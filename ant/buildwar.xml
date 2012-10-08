@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="TradeManager" default="all" basedir=".">
+	<property name="base" location=".."/>
+	<!-- Remember that if another Ant is calling you, its properties will take precedence over you -->
+	<!-- If you run ant -verbose, you'll see the comments about how certain properties weren't set because your parent ant did -->
+	<!-- import the shell's environment renaming each to env.WHATEVER... -->
+	<property environment="env"/>
+	<!-- Our component base is where we are.  May not be current directory which is why everything is parameterized -->
+	<!-- Other directories are untested; this is just an idea for now... -->
+	<property name="component.base" location=".."/>
+	<!-- import component specific properties.  build.xml should be able to be copied to any new component with no changes -->
+	<property file="build.properties"/>
+	<property name="package.name.base" value="${component.name.base}Package"/>
+	<property name="package.name.base.ear" value="${component.name.base}-${component.name.version}.ear"/>
+	<property name="pathname.component.descriptors" location="${base}/config"/>
+	<property name="pathname.component.documentroot" location="${base}/documentroot"/>
+	<property name="pathname.component.config" location="${base}/config"/>
+	<property name="pathname.build" location="${component.base}/bin"/>
+	<property name="pathname.distribute" location="${component.base}/dist"/>
+	<property name="pathname.output.main" location="${component.base}/bin/classes"/>
+	<property name="pathname.output.test" location="${component.base}/bin/testclasses"/>
+	<property name="pathname.output.client" location="${component.base}/bin/classes"/>
+	<property name="pathname.source.core" location="${component.base}/core/src"/>
+	<property name="pathname.source.main" location="${component.base}/trade/src"/>
+	<property name="component.name.server.war" value="${component.name.base}-${component.name.version}.war"/>
+	<property name="component.name.server.war.manifest" value="${pathname.component.descriptors}/${component.name.base}.mf"/>
+
+	<!-- At the end of a successful build, ./dist will have a testclient-side and server-side Library jar -->
+	<!-- At the end of a successful build, ./dist will have a server-side EAR with the server-side portion along with your deps in lib/ -->
+	<!-- And don't forget to modify your manifests in ./DeploymentDescriptors !!! -->
+	<property name="component.name.server.jar" value="${component.name.base}-${component.name.version}.jar"/>
+	<property name="component.name.server.jar.manifest" value="${pathname.component.descriptors}/${component.name.base}.mf"/>
+	<property name="component.name.testclient.jar" value="${component.name.base}LibaryTestClient.jar"/>
+	<property name="component.name.testclient.jar.manifest" value="${pathname.component.descriptors}/${component.name.base}.mf"/>
+	<property name="pathname.library.external" location="${component.base}/lib"/>
+	<!-- change the property below to tell the copy.output target where to copy your EAR to -->
+	<property name="pathname.component.output" value="${component.base}/dist/lib"/>
+	<property name="pathname.webapplication.output" value="${component.base}/dist/output/webapp"/>
+	<property name="pathname.enterpriseapplication.output" value="${component.base}/dist/ear"/>
+	<!-- start of tasks -->
+	<target name="all" depends="init, clean, prepare, package.component.all, warbuild"/>
+	<target name="init">
+		<tstamp/>
+		<fileset dir="${pathname.library.external}" id="fileset.external.library.dist">
+			<include name="jsyntaxpane-0.9.5-b29.jar" />
+			<include name="tws-9.66.jar" />				
+			<include name="jfreechart-1.0.14.jar" />
+			<include name="jcommon-1.0.17.jar" />
+			<include name="swt.jar" />
+			<include name="c3p0-0.9.1.jar" />
+			<include name="hibernate-c3p0-4.1.7.Final.jar" />
+			<include name="javassist-3.15.0.GA.jar" />
+			<include name="dom4j-1.6.1.jar" />
+			<include name="hibernate-commons-annotations-4.0.1.Final.jar" />
+			<include name="hibernate-core-4.1.7.Final.jar" />
+			<include name="hibernate-entitymanager-4.1.7.Final.jar" />
+			<include name="hibernate-jpa-2.0-api-1.0.1.Final.jar" />
+			<include name="hibernate-validator-4.2.0.Final.jar" />
+			<include name="ejb-api-3.0.jar" />
+			<include name="antlr-2.7.7.jar" />
+			<include name="mysql-connector-java-5.1.18.jar" />
+			<include name="jboss-logging-3.1.0.GA.jar" />
+			<include name="jboss-transaction-api_1.1_spec-1.0.0.Final.jar" />
+			<include name="slf4j-api-1.6.1.jar" />
+			<include name="slf4j-log4j12-1.6.1.jar" />
+			<include name="log4j-1.2.16.jar" />
+			<include name="commons-collections-3.2.1.jar" />				
+			<include name="junit-4.8.2.jar" />
+			<include name="validation-api-1.0.0.GA.jar" />	
+		</fileset>
+		<fileset dir="${env.JAVA_HOME}/lib" id="fileset.external.library.java">
+			<include name="tools.jar"/>
+		</fileset>
+		<path id="path.class.compile">
+			<fileset refid="fileset.external.library.dist"/>
+			<fileset refid="fileset.external.library.java"/>
+		</path>
+		<path id="path.output.main">
+			<pathelement location="${pathname.output.main}"/>
+		</path>
+	</target>
+	<target name="prepare" depends="init">
+		<mkdir dir="${pathname.build}"/>
+		<mkdir dir="${pathname.distribute}"/>
+		<mkdir dir="${pathname.output.main}"/>
+		<mkdir dir="${pathname.component.documentroot}/WEB-INF"/>
+		<copy todir="${pathname.component.documentroot}/WEB-INF" filtering="yes">
+			<fileset dir="${pathname.component.descriptors}/WEB-INF">
+				<include name="*.xml"/>
+			</fileset>
+		</copy>
+		<mkdir dir="${pathname.output.main}/META-INF"/>
+		<copy todir="${pathname.output.main}/META-INF" filtering="yes">
+			<fileset dir="${pathname.component.descriptors}/META-INF">
+				<include name="*.xml"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="${pathname.build}"/>
+		<delete dir="${pathname.distribute}"/>
+		<delete dir="${pathname.output.main}"/>
+		<delete dir="${pathname.output.test}"/>
+		<delete dir="${pathname.component.documentroot}"/>
+		<delete dir="${base}/defaultroot"/>
+	</target>
+	<target name="compile.all" depends="prepare">
+		<javac srcdir="${pathname.source.core}" destdir="${pathname.output.main}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false" >
+			<compilerarg value="-Xlint:none"/>
+			<classpath refid="path.class.compile" />
+		</javac>
+		<javac srcdir="${pathname.source.main}" destdir="${pathname.output.main}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false" >
+			<compilerarg value="-Xlint:none"/>
+			<classpath refid="path.class.compile" />
+		</javac>
+	</target>
+	<target name="package.component.all" depends="package.component.server"/>
+	<target name="package.component.server" depends="compile.all">
+		<jar jarfile="${pathname.distribute}/${component.name.server.jar}" manifest="${component.name.server.jar.manifest}" compress="true">
+			<fileset dir="${pathname.output.main}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${pathname.source.main}">
+				<include name="**/*.gif" />
+				<include name="**/*.ico" />
+				<include name="**/*.xml" />
+				<include name="**/*.sql" />
+				<include name="**/*.html" />
+				<include name="**/*.properties" />
+			</fileset>
+			<fileset dir="${pathname.component.config}">
+				<include name="META-INF/application.xml" />
+				<include name="META-INF/persistence.xml" />
+			</fileset>
+		</jar>
+	</target>
+	<target name="warbuild">
+		<!-- Web Application difference: copy out any resource we have inside our src dir -->
+		<copy todir="${pathname.component.documentroot}/WEB-INF/lib">
+			<fileset dir="${pathname.library.external}">
+				<include name="xercesImpl_2_0_1.jar"/>
+				<include name="xmlParserAPIs_2_0_1.jar"/>
+				<include name="jnlp-servlet-1.2.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${pathname.component.documentroot}/app/lib">
+			<fileset dir="${pathname.distribute}">
+				<include name="${component.name.server.jar}"/>
+			</fileset>
+		</copy>
+		<copy todir="${pathname.component.documentroot}/app/lib">
+			<fileset dir="${pathname.library.external}">
+				<include name="jsyntaxpane-0.9.5-b29.jar" />
+				<include name="tws-9.66.jar" />				
+				<include name="jfreechart-1.0.14.jar" />
+				<include name="jcommon-1.0.17.jar" />
+				<include name="swt.jar" />
+				<include name="c3p0-0.9.1.jar" />
+				<include name="hibernate-c3p0-4.1.7.Final.jar" />
+				<include name="javassist-3.15.0.GA.jar" />
+				<include name="dom4j-1.6.1.jar" />
+				<include name="hibernate-commons-annotations-4.0.1.Final.jar" />
+				<include name="hibernate-core-4.1.7.Final.jar" />
+				<include name="hibernate-entitymanager-4.1.7.Final.jar" />
+				<include name="hibernate-jpa-2.0-api-1.0.1.Final.jar" />
+				<include name="hibernate-validator-4.2.0.Final.jar" />
+				<include name="ejb-api-3.0.jar" />
+				<include name="antlr-2.7.7.jar" />
+				<include name="mysql-connector-java-5.1.18.jar" />
+				<include name="jboss-logging-3.1.0.GA.jar" />
+				<include name="jboss-transaction-api_1.1_spec-1.0.0.Final.jar" />
+				<include name="slf4j-api-1.6.1.jar" />
+				<include name="slf4j-log4j12-1.6.1.jar" />
+				<include name="log4j-1.2.16.jar" />
+				<include name="commons-collections-3.2.1.jar" />				
+				<include name="junit-4.8.2.jar" />
+				<include name="validation-api-1.0.0.GA.jar" />	
+			</fileset>
+		</copy>
+		<copy todir="${pathname.component.documentroot}">
+			<fileset dir="${pathname.component.descriptors}">
+				<include name="index.html" />
+				<include name="app/version.xml" />
+				<include name="app/trademanager.jnlp" />
+				<include name="app/images/trade.gif" />
+			</fileset>
+		</copy>		
+		
+		<signjar jar="${pathname.component.documentroot}/app/lib/${component.name.server.jar}" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jsyntaxpane-0.9.5-b29.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/tws-9.65.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jcommon-1.0.17.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jfreechart-1.0.14.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/swt.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/c3p0-0.9.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-c3p0-4.1.7.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/javassist-3.15.0.GA.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/dom4j-1.6.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-commons-annotations-4.0.1.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-core-4.1.7.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-entitymanager-4.1.7.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-validator-4.2.0.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/ejb-api-3.0.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/antlr-2.7.7.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/mysql-connector-java-5.1.18.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/slf4j-api-1.6.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/slf4j-log4j12-1.6.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jboss--logging-3.1.0.GA.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/commons-collections-3.2.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/log4j-1.2.16.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/validation-api-1.0.0.GA.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+
+		<war warfile="${pathname.distribute}/${component.name.server.war}" webxml="${pathname.component.documentroot}/WEB-INF/web.xml" manifest="${component.name.server.war.manifest}">
+			<fileset dir="${pathname.component.documentroot}"/>
+		</war>
+	</target>
+	<!-- Web Application difference: change "init" to "warbuild" to build the ide.war file -->
+	<target name="copy.output" depends="warbuild">
+		<copy todir="{$pathname.component.output}" flatten="yes">
+			<fileset dir="${pathname.distribute}">
+				<include name="${component.name.server.jar}"/>
+			</fileset>
+		</copy>
+	</target>
+</project>

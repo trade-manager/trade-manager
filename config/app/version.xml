@@ -1,0 +1,20 @@
+<jnlp-versions> 
+   <resource> 
+     <pattern> 
+       <name>tradermanager-2.7.jar</name> 
+<!-- Update the version number to force a new download of the ide.jar -->
+       <version-id>2.7</version-id> 
+     </pattern> 
+     <file>tradermanager-2.7.jar</file> 
+   </resource>
+   <platform> 
+     <pattern> 
+       <name>J2RE</name> 
+       <version-id>1.6</version-id> 
+       <locale>en_US</locale>
+       <locale>en</locale>
+     </pattern> 
+     <file>j2re-1_6.0-us.jnlp</file> 
+     <product-version-id>1.6.0</product-version-id>
+   </platform> 
+</jnlp-versions> 

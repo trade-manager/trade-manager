@@ -1,0 +1,149 @@
+<project name="TradeManagerTests" default="all" basedir=".">
+	<property file="build.properties" />
+	<property name="base" location=".." />
+	<property environment="env" />
+	<property name="component.base" location=".." />
+	<property name="srccore" location="${component.base}/core/test" />
+	<property name="srctrade" location="${component.base}/trade/test" />
+	<property name="build" location="${component.base}/bin" />
+	<property name="dist" location="${component.base}/dist" />
+	<property name="db" location="${component.base}/db" />
+	<property name="config" location="${component.base}/config" />
+	<property name="lib" location="${component.base}/lib" />
+	<property name="res" location="${component.base}/res" />
+	<property name="reports" location="${component.base}/reports" />
+
+	<!-- the names of various distributable files -->
+	<property name="jar_name" value="${component.name.base}Test-${component.name.version}.jar" />
+	<property name="war_name" value="${component.name.base}Test-${component.name.version}.war" />
+
+	<!-- top level targets -->
+	<!-- supporting targets -->
+
+	<target name="initialise"  depends="clean" description="initialize the build environment">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create directory structures -->
+		<mkdir dir="${build}" />
+		<mkdir dir="${lib}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${reports}" />
+		<mkdir dir="${reports}/raw/" />
+		<mkdir dir="${reports}/html/" />
+	</target>
+
+	<target name="compile" depends="initialise" description="compile the source code ">
+		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false">
+			<compilerarg value="-Xlint:none"/>
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${dist}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false">
+			<compilerarg value="-Xlint:none"/>
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${dist}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distributable files ">
+
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		<jar jarfile="${dist}/${jar_name}" basedir="${build}">
+			<fileset dir="${config}">
+				<include name="**/*.properties" />
+			</fileset>
+			<fileset dir="${srctrade}">
+				<include name="**/*.gif" />
+				<include name="**/*.ico" />
+				<include name="**/*.xml" />
+				<include name="**/*.sql" />
+				<include name="**/*.html" />
+				<include name="**/*.properties" />
+			</fileset>
+			<fileset dir="${srccore}">
+				<include name="**/*.gif" />
+				<include name="**/*.ico" />
+				<include name="**/*.properties" />
+			</fileset>
+		</jar>
+		<!-- delete the temp directory	-->
+		<delete dir="${build}" />
+	</target>
+
+			
+	<target name="clean"  description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<!--	<delete dir="${dist}" /> -->
+		<delete dir="${reports}" />
+	</target>
+
+	<target name="run-tests" depends="dist, cleanDB" description="run your test suite">
+
+		<junit printsummary="yes" haltonfailure="no" showoutput="yes">
+			<classpath>
+				<pathelement path="${component.base}" />
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${dist}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<batchtest fork="yes" todir="${reports}/raw/">
+				<formatter type="xml" />
+				<fileset dir="${srctrade}">
+					<include name="**/*.java" />
+				</fileset>
+				<fileset dir="${srccore}">
+					<include name="**/*.java" />
+				</fileset>
+				<fileset dir="${config}">
+					<include name="**/*.properties" />
+				</fileset>
+				<fileset dir="${db}">
+					<include name="**/*.csv" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="test" depends="run-tests">
+		<junitreport todir="${reports}">
+			<fileset dir="${reports}/raw/">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports}\html\" />
+		</junitreport>
+	</target>
+	<target name="cleanDB" depends="initialise">
+		  <input message="Do you really want to delete all data in the database (y/n)?" validargs="y,n" addproperty="do.delete" /> 
+	      <condition property="do.abort"> 
+	            <equals arg1="n" arg2="${do.delete}"/> 
+	      </condition> 
+	      <fail if="do.abort">Build aborted by user.</fail> 
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="mysql-connector-java-5.1.18.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="../db/TradeManagerData.sql" />
+		</sql>
+	</target>
+	<target name="all" depends="test">
+	</target>
+</project>
+

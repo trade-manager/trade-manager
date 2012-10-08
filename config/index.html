@@ -1,0 +1,126 @@
+ <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<HTML>
+<HEAD>
+
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<TITLE>
+HTML Test Page
+</TITLE>
+</HEAD>
+<!--- JavaScript to detect if Java Web Start is installed or not --->
+
+<SCRIPT language=Javascript>
+var appName = "";
+var isWindowsOS = (navigator.userAgent.indexOf("Windows") >= 0);
+
+var javawsInstalled = 1;
+isIE = "false";
+
+if (isWindowsOS) {
+  if (navigator.mimeTypes && navigator.mimeTypes.length) {
+    mimeEntry = navigator.mimeTypes['application/x-java-jnlp-file'];
+    if (mimeEntry) {
+      javawsInstalled = 1;
+    }
+  } else {
+    isIE = "true";
+  }
+} else {
+  javawsInstalled = 1;
+}
+
+    function insertLink(url, name) {
+       if (javawsInstalled) {
+          document.write("<a href=" + url + ">"  + name + "</a>");
+       } else {
+          document.write("Need to install Java Web Start");
+       }
+    }
+
+    function launchLink2(imageUrl, jnlpUrl, title, desc) {       
+       var realUrl = "http://java.sun.com/products/javawebstart/download-windows.html";
+       if (javawsInstalled) {
+         realUrl = jnlpUrl;
+       }
+
+       document.write("<div align=\"right\">");
+       document.write("<table width=\"100%\" border=\"0\">");
+       document.write("<tr>");
+       document.write("<td width=\"40%\">");
+       document.write("<a href=" + realUrl + "><img src=\"" + imageUrl + "\" width=\"130\" height=\"107\">");
+       document.write("</td>");
+       document.write("<td width=\"60%\">");
+       document.write("<h2 align=\"center\">" + title + "</h2>");
+       document.write("<p> " + desc);
+       document.write("<center><form action=\"" + realUrl + "\" METHOD=\"GET\"><input type=\"submit\" value=\"Launch\"></form>");
+       document.write("</center></td></tr></table></div>");
+    }    
+
+
+    function launchLink(imageUrl, jnlpUrl, title, desc) {       
+       var realUrl = "http://java.sun.com/products/javawebstart/download-windows.html";
+       if (javawsInstalled) {
+         realUrl = jnlpUrl;
+       }
+       document.write("<center><div align=center>");
+       document.write("<a href=" + realUrl + "><img src=" + imageUrl + " width=\"130\" height=\"107\" BORDER=\"0\"></a></div>");
+       document.write("<form action=\"" + realUrl + "\" METHOD=\"GET\"><input type=\"submit\" value=\"Launch\"></form>");
+       document.write("</center>");
+    }    
+</SCRIPT>
+
+<SCRIPT language=VBScript>
+on error resume next
+If isIE = "true" Then
+  If Not(IsObject(CreateObject("JavaWebStart.IsInstalled"))) Then
+     javawsInstalled = 0
+  Else
+    javawsInstalled = 1
+  End If
+End If
+</SCRIPT>
+
+<BODY>
+
+<TABLE cellSpacing=0 cellPadding=4 width="100%" bgColor=#99ccff 
+        border=0><TBODY>
+        <TR>
+          <TD><FONT face=sans-serif><B>Trade Manager Tool download page</B></FONT> </TD></TR></TBODY></TABLE>
+<!-- START DEMOS TABLE --><BR>
+      <P>Java<SUP><FONT size=-2>TM</FONT></SUP> Web Start allows full-featured 
+      applications to be launched with just a single-click of a mouse. Try 
+      launching one or more of the applications below by clicking on its image. 
+      <P>You will need to have Java Web Start installed in order for the 
+      applications to launch. If it is not installed, you will be redirected to 
+      the Java Web Start setup page. </P>
+      <P>See the Java Web Start <A 
+      href="http://java.sun.com/products/javawebstart/architecture.html">Architecture 
+      Page</A> for an description on how this actually works. </P>
+      <TABLE cellSpacing=10 cellPadding=15 width="100%" bgColor=#ffffff 
+border=1>
+        <TBODY>
+        <TR vAlign=top>
+          <TD width="50%" bgColor=#ffffcc>
+            <TABLE cellSpacing=0 cellPadding=0 width=140 align=left border=0>
+              <TBODY>
+              <TR>
+                <TD>
+                  <SCRIPT language=Javascript type=text/javascript>
+ launchLink2("app/images/trade.gif", "app/trademanager.jnlp", "Trade Manager Tool" , "Trade Manager Tool");
+
+</SCRIPT>
+                </TD></TR></TBODY></TABLE<BR>
+     
+<!-- END DEMOS TABLE --><!-- end main page content --></TD><!-- gutter spacing for right side fo the page -->
+    <TD width=30><IMG height=1 alt="" 
+      src="app/images/trade.gif" width=30> 
+</TD></TR></TBODY></TABLE>
+<BR>
+</ul>
+</BODY>
+</HTML>
+
+
+
