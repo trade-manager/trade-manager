@@ -96,7 +96,6 @@ import org.trade.ui.strategy.StrategyPanel;
 import org.trade.ui.tradingday.TradingdayPanel;
 
 /**
- * The apps main contraoller.
  */
 public class TradeMainControllerPanel extends TabbedAppPanel implements
 		BrokerChangeListener, StrategyChangeListener {
