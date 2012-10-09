@@ -114,7 +114,7 @@
 			<transaction src="../db/TradeManagerData.sql"/>
 		</sql>
 	</target>
-	<target name="cleanTradeOrdersDB" depends="initialise" description="Clears the database of TradeOrders for testing">
+	<target name="cleanTradeOrdersDB" depends="initialise" description="Clears the database of TradeOrders for testing.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" >
 			<classpath refid="build.classpath" />
 			<transaction src="../db/ClearTradeOrdersData.sql"/>
