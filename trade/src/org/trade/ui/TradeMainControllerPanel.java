@@ -211,9 +211,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Constructs a new Configuration tab that contains all information related
-	 * to a portfolio. This tab allows you to see the results of trading
-	 * activity. It records the summary information for each month i.e. Batting
-	 * avg, Simple Sharpe ratio and P/L information.
+	 * to configuration of Default entry parms, strategies, indicators,
+	 * accounts.
 	 * 
 	 */
 
@@ -380,9 +379,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * This is fired from the Contract Tab when the Execute Order button is
 	 * pressed. This should be used to execute orders to the broker platform.
 	 * 
-	
 	 * 
-	 * @param instance TradeOrder
+	 * 
+	 * @param instance
+	 *            TradeOrder
 	 */
 
 	public void doExecute(TradeOrder instance) {
@@ -451,7 +451,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * pressed. This will run the Strategy for all the tradingdays.
 	 * 
 	 * 
-	 * @param tradestrategy Tradestrategy
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 
 	public void doRun(final Tradestrategy tradestrategy) {
@@ -496,9 +497,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * This is fired from the Tradingday Tab when the Back Test Strategy button
 	 * is pressed. This will run the Strategy for the selected tradingday.
 	 * 
-	
 	 * 
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 
 	public void doTest(Tradestrategy tradestrategy) {
@@ -583,8 +585,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @param openTradeOrders
 	 *            Hashtable<Integer, TradeOrder> the open orders that are from
 	 *            IB TWS.
-	
-	 * @see org.trade.broker.BrokerChangeListener#openOrderEnd(ConcurrentHashMap<Integer,TradeOrder>)
+	 * 
+	 * @see 
+	 *      org.trade.broker.BrokerChangeListener#openOrderEnd(ConcurrentHashMap<
+	 *      Integer,TradeOrder>)
 	 */
 
 	public void openOrderEnd(
@@ -636,8 +640,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Hashtable<Integer, TradeOrder> the executed and open orders
 	 *            that are from IB TWS.
 	 * 
-	
-	 * @see org.trade.broker.BrokerChangeListener#executionDetailsEnd(ConcurrentHashMap<Integer,TradeOrder>)
+	 * 
+	 * @see org.trade.broker.BrokerChangeListener#executionDetailsEnd(
+	 *      ConcurrentHashMap<Integer,TradeOrder>)
 	 */
 	public void executionDetailsEnd(
 			ConcurrentHashMap<Integer, TradeOrder> tradeOrders) {
@@ -663,10 +668,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * manager if so start the manager and close the strategy that opened the
 	 * position.
 	 * 
-	
 	 * 
-	
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderFilled(TradeOrder)
 	 */
 	public void tradeOrderFilled(TradeOrder tradeOrder) {
@@ -743,10 +749,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * This method is fired when the Brokermodel has completed
 	 * executionDetails() or openOrder() and the order that was CANCELLED.
 	 * 
-	
 	 * 
-	
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderCancelled(TradeOrder)
 	 */
 	public void tradeOrderCancelled(TradeOrder tradeOrder) {
@@ -769,10 +776,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * executionDetails() or openOrder() and the position was closed by the
 	 * order.
 	 * 
-	
 	 * 
-	
-	 * @param trade Trade
+	 * 
+	 * 
+	 * @param trade
+	 *            Trade
 	 * @see org.trade.broker.BrokerChangeListener#positionClosed(Trade)
 	 */
 	public void positionClosed(Trade trade) {
@@ -791,7 +799,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method strategyComplete.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
 	 */
 	public void strategyComplete(Tradestrategy tradestrategy) {
@@ -815,7 +825,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method strategyStarted.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyStarted(Tradestrategy)
 	 */
 	public void strategyStarted(Tradestrategy tradestrategy) {
@@ -824,7 +836,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method ruleComplete.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#ruleComplete(Tradestrategy)
 	 */
 	public void ruleComplete(Tradestrategy tradestrategy) {
@@ -833,7 +847,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method positionCovered.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#positionCovered(Tradestrategy)
 	 */
 	public void positionCovered(Tradestrategy tradestrategy) {
@@ -848,7 +864,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method strategyError.
-	 * @param ex StrategyRuleException
+	 * 
+	 * @param ex
+	 *            StrategyRuleException
 	 * @see org.trade.strategy.StrategyChangeListener#strategyError(StrategyRuleException)
 	 */
 	public void strategyError(StrategyRuleException ex) {
@@ -906,7 +924,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy that has completed the request for historical
 	 *            data
 	 * 
-	
+	 * 
 	 * @see org.trade.broker.BrokerChangeListener#historicalDataComplete(Tradestrategy)
 	 */
 
@@ -1184,7 +1202,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method updateAccountTime.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @see org.trade.broker.BrokerChangeListener#updateAccountTime(String)
 	 */
 	public void updateAccountTime(String accountNumber) {
@@ -1350,7 +1370,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * pressed. This will re assign all the tradestrategies..
 	 * 
 	 * 
-	 * @param strategies List<Strategy>
+	 * @param strategies
+	 *            List<Strategy>
 	 */
 
 	public void doReAssign(List<Strategy> strategies) {
@@ -1408,7 +1429,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method doTransfer.
-	 * @param idTradestrategy Integer
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 	public void doTransfer(Integer idTradestrategy) {
 		try {
@@ -1439,8 +1462,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method tabChanged.
-	 * @param currBasePanel BasePanel
-	 * @param newBasePanel BasePanel
+	 * 
+	 * @param currBasePanel
+	 *            BasePanel
+	 * @param newBasePanel
+	 *            BasePanel
 	 */
 	public void tabChanged(BasePanel currBasePanel, BasePanel newBasePanel) {
 		this.m_menuBar.setEnabledDeleteSave(false);
@@ -1463,7 +1489,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method deleteTradeOrders.
-	 * @param tradingdays Tradingdays
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
 	 */
 	private void deleteTradeOrders(Tradingdays tradingdays) {
 
@@ -1513,8 +1541,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method runStrategy.
-	 * @param tradingdays Tradingdays
-	 * @param brokerDataOnly boolean
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
+	 * @param brokerDataOnly
+	 *            boolean
 	 */
 	private void runStrategy(Tradingdays tradingdays, boolean brokerDataOnly) {
 		try {
@@ -1674,7 +1705,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method isStrategyWorkerRunning.
-	 * @param tradingday Tradingday
+	 * 
+	 * @param tradingday
+	 *            Tradingday
 	 * @return boolean
 	 */
 	private boolean isStrategyWorkerRunning(Tradingday tradingday) {
@@ -1688,7 +1721,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method isStrategyWorkerRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 */
 	private boolean isStrategyWorkerRunning(Tradestrategy tradestrategy) {
@@ -1708,7 +1743,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method removeStrategyWorker.
-	 * @param tradingday Tradingday
+	 * 
+	 * @param tradingday
+	 *            Tradingday
 	 */
 	private void removeStrategyWorker(Tradingday tradingday) {
 		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
@@ -1725,7 +1762,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method isStrategyWorkerRunning.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return boolean
 	 */
 	private boolean isStrategyWorkerRunning(String key) {
@@ -1740,7 +1779,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method killStrategyWorker.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 */
 	private void killStrategyWorker(String key) {
 		if (m_strategyWorkers.containsKey(key)) {
@@ -1767,7 +1808,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method killAllStrategyWorkersForTradestrategy.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	private void killAllStrategyWorkersForTradestrategy(
 			Tradestrategy tradestrategy) {
@@ -1787,8 +1830,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method createStrategy.
-	 * @param strategyClassName String
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param strategyClassName
+	 *            String
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws Exception
 	 */
 	private synchronized void createStrategy(String strategyClassName,
@@ -1854,7 +1900,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method simulatedMode.
-	 * @param simulated boolean
+	 * 
+	 * @param simulated
+	 *            boolean
 	 */
 	private void simulatedMode(boolean simulated) {
 
@@ -1885,7 +1933,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method refreshTradingdays.
-	 * @param tradingdays Tradingdays
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
 	 */
 	private void refreshTradingdays(Tradingdays tradingdays) {
 
@@ -1904,8 +1954,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * Method setProgressBarProgress.
-	 * @param progress int
-	 * @param worker SwingWorker<Void,String>
+	 * 
+	 * @param progress
+	 *            int
+	 * @param worker
+	 *            SwingWorker<Void,String>
 	 */
 	private void setProgressBarProgress(int progress,
 			SwingWorker<Void, String> worker) {
@@ -1943,8 +1996,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
-		 * @param brokerManagerModel BrokerModel
-		 * @param tradingdays Tradingdays
+		 * 
+		 * @param brokerManagerModel
+		 *            BrokerModel
+		 * @param tradingdays
+		 *            Tradingdays
 		 */
 		public BrokerDataRequestProgressMonitor(BrokerModel brokerManagerModel,
 				Tradingdays tradingdays) {
@@ -1954,6 +2010,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		/**
 		 * Method doInBackground.
+		 * 
 		 * @return Void
 		 */
 		public Void doInBackground() {
@@ -2097,8 +2154,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		/**
 		 * Method submitBrokerRequest.
-		 * @param tradestrategy Tradestrategy
-		 * @param totalSumbitted int
+		 * 
+		 * @param tradestrategy
+		 *            Tradestrategy
+		 * @param totalSumbitted
+		 *            int
 		 * @return int
 		 * @throws InterruptedException
 		 * @throws BrokerModelException
@@ -2155,7 +2215,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 		/**
 		 * Method process.
-		 * @param messages List<String>
+		 * 
+		 * @param messages
+		 *            List<String>
 		 */
 		protected void process(List<String> messages) {
 			setStatusBarMessage(messages.get(messages.size() - 1),
@@ -2179,9 +2241,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 		/**
 		 * Method populateChildTradestrategy.
-		 * @param tradestrategy Tradestrategy
-		 * @param candleDataset CandleDataset
-		 * @param seriesIndex int
+		 * 
+		 * @param tradestrategy
+		 *            Tradestrategy
+		 * @param candleDataset
+		 *            CandleDataset
+		 * @param seriesIndex
+		 *            int
 		 * @return Tradestrategy
 		 * @throws BrokerModelException
 		 */
@@ -2244,8 +2310,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		/**
 		 * Constructor for DeleteProgressMonitor.
-		 * @param tradeManagerModel PersistentModel
-		 * @param tradingdays Tradingdays
+		 * 
+		 * @param tradeManagerModel
+		 *            PersistentModel
+		 * @param tradingdays
+		 *            Tradingdays
 		 */
 		public DeleteProgressMonitor(PersistentModel tradeManagerModel,
 				Tradingdays tradingdays) {
@@ -2255,6 +2324,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		/**
 		 * Method doInBackground.
+		 * 
 		 * @return Void
 		 */
 		public Void doInBackground() {
@@ -2294,7 +2364,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 		/**
 		 * Method process.
-		 * @param messages List<String>
+		 * 
+		 * @param messages
+		 *            List<String>
 		 */
 		protected void process(List<String> messages) {
 			setStatusBarMessage(messages.get(messages.size() - 1),
@@ -2325,10 +2397,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		/**
 		 * Constructor for ReAssignProgressMonitor.
-		 * @param tradeManagerModel PersistentModel
-		 * @param tradingdays Tradingdays
-		 * @param fromStrategy Strategy
-		 * @param toStrategy Strategy
+		 * 
+		 * @param tradeManagerModel
+		 *            PersistentModel
+		 * @param tradingdays
+		 *            Tradingdays
+		 * @param fromStrategy
+		 *            Strategy
+		 * @param toStrategy
+		 *            Strategy
 		 */
 		public ReAssignProgressMonitor(PersistentModel tradeManagerModel,
 				Tradingdays tradingdays, Strategy fromStrategy,
@@ -2341,6 +2418,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		/**
 		 * Method doInBackground.
+		 * 
 		 * @return Void
 		 */
 		public Void doInBackground() {
@@ -2385,7 +2463,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 		/**
 		 * Method process.
-		 * @param messages List<String>
+		 * 
+		 * @param messages
+		 *            List<String>
 		 */
 		protected void process(List<String> messages) {
 			setStatusBarMessage(messages.get(messages.size() - 1),
