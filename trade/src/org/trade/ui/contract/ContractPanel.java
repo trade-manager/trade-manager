@@ -40,7 +40,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
@@ -141,9 +140,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Constructor for ContractPanel.
-	 * @param tradingdays Tradingdays
-	 * @param controller TabbedAppPanel
-	 * @param tradePersistentModel PersistentModel
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
+	 * @param controller
+	 *            TabbedAppPanel
+	 * @param tradePersistentModel
+	 *            PersistentModel
 	 */
 	@SuppressWarnings("unchecked")
 	public ContractPanel(Tradingdays tradingdays, TabbedAppPanel controller,
@@ -189,10 +192,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			JPanel jPanel1 = new JPanel(new BorderLayout());
 			JPanel jPanel2 = new JPanel(new BorderLayout());
-			JPanel jPanel3 = new JPanel();
+
 			FlowLayout flowLayout1 = new FlowLayout();
 			flowLayout1.setAlignment(FlowLayout.RIGHT);
-			jPanel3.setLayout(flowLayout1);
+			JPanel jPanel3 = new JPanel(flowLayout1);
 			jPanel3.add(closeAllButton, null);
 			// Contract Panel
 			JLabel jLabel1 = new JLabel("Trading Day");
@@ -207,13 +210,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JScrollPane jScrollPane3 = new JScrollPane();
 			JPanel jPanel14 = new JPanel(new BorderLayout());
 			JPanel jPanel15 = new JPanel(new BorderLayout());
-			JPanel jPanel4 = new JPanel(new BorderLayout());
-			GridLayout gridLayout1 = new GridLayout();
-			gridLayout1.setColumns(1);
-			gridLayout1.setHgap(5);
-			gridLayout1.setRows(2);
-			gridLayout1.setVgap(5);
-			JPanel jPanel5 = new JPanel(gridLayout1);
 			JPanel jPanel7 = new JPanel(new BorderLayout());
 			JPanel jPanel9 = new JPanel(new BorderLayout());
 
@@ -250,33 +246,26 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			// Order Panel
 			m_tradeOrderTable.setFont(new Font("Monospaced", Font.PLAIN, 12));
-			jScrollPane2.getViewport().add(m_tradeOrderTable,
-					BorderLayout.CENTER);
-			jScrollPane2.setBorder(new BevelBorder(BevelBorder.LOWERED));
-			jScrollPane2.addMouseListener(m_tradeOrderTable);
-			jPanel4.add(m_tradeLabel, BorderLayout.NORTH);
-			jPanel4.add(jScrollPane2, BorderLayout.CENTER);
-			FlowLayout flowLayout3 = new FlowLayout();
-			flowLayout3.setAlignment(FlowLayout.RIGHT);
-			JPanel jPanel8 = new JPanel(flowLayout3);
-
-			// jPanel8.add(executehButton, null);
 			FlowLayout flowLayout2 = new FlowLayout();
 			flowLayout2.setAlignment(FlowLayout.LEFT);
-			jPanel5.setLayout(flowLayout2);
+			JPanel jPanel5 = new JPanel(flowLayout2);
 			jPanel5.add(executeButton, null);
 			jPanel5.add(cancelButton, null);
 			jPanel5.add(refreshButton, null);
 
 			JPanel jPanel10 = new JPanel(new BorderLayout());
 			jPanel10.add(jPanel5, BorderLayout.WEST);
-			jPanel10.add(jPanel8, BorderLayout.EAST);
-			jPanel14.add(jPanel4, null);
+			JPanel jPanel4 = new JPanel(new BorderLayout());
+			jPanel4.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			jPanel4.add(m_tradeOrderTable, null);
+			jPanel14.add(m_tradeLabel, BorderLayout.NORTH);
+			jPanel14.add(jPanel4, BorderLayout.CENTER);
 			jPanel14.add(jPanel10, BorderLayout.SOUTH);
+			jScrollPane2.getViewport().add(jPanel14, BorderLayout.CENTER);
 
 			// use the new JSplitPane to dynamically resize...
 			JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
-					jPanel9, jPanel14);
+					jPanel9, jScrollPane2);
 			split.setOneTouchExpandable(true);
 			split.setDividerLocation(550);
 			jPanel15.add(split, BorderLayout.CENTER);
@@ -319,7 +308,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method doClose.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	public void doClose(Tradestrategy tradestrategy) {
 		for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
@@ -336,7 +327,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method doClose.
-	 * @param index Integer
+	 * 
+	 * @param index
+	 *            Integer
 	 */
 	public void doClose(Integer index) {
 		ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract
@@ -390,6 +383,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
@@ -405,7 +399,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method doRefresh.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	public void doRefresh(final Tradestrategy tradestrategy) {
 		try {
@@ -448,7 +444,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method valueChanged.
-	 * @param e TreeSelectionEvent
+	 * 
+	 * @param e
+	 *            TreeSelectionEvent
 	 * @see javax.swing.event.TreeSelectionListener#valueChanged(TreeSelectionEvent)
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
@@ -512,7 +510,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method doTransfer.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	public void doTransfer(Tradestrategy tradestrategy) {
 		brokerDataButton.setTransferObject(tradestrategy);
@@ -520,7 +520,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method stateChanged.
-	 * @param evt ChangeEvent
+	 * 
+	 * @param evt
+	 *            ChangeEvent
 	 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
 	 */
 	public void stateChanged(ChangeEvent evt) {
@@ -546,7 +548,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method setConnected.
-	 * @param connected Boolean
+	 * 
+	 * @param connected
+	 *            Boolean
 	 */
 	public void setConnected(Boolean connected) {
 		try {
@@ -569,7 +573,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method itemStateChanged.
-	 * @param e ItemEvent
+	 * 
+	 * @param e
+	 *            ItemEvent
 	 * @see java.awt.event.ItemListener#itemStateChanged(ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent e) {
@@ -600,6 +606,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method isConnected.
+	 * 
 	 * @return boolean
 	 */
 	private boolean isConnected() {
@@ -608,7 +615,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method createChartPanel.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return ChartPanel
 	 * @throws PersistentModelException
 	 */
@@ -654,9 +663,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 */
 	/**
 	 * Method populateIndicatorCandleSeries.
-	 * @param tradestrategy Tradestrategy
-	 * @param startDate Date
-	 * @param endDate Date
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
 	 * @throws PersistentModelException
 	 */
 	private void populateIndicatorCandleSeries(Tradestrategy tradestrategy,
@@ -669,8 +682,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			for (int seriesIndex = 0; seriesIndex < candleDataset
 					.getSeriesCount(); seriesIndex++) {
 
-				CandleSeries series = candleDataset
-						.getSeries(seriesIndex);
+				CandleSeries series = candleDataset.getSeries(seriesIndex);
 
 				Contract contract = m_tradePersistentModel
 						.findContractByUniqueKey(series.getSecType(),
@@ -721,7 +733,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private class RowListener implements ListSelectionListener {
 		/**
 		 * Method valueChanged.
-		 * @param event ListSelectionEvent
+		 * 
+		 * @param event
+		 *            ListSelectionEvent
 		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
 		public void valueChanged(ListSelectionEvent event) {
@@ -750,8 +764,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method setTradeLabel.
-	 * @param tradestrategy Tradestrategy
-	 * @param candlestickChart CandlestickChart
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @param candlestickChart
+	 *            CandlestickChart
 	 */
 	private void setTradeLabel(Tradestrategy tradestrategy,
 			CandlestickChart candlestickChart) {
@@ -845,10 +862,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method setMessageText.
-	 * @param content String
-	 * @param append boolean
-	 * @param newLine boolean
-	 * @param attrSet SimpleAttributeSet
+	 * 
+	 * @param content
+	 *            String
+	 * @param append
+	 *            boolean
+	 * @param newLine
+	 *            boolean
+	 * @param attrSet
+	 *            SimpleAttributeSet
 	 */
 	private void setMessageText(String content, boolean append,
 			boolean newLine, SimpleAttributeSet attrSet) {
@@ -869,7 +891,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 * Method enableChartButtons.
-	 * @param transferObject Tradestrategy
+	 * 
+	 * @param transferObject
+	 *            Tradestrategy
 	 * @throws Exception
 	 */
 	private void enableChartButtons(Tradestrategy transferObject)
@@ -942,7 +966,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		/**
 		 * Constructor for ChartPanel.
-		 * @param tradestrategy Tradestrategy
+		 * 
+		 * @param tradestrategy
+		 *            Tradestrategy
 		 */
 		ChartPanel(Tradestrategy tradestrategy) {
 			this.tradestrategy = tradestrategy;
@@ -960,6 +986,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		/**
 		 * Method getTradestrategy.
+		 * 
 		 * @return Tradestrategy
 		 */
 		public Tradestrategy getTradestrategy() {
@@ -968,7 +995,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		/**
 		 * Method setTradestrategy.
-		 * @param tradestrategy Tradestrategy
+		 * 
+		 * @param tradestrategy
+		 *            Tradestrategy
 		 */
 		public void setTradestrategy(Tradestrategy tradestrategy) {
 			this.tradestrategy = tradestrategy;
@@ -976,6 +1005,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		/**
 		 * Method getCandlestickChart.
+		 * 
 		 * @return CandlestickChart
 		 */
 		public CandlestickChart getCandlestickChart() {
