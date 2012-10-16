@@ -173,7 +173,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				/*
 				 * Manage the stop orders if the current bars Vwap crosses the
 				 * Vwap of the first 5min bar then move the stop price (
-				 * currently -2R) to the average fill price i.e. breakeven. This
+				 * currently -2R) to the average fill price i.e. break even. This
 				 * allows for tails that break the 5min high/low between 9:40
 				 * thru 10:30.
 				 */
