@@ -67,13 +67,16 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	/**
 	 * Default Constructor
 	 * 
-	
-	
-	
-	
-	 * @param brokerManagerModel BrokerModel
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param brokerManagerModel
+	 *            BrokerModel
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 
 	public PosMgrFH3RBHHeikinStrategy(BrokerModel brokerManagerModel,
@@ -94,8 +97,11 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	 */
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
@@ -167,8 +173,9 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				/*
 				 * Manage the stop orders if the current bars Vwap crosses the
 				 * Vwap of the first 5min bar then move the stop price (
-				 * currently -2R) to the 9:35 Vwap price. This allows for tails
-				 * that break the 5min high/low between 9:40 thru 10:30.
+				 * currently -2R) to the average fill price i.e. b.e. This
+				 * allows for tails that break the 5min high/low between 9:40
+				 * thru 10:30.
 				 */
 
 				if (startPeriod.before(TradingCalendar.getSpecificTime(
@@ -178,11 +185,13 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 					CandleItem firstCandle = this.getCandle(TradingCalendar
 							.getBusinessDayStart(startPeriod));
+
 					if (Side.BOT.equals(getTrade().getSide())) {
 						if (currentCandle.getVwap() < firstCandle.getVwap()) {
-							Money stopPrice = addPennyAndRoundStop(
-									firstCandle.getVwap(),
-									getTrade().getSide(), Action.SELL, 0.01);
+							Money stopPrice = addPennyAndRoundStop(getTrade()
+									.getOpenPosition().getAverageFilledPrice()
+									.doubleValue(), getTrade().getSide(),
+									Action.SELL, 0.01);
 							moveStopOCAPrice(stopPrice, true);
 							_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
 									+ getSymbol()
@@ -193,9 +202,10 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 					} else {
 
 						if (currentCandle.getVwap() > firstCandle.getVwap()) {
-							Money stopPrice = addPennyAndRoundStop(
-									firstCandle.getVwap(),
-									getTrade().getSide(), Action.BUY, 0.01);
+							Money stopPrice = addPennyAndRoundStop(getTrade()
+									.getOpenPosition().getAverageFilledPrice()
+									.doubleValue(), getTrade().getSide(),
+									Action.BUY, 0.01);
 							moveStopOCAPrice(stopPrice, true);
 							_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
 									+ getSymbol()
@@ -272,8 +282,11 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 	/**
 	 * Method setHiekinAshiTrail.
-	 * @param trade Trade
-	 * @param bars int
+	 * 
+	 * @param trade
+	 *            Trade
+	 * @param bars
+	 *            int
 	 * @return boolean
 	 * @throws StrategyRuleException
 	 */
