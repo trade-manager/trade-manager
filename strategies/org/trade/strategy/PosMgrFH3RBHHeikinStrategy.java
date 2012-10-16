@@ -173,8 +173,9 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				/*
 				 * Manage the stop orders if the current bars Vwap crosses the
 				 * Vwap of the first 5min bar then move the stop price (
-				 * currently -2R) to the 9:35 Vwap price. This allows for tails
-				 * that break the 5min high/low between 9:40 thru 10:30.
+				 * currently -2R) to the average fill price i.e. b.e. This
+				 * allows for tails that break the 5min high/low between 9:40
+				 * thru 10:30.
 				 */
 
 				if (startPeriod.before(TradingCalendar.getSpecificTime(
