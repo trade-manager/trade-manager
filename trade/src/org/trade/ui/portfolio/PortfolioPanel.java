@@ -118,8 +118,11 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Constructor for PortfolioPanel.
-	 * @param controller BasePanel
-	 * @param tradePersistentModel PersistentModel
+	 * 
+	 * @param controller
+	 *            BasePanel
+	 * @param tradePersistentModel
+	 *            PersistentModel
 	 */
 	@SuppressWarnings("unchecked")
 	public PortfolioPanel(BasePanel controller,
@@ -274,7 +277,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Method itemStateChanged.
-	 * @param e ItemEvent
+	 * 
+	 * @param e
+	 *            ItemEvent
 	 * @see java.awt.event.ItemListener#itemStateChanged(ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent e) {
@@ -287,7 +292,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Method stateChanged.
-	 * @param e ChangeEvent
+	 * 
+	 * @param e
+	 *            ChangeEvent
 	 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
 	 */
 	public void stateChanged(ChangeEvent e) {
@@ -323,6 +330,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
@@ -331,7 +339,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Method resetTradeAccountComboBox.
-	 * @param editorComboBox DAODecodeComboBoxEditor
+	 * 
+	 * @param editorComboBox
+	 *            DAODecodeComboBoxEditor
 	 * @throws ValueTypeException
 	 */
 	@SuppressWarnings("unchecked")
@@ -352,7 +362,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			ListSelectionListener {
 		/**
 		 * Method valueChanged.
-		 * @param event ListSelectionEvent
+		 * 
+		 * @param event
+		 *            ListSelectionEvent
 		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
 		public void valueChanged(ListSelectionEvent event) {
@@ -373,6 +385,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Method openFileChooser.
+	 * 
 	 * @return String
 	 */
 	private String openFileChooser() {
@@ -427,7 +440,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Method doReadWrite.
-	 * @param fileName String
+	 * 
+	 * @param fileName
+	 *            String
 	 */
 	private void doReadWrite(String fileName) {
 		FileWriter fileWriter = null;
@@ -450,7 +465,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 						+ TradelogSummaryTableModel.WIN_AMOUNT + ","
 						+ TradelogSummaryTableModel.LOSS_COUNT + ","
 						+ TradelogSummaryTableModel.LOSS_AMOUNT + ","
-						+ TradelogSummaryTableModel.TRADE_COUNT);
+						+ TradelogSummaryTableModel.TRADE_COUNT + ","
+						+ TradelogSummaryTableModel.CONTRACT_COUNT);
 				// Write out the lines
 				if (null != m_tradelogReport) {
 					for (TradelogSummary tradelogSummary : m_tradelogReport
@@ -494,7 +510,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 * Method formatTradelogSummaryLine.
-	 * @param tradelogSummary TradelogSummary
+	 * 
+	 * @param tradelogSummary
+	 *            TradelogSummary
 	 * @return StringBuffer
 	 */
 	private StringBuffer formatTradelogSummaryLine(
@@ -534,14 +552,19 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 						: tradelogSummary.getLossAmount())
 				+ ","
 				+ (tradelogSummary.getTradeCount() == null ? ""
-						: tradelogSummary.getTradeCount()));
+						: tradelogSummary.getTradeCount())
+				+ ","
+				+ (tradelogSummary.getTradestrategyCount() == null ? ""
+						: tradelogSummary.getTradestrategyCount()));
 
 		return tradelogLine;
 	}
 
 	/**
 	 * Method formatTradelogDetailLine.
-	 * @param tradelogDetail TradelogDetail
+	 * 
+	 * @param tradelogDetail
+	 *            TradelogDetail
 	 * @return StringBuffer
 	 */
 	private StringBuffer formatTradelogDetailLine(TradelogDetail tradelogDetail) {
