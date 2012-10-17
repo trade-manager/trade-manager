@@ -289,7 +289,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel2.add(jScrollPane1, BorderLayout.CENTER);
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel2, jPanel4);
-			jSplitPane1.setDividerLocation(200);
+			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
 			jPanel1.add(jSplitPane1);
 			this.add(jPanel1, null);
