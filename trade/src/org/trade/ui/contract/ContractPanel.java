@@ -267,13 +267,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
 					jPanel9, jScrollPane2);
 			split.setOneTouchExpandable(true);
-			split.setDividerLocation(550);
+			split.setResizeWeight(0.8d);
 			jPanel15.add(split, BorderLayout.CENTER);
 
 			JSplitPane mainSplitPane = new JSplitPane(
 					JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
 
-			mainSplitPane.setDividerLocation(150);
+			mainSplitPane.setResizeWeight(0.05d);
 			mainSplitPane.setOneTouchExpandable(true);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
