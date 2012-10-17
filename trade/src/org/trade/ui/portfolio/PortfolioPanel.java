@@ -221,7 +221,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel3, jPanel4);
 			jSplitPane1.setOneTouchExpandable(true);
-			jSplitPane1.setDividerLocation(150);
+			jSplitPane1.setResizeWeight(0.2d);
 			this.add(jSplitPane1, BorderLayout.CENTER);
 
 			m_tableTradelogDetail.getSelectionModel().addListSelectionListener(

@@ -191,7 +191,7 @@ public class ConfigurationPanel extends BasePanel {
 
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel4, jPanel2);
-			jSplitPane1.setDividerLocation(400);
+			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
 			jPanel1.add(jSplitPane1, BorderLayout.CENTER);
 			jPanel1.add(jPanel3, BorderLayout.SOUTH);

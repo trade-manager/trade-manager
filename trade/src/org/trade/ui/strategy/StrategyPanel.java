@@ -211,11 +211,11 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 					true, treePanel, sourcePanel);
 			split.setOneTouchExpandable(true);
-			split.setDividerLocation(200);
+			split.setResizeWeight(0.05d);
 
 			JSplitPane mainSplitPane = new JSplitPane(
 					JSplitPane.VERTICAL_SPLIT, true, split, messagePanel);
-			mainSplitPane.setDividerLocation(550);
+			mainSplitPane.setResizeWeight(0.8d);
 			mainSplitPane.setOneTouchExpandable(true);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 
