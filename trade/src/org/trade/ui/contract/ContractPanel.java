@@ -191,8 +191,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tree.setCellRenderer(new TradingdayTreeCellRenderer());
 
 			JPanel jPanel1 = new JPanel(new BorderLayout());
-			JPanel jPanel2 = new JPanel(new BorderLayout());
-
 			FlowLayout flowLayout1 = new FlowLayout();
 			flowLayout1.setAlignment(FlowLayout.RIGHT);
 			JPanel jPanel3 = new JPanel(flowLayout1);
@@ -203,15 +201,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel1.add(jPanel3, BorderLayout.EAST);
 			JScrollPane jScrollPane1 = new JScrollPane();
 			jScrollPane1.getViewport().add(m_tree, BorderLayout.CENTER);
+			JPanel jPanel2 = new JPanel(new BorderLayout());
 			jPanel2.add(jScrollPane1, BorderLayout.CENTER);
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
-
-			JScrollPane jScrollPane2 = new JScrollPane();
-			JScrollPane jScrollPane3 = new JScrollPane();
-			JPanel jPanel14 = new JPanel(new BorderLayout());
-			JPanel jPanel15 = new JPanel(new BorderLayout());
-			JPanel jPanel7 = new JPanel(new BorderLayout());
-			JPanel jPanel9 = new JPanel(new BorderLayout());
 
 			// Chart Panel
 			JLabel jLabel4 = new JLabel("Period:");
@@ -221,34 +213,35 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			periodEditorComboBox.setRenderer(periodRenderer);
 			periodEditorComboBox.setItem(BarSize.newInstance(BarSize.FIVE_MIN));
 			periodEditorComboBox.addItemListener(this);
-			FlowLayout flowLayout5 = new FlowLayout();
-			flowLayout5.setAlignment(FlowLayout.LEFT);
-			JPanel jPanel6 = new JPanel(flowLayout5);
+			FlowLayout flowLayout2 = new FlowLayout();
+			flowLayout2.setAlignment(FlowLayout.LEFT);
+			JPanel jPanel6 = new JPanel(flowLayout2);
 			jPanel6.add(brokerDataButton, null);
 			jPanel6.add(cancelStrategiesButton, null);
 			jPanel6.add(jLabel4, null);
 			jPanel6.add(periodEditorComboBox, null);
 
-			FlowLayout flowLayout4 = new FlowLayout();
-			flowLayout4.setAlignment(FlowLayout.RIGHT);
-			JPanel jPanel12 = new JPanel(flowLayout4);
+			FlowLayout flowLayout3 = new FlowLayout();
+			flowLayout3.setAlignment(FlowLayout.RIGHT);
+			JPanel jPanel12 = new JPanel(flowLayout3);
 
 			m_strategyLabel = new JLabel("Strategy: ");
 			jPanel12.add(m_strategyLabel, null);
 			JPanel jPanel11 = new JPanel(new BorderLayout());
 			jPanel11.add(jPanel6, BorderLayout.WEST);
 			jPanel11.add(jPanel12, BorderLayout.EAST);
-
-			jPanel7.add(m_jTabbedPaneContract, BorderLayout.CENTER);
-			jPanel7.add(jPanel11, BorderLayout.SOUTH);
-			jScrollPane3.getViewport().add(jPanel7, BorderLayout.CENTER);
+			JPanel jPanel7 = new JPanel(new BorderLayout());
+			jPanel7.add(m_jTabbedPaneContract, BorderLayout.CENTER);	
+			JScrollPane jScrollPane3 = new JScrollPane();
+			jScrollPane3.getViewport().add(jPanel7, BorderLayout.CENTER);			
+			JPanel jPanel9 = new JPanel(new BorderLayout());
 			jPanel9.add(jScrollPane3, BorderLayout.CENTER);
-
+			jPanel9.add(jPanel11, BorderLayout.SOUTH);
 			// Order Panel
 			m_tradeOrderTable.setFont(new Font("Monospaced", Font.PLAIN, 12));
-			FlowLayout flowLayout2 = new FlowLayout();
-			flowLayout2.setAlignment(FlowLayout.LEFT);
-			JPanel jPanel5 = new JPanel(flowLayout2);
+			FlowLayout flowLayout4 = new FlowLayout();
+			flowLayout4.setAlignment(FlowLayout.LEFT);
+			JPanel jPanel5 = new JPanel(flowLayout4);
 			jPanel5.add(executeButton, null);
 			jPanel5.add(cancelButton, null);
 			jPanel5.add(refreshButton, null);
@@ -258,16 +251,21 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JPanel jPanel4 = new JPanel(new BorderLayout());
 			jPanel4.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel4.add(m_tradeOrderTable, null);
+			JPanel jPanel14 = new JPanel(new BorderLayout());
 			jPanel14.add(m_tradeLabel, BorderLayout.NORTH);
 			jPanel14.add(jPanel4, BorderLayout.CENTER);
-			jPanel14.add(jPanel10, BorderLayout.SOUTH);
-			jScrollPane2.getViewport().add(jPanel14, BorderLayout.CENTER);
+			JScrollPane jScrollPane2 = new JScrollPane();
+			jScrollPane2.getViewport().add(jPanel14, BorderLayout.CENTER);		
+			JPanel jPanel16 = new JPanel(new BorderLayout());
+			jPanel16.add(jPanel10, BorderLayout.SOUTH);
+			jPanel16.add(jScrollPane2, BorderLayout.CENTER);
 
 			// use the new JSplitPane to dynamically resize...
 			JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
-					jPanel9, jScrollPane2);
+					jPanel9, jPanel16);
 			split.setOneTouchExpandable(true);
 			split.setResizeWeight(0.8d);
+			JPanel jPanel15 = new JPanel(new BorderLayout());
 			jPanel15.add(split, BorderLayout.CENTER);
 
 			JSplitPane mainSplitPane = new JSplitPane(
