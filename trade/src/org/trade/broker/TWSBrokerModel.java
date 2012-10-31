@@ -153,6 +153,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method isConnected.
+	 * 
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isConnected()
 	 */
@@ -162,6 +163,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method getHistoricalData.
+	 * 
 	 * @return ConcurrentHashMap<Integer,Tradestrategy>
 	 * @see org.trade.broker.BrokerModel#getHistoricalData()
 	 */
@@ -171,9 +173,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onConnect.
-	 * @param host String
-	 * @param port Integer
-	 * @param clientId Integer
+	 * 
+	 * @param host
+	 *            String
+	 * @param port
+	 *            Integer
+	 * @param clientId
+	 *            Integer
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onConnect(String, Integer, Integer)
 	 */
@@ -187,6 +193,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method disconnect.
+	 * 
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#disconnect()
 	 */
@@ -203,6 +210,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method connectionClosed.
+	 * 
 	 * @see com.ib.client.AnyWrapper#connectionClosed()
 	 */
 	public void connectionClosed() {
@@ -214,6 +222,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onReqManagedAccount.
+	 * 
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqManagedAccount()
 	 */
@@ -229,10 +238,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onSubscribeAccountUpdates.
-	 * @param subscribe boolean
-	 * @param tradeAccount TradeAccount
+	 * 
+	 * @param subscribe
+	 *            boolean
+	 * @param tradeAccount
+	 *            TradeAccount
 	 * @throws BrokerModelException
-	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean, TradeAccount)
+	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean,
+	 *      TradeAccount)
 	 */
 	public void onSubscribeAccountUpdates(boolean subscribe,
 			TradeAccount tradeAccount) throws BrokerModelException {
@@ -260,6 +273,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onReqAllOpenOrders.
+	 * 
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqAllOpenOrders()
 	 */
@@ -276,6 +290,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onReqOpenOrders.
+	 * 
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqOpenOrders()
 	 */
@@ -292,7 +307,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onReqAllExecutions.
-	 * @param mktOpenDate Date
+	 * 
+	 * @param mktOpenDate
+	 *            Date
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqAllExecutions(Date)
 	 */
@@ -316,7 +333,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onReqExecutions.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqExecutions(Tradestrategy)
 	 */
@@ -342,7 +361,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onReqRealTimeBars.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqRealTimeBars(Tradestrategy)
 	 */
@@ -383,7 +404,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onReqMarketData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqMarketData(Tradestrategy)
 	 */
@@ -419,7 +442,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onContractDetails.
-	 * @param contract Contract
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onContractDetails(Contract)
 	 */
@@ -443,7 +468,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onBrokerData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Tradestrategy)
 	 */
@@ -492,14 +519,28 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 				String endDateTime = m_sdfGMT.format(endDate);
 
+				_log.info("onBrokerData Symbol: "
+						+ tradestrategy.getContract().getSymbol()
+						+ " end Time: "
+						+ endDateTime
+						+ " Period length: "
+						+ ChartDays.newInstance(tradestrategy.getChartDays())
+								.getDisplayName()
+						+ " Bar size: "
+						+ BarSize.newInstance(tradestrategy.getBarSize())
+								.getDisplayName() + " WhatToShow: "
+						+ backfillWhatToShow + " Regular Trading Hrs: "
+						+ backfillUseRTH + " Date format: "
+						+ backfillDateFormat);
+
 				m_client.reqHistoricalData(tradestrategy.getIdTradeStrategy(),
 						TWSBrokerModel.getIBContract(tradestrategy
 								.getContract()), endDateTime, ChartDays
 								.newInstance(tradestrategy.getChartDays())
 								.getDisplayName(),
 						BarSize.newInstance(tradestrategy.getBarSize())
-								.getDisplayName(), backfillWhatToShow, 1,
-						backfillDateFormat);
+								.getDisplayName(), backfillWhatToShow,
+						backfillUseRTH, backfillDateFormat);
 
 			} else {
 				throw new BrokerModelException(
@@ -516,7 +557,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method isAccountUpdatesRunning.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isAccountUpdatesRunning(String)
 	 */
@@ -531,7 +574,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method isHistoricalDataRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isHistoricalDataRunning(Tradestrategy)
 	 */
@@ -547,7 +592,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method isRealtimeBarsRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Tradestrategy)
 	 */
@@ -569,7 +616,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method isMarketDataRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isMarketDataRunning(Tradestrategy)
 	 */
@@ -591,6 +640,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onCancelAllRealtimeData.
+	 * 
 	 * @see org.trade.broker.BrokerModel#onCancelAllRealtimeData()
 	 */
 	public void onCancelAllRealtimeData() {
@@ -615,7 +665,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onCancelAccountUpdates.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @see org.trade.broker.BrokerModel#onCancelAccountUpdates(String)
 	 */
 	public void onCancelAccountUpdates(String accountNumber) {
@@ -631,7 +683,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onCancelContractDetails.
-	 * @param contract Contract
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @see org.trade.broker.BrokerModel#onCancelContractDetails(Contract)
 	 */
 	public void onCancelContractDetails(Contract contract) {
@@ -648,7 +702,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onCancelBrokerData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#onCancelBrokerData(Tradestrategy)
 	 */
 	public void onCancelBrokerData(Tradestrategy tradestrategy) {
@@ -668,7 +724,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onCancelRealtimeBars.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Tradestrategy)
 	 */
 	public void onCancelRealtimeBars(Tradestrategy tradestrategy) {
@@ -690,7 +748,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onCancelMktData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#onCancelMktData(Tradestrategy)
 	 */
 	public void onCancelMktData(Tradestrategy tradestrategy) {
@@ -708,8 +768,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onPlaceOrder.
-	 * @param contract Contract
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @return TradeOrder
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onPlaceOrder(Contract, TradeOrder)
@@ -752,7 +815,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method onCancelOrder.
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onCancelOrder(TradeOrder)
 	 */
@@ -778,10 +843,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	/**
 	 * Method execDetails.
-	 * @param reqId int
-	 * @param contractIB com.ib.client.Contract
-	 * @param execution Execution
-	 * @see com.ib.client.EWrapper#execDetails(int, com.ib.client.Contract, Execution)
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param contractIB
+	 *            com.ib.client.Contract
+	 * @param execution
+	 *            Execution
+	 * @see com.ib.client.EWrapper#execDetails(int, com.ib.client.Contract,
+	 *      Execution)
 	 */
 	public void execDetails(int reqId, com.ib.client.Contract contractIB,
 			Execution execution) {
@@ -833,7 +903,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method execDetailsEnd.
-	 * @param reqId int
+	 * 
+	 * @param reqId
+	 *            int
 	 * @see com.ib.client.EWrapper#execDetailsEnd(int)
 	 */
 	public void execDetailsEnd(int reqId) {
@@ -883,11 +955,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method openOrder.
-	 * @param orderId int
-	 * @param contractIB com.ib.client.Contract
-	 * @param order com.ib.client.Order
-	 * @param orderState OrderState
-	 * @see com.ib.client.EWrapper#openOrder(int, com.ib.client.Contract, com.ib.client.Order, OrderState)
+	 * 
+	 * @param orderId
+	 *            int
+	 * @param contractIB
+	 *            com.ib.client.Contract
+	 * @param order
+	 *            com.ib.client.Order
+	 * @param orderState
+	 *            OrderState
+	 * @see com.ib.client.EWrapper#openOrder(int, com.ib.client.Contract,
+	 *      com.ib.client.Order, OrderState)
 	 */
 	public void openOrder(int orderId, com.ib.client.Contract contractIB,
 			com.ib.client.Order order, OrderState orderState) {
@@ -974,17 +1052,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	/**
 	 * Method orderStatus.
-	 * @param orderId int
-	 * @param status String
-	 * @param filled int
-	 * @param remaining int
-	 * @param avgFillPrice double
-	 * @param permId int
-	 * @param parentId int
-	 * @param lastFillPrice double
-	 * @param clientId int
-	 * @param whyHeld String
-	 * @see com.ib.client.EWrapper#orderStatus(int, String, int, int, double, int, int, double, int, String)
+	 * 
+	 * @param orderId
+	 *            int
+	 * @param status
+	 *            String
+	 * @param filled
+	 *            int
+	 * @param remaining
+	 *            int
+	 * @param avgFillPrice
+	 *            double
+	 * @param permId
+	 *            int
+	 * @param parentId
+	 *            int
+	 * @param lastFillPrice
+	 *            double
+	 * @param clientId
+	 *            int
+	 * @param whyHeld
+	 *            String
+	 * @see com.ib.client.EWrapper#orderStatus(int, String, int, int, double,
+	 *      int, int, double, int, String)
 	 */
 	public void orderStatus(int orderId, String status, int filled,
 			int remaining, double avgFillPrice, int permId, int parentId,
@@ -1043,7 +1133,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method error.
-	 * @param ex Exception
+	 * 
+	 * @param ex
+	 *            Exception
 	 * @see com.ib.client.AnyWrapper#error(Exception)
 	 */
 	public void error(Exception ex) {
@@ -1053,7 +1145,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method error.
-	 * @param str String
+	 * 
+	 * @param str
+	 *            String
 	 * @see com.ib.client.AnyWrapper#error(String)
 	 */
 	public void error(String str) {
@@ -1067,10 +1161,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * System error 2000 - 2999 are IB TWS Warning 4000 - 4999 are application
 	 * warnings 5000 - 5999 are application information
 	 * 
-	
-	 * @param id int
-	 * @param code int
-	 * @param msg String
+	 * 
+	 * @param id
+	 *            int
+	 * @param code
+	 *            int
+	 * @param msg
+	 *            String
 	 * @see com.ib.client.AnyWrapper#error(int, int, String)
 	 */
 	public void error(int id, int code, String msg) {
@@ -1142,10 +1239,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method tickPrice.
-	 * @param reqId int
-	 * @param field int
-	 * @param value double
-	 * @param canAutoExecute int
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param field
+	 *            int
+	 * @param value
+	 *            double
+	 * @param canAutoExecute
+	 *            int
 	 * @see com.ib.client.EWrapper#tickPrice(int, int, double, int)
 	 */
 	public synchronized void tickPrice(int reqId, int field, double value,
@@ -1216,9 +1318,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method tickSize.
-	 * @param reqId int
-	 * @param field int
-	 * @param value int
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param field
+	 *            int
+	 * @param value
+	 *            int
 	 * @see com.ib.client.EWrapper#tickSize(int, int, int)
 	 */
 	public synchronized void tickSize(int reqId, int field, int value) {
@@ -1260,9 +1366,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method tickString.
-	 * @param reqId int
-	 * @param field int
-	 * @param value String
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param field
+	 *            int
+	 * @param value
+	 *            String
 	 * @see com.ib.client.EWrapper#tickString(int, int, String)
 	 */
 	public synchronized void tickString(int reqId, int field, String value) {
@@ -1366,17 +1476,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method tickOptionComputation.
-	 * @param reqId int
-	 * @param field int
-	 * @param impliedVol double
-	 * @param delta double
-	 * @param optPrice double
-	 * @param pvDividend double
-	 * @param gamma double
-	 * @param vega double
-	 * @param theta double
-	 * @param undPrice double
-	 * @see com.ib.client.EWrapper#tickOptionComputation(int, int, double, double, double, double, double, double, double, double)
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param field
+	 *            int
+	 * @param impliedVol
+	 *            double
+	 * @param delta
+	 *            double
+	 * @param optPrice
+	 *            double
+	 * @param pvDividend
+	 *            double
+	 * @param gamma
+	 *            double
+	 * @param vega
+	 *            double
+	 * @param theta
+	 *            double
+	 * @param undPrice
+	 *            double
+	 * @see com.ib.client.EWrapper#tickOptionComputation(int, int, double,
+	 *      double, double, double, double, double, double, double)
 	 */
 	public void tickOptionComputation(int reqId, int field, double impliedVol,
 			double delta, double optPrice, double pvDividend, double gamma,
@@ -1386,9 +1508,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method tickGeneric.
-	 * @param reqId int
-	 * @param tickType int
-	 * @param value double
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param tickType
+	 *            int
+	 * @param value
+	 *            double
 	 * @see com.ib.client.EWrapper#tickGeneric(int, int, double)
 	 */
 	public void tickGeneric(int reqId, int tickType, double value) {
@@ -1398,16 +1524,27 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method tickEFP.
-	 * @param reqId int
-	 * @param tickType int
-	 * @param basisPoints double
-	 * @param formattedBasisPoints String
-	 * @param impliedFuture double
-	 * @param holdDays int
-	 * @param futureExpiry String
-	 * @param dividendImpact double
-	 * @param dividendsToExpiry double
-	 * @see com.ib.client.EWrapper#tickEFP(int, int, double, String, double, int, String, double, double)
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param tickType
+	 *            int
+	 * @param basisPoints
+	 *            double
+	 * @param formattedBasisPoints
+	 *            String
+	 * @param impliedFuture
+	 *            double
+	 * @param holdDays
+	 *            int
+	 * @param futureExpiry
+	 *            String
+	 * @param dividendImpact
+	 *            double
+	 * @param dividendsToExpiry
+	 *            double
+	 * @see com.ib.client.EWrapper#tickEFP(int, int, double, String, double,
+	 *      int, String, double, double)
 	 */
 	public void tickEFP(int reqId, int tickType, double basisPoints,
 			String formattedBasisPoints, double impliedFuture, int holdDays,
@@ -1417,11 +1554,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method updateAccountValue.
-	 * @param key String
-	 * @param value String
-	 * @param currency String
-	 * @param accountNumber String
-	 * @see com.ib.client.EWrapper#updateAccountValue(String, String, String, String)
+	 * 
+	 * @param key
+	 *            String
+	 * @param value
+	 *            String
+	 * @param currency
+	 *            String
+	 * @param accountNumber
+	 *            String
+	 * @see com.ib.client.EWrapper#updateAccountValue(String, String, String,
+	 *      String)
 	 */
 	public void updateAccountValue(String key, String value, String currency,
 			String accountNumber) {
@@ -1465,15 +1608,25 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method updatePortfolio.
-	 * @param contract com.ib.client.Contract
-	 * @param position int
-	 * @param marketPrice double
-	 * @param marketValue double
-	 * @param averageCost double
-	 * @param unrealizedPNL double
-	 * @param realizedPNL double
-	 * @param accountNumber String
-	 * @see com.ib.client.EWrapper#updatePortfolio(com.ib.client.Contract, int, double, double, double, double, double, String)
+	 * 
+	 * @param contract
+	 *            com.ib.client.Contract
+	 * @param position
+	 *            int
+	 * @param marketPrice
+	 *            double
+	 * @param marketValue
+	 *            double
+	 * @param averageCost
+	 *            double
+	 * @param unrealizedPNL
+	 *            double
+	 * @param realizedPNL
+	 *            double
+	 * @param accountNumber
+	 *            String
+	 * @see com.ib.client.EWrapper#updatePortfolio(com.ib.client.Contract, int,
+	 *      double, double, double, double, double, String)
 	 */
 	public void updatePortfolio(com.ib.client.Contract contract, int position,
 			double marketPrice, double marketValue, double averageCost,
@@ -1487,7 +1640,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method updateAccountTime.
-	 * @param timeStamp String
+	 * 
+	 * @param timeStamp
+	 *            String
 	 * @see com.ib.client.EWrapper#updateAccountTime(String)
 	 */
 	public void updateAccountTime(String timeStamp) {
@@ -1514,7 +1669,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method accountDownloadEnd.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @see com.ib.client.EWrapper#accountDownloadEnd(String)
 	 */
 	public void accountDownloadEnd(String accountNumber) {
@@ -1523,6 +1680,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method getNextRequestId.
+	 * 
 	 * @return Integer
 	 * @see org.trade.broker.BrokerModel#getNextRequestId()
 	 */
@@ -1532,7 +1690,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method nextValidId.
-	 * @param orderId int
+	 * 
+	 * @param orderId
+	 *            int
 	 * @see com.ib.client.EWrapper#nextValidId(int)
 	 */
 	public void nextValidId(int orderId) {
@@ -1556,8 +1716,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method contractDetails.
-	 * @param reqId int
-	 * @param contractDetails ContractDetails
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param contractDetails
+	 *            ContractDetails
 	 * @see com.ib.client.EWrapper#contractDetails(int, ContractDetails)
 	 */
 	public void contractDetails(int reqId, ContractDetails contractDetails) {
@@ -1591,8 +1754,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method bondContractDetails.
-	 * @param reqId int
-	 * @param contractDetails ContractDetails
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param contractDetails
+	 *            ContractDetails
 	 * @see com.ib.client.EWrapper#bondContractDetails(int, ContractDetails)
 	 */
 	public void bondContractDetails(int reqId, ContractDetails contractDetails) {
@@ -1601,7 +1767,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method contractDetailsEnd.
-	 * @param reqId int
+	 * 
+	 * @param reqId
+	 *            int
 	 * @see com.ib.client.EWrapper#contractDetailsEnd(int)
 	 */
 	public void contractDetailsEnd(int reqId) {
@@ -1612,13 +1780,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method updateMktDepth.
-	 * @param tickerId int
-	 * @param position int
-	 * @param operation int
-	 * @param side int
-	 * @param price double
-	 * @param size int
-	 * @see com.ib.client.EWrapper#updateMktDepth(int, int, int, int, double, int)
+	 * 
+	 * @param tickerId
+	 *            int
+	 * @param position
+	 *            int
+	 * @param operation
+	 *            int
+	 * @param side
+	 *            int
+	 * @param price
+	 *            double
+	 * @param size
+	 *            int
+	 * @see com.ib.client.EWrapper#updateMktDepth(int, int, int, int, double,
+	 *      int)
 	 */
 	public void updateMktDepth(int tickerId, int position, int operation,
 			int side, double price, int size) {
@@ -1627,14 +1803,23 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method updateMktDepthL2.
-	 * @param tickerId int
-	 * @param position int
-	 * @param marketMaker String
-	 * @param operation int
-	 * @param side int
-	 * @param price double
-	 * @param size int
-	 * @see com.ib.client.EWrapper#updateMktDepthL2(int, int, String, int, int, double, int)
+	 * 
+	 * @param tickerId
+	 *            int
+	 * @param position
+	 *            int
+	 * @param marketMaker
+	 *            String
+	 * @param operation
+	 *            int
+	 * @param side
+	 *            int
+	 * @param price
+	 *            double
+	 * @param size
+	 *            int
+	 * @see com.ib.client.EWrapper#updateMktDepthL2(int, int, String, int, int,
+	 *      double, int)
 	 */
 	public void updateMktDepthL2(int tickerId, int position,
 			String marketMaker, int operation, int side, double price, int size) {
@@ -1643,10 +1828,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method updateNewsBulletin.
-	 * @param msgId int
-	 * @param msgType int
-	 * @param message String
-	 * @param origExchange String
+	 * 
+	 * @param msgId
+	 *            int
+	 * @param msgType
+	 *            int
+	 * @param message
+	 *            String
+	 * @param origExchange
+	 *            String
 	 * @see com.ib.client.EWrapper#updateNewsBulletin(int, int, String, String)
 	 */
 	public void updateNewsBulletin(int msgId, int msgType, String message,
@@ -1656,7 +1846,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method managedAccounts.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @see com.ib.client.EWrapper#managedAccounts(String)
 	 */
 	public void managedAccounts(String accountNumber) {
@@ -1665,8 +1857,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method receiveFA.
-	 * @param faDataType int
-	 * @param xml String
+	 * 
+	 * @param faDataType
+	 *            int
+	 * @param xml
+	 *            String
 	 * @see com.ib.client.EWrapper#receiveFA(int, String)
 	 */
 	public void receiveFA(int faDataType, String xml) {
@@ -1675,8 +1870,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method marketDataType.
-	 * @param reqId int
-	 * @param marketDataType int
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param marketDataType
+	 *            int
 	 * @see com.ib.client.EWrapper#marketDataType(int, int)
 	 */
 	public void marketDataType(int reqId, int marketDataType) {
@@ -1685,17 +1883,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method historicalData.
-	 * @param reqId int
-	 * @param dateString String
-	 * @param open double
-	 * @param high double
-	 * @param low double
-	 * @param close double
-	 * @param volume int
-	 * @param tradeCount int
-	 * @param vwap double
-	 * @param hasGaps boolean
-	 * @see com.ib.client.EWrapper#historicalData(int, String, double, double, double, double, int, int, double, boolean)
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param dateString
+	 *            String
+	 * @param open
+	 *            double
+	 * @param high
+	 *            double
+	 * @param low
+	 *            double
+	 * @param close
+	 *            double
+	 * @param volume
+	 *            int
+	 * @param tradeCount
+	 *            int
+	 * @param vwap
+	 *            double
+	 * @param hasGaps
+	 *            boolean
+	 * @see com.ib.client.EWrapper#historicalData(int, String, double, double,
+	 *      double, double, int, int, double, boolean)
 	 */
 	public void historicalData(int reqId, String dateString, double open,
 			double high, double low, double close, int volume, int tradeCount,
@@ -1777,7 +1987,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method scannerParameters.
-	 * @param xml String
+	 * 
+	 * @param xml
+	 *            String
 	 * @see com.ib.client.EWrapper#scannerParameters(String)
 	 */
 	public void scannerParameters(String xml) {
@@ -1786,14 +1998,23 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method scannerData.
-	 * @param reqId int
-	 * @param rank int
-	 * @param contractDetails ContractDetails
-	 * @param distance String
-	 * @param benchmark String
-	 * @param projection String
-	 * @param legsStr String
-	 * @see com.ib.client.EWrapper#scannerData(int, int, ContractDetails, String, String, String, String)
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param rank
+	 *            int
+	 * @param contractDetails
+	 *            ContractDetails
+	 * @param distance
+	 *            String
+	 * @param benchmark
+	 *            String
+	 * @param projection
+	 *            String
+	 * @param legsStr
+	 *            String
+	 * @see com.ib.client.EWrapper#scannerData(int, int, ContractDetails,
+	 *      String, String, String, String)
 	 */
 	public void scannerData(int reqId, int rank,
 			ContractDetails contractDetails, String distance, String benchmark,
@@ -1803,7 +2024,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method scannerDataEnd.
-	 * @param reqId int
+	 * 
+	 * @param reqId
+	 *            int
 	 * @see com.ib.client.EWrapper#scannerDataEnd(int)
 	 */
 	public void scannerDataEnd(int reqId) {
@@ -1812,16 +2035,27 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method realtimeBar.
-	 * @param reqId int
-	 * @param time long
-	 * @param open double
-	 * @param high double
-	 * @param low double
-	 * @param close double
-	 * @param volume long
-	 * @param vwap double
-	 * @param tradeCount int
-	 * @see com.ib.client.EWrapper#realtimeBar(int, long, double, double, double, double, long, double, int)
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param time
+	 *            long
+	 * @param open
+	 *            double
+	 * @param high
+	 *            double
+	 * @param low
+	 *            double
+	 * @param close
+	 *            double
+	 * @param volume
+	 *            long
+	 * @param vwap
+	 *            double
+	 * @param tradeCount
+	 *            int
+	 * @see com.ib.client.EWrapper#realtimeBar(int, long, double, double,
+	 *      double, double, long, double, int)
 	 */
 	public void realtimeBar(int reqId, long time, double open, double high,
 			double low, double close, long volume, double vwap, int tradeCount) {
@@ -1863,7 +2097,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method currentTime.
-	 * @param time long
+	 * 
+	 * @param time
+	 *            long
 	 * @see com.ib.client.EWrapper#currentTime(long)
 	 */
 	public void currentTime(long time) {
@@ -1872,8 +2108,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method fundamentalData.
-	 * @param reqId int
-	 * @param data String
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param data
+	 *            String
 	 * @see com.ib.client.EWrapper#fundamentalData(int, String)
 	 */
 	public void fundamentalData(int reqId, String data) {
@@ -1882,8 +2121,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method deltaNeutralValidation.
-	 * @param reqId int
-	 * @param underComp UnderComp
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param underComp
+	 *            UnderComp
 	 * @see com.ib.client.EWrapper#deltaNeutralValidation(int, UnderComp)
 	 */
 	public void deltaNeutralValidation(int reqId, UnderComp underComp) {
@@ -1892,7 +2134,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method tickSnapshotEnd.
-	 * @param reqId int
+	 * 
+	 * @param reqId
+	 *            int
 	 * @see com.ib.client.EWrapper#tickSnapshotEnd(int)
 	 */
 	public void tickSnapshotEnd(int reqId) {
@@ -1901,7 +2145,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method printCandles.
-	 * @param series CandleSeries
+	 * 
+	 * @param series
+	 *            CandleSeries
 	 */
 	@SuppressWarnings("unused")
 	private void printCandles(CandleSeries series) {
@@ -1917,7 +2163,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method getIBContract.
-	 * @param contract Contract
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @return com.ib.client.Contract
 	 * @throws IOException
 	 */
@@ -1961,7 +2209,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method getIBOrder.
-	 * @param order TradeOrder
+	 * 
+	 * @param order
+	 *            TradeOrder
 	 * @return com.ib.client.Order
 	 */
 	public static com.ib.client.Order getIBOrder(TradeOrder order) {
@@ -2044,9 +2294,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method updateTradeOrder.
-	 * @param ibOrder com.ib.client.Order
-	 * @param ibOrderState com.ib.client.OrderState
-	 * @param order TradeOrder
+	 * 
+	 * @param ibOrder
+	 *            com.ib.client.Order
+	 * @param ibOrderState
+	 *            com.ib.client.OrderState
+	 * @param order
+	 *            TradeOrder
 	 * @return boolean
 	 * @throws ParseException
 	 */
@@ -2204,8 +2458,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method populateContract.
-	 * @param contractDetails com.ib.client.ContractDetails
-	 * @param transientContract Contract
+	 * 
+	 * @param contractDetails
+	 *            com.ib.client.ContractDetails
+	 * @param transientContract
+	 *            Contract
 	 * @throws ParseException
 	 */
 	public static void populateContract(
@@ -2266,8 +2523,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method populateTradeOrderfill.
-	 * @param execution com.ib.client.Execution
-	 * @param tradeOrderfill TradeOrderfill
+	 * 
+	 * @param execution
+	 *            com.ib.client.Execution
+	 * @param tradeOrderfill
+	 *            TradeOrderfill
 	 * @throws ParseException
 	 * @throws IOException
 	 */
@@ -2291,10 +2551,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method getIBExecutionFilter.
-	 * @param clientId Integer
-	 * @param mktOpen Date
-	 * @param secType String
-	 * @param symbol String
+	 * 
+	 * @param clientId
+	 *            Integer
+	 * @param mktOpen
+	 *            Date
+	 * @param secType
+	 *            String
+	 * @param symbol
+	 *            String
 	 * @return com.ib.client.ExecutionFilter
 	 */
 	public static com.ib.client.ExecutionFilter getIBExecutionFilter(
@@ -2315,16 +2580,27 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method logOrderStatus.
-	 * @param orderId int
-	 * @param status String
-	 * @param filled int
-	 * @param remaining int
-	 * @param avgFillPrice double
-	 * @param permId int
-	 * @param parentId int
-	 * @param lastFillPrice double
-	 * @param clientId int
-	 * @param whyHeld String
+	 * 
+	 * @param orderId
+	 *            int
+	 * @param status
+	 *            String
+	 * @param filled
+	 *            int
+	 * @param remaining
+	 *            int
+	 * @param avgFillPrice
+	 *            double
+	 * @param permId
+	 *            int
+	 * @param parentId
+	 *            int
+	 * @param lastFillPrice
+	 *            double
+	 * @param clientId
+	 *            int
+	 * @param whyHeld
+	 *            String
 	 */
 	public static void logOrderStatus(int orderId, String status, int filled,
 			int remaining, double avgFillPrice, int permId, int parentId,
@@ -2339,7 +2615,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method logTradeOrder.
-	 * @param order com.ib.client.Order
+	 * 
+	 * @param order
+	 *            com.ib.client.Order
 	 */
 	public static void logTradeOrder(com.ib.client.Order order) {
 
@@ -2362,7 +2640,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method logContract.
-	 * @param contect com.ib.client.Contract
+	 * 
+	 * @param contect
+	 *            com.ib.client.Contract
 	 */
 	public static void logContract(com.ib.client.Contract contect) {
 		_log.info("Symbol: " + contect.m_symbol + " Sec Type: "
@@ -2377,7 +2657,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method logOrderState.
-	 * @param orderState com.ib.client.OrderState
+	 * 
+	 * @param orderState
+	 *            com.ib.client.OrderState
 	 */
 	public static void logOrderState(com.ib.client.OrderState orderState) {
 		_log.info("Status: " + orderState.m_status + " Comms Amt: "
@@ -2392,7 +2674,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method logExecution.
-	 * @param execution com.ib.client.Execution
+	 * 
+	 * @param execution
+	 *            com.ib.client.Execution
 	 */
 	public static void logExecution(com.ib.client.Execution execution) {
 		_log.info("execDetails OrderId: " + execution.m_orderId + " ClientId: "
