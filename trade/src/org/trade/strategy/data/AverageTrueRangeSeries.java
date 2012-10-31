@@ -262,13 +262,13 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
-		if (getLength() < Double.MIN_VALUE) {
-			throw new IllegalArgumentException("period must be positive.");
+		if (getLength() < 1) {
+			throw new IllegalArgumentException("period must be greater than 0.");
 		}
 
 		if (skip == 0) {
 			sum = 0.0;
-			currATR = Double.MAX_VALUE;
+			currATR = -1;
 			prevATR = 0;
 			prevTR = 0;
 		}
@@ -302,7 +302,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 			if (skip >= getLength()) {
 
-				if (currATR == Double.MAX_VALUE) {
+				if (currATR == -1) {
 					currATR = sum / getLength();
 				} else {
 					currATR = ((prevATR * (getLength() - 1)) + tR)
