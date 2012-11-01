@@ -1949,6 +1949,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					} catch (BrokerModelException e) {
 						error(reqId, 3250, e.getMessage());
 					}
+				}else{
+					tradestrategy.getDatasetContainer().cancel();
+					_log.info("Historical data complete for: "
+							+ tradestrategy.getContract().getSymbol());
 				}
 
 			} else {

@@ -72,8 +72,11 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Constructor for StrategyData.
-	 * @param strategy Strategy
-	 * @param baseCandleDataset CandleDataset
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param baseCandleDataset
+	 *            CandleDataset
 	 */
 	public StrategyData(Strategy strategy, CandleDataset baseCandleDataset) {
 
@@ -212,12 +215,15 @@ public class StrategyData extends Worker {
 	}
 
 	protected void done() {
-
+		// Free some memory!!
+		this.clearBaseCandleSeries();
 	}
 
 	/**
 	 * Method changeCandleSeriesPeriod.
-	 * @param newPeriod int
+	 * 
+	 * @param newPeriod
+	 *            int
 	 */
 	public void changeCandleSeriesPeriod(int newPeriod) {
 		/*
@@ -237,15 +243,25 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method buildCandle.
-	 * @param time Date
-	 * @param open double
-	 * @param high double
-	 * @param low double
-	 * @param close double
-	 * @param volume long
-	 * @param vwap double
-	 * @param tradeCount int
-	 * @param rollupInterval int
+	 * 
+	 * @param time
+	 *            Date
+	 * @param open
+	 *            double
+	 * @param high
+	 *            double
+	 * @param low
+	 *            double
+	 * @param close
+	 *            double
+	 * @param volume
+	 *            long
+	 * @param vwap
+	 *            double
+	 * @param tradeCount
+	 *            int
+	 * @param rollupInterval
+	 *            int
 	 * @return int
 	 */
 	public int buildCandle(Date time, double open, double high, double low,
@@ -303,7 +319,9 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method updateDatasetSeries.
-	 * @param candle CandleItem
+	 * 
+	 * @param candle
+	 *            CandleItem
 	 */
 	private synchronized void updateDatasetSeries(CandleItem candle) {
 
@@ -344,6 +362,7 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method getIndicators.
+	 * 
 	 * @return List<IndicatorDataset>
 	 */
 	public List<IndicatorDataset> getIndicators() {
@@ -352,7 +371,9 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method getIndicators.
-	 * @param type String
+	 * 
+	 * @param type
+	 *            String
 	 * @return IndicatorDataset
 	 */
 	public IndicatorDataset getIndicators(String type) {
@@ -367,6 +388,7 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method getBaseCandleSeries.
+	 * 
 	 * @return CandleSeries
 	 */
 	public CandleSeries getBaseCandleSeries() {
@@ -375,6 +397,7 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method getCandleDataset.
+	 * 
 	 * @return CandleDataset
 	 */
 	public CandleDataset getCandleDataset() {
@@ -383,6 +406,7 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method getStrategy.
+	 * 
 	 * @return Strategy
 	 */
 	public Strategy getStrategy() {
@@ -391,6 +415,7 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method getBackTestWorker.
+	 * 
 	 * @return BackTestBroker
 	 */
 	public BackTestBroker getBackTestWorker() {
@@ -399,7 +424,9 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method setBackTestWorker.
-	 * @param backTestWorker BackTestBroker
+	 * 
+	 * @param backTestWorker
+	 *            BackTestBroker
 	 */
 	public void setBackTestWorker(BackTestBroker backTestWorker) {
 		this.backTestWorker = backTestWorker;
@@ -407,12 +434,19 @@ public class StrategyData extends Worker {
 
 	/**
 	 * Method doDummyData.
-	 * @param series CandleSeries
-	 * @param start Tradingday
-	 * @param noDays int
-	 * @param barSize int
-	 * @param longTrade boolean
-	 * @param delaySecond int
+	 * 
+	 * @param series
+	 *            CandleSeries
+	 * @param start
+	 *            Tradingday
+	 * @param noDays
+	 *            int
+	 * @param barSize
+	 *            int
+	 * @param longTrade
+	 *            boolean
+	 * @param delaySecond
+	 *            int
 	 */
 	public static void doDummyData(CandleSeries series, Tradingday start,
 			int noDays, int barSize, boolean longTrade, int delaySecond) {
