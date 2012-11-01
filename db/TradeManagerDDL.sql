@@ -40,7 +40,7 @@ CREATE  TABLE IF NOT EXISTS contract (
   category VARCHAR(80) NULL ,
   currency VARCHAR(3) NOT NULL ,
   description VARCHAR(80) NULL ,
-  exchange VARCHAR(10) NOT NULL ,
+  exchange VARCHAR(30) NOT NULL ,
   expiry DATETIME NULL ,
   idContractIB INT NULL ,
   industry VARCHAR(80) NULL ,
@@ -128,8 +128,7 @@ CREATE  TABLE IF NOT EXISTS strategy (
     FOREIGN KEY (idStrategyManager )
     REFERENCES strategy (idStrategy )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION) ENGINE = InnoDB;
 
 SHOW WARNINGS;
 

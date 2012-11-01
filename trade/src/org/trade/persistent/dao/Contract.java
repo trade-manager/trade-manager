@@ -234,7 +234,7 @@ public class Contract extends Aspect implements java.io.Serializable {
 	 * Method getExchange.
 	 * @return String
 	 */
-	@Column(name = "exchange", nullable = false, length = 10)
+	@Column(name = "exchange", nullable = false, length = 30)
 	public String getExchange() {
 		return this.exchange;
 	}

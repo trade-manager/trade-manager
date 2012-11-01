@@ -69,7 +69,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for Tradingdays.
-	 * @param idTradingdays Integer
+	 * 
+	 * @param idTradingdays
+	 *            Integer
 	 */
 	public Tradingdays(Integer idTradingdays) {
 		this.id = idTradingdays;
@@ -77,8 +79,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for Tradingdays.
-	 * @param idTradingdays Integer
-	 * @param tradingdays List<Tradingday>
+	 * 
+	 * @param idTradingdays
+	 *            Integer
+	 * @param tradingdays
+	 *            List<Tradingday>
 	 */
 	public Tradingdays(Integer idTradingdays, List<Tradingday> tradingdays) {
 		this.id = idTradingdays;
@@ -89,6 +94,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getIdTradingdays.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getIdTradingdays() {
@@ -97,7 +103,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdTradingdays.
-	 * @param idTradingdays Integer
+	 * 
+	 * @param idTradingdays
+	 *            Integer
 	 */
 	public void setIdTradingdays(Integer idTradingdays) {
 		this.id = idTradingdays;
@@ -105,7 +113,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method add.
-	 * @param tradingday Tradingday
+	 * 
+	 * @param tradingday
+	 *            Tradingday
 	 */
 	public void add(Tradingday tradingday) {
 		this.tradingdays.put(tradingday.getOpen(), tradingday);
@@ -113,7 +123,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method remove.
-	 * @param tradingday Tradingday
+	 * 
+	 * @param tradingday
+	 *            Tradingday
 	 */
 	public void remove(Tradingday tradingday) {
 		this.tradingdays.remove(tradingday.getOpen());
@@ -121,6 +133,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getTradingdays.
+	 * 
 	 * @return ConcurrentHashMap<Date,Tradingday>
 	 */
 	public ConcurrentHashMap<Date, Tradingday> getTradingdays() {
@@ -129,7 +142,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setTradingdays.
-	 * @param tradingdays ConcurrentHashMap<Date,Tradingday>
+	 * 
+	 * @param tradingdays
+	 *            ConcurrentHashMap<Date,Tradingday>
 	 */
 	public void setTradingdays(ConcurrentHashMap<Date, Tradingday> tradingdays) {
 		this.tradingdays = tradingdays;
@@ -137,7 +152,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getTradingday.
-	 * @param open Date
+	 * 
+	 * @param open
+	 *            Date
 	 * @return Tradingday
 	 */
 	public Tradingday getTradingday(Date open) {
@@ -146,6 +163,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method isDirty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isDirty() {
@@ -159,7 +177,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getContract.
-	 * @param symbol String
+	 * 
+	 * @param symbol
+	 *            String
 	 * @return Contract
 	 */
 	public Contract getContract(String symbol) {
@@ -178,7 +198,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getTradestrategy.
-	 * @param idTradestrategy Integer
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy getTradestrategy(Integer idTradestrategy) {
@@ -194,7 +216,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method replaceTradingday.
-	 * @param newTradingday Tradingday
+	 * 
+	 * @param newTradingday
+	 *            Tradingday
 	 */
 	public void replaceTradingday(Tradingday newTradingday) {
 		this.tradingdays.replace(newTradingday.getOpen(), newTradingday);
@@ -202,7 +226,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method replaceTradestrategy.
-	 * @param newTradestrategy Tradestrategy
+	 * 
+	 * @param newTradestrategy
+	 *            Tradestrategy
 	 */
 	public void replaceTradestrategy(Tradestrategy newTradestrategy) {
 		for (Tradingday tradingday : getTradingdays().values()) {
@@ -218,7 +244,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method hasTradestrategies.
-	 * @param tradingdays Tradingdays
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
 	 * @return boolean
 	 */
 	public static boolean hasTradestrategies(Tradingdays tradingdays) {
@@ -232,7 +260,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method hasTrades.
-	 * @param tradingday Tradingday
+	 * 
+	 * @param tradingday
+	 *            Tradingday
 	 * @return boolean
 	 */
 	public static boolean hasTrades(Tradingday tradingday) {
@@ -246,7 +276,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method hasOpenTrades.
-	 * @param tradingday Tradingday
+	 * 
+	 * @param tradingday
+	 *            Tradingday
 	 * @return boolean
 	 */
 	public static boolean hasOpenTrades(Tradingday tradingday) {
@@ -262,7 +294,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method populateDataFromFile.
-	 * @param fileName String
+	 * 
+	 * @param fileName
+	 *            String
 	 * @throws Exception
 	 */
 	public synchronized void populateDataFromFile(String fileName)
@@ -379,7 +413,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method parseContractLine.
-	 * @param csvLine String
+	 * 
+	 * @param csvLine
+	 *            String
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
@@ -423,7 +459,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				break;
 			}
 			case 4: {
-				contract.setExchange(token.toUpperCase());
+				if (token.toUpperCase().equals("SMART/ISLAND")) {
+					contract.setExchange("SMART");
+				} else {
+					contract.setExchange(token.toUpperCase());
+				}
 				break;
 			}
 			case 5: {
