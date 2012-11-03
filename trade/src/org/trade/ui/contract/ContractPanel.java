@@ -38,6 +38,7 @@ package org.trade.ui.contract;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
@@ -47,6 +48,7 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -92,7 +94,6 @@ import org.trade.strategy.data.IndicatorSeries;
 import org.trade.ui.base.BaseButton;
 import org.trade.ui.base.BasePanel;
 import org.trade.ui.base.BaseUIPropertyCodes;
-import org.trade.ui.base.StreamEditorPane;
 import org.trade.ui.base.TabbedAppPanel;
 import org.trade.ui.base.TabbedCloseButton;
 import org.trade.ui.base.Table;
@@ -121,7 +122,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private Tree m_tree = null;
 	private Table m_tradeOrderTable = null;
 	private TradeOrderTableModel m_tradeOrderModel = null;
-	private StreamEditorPane m_tradeLabel = new StreamEditorPane("text/rtf");
+	private JEditorPane m_tradeLabel = null;
 	private JLabel m_strategyLabel = null;
 	private BaseButton executeButton = null;
 	private BaseButton brokerDataButton = null;
@@ -153,7 +154,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			PersistentModel tradePersistentModel) {
 
 		try {
-
 			formater.setMinimumFractionDigits(2);
 			StyleConstants.setBold(bold, true);
 			StyleConstants.setBackground(colorRedAttr, Color.RED);
@@ -179,7 +179,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
 			closeAllButton = new BaseButton(this, BaseUIPropertyCodes.CLOSE_ALL);
 			m_tradeOrderModel = new TradeOrderTableModel();
-			m_tradeOrderModel.setData(new Tradestrategy());
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
 					new RowListener());
@@ -231,9 +230,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel11.add(jPanel6, BorderLayout.WEST);
 			jPanel11.add(jPanel12, BorderLayout.EAST);
 			JPanel jPanel7 = new JPanel(new BorderLayout());
-			jPanel7.add(m_jTabbedPaneContract, BorderLayout.CENTER);	
+			jPanel7.add(m_jTabbedPaneContract, BorderLayout.CENTER);
 			JScrollPane jScrollPane3 = new JScrollPane();
-			jScrollPane3.getViewport().add(jPanel7, BorderLayout.CENTER);			
+			jScrollPane3.getViewport().add(jPanel7, BorderLayout.CENTER);
 			JPanel jPanel9 = new JPanel(new BorderLayout());
 			jPanel9.add(jScrollPane3, BorderLayout.CENTER);
 			jPanel9.add(jPanel11, BorderLayout.SOUTH);
@@ -248,17 +247,21 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			JPanel jPanel10 = new JPanel(new BorderLayout());
 			jPanel10.add(jPanel5, BorderLayout.WEST);
-			JPanel jPanel4 = new JPanel(new BorderLayout());
-			jPanel4.setBorder(new BevelBorder(BevelBorder.LOWERED));
-			jPanel4.add(m_tradeOrderTable, null);
-			JPanel jPanel14 = new JPanel(new BorderLayout());
-			jPanel14.add(m_tradeLabel, BorderLayout.NORTH);
-			jPanel14.add(jPanel4, BorderLayout.CENTER);
 			JScrollPane jScrollPane2 = new JScrollPane();
-			jScrollPane2.getViewport().add(jPanel14, BorderLayout.CENTER);		
+			jScrollPane2.getViewport().add(m_tradeOrderTable,
+					BorderLayout.CENTER);
+			jScrollPane2.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			JPanel jPanel16 = new JPanel(new BorderLayout());
-			jPanel16.add(jPanel10, BorderLayout.SOUTH);
+			Dimension d = m_tradeOrderTable.getPreferredSize();
+			// Make changes to [i]d[/i] if you like...
+			m_tradeOrderTable.setPreferredScrollableViewportSize(d);
+
+			m_tradeLabel = new JEditorPane("text/rtf", "");
+			m_tradeLabel.setAutoscrolls(false);
+			m_tradeLabel.setEditable(false);
+			jPanel16.add(m_tradeLabel, BorderLayout.NORTH);
 			jPanel16.add(jScrollPane2, BorderLayout.CENTER);
+			jPanel16.add(jPanel10, BorderLayout.SOUTH);
 
 			// use the new JSplitPane to dynamically resize...
 			JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
@@ -271,12 +274,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JSplitPane mainSplitPane = new JSplitPane(
 					JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
 
-			mainSplitPane.setResizeWeight(0.05d);
 			mainSplitPane.setOneTouchExpandable(true);
+			mainSplitPane.setResizeWeight(0.05d);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
 			enableChartButtons(null);
-
+			
+			
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
 					ex.getMessage(), ex);

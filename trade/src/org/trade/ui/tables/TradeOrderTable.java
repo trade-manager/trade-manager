@@ -78,12 +78,15 @@ public class TradeOrderTable extends Table {
 
 	/**
 	 * Constructor for TradeOrderTable.
-	 * @param model TableModel
+	 * 
+	 * @param model
+	 *            TableModel
 	 * @throws ValueTypeException
 	 * @throws ParseException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public TradeOrderTable(TableModel model) throws ValueTypeException, ParseException {
+	public TradeOrderTable(TableModel model) throws ValueTypeException,
+			ParseException {
 		super(model);
 
 		DecodeTableEditor actionEditor = new DecodeTableEditor(new JComboBox(
@@ -119,13 +122,13 @@ public class TradeOrderTable extends Table {
 				new Date()), DATETIMEFORMAT, Calendar.DAY_OF_MONTH);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
-
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 	}
 
 	// Implement table header tool tips.
 	/**
 	 * Method createDefaultTableHeader.
+	 * 
 	 * @return JTableHeader
 	 */
 	protected JTableHeader createDefaultTableHeader() {
@@ -143,5 +146,6 @@ public class TradeOrderTable extends Table {
 				return null;
 			}
 		};
+
 	}
 }
