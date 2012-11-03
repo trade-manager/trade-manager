@@ -72,6 +72,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
@@ -279,8 +280,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
 			enableChartButtons(null);
-			
-			
+
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
 					ex.getMessage(), ex);
@@ -779,28 +779,32 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			double profitLoss = 0;
 			double commision = 0;
 			setMessageText("Symbol:", false, false, bold);
-			setMessageText(tradestrategy.getContract().getSymbol(), true,
-					false, null);
+			setMessageText(CoreUtils.padRight(tradestrategy.getContract()
+					.getSymbol(), 10), true, false, null);
 			setMessageText(" Side:", true, false, bold);
-			setMessageText(Side.newInstance(tradestrategy.getSide())
-					.getDisplayName(), true, false, null);
+			setMessageText(CoreUtils.padRight(
+					Side.newInstance(tradestrategy.getSide()).getDisplayName(),
+					6), true, false, null);
 			setMessageText(" Tier:", true, false, bold);
-			setMessageText((tradestrategy.getTier() == null ? "" : Tier
-					.newInstance(tradestrategy.getTier()).getDisplayName()),
+			setMessageText(CoreUtils.padRight(
+					(tradestrategy.getTier() == null ? "" : Tier.newInstance(
+							tradestrategy.getTier()).getDisplayName()), 6),
 					true, false, null);
 			setMessageText(" Status:", true, false, bold);
-			setMessageText((tradestrategy.getStatus() == null ? ""
-					: TradestrategyStatus
-							.newInstance(tradestrategy.getStatus())
-							.getDisplayName()), true, false, null);
-			setMessageText(" Account:", true, false, bold);
-			setMessageText(tradestrategy.getTradeAccount().toString(), true,
-					false, null);
-			setMessageText(" Risk:", true, false, bold);
 			setMessageText(
-					formater.format((tradestrategy.getRiskAmount() == null ? 0
-							: tradestrategy.getRiskAmount()).doubleValue()),
-					true, false, null);
+					CoreUtils.padRight(
+							(tradestrategy.getStatus() == null ? ""
+									: TradestrategyStatus.newInstance(
+											tradestrategy.getStatus())
+											.getDisplayName()), 20), true,
+					false, null);
+			setMessageText(" Account:", true, false, bold);
+			setMessageText(CoreUtils.padRight(tradestrategy.getTradeAccount()
+					.toString(), 10), true, false, null);
+			setMessageText(" Risk:", true, false, bold);
+			setMessageText(CoreUtils.padLeft(formater.format((tradestrategy
+					.getRiskAmount() == null ? 0 : tradestrategy
+					.getRiskAmount()).doubleValue()), 10), true, false, null);
 			for (Trade trade : tradestrategy.getTrades()) {
 				if (!trade.getIsOpen()) {
 
@@ -845,16 +849,21 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			}
 			setMessageText(" Profit:", true, false, bold);
 			if (profitLoss < 0) {
-				setMessageText(formater.format(profitLoss), true, false,
-						colorRedAttr);
+				setMessageText(
+						CoreUtils.padLeft(formater.format(profitLoss), 10),
+						true, false, colorRedAttr);
 			} else if (profitLoss > 0) {
-				setMessageText(formater.format(profitLoss), true, false,
-						colorGreenAttr);
+				setMessageText(
+						CoreUtils.padLeft(formater.format(profitLoss), 10),
+						true, false, colorGreenAttr);
 			} else {
-				setMessageText(formater.format(profitLoss), true, false, null);
+				setMessageText(
+						CoreUtils.padLeft(formater.format(profitLoss), 10),
+						true, false, null);
 			}
 			setMessageText(" Comms:", true, false, bold);
-			setMessageText(formater.format(commision), true, false, null);
+			setMessageText(CoreUtils.padLeft(formater.format(commision), 10),
+					true, false, null);
 
 		} catch (ValueTypeException ex) {
 			this.setErrorMessage("Error initializing valueTypes.",
