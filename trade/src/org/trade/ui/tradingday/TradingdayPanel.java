@@ -37,6 +37,7 @@ package org.trade.ui.tradingday;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -134,10 +135,15 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Constructor
-	 * @param tradingdays Tradingdays
-	 * @param controller BasePanel
-	 * @param tradePersistentModel PersistentModel
-	 * @param strategyWorkers ConcurrentHashMap<String,StrategyRule>
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
+	 * @param controller
+	 *            BasePanel
+	 * @param tradePersistentModel
+	 *            PersistentModel
+	 * @param strategyWorkers
+	 *            ConcurrentHashMap<String,StrategyRule>
 	 */
 	@SuppressWarnings("unchecked")
 	public TradingdayPanel(Tradingdays tradingdays, BasePanel controller,
@@ -239,6 +245,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jScrollPane.getViewport().add(m_tradestrategyTable,
 					BorderLayout.CENTER);
 			jScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			Dimension tradestrategyTableDimension = m_tradestrategyTable
+					.getPreferredSize();
+			// Make changes to [i]d[/i] if you like...
+			m_tradestrategyTable
+					.setPreferredScrollableViewportSize(tradestrategyTableDimension);
 			jScrollPane.addMouseListener(m_tradestrategyTable);
 
 			spinnerStart.setModel(new SpinnerDateModel());
@@ -281,6 +292,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jScrollPane1.getViewport().add(m_tradingdayTable,
 					BorderLayout.NORTH);
 			jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			Dimension tradingdayTableDimension = m_tradingdayTable
+					.getPreferredSize();
+			// Make changes to [i]d[/i] if you like...
+			m_tradingdayTable
+					.setPreferredScrollableViewportSize(tradingdayTableDimension);
 			DAOTradeAccount account = DAOTradeAccount.newInstance();
 			tradeAccountLabel = new TradeAccountLabel();
 			tradeAccountLabel.setTradeAccountValues((TradeAccount) account
@@ -302,6 +318,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Method getTradestrategyTable.
+	 * 
 	 * @return Table
 	 */
 	public Table getTradestrategyTable() {
@@ -338,6 +355,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
@@ -543,7 +561,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 * This is fired from the dropdown Strategy list is selected.
 	 * 
 	 * 
-	 * @param e ItemEvent
+	 * @param e
+	 *            ItemEvent
 	 * @see java.awt.event.ItemListener#itemStateChanged(ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent e) {
@@ -562,7 +581,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Method setConnected.
-	 * @param connected Boolean
+	 * 
+	 * @param connected
+	 *            Boolean
 	 */
 	public void setConnected(Boolean connected) {
 		this.connected = connected;
@@ -579,7 +600,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Method setTradeAccountLabel.
-	 * @param tradeAccount TradeAccount
+	 * 
+	 * @param tradeAccount
+	 *            TradeAccount
 	 */
 	public void setTradeAccountLabel(TradeAccount tradeAccount) {
 		tradeAccountLabel.setTradeAccountValues(tradeAccount);
@@ -587,7 +610,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Method enableTradestrategyButtons.
-	 * @param transferObject Tradestrategy
+	 * 
+	 * @param transferObject
+	 *            Tradestrategy
 	 */
 	private void enableTradestrategyButtons(Tradestrategy transferObject) {
 		boolean enable = false;
@@ -630,6 +655,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Method isConnected.
+	 * 
 	 * @return boolean
 	 */
 	private boolean isConnected() {
@@ -638,7 +664,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	/**
 	 * Method resetStrategyComboBox.
-	 * @param editorComboBox DAODecodeComboBoxEditor
+	 * 
+	 * @param editorComboBox
+	 *            DAODecodeComboBoxEditor
 	 * @throws ValueTypeException
 	 */
 	@SuppressWarnings("unchecked")
@@ -658,7 +686,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			ListSelectionListener {
 		/**
 		 * Method valueChanged.
-		 * @param event ListSelectionEvent
+		 * 
+		 * @param event
+		 *            ListSelectionEvent
 		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
 		public void valueChanged(ListSelectionEvent event) {
@@ -686,7 +716,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private class TradingdayTableRowListener implements ListSelectionListener {
 		/**
 		 * Method valueChanged.
-		 * @param event ListSelectionEvent
+		 * 
+		 * @param event
+		 *            ListSelectionEvent
 		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
 		public void valueChanged(ListSelectionEvent event) {
@@ -729,7 +761,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		// Accept all directories and all csv files.
 		/**
 		 * Method accept.
-		 * @param f File
+		 * 
+		 * @param f
+		 *            File
 		 * @return boolean
 		 */
 		public boolean accept(File f) {
@@ -745,7 +779,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 		/**
 		 * Method getExtension.
-		 * @param f File
+		 * 
+		 * @param f
+		 *            File
 		 * @return String
 		 */
 		public String getExtension(File f) {
@@ -762,6 +798,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		// The description of this filter
 		/**
 		 * Method getDescription.
+		 * 
 		 * @return String
 		 */
 		public String getDescription() {
@@ -824,7 +861,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 		/**
 		 * Method setTradeAccountValues.
-		 * @param tradeAccount TradeAccount
+		 * 
+		 * @param tradeAccount
+		 *            TradeAccount
 		 */
 		public void setTradeAccountValues(TradeAccount tradeAccount) {
 			accountNumberField.setText(tradeAccount.getAccountNumber());
