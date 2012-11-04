@@ -47,6 +47,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+
 import org.trade.core.dao.Aspect;
 import org.trade.core.properties.CollectionUtilities;
 import org.trade.core.valuetype.Money;
@@ -56,9 +60,13 @@ import org.trade.core.valuetype.Money;
 public class CoreUtils {
 	/**
 	 * Replace substrings of a string.
-	 * @param replaceIn String
-	 * @param toReplace String
-	 * @param replaceWith String
+	 * 
+	 * @param replaceIn
+	 *            String
+	 * @param toReplace
+	 *            String
+	 * @param replaceWith
+	 *            String
 	 * @return String
 	 */
 	public static final String replace(String replaceIn, String toReplace,
@@ -84,7 +92,9 @@ public class CoreUtils {
 	/**
 	 * Convert a string into a Java string representation. This just changes \
 	 * to \\ and " to \".
-	 * @param unescaped String
+	 * 
+	 * @param unescaped
+	 *            String
 	 * @return String
 	 */
 	public static final String escapeJava(String unescaped) {
@@ -99,10 +109,12 @@ public class CoreUtils {
 	 * Returns a Hashtable of the attribute anems and vales in alpha order
 	 * Returns a <code>Hashtable</code>
 	 * 
-	
+	 * 
 	 * @since ICAP Version Exchange
-	 * @param aspect Aspect
-	 * @param decodeConvertion boolean
+	 * @param aspect
+	 *            Aspect
+	 * @param decodeConvertion
+	 *            boolean
 	 * @return Hashtable. * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 */
@@ -158,9 +170,10 @@ public class CoreUtils {
 	 * Format the return values from the getters as a string Returns a
 	 * <code>String</code>
 	 * 
-	
+	 * 
 	 * @since ICAP Version Exchange
-	 * @param aspect Aspect
+	 * @param aspect
+	 *            Aspect
 	 * @return String. * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 */
@@ -229,9 +242,10 @@ public class CoreUtils {
 	 * Format the return values from the getters as a string Returns a
 	 * <code>String</code>
 	 * 
-	
+	 * 
 	 * @since ICAP Version Exchange
-	 * @param aspect Aspect
+	 * @param aspect
+	 *            Aspect
 	 * @return String. * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 */
@@ -293,15 +307,19 @@ public class CoreUtils {
 	 *            a <code>StringBuffer</code> that has the toAppend a
 	 *            <code>Object</code> or attributeName a <code>String</code>
 	 *            appended
-	
+	 * 
 	 * @since ICAP Version Exchange
-	 * @param attributeName String
-	 * @param toAppend Object
-	 * @param columnNamesOnly boolean
-	 * @see com.inpurchase.icap.aspect.Aspect */
+	 * @param attributeName
+	 *            String
+	 * @param toAppend
+	 *            Object
+	 * @param columnNamesOnly
+	 *            boolean
+	 * @see com.inpurchase.icap.aspect.Aspect
+	 */
 
-	public static void appendSQLString(StringBuffer strBuf, String attributeName,
-			Object toAppend, boolean columnNamesOnly) {
+	public static void appendSQLString(StringBuffer strBuf,
+			String attributeName, Object toAppend, boolean columnNamesOnly) {
 
 		if (toAppend instanceof String) {
 			if ("null".equals(toAppend)) {
@@ -342,9 +360,35 @@ public class CoreUtils {
 	}
 
 	/**
+	 * Method setDocumentText.
+	 * 
+	 * @param content
+	 *            String
+	 * @param append
+	 *            boolean
+	 * @param newLine
+	 *            boolean
+	 * @param attrSet
+	 *            SimpleAttributeSet
+	 * @throws BadLocationException
+	 */
+	public static void setDocumentText(Document doc, String content,
+			boolean newLine, SimpleAttributeSet attrSet)
+			throws BadLocationException {
+		if (null != content) {
+			doc.insertString(doc.getLength(), content, attrSet);
+			if (newLine)
+				doc.insertString(doc.getLength(), "\n", null);
+		}
+	}
+
+	/**
 	 * Method padRight.
-	 * @param text String
-	 * @param size int
+	 * 
+	 * @param text
+	 *            String
+	 * @param size
+	 *            int
 	 * @return String
 	 */
 	public static String padRight(String text, int size) {
@@ -353,18 +397,24 @@ public class CoreUtils {
 
 	/**
 	 * Method padLeft.
-	 * @param text String
-	 * @param size int
+	 * 
+	 * @param text
+	 *            String
+	 * @param size
+	 *            int
 	 * @return String
 	 */
 	public static String padLeft(String text, int size) {
 		return String.format("%1$" + size + "s", text);
 	}
-	
+
 	/**
 	 * Method nullSafeStringComparator.
-	 * @param one String
-	 * @param two String
+	 * 
+	 * @param one
+	 *            String
+	 * @param two
+	 *            String
 	 * @return int
 	 */
 	public static int nullSafeStringComparator(final String one,
@@ -382,8 +432,11 @@ public class CoreUtils {
 
 	/**
 	 * Method nullSafeDateComparator.
-	 * @param one java.util.Date
-	 * @param two java.util.Date
+	 * 
+	 * @param one
+	 *            java.util.Date
+	 * @param two
+	 *            java.util.Date
 	 * @return int
 	 */
 	public static int nullSafeDateComparator(final java.util.Date one,
@@ -401,8 +454,11 @@ public class CoreUtils {
 
 	/**
 	 * Method nullSafeBooleanComparator.
-	 * @param one Boolean
-	 * @param two Boolean
+	 * 
+	 * @param one
+	 *            Boolean
+	 * @param two
+	 *            Boolean
 	 * @return int
 	 */
 	public static int nullSafeBooleanComparator(final Boolean one,
@@ -417,11 +473,14 @@ public class CoreUtils {
 
 		return one.compareTo(two);
 	}
-	
+
 	/**
 	 * Method nullSafeBigDecimalComparator.
-	 * @param one BigDecimal
-	 * @param two BigDecimal
+	 * 
+	 * @param one
+	 *            BigDecimal
+	 * @param two
+	 *            BigDecimal
 	 * @return int
 	 */
 	public static int nullSafeBigDecimalComparator(final BigDecimal one,
@@ -436,15 +495,17 @@ public class CoreUtils {
 
 		return one.compareTo(two);
 	}
-	
+
 	/**
 	 * Method nullSafeMoneyComparator.
-	 * @param one Money
-	 * @param two Money
+	 * 
+	 * @param one
+	 *            Money
+	 * @param two
+	 *            Money
 	 * @return int
 	 */
-	public static int nullSafeMoneyComparator(final Money one,
-			final Money two) {
+	public static int nullSafeMoneyComparator(final Money one, final Money two) {
 		if (one == null ^ two == null) {
 			return (one == null) ? -1 : 1;
 		}
@@ -458,8 +519,11 @@ public class CoreUtils {
 
 	/**
 	 * Method nullSafeBigIntegerComparator.
-	 * @param one BigInteger
-	 * @param two BigInteger
+	 * 
+	 * @param one
+	 *            BigInteger
+	 * @param two
+	 *            BigInteger
 	 * @return int
 	 */
 	public static int nullSafeBigIntegerComparator(final BigInteger one,
@@ -473,11 +537,14 @@ public class CoreUtils {
 		}
 		return one.compareTo(two);
 	}
-	
+
 	/**
 	 * Method nullSafeIntegerComparator.
-	 * @param one Integer
-	 * @param two Integer
+	 * 
+	 * @param one
+	 *            Integer
+	 * @param two
+	 *            Integer
 	 * @return int
 	 */
 	public static int nullSafeIntegerComparator(final Integer one,
@@ -494,8 +561,11 @@ public class CoreUtils {
 
 	/**
 	 * Method nullSafeObjectComparator.
-	 * @param one Object
-	 * @param two Object
+	 * 
+	 * @param one
+	 *            Object
+	 * @param two
+	 *            Object
 	 * @return int
 	 */
 	public static int nullSafeObjectComparator(final Object one,

@@ -45,21 +45,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -69,11 +72,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
-import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
@@ -95,10 +101,8 @@ import org.trade.ui.models.TradingdayTableModel;
 import org.trade.ui.tables.TradestrategyTable;
 import org.trade.ui.tables.TradingdayTable;
 import org.trade.ui.widget.DAODecodeComboBoxEditor;
-import org.trade.ui.widget.DateField;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
 import org.trade.ui.widget.DecodeTableEditor;
-import org.trade.ui.widget.MoneyField;
 
 /**
  */
@@ -129,7 +133,15 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private JSpinner spinnerStart = new JSpinner();
 	private JSpinner spinnerEnd = new JSpinner();
 	private Boolean connected = new Boolean(false);
-	private TradeAccountLabel tradeAccountLabel = null;
+	private JEditorPane tradeAccountLabel = null;
+	private static final NumberFormat currencyFormater = NumberFormat
+			.getCurrencyInstance();
+	private final SimpleDateFormat dateFormater = new SimpleDateFormat(
+			"MM/dd/yy HH:mm:ss", Locale.getDefault());
+
+	private static final SimpleAttributeSet bold = new SimpleAttributeSet();
+	private static final SimpleAttributeSet colorRedAttr = new SimpleAttributeSet();
+	private static final SimpleAttributeSet colorGreenAttr = new SimpleAttributeSet();
 
 	private static final String DATEFORMAT = "MM/dd/yyyy";
 
@@ -154,6 +166,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_tradePersistentModel = tradePersistentModel;
 			m_defaultDir = ConfigProperties
 					.getPropAsString("trade.csv.default.dir");
+			currencyFormater.setMinimumFractionDigits(2);
+			dateFormater.setLenient(false);
+			StyleConstants.setBold(bold, true);
+			StyleConstants.setBackground(colorRedAttr, Color.RED);
+			StyleConstants.setBackground(colorGreenAttr, Color.GREEN);
 
 			// This allows the controller to listen to these events
 			transferButton = new BaseButton(controller,
@@ -297,10 +314,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			// Make changes to [i]d[/i] if you like...
 			m_tradingdayTable
 					.setPreferredScrollableViewportSize(tradingdayTableDimension);
-			DAOTradeAccount account = DAOTradeAccount.newInstance();
-			tradeAccountLabel = new TradeAccountLabel();
-			tradeAccountLabel.setTradeAccountValues((TradeAccount) account
-					.getObject());
+
+			tradeAccountLabel = new JEditorPane("text/rtf", "");
+			tradeAccountLabel.setAutoscrolls(false);
+			tradeAccountLabel.setEditable(false);
 			jPanel2.add(tradeAccountLabel, BorderLayout.NORTH);
 			jPanel2.add(jScrollPane1, BorderLayout.CENTER);
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
@@ -309,6 +326,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jSplitPane1.setOneTouchExpandable(true);
 			jPanel1.add(jSplitPane1);
 			this.add(jPanel1, null);
+			DAOTradeAccount account = DAOTradeAccount.newInstance();
+			this.setTradeAccountLabel((TradeAccount)account.getObject());
 			enableTradestrategyButtons(null);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
@@ -605,7 +624,89 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 *            TradeAccount
 	 */
 	public void setTradeAccountLabel(TradeAccount tradeAccount) {
-		tradeAccountLabel.setTradeAccountValues(tradeAccount);
+		try {
+
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					"Acct #:", false, bold);
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					CoreUtils.padRight(tradeAccount.toString(), 10), false,
+					null);
+
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					" Avail Bal:", false, bold);
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					CoreUtils.padLeft(currencyFormater.format((tradeAccount
+							.getAvailableFunds() == null ? 0 : tradeAccount
+							.getAvailableFunds().doubleValue())), 13), false,
+					null);
+
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					" Margin:", false, bold);
+			CoreUtils
+					.setDocumentText(tradeAccountLabel.getDocument(), CoreUtils
+							.padLeft(currencyFormater.format((tradeAccount
+									.getBuyingPower() == null ? 0
+									: tradeAccount.getBuyingPower()
+											.doubleValue())), 13), false, null);
+
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					" Pos Val:", false, bold);
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					CoreUtils.padLeft(currencyFormater.format((tradeAccount
+							.getGrossPositionValue() == null ? 0 : tradeAccount
+							.getGrossPositionValue().doubleValue())), 13),
+					false, null);
+
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					" Realized P/L:", false, bold);
+			double realizedPnL = tradeAccount.getRealizedPnL().doubleValue();
+			if (realizedPnL < 0) {
+				CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
+								13), false, colorRedAttr);
+			} else if (realizedPnL > 0) {
+				CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
+								13), false, colorGreenAttr);
+			} else {
+				CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
+								13), false, null);
+			}
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					" Unrealized P/L:", false, bold);
+			double unRealizedPnL = tradeAccount.getUnrealizedPnL()
+					.doubleValue();
+			if (unRealizedPnL < 0) {
+				CoreUtils.setDocumentText(
+						tradeAccountLabel.getDocument(),
+						CoreUtils.padLeft(
+								currencyFormater.format(unRealizedPnL), 13),
+						false, colorRedAttr);
+			} else if (unRealizedPnL > 0) {
+				CoreUtils.setDocumentText(
+						tradeAccountLabel.getDocument(),
+						CoreUtils.padLeft(
+								currencyFormater.format(unRealizedPnL), 13),
+						false, colorGreenAttr);
+			} else {
+				CoreUtils.setDocumentText(
+						tradeAccountLabel.getDocument(),
+						CoreUtils.padLeft(
+								currencyFormater.format(unRealizedPnL), 13),
+						false, null);
+			}
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					" Date:", false, bold);
+			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
+					CoreUtils.padRight(dateFormater.format((tradeAccount
+							.getUpdateDate() == null ? new Date()
+							: tradeAccount.getUpdateDate())), 17), false, null);
+
+		} catch (BadLocationException ex) {
+			this.setErrorMessage("Error initializing valueTypes.",
+					ex.getMessage(), ex);
+		}
 	}
 
 	/**
@@ -803,102 +904,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		 */
 		public String getDescription() {
 			return "CSV Files";
-		}
-	}
-
-	/**
-	 */
-	private class TradeAccountLabel extends JPanel {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -4751793056751646373L;
-		private JLabel accountNumberLabel = new JLabel("Acct #:");
-		private JTextField accountNumberField = new JTextField();
-		private JLabel availableBalanceLabel = new JLabel("Avail Bal:");
-		private MoneyField availableBalanceField = new MoneyField();
-		private JLabel marginLabel = new JLabel("Margin:");
-		private MoneyField marginField = new MoneyField();
-		private JLabel grossPosValueLabel = new JLabel("Pos Val:");
-		private MoneyField grossPosValueField = new MoneyField();
-		private JLabel realizedPnLLabel = new JLabel("Realized P/L:");
-		private MoneyField realizedPnLField = new MoneyField();
-		private JLabel unrealizedPnLabel = new JLabel("Unrealized P/L:");
-		private MoneyField unrealizedPnLField = new MoneyField();
-		private JLabel updateDateLabel = new JLabel("Date:");
-		private DateField updateDateField = new DateField("MM/dd/yy HH:mm:ss");
-
-		public TradeAccountLabel() {
-			this.setLayout(new BorderLayout());
-			JPanel jPanel = new JPanel();
-			FlowLayout flowLayout = new FlowLayout();
-			flowLayout.setAlignment(FlowLayout.LEFT);
-			jPanel.setLayout(flowLayout);
-			accountNumberField.setEditable(false);
-			jPanel.add(accountNumberLabel, null);
-			jPanel.add(accountNumberField, null);
-			availableBalanceField.setEditable(false);
-			jPanel.add(availableBalanceLabel, null);
-			jPanel.add(availableBalanceField, null);
-			marginField.setEditable(false);
-			jPanel.add(marginLabel, null);
-			jPanel.add(marginField, null);
-			grossPosValueField.setEditable(false);
-			jPanel.add(grossPosValueLabel, null);
-			jPanel.add(grossPosValueField, null);
-			realizedPnLField.setEditable(false);
-			jPanel.add(realizedPnLLabel, null);
-			jPanel.add(realizedPnLField, null);
-			unrealizedPnLField.setEditable(false);
-			jPanel.add(unrealizedPnLabel, null);
-			jPanel.add(unrealizedPnLField, null);
-			updateDateField.setEditable(false);
-			jPanel.add(updateDateLabel, null);
-			jPanel.add(updateDateField, null);
-			this.add(jPanel);
-		}
-
-		/**
-		 * Method setTradeAccountValues.
-		 * 
-		 * @param tradeAccount
-		 *            TradeAccount
-		 */
-		public void setTradeAccountValues(TradeAccount tradeAccount) {
-			accountNumberField.setText(tradeAccount.getAccountNumber());
-			availableBalanceField.setMoney(new Money((tradeAccount
-					.getAvailableFunds() == null ? 0 : tradeAccount
-					.getAvailableFunds()).doubleValue()));
-
-			marginField.setMoney(new Money(
-					(tradeAccount.getBuyingPower() == null ? 0 : tradeAccount
-							.getBuyingPower()).doubleValue()));
-			grossPosValueField.setMoney(new Money((tradeAccount
-					.getGrossPositionValue() == null ? 0 : tradeAccount
-					.getGrossPositionValue()).doubleValue()));
-			double realizedPnL = (tradeAccount.getRealizedPnL() == null ? 0
-					: tradeAccount.getRealizedPnL()).doubleValue();
-			realizedPnLField.setBackground(grossPosValueField.getBackground());
-			if (realizedPnL > 0) {
-				realizedPnLField.setBackground(Color.GREEN);
-			} else if (realizedPnL < 0) {
-				realizedPnLField.setBackground(Color.RED);
-			}
-			realizedPnLField.setMoney(new Money(realizedPnL));
-			double unrealizedPnL = (tradeAccount.getUnrealizedPnL() == null ? 0
-					: tradeAccount.getUnrealizedPnL()).doubleValue();
-			unrealizedPnLField
-					.setBackground(grossPosValueField.getBackground());
-			if (unrealizedPnL > 0) {
-				unrealizedPnLField.setBackground(Color.GREEN);
-			} else if (unrealizedPnL < 0) {
-				unrealizedPnLField.setBackground(Color.RED);
-			}
-			unrealizedPnLField.setMoney(new Money(unrealizedPnL));
-			updateDateField
-					.setDate((tradeAccount.getUpdateDate() == null ? new Date()
-							: tradeAccount.getUpdateDate()));
 		}
 	}
 }

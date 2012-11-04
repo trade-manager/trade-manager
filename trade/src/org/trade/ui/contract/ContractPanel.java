@@ -65,7 +65,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -134,7 +133,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private DecodeComboBoxEditor periodEditorComboBox = null;
 	private Integer backfillOffsetDays = 0;
 	private Boolean connected = new Boolean(false);
-	private static final NumberFormat formater = NumberFormat
+	private static final NumberFormat currencyFormater = NumberFormat
 			.getCurrencyInstance();
 	private static final SimpleAttributeSet bold = new SimpleAttributeSet();
 	private static final SimpleAttributeSet colorRedAttr = new SimpleAttributeSet();
@@ -155,7 +154,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			PersistentModel tradePersistentModel) {
 
 		try {
-			formater.setMinimumFractionDigits(2);
+			currencyFormater.setMinimumFractionDigits(2);
 			StyleConstants.setBold(bold, true);
 			StyleConstants.setBackground(colorRedAttr, Color.RED);
 			StyleConstants.setBackground(colorGreenAttr, Color.GREEN);
@@ -771,6 +770,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            Tradestrategy
 	 * @param candlestickChart
 	 *            CandlestickChart
+	 * @throws BadLocationException
 	 */
 	private void setTradeLabel(Tradestrategy tradestrategy,
 			CandlestickChart candlestickChart) {
@@ -778,33 +778,43 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			double profitLoss = 0;
 			double commision = 0;
-			setMessageText("Symbol:", false, false, bold);
-			setMessageText(CoreUtils.padRight(tradestrategy.getContract()
-					.getSymbol(), 10), true, false, null);
-			setMessageText(" Side:", true, false, bold);
-			setMessageText(CoreUtils.padRight(
-					Side.newInstance(tradestrategy.getSide()).getDisplayName(),
-					6), true, false, null);
-			setMessageText(" Tier:", true, false, bold);
-			setMessageText(CoreUtils.padRight(
-					(tradestrategy.getTier() == null ? "" : Tier.newInstance(
-							tradestrategy.getTier()).getDisplayName()), 6),
-					true, false, null);
-			setMessageText(" Status:", true, false, bold);
-			setMessageText(
-					CoreUtils.padRight(
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:",
+					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+					.padRight(tradestrategy.getContract().getSymbol(), 10),
+					false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Side:",
+					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+					.padRight(Side.newInstance(tradestrategy.getSide())
+							.getDisplayName(), 6), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Tier:",
+					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+					.padRight((tradestrategy.getTier() == null ? "" : Tier
+							.newInstance(tradestrategy.getTier())
+							.getDisplayName()), 6), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Status:",
+					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+					.padRight(
 							(tradestrategy.getStatus() == null ? ""
 									: TradestrategyStatus.newInstance(
 											tradestrategy.getStatus())
-											.getDisplayName()), 20), true,
+											.getDisplayName()), 20), false,
+					null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Account:",
+					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+					.padRight(tradestrategy.getTradeAccount().toString(), 10),
 					false, null);
-			setMessageText(" Account:", true, false, bold);
-			setMessageText(CoreUtils.padRight(tradestrategy.getTradeAccount()
-					.toString(), 10), true, false, null);
-			setMessageText(" Risk:", true, false, bold);
-			setMessageText(CoreUtils.padLeft(formater.format((tradestrategy
-					.getRiskAmount() == null ? 0 : tradestrategy
-					.getRiskAmount()).doubleValue()), 10), true, false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Risk:",
+					false, bold);
+
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+					.padLeft(currencyFormater.format((tradestrategy
+							.getRiskAmount() == null ? 0 : tradestrategy
+							.getRiskAmount().doubleValue())), 10), false, null);
 			for (Trade trade : tradestrategy.getTrades()) {
 				if (!trade.getIsOpen()) {
 
@@ -847,56 +857,30 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					prevTradeOrder = order;
 				}
 			}
-			setMessageText(" Profit:", true, false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Profit:",
+					false, bold);
 			if (profitLoss < 0) {
-				setMessageText(
-						CoreUtils.padLeft(formater.format(profitLoss), 10),
-						true, false, colorRedAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(profitLoss), 10),
+						false, colorRedAttr);
 			} else if (profitLoss > 0) {
-				setMessageText(
-						CoreUtils.padLeft(formater.format(profitLoss), 10),
-						true, false, colorGreenAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(profitLoss), 10),
+						false, colorGreenAttr);
 			} else {
-				setMessageText(
-						CoreUtils.padLeft(formater.format(profitLoss), 10),
-						true, false, null);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(profitLoss), 10),
+						false, null);
 			}
-			setMessageText(" Comms:", true, false, bold);
-			setMessageText(CoreUtils.padLeft(formater.format(commision), 10),
-					true, false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Comms:",
+					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padLeft(currencyFormater.format(commision), 10),
+					false, null);
 
-		} catch (ValueTypeException ex) {
+		} catch (ValueTypeException | BadLocationException ex) {
 			this.setErrorMessage("Error initializing valueTypes.",
 					ex.getMessage(), ex);
-		}
-	}
-
-	/**
-	 * Method setMessageText.
-	 * 
-	 * @param content
-	 *            String
-	 * @param append
-	 *            boolean
-	 * @param newLine
-	 *            boolean
-	 * @param attrSet
-	 *            SimpleAttributeSet
-	 */
-	private void setMessageText(String content, boolean append,
-			boolean newLine, SimpleAttributeSet attrSet) {
-		if (!append)
-			m_tradeLabel.setText(null);
-		if (null != content) {
-			Document doc = m_tradeLabel.getDocument();
-			try {
-				doc.insertString(doc.getLength(), content, attrSet);
-				if (newLine)
-					doc.insertString(doc.getLength(), "\n", null);
-			} catch (BadLocationException ex1) {
-				this.setErrorMessage("Exception setting messge: ",
-						ex1.getMessage(), ex1);
-			}
 		}
 	}
 
