@@ -74,7 +74,6 @@ import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
-import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.Tier;
@@ -878,8 +877,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					CoreUtils.padLeft(currencyFormater.format(commision), 10),
 					false, null);
 
-		} catch (ValueTypeException | BadLocationException ex) {
-			this.setErrorMessage("Error initializing valueTypes.",
+		} catch (Exception ex) {
+			this.setErrorMessage("Error setting Tradestrategy Label.",
 					ex.getMessage(), ex);
 		}
 	}

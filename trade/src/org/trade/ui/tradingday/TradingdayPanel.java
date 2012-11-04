@@ -72,7 +72,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -327,7 +326,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel1.add(jSplitPane1);
 			this.add(jPanel1, null);
 			DAOTradeAccount account = DAOTradeAccount.newInstance();
-			this.setTradeAccountLabel((TradeAccount)account.getObject());
+			this.setTradeAccountLabel((TradeAccount) account.getObject());
 			enableTradestrategyButtons(null);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
@@ -703,8 +702,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 							.getUpdateDate() == null ? new Date()
 							: tradeAccount.getUpdateDate())), 17), false, null);
 
-		} catch (BadLocationException ex) {
-			this.setErrorMessage("Error initializing valueTypes.",
+		} catch (Exception ex) {
+			this.setErrorMessage("Error setting Trade Account Label.",
 					ex.getMessage(), ex);
 		}
 	}
