@@ -777,6 +777,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			double profitLoss = 0;
 			double commision = 0;
+			m_tradeLabel.setText(null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:",
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils

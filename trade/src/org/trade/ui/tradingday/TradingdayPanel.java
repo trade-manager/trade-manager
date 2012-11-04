@@ -624,7 +624,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 */
 	public void setTradeAccountLabel(TradeAccount tradeAccount) {
 		try {
-
+			tradeAccountLabel.setText(null);
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
 					"Acct #:", false, bold);
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
