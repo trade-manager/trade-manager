@@ -58,18 +58,35 @@ import org.trade.strategy.data.heikinashi.HeikinAshiItem;
 public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 	/**
+	 * 1/ If the open position is filled create a STP and 2 Targets (LMT) OCA
+	 * orders at 4R and 7R with 50% of the filled quantity for each. Use the
+	 * open position fill quantity, price and stop price to determine the target
+	 * price. The STP orders take an initial risk of 2R.
+	 * 
+	 * 2/ Target/Stop prices should be round over/under whole/half numbers when
+	 * ever they are calculated..
+	 * 
+	 * 3/ After 9:35 and before 10:30 if the current VWAP crosses the 9:35
+	 * candles VWAP move the STP price on each of the STP order to break even.
+	 * 
+	 * 4/ At 10:30 move the STP order to the average fill price of the filled
+	 * open order.
+	 * 
+	 * 5/ When target one has been reached trail the second half using prev two
+	 * Heikin-Ashi bars. i.e. STP price is moved up to the Low of current
+	 * Heikin-Ashi bar -2 as long as the prev bars low is higher than the prev
+	 * bar -1 low.
+	 * 
+	 * 6/ Close any open positions at 15:55.
 	 * 
 	 */
+
 	private static final long serialVersionUID = -6717691162128305191L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrFH3RBHHeikinStrategy.class);
 
 	/**
 	 * Default Constructor
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param brokerManagerModel
 	 *            BrokerModel
@@ -84,17 +101,6 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
 	}
 
-	/*
-	 * This method is fired from the underlying strategy when the candle series
-	 * data is changes. Note the current candle is just forming but the first
-	 * time this strategy fires is when the open position is filled or partial
-	 * filled.
-	 * 
-	 * 
-	 * @param candleSeries the series of candels that has been updated.
-	 * 
-	 * @param newBar has a new bar just started.
-	 */
 	/**
 	 * Method runStrategy.
 	 * 
@@ -173,9 +179,9 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				/*
 				 * Manage the stop orders if the current bars Vwap crosses the
 				 * Vwap of the first 5min bar then move the stop price (
-				 * currently -2R) to the average fill price i.e. break even. This
-				 * allows for tails that break the 5min high/low between 9:40
-				 * thru 10:30.
+				 * currently -2R) to the average fill price i.e. break even.
+				 * This allows for tails that break the 5min high/low between
+				 * 9:40 thru 10:30.
 				 */
 
 				if (startPeriod.before(TradingCalendar.getSpecificTime(
@@ -193,10 +199,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 									.doubleValue(), getTrade().getSide(),
 									Action.SELL, 0.01);
 							moveStopOCAPrice(stopPrice, true);
-							_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
-									+ getSymbol()
-									+ " Time:"
-									+ startPeriod
+							_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
+									+ getSymbol() + " Time:" + startPeriod
 									+ " Price: " + stopPrice);
 						}
 					} else {
@@ -207,10 +211,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 									.doubleValue(), getTrade().getSide(),
 									Action.BUY, 0.01);
 							moveStopOCAPrice(stopPrice, true);
-							_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
-									+ getSymbol()
-									+ " Time:"
-									+ startPeriod
+							_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
+									+ getSymbol() + " Time:" + startPeriod
 									+ " Price: " + stopPrice);
 						}
 					}
@@ -237,7 +239,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 				/*
 				 * We have sold the first half of the position try to trail BH
-				 * on Heikin-Ashi above 3R with a two bar trail.
+				 * on Heikin-Ashi above target 1 with a two bar trail.
 				 */
 				if ((null != getTargetPrice()) && newBar) {
 					if (setHiekinAshiTrail(getTrade(), 2)) {

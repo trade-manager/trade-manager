@@ -67,13 +67,12 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 	/**
 	 * Default Constructor
 	 * 
-	
-	
-	
-	
-	 * @param brokerManagerModel BrokerModel
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
+	 * @param brokerManagerModel
+	 *            BrokerModel
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 
 	public Vwap5MinSideGapBarStrategy(BrokerModel brokerManagerModel,
@@ -95,8 +94,11 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 	 */
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {

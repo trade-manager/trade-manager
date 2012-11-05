@@ -53,8 +53,25 @@ import org.trade.strategy.data.candle.CandleItem;
 public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 
 	/**
+	 * 1/ If the open position is filled create a STP (transmit=false see 2/ )
+	 * and 1 Target (LMT) OCA order at 3R with 100% of the filled quantity. Use
+	 * the open position fill quantity, price and stop price to determine the
+	 * target price. The STP order take an initial risk of 1R.
+	 * 
+	 * 2/ The STP order should not be transmitted unless the current bars Vwap
+	 * crosses the stop price. Note this will result in more than a 1R stop.
+	 * This help with quick tails below the 5min low.
+	 * 
+	 * 3/ Target/Stop prices should be round over/under whole/half numbers when
+	 * ever they are calculated..
+	 * 
+	 * 4/ At 10:30 move the STP order to the average fill price of the filled
+	 * open order.
+	 * 
+	 * 5/ Close any open positions at 15:55.
 	 * 
 	 */
+
 	private static final long serialVersionUID = 5998132222691879078L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrAllOrNothingStrategy.class);
@@ -62,13 +79,12 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 	/**
 	 * Default Constructor
 	 * 
-	
-	
-	
-	
-	 * @param brokerManagerModel BrokerModel
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
+	 * @param brokerManagerModel
+	 *            BrokerModel
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 
 	public PosMgrAllOrNothingStrategy(BrokerModel brokerManagerModel,
@@ -76,20 +92,13 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
 	}
 
-	/*
-	 * This method is fired from the underlying strategy when the candle series
-	 * data is changes. Note the current candle is just forming but the first
-	 * time this strategy fires is when the open position is filled or partial
-	 * filled.
-	 * 
-	 * @param candleSeries the series of candels that has been updated.
-	 * 
-	 * @param newBar has a new bar just started.
-	 */
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
@@ -143,7 +152,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 					_log.info("Open position submit Stop/Tgt orders Symbol: "
 							+ getSymbol() + " Time:" + startPeriod);
 					Money targetPrice = createStopAndTargetOrder(
-							getOpenPositionOrder(), 1, 3, 100, true);
+							getOpenPositionOrder(), 1, 3, 100, false);
 					setTargetPrice(targetPrice);
 				}
 				/*

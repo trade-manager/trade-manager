@@ -59,8 +59,26 @@ import org.trade.strategy.data.candle.CandleItem;
 public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 	/**
+	 * 1/ Enter in the direction of the first 5min bar with a stop at the first
+	 * 5min bars open. Use a STPLMT order with a range from the Entry Limit
+	 * table.
+	 * 
+	 * 2/ Bar must be within the Entry Limit table % Range Bar. i.e in this case
+	 * 2%
+	 * 
+	 * 3/ If the position is not filled by 10:30 cancel the order.
+	 * 
+	 * 4/ Add 1c to the entry price and round over/under whole/half numbers in
+	 * the direction of the trade, same for stop price.
+	 * 
+	 * E.g. If first 5min bar is H=21.50 L=21.15 Open= 21.2 Close=21.40 then
+	 * position order will be Buy STPLMT=21.51-21.55 (STPLMT range 0.04 from
+	 * EntryLimit table and as we are at 21.5 we also buy over/under whole/half
+	 * numbers), Quantity=Risk/(21.51-21.2) rounded to +/-100 shares (see
+	 * EntryLimit table).
 	 * 
 	 */
+
 	private static final long serialVersionUID = -1373776942145894938L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinGapBarStrategy.class);
@@ -68,13 +86,12 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 	/**
 	 * Default Constructor
 	 * 
-	
-	
-	
-	
-	 * @param brokerManagerModel BrokerModel
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
+	 * @param brokerManagerModel
+	 *            BrokerModel
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 
 	public FiveMinGapBarStrategy(BrokerModel brokerManagerModel,
@@ -83,18 +100,13 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 	}
 
-	/*
-	 * Note the current candle is just forming Enter a tier 1-3 gap in first
-	 * 5min bar direction, with a 3R target and stop @ 5min high/low
-	 * 
-	 * @param candleSeries the series of candels that has been updated.
-	 * 
-	 * @param newBar has a new bar just started.
-	 */
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {

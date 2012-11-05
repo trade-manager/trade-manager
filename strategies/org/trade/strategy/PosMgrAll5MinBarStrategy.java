@@ -54,8 +54,20 @@ import org.trade.strategy.data.candle.CandleItem;
 public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 
 	/**
+	 * 1/ If the open position is filled create a STP and 1 Target (LMT) OCA
+	 * order at 6R with 100% of the filled quantity. Use the open position fill
+	 * quantity, price and stop price to determine the target price. The STP
+	 * order take an initial risk of 1R.
+	 * 
+	 * 2/ Target/Stop prices should be round over/under whole/half numbers when
+	 * ever they are calculated..
+	 * 
+	 * 4/ After 9:40 trail the whole position under/over the previous bar.
+	 * 
+	 * 5/ Close any open positions at 15:55.
 	 * 
 	 */
+
 	private static final long serialVersionUID = -1802229646519981959L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrAll5MinBarStrategy.class);
@@ -63,13 +75,12 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 	/**
 	 * Default Constructor
 	 * 
-	
-	
-	
-	
-	 * @param brokerManagerModel BrokerModel
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
+	 * @param brokerManagerModel
+	 *            BrokerModel
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 
 	public PosMgrAll5MinBarStrategy(BrokerModel brokerManagerModel,
@@ -77,21 +88,13 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
 	}
 
-	/*
-	 * This method is fired from the underlying strategy when the candle series
-	 * data is changes. Note the current candle is just forming but the first
-	 * time this strategy fires is when the open position is filled or partial
-	 * filled.
-	 * 
-	 * 
-	 * @param candleSeries the series of candels that has been updated.
-	 * 
-	 * @param newBar has a new bar just started.
-	 */
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
@@ -201,8 +204,11 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 
 	/**
 	 * Method set5MinBarTrail.
-	 * @param trade Trade
-	 * @param bars int
+	 * 
+	 * @param trade
+	 *            Trade
+	 * @param bars
+	 *            int
 	 * @return boolean
 	 * @throws StrategyRuleException
 	 */

@@ -59,8 +59,32 @@ import org.trade.strategy.data.candle.CandleItem;
 public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 
 	/**
+	 * 1/ Enter in the direction of the Tradingday Tab Side field when the first
+	 * 5min bar direction co-inside.
+	 * 
+	 * 2/ Size with a stop at the first 5min bars Low (so for Long position
+	 * Quantity= Risk/(High-Low) include rounding). Use a STPLMT order with a
+	 * range from the Entry Limit table.
+	 * 
+	 * 3/ Bar must be within the Entry Limit table % Range Bar. i.e in this case
+	 * 2%
+	 * 
+	 * 4/ If the position is not filled by 10:30 cancel the order.
+	 * 
+	 * 5/ If the first 5min bar High/Low is broken (so for Side=Long a break of
+	 * the Low) before entry, cancel the open order position.
+	 * 
+	 * 6/ Add 1c to the entry price and round over/under whole/half numbers in
+	 * the direction of the trade, same for stop price.
+	 * 
+	 * E.g. If first 5min bar is H=21.50 L=21.15 Open= 21.2 Close=21.40 and the
+	 * Side is Long, then position order will be Buy STPLMT=21.51-21.55 (STPLMT
+	 * range 0.04 from EntryLimit table and as we are at 21.5 we also buy
+	 * over/under whole/half numbers), Quantity=Risk/(21.51-21.2) rounded to
+	 * +/-100 shares (see EntryLimit table).
 	 * 
 	 */
+
 	private static final long serialVersionUID = -1629661431267666769L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinSideGapBarStrategy.class);
@@ -68,13 +92,12 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 	/**
 	 * Default Constructor
 	 * 
-	
-	
-	
-	
-	 * @param brokerManagerModel BrokerModel
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
+	 * @param brokerManagerModel
+	 *            BrokerModel
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 
 	public FiveMinSideGapBarStrategy(BrokerModel brokerManagerModel,
@@ -82,18 +105,13 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
 	}
 
-	/*
-	 * Note the current candle is just forming Enter a tier 1-3 gap in first
-	 * 5min bar direction, with a 3R target and stop @ 5min high/low
-	 * 
-	 * @param candleSeries the series of candels that has been updated.
-	 * 
-	 * @param newBar has a new bar just started.
-	 */
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
