@@ -272,9 +272,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			JSplitPane mainSplitPane = new JSplitPane(
 					JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
-
-			mainSplitPane.setOneTouchExpandable(true);
-			mainSplitPane.setResizeWeight(0.05d);
+			mainSplitPane.setOneTouchExpandable(true);			
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
 			enableChartButtons(null);

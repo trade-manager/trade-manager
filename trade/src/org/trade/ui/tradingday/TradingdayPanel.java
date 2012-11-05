@@ -658,7 +658,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
 					" Realized P/L:", false, bold);
-			double realizedPnL = tradeAccount.getRealizedPnL().doubleValue();
+			double realizedPnL = (tradeAccount.getRealizedPnL() == null ? 0
+					: tradeAccount.getRealizedPnL().doubleValue());
 			if (realizedPnL < 0) {
 				CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
 						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
@@ -674,8 +675,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			}
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
 					" Unrealized P/L:", false, bold);
-			double unRealizedPnL = tradeAccount.getUnrealizedPnL()
-					.doubleValue();
+			double unRealizedPnL = (tradeAccount.getUnrealizedPnL() == null ? 0
+					: tradeAccount.getUnrealizedPnL().doubleValue());
 			if (unRealizedPnL < 0) {
 				CoreUtils.setDocumentText(
 						tradeAccountLabel.getDocument(),

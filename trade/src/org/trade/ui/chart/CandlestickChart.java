@@ -110,7 +110,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * 
 	 * @param title
 	 *            the frame title.
-	 * @param datasetContainer StrategyData
+	 * @param datasetContainer
+	 *            StrategyData
 	 */
 	public CandlestickChart(final String title, StrategyData datasetContainer) {
 
@@ -249,6 +250,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	/**
 	 * Method getChart.
+	 * 
 	 * @return JFreeChart
 	 */
 	public JFreeChart getChart() {
@@ -257,8 +259,11 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	/**
 	 * Method createChart.
-	 * @param datasetContainer StrategyData
-	 * @param title String
+	 * 
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param title
+	 *            String
 	 * @return JFreeChart
 	 */
 	private JFreeChart createChart(StrategyData datasetContainer, String title) {
@@ -327,6 +332,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 											.getSeries(0).getItemCount() - 1))
 							.getPeriod().getStart());
 			end = TradingCalendar.getNextTradingDay(end);
+			segmentedTimeline.setStartTime(start.getTime());
 			segmentedTimeline.addExceptions(setNonTradingPeriods(start, end,
 					segments15min));
 			dateAxis.setTimeline(segmentedTimeline);
@@ -411,7 +417,9 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	/**
 	 * Method seriesChanged.
-	 * @param event SeriesChangeEvent
+	 * 
+	 * @param event
+	 *            SeriesChangeEvent
 	 * @see org.jfree.data.general.SeriesChangeListener#seriesChanged(SeriesChangeEvent)
 	 */
 	public void seriesChanged(SeriesChangeEvent event) {
@@ -460,10 +468,15 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	/**
 	 * Method addBuySellTradeArrow.
-	 * @param action String
-	 * @param price Money
-	 * @param time Date
-	 * @param quantity Integer
+	 * 
+	 * @param action
+	 *            String
+	 * @param price
+	 *            Money
+	 * @param time
+	 *            Date
+	 * @param quantity
+	 *            Integer
 	 * @throws ValueTypeException
 	 */
 	public void addBuySellTradeArrow(String action, Money price, Date time,
@@ -489,9 +502,13 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	/**
 	 * Method setNonTradingPeriods.
-	 * @param start Date
-	 * @param end Date
-	 * @param segments15min int
+	 * 
+	 * @param start
+	 *            Date
+	 * @param end
+	 *            Date
+	 * @param segments15min
+	 *            int
 	 * @return List<Date>
 	 */
 	private List<Date> setNonTradingPeriods(Date start, Date end,
@@ -508,9 +525,13 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				/*
 				 * 26*15 = 6.5hr
 				 */
-				for (int j = 0; j < segments15min; j++) {
+				for (int j = 0; j < 96; j++) {
+					// Date exceptionSeg = TradingCalendar.addMinutes(
+					// TradingCalendar.getBusinessDayStart(start), j * 15);
 					Date exceptionSeg = TradingCalendar.addMinutes(
-							TradingCalendar.getBusinessDayStart(start), j * 15);
+							TradingCalendar.getSpecificTime(
+									TradingCalendar.getBusinessDayStart(start),
+									0, 0), j * 15);
 					noneTradingSegments.add(exceptionSeg);
 				}
 			}
