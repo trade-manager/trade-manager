@@ -74,13 +74,14 @@ public class CandlestickChartApp extends BasePanel {
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandlestickChartApp.class);
 
-
 	private JPanel m_menuPanel = null;
 
 	// Main method
 	/**
 	 * Method main.
-	 * @param args String[]
+	 * 
+	 * @param args
+	 *            String[]
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -91,11 +92,12 @@ public class CandlestickChartApp extends BasePanel {
 					String symbol = "MSFT";
 					// StrategyData data = CandlestickChartTest
 					// .getPriceDataSetYahooDay(symbol);
-
+					Integer numberOfDays = 2;
 					StrategyData data = CandlestickChartApp
-							.getPriceDataSetYahooIntraday(symbol, 2,
+							.getPriceDataSetYahooIntraday(symbol, numberOfDays,
 									BarSize.FIVE_MIN);
-					CandlestickChart chart = new CandlestickChart(symbol, data);
+					CandlestickChart chart = new CandlestickChart(symbol, data,
+							null, null);
 					CandlestickChartApp panel = new CandlestickChartApp(chart);
 
 					frame.getContentPane().add(panel);
@@ -122,7 +124,9 @@ public class CandlestickChartApp extends BasePanel {
 
 	/**
 	 * Constructor for CandlestickChartApp.
-	 * @param chart CandlestickChart
+	 * 
+	 * @param chart
+	 *            CandlestickChart
 	 */
 	public CandlestickChartApp(CandlestickChart chart) {
 
@@ -181,7 +185,9 @@ public class CandlestickChartApp extends BasePanel {
 
 	/**
 	 * Method setMenu.
-	 * @param menu BasePanelMenu
+	 * 
+	 * @param menu
+	 *            BasePanelMenu
 	 */
 	public void setMenu(BasePanelMenu menu) {
 		m_menuPanel.removeAll();
@@ -199,6 +205,7 @@ public class CandlestickChartApp extends BasePanel {
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
@@ -233,7 +240,9 @@ public class CandlestickChartApp extends BasePanel {
 
 	/**
 	 * Method getPriceDataSetYahooDay.
-	 * @param symbol String
+	 * 
+	 * @param symbol
+	 *            String
 	 * @return StrategyData
 	 */
 	protected static StrategyData getPriceDataSetYahooDay(String symbol) {
@@ -315,9 +324,13 @@ public class CandlestickChartApp extends BasePanel {
 
 	/**
 	 * Method getPriceDataSetYahooIntraday.
-	 * @param symbol String
-	 * @param days int
-	 * @param periodSeconds int
+	 * 
+	 * @param symbol
+	 *            String
+	 * @param days
+	 *            int
+	 * @param periodSeconds
+	 *            int
 	 * @return StrategyData
 	 */
 	protected static StrategyData getPriceDataSetYahooIntraday(String symbol,
@@ -399,7 +412,9 @@ public class CandlestickChartApp extends BasePanel {
 
 		/**
 		 * Constructor for ComponentPrintable.
-		 * @param c Component
+		 * 
+		 * @param c
+		 *            Component
 		 */
 		public ComponentPrintable(Component c) {
 			m_component = c;
@@ -407,9 +422,13 @@ public class CandlestickChartApp extends BasePanel {
 
 		/**
 		 * Method print.
-		 * @param g Graphics
-		 * @param pageFormat PageFormat
-		 * @param pageIndex int
+		 * 
+		 * @param g
+		 *            Graphics
+		 * @param pageFormat
+		 *            PageFormat
+		 * @param pageIndex
+		 *            int
 		 * @return int
 		 * @see java.awt.print.Printable#print(Graphics, PageFormat, int)
 		 */
@@ -426,7 +445,9 @@ public class CandlestickChartApp extends BasePanel {
 
 		/**
 		 * Method disableDoubleBuffering.
-		 * @param c Component
+		 * 
+		 * @param c
+		 *            Component
 		 * @return boolean
 		 */
 		private boolean disableDoubleBuffering(Component c) {
@@ -440,8 +461,11 @@ public class CandlestickChartApp extends BasePanel {
 
 		/**
 		 * Method restoreDoubleBuffering.
-		 * @param c Component
-		 * @param wasBuffered boolean
+		 * 
+		 * @param c
+		 *            Component
+		 * @param wasBuffered
+		 *            boolean
 		 */
 		private void restoreDoubleBuffering(Component c, boolean wasBuffered) {
 			if (c instanceof JComponent)

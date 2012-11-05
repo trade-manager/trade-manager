@@ -272,7 +272,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			JSplitPane mainSplitPane = new JSplitPane(
 					JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
-			mainSplitPane.setOneTouchExpandable(true);	
+			mainSplitPane.setOneTouchExpandable(true);
 			mainSplitPane.setResizeWeight(0.05d);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
@@ -623,13 +623,16 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private ChartPanel createChartPanel(Tradestrategy tradestrategy)
 			throws PersistentModelException {
 
+		Date startDate = null;
+		Date endDate = null;
+
 		if (tradestrategy.getDatasetContainer().getBaseCandleSeries().isEmpty()) {
 
-			Date endDate = TradingCalendar.getBusinessDayEnd(TradingCalendar
+			endDate = TradingCalendar.getBusinessDayEnd(TradingCalendar
 					.getMostRecentTradingDay(TradingCalendar.addBusinessDays(
 							tradestrategy.getTradingday().getClose(),
 							backfillOffsetDays)));
-			Date startDate = TradingCalendar.addDays(endDate,
+			startDate = TradingCalendar.addDays(endDate,
 					(-1 * (tradestrategy.getChartDays() - 1)));
 			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
 			if (startDate.after(tradestrategy.getTradingday().getOpen())) {
@@ -651,7 +654,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			}
 		}
 
-		ChartPanel chartPanel = new ChartPanel(tradestrategy);
+		ChartPanel chartPanel = new ChartPanel(tradestrategy, startDate,
+				endDate);
 		return chartPanel;
 	}
 
@@ -964,7 +968,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 * @param tradestrategy
 		 *            Tradestrategy
 		 */
-		ChartPanel(Tradestrategy tradestrategy) {
+		ChartPanel(Tradestrategy tradestrategy, Date startDate, Date endDate) {
 			this.tradestrategy = tradestrategy;
 			String ledgend = "("
 					+ tradestrategy.getContract().getSymbol()
@@ -972,7 +976,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					+ (tradestrategy.getContract().getDescription() == null ? "Contract details not available."
 							: tradestrategy.getContract().getDescription());
 			this.candlestickChart = new CandlestickChart(ledgend,
-					tradestrategy.getDatasetContainer());
+					tradestrategy.getDatasetContainer(), startDate, endDate);
 			candlestickChart.setName(tradestrategy.getContract().getSymbol());
 			this.setLayout(new BorderLayout());
 			this.add(candlestickChart, null);

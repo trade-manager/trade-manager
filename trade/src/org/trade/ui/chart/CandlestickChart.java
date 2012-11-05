@@ -113,7 +113,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * @param datasetContainer
 	 *            StrategyData
 	 */
-	public CandlestickChart(final String title, StrategyData datasetContainer) {
+	public CandlestickChart(final String title, StrategyData datasetContainer,
+			Date startDate, Date endDate) {
 
 		this.datasetContainer = datasetContainer;
 		// Used to mark the current price
@@ -122,7 +123,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		valueMarker = new ValueMarker(0.00, Color.black, stroke);
 
 		this.setLayout(new BorderLayout());
-		m_chart = createChart(this.datasetContainer, title);
+		m_chart = createChart(this.datasetContainer, title, startDate, endDate);
 
 		BlockContainer container = new BlockContainer(new BorderArrangement());
 		container.add(titleLegend1, RectangleEdge.LEFT);
@@ -266,7 +267,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            String
 	 * @return JFreeChart
 	 */
-	private JFreeChart createChart(StrategyData datasetContainer, String title) {
+	private JFreeChart createChart(StrategyData datasetContainer, String title,
+			Date startDate, Date endDate) {
 
 		DateAxis dateAxis = new DateAxis("Date");
 		dateAxis.setVerticalTickLabels(true);
@@ -299,31 +301,16 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				.getTime())
 				/ (1000 * 60 * 15);
 
-		int segments15minFromMidnight = ((TradingCalendar
-				.getHourOfDay(TradingCalendar.getTodayBusinessDayStart()) * 60) + TradingCalendar
-				.getMinute(TradingCalendar.getTodayBusinessDayStart())) / 15;
-
 		SegmentedTimeline segmentedTimeline = new SegmentedTimeline(
 				SegmentedTimeline.FIFTEEN_MINUTE_SEGMENT_SIZE, segments15min,
 				(96 - segments15min));
-		// Start time midnight + 38 * 15 = 9.5 hrs
-		if (TradingCalendar.inDaylightTime(dateAxis.getMaximumDate())) {
-			segmentedTimeline.setStartTime(TradingCalendar
-					.firstMondayAfter2010()
-					+ ((segments15minFromMidnight - 4) * segmentedTimeline
-							.getSegmentSize()));
-		} else {
-			segmentedTimeline.setStartTime(TradingCalendar
-					.firstMondayAfter2010()
-					+ (segments15minFromMidnight * segmentedTimeline
-							.getSegmentSize()));
-		}
+
 		if (datasetContainer.getCandleDataset().getSeries(0).getItemCount() > 0) {
-			Date start = TradingCalendar
+			startDate = TradingCalendar
 					.getBusinessDayStart(((CandleItem) datasetContainer
 							.getCandleDataset().getSeries(0).getDataItem(0))
 							.getPeriod().getStart());
-			Date end = TradingCalendar
+			endDate = TradingCalendar
 					.getBusinessDayStart(((CandleItem) datasetContainer
 							.getCandleDataset()
 							.getSeries(0)
@@ -331,12 +318,13 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 									datasetContainer.getCandleDataset()
 											.getSeries(0).getItemCount() - 1))
 							.getPeriod().getStart());
-			end = TradingCalendar.getNextTradingDay(end);
-			segmentedTimeline.setStartTime(start.getTime());
-			segmentedTimeline.addExceptions(setNonTradingPeriods(start, end,
-					segments15min));
-			dateAxis.setTimeline(segmentedTimeline);
+			endDate = TradingCalendar.getNextTradingDay(endDate);
 		}
+		segmentedTimeline.setStartTime(startDate.getTime());
+		segmentedTimeline
+				.addExceptions(getNonTradingPeriods(startDate, endDate));
+		dateAxis.setTimeline(segmentedTimeline);
+
 		// Build Combined Plot
 		CombinedDomainXYPlot mainPlot = new CombinedDomainXYPlot(dateAxis);
 		mainPlot.add(pricePlot, 4);
@@ -511,32 +499,27 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            int
 	 * @return List<Date>
 	 */
-	private List<Date> setNonTradingPeriods(Date start, Date end,
-			int segments15min) {
-
+	private List<Date> getNonTradingPeriods(Date startDate, Date endDate) {
 		/*
-		 * See if we have a weekend in the date range if so find the exceptions
-		 * TODO add half trading days and days with different start/ends this
-		 * assumes all periods are of equal length.
+		 * Add all 15min periods that are not trading times.
 		 */
 		List<Date> noneTradingSegments = new ArrayList<Date>();
 		do {
-			if (!TradingCalendar.isTradingDay(start)) {
-				/*
-				 * 26*15 = 6.5hr
-				 */
-				for (int j = 0; j < 96; j++) {
-					// Date exceptionSeg = TradingCalendar.addMinutes(
-					// TradingCalendar.getBusinessDayStart(start), j * 15);
-					Date exceptionSeg = TradingCalendar.addMinutes(
-							TradingCalendar.getSpecificTime(
-									TradingCalendar.getBusinessDayStart(start),
-									0, 0), j * 15);
-					noneTradingSegments.add(exceptionSeg);
+			/*
+			 * 96 15min periods per day
+			 */
+			for (int j = 0; j < 96; j++) {
+				Date segment = TradingCalendar.addMinutes(TradingCalendar
+						.getSpecificTime(
+								TradingCalendar.getBusinessDayStart(startDate),
+								0, 0), j * 15);
+				if (!TradingCalendar.isTradingDay(segment)
+						|| !TradingCalendar.isMarketHours(segment)) {
+					noneTradingSegments.add(segment);
 				}
 			}
-			start = TradingCalendar.addDays(start, 1);
-		} while (end.after(start));
+			startDate = TradingCalendar.addDays(startDate, 1);
+		} while (endDate.after(startDate));
 
 		return noneTradingSegments;
 	}
