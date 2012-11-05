@@ -197,10 +197,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JLabel jLabel1 = new JLabel("Trading Day");
 			jPanel1.add(jLabel1, BorderLayout.WEST);
 			jPanel1.add(jPanel3, BorderLayout.EAST);
-			JScrollPane jScrollPane1 = new JScrollPane();
-			jScrollPane1.getViewport().add(m_tree, BorderLayout.CENTER);
+			JScrollPane jScrollPane1Tree = new JScrollPane();
+			jScrollPane1Tree.getViewport().add(m_tree, BorderLayout.CENTER);
 			JPanel jPanel2 = new JPanel(new BorderLayout());
-			jPanel2.add(jScrollPane1, BorderLayout.CENTER);
+			jPanel2.add(jScrollPane1Tree, BorderLayout.CENTER);
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
 			// Chart Panel
@@ -272,7 +272,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			JSplitPane mainSplitPane = new JSplitPane(
 					JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
-			mainSplitPane.setOneTouchExpandable(true);			
+			mainSplitPane.setOneTouchExpandable(true);	
+			mainSplitPane.setResizeWeight(0.05d);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
 			enableChartButtons(null);
