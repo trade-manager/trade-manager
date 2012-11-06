@@ -1643,7 +1643,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 											tradestrategy.getContract()
 													.getIdContract(),
 											startDate, endDate);
-							if (candles.isEmpty()) {
+							if (!candles.isEmpty()) {
 								int result = JOptionPane.showConfirmDialog(this
 										.getFrame(),
 										"Candle data already exists for Symbol: "
