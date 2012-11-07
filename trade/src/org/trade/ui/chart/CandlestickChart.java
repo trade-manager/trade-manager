@@ -56,6 +56,7 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.SegmentedTimeline;
+import org.jfree.chart.axis.SegmentedTimeline.Segment;
 import org.jfree.chart.block.BlockContainer;
 import org.jfree.chart.block.BorderArrangement;
 import org.jfree.chart.block.EmptyBlock;
@@ -321,8 +322,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			endDate = TradingCalendar.getNextTradingDay(endDate);
 		}
 		segmentedTimeline.setStartTime(startDate.getTime());
-		segmentedTimeline
-				.addExceptions(getNonTradingPeriods(startDate, endDate));
+		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate,
+				endDate, segmentedTimeline));
 		dateAxis.setTimeline(segmentedTimeline);
 
 		// Build Combined Plot
@@ -499,7 +500,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            int
 	 * @return List<Date>
 	 */
-	private List<Date> getNonTradingPeriods(Date startDate, Date endDate) {
+	private List<Date> getNonTradingPeriods(Date startDate, Date endDate,
+			SegmentedTimeline segmentedTimeline) {
 		/*
 		 * Add all 15min periods that are not trading times.
 		 */
@@ -509,13 +511,17 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			 * 96 15min periods per day
 			 */
 			for (int j = 0; j < 96; j++) {
-				Date segment = TradingCalendar.addMinutes(TradingCalendar
-						.getSpecificTime(
+				Date segmentStartDate = TradingCalendar.addMinutes(
+						TradingCalendar.getSpecificTime(
 								TradingCalendar.getBusinessDayStart(startDate),
 								0, 0), j * 15);
-				if (!TradingCalendar.isTradingDay(segment)
-						|| !TradingCalendar.isMarketHours(segment)) {
-					noneTradingSegments.add(segment);
+
+				if (!TradingCalendar.isTradingDay(segmentStartDate)
+						|| !TradingCalendar.isMarketHours(segmentStartDate)) {
+					Segment segment = segmentedTimeline
+							.getSegment(segmentStartDate);
+					if (segment.inIncludeSegments())
+						noneTradingSegments.add(segmentStartDate);
 				}
 			}
 			startDate = TradingCalendar.addDays(startDate, 1);
