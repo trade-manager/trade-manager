@@ -453,8 +453,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			if (m_client.isConnected()) {
 				m_contractRequests.put(this.getNextRequestId(), contract);
+				/*
+				 * Null the IB Contract Id as these sometimes change. This will
+				 * force a get of the IB data via the Exchange/Symbol/Currency.
+				 */
+				contract.setIdContractIB(null);
+				TWSBrokerModel.logContract(TWSBrokerModel
+						.getIBContract(contract));
 				m_client.reqContractDetails(contract.getIdContract(),
 						TWSBrokerModel.getIBContract(contract));
+
 			} else {
 				throw new BrokerModelException(contract.getIdContract(), 3080,
 						"Not conected to TWS historical data cannot be retrieved");
@@ -1949,7 +1957,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					} catch (BrokerModelException e) {
 						error(reqId, 3250, e.getMessage());
 					}
-				}else{
+				} else {
 					tradestrategy.getDatasetContainer().cancel();
 					_log.info("Historical data complete for: "
 							+ tradestrategy.getContract().getSymbol());
