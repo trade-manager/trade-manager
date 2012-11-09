@@ -220,8 +220,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @param newTradingday
 	 *            Tradingday
 	 */
-	public void replaceTradingday(Tradingday newTradingday) {
-		this.tradingdays.replace(newTradingday.getOpen(), newTradingday);
+	public void replaceTradingday(Date date, Tradingday newTradingday) {
+		if (this.tradingdays.containsKey(date))
+			this.tradingdays.remove(date);
+		this.tradingdays.put(newTradingday.getOpen(), newTradingday);
 	}
 
 	/**

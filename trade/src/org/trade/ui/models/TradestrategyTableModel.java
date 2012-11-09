@@ -142,7 +142,7 @@ public class TradestrategyTableModel extends TableModel {
 	 * @return Tradingday
 	 */
 	public Tradingday getData() {
-		return m_data;
+		return this.m_data;
 	}
 
 	/**
