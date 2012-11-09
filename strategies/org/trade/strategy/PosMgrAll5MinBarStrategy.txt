@@ -1,0 +1,8 @@
+1/ If the open position is filled create a STP and 1 Target (LMT) OCA order at 6R with 100% of the filled quantity. Use the open position fill
+quantity, price and stop price to determine the target price. The STP order take an initial risk of 1R.
+
+2/ Target/Stop prices should be round over/under whole/half numbers when ever they are calculated..
+
+3/ After 9:40 trail the whole position under/over the previous bar.
+
+4/ Close any open positions at 15:55.

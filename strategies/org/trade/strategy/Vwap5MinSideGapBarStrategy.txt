@@ -1,0 +1,8 @@
+1/ Enter over/under the 9:35am 5min bar if the bar is in the direction of the Tradestrategy side and the Vwap is also in that direction. 
+
+2/ Bar must be within the Entry Limit table % Range Bar. i.e in this case 2%
+
+3/ If the position is not filled by 10:30 cancel the order.
+
+4/ Add 1c to the entry price and round over/under whole/half numbers in
+the direction of the trade, same for stop price.

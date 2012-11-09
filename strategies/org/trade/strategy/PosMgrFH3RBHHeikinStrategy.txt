@@ -1,0 +1,13 @@
+1/ If the open position is filled create a STP and 2 Targets (LMT) OCA orders at 4R and 7R with 50% of the filled quantity for each. 
+Use the open position fill quantity, price and stop price to determine the target price. The STP orders take an initial risk of 2R.
+
+2/ Target/Stop prices should be round over/under whole/half numbers when ever they are calculated..
+	  
+3/ After 9:35 and before 10:30 if the current VWAP crosses the 9:35 candles VWAP move the STP price on each of the STP order to break even.
+	  
+4/ At 10:30 move the STP order to the average fill price of the filled open order.
+	  
+5/ When target one has been reached trail the second half using prev two Heikin-Ashi bars. i.e. STP price is moved up to the Low of current
+Heikin-Ashi bar -2 as long as the prev bars low is higher than the prev  bar -1 low.
+
+6/ Close any open positions at 15:55.
