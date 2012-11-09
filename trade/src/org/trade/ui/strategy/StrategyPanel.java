@@ -300,6 +300,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 				}
 				setContent(new String(rule.getRule()));
 				commentText.setText(rule.getComment());
+				commentText.setCaretPosition(0);
 				messageText.setCaretPosition(0);
 				currentRule = rule;
 			}
