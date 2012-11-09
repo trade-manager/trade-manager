@@ -125,7 +125,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Constructor for StrategyPanel.
-	 * @param tradePersistentModel PersistentModel
+	 * 
+	 * @param tradePersistentModel
+	 *            PersistentModel
 	 */
 	public StrategyPanel(PersistentModel tradePersistentModel) {
 		try {
@@ -194,7 +196,11 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			sourcePanel.setBorder(BorderFactory.createCompoundBorder(
 					BorderFactory.createTitledBorder("Source"),
 					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
-			sourcePanel.add(commentPanel, BorderLayout.SOUTH);
+			// use the new JSplitPane to dynamically resize...
+			JSplitPane splitSource = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+					true, sourcePanel, commentPanel);
+			splitSource.setOneTouchExpandable(true);
+			splitSource.setResizeWeight(0.7d);
 
 			// create the JTree and scroll pane.
 			JPanel treePanel = new JPanel(new BorderLayout());
@@ -209,7 +215,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 			// use the new JSplitPane to dynamically resize...
 			JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-					true, treePanel, sourcePanel);
+					true, treePanel, splitSource);
 			split.setOneTouchExpandable(true);
 			split.setResizeWeight(0.05d);
 
@@ -234,7 +240,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method valueChanged.
-	 * @param e TreeSelectionEvent
+	 * 
+	 * @param e
+	 *            TreeSelectionEvent
 	 * @see javax.swing.event.TreeSelectionListener#valueChanged(TreeSelectionEvent)
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
@@ -313,6 +321,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
@@ -321,7 +330,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method doCompile.
-	 * @param rule Rule
+	 * 
+	 * @param rule
+	 *            Rule
 	 */
 	public void doCompile(Rule rule) {
 		try {
@@ -406,7 +417,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method doSave.
-	 * @param rule Rule
+	 * 
+	 * @param rule
+	 *            Rule
 	 */
 	public void doSave(Rule rule) {
 		try {
@@ -473,7 +486,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method doNew.
-	 * @param strategy Strategy
+	 * 
+	 * @param strategy
+	 *            Strategy
 	 */
 	public void doNew(Strategy strategy) {
 		try {
@@ -498,7 +513,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method doDelete.
-	 * @param rule Rule
+	 * 
+	 * @param rule
+	 *            Rule
 	 */
 	public void doDelete(Rule rule) {
 		try {
@@ -526,7 +543,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	/**
 	 * This is fired when the tool-bar Refresh button is pressed.
 	 * 
-	
+	 * 
 	 * 
 	 */
 	public void doRefresh() {
@@ -542,11 +559,14 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	/**
 	 * Read a file from an absolute file name.
 	 * 
-	
-	
-	 * @param fileName String
+	 * 
+	 * 
+	 * @param fileName
+	 *            String
 	 * @return String
-	 * @throws IOException * @throws BadLocationException */
+	 * @throws IOException
+	 *             * @throws BadLocationException
+	 */
 	public synchronized String readFile(String fileName) throws IOException,
 			BadLocationException {
 		FileReader fileReader = null;
@@ -567,12 +587,15 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	/**
 	 * Read a resource from the class path.
 	 * 
-	
 	 * 
-	
-	 * @param fileName String
+	 * 
+	 * 
+	 * @param fileName
+	 *            String
 	 * @return String
-	 * @throws IOException * @throws BadLocationException */
+	 * @throws IOException
+	 *             * @throws BadLocationException
+	 */
 	public synchronized String readResource(String fileName)
 			throws IOException, BadLocationException {
 		InputStream inputStream = null;
@@ -589,21 +612,27 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method loadStrategiesFromFileSystem.
-	 * @param strategies List<Strategy>
+	 * 
+	 * @param strategies
+	 *            List<Strategy>
 	 */
 	private void loadStrategiesFromFileSystem(List<Strategy> strategies) {
 		try {
 			this.setMessageText(null, false, false, null);
 			for (Strategy strategy : strategies) {
-				String fileName = m_strategyDir + "/"
+				String fileNameCode = m_strategyDir + "/"
 						+ StrategyRule.PACKAGE.replace('.', '/')
 						+ strategy.getClassName() + ".java";
+				String fileNameComments = m_strategyDir + "/"
+						+ StrategyRule.PACKAGE.replace('.', '/')
+						+ strategy.getClassName() + ".txt";
 
 				try {
-					String content = readFile(fileName);
+					String content = readFile(fileNameCode);
+					String comments = readFile(fileNameComments);
 					if (strategy.getRules().isEmpty()) {
-						Rule nextRule = new Rule(strategy, 1, null, new Date(),
-								content.getBytes(), new Date());
+						Rule nextRule = new Rule(strategy, 1, comments,
+								new Date(), content.getBytes(), new Date());
 						strategy.add(nextRule);
 						this.tradePersistentModel.persistRule(nextRule);
 					} else {
@@ -625,7 +654,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 									if (!ruleDB.equals(content)) {
 										setMessageText(
 												"DB strategy not in sync with file system strategy: "
-														+ fileName
+														+ fileNameCode
 														+ " file length: "
 														+ content.length()
 														+ " Strategy "
@@ -636,13 +665,34 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 												true, true, colorRedAttr);
 									}
 								}
+								if (null == rule.getComment()
+										&& null != comments) {
+									rule.setComment(comments);
+									this.tradePersistentModel.persistRule(rule);
+								} else {
+									String commentsDB = new String(
+											rule.getComment());
+									if (!commentsDB.equals(comments)) {
+										setMessageText(
+												"DB strategy not in sync with file system strategy: "
+														+ fileNameComments
+														+ " file length: "
+														+ comments.length()
+														+ " Strategy "
+														+ rule.getStrategy()
+																.getName()
+														+ " length: "
+														+ +commentsDB.length(),
+												true, true, colorRedAttr);
+									}
+								}
 							}
 						}
 					}
 				} catch (IOException e) {
 					// Do nothing.
 				} catch (BadLocationException e) {
-					setMessageText("Could not load rule " + fileName, true,
+					setMessageText("Could not load rule " + fileNameCode, true,
 							true, colorRedAttr);
 				}
 			}
@@ -658,9 +708,13 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method addClassDefinition.
-	 * @param theClass Class<?>
-	 * @param title String
-	 * @param doc Document
+	 * 
+	 * @param theClass
+	 *            Class<?>
+	 * @param title
+	 *            String
+	 * @param doc
+	 *            Document
 	 * @throws Exception
 	 */
 	private void addClassDefinition(Class<?> theClass, String title,
@@ -707,11 +761,14 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	/**
 	 * Read an imputStream reader
 	 * 
-	
-	
-	 * @param inputStreamReader InputStreamReader
+	 * 
+	 * 
+	 * @param inputStreamReader
+	 *            InputStreamReader
 	 * @return String
-	 * @throws IOException * @throws BadLocationException */
+	 * @throws IOException
+	 *             * @throws BadLocationException
+	 */
 	private synchronized String readInputStream(
 			InputStreamReader inputStreamReader) throws IOException,
 			BadLocationException {
@@ -738,8 +795,11 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method doSaveFile.
-	 * @param fileName String
-	 * @param content String
+	 * 
+	 * @param fileName
+	 *            String
+	 * @param content
+	 *            String
 	 */
 	private void doSaveFile(String fileName, String content) {
 
@@ -759,6 +819,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method refreshTree.
+	 * 
 	 * @throws ValueTypeException
 	 */
 	private void refreshTree() throws ValueTypeException {
@@ -783,7 +844,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method setContent.
-	 * @param content String
+	 * 
+	 * @param content
+	 *            String
 	 */
 	private void setContent(String content) {
 		sourceText.setText(null);
@@ -795,10 +858,15 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method setMessageText.
-	 * @param content String
-	 * @param append boolean
-	 * @param newLine boolean
-	 * @param attrSet SimpleAttributeSet
+	 * 
+	 * @param content
+	 *            String
+	 * @param append
+	 *            boolean
+	 * @param newLine
+	 *            boolean
+	 * @param attrSet
+	 *            SimpleAttributeSet
 	 */
 	private void setMessageText(String content, boolean append,
 			boolean newLine, SimpleAttributeSet attrSet) {
@@ -819,6 +887,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method getMessageText.
+	 * 
 	 * @return String
 	 */
 	private String getMessageText() {
@@ -827,6 +896,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method getContent.
+	 * 
 	 * @return String
 	 */
 	private String getContent() {
@@ -835,7 +905,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method deleteDir.
-	 * @param dir File
+	 * 
+	 * @param dir
+	 *            File
 	 * @return boolean
 	 */
 	protected static boolean deleteDir(File dir) {
@@ -855,7 +927,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 	/**
 	 * Method createRule.
-	 * @param strategy Strategy
+	 * 
+	 * @param strategy
+	 *            Strategy
 	 * @throws PersistentModelException
 	 * @throws ValueTypeException
 	 */
@@ -885,7 +959,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 		// Accept all directories and all csv files.
 		/**
 		 * Method accept.
-		 * @param f File
+		 * 
+		 * @param f
+		 *            File
 		 * @return boolean
 		 */
 		public boolean accept(File f) {
@@ -901,7 +977,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 
 		/**
 		 * Method getExtension.
-		 * @param f File
+		 * 
+		 * @param f
+		 *            File
 		 * @return String
 		 */
 		public String getExtension(File f) {
@@ -918,6 +996,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 		// The description of this filter
 		/**
 		 * Method getDescription.
+		 * 
 		 * @return String
 		 */
 		public String getDescription() {
