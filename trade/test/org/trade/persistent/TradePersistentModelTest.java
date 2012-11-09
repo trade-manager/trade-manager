@@ -83,11 +83,14 @@ import org.trade.strategy.data.IndicatorSeries;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.CandlePeriod;
 import org.trade.ui.TradeAppLoadConfig;
+import org.trade.ui.models.TradingdayTableModel;
+import org.trade.ui.tables.TradingdayTable;
 
 import com.ib.client.Execution;
 
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -102,6 +105,7 @@ public class TradePersistentModelTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -114,6 +118,7 @@ public class TradePersistentModelTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -277,7 +282,8 @@ public class TradePersistentModelTest extends TestCase {
 
 			if (OrderStatus.FILLED.equals(tradeOrderFilledStatus.getStatus())
 					&& !tradeOrderFilledStatus.getIsFilled()
-					&& !((new Money(commisionAmt)).equals(new Money(Double.MAX_VALUE)))) {
+					&& !((new Money(commisionAmt)).equals(new Money(
+							Double.MAX_VALUE)))) {
 				tradeOrderFilledStatus.setIsFilled(true);
 				tradeOrderFilledStatus.setCommission(new BigDecimal(
 						commisionAmt));
@@ -1181,6 +1187,53 @@ public class TradePersistentModelTest extends TestCase {
 					.getObject(), this.tradestrategy.getTradingday());
 		} catch (Exception e) {
 			fail("Error testReassignStrategy Msg: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testReplaceTradingday() {
+
+		try {
+			Tradingdays tradingdays = new Tradingdays();
+
+			Tradingday instance1 = tradePersistentModel
+					.findTradingdayById(this.tradestrategy.getTradingday()
+							.getIdTradingDay());
+			tradingdays.add(instance1);
+
+			TradingdayTableModel tradingdayModel = new TradingdayTableModel();
+			tradingdayModel.setData(tradingdays);
+			TradingdayTable tradingdayTable = new TradingdayTable(
+					tradingdayModel);
+			tradingdayTable.setRowSelectionInterval(0, 0);
+
+			this.tradestrategy.getContract().setIndustry("Computer");
+			Contract result = this.tradePersistentModel
+					.persistContract(this.tradestrategy.getContract());
+			assertNotNull(result);
+			Tradingday instance2 = tradePersistentModel
+					.findTradingdayById(this.tradestrategy.getTradingday()
+							.getIdTradingDay());
+			tradingdays.replaceTradingday(instance1.getOpen(), instance2);
+			int selectedRow = tradingdayTable.getSelectedRow();
+			tradingdayModel.setData(tradingdays);
+			if (selectedRow > -1) {
+				tradingdayTable.setRowSelectionInterval(selectedRow,
+						selectedRow);
+			}
+			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) tradingdayModel
+					.getValueAt(0, tradingdayTable.convertRowIndexToModel(0));
+			Tradingday transferObject = tradingdayModel.getData()
+					.getTradingdays().get(openDate.getDate());
+			assertNotNull(transferObject);
+
+			assertNotNull(tradingdays.getTradingday(instance1.getOpen()));
+			String industry = transferObject.getTradestrategies().get(0)
+					.getContract().getIndustry();
+			assertNotNull(industry);
+
+		} catch (Exception e) {
+			fail("Error testReplaceTradingday Msg: " + e.getMessage());
 		}
 	}
 }
