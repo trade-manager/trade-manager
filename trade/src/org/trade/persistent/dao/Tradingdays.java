@@ -461,7 +461,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				break;
 			}
 			case 4: {
-				if (token.toUpperCase().equals("SMART/ISLAND")) {
+				if (token.toUpperCase().equals("SMART/ARCA")) {
 					contract.setExchange("SMART");
 				} else {
 					contract.setExchange(token.toUpperCase());
