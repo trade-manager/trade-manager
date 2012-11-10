@@ -430,7 +430,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			if (rule.getRule().length > 0) {
 				if ((new String(rule.getRule())).equals(getContent())) {
 					if (null != rule.getComment()
-							&& rule.getComment().equals(commentText.getText())) {
+							&& rule.getComment().equals(getComments())) {
 						if (null != rule.getIdRule()) {
 							return;
 						}
@@ -439,7 +439,10 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			}
 			String fileName = m_strategyDir + "/"
 					+ StrategyRule.PACKAGE.replace('.', '/');
-			fileName = fileName + rule.getStrategy().getClassName() + ".java";
+			String fileNameSource = fileName
+					+ rule.getStrategy().getClassName() + ".java";
+			String fileNameComments = fileName
+					+ rule.getStrategy().getClassName() + ".txt";
 			int result = JOptionPane.NO_OPTION;
 			if (null != rule.getId()) {
 				result = JOptionPane.showConfirmDialog(this.getFrame(),
@@ -454,7 +457,8 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 								.getBytes(), new Date());
 				rule.getStrategy().add(nextRule);
 				this.tradePersistentModel.persistRule(nextRule);
-				doSaveFile(fileName, getContent());
+				doSaveFile(fileNameSource, getContent());
+				doSaveFile(fileNameComments, getComments());
 				/*
 				 * Now find and reset the original rule back to before the
 				 * changes made.
@@ -469,12 +473,13 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 				this.setContent(new String(rule.getRule()));
 				commentText.setText(rule.getComment());
 			} else {
-				if (commentText.getText().length() > 0)
-					rule.setComment(commentText.getText());
+				if (getComments().length() > 0)
+					rule.setComment(getComments());
 				rule.setUpdateDate(new Date());
 				rule.setRule(getContent().getBytes());
 				this.tradePersistentModel.persistRule(rule);
-				doSaveFile(fileName, getContent());
+				doSaveFile(fileNameSource, getContent());
+				doSaveFile(fileNameComments, getComments());
 			}
 			refreshTree();
 			rule.setDirty(false);
@@ -902,6 +907,15 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 */
 	private String getContent() {
 		return sourceText.getText();
+	}
+
+	/**
+	 * Method getComments.
+	 * 
+	 * @return String
+	 */
+	private String getComments() {
+		return commentText.getText();
 	}
 
 	/**
