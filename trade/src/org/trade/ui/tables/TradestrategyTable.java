@@ -66,7 +66,6 @@ import org.trade.strategy.StrategyRule;
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
 import org.trade.ui.models.TradestrategyTableModel;
-import org.trade.ui.tables.renderer.ContractRenderer;
 import org.trade.ui.tables.renderer.DAOStrategyManagerRenderer;
 import org.trade.ui.tables.renderer.DAOStrategyRenderer;
 import org.trade.ui.widget.DateEditor;
@@ -112,7 +111,6 @@ public class TradestrategyTable extends Table {
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new org.trade.core.valuetype.Date(
 				new Date()), DATETIMEFORMAT, Calendar.MONTH);
-		ContractRenderer contractRenderer = new ContractRenderer();
 
 		this.getColumn("Expiry").setCellEditor(eDate);
 		this.getColumn("Expiry").setCellRenderer(rDate);
@@ -162,7 +160,6 @@ public class TradestrategyTable extends Table {
 		this.setDefaultEditor(Tier.class, tierEditor);
 		this.setDefaultEditor(TradestrategyStatus.class,
 				tradestrategyStatusEditor);
-		this.setDefaultRenderer(Contract.class, contractRenderer);
 		this.setDefaultRenderer(DAOStrategy.class, dAOStrategyRenderer);
 		this.setDefaultRenderer(DAOStrategyManager.class,
 				dAOStrategyManagerRenderer);
@@ -197,9 +194,8 @@ public class TradestrategyTable extends Table {
 		};
 	}
 
-	// Implement table cell tool tips.
 	/**
-	 * Method getToolTipText.
+	 * Method getToolTipText. Implement table cell tool tips.
 	 * 
 	 * @param e
 	 *            MouseEvent

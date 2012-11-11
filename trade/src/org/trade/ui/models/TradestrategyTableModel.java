@@ -139,6 +139,7 @@ public class TradestrategyTableModel extends TableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Tradingday
 	 */
 	public Tradingday getData() {
@@ -147,8 +148,11 @@ public class TradestrategyTableModel extends TableModel {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -170,7 +174,9 @@ public class TradestrategyTableModel extends TableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Tradingday
+	 * 
+	 * @param data
+	 *            Tradingday
 	 */
 	public void setData(Tradingday data) {
 		if (timer.isRunning())
@@ -190,9 +196,13 @@ public class TradestrategyTableModel extends TableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 		Tradestrategy element = getData().getTradestrategies().get(row);
@@ -207,8 +217,7 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 2: {
-			element.getContract().setSymbol(
-					((String) value).trim().toUpperCase());
+			element.setContract((Contract) value);
 			break;
 		}
 		case 3: {
@@ -291,7 +300,9 @@ public class TradestrategyTableModel extends TableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
 
@@ -370,14 +381,17 @@ public class TradestrategyTableModel extends TableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element Tradestrategy
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            Tradestrategy
 	 */
 	public void getNewRow(Vector<Object> newRow, Tradestrategy element) {
 
 		newRow.addElement(new Date(element.getTradingday().getOpen()));
 		newRow.addElement(YesNo.newInstance(element.getTrade()));
-		newRow.addElement(element.getContract().getSymbol());
+		newRow.addElement(element.getContract());
 		if (null == element.getSide()) {
 			newRow.addElement(new Side());
 		} else {
