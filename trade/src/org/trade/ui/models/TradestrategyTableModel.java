@@ -217,7 +217,7 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 2: {
-			element.setContract((Contract) value);
+			element.getContract().setSymbol(((String) value).toUpperCase());
 			break;
 		}
 		case 3: {
@@ -391,7 +391,7 @@ public class TradestrategyTableModel extends TableModel {
 
 		newRow.addElement(new Date(element.getTradingday().getOpen()));
 		newRow.addElement(YesNo.newInstance(element.getTrade()));
-		newRow.addElement(element.getContract());
+		newRow.addElement(element.getContract().getSymbol());
 		if (null == element.getSide()) {
 			newRow.addElement(new Side());
 		} else {
