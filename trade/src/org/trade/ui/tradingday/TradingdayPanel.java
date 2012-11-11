@@ -67,6 +67,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SpinnerDateModel;
+import javax.swing.ToolTipManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -207,6 +208,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_tradestrategyModel.setData(tradingday);
 			m_tradestrategyTable = new TradestrategyTable(m_tradestrategyModel,
 					strategyWorkers);
+			ToolTipManager.sharedInstance().registerComponent(
+					m_tradestrategyTable);
 			m_tradestrategyTable.getSelectionModel().addListSelectionListener(
 					new TradestrategyTableRowListener());
 			m_tradestrategyTable.addMouseListener(new MouseAdapter() {
