@@ -123,7 +123,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private Table m_tradeOrderTable = null;
 	private TradeOrderTableModel m_tradeOrderModel = null;
 	private JEditorPane m_tradeLabel = null;
-	private JLabel m_strategyLabel = null;
+	private JEditorPane m_strategyLabel = null;
 	private BaseButton executeButton = null;
 	private BaseButton brokerDataButton = null;
 	private BaseButton cancelButton = null;
@@ -189,7 +189,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tree.addTreeSelectionListener(this);
 			m_tree.setCellRenderer(new TradingdayTreeCellRenderer());
 			ToolTipManager.sharedInstance().registerComponent(m_tree);
-			
+
 			JPanel jPanel1 = new JPanel(new BorderLayout());
 			FlowLayout flowLayout1 = new FlowLayout();
 			flowLayout1.setAlignment(FlowLayout.RIGHT);
@@ -221,15 +221,19 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel6.add(jLabel4, null);
 			jPanel6.add(periodEditorComboBox, null);
 
-			FlowLayout flowLayout3 = new FlowLayout();
-			flowLayout3.setAlignment(FlowLayout.RIGHT);
-			JPanel jPanel12 = new JPanel(flowLayout3);
+			// FlowLayout flowLayout3 = new FlowLayout();
+			// flowLayout3.setAlignment(FlowLayout.RIGHT);
+			// JPanel jPanel12 = new JPanel(flowLayout3);
 
-			m_strategyLabel = new JLabel("Strategy: ");
+			JPanel jPanel12 = new JPanel(new BorderLayout());
+			m_strategyLabel = new JEditorPane("text/rtf", "");
+			setStrategyLabel(null);
+			m_strategyLabel.setAutoscrolls(false);
+			m_strategyLabel.setEditable(false);
 			jPanel12.add(m_strategyLabel, null);
 			JPanel jPanel11 = new JPanel(new BorderLayout());
 			jPanel11.add(jPanel6, BorderLayout.WEST);
-			jPanel11.add(jPanel12, BorderLayout.EAST);
+			jPanel11.add(jPanel12, BorderLayout.CENTER);
 			JPanel jPanel7 = new JPanel(new BorderLayout());
 			jPanel7.add(m_jTabbedPaneContract, BorderLayout.CENTER);
 			JScrollPane jScrollPane3 = new JScrollPane();
@@ -258,6 +262,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderTable.setPreferredScrollableViewportSize(d);
 
 			m_tradeLabel = new JEditorPane("text/rtf", "");
+			this.setTradeLabel(null, null);
 			m_tradeLabel.setAutoscrolls(false);
 			m_tradeLabel.setEditable(false);
 			jPanel16.add(m_tradeLabel, BorderLayout.NORTH);
@@ -768,6 +773,46 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	}
 
 	/**
+	 * Method setStrategyLabel.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @param candlestickChart
+	 *            CandlestickChart
+	 * @throws BadLocationException
+	 */
+	private void setStrategyLabel(Tradestrategy tradestrategy) {
+		try {
+			String primaryExchange = "";
+			String industry = "";
+			String strategy = "";
+			if (null != tradestrategy) {
+				primaryExchange = tradestrategy.getContract()
+						.getPrimaryExchange();
+				industry = tradestrategy.getContract().getIndustry();
+				strategy = tradestrategy.getStrategy().getDescription();
+			}
+			m_strategyLabel.setText(null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
+					"Primary Exch: ", false, bold);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
+					CoreUtils.padRight(primaryExchange, 8), false, null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
+					" Industry:", false, bold);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
+					CoreUtils.padRight(industry, 30), false, null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
+					" Strategy:", false, bold);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
+					CoreUtils.padRight(strategy, 30), false, null);
+
+		} catch (Exception ex) {
+			this.setErrorMessage("Error setting Tradestrategy Label.",
+					ex.getMessage(), ex);
+		}
+	}
+
+	/**
 	 * Method setTradeLabel.
 	 * 
 	 * @param tradestrategy
@@ -779,89 +824,102 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private void setTradeLabel(Tradestrategy tradestrategy,
 			CandlestickChart candlestickChart) {
 		try {
-
 			double profitLoss = 0;
 			double commision = 0;
+			String symbol = "";
+			String side = "";
+			String tier = "";
+			String status = "";
+			String account = "";
+			String risk = "";
+			if (null != tradestrategy) {
+				symbol = tradestrategy.getContract().getSymbol();
+				side = (tradestrategy.getSide() == null ? "" : Side
+						.newInstance(tradestrategy.getSide()).getDisplayName());
+				tier = (tradestrategy.getTier() == null ? "" : Tier
+						.newInstance(tradestrategy.getTier()).getDisplayName());
+				status = (tradestrategy.getStatus() == null ? ""
+						: TradestrategyStatus.newInstance(
+								tradestrategy.getStatus()).getDisplayName());
+				account = tradestrategy.getTradeAccount().toString();
+				risk = currencyFormater
+						.format((tradestrategy.getRiskAmount() == null ? 0
+								: tradestrategy.getRiskAmount().doubleValue()));
+				for (Trade trade : tradestrategy.getTrades()) {
+					if (!trade.getIsOpen()) {
+
+						if (null != trade.getProfitLoss()) {
+							profitLoss = profitLoss
+									+ trade.getProfitLoss().doubleValue();
+						}
+						if (null != trade.getTotalCommission()) {
+							commision = commision
+									+ trade.getTotalCommission().doubleValue();
+						}
+					}
+					// Collections.sort(trade.getTradeOrders(), new
+					// TradeOrder());
+					TradeOrder prevTradeOrder = null;
+
+					/*
+					 * Sum up orders that are filled and at the same time add
+					 * the fill price. This happens when orders stop out as
+					 * there are multiple stop orders for a position with
+					 * multiple targets.
+					 */
+					for (TradeOrder order : trade.getTradeOrders()) {
+						Integer quantity = order.getFilledQuantity();
+						if (order.getIsFilled()) {
+							if (null != prevTradeOrder) {
+								if (prevTradeOrder.getIsFilled()
+										&& prevTradeOrder.getFilledDate()
+												.equals(order.getFilledDate())
+										&& prevTradeOrder
+												.getAverageFilledPrice()
+												.equals(order
+														.getAverageFilledPrice())) {
+									quantity = quantity
+											+ prevTradeOrder
+													.getFilledQuantity();
+								}
+							}
+							candlestickChart.addBuySellTradeArrow(
+									order.getAction(),
+									new Money(order.getAverageFilledPrice()),
+									order.getFilledDate(), quantity);
+						}
+						prevTradeOrder = order;
+					}
+				}
+			}
+
 			m_tradeLabel.setText(null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:",
 					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-					.padRight(tradestrategy.getContract().getSymbol(), 10),
-					false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padRight(symbol, 10), false, null);
+
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Side:",
 					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-					.padRight(Side.newInstance(tradestrategy.getSide())
-							.getDisplayName(), 6), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padRight(side, 6), false, null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Tier:",
 					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-					.padRight((tradestrategy.getTier() == null ? "" : Tier
-							.newInstance(tradestrategy.getTier())
-							.getDisplayName()), 6), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padRight(tier, 6), false, null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Status:",
 					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-					.padRight(
-							(tradestrategy.getStatus() == null ? ""
-									: TradestrategyStatus.newInstance(
-											tradestrategy.getStatus())
-											.getDisplayName()), 20), false,
-					null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padRight(status, 20), false, null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Account:",
 					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-					.padRight(tradestrategy.getTradeAccount().toString(), 10),
-					false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padRight(account, 10), false, null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Risk:",
 					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padLeft(risk, 10), false, null);
 
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-					.padLeft(currencyFormater.format((tradestrategy
-							.getRiskAmount() == null ? 0 : tradestrategy
-							.getRiskAmount().doubleValue())), 10), false, null);
-			for (Trade trade : tradestrategy.getTrades()) {
-				if (!trade.getIsOpen()) {
-
-					if (null != trade.getProfitLoss()) {
-						profitLoss = profitLoss
-								+ trade.getProfitLoss().doubleValue();
-					}
-					if (null != trade.getTotalCommission()) {
-						commision = commision
-								+ trade.getTotalCommission().doubleValue();
-					}
-				}
-				// Collections.sort(trade.getTradeOrders(), new TradeOrder());
-				TradeOrder prevTradeOrder = null;
-
-				/*
-				 * Sum up orders that are filled and at the same time add the
-				 * fill price. This happens when orders stop out as there are
-				 * multiple stop orders for a position with multiple targets.
-				 */
-				for (TradeOrder order : trade.getTradeOrders()) {
-					Integer quantity = order.getFilledQuantity();
-					if (order.getIsFilled()) {
-						if (null != prevTradeOrder) {
-							if (prevTradeOrder.getIsFilled()
-									&& prevTradeOrder.getFilledDate().equals(
-											order.getFilledDate())
-									&& prevTradeOrder.getAverageFilledPrice()
-											.equals(order
-													.getAverageFilledPrice())) {
-								quantity = quantity
-										+ prevTradeOrder.getFilledQuantity();
-							}
-						}
-						candlestickChart.addBuySellTradeArrow(
-								order.getAction(),
-								new Money(order.getAverageFilledPrice()),
-								order.getFilledDate(), quantity);
-					}
-					prevTradeOrder = order;
-				}
-			}
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Profit:",
 					false, bold);
 			if (profitLoss < 0) {
@@ -940,7 +998,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							.getStrategy().getName() : transferObject
 							.getStrategy().getDescription()));
 
-			m_strategyLabel.setText(result.toString());
+			setStrategyLabel(transferObject);
 			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 					.getSelectedComponent();
 			setTradeLabel(transferObject, currentTab.getCandlestickChart());
@@ -948,8 +1006,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					.getBarSize()));
 		} else {
 			m_tradeOrderModel.setData(new Tradestrategy());
-			m_strategyLabel.setText("Strategy: ");
-			m_tradeLabel.setText("Symbol: ");
+			setStrategyLabel(null);
+			setTradeLabel(null, null);
 		}
 	}
 
