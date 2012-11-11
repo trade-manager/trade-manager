@@ -57,6 +57,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -187,7 +188,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			// Listen for when the selection changes.
 			m_tree.addTreeSelectionListener(this);
 			m_tree.setCellRenderer(new TradingdayTreeCellRenderer());
-
+			ToolTipManager.sharedInstance().registerComponent(m_tree);
+			
 			JPanel jPanel1 = new JPanel(new BorderLayout());
 			FlowLayout flowLayout1 = new FlowLayout();
 			flowLayout1.setAlignment(FlowLayout.RIGHT);

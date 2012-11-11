@@ -62,6 +62,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileFilter;
@@ -207,6 +208,8 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			m_tree = new Tree(strategyTreeModel);
 			m_tree.setCellRenderer(new StrategyTreeCellRenderer());
 			m_tree.addTreeSelectionListener(this);
+			ToolTipManager.sharedInstance().registerComponent(m_tree);
+			
 			JScrollPane jScrollPane2 = new JScrollPane(m_tree);
 			treePanel.add(jScrollPane2, BorderLayout.CENTER);
 			treePanel.setBorder(BorderFactory.createCompoundBorder(

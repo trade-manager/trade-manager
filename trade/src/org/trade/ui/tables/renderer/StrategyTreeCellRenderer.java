@@ -41,6 +41,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.trade.persistent.dao.Rule;
+import org.trade.persistent.dao.Strategy;
 import org.trade.ui.models.StrategyTreeModel;
 
 /**
@@ -57,15 +58,24 @@ public class StrategyTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	/**
 	 * Method getTreeCellRendererComponent.
-	 * @param tree JTree
-	 * @param value Object
-	 * @param selected boolean
-	 * @param expanded boolean
-	 * @param leaf boolean
-	 * @param row int
-	 * @param hasFocus boolean
+	 * 
+	 * @param tree
+	 *            JTree
+	 * @param value
+	 *            Object
+	 * @param selected
+	 *            boolean
+	 * @param expanded
+	 *            boolean
+	 * @param leaf
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param hasFocus
+	 *            boolean
 	 * @return Component
-	 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree, Object, boolean, boolean, boolean, int, boolean)
+	 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree,
+	 *      Object, boolean, boolean, boolean, int, boolean)
 	 */
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row,
@@ -82,8 +92,11 @@ public class StrategyTreeCellRenderer extends DefaultTreeCellRenderer {
 			if ((node instanceof Rule) /* leaf */) {
 				this.setToolTipText("Select to open rule.");
 				if (((Rule) node).isDirty()) {
-					this.setBackgroundSelectionColor(Color.RED);
+					setBackgroundSelectionColor(Color.RED);
 				}
+			} else if ((node instanceof Strategy)) {
+				this.setToolTipText("Class name: "
+						+ ((Strategy) node).getClassName());
 			} else if (expanded) {
 
 			} else {
