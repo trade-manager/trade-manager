@@ -452,12 +452,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			throws BrokerModelException {
 		try {
 			if (m_client.isConnected()) {
-				m_contractRequests.put(this.getNextRequestId(), contract);
+
 				/*
 				 * Null the IB Contract Id as these sometimes change. This will
 				 * force a get of the IB data via the Exchange/Symbol/Currency.
 				 */
 				contract.setIdContractIB(null);
+				m_contractRequests.put(this.getNextRequestId(), contract);
 				TWSBrokerModel.logContract(TWSBrokerModel
 						.getIBContract(contract));
 				m_client.reqContractDetails(contract.getIdContract(),
@@ -507,6 +508,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					tradestrategy.getDatasetContainer().execute();
 
 				Integer reqId = getNextRequestId();
+				/*
+				 * Null the IB Contract Id as these sometimes change. This will
+				 * force a get of the IB data via the Exchange/Symbol/Currency.
+				 */
+				tradestrategy.getContract().setIdContractIB(null);
 				m_contractRequests.put(reqId, tradestrategy.getContract());
 
 				TWSBrokerModel.logContract(TWSBrokerModel
