@@ -205,7 +205,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 									.getHigh() - prevCandleItem.getLow())
 									/ prevCandleItem.getClose();
 							// If the candle less than the entry limit %
-							if (percentChange < entrylimit.getPercent()
+							if (percentChange < entrylimit.getPercentOfPrice()
 									.doubleValue()) {
 								// TODO add the tails as a % of the body.
 								_log.info(" We have a trade!!  Symbol: "

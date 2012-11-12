@@ -61,7 +61,8 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 	private BigDecimal startPrice;
 	private BigDecimal endPrice;
 	private BigDecimal limitAmount;
-	private BigDecimal percent;
+	private BigDecimal percentOfPrice;
+	private BigDecimal percentOfMargin;
 	private BigDecimal priceRound;
 	private Integer shareRound;
 	private BigDecimal pivotRange;
@@ -71,9 +72,13 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for Entrylimit.
-	 * @param startPrice BigDecimal
-	 * @param endPrice BigDecimal
-	 * @param limitAmount BigDecimal
+	 * 
+	 * @param startPrice
+	 *            BigDecimal
+	 * @param endPrice
+	 *            BigDecimal
+	 * @param limitAmount
+	 *            BigDecimal
 	 */
 	public Entrylimit(BigDecimal startPrice, BigDecimal endPrice,
 			BigDecimal limitAmount) {
@@ -84,27 +89,38 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for Entrylimit.
-	 * @param startPrice BigDecimal
-	 * @param endPrice BigDecimal
-	 * @param limitAmount BigDecimal
-	 * @param percent BigDecimal
-	 * @param priceRound BigDecimal
-	 * @param shareRound Integer
-	 * @param pivotRange BigDecimal
+	 * 
+	 * @param startPrice
+	 *            BigDecimal
+	 * @param endPrice
+	 *            BigDecimal
+	 * @param limitAmount
+	 *            BigDecimal
+	 * @param percent
+	 *            BigDecimal
+	 * @param priceRound
+	 *            BigDecimal
+	 * @param shareRound
+	 *            Integer
+	 * @param pivotRange
+	 *            BigDecimal
 	 */
 	public Entrylimit(BigDecimal startPrice, BigDecimal endPrice,
-			BigDecimal limitAmount, BigDecimal percent, BigDecimal priceRound,
+			BigDecimal limitAmount, BigDecimal percentOfPrice,
+			BigDecimal priceRound, BigDecimal percentOfMargin,
 			Integer shareRound, BigDecimal pivotRange) {
 		this.startPrice = startPrice;
 		this.endPrice = endPrice;
 		this.limitAmount = limitAmount;
-		this.percent = percent;
+		this.percentOfPrice = percentOfPrice;
+		this.percentOfMargin = percentOfMargin;
 		this.pivotRange = pivotRange;
 		this.priceRound = priceRound;
 	}
 
 	/**
 	 * Method getIdEntryLimit.
+	 * 
 	 * @return Integer
 	 */
 	@Id
@@ -116,7 +132,9 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdEntryLimit.
-	 * @param idEntryLimit Integer
+	 * 
+	 * @param idEntryLimit
+	 *            Integer
 	 */
 	public void setIdEntryLimit(Integer idEntryLimit) {
 		this.id = idEntryLimit;
@@ -124,6 +142,7 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getStartPrice.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "startPrice", nullable = false, precision = 10)
@@ -133,7 +152,9 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setStartPrice.
-	 * @param startPrice BigDecimal
+	 * 
+	 * @param startPrice
+	 *            BigDecimal
 	 */
 	public void setStartPrice(BigDecimal startPrice) {
 		this.startPrice = startPrice;
@@ -141,6 +162,7 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getEndPrice.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "endPrice", nullable = false, precision = 10)
@@ -150,7 +172,9 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setEndPrice.
-	 * @param endPrice BigDecimal
+	 * 
+	 * @param endPrice
+	 *            BigDecimal
 	 */
 	public void setEndPrice(BigDecimal endPrice) {
 		this.endPrice = endPrice;
@@ -158,6 +182,7 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getLimitAmount.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "limitAmount", nullable = false, precision = 10)
@@ -167,31 +192,37 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setLimitAmount.
-	 * @param limitAmount BigDecimal
+	 * 
+	 * @param limitAmount
+	 *            BigDecimal
 	 */
 	public void setLimitAmount(BigDecimal limitAmount) {
 		this.limitAmount = limitAmount;
 	}
 
 	/**
-	 * Method getPercent.
+	 * Method getPercentOfPrice.
+	 * 
 	 * @return BigDecimal
 	 */
-	@Column(name = "percent", precision = 10)
-	public BigDecimal getPercent() {
-		return this.percent;
+	@Column(name = "percentOfPrice", precision = 10)
+	public BigDecimal getPercentOfPrice() {
+		return this.percentOfPrice;
 	}
 
 	/**
-	 * Method setPercent.
-	 * @param percent BigDecimal
+	 * Method setPercentOfPrice.
+	 * 
+	 * @param percentOfPrice
+	 *            BigDecimal
 	 */
-	public void setPercent(BigDecimal percent) {
-		this.percent = percent;
+	public void setPercentOfPrice(BigDecimal percentOfPrice) {
+		this.percentOfPrice = percentOfPrice;
 	}
 
 	/**
 	 * Method getPivotRange.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "pivotRange", precision = 10)
@@ -201,14 +232,37 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setPivotRange.
-	 * @param pivotRange BigDecimal
+	 * 
+	 * @param pivotRange
+	 *            BigDecimal
 	 */
 	public void setPivotRange(BigDecimal pivotRange) {
 		this.pivotRange = pivotRange;
 	}
 
 	/**
+	 * Method getPercentOfMargin.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "percentOfMargin", precision = 10)
+	public BigDecimal getPercentOfMargin() {
+		return this.percentOfMargin;
+	}
+
+	/**
+	 * Method setPercentOfMargin.
+	 * 
+	 * @param percentOfMargin
+	 *            BigDecimal
+	 */
+	public void setPercentOfMargin(BigDecimal percentOfMargin) {
+		this.percentOfMargin = percentOfMargin;
+	}
+
+	/**
 	 * Method getPriceRound.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "priceRound", precision = 10)
@@ -218,7 +272,9 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setPriceRound.
-	 * @param priceRound BigDecimal
+	 * 
+	 * @param priceRound
+	 *            BigDecimal
 	 */
 	public void setPriceRound(BigDecimal priceRound) {
 		this.priceRound = priceRound;
@@ -226,6 +282,7 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getShareRound.
+	 * 
 	 * @return Integer
 	 */
 	@Column(name = "shareRound")
@@ -235,14 +292,17 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setShareRound.
-	 * @param shareRound Integer
+	 * 
+	 * @param shareRound
+	 *            Integer
 	 */
 	public void setShareRound(Integer shareRound) {
 		this.shareRound = shareRound;
 	}
-	
+
 	/**
 	 * Method getVersion.
+	 * 
 	 * @return Integer
 	 */
 	@Version
@@ -253,7 +313,9 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setVersion.
-	 * @param version Integer
+	 * 
+	 * @param version
+	 *            Integer
 	 */
 	public void setVersion(Integer version) {
 		this.version = version;

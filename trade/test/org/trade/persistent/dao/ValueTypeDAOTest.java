@@ -55,6 +55,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -65,6 +66,7 @@ public class ValueTypeDAOTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -73,6 +75,7 @@ public class ValueTypeDAOTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -141,14 +144,15 @@ public class ValueTypeDAOTest extends TestCase {
 			}
 			Money price = new Money(20.22);
 			Entrylimit entrylimit = entryLimits.getValue(price);
-			_log.info("Price:" + price + " Percent:" + entrylimit.getPercent()
-					+ " LimitAmount:" + entrylimit.getLimitAmount());
+			_log.info("Price:" + price + " Percent:"
+					+ entrylimit.getPercentOfPrice() + " LimitAmount:"
+					+ entrylimit.getLimitAmount());
 
 		} catch (Exception ex) {
 			fail("Error finding row " + ex.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testChartDays() {
 		try {

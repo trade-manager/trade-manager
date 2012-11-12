@@ -452,18 +452,23 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			throws BrokerModelException {
 		try {
 			if (m_client.isConnected()) {
+				Integer reqId = contract.getIdContract();
+				if (null == reqId)
+					reqId = this.getNextRequestId();
 
-				/*
-				 * Null the IB Contract Id as these sometimes change. This will
-				 * force a get of the IB data via the Exchange/Symbol/Currency.
-				 */
-				contract.setIdContractIB(null);
-				m_contractRequests.put(this.getNextRequestId(), contract);
-				TWSBrokerModel.logContract(TWSBrokerModel
-						.getIBContract(contract));
-				m_client.reqContractDetails(contract.getIdContract(),
-						TWSBrokerModel.getIBContract(contract));
-
+				if (!m_contractRequests.containsKey(reqId)) {
+					/*
+					 * Null the IB Contract Id as these sometimes change. This
+					 * will force a get of the IB data via the
+					 * Exchange/Symbol/Currency.
+					 */
+					contract.setIdContractIB(null);
+					m_contractRequests.put(reqId, contract);
+					TWSBrokerModel.logContract(TWSBrokerModel
+							.getIBContract(contract));
+					m_client.reqContractDetails(reqId,
+							TWSBrokerModel.getIBContract(contract));
+				}
 			} else {
 				throw new BrokerModelException(contract.getIdContract(), 3080,
 						"Not conected to TWS historical data cannot be retrieved");
@@ -507,18 +512,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				if (!tradestrategy.getDatasetContainer().isRunning())
 					tradestrategy.getDatasetContainer().execute();
 
-				Integer reqId = getNextRequestId();
 				/*
-				 * Null the IB Contract Id as these sometimes change. This will
-				 * force a get of the IB data via the Exchange/Symbol/Currency.
+				 * Get the contract details.
 				 */
-				tradestrategy.getContract().setIdContractIB(null);
-				m_contractRequests.put(reqId, tradestrategy.getContract());
-
-				TWSBrokerModel.logContract(TWSBrokerModel
-						.getIBContract(tradestrategy.getContract()));
-				m_client.reqContractDetails(reqId, TWSBrokerModel
-						.getIBContract(tradestrategy.getContract()));
+				this.onContractDetails(tradestrategy.getContract());
 
 				m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
 						tradestrategy);
@@ -1742,20 +1739,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			synchronized (m_contractRequests) {
 				if (m_contractRequests.containsKey(reqId)) {
 					Contract transientContract = m_contractRequests.get(reqId);
-					/*
-					 * If the contract id is null this will be an indicator so
-					 * ignore the response. We must refresh the contract as
-					 * there maybe multiple request for the same contract in the
-					 * set of tradestrategies.
-					 */
-					if (null != transientContract.getIdContract()) {
-						Contract contract = m_tradePersistentModel
-								.findContractById(transientContract
-										.getIdContract());
-						TWSBrokerModel.populateContract(contractDetails,
-								contract);
-						m_tradePersistentModel.persistContract(contract);
-					}
+					TWSBrokerModel.populateContract(contractDetails,
+							transientContract);
+					m_tradePersistentModel.persistContract(transientContract);
 				} else {
 					error(reqId, 3220, "Contract details not found for reqId: "
 							+ reqId);

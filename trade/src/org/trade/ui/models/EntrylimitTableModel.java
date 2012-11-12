@@ -57,7 +57,8 @@ public class EntrylimitTableModel extends AspectTableModel {
 	private static final String START_PRICE = "Price From*";
 	private static final String END_PRICE = "Price To*";
 	private static final String STP_LMT_AMOUNT = "Stop Lmt Amt";
-	private static final String PERCENT = "% Range Bar";
+	private static final String PERCENT_OF_PRICE = "% Range Bar";
+	private static final String PERCENT_OF_MARGIN = "% Of Margin";
 	private static final String ROUND_SHARES = "Round Shares";
 	private static final String ROUND_PRICE = "Round Price";
 	private static final String PIVOT_RANGE = "Pivot Range";
@@ -68,18 +69,20 @@ public class EntrylimitTableModel extends AspectTableModel {
 
 		// Get the column names and cache them.
 		// Then we can close the connection.
-		columnNames = new String[7];
+		columnNames = new String[8];
 		columnNames[0] = START_PRICE;
 		columnNames[1] = END_PRICE;
 		columnNames[2] = STP_LMT_AMOUNT;
-		columnNames[3] = PERCENT;
-		columnNames[4] = ROUND_SHARES;
-		columnNames[5] = ROUND_PRICE;
-		columnNames[6] = PIVOT_RANGE;
+		columnNames[3] = PERCENT_OF_PRICE;
+		columnNames[4] = PERCENT_OF_MARGIN;
+		columnNames[5] = ROUND_SHARES;
+		columnNames[6] = ROUND_PRICE;
+		columnNames[7] = PIVOT_RANGE;
 	}
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Aspects
 	 */
 	public Aspects getData() {
@@ -88,7 +91,9 @@ public class EntrylimitTableModel extends AspectTableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Aspects
+	 * 
+	 * @param data
+	 *            Aspects
 	 * @throws Exception
 	 */
 	public void setData(Aspects data) throws Exception {
@@ -109,9 +114,13 @@ public class EntrylimitTableModel extends AspectTableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -120,46 +129,47 @@ public class EntrylimitTableModel extends AspectTableModel {
 		switch (column) {
 		case 0: {
 			element.setStartPrice(((Money) value).getBigDecimalValue());
-
 			break;
 		}
 		case 1: {
 			element.setEndPrice(((Money) value).getBigDecimalValue());
-
 			break;
 		}
 		case 2: {
 			element.setLimitAmount(((Money) value).getBigDecimalValue());
-
 			break;
 		}
 		case 3: {
-			element.setPercent(((Percent) value).getBigDecimalValue());
-
+			element.setPercentOfPrice(((Percent) value).getBigDecimalValue());
 			break;
 		}
 		case 4: {
-			element.setShareRound(((Quantity) value).getIntegerValue());
-
+			element.setPercentOfMargin(((Percent) value)
+					.getBigDecimalValue());
 			break;
 		}
 		case 5: {
-			element.setPriceRound(((Money) value).getBigDecimalValue());
-
+			element.setShareRound(((Quantity) value).getIntegerValue());
 			break;
 		}
 		case 6: {
+			element.setPriceRound(((Money) value).getBigDecimalValue());
+			break;
+		}
+		case 7: {
 			element.setPivotRange(((Money) value).getBigDecimalValue());
-
 			break;
 		}
 		default: {
 		}
 		}
 	}
+
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
 
@@ -191,14 +201,18 @@ public class EntrylimitTableModel extends AspectTableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element Entrylimit
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            Entrylimit
 	 */
 	public void getNewRow(Vector<Object> newRow, Entrylimit element) {
 		newRow.addElement(new Money(element.getStartPrice()));
 		newRow.addElement(new Money(element.getEndPrice()));
 		newRow.addElement(new Money(element.getLimitAmount()));
-		newRow.addElement(new Percent(element.getPercent()));
+		newRow.addElement(new Percent(element.getPercentOfPrice()));
+		newRow.addElement(new Percent(element.getPercentOfMargin()));
 		newRow.addElement(new Quantity(element.getShareRound()));
 		newRow.addElement(new Money(element.getPriceRound()));
 		newRow.addElement(new Money(element.getPivotRange()));

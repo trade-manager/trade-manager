@@ -119,9 +119,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Constructor for AbstractStrategyRule.
-	 * @param brokerManagerModel BrokerModel
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
+	 * 
+	 * @param brokerManagerModel
+	 *            BrokerModel
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 	public AbstractStrategyRule(BrokerModel brokerManagerModel,
 			StrategyData datasetContainer, Integer idTradestrategy) {
@@ -143,9 +147,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	/**
 	 * Method error.
-	 * @param id int
-	 * @param errorCode int
-	 * @param errorMsg String
+	 * 
+	 * @param id
+	 *            int
+	 * @param errorCode
+	 *            int
+	 * @param errorMsg
+	 *            String
 	 * @see org.trade.strategy.StrategyRule#error(int, int, String)
 	 */
 	public void error(int id, int errorCode, String errorMsg) {
@@ -172,8 +180,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param listener
 	 *            the object to register.
 	 * 
-	
-	 * @see #removeChangeListener(StrategyChangeListener) */
+	 * 
+	 * @see #removeChangeListener(StrategyChangeListener)
+	 */
 	public void addMessageListener(StrategyChangeListener listener) {
 		this.listenerList.add(StrategyChangeListener.class, listener);
 	}
@@ -185,8 +194,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param listener
 	 *            the object to deregister.
 	 * 
-	
-	 * @see #addChangeListener(StrategyChangeListener) */
+	 * 
+	 * @see #addChangeListener(StrategyChangeListener)
+	 */
 	public void removeMessageListener(StrategyChangeListener listener) {
 		this.listenerList.remove(StrategyChangeListener.class, listener);
 	}
@@ -203,9 +213,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	/**
 	 * Notifies all registered listeners that the strategyRule has an error.
 	 * 
-	
-	 * @param strategyError StrategyRuleException
-	 * @see #addChangeListener(StrategyChangeListener) */
+	 * 
+	 * @param strategyError
+	 *            StrategyRuleException
+	 * @see #addChangeListener(StrategyChangeListener)
+	 */
 	protected void fireStrategyError(StrategyRuleException strategyError) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -219,9 +231,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	/**
 	 * Notifies all registered listeners that the strategyRule has completed.
 	 * 
-	
-	 * @param tradestrategy Tradestrategy
-	 * @see #addChangeListener(StrategyChangeListener) */
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @see #addChangeListener(StrategyChangeListener)
+	 */
 	protected void fireStrategyComplete(Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -235,9 +249,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	/**
 	 * Notifies all registered listeners that the strategyRule has started.
 	 * 
-	
-	 * @param tradestrategy Tradestrategy
-	 * @see #addChangeListener(StrategyChangeListener) */
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @see #addChangeListener(StrategyChangeListener)
+	 */
 	protected void fireStrategyStarted(Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -252,9 +268,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * Notifies all registered listeners that the strategyRule rule has
 	 * completed.
 	 * 
-	
-	 * @param tradestrategy Tradestrategy
-	 * @see #addChangeListener(StrategyChangeListener) */
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @see #addChangeListener(StrategyChangeListener)
+	 */
 	protected void fireRuleComplete(Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -269,9 +287,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * Notifies all registered listeners that the strategyRule position has been
 	 * covered.
 	 * 
-	
-	 * @param tradestrategy Tradestrategy
-	 * @see #addChangeListener(StrategyChangeListener) */
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @see #addChangeListener(StrategyChangeListener)
+	 */
 	protected void firePositionCovered(Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -431,6 +451,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method cancel.
+	 * 
 	 * @see org.trade.strategy.StrategyRule#cancel()
 	 */
 	public void cancel() {
@@ -453,8 +474,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public abstract void runStrategy(CandleSeries candleSeries, boolean newBar);
@@ -477,7 +501,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	/**
 	 * Method seriesChanged.
-	 * @param event SeriesChangeEvent
+	 * 
+	 * @param event
+	 *            SeriesChangeEvent
 	 * @see org.jfree.data.general.SeriesChangeListener#seriesChanged(SeriesChangeEvent)
 	 */
 	public void seriesChanged(SeriesChangeEvent event) {
@@ -498,7 +524,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method closePosition.
-	 * @param transmit boolean
+	 * 
+	 * @param transmit
+	 *            boolean
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
@@ -558,14 +586,23 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method createOrder.
-	 * @param action String
-	 * @param orderType String
-	 * @param limitPrice Money
-	 * @param auxPrice Money
-	 * @param quantity int
-	 * @param ocaGroupName String
-	 * @param roundPrice boolean
-	 * @param transmit boolean
+	 * 
+	 * @param action
+	 *            String
+	 * @param orderType
+	 *            String
+	 * @param limitPrice
+	 *            Money
+	 * @param auxPrice
+	 *            Money
+	 * @param quantity
+	 *            int
+	 * @param ocaGroupName
+	 *            String
+	 * @param roundPrice
+	 *            boolean
+	 * @param transmit
+	 *            boolean
 	 * @return TradeOrder
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
@@ -617,17 +654,29 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method createOrder.
-	 * @param action String
-	 * @param orderType String
-	 * @param limitPrice Money
-	 * @param auxPrice Money
-	 * @param quantity int
-	 * @param ocaGroupName String
-	 * @param triggerMethod int
-	 * @param overrideConstraints int
-	 * @param timeInForce String
-	 * @param roundPrice boolean
-	 * @param transmit boolean
+	 * 
+	 * @param action
+	 *            String
+	 * @param orderType
+	 *            String
+	 * @param limitPrice
+	 *            Money
+	 * @param auxPrice
+	 *            Money
+	 * @param quantity
+	 *            int
+	 * @param ocaGroupName
+	 *            String
+	 * @param triggerMethod
+	 *            int
+	 * @param overrideConstraints
+	 *            int
+	 * @param timeInForce
+	 *            String
+	 * @param roundPrice
+	 *            boolean
+	 * @param transmit
+	 *            boolean
 	 * @return TradeOrder
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
@@ -705,14 +754,23 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method updateOrder.
-	 * @param orderKey Integer
-	 * @param action String
-	 * @param orderType String
-	 * @param limitPrice Money
-	 * @param auxPrice Money
-	 * @param quantity int
-	 * @param roundPrice boolean
-	 * @param transmit boolean
+	 * 
+	 * @param orderKey
+	 *            Integer
+	 * @param action
+	 *            String
+	 * @param orderType
+	 *            String
+	 * @param limitPrice
+	 *            Money
+	 * @param auxPrice
+	 *            Money
+	 * @param quantity
+	 *            int
+	 * @param roundPrice
+	 *            boolean
+	 * @param transmit
+	 *            boolean
 	 * @return TradeOrder
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
@@ -768,10 +826,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method createRiskOpenPosition.
-	 * @param action String
-	 * @param entryPrice Money
-	 * @param stopPrice Money
-	 * @param transmit boolean
+	 * 
+	 * @param action
+	 *            String
+	 * @param entryPrice
+	 *            Money
+	 * @param stopPrice
+	 *            Money
+	 * @param transmit
+	 *            boolean
 	 * @return TradeOrder
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
@@ -816,10 +879,26 @@ public abstract class AbstractStrategyRule extends Worker implements
 				.getTrade().getSide(), action, 0.01);
 		double risk = getTradestrategy().getRiskAmount().doubleValue();
 
-		double stop = (entryPrice.doubleValue() - stopPrice.doubleValue());
+		double stop = entryPrice.doubleValue() - stopPrice.doubleValue();
 
 		// Round to round value
 		int quantity = (int) ((int) risk / Math.abs(stop));
+		/*
+		 * Check to see if we are in the limits of the amount of margin we can
+		 * use.
+		 */
+		if ((quantity * entryPrice.doubleValue()) > this.getTradeAccount()
+				.getBuyingPower().multiply(entrylimit.getPercentOfMargin())
+				.doubleValue()) {
+			quantity = (int) ((int) this.getTradeAccount().getBuyingPower()
+					.doubleValue()
+					* entrylimit.getPercentOfMargin().doubleValue() / entryPrice
+					.getBigDecimalValue().doubleValue());
+			stop = risk / quantity;
+			stopPrice = (Side.BOT.equals(this.getTrade().getSide()) ? entryPrice
+					.subtract(new Money(stop)) : entryPrice
+					.add(new Money(stop)));
+		}
 		quantity = (int) ((Math.rint(quantity
 				/ entrylimit.getShareRound().doubleValue())) * entrylimit
 				.getShareRound().doubleValue());
@@ -836,6 +915,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		TradeOrder tradeOrder = new TradeOrder(this.getTrade(), action,
 				OrderType.STPLMT, quantity, entryPrice.getBigDecimalValue(),
 				limitPrice.getBigDecimalValue(), createDate);
+
 		tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
 		tradeOrder.setTransmit(transmit);
 		tradeOrder = getBrokerManager().onPlaceOrder(
@@ -852,7 +932,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	/**
 	 * Method cancelOrder.
-	 * @param order TradeOrder
+	 * 
+	 * @param order
+	 *            TradeOrder
 	 * @throws BrokerModelException
 	 */
 	public void cancelOrder(TradeOrder order) throws BrokerModelException {
@@ -875,6 +957,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	/**
 	 * Method isPositionConvered.
+	 * 
 	 * @return boolean
 	 * @throws StrategyRuleException
 	 */
@@ -939,17 +1022,22 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method createStopAndTargetOrder.
-	 * @param stopPrice Money
-	 * @param targetPrice Money
-	 * @param quantity int
-	 * @param stopTransmit boolean
+	 * 
+	 * @param stopPrice
+	 *            Money
+	 * @param targetPrice
+	 *            Money
+	 * @param quantity
+	 *            int
+	 * @param stopTransmit
+	 *            boolean
 	 * @return Money
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
 	 */
-	public Money createStopAndTargetOrder(Money stopPrice, Money targetPrice, int quantity,
-			boolean stopTransmit) throws ValueTypeException,
+	public Money createStopAndTargetOrder(Money stopPrice, Money targetPrice,
+			int quantity, boolean stopTransmit) throws ValueTypeException,
 			BrokerModelException, PersistentModelException {
 
 		Date createDate = new Date();
@@ -959,8 +1047,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 			action = Action.SELL;
 		}
 
-		String ocaID = new String(Integer.toString((new BigDecimal(
-				Math.random() * 1000000)).intValue()));
+		String ocaID = new String(Integer.toString((new BigDecimal(Math
+				.random() * 1000000)).intValue()));
 
 		TradeOrder orderTarget = new TradeOrder(this.getTrade(), action,
 				OrderType.LMT, quantity, null,
@@ -1023,11 +1111,17 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method createStopAndTargetOrder.
-	 * @param openPosition TradeOrder
-	 * @param stopRiskUnits int
-	 * @param targetRiskUnits int
-	 * @param percentQty int
-	 * @param stopTransmit boolean
+	 * 
+	 * @param openPosition
+	 *            TradeOrder
+	 * @param stopRiskUnits
+	 *            int
+	 * @param targetRiskUnits
+	 *            int
+	 * @param percentQty
+	 *            int
+	 * @param stopTransmit
+	 *            boolean
 	 * @return Money
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
@@ -1075,8 +1169,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		int quantity = Math.abs(this.getTrade().getOpenQuantity() * percentQty) / 100;
 
-		String ocaID = new String(Integer.toString((new BigDecimal(
-				Math.random() * 1000000)).intValue()));
+		String ocaID = new String(Integer.toString((new BigDecimal(Math
+				.random() * 1000000)).intValue()));
 
 		TradeOrder orderTarget = new TradeOrder(this.getTrade(), action,
 				OrderType.LMT, quantity, null,
@@ -1119,8 +1213,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getStopPriceForPositionRisk.
-	 * @param openPosition TradeOrder
-	 * @param numberRiskUnits int
+	 * 
+	 * @param openPosition
+	 *            TradeOrder
+	 * @param numberRiskUnits
+	 *            int
 	 * @return Money
 	 * @throws ValueTypeException
 	 */
@@ -1149,6 +1246,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method closeAllOpenPositions.
+	 * 
 	 * @throws StrategyRuleException
 	 */
 	public void closeAllOpenPositions() throws StrategyRuleException {
@@ -1176,8 +1274,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method moveStopOCAPrice.
-	 * @param stopPrice Money
-	 * @param stopTransmit boolean
+	 * 
+	 * @param stopPrice
+	 *            Money
+	 * @param stopTransmit
+	 *            boolean
 	 * @throws StrategyRuleException
 	 */
 	public void moveStopOCAPrice(Money stopPrice, boolean stopTransmit)
@@ -1227,6 +1328,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method cancelAllOrders.
+	 * 
 	 * @throws StrategyRuleException
 	 */
 	public void cancelAllOrders() throws StrategyRuleException {
@@ -1260,10 +1362,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method addPennyAndRoundStop.
-	 * @param price double
-	 * @param side String
-	 * @param action String
-	 * @param dollars double
+	 * 
+	 * @param price
+	 *            double
+	 * @param side
+	 *            String
+	 * @param action
+	 *            String
+	 * @param dollars
+	 *            double
 	 * @return Money
 	 * @throws ValueTypeException
 	 */
@@ -1280,6 +1387,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method isPositionOpen.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isPositionOpen() {
@@ -1292,6 +1400,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method isPositionCancelled.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isPositionCancelled() {
@@ -1308,6 +1417,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getCurrentCandleCount.
+	 * 
 	 * @return int
 	 */
 	public int getCurrentCandleCount() {
@@ -1316,7 +1426,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getCandle.
-	 * @param startPeriod Date
+	 * 
+	 * @param startPeriod
+	 *            Date
 	 * @return CandleItem
 	 * @throws StrategyRuleException
 	 */
@@ -1342,7 +1454,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method updateTradestrategyStatus.
-	 * @param status String
+	 * 
+	 * @param status
+	 *            String
 	 * @throws PersistentModelException
 	 */
 	public void updateTradestrategyStatus(String status)
@@ -1356,6 +1470,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getBrokerManager.
+	 * 
 	 * @return BrokerModel
 	 */
 	private BrokerModel getBrokerManager() {
@@ -1364,6 +1479,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getEntryLimit.
+	 * 
 	 * @return DAOEntryLimit
 	 */
 	public DAOEntryLimit getEntryLimit() {
@@ -1372,6 +1488,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getTradestrategy.
+	 * 
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy getTradestrategy() {
@@ -1386,6 +1503,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	/**
 	 * Method getTradeAccount.
+	 * 
 	 * @return TradeAccount
 	 * @throws PersistentModelException
 	 */
@@ -1397,6 +1515,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getTrade.
+	 * 
 	 * @return Trade
 	 */
 	public Trade getTrade() {
@@ -1405,6 +1524,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getSymbol.
+	 * 
 	 * @return String
 	 */
 	public String getSymbol() {
@@ -1426,6 +1546,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getOpenPositionOrder.
+	 * 
 	 * @return TradeOrder
 	 */
 	public TradeOrder getOpenPositionOrder() {
@@ -1437,6 +1558,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method isThereOpenPositionOrder.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isThereOpenPositionOrder() {
@@ -1447,6 +1569,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method getTargetPrice.
+	 * 
 	 * @return Money
 	 */
 	public Money getTargetPrice() {
@@ -1455,7 +1578,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method setTargetPrice.
-	 * @param targetPrice Money
+	 * 
+	 * @param targetPrice
+	 *            Money
 	 * @return Money
 	 */
 	public Money setTargetPrice(Money targetPrice) {
@@ -1464,8 +1589,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	/**
 	 * Method roundPrice.
-	 * @param price double
-	 * @param action String
+	 * 
+	 * @param price
+	 *            double
+	 * @param action
+	 *            String
 	 * @return double
 	 * @throws ValueTypeException
 	 */

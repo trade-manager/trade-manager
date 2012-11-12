@@ -113,6 +113,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method isConnected.
+	 * 
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isConnected()
 	 */
@@ -122,6 +123,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method getHistoricalData.
+	 * 
 	 * @return ConcurrentHashMap<Integer,Tradestrategy>
 	 * @see org.trade.broker.BrokerModel#getHistoricalData()
 	 */
@@ -131,9 +133,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onConnect.
-	 * @param host String
-	 * @param port Integer
-	 * @param clientId Integer
+	 * 
+	 * @param host
+	 *            String
+	 * @param port
+	 *            Integer
+	 * @param clientId
+	 *            Integer
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onConnect(String, Integer, Integer)
 	 */
@@ -144,6 +150,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method disconnect.
+	 * 
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#disconnect()
 	 */
@@ -155,6 +162,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method getNextRequestId.
+	 * 
 	 * @return Integer
 	 * @see org.trade.broker.BrokerModel#getNextRequestId()
 	 */
@@ -164,10 +172,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onSubscribeAccountUpdates.
-	 * @param subscribe boolean
-	 * @param tradeAccount TradeAccount
+	 * 
+	 * @param subscribe
+	 *            boolean
+	 * @param tradeAccount
+	 *            TradeAccount
 	 * @throws BrokerModelException
-	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean, TradeAccount)
+	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean,
+	 *      TradeAccount)
 	 */
 	public void onSubscribeAccountUpdates(boolean subscribe,
 			TradeAccount tradeAccount) throws BrokerModelException {
@@ -175,7 +187,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onCancelAccountUpdates.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @see org.trade.broker.BrokerModel#onCancelAccountUpdates(String)
 	 */
 	public void onCancelAccountUpdates(String accountNumber) {
@@ -183,6 +197,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onReqManagedAccount.
+	 * 
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqManagedAccount()
 	 */
@@ -191,6 +206,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onReqAllOpenOrders.
+	 * 
 	 * @see org.trade.broker.BrokerModel#onReqAllOpenOrders()
 	 */
 	public void onReqAllOpenOrders() {
@@ -200,6 +216,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onReqOpenOrders.
+	 * 
 	 * @see org.trade.broker.BrokerModel#onReqOpenOrders()
 	 */
 	public void onReqOpenOrders() {
@@ -209,7 +226,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onReqExecutions.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#onReqExecutions(Tradestrategy)
 	 */
 	public void onReqExecutions(Tradestrategy tradestrategy) {
@@ -218,7 +237,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onReqAllExecutions.
-	 * @param mktOpenDate Date
+	 * 
+	 * @param mktOpenDate
+	 *            Date
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqAllExecutions(Date)
 	 */
@@ -228,7 +249,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onReqRealTimeBars.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqRealTimeBars(Tradestrategy)
 	 */
@@ -238,7 +261,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onBrokerData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Tradestrategy)
 	 */
@@ -324,7 +349,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method isHistoricalDataRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isHistoricalDataRunning(Tradestrategy)
 	 */
@@ -340,7 +367,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method isRealtimeBarsRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Tradestrategy)
 	 */
@@ -359,7 +388,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method isMarketDataRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isMarketDataRunning(Tradestrategy)
 	 */
@@ -369,7 +400,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method isAccountUpdatesRunning.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isAccountUpdatesRunning(String)
 	 */
@@ -379,6 +412,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onCancelAllRealtimeData.
+	 * 
 	 * @see org.trade.broker.BrokerModel#onCancelAllRealtimeData()
 	 */
 	public void onCancelAllRealtimeData() {
@@ -388,7 +422,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onContractDetails.
-	 * @param contract Contract
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onContractDetails(Contract)
 	 */
@@ -398,7 +434,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onCancelContractDetails.
-	 * @param contract Contract
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @see org.trade.broker.BrokerModel#onCancelContractDetails(Contract)
 	 */
 	public void onCancelContractDetails(Contract contract) {
@@ -406,7 +444,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onCancelBrokerData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#onCancelBrokerData(Tradestrategy)
 	 */
 	public void onCancelBrokerData(Tradestrategy tradestrategy) {
@@ -423,7 +463,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onCancelRealtimeBars.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Tradestrategy)
 	 */
 	public void onCancelRealtimeBars(Tradestrategy tradestrategy) {
@@ -440,8 +482,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onPlaceOrder.
-	 * @param contract Contract
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @return TradeOrder
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onPlaceOrder(Contract, TradeOrder)
@@ -481,7 +526,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onCancelOrder.
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onCancelOrder(TradeOrder)
 	 */
@@ -510,9 +557,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	 */
 	/**
 	 * Method execDetails.
-	 * @param reqId int
-	 * @param contractIB com.ib.client.Contract
-	 * @param execution Execution
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param contractIB
+	 *            com.ib.client.Contract
+	 * @param execution
+	 *            Execution
 	 */
 	public void execDetails(int reqId, com.ib.client.Contract contractIB,
 			Execution execution) {
@@ -557,7 +608,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method execDetailsEnd.
-	 * @param reqId int
+	 * 
+	 * @param reqId
+	 *            int
 	 */
 	public void execDetailsEnd(int reqId) {
 
@@ -571,10 +624,15 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method openOrder.
-	 * @param orderId int
-	 * @param contractIB com.ib.client.Contract
-	 * @param order com.ib.client.Order
-	 * @param orderState OrderState
+	 * 
+	 * @param orderId
+	 *            int
+	 * @param contractIB
+	 *            com.ib.client.Contract
+	 * @param order
+	 *            com.ib.client.Order
+	 * @param orderState
+	 *            OrderState
 	 */
 	public void openOrder(int orderId, com.ib.client.Contract contractIB,
 			com.ib.client.Order order, OrderState orderState) {
@@ -646,16 +704,27 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	 */
 	/**
 	 * Method orderStatus.
-	 * @param orderId int
-	 * @param status String
-	 * @param filled int
-	 * @param remaining int
-	 * @param avgFillPrice double
-	 * @param permId int
-	 * @param parentId int
-	 * @param lastFillPrice double
-	 * @param clientId int
-	 * @param whyHeld String
+	 * 
+	 * @param orderId
+	 *            int
+	 * @param status
+	 *            String
+	 * @param filled
+	 *            int
+	 * @param remaining
+	 *            int
+	 * @param avgFillPrice
+	 *            double
+	 * @param permId
+	 *            int
+	 * @param parentId
+	 *            int
+	 * @param lastFillPrice
+	 *            double
+	 * @param clientId
+	 *            int
+	 * @param whyHeld
+	 *            String
 	 */
 	public void orderStatus(int orderId, String status, int filled,
 			int remaining, double avgFillPrice, int permId, int parentId,
@@ -707,7 +776,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method error.
-	 * @param e Exception
+	 * 
+	 * @param e
+	 *            Exception
 	 */
 	public void error(Exception e) {
 		_log.error("BrokerModel error ex: " + e.getMessage());
@@ -716,7 +787,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method error.
-	 * @param str String
+	 * 
+	 * @param str
+	 *            String
 	 */
 	public void error(String str) {
 		_log.error("BrokerModel error str: " + str);
@@ -729,10 +802,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	 * System error 2000 - 2999 are IB TWS Warning 4000 - 4999 are application
 	 * warnings 5000 - 5999 are application information
 	 * 
-	
-	 * @param id int
-	 * @param code int
-	 * @param msg String
+	 * 
+	 * @param id
+	 *            int
+	 * @param code
+	 *            int
+	 * @param msg
+	 *            String
 	 * @see org.trade.broker.BrokerModel#error(int, int, String)
 	 */
 	public void error(int id, int code, String msg) {
@@ -791,7 +867,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onReqMarketData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqMarketData(Tradestrategy)
 	 */
@@ -802,7 +880,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method onCancelMktData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#onCancelMktData(Tradestrategy)
 	 */
 	public void onCancelMktData(Tradestrategy tradestrategy) {
@@ -811,8 +891,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method bondContractDetails.
-	 * @param reqId int
-	 * @param contractDetails ContractDetails
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param contractDetails
+	 *            ContractDetails
 	 */
 	public void bondContractDetails(int reqId, ContractDetails contractDetails) {
 		_log.info("bondContractDetails:" + reqId);
@@ -820,29 +903,21 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method contractDetails.
-	 * @param reqId int
-	 * @param contractDetails ContractDetails
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param contractDetails
+	 *            ContractDetails
+	 * @see com.ib.client.EWrapper#contractDetails(int, ContractDetails)
 	 */
 	public void contractDetails(int reqId, ContractDetails contractDetails) {
-
 		try {
 			synchronized (m_contractRequests) {
 				if (m_contractRequests.containsKey(reqId)) {
 					Contract transientContract = m_contractRequests.get(reqId);
-					/*
-					 * If the contract id is null this will be an indicator so
-					 * ignore the response. We must refresh the contract as
-					 * there maybe multiple request for the same contract in the
-					 * set of tradestrategies.
-					 */
-					if (null != transientContract.getIdContract()) {
-						Contract contract = m_tradePersistentModel
-								.findContractById(transientContract
-										.getIdContract());
-						TWSBrokerModel.populateContract(contractDetails,
-								contract);
-						m_tradePersistentModel.persistContract(contract);
-					}
+					TWSBrokerModel.populateContract(contractDetails,
+							transientContract);
+					m_tradePersistentModel.persistContract(transientContract);
 				} else {
 					error(reqId, 3220, "Contract details not found for reqId: "
 							+ reqId);
@@ -855,23 +930,36 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method contractDetailsEnd.
-	 * @param reqId int
+	 * 
+	 * @param reqId
+	 *            int
 	 */
 	public void contractDetailsEnd(int reqId) {
 	}
 
 	/**
 	 * Method historicalData.
-	 * @param reqId int
-	 * @param dateString String
-	 * @param open double
-	 * @param high double
-	 * @param low double
-	 * @param close double
-	 * @param volume int
-	 * @param tradeCount int
-	 * @param vwap double
-	 * @param hasGaps boolean
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param dateString
+	 *            String
+	 * @param open
+	 *            double
+	 * @param high
+	 *            double
+	 * @param low
+	 *            double
+	 * @param close
+	 *            double
+	 * @param volume
+	 *            int
+	 * @param tradeCount
+	 *            int
+	 * @param vwap
+	 *            double
+	 * @param hasGaps
+	 *            boolean
 	 */
 	public void historicalData(int reqId, String dateString, double open,
 			double high, double low, double close, int volume, int tradeCount,
@@ -949,15 +1037,25 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method realtimeBar.
-	 * @param reqId int
-	 * @param time long
-	 * @param open double
-	 * @param high double
-	 * @param low double
-	 * @param close double
-	 * @param volume long
-	 * @param vwap double
-	 * @param tradeCount int
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param time
+	 *            long
+	 * @param open
+	 *            double
+	 * @param high
+	 *            double
+	 * @param low
+	 *            double
+	 * @param close
+	 *            double
+	 * @param volume
+	 *            long
+	 * @param vwap
+	 *            double
+	 * @param tradeCount
+	 *            int
 	 */
 	public void realtimeBar(int reqId, long time, double open, double high,
 			double low, double close, long volume, double vwap, int tradeCount) {
@@ -966,7 +1064,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method printCandles.
-	 * @param series CandleSeries
+	 * 
+	 * @param series
+	 *            CandleSeries
 	 */
 	@SuppressWarnings("unused")
 	private void printCandles(CandleSeries series) {
@@ -982,7 +1082,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method logOrderState.
-	 * @param orderState OrderState
+	 * 
+	 * @param orderState
+	 *            OrderState
 	 */
 	public static void logOrderState(OrderState orderState) {
 		_log.info("Status: " + orderState.m_status + " Comms Amt: "
@@ -997,9 +1099,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	/**
 	 * Method updateTradeOrder.
-	 * @param ibOrder com.ib.client.Order
-	 * @param ibOrderState OrderState
-	 * @param order TradeOrder
+	 * 
+	 * @param ibOrder
+	 *            com.ib.client.Order
+	 * @param ibOrderState
+	 *            OrderState
+	 * @param order
+	 *            TradeOrder
 	 * @return boolean
 	 * @throws ParseException
 	 */
@@ -1173,15 +1279,25 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 		/**
 		 * Constructor for OrderState.
-		 * @param status String
-		 * @param initMargin String
-		 * @param maintMargin String
-		 * @param equityWithLoan String
-		 * @param commission double
-		 * @param minCommission double
-		 * @param maxCommission double
-		 * @param commissionCurrency String
-		 * @param warningText String
+		 * 
+		 * @param status
+		 *            String
+		 * @param initMargin
+		 *            String
+		 * @param maintMargin
+		 *            String
+		 * @param equityWithLoan
+		 *            String
+		 * @param commission
+		 *            double
+		 * @param minCommission
+		 *            double
+		 * @param maxCommission
+		 *            double
+		 * @param commissionCurrency
+		 *            String
+		 * @param warningText
+		 *            String
 		 */
 		public OrderState(String status, String initMargin, String maintMargin,
 				String equityWithLoan, double commission, double minCommission,
@@ -1200,7 +1316,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 		/**
 		 * Method equals.
-		 * @param objectToCompare Object
+		 * 
+		 * @param objectToCompare
+		 *            Object
 		 * @return boolean
 		 */
 		public boolean equals(Object objectToCompare) {

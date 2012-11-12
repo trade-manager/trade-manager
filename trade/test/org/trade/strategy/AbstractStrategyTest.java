@@ -96,6 +96,7 @@ public class AbstractStrategyTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -139,6 +140,7 @@ public class AbstractStrategyTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -416,13 +418,32 @@ public class AbstractStrategyTest extends TestCase {
 	}
 
 	@Test
-	public void testCreateOpenPosition() {
+	public void testCreateRiskOpenPosition() {
 		try {
 			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
 					Action.BUY, new Money(100.00), new Money(99.00), true);
 			assertNotNull(result);
 		} catch (Exception ex) {
 			fail("Error testCreateOpenPosition Msg:" + ex.getMessage());
+		}
+	}
+
+	@Test
+	public void testCreateRiskOpenPositionMargin() {
+		try {
+			/*
+			 * Standard test account has $100,000 margin and % of Margin 50% i.e
+			 * $50,000 with $100 risk. So 2cent stop after round over whole
+			 * number give 3cent stop. Risk/Stop = 3333 shares * $20 = $66,666
+			 * which is > than 50% of $100,000 So we should see it adjust to
+			 * $50,000/$20.01 = 2498 rounded to nearest 100 i.e Quantity = 2500.
+			 */
+			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
+					Action.BUY, new Money(20.00), new Money(19.98), true);
+			assertEquals(2500, result.getQuantity(), 0);
+
+		} catch (Exception ex) {
+			fail("Error testAddPennyAndRoundStop Msg:" + ex.getMessage());
 		}
 	}
 
@@ -699,8 +720,11 @@ public class AbstractStrategyTest extends TestCase {
 
 	/**
 	 * Method createOpenPosition.
-	 * @param price Money
-	 * @param fillOpenPosition boolean
+	 * 
+	 * @param price
+	 *            Money
+	 * @param fillOpenPosition
+	 *            boolean
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
@@ -761,13 +785,16 @@ public class AbstractStrategyTest extends TestCase {
 		/**
 		 * Default Constructor
 		 * 
-		
-		
-		
-		
-		 * @param brokerManagerModel BrokerModel
-		 * @param datasetContainer StrategyData
-		 * @param idTradestrategy Integer
+		 * 
+		 * 
+		 * 
+		 * 
+		 * @param brokerManagerModel
+		 *            BrokerModel
+		 * @param datasetContainer
+		 *            StrategyData
+		 * @param idTradestrategy
+		 *            Integer
 		 */
 
 		public StrategyRuleTest(BrokerModel brokerManagerModel,
@@ -785,9 +812,13 @@ public class AbstractStrategyTest extends TestCase {
 		 */
 		/**
 		 * Method runStrategy.
-		 * @param candleSeries CandleSeries
-		 * @param newBar boolean
-		 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
+		 * 
+		 * @param candleSeries
+		 *            CandleSeries
+		 * @param newBar
+		 *            boolean
+		 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries,
+		 *      boolean)
 		 */
 		public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
