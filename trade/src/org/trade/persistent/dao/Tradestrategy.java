@@ -86,8 +86,6 @@ public class Tradestrategy extends Aspect implements Serializable {
 	private BigDecimal riskAmount;
 	private boolean dirty = false;
 	private Boolean trade = new Boolean(false);
-	private BigDecimal lastAskPrice = new BigDecimal(0);
-	private BigDecimal lastBidPrice = new BigDecimal(0);
 	private List<Trade> trades = new ArrayList<Trade>(0);
 	private StrategyData datasetContainer = null;
 	private TradestrategyStatus tradestrategyStatus = new TradestrategyStatus();
@@ -203,45 +201,6 @@ public class Tradestrategy extends Aspect implements Serializable {
 		this.chartDays = chartDays;
 	}
 
-	/**
-	 * Method getLastAskPrice.
-	 * 
-	 * @return BigDecimal
-	 */
-	@Transient
-	public BigDecimal getLastAskPrice() {
-		return this.lastAskPrice;
-	}
-
-	/**
-	 * Method setLastAskPrice.
-	 * 
-	 * @param lastAskPrice
-	 *            BigDecimal
-	 */
-	public void setLastAskPrice(BigDecimal lastAskPrice) {
-		this.lastAskPrice = lastAskPrice;
-	}
-
-	/**
-	 * Method getLastBidPrice.
-	 * 
-	 * @return BigDecimal
-	 */
-	@Transient
-	public BigDecimal getLastBidPrice() {
-		return this.lastBidPrice;
-	}
-
-	/**
-	 * Method setLastBidPrice.
-	 * 
-	 * @param lastBidPrice
-	 *            BigDecimal
-	 */
-	public void setLastBidPrice(BigDecimal lastBidPrice) {
-		this.lastBidPrice = lastBidPrice;
-	}
 
 	/**
 	 * Method getStatus.

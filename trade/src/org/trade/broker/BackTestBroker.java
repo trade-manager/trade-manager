@@ -111,9 +111,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Constructor for BackTestBroker.
-	 * @param datasetContainer StrategyData
-	 * @param idTradestrategy Integer
-	 * @param brokerModel BrokerModel
+	 * 
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param idTradestrategy
+	 *            Integer
+	 * @param brokerModel
+	 *            BrokerModel
 	 */
 	public BackTestBroker(StrategyData datasetContainer,
 			Integer idTradestrategy, BrokerModel brokerModel) {
@@ -133,8 +137,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method reqContractDetails.
-	 * @param reqId int
-	 * @param ibContract com.ib.client.Contract
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param ibContract
+	 *            com.ib.client.Contract
 	 * @throws BrokerModelException
 	 */
 	public void reqContractDetails(int reqId, com.ib.client.Contract ibContract)
@@ -152,14 +159,23 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method reqHistoricalData.
-	 * @param reqId int
-	 * @param ibContract com.ib.client.Contract
-	 * @param endDateTime String
-	 * @param durationStr String
-	 * @param barSizeSetting String
-	 * @param whatToShow String
-	 * @param useRTH int
-	 * @param formatDateInteger int
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param ibContract
+	 *            com.ib.client.Contract
+	 * @param endDateTime
+	 *            String
+	 * @param durationStr
+	 *            String
+	 * @param barSizeSetting
+	 *            String
+	 * @param whatToShow
+	 *            String
+	 * @param useRTH
+	 *            int
+	 * @param formatDateInteger
+	 *            int
 	 * @throws BrokerModelException
 	 */
 	public void reqHistoricalData(int reqId, com.ib.client.Contract ibContract,
@@ -203,7 +219,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method strategyComplete.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
 	 */
 	public synchronized void strategyComplete(Tradestrategy tradestrategy) {
@@ -215,7 +233,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method strategyStarted.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyStarted(Tradestrategy)
 	 */
 	public synchronized void strategyStarted(Tradestrategy tradestrategy) {
@@ -227,7 +247,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method ruleComplete.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#ruleComplete(Tradestrategy)
 	 */
 	public synchronized void ruleComplete(Tradestrategy tradestrategy) {
@@ -239,7 +261,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method positionCovered.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#positionCovered(Tradestrategy)
 	 */
 	public synchronized void positionCovered(Tradestrategy tradestrategy) {
@@ -251,7 +275,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method strategyError.
-	 * @param strategyError StrategyRuleException
+	 * 
+	 * @param strategyError
+	 *            StrategyRuleException
 	 * @see org.trade.strategy.StrategyChangeListener#strategyError(StrategyRuleException)
 	 */
 	public void strategyError(StrategyRuleException strategyError) {
@@ -260,6 +286,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method doInBackground.
+	 * 
 	 * @return Void
 	 */
 	public Void doInBackground() {
@@ -412,7 +439,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	}
 
 	public void done() {
-		brokerModel.onCancelRealtimeBars(this.tradestrategy);
+		brokerModel.onCancelRealtimeBars(this.tradestrategy.getContract());
 		brokerModel.onCancelBrokerData(this.tradestrategy);
 		// Free some memory!!
 		this.tradestrategy.getDatasetContainer().clearBaseCandleSeries();
@@ -423,9 +450,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method filledOrdersOpenPosition.
-	 * @param contract Contract
-	 * @param trade Trade
-	 * @param candle Candle
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param trade
+	 *            Trade
+	 * @param candle
+	 *            Candle
 	 * @return boolean
 	 * @throws Exception
 	 */
@@ -526,8 +557,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method getFilledPrice.
-	 * @param order TradeOrder
-	 * @param candle Candle
+	 * 
+	 * @param order
+	 *            TradeOrder
+	 * @param candle
+	 *            Candle
 	 * @return BigDecimal
 	 */
 	private BigDecimal getFilledPrice(TradeOrder order, Candle candle) {
@@ -592,10 +626,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method createOrderExecution.
-	 * @param contract Contract
-	 * @param order TradeOrder
-	 * @param filledPrice BigDecimal
-	 * @param date Date
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param order
+	 *            TradeOrder
+	 * @param filledPrice
+	 *            BigDecimal
+	 * @param date
+	 *            Date
 	 * @throws IOException
 	 */
 	private void createOrderExecution(Contract contract, TradeOrder order,
@@ -631,8 +670,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method cancelOrder.
-	 * @param contract Contract
-	 * @param order TradeOrder
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param order
+	 *            TradeOrder
 	 * @throws IOException
 	 */
 	private void cancelOrder(Contract contract, TradeOrder order)
@@ -652,9 +694,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 */
 	/**
 	 * Method populateIndicatorCandleSeries.
-	 * @param tradestrategy Tradestrategy
-	 * @param startDate Date
-	 * @param endDate Date
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
 	 * @throws PersistentModelException
 	 */
 	private void populateIndicatorCandleSeries(Tradestrategy tradestrategy,
@@ -709,8 +755,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method getYahooContractDetails.
-	 * @param reqId int
-	 * @param symbol String
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param symbol
+	 *            String
 	 * @return ContractDetails
 	 * @throws IOException
 	 */
@@ -743,10 +792,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method getYahooPriceDataIntraday.
-	 * @param reqId int
-	 * @param symbol String
-	 * @param chartDays int
-	 * @param startDate Date
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param symbol
+	 *            String
+	 * @param chartDays
+	 *            int
+	 * @param startDate
+	 *            Date
 	 * @throws IOException
 	 */
 	private void getYahooPriceDataIntraday(int reqId, String symbol,
@@ -801,10 +855,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	/**
 	 * Method getYahooPriceDataDay.
-	 * @param reqId int
-	 * @param symbol String
-	 * @param startDate Date
-	 * @param endDate Date
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param symbol
+	 *            String
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
 	 * @throws IOException
 	 * @throws ParseException
 	 */

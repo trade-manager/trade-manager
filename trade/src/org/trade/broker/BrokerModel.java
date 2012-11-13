@@ -54,36 +54,50 @@ public interface BrokerModel {
 
 	/**
 	 * Method addMessageListener.
-	 * @param listener BrokerChangeListener
+	 * 
+	 * @param listener
+	 *            BrokerChangeListener
 	 */
 	void addMessageListener(BrokerChangeListener listener);
 
 	/**
 	 * Method removeMessageListener.
-	 * @param listener BrokerChangeListener
+	 * 
+	 * @param listener
+	 *            BrokerChangeListener
 	 */
 	void removeMessageListener(BrokerChangeListener listener);
 
 	/**
 	 * Method hasListener.
-	 * @param listener EventListener
+	 * 
+	 * @param listener
+	 *            EventListener
 	 * @return boolean
 	 */
 	boolean hasListener(EventListener listener);
 
 	/**
 	 * Method error.
-	 * @param id int
-	 * @param code int
-	 * @param msg String
+	 * 
+	 * @param id
+	 *            int
+	 * @param code
+	 *            int
+	 * @param msg
+	 *            String
 	 */
 	void error(int id, int code, String msg);
 
 	/**
 	 * Method onConnect.
-	 * @param host String
-	 * @param port Integer
-	 * @param clientId Integer
+	 * 
+	 * @param host
+	 *            String
+	 * @param port
+	 *            Integer
+	 * @param clientId
+	 *            Integer
 	 * @throws BrokerModelException
 	 */
 	void onConnect(String host, Integer port, Integer clientId)
@@ -91,26 +105,32 @@ public interface BrokerModel {
 
 	/**
 	 * Method isConnected.
+	 * 
 	 * @return boolean
 	 */
 	boolean isConnected();
 
 	/**
 	 * Method disconnect.
+	 * 
 	 * @throws BrokerModelException
 	 */
 	void disconnect() throws BrokerModelException;
 
 	/**
 	 * Method getNextRequestId.
+	 * 
 	 * @return Integer
 	 */
 	Integer getNextRequestId();
 
 	/**
 	 * Method onSubscribeAccountUpdates.
-	 * @param subscribe boolean
-	 * @param tradeAccounte TradeAccount
+	 * 
+	 * @param subscribe
+	 *            boolean
+	 * @param tradeAccounte
+	 *            TradeAccount
 	 * @throws BrokerModelException
 	 */
 	void onSubscribeAccountUpdates(boolean subscribe, TradeAccount tradeAccounte)
@@ -118,31 +138,38 @@ public interface BrokerModel {
 
 	/**
 	 * Method onCancelAccountUpdates.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 */
 	void onCancelAccountUpdates(String accountNumber);
 
 	/**
 	 * Method onReqManagedAccount.
+	 * 
 	 * @throws BrokerModelException
 	 */
 	void onReqManagedAccount() throws BrokerModelException;
 
 	/**
 	 * Method onReqAllOpenOrders.
+	 * 
 	 * @throws BrokerModelException
 	 */
 	void onReqAllOpenOrders() throws BrokerModelException;
 
 	/**
 	 * Method onReqOpenOrders.
+	 * 
 	 * @throws BrokerModelException
 	 */
 	void onReqOpenOrders() throws BrokerModelException;
 
 	/**
 	 * Method onReqMarketData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 */
 	void onReqMarketData(Tradestrategy tradestrategy)
@@ -150,20 +177,26 @@ public interface BrokerModel {
 
 	/**
 	 * Method onCancelMktData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param contract
+	 *            Contract
 	 */
-	void onCancelMktData(Tradestrategy tradestrategy);
+	void onCancelMktData(Contract contract);
 
 	/**
 	 * Method onBrokerData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 */
 	void onBrokerData(Tradestrategy tradestrategy) throws BrokerModelException;
 
 	/**
 	 * Method onReqRealTimeBars.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 */
 	void onReqRealTimeBars(Tradestrategy tradestrategy)
@@ -171,14 +204,18 @@ public interface BrokerModel {
 
 	/**
 	 * Method onReqAllExecutions.
-	 * @param mktOpenDate Date
+	 * 
+	 * @param mktOpenDate
+	 *            Date
 	 * @throws BrokerModelException
 	 */
 	void onReqAllExecutions(Date mktOpenDate) throws BrokerModelException;
 
 	/**
 	 * Method onReqExecutions.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @throws BrokerModelException
 	 */
 	void onReqExecutions(Tradestrategy tradestrategy)
@@ -186,28 +223,36 @@ public interface BrokerModel {
 
 	/**
 	 * Method isRealtimeBarsRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @return boolean
 	 */
-	boolean isRealtimeBarsRunning(Tradestrategy tradestrategy);
+	boolean isRealtimeBarsRunning(Contract contract);
 
 	/**
 	 * Method isMarketDataRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @return boolean
 	 */
-	boolean isMarketDataRunning(Tradestrategy tradestrategy);
+	boolean isMarketDataRunning(Contract contract);
 
 	/**
 	 * Method isHistoricalDataRunning.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return boolean
 	 */
 	boolean isHistoricalDataRunning(Tradestrategy tradestrategy);
 
 	/**
 	 * Method isAccountUpdatesRunning.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @return boolean
 	 */
 	boolean isAccountUpdatesRunning(String accountNumber);
@@ -216,39 +261,51 @@ public interface BrokerModel {
 
 	/**
 	 * Method onCancelRealtimeBars.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param contract
+	 *            Contract
 	 */
-	void onCancelRealtimeBars(Tradestrategy tradestrategy);
+	void onCancelRealtimeBars(Contract contract);
 
 	/**
 	 * Method onCancelBrokerData.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	void onCancelBrokerData(Tradestrategy tradestrategy);
 
 	/**
 	 * Method onCancelContractDetails.
-	 * @param contract Contract
+	 * 
+	 * @param contract
+	 *            Contract
 	 */
 	void onCancelContractDetails(Contract contract);
 
 	/**
 	 * Method onContractDetails.
-	 * @param contract Contract
+	 * 
+	 * @param contract
+	 *            Contract
 	 * @throws BrokerModelException
 	 */
 	void onContractDetails(Contract contract) throws BrokerModelException;
 
 	/**
 	 * Method getHistoricalData.
+	 * 
 	 * @return ConcurrentHashMap<Integer,Tradestrategy>
 	 */
 	ConcurrentHashMap<Integer, Tradestrategy> getHistoricalData();
 
 	/**
 	 * Method onPlaceOrder.
-	 * @param contract Contract
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @return TradeOrder
 	 * @throws BrokerModelException
 	 */
@@ -257,20 +314,25 @@ public interface BrokerModel {
 
 	/**
 	 * Method onCancelOrder.
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @throws BrokerModelException
 	 */
 	void onCancelOrder(TradeOrder tradeOrder) throws BrokerModelException;
 
 	/**
 	 * Method isBrokerDataOnly.
+	 * 
 	 * @return boolean
 	 */
 	boolean isBrokerDataOnly();
 
 	/**
 	 * Method setBrokerDataOnly.
-	 * @param brokerDataOnly boolean
+	 * 
+	 * @param brokerDataOnly
+	 *            boolean
 	 */
 	void setBrokerDataOnly(boolean brokerDataOnly);
 

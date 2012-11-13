@@ -66,6 +66,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -84,6 +85,7 @@ public class BrokerModelTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -114,6 +116,7 @@ public class BrokerModelTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -186,8 +189,8 @@ public class BrokerModelTest extends TestCase {
 		try {
 			this.tradestrategy = TradestrategyTest
 					.removeTrades(this.tradestrategy);
-			String ocaID = new String(Integer.toString((new BigDecimal(
-					Math.random() * 1000000)).intValue()));
+			String ocaID = new String(Integer.toString((new BigDecimal(Math
+					.random() * 1000000)).intValue()));
 			Trade trade = new Trade(this.tradestrategy,
 					this.tradestrategy.getSide());
 
@@ -332,7 +335,7 @@ public class BrokerModelTest extends TestCase {
 				_log.info(" Thread interupt: " + e.getMessage());
 			}
 
-			m_brokerModel.onCancelMktData(this.tradestrategy);
+			m_brokerModel.onCancelMktData(this.tradestrategy.getContract());
 
 		} catch (Exception e) {
 			fail("Error testRrequestMarketData Msg: " + e.getMessage());
@@ -545,7 +548,7 @@ public class BrokerModelTest extends TestCase {
 	public void testOnCancelMktData() {
 
 		try {
-			m_brokerModel.onCancelMktData(this.tradestrategy);
+			m_brokerModel.onCancelMktData(this.tradestrategy.getContract());
 		} catch (Exception ex) {
 			fail("Error testOnCancelMktData Msg: " + ex.getMessage());
 		}
@@ -586,9 +589,10 @@ public class BrokerModelTest extends TestCase {
 	public void testIsRealtimeBarsRunning() {
 
 		try {
-			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
+			m_brokerModel
+					.onCancelRealtimeBars(this.tradestrategy.getContract());
 			boolean result = m_brokerModel
-					.isRealtimeBarsRunning(this.tradestrategy);
+					.isRealtimeBarsRunning(this.tradestrategy.getContract());
 			assertFalse(result);
 		} catch (Exception ex) {
 			fail("Error testIsRealtimeBarsRunning Msg: " + ex.getMessage());
@@ -614,9 +618,10 @@ public class BrokerModelTest extends TestCase {
 	public void testIsMarketDataRunning() {
 
 		try {
-			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
+			m_brokerModel
+					.onCancelRealtimeBars(this.tradestrategy.getContract());
 			boolean result = m_brokerModel
-					.isMarketDataRunning(this.tradestrategy);
+					.isMarketDataRunning(this.tradestrategy.getContract());
 			assertFalse(result);
 		} catch (Exception ex) {
 			fail("Error testIsMarketDataRunning Msg: " + ex.getMessage());
@@ -641,7 +646,8 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelAllRealtimeData();
-			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy));
+			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy
+					.getContract()));
 		} catch (Exception ex) {
 			fail("Error testOnCancelAllRealtimeData Msg: " + ex.getMessage());
 		}
@@ -651,8 +657,10 @@ public class BrokerModelTest extends TestCase {
 	public void testOnCancelRealtimeBars() {
 
 		try {
-			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
-			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy));
+			m_brokerModel
+					.onCancelRealtimeBars(this.tradestrategy.getContract());
+			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy
+					.getContract()));
 		} catch (Exception ex) {
 			fail("Error testOnCancelRealtimeBars Msg: " + ex.getMessage());
 		}

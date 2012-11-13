@@ -271,7 +271,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			throws BrokerModelException {
 
 		try {
-			if (this.isRealtimeBarsRunning(tradestrategy)) {
+			if (this.isHistoricalDataRunning(tradestrategy)) {
 				throw new BrokerModelException(
 						tradestrategy.getIdTradeStrategy(), 3010,
 						"Data request is already in progress for: "
@@ -368,19 +368,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	/**
 	 * Method isRealtimeBarsRunning.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
+	 * @param contract
+	 *            Contract
 	 * @return boolean
-	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Tradestrategy)
+	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Contract)
 	 */
-	public boolean isRealtimeBarsRunning(Tradestrategy tradestrategy) {
-		if (m_historyDataRequests.containsKey(tradestrategy
-				.getIdTradeStrategy())) {
-			return true;
-		}
+	public boolean isRealtimeBarsRunning(Contract contract) {
 
-		if (m_realTimeBarsRequests.containsKey(tradestrategy
-				.getIdTradeStrategy())) {
+		if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
 			return true;
 		}
 		return false;
@@ -389,12 +384,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	/**
 	 * Method isMarketDataRunning.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
+	 * @param contract
+	 *            Contract
 	 * @return boolean
-	 * @see org.trade.broker.BrokerModel#isMarketDataRunning(Tradestrategy)
+	 * @see org.trade.broker.BrokerModel#isMarketDataRunning(Contract)
 	 */
-	public boolean isMarketDataRunning(Tradestrategy tradestrategy) {
+	public boolean isMarketDataRunning(Contract contract) {
 		return false;
 	}
 
@@ -464,17 +459,15 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	/**
 	 * Method onCancelRealtimeBars.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Tradestrategy)
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
 	 */
-	public void onCancelRealtimeBars(Tradestrategy tradestrategy) {
+	public void onCancelRealtimeBars(Contract contract) {
 
 		synchronized (m_realTimeBarsRequests) {
-			if (m_realTimeBarsRequests.containsKey(tradestrategy
-					.getIdTradeStrategy())) {
-				m_realTimeBarsRequests.remove(tradestrategy
-						.getIdTradeStrategy());
+			if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
+				m_realTimeBarsRequests.remove(contract.getIdContract());
 				m_realTimeBarsRequests.notifyAll();
 			}
 		}
@@ -881,11 +874,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	/**
 	 * Method onCancelMktData.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see org.trade.broker.BrokerModel#onCancelMktData(Tradestrategy)
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelMktData(Contract)
 	 */
-	public void onCancelMktData(Tradestrategy tradestrategy) {
+	public void onCancelMktData(Contract contract) {
 
 	}
 

@@ -549,7 +549,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 										if (null != tradestrategy
 												.getIdTradeStrategy()) {
 											m_brokerModel
-													.onCancelRealtimeBars(tradestrategy);
+													.onCancelRealtimeBars(tradestrategy
+															.getContract());
 											tradestrategy
 													.setDatasetContainer(null);
 										}
@@ -1302,8 +1303,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doCancel(Tradestrategy tradestrategy) {
 		try {
-			if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
-				m_brokerModel.onCancelRealtimeBars(tradestrategy);
+			if (m_brokerModel
+					.isRealtimeBarsRunning(tradestrategy.getContract())) {
+				m_brokerModel.onCancelRealtimeBars(tradestrategy.getContract());
 				this.setStatusBarMessage(
 						"Realtime data has been cancelled for Symbol: "
 								+ tradestrategy.getContract().getSymbol(),
@@ -1609,9 +1611,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
-						if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)
+						if (m_brokerModel.isRealtimeBarsRunning(tradestrategy
+								.getContract())
 								|| m_brokerModel
-										.isMarketDataRunning(tradestrategy)) {
+										.isMarketDataRunning(tradestrategy
+												.getContract())) {
 							int result = JOptionPane.showConfirmDialog(this
 									.getFrame(),
 									"A real time data request is already running for Symbol: "
@@ -1621,7 +1625,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									"Information", JOptionPane.YES_NO_OPTION);
 							if (result == JOptionPane.YES_OPTION) {
 								m_brokerModel
-										.onCancelRealtimeBars(tradestrategy);
+										.onCancelRealtimeBars(tradestrategy
+												.getContract());
 							}
 						}
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
@@ -2037,9 +2042,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
 
-						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)
+						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy
+								.getContract())
 								&& !m_brokerModel
-										.isMarketDataRunning(tradestrategy)) {
+										.isMarketDataRunning(tradestrategy
+												.getContract())) {
 							/*
 							 * If running in test mode create the test broker
 							 * client.
