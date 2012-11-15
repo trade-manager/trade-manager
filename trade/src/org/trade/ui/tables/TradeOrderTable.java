@@ -35,14 +35,12 @@
  */
 package org.trade.ui.tables;
 
-import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.table.JTableHeader;
 import javax.swing.text.MaskFormatter;
 
 import org.trade.core.valuetype.ValueTypeException;
@@ -68,11 +66,6 @@ public class TradeOrderTable extends Table {
 
 	private static final long serialVersionUID = 1132297931453070904L;
 	private final String DATETIMEFORMAT = "HH:mm:ss";
-	private String[] columnToolTips = { null, "System generated key",
-			"Buy/Sell/Short", null, null, null, "Stop/Mkt price",
-			"Transmit to mkt in TWS", null,
-			"One Cancels Another(OCA) id must be unique for day", null, null,
-			null, null };
 	private String OCA_MASK = "AAAAAA";
 	private String OCA_VALIDCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -123,29 +116,5 @@ public class TradeOrderTable extends Table {
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-	}
-
-	// Implement table header tool tips.
-	/**
-	 * Method createDefaultTableHeader.
-	 * 
-	 * @return JTableHeader
-	 */
-	protected JTableHeader createDefaultTableHeader() {
-		return new JTableHeader(columnModel) {
-			private static final long serialVersionUID = 8610311308600399988L;
-
-			public String getToolTipText(MouseEvent e) {
-				java.awt.Point p = e.getPoint();
-				int index = columnModel.getColumnIndexAtX(p.x);
-				if (index > -1) {
-					int realIndex = columnModel.getColumn(index)
-							.getModelIndex();
-					return columnToolTips[realIndex];
-				}
-				return null;
-			}
-		};
-
 	}
 }

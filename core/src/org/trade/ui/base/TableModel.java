@@ -46,10 +46,15 @@ public abstract class TableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 7428125408630828769L;
 	protected String[] columnNames = {};
+	protected String[] columnHeaderToolTip = {};
 	protected Class<?>[] columnTypes = {};
 	protected ArrayList<Vector<Object>> rows = new ArrayList<Vector<Object>>(0);
 
 	public TableModel() {
+	}
+	
+	public TableModel(String[] columnHeaderToolTip) {
+		this.columnHeaderToolTip = columnHeaderToolTip;
 	}
 
 	/**
@@ -73,6 +78,20 @@ public abstract class TableModel extends AbstractTableModel {
 		if (rowSize > -1) {
 			rows = new ArrayList<Vector<Object>>();
 			this.fireTableRowsDeleted(0, rowSize);
+		}
+	}
+	
+	/**
+	 * Method getColumnHeaderToolTip.
+	 * @param column int
+	 * @return String
+	 * @see javax.swing.table.TableModel#getColumnName(int)
+	 */
+	public String getColumnHeaderToolTip(int column) {
+		if (columnHeaderToolTip.length > column) {
+			return columnHeaderToolTip[column];
+		} else {
+			return "";
 		}
 	}
 

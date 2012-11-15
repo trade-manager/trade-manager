@@ -2015,6 +2015,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				for (Date date : keys) {
 					Tradingday tradingday = this.tradingdays.getTradingdays()
 							.get(date);
+					if (tradingday.getTradestrategies().isEmpty())
+						continue;
 					Collections.sort(tradingday.getTradestrategies(),
 							Tradestrategy.TRADINGDAY_CONTRACT);
 

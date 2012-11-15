@@ -59,15 +59,23 @@ public class StrategyTableModel extends AspectTableModel {
 	private static final String CLASSNAME = "    Class Name*  ";
 	private static final String STRATEGY_MANAGER_NAME = "Strategy Mgr Name";
 
+	private static final String[] columnHeaderToolTip = {
+			"The name of the strategy",
+			null,
+			"The java class name for the strategy this file is stored in the strategy dir",
+			"The strategy manager used to managed the open position",
+			"If checked then TWS Mkt data api will run. \n This will cause the strategy to fire if last price falls outside the currents bars H/L" };
+
 	private Aspects m_data = null;
 
 	public StrategyTableModel() {
+		super(columnHeaderToolTip);
 
 		// Get the column names and cache them.
 		// Then we can close the connection.
 		columnNames = new String[5];
 		columnNames[0] = NAME;
-		columnNames[1] = DESCRIPTION;		
+		columnNames[1] = DESCRIPTION;
 		columnNames[2] = CLASSNAME;
 		columnNames[3] = STRATEGY_MANAGER_NAME;
 		columnNames[4] = MARKET_DATA;
@@ -75,6 +83,7 @@ public class StrategyTableModel extends AspectTableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Aspects
 	 */
 	public Aspects getData() {
@@ -83,7 +92,9 @@ public class StrategyTableModel extends AspectTableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Aspects
+	 * 
+	 * @param data
+	 *            Aspects
 	 */
 	public void setData(Aspects data) {
 
@@ -101,9 +112,13 @@ public class StrategyTableModel extends AspectTableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -142,7 +157,9 @@ public class StrategyTableModel extends AspectTableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
 
@@ -174,8 +191,11 @@ public class StrategyTableModel extends AspectTableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element Strategy
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            Strategy
 	 */
 	public void getNewRow(Vector<Object> newRow, Strategy element) {
 		newRow.addElement(element.getName());

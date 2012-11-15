@@ -49,15 +49,22 @@ public abstract class AspectTableModel extends TableModel {
 	public AspectTableModel() {
 	}
 
+	public AspectTableModel(String[] columnHeaderToolTip) {
+		super(columnHeaderToolTip);
+	}
+
 	/**
 	 * Method getData.
+	 * 
 	 * @return Aspects
 	 */
 	public abstract Aspects getData();
 
 	/**
 	 * Method setData.
-	 * @param data Aspects
+	 * 
+	 * @param data
+	 *            Aspects
 	 * @throws Exception
 	 */
 	public abstract void setData(Aspects data) throws Exception;

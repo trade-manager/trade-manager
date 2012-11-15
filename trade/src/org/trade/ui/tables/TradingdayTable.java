@@ -37,7 +37,6 @@ package org.trade.ui.tables;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +46,6 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 
 import org.trade.core.valuetype.ValueTypeException;
@@ -65,14 +63,12 @@ public class TradingdayTable extends Table {
 	private static final long serialVersionUID = 1132297931453070904L;
 
 	private static final String DATETIMEFORMAT = "MM/dd/yyyy HH:mm";
-	private String[] columnToolTips = { "Market open time",
-			"Market close time", "Market bias for the day i.e S&P500 bar",
-			"Market gap from prev close i.e. S&P500 bar",
-			"Actual market bar i.e. S&P500" };
 
 	/**
 	 * Constructor for TradingdayTable.
-	 * @param model TableModel
+	 * 
+	 * @param model
+	 *            TableModel
 	 * @throws ValueTypeException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -96,27 +92,5 @@ public class TradingdayTable extends Table {
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));
 		sorter.setSortKeys(sortKeys);
-	}
-
-	// Implement table header tool tips.
-	/**
-	 * Method createDefaultTableHeader.
-	 * @return JTableHeader
-	 */
-	protected JTableHeader createDefaultTableHeader() {
-		return new JTableHeader(columnModel) {
-			private static final long serialVersionUID = -1136855448349012349L;
-
-			public String getToolTipText(MouseEvent e) {
-				java.awt.Point p = e.getPoint();
-				int index = columnModel.getColumnIndexAtX(p.x);
-				if (index > -1) {
-					int realIndex = columnModel.getColumn(index)
-							.getModelIndex();
-					return columnToolTips[realIndex];
-				}
-				return null;
-			}
-		};
 	}
 }

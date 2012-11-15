@@ -35,10 +35,7 @@
  */
 package org.trade.ui.tables;
 
-import java.awt.event.MouseEvent;
-
 import javax.swing.JTable;
-import javax.swing.table.JTableHeader;
 
 import org.trade.core.valuetype.ValueTypeException;
 
@@ -50,40 +47,17 @@ import org.trade.ui.base.TableModel;
 public class TradelogSummaryTable extends Table {
 
 	private static final long serialVersionUID = 1132297931453070904L;
-	private String[] columnToolTips = { null, "% wins vs loss",
-			"Simple sharpe ratio (sum $wins/#wins)/(sum $loss/#loss)",
-			null, null, null, null, null, null, null, null, null, };
 
 	/**
 	 * Constructor for TradelogSummaryTable.
-	 * @param model TableModel
+	 * 
+	 * @param model
+	 *            TableModel
 	 * @throws ValueTypeException
 	 */
 	public TradelogSummaryTable(TableModel model) throws ValueTypeException {
 		super(model);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		this.enablePopupMenu(false);
-	}
-
-	// Implement table header tool tips.
-	/**
-	 * Method createDefaultTableHeader.
-	 * @return JTableHeader
-	 */
-	protected JTableHeader createDefaultTableHeader() {
-		return new JTableHeader(columnModel) {
-			private static final long serialVersionUID = 4317932796467789524L;
-
-			public String getToolTipText(MouseEvent e) {
-				java.awt.Point p = e.getPoint();
-				int index = columnModel.getColumnIndexAtX(p.x);
-				if (index > -1) {
-					int realIndex = columnModel.getColumn(index)
-							.getModelIndex();
-					return columnToolTips[realIndex];
-				}
-				return null;
-			}
-		};
 	}
 }

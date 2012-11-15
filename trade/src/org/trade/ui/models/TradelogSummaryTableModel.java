@@ -69,18 +69,21 @@ public class TradelogSummaryTableModel extends TableModel {
 	public static final String TRADE_COUNT = "Trades";
 	public static final String CONTRACT_COUNT = "Contracts";
 
+	private static final String[] columnHeaderToolTip = { null,
+			"% wins vs loss",
+			"Simple sharpe ratio (sum $wins/#wins)/(sum $loss/#loss)", null,
+			null, null, null, null, null, null, null, null, };
+
 	private TradelogReport m_data = null;
 
 	/**
 	 * OrderModel() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public TradelogSummaryTableModel() {
+		super(columnHeaderToolTip);
 		// Get the column names and cache them.
 		// Then we can close the connection.
 		columnNames = new String[13];
@@ -101,8 +104,11 @@ public class TradelogSummaryTableModel extends TableModel {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -112,6 +118,7 @@ public class TradelogSummaryTableModel extends TableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return TradelogReport
 	 */
 	public TradelogReport getData() {
@@ -121,13 +128,15 @@ public class TradelogSummaryTableModel extends TableModel {
 	/**
 	 * setData() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param data TradelogReport
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param data
+	 *            TradelogReport
+	 * @exception * @see
+	 */
 
 	public void setData(TradelogReport data) {
 
@@ -147,15 +156,19 @@ public class TradelogSummaryTableModel extends TableModel {
 	/**
 	 * getData() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param value Object
-	 * @param row int
-	 * @param column int
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
+	 * @exception * @see
+	 */
 
 	public void populateDAO(Object value, int row, int column) {
 		final TradelogSummary element = getData().getTradelogSummary().get(row);
@@ -222,13 +235,15 @@ public class TradelogSummaryTableModel extends TableModel {
 	/**
 	 * deleteRow() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param selectedRow int
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param selectedRow
+	 *            int
+	 * @exception * @see
+	 */
 	public void deleteRow(int selectedRow) {
 
 		int i = 0;
@@ -246,7 +261,9 @@ public class TradelogSummaryTableModel extends TableModel {
 
 	/**
 	 * Method addRow.
-	 * @param element TradelogSummary
+	 * 
+	 * @param element
+	 *            TradelogSummary
 	 */
 	public void addRow(TradelogSummary element) {
 
@@ -275,8 +292,11 @@ public class TradelogSummaryTableModel extends TableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element TradelogSummary
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            TradelogSummary
 	 */
 	public void getNewRow(Vector<Object> newRow, TradelogSummary element) {
 

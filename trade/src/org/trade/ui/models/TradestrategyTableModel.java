@@ -95,11 +95,20 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String SEC_TYPE = "SEC Type*";
 	private static final String EXPIRY = "Expiry";
 
+	private static final String[] columnHeaderToolTip = { "Trading day",
+			"Run strategy", null, "Trade bias", "For gaps the grade", null,
+			null, "Trading account", "Bar size for strategy",
+			"Historical data to pull in i.e 2D is today + yesterday",
+			"Risk amount for trade used to calculate position size",
+			"% Change from close", "% Change from open",
+			"Tradestrategy status", null, null, null,
+			"Expiry date for future contracts" };
+
 	private Tradingday m_data = null;
 	private Timer timer = null;
 
 	public TradestrategyTableModel() {
-
+		super(columnHeaderToolTip);
 		columnNames = new String[18];
 		columnNames[0] = DATE;
 		columnNames[1] = TRADE;

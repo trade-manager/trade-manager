@@ -56,12 +56,14 @@ import org.trade.ui.widget.DecodeTableEditor;
 public class ConfigurationTable extends Table {
 
 	private static final long serialVersionUID = 1132297931453070904L;
-	
+
 	private static final String DATETIMEFORMAT = "MM/dd/yyyy HH:mm";
 
 	/**
 	 * Constructor for ConfigurationTable.
-	 * @param model TableModel
+	 * 
+	 * @param model
+	 *            TableModel
 	 * @throws ValueTypeException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })

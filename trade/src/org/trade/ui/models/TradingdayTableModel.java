@@ -59,11 +59,15 @@ public class TradingdayTableModel extends TableModel {
 	private static final String MKTBIAS = "    Market Bias    ";
 	private static final String MKTGAP = "    Market Gap     ";
 	private static final String MKTBAR = "    Market Bar     ";
+	private static final String[] columnHeaderToolTip = { "Market open time",
+			"Market close time", "Market bias for the day i.e S&P500 bar",
+			"Market gap from prev close i.e. S&P500 bar",
+			"Actual market bar i.e. S&P500" };
 
 	private Tradingdays m_data = null;
 
 	public TradingdayTableModel() {
-
+		super(columnHeaderToolTip);
 		// Get the column names and cache them.
 		// Then we can close the connection.
 		columnNames = new String[5];
@@ -76,6 +80,7 @@ public class TradingdayTableModel extends TableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Tradingdays
 	 */
 	public Tradingdays getData() {
@@ -84,8 +89,11 @@ public class TradingdayTableModel extends TableModel {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -102,7 +110,9 @@ public class TradingdayTableModel extends TableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Tradingdays
+	 * 
+	 * @param data
+	 *            Tradingdays
 	 */
 	public void setData(Tradingdays data) {
 
@@ -120,9 +130,13 @@ public class TradingdayTableModel extends TableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -160,7 +174,9 @@ public class TradingdayTableModel extends TableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
 
@@ -204,8 +220,11 @@ public class TradingdayTableModel extends TableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element Tradingday
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            Tradingday
 	 */
 	public void getNewRow(Vector<Object> newRow, Tradingday element) {
 		newRow.addElement(new Date(element.getOpen()));

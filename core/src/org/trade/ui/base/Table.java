@@ -55,6 +55,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import org.trade.core.valuetype.Date;
@@ -107,7 +108,9 @@ public class Table extends JTable implements MouseListener, ActionListener {
 
 	/**
 	 * Constructor for Table.
-	 * @param tableModel TableModel
+	 * 
+	 * @param tableModel
+	 *            TableModel
 	 * @throws ValueTypeException
 	 */
 	public Table(TableModel tableModel) throws ValueTypeException {
@@ -188,12 +191,10 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * mousePressed() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mousePressed(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			createPopup(evt.getPoint());
@@ -203,12 +204,10 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * mouseReleased() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			createPopup(evt.getPoint());
@@ -218,12 +217,10 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * mouseClicked() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseClicked(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			createPopup(evt.getPoint());
@@ -233,36 +230,53 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * mouseEntered() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseEntered(MouseEvent evt) {
 	}
 
 	/**
 	 * mouseExited() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseExited(MouseEvent evt) {
+	}
+
+	/**
+	 * Method createDefaultTableHeader.
+	 * 
+	 * @return JTableHeader
+	 */
+	protected JTableHeader createDefaultTableHeader() {
+		return new JTableHeader(columnModel) {
+			private static final long serialVersionUID = -2667248411137081167L;
+
+			public String getToolTipText(MouseEvent e) {
+				java.awt.Point p = e.getPoint();
+				int index = columnModel.getColumnIndexAtX(p.x);
+				if (index > -1) {
+					int realIndex = columnModel.getColumn(index)
+							.getModelIndex();
+					return ((TableModel) this.getTable().getModel())
+							.getColumnHeaderToolTip(realIndex);
+				}
+				return null;
+			}
+		};
 	}
 
 	/**
 	 * createPopup() -
 	 * 
-	
-	
-	
-	
-	 * @param point Point
-	 * @exception * @see */
+	 * @param point
+	 *            Point
+	 * @exception * @see
+	 */
 	public void createPopup(Point point) {
 
 		popup = new JPopupMenu();
@@ -289,12 +303,10 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * actionPerformed() -
 	 * 
-	
-	
-	
-	
-	 * @param evt ActionEvent
-	 * @exception * @see */
+	 * @param evt
+	 *            ActionEvent
+	 * @exception * @see
+	 */
 	public void actionPerformed(ActionEvent evt) {
 		JMenuItem mi = (JMenuItem) evt.getSource();
 
@@ -316,14 +328,14 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * getSuitableLocation() -
 	 * 
-	
-	
-	
-	
-	 * @param point Point
-	 * @param d Dimension
-	 * @param c Component
-	 * @return Point * @exception * @see */
+	 * @param point
+	 *            Point
+	 * @param d
+	 *            Dimension
+	 * @param c
+	 *            Component
+	 * @return Point * @exception * @see
+	 */
 	protected Point getSuitableLocation(Point point, Dimension d, Component c) {
 		// First locate the parent JFrame or JDialog
 		Component topLevel = getComponentContainer(c);
@@ -369,12 +381,10 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * getComponentContainer() -
 	 * 
-	
-	
-	
-	
-	 * @param c Component
-	 * @return Component * @exception * @see */
+	 * @param c
+	 *            Component
+	 * @return Component * @exception * @see
+	 */
 	private Component getComponentContainer(Component c) {
 		Component topLevel = c;
 
@@ -389,11 +399,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * delete a row() -
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public void delete() {
 		if (this.getSelectedRow() > -1) {
 			((TableModel) this.getModel()).deleteRow(this
@@ -404,11 +411,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * clear all rows() -
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public void clearAll() {
 		int rowCount = this.getRowCount();
 		for (int i = 0; i < rowCount; i++) {
@@ -419,11 +423,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * print all rows() -
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	/**
 	 * add a row() -

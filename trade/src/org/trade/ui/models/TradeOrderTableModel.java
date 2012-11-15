@@ -75,9 +75,15 @@ public class TradeOrderTableModel extends TableModel {
 	private static final String FILLED_QTY = "Filled Qty";
 	private static final String STOP_PRICE = "Stop Price";
 
+	private static final String[] columnHeaderToolTip = { null,
+			"System generated key", "Buy/Sell/Short", null, null, null,
+			"Stop/Mkt price", "Transmit to mkt in TWS", null,
+			"One Cancels Another(OCA) id must be unique for day", null, null,
+			null, null };
 	private Tradestrategy m_data = null;
 
 	public TradeOrderTableModel() {
+		super(columnHeaderToolTip);
 		// Get the column names and cache them.
 		// Then we can close the connection.
 		columnNames = new String[14];
@@ -100,8 +106,11 @@ public class TradeOrderTableModel extends TableModel {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -122,6 +131,7 @@ public class TradeOrderTableModel extends TableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy getData() {
@@ -130,7 +140,9 @@ public class TradeOrderTableModel extends TableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Tradestrategy
+	 * 
+	 * @param data
+	 *            Tradestrategy
 	 */
 	public void setData(Tradestrategy data) {
 		this.m_data = data;
@@ -149,9 +161,13 @@ public class TradeOrderTableModel extends TableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -234,7 +250,9 @@ public class TradeOrderTableModel extends TableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
 		final Vector<Object> currRow = rows.get(selectedRow);
@@ -255,7 +273,9 @@ public class TradeOrderTableModel extends TableModel {
 
 	/**
 	 * Method addRow.
-	 * @param element TradeOrder
+	 * 
+	 * @param element
+	 *            TradeOrder
 	 */
 	public void addRow(TradeOrder element) {
 
@@ -336,8 +356,11 @@ public class TradeOrderTableModel extends TableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element TradeOrder
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            TradeOrder
 	 */
 	public void getNewRow(Vector<Object> newRow, TradeOrder element) {
 

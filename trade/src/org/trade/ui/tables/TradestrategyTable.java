@@ -45,7 +45,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.table.JTableHeader;
 import javax.swing.text.MaskFormatter;
 
 import org.trade.core.valuetype.ValueTypeException;
@@ -80,14 +79,6 @@ import org.trade.ui.widget.StringRenderer;
 public class TradestrategyTable extends Table {
 
 	private static final long serialVersionUID = 1132297931453070904L;
-	private String[] columnToolTips = { "Trading day", "Run strategy", null,
-			"Trade bias", "For gaps the grade", null, null, "Trading account",
-			"Bar size for strategy",
-			"Historical data to pull in i.e 2D is today + yesterday",
-			"Risk amount for trade used to calculate position size",
-			"% Change from close", "% Change from open",
-			"Tradestrategy status", null, null, null,
-			"Expiry date for future contracts" };
 	private static final String MASK = "******";
 	private static final String VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789. ";
 	private static final String PLACE_HOLDER = " ";
@@ -169,29 +160,6 @@ public class TradestrategyTable extends Table {
 		this.setPreferredScrollableViewportSize(new Dimension(300, 200));
 		this.setFillsViewportHeight(true);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-	}
-
-	// Implement table header tool tips.
-	/**
-	 * Method createDefaultTableHeader.
-	 * 
-	 * @return JTableHeader
-	 */
-	protected JTableHeader createDefaultTableHeader() {
-		return new JTableHeader(columnModel) {
-			private static final long serialVersionUID = -2667248411137081167L;
-
-			public String getToolTipText(MouseEvent e) {
-				java.awt.Point p = e.getPoint();
-				int index = columnModel.getColumnIndexAtX(p.x);
-				if (index > -1) {
-					int realIndex = columnModel.getColumn(index)
-							.getModelIndex();
-					return columnToolTips[realIndex];
-				}
-				return null;
-			}
-		};
 	}
 
 	/**

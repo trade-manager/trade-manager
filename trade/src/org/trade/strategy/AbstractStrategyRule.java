@@ -885,20 +885,24 @@ public abstract class AbstractStrategyRule extends Worker implements
 		int quantity = (int) ((int) risk / Math.abs(stop));
 		/*
 		 * Check to see if we are in the limits of the amount of margin we can
-		 * use.
+		 * use. If percentOfMargin is null or zero ignore this calc.
 		 */
-		if ((quantity * entryPrice.doubleValue()) > this.getTradeAccount()
-				.getBuyingPower().multiply(entrylimit.getPercentOfMargin())
-				.doubleValue()) {
-			quantity = (int) ((int) this.getTradeAccount().getBuyingPower()
-					.doubleValue()
-					* entrylimit.getPercentOfMargin().doubleValue() / entryPrice
-					.getBigDecimalValue().doubleValue());
-			stop = risk / quantity;
-			stopPrice = (Side.BOT.equals(this.getTrade().getSide()) ? entryPrice
-					.subtract(new Money(stop)) : entryPrice
-					.add(new Money(stop)));
+		if (null != entrylimit.getPercentOfMargin()
+				&& entrylimit.getPercentOfMargin().doubleValue() > 0) {
+			if ((quantity * entryPrice.doubleValue()) > this.getTradeAccount()
+					.getBuyingPower().multiply(entrylimit.getPercentOfMargin())
+					.doubleValue()) {
+				quantity = (int) ((int) this.getTradeAccount().getBuyingPower()
+						.doubleValue()
+						* entrylimit.getPercentOfMargin().doubleValue() / entryPrice
+						.getBigDecimalValue().doubleValue());
+				stop = risk / quantity;
+				stopPrice = (Side.BOT.equals(this.getTrade().getSide()) ? entryPrice
+						.subtract(new Money(stop)) : entryPrice.add(new Money(
+						stop)));
+			}
 		}
+
 		quantity = (int) ((Math.rint(quantity
 				/ entrylimit.getShareRound().doubleValue())) * entrylimit
 				.getShareRound().doubleValue());
