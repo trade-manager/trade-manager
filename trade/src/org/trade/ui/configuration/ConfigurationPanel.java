@@ -56,6 +56,7 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -114,7 +115,9 @@ public class ConfigurationPanel extends BasePanel {
 
 	/**
 	 * Constructor
-	 * @param tradePersistentModel PersistentModel
+	 * 
+	 * @param tradePersistentModel
+	 *            PersistentModel
 	 */
 	@SuppressWarnings("unchecked")
 	public ConfigurationPanel(PersistentModel tradePersistentModel) {
@@ -208,6 +211,7 @@ public class ConfigurationPanel extends BasePanel {
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
@@ -263,7 +267,6 @@ public class ConfigurationPanel extends BasePanel {
 	/**
 	 * This is fired when the Refresh button is pressed.
 	 * 
-	
 	 */
 	public void doRefresh() {
 		try {
@@ -285,13 +288,18 @@ public class ConfigurationPanel extends BasePanel {
 	public void doDelete(Aspect instance) {
 
 		try {
-			m_tradePersistentModel.removeAspect(instance);
-			m_aspects.remove(instance);
-			m_tableModel.setData(m_aspects);
-			if (null != m_tableModelChild) {
-				m_tableModelChild.clearAll();
+			int result = JOptionPane.showConfirmDialog(this.getFrame(),
+					"Do you want to delete selected item?", "Information",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				m_tradePersistentModel.removeAspect(instance);
+				m_aspects.remove(instance);
+				m_tableModel.setData(m_aspects);
+				if (null != m_tableModelChild) {
+					m_tableModelChild.clearAll();
+				}
+				DBTableLookupServiceProvider.clearLookup();
 			}
-			DBTableLookupServiceProvider.clearLookup();
 		} catch (Exception ex) {
 			this.setErrorMessage("Error deleting item.", ex.getMessage(), ex);
 		}
@@ -309,7 +317,9 @@ public class ConfigurationPanel extends BasePanel {
 
 	/**
 	 * Method doProperties.
-	 * @param series IndicatorSeries
+	 * 
+	 * @param series
+	 *            IndicatorSeries
 	 */
 	public void doProperties(IndicatorSeries series) {
 		try {
@@ -399,7 +409,9 @@ public class ConfigurationPanel extends BasePanel {
 	private class TableRowListener implements ListSelectionListener {
 		/**
 		 * Method valueChanged.
-		 * @param event ListSelectionEvent
+		 * 
+		 * @param event
+		 *            ListSelectionEvent
 		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
 		public void valueChanged(ListSelectionEvent event) {
@@ -425,7 +437,9 @@ public class ConfigurationPanel extends BasePanel {
 
 	/**
 	 * Method addReferenceTablePanel.
-	 * @param refTableClass String
+	 * 
+	 * @param refTableClass
+	 *            String
 	 */
 	private void addReferenceTablePanel(String refTableClass) {
 
@@ -465,7 +479,9 @@ public class ConfigurationPanel extends BasePanel {
 			ListSelectionListener {
 		/**
 		 * Method valueChanged.
-		 * @param event ListSelectionEvent
+		 * 
+		 * @param event
+		 *            ListSelectionEvent
 		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
 		public void valueChanged(ListSelectionEvent event) {
@@ -489,7 +505,9 @@ public class ConfigurationPanel extends BasePanel {
 
 	/**
 	 * Method setChildPanel.
-	 * @param aspect Aspect
+	 * 
+	 * @param aspect
+	 *            Aspect
 	 */
 	private void setChildPanel(Aspect aspect) {
 		try {
@@ -547,8 +565,11 @@ public class ConfigurationPanel extends BasePanel {
 
 		/**
 		 * Constructor for CodeAttributesPanel.
-		 * @param aspects Aspects
-		 * @param series IndicatorSeries
+		 * 
+		 * @param aspects
+		 *            Aspects
+		 * @param series
+		 *            IndicatorSeries
 		 * @throws Exception
 		 */
 		@SuppressWarnings("unchecked")
@@ -631,6 +652,7 @@ public class ConfigurationPanel extends BasePanel {
 
 		/**
 		 * Method getFields.
+		 * 
 		 * @return Hashtable<String,JComponent>
 		 */
 		public Hashtable<String, JComponent> getFields() {
@@ -646,7 +668,9 @@ public class ConfigurationPanel extends BasePanel {
 
 		/**
 		 * Method verify.
-		 * @param input JComponent
+		 * 
+		 * @param input
+		 *            JComponent
 		 * @return boolean
 		 */
 		public boolean verify(JComponent input) {
@@ -670,7 +694,9 @@ public class ConfigurationPanel extends BasePanel {
 
 		/**
 		 * Method shouldYieldFocus.
-		 * @param input JComponent
+		 * 
+		 * @param input
+		 *            JComponent
 		 * @return boolean
 		 */
 		public boolean shouldYieldFocus(JComponent input) {
@@ -679,6 +705,7 @@ public class ConfigurationPanel extends BasePanel {
 
 		/**
 		 * Method isValid.
+		 * 
 		 * @return boolean
 		 */
 		public boolean isValid() {

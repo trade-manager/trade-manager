@@ -71,6 +71,7 @@ import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
+import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeAccount;
@@ -267,29 +268,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	}
 
 	/**
-	 * This is fired from the Tradingday Tab when the Request Executions button
-	 * is pressed. This should be used to fetch orders that have executed at the
-	 * broker while the system was down.
-	 * 
-	 * @param tradestrategy
-	 *            the Tradestrategy for which you are requesting trade
-	 *            executions
-	 * 
-	 */
-
-	public void doMarketData(final Tradestrategy tradestrategy) {
-		try {
-			_log.info("doMarketData" + tradestrategy.getIdTradeStrategy());
-			if (null != tradestrategy.getIdTradeStrategy()) {
-				m_brokerModel.onReqMarketData(tradestrategy);
-			}
-		} catch (BrokerModelException ex) {
-			setErrorMessage("Error subscribing to market data.",
-					ex.getMessage(), ex);
-		}
-	}
-
-	/**
 	 * This is fired from the main menu when the Broker data button is pressed.
 	 * This will run the Strategy for all the tradingdays.
 	 * 
@@ -342,7 +320,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doDelete() {
 		try {
 			deleteTradeOrders(m_tradingdays);
-
 		} catch (Exception ex) {
 			this.setErrorMessage("Error deleting TradeOrders.",
 					ex.getMessage(), ex);
@@ -362,12 +339,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doDelete(final Tradestrategy tradestrategy) {
 		try {
-			Tradingdays tradingdays = new Tradingdays();
-			Tradingday tradingday = Tradingday.newInstance(tradestrategy
-					.getTradingday().getOpen());
-			tradingday.addTradestrategy(tradestrategy);
-			tradingdays.add(tradingday);
-			deleteTradeOrders(tradingdays);
+			int result = JOptionPane.showConfirmDialog(this.getFrame(),
+					"Do you want to delete selected Tradestrategy?",
+					"Information", JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				Tradingdays tradingdays = new Tradingdays();
+				Tradingday tradingday = Tradingday.newInstance(tradestrategy
+						.getTradingday().getOpen());
+				tradingday.addTradestrategy(tradestrategy);
+				tradingdays.add(tradingday);
+				deleteTradeOrders(tradingdays);
+			}
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error deleting TradeOrders.",
@@ -549,8 +531,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 										if (null != tradestrategy
 												.getIdTradeStrategy()) {
 											m_brokerModel
-													.onCancelRealtimeBars(tradestrategy
-															.getContract());
+													.onCancelRealtimeBars(tradestrategy);
 											tradestrategy
 													.setDatasetContainer(null);
 										}
@@ -1303,9 +1284,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doCancel(Tradestrategy tradestrategy) {
 		try {
-			if (m_brokerModel
-					.isRealtimeBarsRunning(tradestrategy.getContract())) {
-				m_brokerModel.onCancelRealtimeBars(tradestrategy.getContract());
+			if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
+				m_brokerModel.onCancelRealtimeBars(tradestrategy);
 				this.setStatusBarMessage(
 						"Realtime data has been cancelled for Symbol: "
 								+ tradestrategy.getContract().getSymbol(),
@@ -1611,11 +1591,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
-						if (m_brokerModel.isRealtimeBarsRunning(tradestrategy
-								.getContract())
-								|| m_brokerModel
-										.isMarketDataRunning(tradestrategy
-												.getContract())) {
+						if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 							int result = JOptionPane.showConfirmDialog(this
 									.getFrame(),
 									"A real time data request is already running for Symbol: "
@@ -1625,8 +1601,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									"Information", JOptionPane.YES_NO_OPTION);
 							if (result == JOptionPane.YES_OPTION) {
 								m_brokerModel
-										.onCancelRealtimeBars(tradestrategy
-												.getContract());
+										.onCancelRealtimeBars(tradestrategy);
 							}
 						}
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
@@ -1644,10 +1619,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									.getMostRecentTradingDay(startDate);
 
 							List<Candle> candles = m_tradePersistentModel
-									.findCandlesByContractAndDateRange(
+									.findCandlesByContractDateRangeBarSize(
 											tradestrategy.getContract()
 													.getIdContract(),
-											startDate, endDate);
+											startDate, endDate, tradestrategy
+													.getBarSize());
 							if (!candles.isEmpty()) {
 								int result = JOptionPane.showConfirmDialog(this
 										.getFrame(),
@@ -1997,7 +1973,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private Tradingdays tradingdays = null;
 		private int grandtotal = 0;
 		private long startTime = 0;
-		private final ConcurrentHashMap<Integer, Tradestrategy> m_runningContractRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
+		private final ConcurrentHashMap<Integer, Contract> m_runningContractRequests = new ConcurrentHashMap<Integer, Contract>();
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -2039,14 +2015,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				for (Date date : keys) {
 					Tradingday tradingday = this.tradingdays.getTradingdays()
 							.get(date);
+					Collections.sort(tradingday.getTradestrategies(),
+							Tradestrategy.TRADINGDAY_CONTRACT);
+
+					Contract contract = null;
+					Integer barSize = null;
+					Integer chartDays = null;
+
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
-
-						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy
-								.getContract())
-								&& !m_brokerModel
-										.isMarketDataRunning(tradestrategy
-												.getContract())) {
+						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 							/*
 							 * If running in test mode create the test broker
 							 * client.
@@ -2091,42 +2069,68 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 															indicatorTradestrategy);
 										}
 										this.grandtotal++;
-										if (m_brokerModel
-												.isHistoricalDataRunning(indicatorTradestrategy)) {
-											m_runningContractRequests
-													.put(indicatorTradestrategy
-															.getIdTradeStrategy(),
-															indicatorTradestrategy);
-										} else {
-											totalSumbitted = submitBrokerRequest(
-													indicatorTradestrategy,
-													totalSumbitted);
-										}
+										indicatorTradestrategy.getContract()
+												.addTradestrategy(
+														indicatorTradestrategy);
+										totalSumbitted = submitBrokerRequest(
+												indicatorTradestrategy
+														.getContract(),
+												tradingday.getOpen(),
+												tradingday.getClose(),
+												indicatorTradestrategy
+														.getBarSize(),
+												indicatorTradestrategy
+														.getChartDays(),
+												totalSumbitted);
 									}
 								}
 							}
-							if (m_brokerModel
-									.isHistoricalDataRunning(tradestrategy)) {
-								m_runningContractRequests.put(
-										tradestrategy.getIdTradeStrategy(),
-										tradestrategy);
-							} else {
-								totalSumbitted = submitBrokerRequest(
-										tradestrategy, totalSumbitted);
+							if (null == contract) {
+								contract = tradestrategy.getContract();
+								chartDays = tradestrategy.getChartDays();
+								barSize = tradestrategy.getBarSize();
 							}
+							if (tradestrategy.getContract().equals(contract)
+									&& tradestrategy.getBarSize().equals(
+											barSize)
+									&& tradestrategy.getChartDays().equals(
+											chartDays)) {
+								contract.addTradestrategy(tradestrategy);
+								continue;
+							}
+							totalSumbitted = submitBrokerRequest(contract,
+									tradingday.getOpen(),
+									tradingday.getClose(), barSize, chartDays,
+									totalSumbitted);
+							contract = tradestrategy.getContract();
+							contract.addTradestrategy(tradestrategy);
+							chartDays = tradestrategy.getChartDays();
+							barSize = tradestrategy.getBarSize();
 						}
 					}
+					totalSumbitted = submitBrokerRequest(contract, contract
+							.getTradestrategies().get(0).getTradingday()
+							.getOpen(), contract.getTradestrategies().get(0)
+							.getTradingday().getClose(), barSize, chartDays,
+							totalSumbitted);
 				}
+
 				while (!m_runningContractRequests.isEmpty()) {
-					for (Integer idTradestrategy : m_runningContractRequests
+					for (Integer idContract : m_runningContractRequests
 							.keySet()) {
-						Tradestrategy tradestrategy = m_runningContractRequests
-								.get(idTradestrategy);
-						if (!m_brokerModel
-								.isHistoricalDataRunning(tradestrategy)) {
-							totalSumbitted = submitBrokerRequest(tradestrategy,
-									totalSumbitted);
-							m_runningContractRequests.remove(idTradestrategy);
+						Contract contract = m_runningContractRequests
+								.get(idContract);
+						if (!m_brokerModel.isHistoricalDataRunning(contract)) {
+							totalSumbitted = submitBrokerRequest(contract,
+									contract.getTradestrategies().get(0)
+											.getTradingday().getOpen(),
+									contract.getTradestrategies().get(0)
+											.getTradingday().getClose(),
+									contract.getTradestrategies().get(0)
+											.getBarSize(), contract
+											.getTradestrategies().get(0)
+											.getChartDays(), totalSumbitted);
+							m_runningContractRequests.remove(idContract);
 						}
 					}
 				}
@@ -2170,11 +2174,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @throws InterruptedException
 		 * @throws BrokerModelException
 		 */
-		private int submitBrokerRequest(Tradestrategy tradestrategy,
+		private int submitBrokerRequest(Contract contract, Date startDate,
+				Date endDate, Integer barSize, Integer chartDays,
 				int totalSumbitted) throws InterruptedException,
 				BrokerModelException {
-
-			m_brokerModel.onBrokerData(tradestrategy);
+			if (m_brokerModel.isHistoricalDataRunning(contract)) {
+				m_runningContractRequests.put(contract.getIdContract(),
+						contract);
+				return totalSumbitted;
+			}
+			m_brokerModel.onBrokerData(contract, startDate, endDate, barSize,
+					chartDays);
 			totalSumbitted++;
 			// _log.info("Total: " + this.grandtotal + " totalSumbitted: "
 			// + totalSumbitted);
@@ -2257,10 +2267,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 *            int
 		 * @return Tradestrategy
 		 * @throws BrokerModelException
+		 * @throws PersistentModelException
 		 */
 		private Tradestrategy populateChildTradestrategy(
 				Tradestrategy tradestrategy, CandleDataset candleDataset,
-				int seriesIndex) throws BrokerModelException {
+				int seriesIndex) throws BrokerModelException,
+				PersistentModelException {
 			CandleSeries series = candleDataset.getSeries(seriesIndex);
 			Tradestrategy indicatorTradestrategy = null;
 			for (Tradestrategy indicator : m_indicatorTradestrategy.values()) {
@@ -2278,12 +2290,24 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 			if (null == indicatorTradestrategy) {
-				indicatorTradestrategy = new Tradestrategy(
-						series.getContract(), tradestrategy.getTradingday(),
-						new Strategy(), tradestrategy.getTradeAccount(),
-						new BigDecimal(0), null, null, false,
-						tradestrategy.getChartDays(),
+				Contract contract = series.getContract();
+				if (null == series.getContract().getIdContract()) {
+					contract = m_tradePersistentModel.findContractByUniqueKey(
+							series.getContract().getSecType(), series
+									.getContract().getSymbol(), series
+									.getContract().getExchange(), series
+									.getContract().getCurrency());
+					if (null == contract) {
+						contract = (Contract) m_tradePersistentModel
+								.persistAspect(series.getContract());
+					}
+				}
+				indicatorTradestrategy = new Tradestrategy(contract,
+						tradestrategy.getTradingday(), new Strategy(),
+						tradestrategy.getTradeAccount(), new BigDecimal(0),
+						null, null, false, tradestrategy.getChartDays(),
 						tradestrategy.getBarSize());
+
 				indicatorTradestrategy.setIdTradeStrategy(m_brokerModel
 						.getNextRequestId());
 				indicatorTradestrategy.setDirty(false);

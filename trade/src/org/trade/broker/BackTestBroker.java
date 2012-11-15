@@ -302,10 +302,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			this.tradestrategy.setDatasetContainer(this.datasetContainer);
 
 			List<Candle> candles = tradePersistentModel
-					.findCandlesByContractAndDateRange(this.tradestrategy
+					.findCandlesByContractDateRangeBarSize(this.tradestrategy
 							.getContract().getIdContract(), this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
-							.getTradingday().getOpen());
+							.getTradingday().getOpen(), this.tradestrategy
+							.getBarSize());
 			/*
 			 * Populate any child datasets.
 			 */
@@ -440,7 +441,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	public void done() {
 		brokerModel.onCancelRealtimeBars(this.tradestrategy.getContract());
-		brokerModel.onCancelBrokerData(this.tradestrategy);
+		brokerModel.onCancelBrokerData(this.tradestrategy.getContract());
 		// Free some memory!!
 		this.tradestrategy.getDatasetContainer().clearBaseCandleSeries();
 		this.tradestrategy.setDatasetContainer(null);
@@ -727,9 +728,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				childTradestrategy.setDirty(false);
 
 				List<Candle> indicatorCandles = this.tradePersistentModel
-						.findCandlesByContractAndDateRange(childTradestrategy
-								.getContract().getIdContract(), startDate,
-								endDate);
+						.findCandlesByContractDateRangeBarSize(
+								childTradestrategy.getContract()
+										.getIdContract(), startDate, endDate,
+								childTradestrategy.getBarSize());
 				if (indicatorCandles.isEmpty()) {
 					_log.info("No chart data available for "
 							+ childTradestrategy.getContract().getSymbol());

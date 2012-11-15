@@ -984,10 +984,11 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			List<Candle> result = this.tradePersistentModel
-					.findCandlesByContractAndDateRange(this.tradestrategy
+					.findCandlesByContractDateRangeBarSize(this.tradestrategy
 							.getContract().getIdContract(), this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
-							.getTradingday().getClose());
+							.getTradingday().getClose(), this.tradestrategy
+							.getBarSize());
 			assertNotNull(result);
 		} catch (Exception e) {
 			fail("Error testFindCandlesByContractAndDateRange Msg: "

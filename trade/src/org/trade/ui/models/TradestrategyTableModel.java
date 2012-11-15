@@ -217,7 +217,8 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 2: {
-			element.getContract().setSymbol(((String) value).toUpperCase());
+			element.getContract().setSymbol(
+					((String) value).trim().toUpperCase());
 			break;
 		}
 		case 3: {

@@ -552,6 +552,35 @@ public class Tradestrategy extends Aspect implements Serializable {
 			return returnVal;
 		}
 	};
+	
+	public static final Comparator<Tradestrategy> TRADINGDAY_CONTRACT = new Comparator<Tradestrategy>() {
+		public int compare(Tradestrategy o1, Tradestrategy o2) {
+			m_ascending = true;
+			int returnVal = 0;
+
+			if (CoreUtils.nullSafeDateComparator(o1.getTradingday().getOpen(),
+					o2.getTradingday().getOpen()) == 0) {
+				if (CoreUtils.nullSafeObjectComparator(o1.getContract(),
+						o2.getContract()) == 0) {
+					returnVal = CoreUtils.nullSafeIntegerComparator(
+							o1.getChartDays(), o2.getChartDays());
+				} else {
+					returnVal = CoreUtils.nullSafeObjectComparator(
+							o1.getContract(), o2.getContract());
+				}
+
+			} else {
+				returnVal = CoreUtils.nullSafeDateComparator(o1.getTradingday()
+						.getOpen(), o2.getTradingday().getOpen());
+
+			}
+
+			if (m_ascending.equals(Boolean.FALSE)) {
+				returnVal = returnVal * -1;
+			}
+			return returnVal;
+		}
+	};
 
 	/**
 	 * Method toString.

@@ -67,7 +67,9 @@ public class CandleHome {
 
 	/**
 	 * Method persistCandleSeries.
-	 * @param candleSeries CandleSeries
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
 	 * @throws Exception
 	 */
 	public synchronized void persistCandleSeries(CandleSeries candleSeries)
@@ -99,11 +101,12 @@ public class CandleHome {
 
 					Integer idTradingday = tradingday.getIdTradingDay();
 					Integer idContract = contract.getIdContract();
-					String hqlDelete = "delete Candle where idContract = :idContract and idTradingday = :idTradingday";
+					Integer barSize = candleSeries.getBarSize();
+					String hqlDelete = "delete Candle where idContract = :idContract and idTradingday = :idTradingday and barSize = :barSize";
 					entityManager.createQuery(hqlDelete)
 							.setParameter("idContract", idContract)
 							.setParameter("idTradingday", idTradingday)
-							.executeUpdate();
+							.setParameter("barSize", barSize).executeUpdate();
 					entityManager.getTransaction().commit();
 					entityManager.getTransaction().begin();
 				}
@@ -132,9 +135,13 @@ public class CandleHome {
 
 	/**
 	 * Method findByContractAndDateRange.
-	 * @param idContract Integer
-	 * @param startPeriod Date
-	 * @param endPeriod Date
+	 * 
+	 * @param idContract
+	 *            Integer
+	 * @param startPeriod
+	 *            Date
+	 * @param endPeriod
+	 *            Date
 	 * @return List<Candle>
 	 */
 	public List<Candle> findByContractAndDateRange(Integer idContract,
@@ -181,14 +188,20 @@ public class CandleHome {
 	}
 
 	/**
-	 * Method findCandlesByTradingdayContract.
-	 * @param idContract Integer
-	 * @param startDate Date
-	 * @param endDate Date
+	 * Method findCandlesByContractDateRangeBarSize.
+	 * 
+	 * @param idContract
+	 *            Integer
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
+	 * @param barSize
+	 *            Integer
 	 * @return List<Candle>
 	 */
-	public List<Candle> findCandlesByTradingdayContract(Integer idContract,
-			Date startDate, Date endDate) {
+	public List<Candle> findCandlesByContractDateRangeBarSize(
+			Integer idContract, Date startDate, Date endDate, Integer barSize) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -199,23 +212,33 @@ public class CandleHome {
 			query.select(from);
 			query.orderBy(builder.asc(from.get("startPeriod")));
 			List<Predicate> predicates = new ArrayList<Predicate>();
-
-			Join<Candle, Tradingday> tradingdayStartDate = from
-					.join("tradingday");
-			Predicate predicateStartDate = builder.greaterThanOrEqualTo(
-					tradingdayStartDate.get("open").as(Date.class), startDate);
-			predicates.add(predicateStartDate);
-
-			Join<Candle, Tradingday> tradingdayEndDate = from
-					.join("tradingday");
-			Predicate predicateEndDate = builder.lessThanOrEqualTo(
-					tradingdayEndDate.get("open").as(Date.class), endDate);
-			predicates.add(predicateEndDate);
-
-			Join<Candle, Contract> contract = from.join("contract");
-			Predicate predicateContract = builder.equal(
-					contract.get("idContract"), idContract);
-			predicates.add(predicateContract);
+			if (null != startDate) {
+				Join<Candle, Tradingday> tradingdayStartDate = from
+						.join("tradingday");
+				Predicate predicateStartDate = builder.greaterThanOrEqualTo(
+						tradingdayStartDate.get("open").as(Date.class),
+						startDate);
+				predicates.add(predicateStartDate);
+			}
+			if (null != endDate) {
+				Join<Candle, Tradingday> tradingdayEndDate = from
+						.join("tradingday");
+				Predicate predicateEndDate = builder.lessThanOrEqualTo(
+						tradingdayEndDate.get("open").as(Date.class), endDate);
+				predicates.add(predicateEndDate);
+			}
+			if (null != idContract) {
+				Join<Candle, Contract> contract = from.join("contract");
+				Predicate predicateContract = builder.equal(
+						contract.get("idContract"), idContract);
+				predicates.add(predicateContract);
+			}
+			if (null != barSize) {
+				Expression<Integer> expBarSize = from.get("barSize");
+				Predicate predicate = builder.greaterThanOrEqualTo(expBarSize,
+						barSize);
+				predicates.add(predicate);
+			}
 
 			query.where(predicates.toArray(new Predicate[] {}));
 			TypedQuery<Candle> typedQuery = entityManager.createQuery(query);
@@ -233,7 +256,9 @@ public class CandleHome {
 
 	/**
 	 * Method findById.
-	 * @param idCandle Integer
+	 * 
+	 * @param idCandle
+	 *            Integer
 	 * @return Candle
 	 */
 	public Candle findById(Integer idCandle) {
@@ -255,10 +280,15 @@ public class CandleHome {
 
 	/**
 	 * Method findByUniqueKey.
-	 * @param idTradingday Integer
-	 * @param idContract Integer
-	 * @param startPeriod Date
-	 * @param endPeriod Date
+	 * 
+	 * @param idTradingday
+	 *            Integer
+	 * @param idContract
+	 *            Integer
+	 * @param startPeriod
+	 *            Date
+	 * @param endPeriod
+	 *            Date
 	 * @return Candle
 	 */
 	public Candle findByUniqueKey(Integer idTradingday, Integer idContract,
@@ -312,8 +342,11 @@ public class CandleHome {
 
 	/**
 	 * Method findCandleCount.
-	 * @param idTradingday Integer
-	 * @param idContract Integer
+	 * 
+	 * @param idTradingday
+	 *            Integer
+	 * @param idContract
+	 *            Integer
 	 * @return Long
 	 */
 	public Long findCandleCount(Integer idTradingday, Integer idContract) {
@@ -361,7 +394,9 @@ public class CandleHome {
 
 	/**
 	 * Method findContractById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Contract
 	 */
 	private Contract findContractById(Integer id) {
@@ -377,7 +412,9 @@ public class CandleHome {
 
 	/**
 	 * Method findTradingdayByDate.
-	 * @param open Date
+	 * 
+	 * @param open
+	 *            Date
 	 * @return Tradingday
 	 */
 	private Tradingday findTradingdayByDate(Date open) {

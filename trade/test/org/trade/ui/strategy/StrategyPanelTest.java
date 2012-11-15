@@ -52,6 +52,7 @@ public class StrategyPanelTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -91,6 +92,7 @@ public class StrategyPanelTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -134,7 +136,9 @@ public class StrategyPanelTest extends TestCase {
 
 	/**
 	 * Method readFile.
-	 * @param fileName String
+	 * 
+	 * @param fileName
+	 *            String
 	 * @return String
 	 * @throws IOException
 	 */
@@ -163,8 +167,11 @@ public class StrategyPanelTest extends TestCase {
 
 	/**
 	 * Method writeFile.
-	 * @param fileName String
-	 * @param content String
+	 * 
+	 * @param fileName
+	 *            String
+	 * @param content
+	 *            String
 	 * @throws IOException
 	 */
 	private void writeFile(String fileName, String content) throws IOException {
@@ -203,10 +210,11 @@ public class StrategyPanelTest extends TestCase {
 			}
 
 			List<Candle> candles = tradePersistentModel
-					.findCandlesByContractAndDateRange(this.tradestrategy
+					.findCandlesByContractDateRangeBarSize(this.tradestrategy
 							.getContract().getIdContract(), this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
-							.getTradingday().getOpen());
+							.getTradingday().getOpen(), this.tradestrategy
+							.getBarSize());
 			for (Candle candle : candles) {
 				double high = candle.getHigh().doubleValue();
 				double low = candle.getLow().doubleValue();

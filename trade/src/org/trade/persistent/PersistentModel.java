@@ -63,7 +63,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistTradingday.
-	 * @param transientInstance Tradingday
+	 * 
+	 * @param transientInstance
+	 *            Tradingday
 	 * @throws PersistentModelException
 	 */
 	void persistTradingday(Tradingday transientInstance)
@@ -71,7 +73,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistTradestrategy.
-	 * @param transientInstance Tradestrategy
+	 * 
+	 * @param transientInstance
+	 *            Tradestrategy
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
@@ -80,7 +84,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistContract.
-	 * @param transientInstance Contract
+	 * 
+	 * @param transientInstance
+	 *            Contract
 	 * @return Contract
 	 * @throws PersistentModelException
 	 */
@@ -89,7 +95,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method resetDefaultTradeAccount.
-	 * @param transientInstance TradeAccount
+	 * 
+	 * @param transientInstance
+	 *            TradeAccount
 	 * @throws PersistentModelException
 	 */
 	void resetDefaultTradeAccount(TradeAccount transientInstance)
@@ -97,16 +105,20 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistTradeOrder.
-	 * @param transientInstance TradeOrder
+	 * 
+	 * @param transientInstance
+	 *            TradeOrder
 	 * @return TradeOrder
 	 * @throws PersistentModelException
 	 */
 	TradeOrder persistTradeOrder(TradeOrder transientInstance)
 			throws PersistentModelException;
-	
+
 	/**
 	 * Method persistTradeOrderfill.
-	 * @param tradeOrder TradeOrder
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
 	 * @return TradeOrder
 	 * @throws PersistentModelException
 	 */
@@ -115,7 +127,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistTrade.
-	 * @param transientInstance Trade
+	 * 
+	 * @param transientInstance
+	 *            Trade
 	 * @return Trade
 	 * @throws PersistentModelException
 	 */
@@ -123,7 +137,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistCandleSeries.
-	 * @param candleSeries CandleSeries
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
 	 * @throws PersistentModelException
 	 */
 	void persistCandleSeries(CandleSeries candleSeries)
@@ -131,7 +147,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistCandleItem.
-	 * @param candleItem CandleItem
+	 * 
+	 * @param candleItem
+	 *            CandleItem
 	 * @throws PersistentModelException
 	 */
 	void persistCandleItem(CandleItem candleItem)
@@ -139,7 +157,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradeAccountById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return TradeAccount
 	 * @throws PersistentModelException
 	 */
@@ -148,7 +168,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradeAccountByNumber.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @return TradeAccount
 	 * @throws PersistentModelException
 	 */
@@ -157,7 +179,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findContractById.
-	 * @param idContract Integer
+	 * 
+	 * @param idContract
+	 *            Integer
 	 * @return Contract
 	 * @throws PersistentModelException
 	 */
@@ -166,10 +190,15 @@ public interface PersistentModel {
 
 	/**
 	 * Method findContractByUniqueKey.
-	 * @param SECType String
-	 * @param symbol String
-	 * @param exchange String
-	 * @param currency String
+	 * 
+	 * @param SECType
+	 *            String
+	 * @param symbol
+	 *            String
+	 * @param exchange
+	 *            String
+	 * @param currency
+	 *            String
 	 * @return Contract
 	 * @throws PersistentModelException
 	 */
@@ -178,7 +207,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradestrategyById.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
@@ -187,7 +218,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradestrategyById.
-	 * @param idTradestrategy Integer
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
@@ -196,10 +229,15 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradestrategyByUniqueKeys.
-	 * @param open Date
-	 * @param strategy String
-	 * @param idContract Integer
-	 * @param accountNumber String
+	 * 
+	 * @param open
+	 *            Date
+	 * @param strategy
+	 *            String
+	 * @param idContract
+	 *            Integer
+	 * @param accountNumber
+	 *            String
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
@@ -209,6 +247,7 @@ public interface PersistentModel {
 
 	/**
 	 * Method findAllTradestrategies.
+	 * 
 	 * @return List<Tradestrategy>
 	 * @throws PersistentModelException
 	 */
@@ -217,7 +256,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradeById.
-	 * @param idTrade Integer
+	 * 
+	 * @param idTrade
+	 *            Integer
 	 * @return Trade
 	 * @throws PersistentModelException
 	 */
@@ -225,7 +266,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findOpenTradeByTradestrategyId.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Trade
 	 * @throws PersistentModelException
 	 */
@@ -234,7 +277,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradesByTradestrategyId.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return List<Trade>
 	 * @throws PersistentModelException
 	 */
@@ -243,7 +288,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method removeTradingdayTrades.
-	 * @param transientInstance Tradingday
+	 * 
+	 * @param transientInstance
+	 *            Tradingday
 	 * @throws PersistentModelException
 	 */
 	void removeTradingdayTrades(Tradingday transientInstance)
@@ -251,7 +298,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method removeTradestrategyTrades.
-	 * @param transientInstance Tradestrategy
+	 * 
+	 * @param transientInstance
+	 *            Tradestrategy
 	 * @throws PersistentModelException
 	 */
 	void removeTradestrategyTrades(Tradestrategy transientInstance)
@@ -259,7 +308,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradeOrderByKey.
-	 * @param orderKey Integer
+	 * 
+	 * @param orderKey
+	 *            Integer
 	 * @return TradeOrder
 	 * @throws PersistentModelException
 	 */
@@ -268,7 +319,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradeOrderfillByExecId.
-	 * @param execId String
+	 * 
+	 * @param execId
+	 *            String
 	 * @return TradeOrderfill
 	 * @throws PersistentModelException
 	 */
@@ -277,6 +330,7 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradeOrderByMaxKey.
+	 * 
 	 * @return Integer
 	 * @throws PersistentModelException
 	 */
@@ -284,7 +338,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradingdayById.
-	 * @param idTradingday Integer
+	 * 
+	 * @param idTradingday
+	 *            Integer
 	 * @return Tradingday
 	 * @throws PersistentModelException
 	 */
@@ -293,7 +349,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradingdayByOpenDate.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return Tradingday
 	 * @throws PersistentModelException
 	 */
@@ -302,8 +360,11 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradingdaysByDateRange.
-	 * @param startDate Date
-	 * @param endDate Date
+	 * 
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
 	 * @return Tradingdays
 	 * @throws PersistentModelException
 	 */
@@ -312,10 +373,15 @@ public interface PersistentModel {
 
 	/**
 	 * Method findTradelogReport.
-	 * @param tradeAccount TradeAccount
-	 * @param start Date
-	 * @param end Date
-	 * @param filter boolean
+	 * 
+	 * @param tradeAccount
+	 *            TradeAccount
+	 * @param start
+	 *            Date
+	 * @param end
+	 *            Date
+	 * @param filter
+	 *            boolean
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 */
@@ -323,20 +389,30 @@ public interface PersistentModel {
 			Date end, boolean filter) throws PersistentModelException;
 
 	/**
-	 * Method findCandlesByContractAndDateRange.
-	 * @param idContract Integer
-	 * @param startDate Date
-	 * @param endDate Date
+	 * Method findCandlesByContractDateRangeBarSize.
+	 * 
+	 * @param idContract
+	 *            Integer
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
+	 * @param barSize
+	 *            Integer
 	 * @return List<Candle>
 	 * @throws PersistentModelException
 	 */
-	List<Candle> findCandlesByContractAndDateRange(Integer idContract,
-			Date startDate, Date endDate) throws PersistentModelException;
+	List<Candle> findCandlesByContractDateRangeBarSize(Integer idContract,
+			Date startDate, Date endDate, Integer barSize)
+			throws PersistentModelException;
 
 	/**
 	 * Method findCandleCount.
-	 * @param idTradingday Integer
-	 * @param idContract Integer
+	 * 
+	 * @param idTradingday
+	 *            Integer
+	 * @param idContract
+	 *            Integer
 	 * @return Long
 	 * @throws PersistentModelException
 	 */
@@ -345,7 +421,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistRule.
-	 * @param transientInstance Rule
+	 * 
+	 * @param transientInstance
+	 *            Rule
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
@@ -353,7 +431,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findRuleById.
-	 * @param idRule Integer
+	 * 
+	 * @param idRule
+	 *            Integer
 	 * @return Rule
 	 * @throws PersistentModelException
 	 */
@@ -361,7 +441,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findRuleByMaxVersion.
-	 * @param strategy Strategy
+	 * 
+	 * @param strategy
+	 *            Strategy
 	 * @return Integer
 	 * @throws PersistentModelException
 	 */
@@ -370,7 +452,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findStrategyById.
-	 * @param idStrategy Integer
+	 * 
+	 * @param idStrategy
+	 *            Integer
 	 * @return Strategy
 	 * @throws PersistentModelException
 	 */
@@ -379,7 +463,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findStrategyByName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 * @return Strategy
 	 * @throws PersistentModelException
 	 */
@@ -387,13 +473,16 @@ public interface PersistentModel {
 
 	/**
 	 * Method removeRule.
-	 * @param rule Rule
+	 * 
+	 * @param rule
+	 *            Rule
 	 * @throws PersistentModelException
 	 */
 	void removeRule(Rule rule) throws PersistentModelException;
 
 	/**
 	 * Method findStrategies.
+	 * 
 	 * @return List<Strategy>
 	 * @throws PersistentModelException
 	 */
@@ -401,7 +490,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findAspectsByClassName.
-	 * @param aspectClassName String
+	 * 
+	 * @param aspectClassName
+	 *            String
 	 * @return Aspects
 	 * @throws PersistentModelException
 	 */
@@ -410,9 +501,13 @@ public interface PersistentModel {
 
 	/**
 	 * Method findAspectsByClassNameFieldName.
-	 * @param className String
-	 * @param fieldname String
-	 * @param value String
+	 * 
+	 * @param className
+	 *            String
+	 * @param fieldname
+	 *            String
+	 * @param value
+	 *            String
 	 * @return Aspects
 	 * @throws PersistentModelException
 	 */
@@ -421,7 +516,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method findAspectById.
-	 * @param transientInstance Aspect
+	 * 
+	 * @param transientInstance
+	 *            Aspect
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
@@ -430,7 +527,9 @@ public interface PersistentModel {
 
 	/**
 	 * Method persistAspect.
-	 * @param aspect Aspect
+	 * 
+	 * @param aspect
+	 *            Aspect
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
@@ -438,16 +537,22 @@ public interface PersistentModel {
 
 	/**
 	 * Method removeAspect.
-	 * @param aspect Aspect
+	 * 
+	 * @param aspect
+	 *            Aspect
 	 * @throws PersistentModelException
 	 */
 	void removeAspect(Aspect aspect) throws PersistentModelException;
 
 	/**
 	 * Method reassignStrategy.
-	 * @param fromStrategy Strategy
-	 * @param toStrategy Strategy
-	 * @param tradingday Tradingday
+	 * 
+	 * @param fromStrategy
+	 *            Strategy
+	 * @param toStrategy
+	 *            Strategy
+	 * @param tradingday
+	 *            Tradingday
 	 * @throws PersistentModelException
 	 */
 	void reassignStrategy(Strategy fromStrategy, Strategy toStrategy,

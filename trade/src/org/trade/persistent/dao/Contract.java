@@ -43,6 +43,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -604,11 +605,29 @@ public class Contract extends Aspect implements java.io.Serializable {
 	}
 
 	/**
+	 * Method removeTradestrategies.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void removeTradestrategy(Tradestrategy tradestrategy) {
+		for (ListIterator<Tradestrategy> itemIter = this.tradestrategies
+				.listIterator(); itemIter.hasNext();) {
+			Tradestrategy item = itemIter.next();
+			if (item.equals(tradestrategy)) {
+				itemIter.remove();
+				break;
+			}
+		}
+	}
+
+	/**
 	 * Method getTradestrategies.
 	 * 
 	 * @return List<Tradestrategy>
 	 */
-	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	@Transient
 	public List<Tradestrategy> getTradestrategies() {
 		return this.tradestrategies;
 	}

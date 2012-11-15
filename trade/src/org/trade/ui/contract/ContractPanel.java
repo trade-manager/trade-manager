@@ -646,8 +646,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				startDate = tradestrategy.getTradingday().getOpen();
 			}
 			List<Candle> candles = m_tradePersistentModel
-					.findCandlesByContractAndDateRange(tradestrategy
-							.getContract().getIdContract(), startDate, endDate);
+					.findCandlesByContractDateRangeBarSize(tradestrategy
+							.getContract().getIdContract(), startDate, endDate,
+							tradestrategy.getBarSize());
 			if (candles.isEmpty()) {
 				this.setStatusBarMessage("No chart data available for "
 						+ tradestrategy.getContract().getSymbol(),
@@ -708,10 +709,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					childTradestrategy.setDirty(false);
 
 					List<Candle> indicatorCandles = m_tradePersistentModel
-							.findCandlesByContractAndDateRange(
+							.findCandlesByContractDateRangeBarSize(
 									childTradestrategy.getContract()
 											.getIdContract(), startDate,
-									endDate);
+									endDate, childTradestrategy.getBarSize());
 					if (indicatorCandles.isEmpty()) {
 						this.setStatusBarMessage("No chart data available for "
 								+ childTradestrategy.getContract().getSymbol(),

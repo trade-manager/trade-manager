@@ -71,6 +71,7 @@ public class CandlePeriodTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -82,6 +83,7 @@ public class CandlePeriodTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -100,9 +102,10 @@ public class CandlePeriodTest extends TestCase {
 			prevTradingday = TradingCalendar
 					.getMostRecentTradingDay(prevTradingday);
 			List<Candle> candles = tradePersistentModel
-					.findCandlesByContractAndDateRange(this.tradestrategy
+					.findCandlesByContractDateRangeBarSize(this.tradestrategy
 							.getContract().getIdContract(), prevTradingday,
-							this.tradestrategy.getTradingday().getOpen());
+							this.tradestrategy.getTradingday().getOpen(),
+							this.tradestrategy.getBarSize());
 
 			if (candles.isEmpty()) {
 				StrategyData.doDummyData(this.tradestrategy
@@ -145,9 +148,10 @@ public class CandlePeriodTest extends TestCase {
 			prevTradingday = TradingCalendar
 					.getMostRecentTradingDay(prevTradingday);
 			List<Candle> candles = tradePersistentModel
-					.findCandlesByContractAndDateRange(this.tradestrategy
+					.findCandlesByContractDateRangeBarSize(this.tradestrategy
 							.getContract().getIdContract(), prevTradingday,
-							this.tradestrategy.getTradingday().getOpen());
+							this.tradestrategy.getTradingday().getOpen(),
+							this.tradestrategy.getBarSize());
 			if (candles.isEmpty()) {
 				StrategyData.doDummyData(this.tradestrategy
 						.getDatasetContainer().getBaseCandleSeries(),

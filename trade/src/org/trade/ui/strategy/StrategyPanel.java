@@ -209,7 +209,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			m_tree.setCellRenderer(new StrategyTreeCellRenderer());
 			m_tree.addTreeSelectionListener(this);
 			ToolTipManager.sharedInstance().registerComponent(m_tree);
-			
+
 			JScrollPane jScrollPane2 = new JScrollPane(m_tree);
 			treePanel.add(jScrollPane2, BorderLayout.CENTER);
 			treePanel.setBorder(BorderFactory.createCompoundBorder(
@@ -528,22 +528,26 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 */
 	public void doDelete(Rule rule) {
 		try {
-
-			for (Strategy strategy : this.strategies) {
-				if (strategy.getIdStrategy().equals(
-						rule.getStrategy().getIdStrategy())) {
-					strategy.getRules().remove(rule);
-					this.tradePersistentModel.removeRule(rule);
+			int result = JOptionPane.showConfirmDialog(this.getFrame(),
+					"Do you want to delete selected rule?", "Information",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				for (Strategy strategy : this.strategies) {
+					if (strategy.getIdStrategy().equals(
+							rule.getStrategy().getIdStrategy())) {
+						strategy.getRules().remove(rule);
+						this.tradePersistentModel.removeRule(rule);
+					}
 				}
+				Integer version = this.tradePersistentModel
+						.findRuleByMaxVersion(rule.getStrategy());
+				if (version == rule.getVersion() && version > 1) {
+					setMessageText(
+							"File system is out of sync with DB please re deploy the latest version.",
+							false, true, colorRedAttr);
+				}
+				refreshTree();
 			}
-			Integer version = this.tradePersistentModel
-					.findRuleByMaxVersion(rule.getStrategy());
-			if (version == rule.getVersion() && version > 1) {
-				setMessageText(
-						"File system is out of sync with DB please re deploy the latest version.",
-						false, true, colorRedAttr);
-			}
-			refreshTree();
 		} catch (Exception ex) {
 			setErrorMessage("Error saving rule", ex.getMessage(), ex);
 		}

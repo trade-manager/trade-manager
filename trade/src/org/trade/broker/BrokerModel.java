@@ -166,40 +166,33 @@ public interface BrokerModel {
 	void onReqOpenOrders() throws BrokerModelException;
 
 	/**
-	 * Method onReqMarketData.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @throws BrokerModelException
-	 */
-	void onReqMarketData(Tradestrategy tradestrategy)
-			throws BrokerModelException;
-
-	/**
-	 * Method onCancelMktData.
+	 * Method onBrokerData.
 	 * 
 	 * @param contract
 	 *            Contract
-	 */
-	void onCancelMktData(Contract contract);
-
-	/**
-	 * Method onBrokerData.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
+	 * @param Date
+	 *            startDate
+	 * @param Date
+	 *            endDate
+	 * @param Integer
+	 *            barSize
+	 * @param Integer
+	 *            chartDays
 	 * @throws BrokerModelException
+	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
+	 *      )
 	 */
-	void onBrokerData(Tradestrategy tradestrategy) throws BrokerModelException;
+	public void onBrokerData(Contract contract, Date startDate, Date endDate,
+			Integer barSize, Integer chartDays) throws BrokerModelException;
 
 	/**
 	 * Method onReqRealTimeBars.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
+	 * @param contract
+	 *            Contract
 	 * @throws BrokerModelException
 	 */
-	void onReqRealTimeBars(Tradestrategy tradestrategy)
+	void onReqRealTimeBars(Contract contract, boolean mktData)
 			throws BrokerModelException;
 
 	/**
@@ -231,13 +224,22 @@ public interface BrokerModel {
 	boolean isRealtimeBarsRunning(Contract contract);
 
 	/**
-	 * Method isMarketDataRunning.
+	 * Method isHistoricalDataRunning.
 	 * 
 	 * @param contract
 	 *            Contract
 	 * @return boolean
 	 */
-	boolean isMarketDataRunning(Contract contract);
+	boolean isHistoricalDataRunning(Contract contract);
+
+	/**
+	 * Method isRealtimeBarsRunning.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @return boolean
+	 */
+	boolean isRealtimeBarsRunning(Tradestrategy tradestrategy);
 
 	/**
 	 * Method isHistoricalDataRunning.
@@ -268,6 +270,22 @@ public interface BrokerModel {
 	void onCancelRealtimeBars(Contract contract);
 
 	/**
+	 * Method onCancelRealtimeBars.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	void onCancelRealtimeBars(Tradestrategy tradestrategy);
+
+	/**
+	 * Method onCancelBrokerData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 */
+	void onCancelBrokerData(Contract contract);
+	
+	/**
 	 * Method onCancelBrokerData.
 	 * 
 	 * @param tradestrategy
@@ -295,9 +313,9 @@ public interface BrokerModel {
 	/**
 	 * Method getHistoricalData.
 	 * 
-	 * @return ConcurrentHashMap<Integer,Tradestrategy>
+	 * @return ConcurrentHashMap<Integer,Contract>
 	 */
-	ConcurrentHashMap<Integer, Tradestrategy> getHistoricalData();
+	ConcurrentHashMap<Integer, Contract> getHistoricalData();
 
 	/**
 	 * Method onPlaceOrder.
