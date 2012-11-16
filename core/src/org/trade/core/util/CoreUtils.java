@@ -37,8 +37,6 @@ package org.trade.core.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +51,6 @@ import javax.swing.text.SimpleAttributeSet;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.properties.CollectionUtilities;
-import org.trade.core.valuetype.Money;
 
 /**
  */
@@ -409,178 +406,6 @@ public class CoreUtils {
 	}
 
 	/**
-	 * Method nullSafeStringComparator.
-	 * 
-	 * @param one
-	 *            String
-	 * @param two
-	 *            String
-	 * @return int
-	 */
-	public static int nullSafeStringComparator(final String one,
-			final String two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-
-		return one.compareToIgnoreCase(two);
-	}
-
-	/**
-	 * Method nullSafeDateComparator.
-	 * 
-	 * @param one
-	 *            java.util.Date
-	 * @param two
-	 *            java.util.Date
-	 * @return int
-	 */
-	public static int nullSafeDateComparator(final java.util.Date one,
-			final java.util.Date two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-
-		return one.compareTo(two);
-	}
-
-	/**
-	 * Method nullSafeBooleanComparator.
-	 * 
-	 * @param one
-	 *            Boolean
-	 * @param two
-	 *            Boolean
-	 * @return int
-	 */
-	public static int nullSafeBooleanComparator(final Boolean one,
-			final Boolean two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-
-		return one.compareTo(two);
-	}
-
-	/**
-	 * Method nullSafeBigDecimalComparator.
-	 * 
-	 * @param one
-	 *            BigDecimal
-	 * @param two
-	 *            BigDecimal
-	 * @return int
-	 */
-	public static int nullSafeBigDecimalComparator(final BigDecimal one,
-			final BigDecimal two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-
-		return one.compareTo(two);
-	}
-
-	/**
-	 * Method nullSafeMoneyComparator.
-	 * 
-	 * @param one
-	 *            Money
-	 * @param two
-	 *            Money
-	 * @return int
-	 */
-	public static int nullSafeMoneyComparator(final Money one, final Money two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-
-		return one.compareTo(two);
-	}
-
-	/**
-	 * Method nullSafeBigIntegerComparator.
-	 * 
-	 * @param one
-	 *            BigInteger
-	 * @param two
-	 *            BigInteger
-	 * @return int
-	 */
-	public static int nullSafeBigIntegerComparator(final BigInteger one,
-			final BigInteger two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-		return one.compareTo(two);
-	}
-
-	/**
-	 * Method nullSafeIntegerComparator.
-	 * 
-	 * @param one
-	 *            Integer
-	 * @param two
-	 *            Integer
-	 * @return int
-	 */
-	public static int nullSafeIntegerComparator(final Integer one,
-			final Integer two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-		return one.compareTo(two);
-	}
-
-	/**
-	 * Method nullSafeObjectComparator.
-	 * 
-	 * @param one
-	 *            Object
-	 * @param two
-	 *            Object
-	 * @return int
-	 */
-	public static int nullSafeObjectComparator(final Object one,
-			final Object two) {
-		if (one == null ^ two == null) {
-			return (one == null) ? -1 : 1;
-		}
-
-		if (one == null && two == null) {
-			return 0;
-		}
-		return (one.equals(two) ? 1 : -1);
-	}
-
-	/**
 	 * Method nullSafeObjectComparator.
 	 * 
 	 * @param one
@@ -590,7 +415,7 @@ public class CoreUtils {
 	 * @return int
 	 */
 
-	public static <T> int nullSafeComparator(T one, T two) {
+	public static <T extends Comparable<T>> int nullSafeComparator(T one, T two) {
 		if (one == null ^ two == null) {
 			return (one == null) ? -1 : 1;
 		}
@@ -598,7 +423,6 @@ public class CoreUtils {
 		if (one == null && two == null) {
 			return 0;
 		}
-		return (one.equals(two) ? 1 : -1);
+		return one.compareTo(two);
 	}
-
 }

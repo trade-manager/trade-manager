@@ -596,7 +596,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @return int
 	 */
 	public int compareTo(final Percent other) {
-		return CoreUtils.nullSafeBigDecimalComparator(
+		return CoreUtils.nullSafeComparator(
 				this.getBigDecimalValue(), other.getBigDecimalValue());
 	}
 
@@ -607,7 +607,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @return int
 	 */
 	public int compare(Percent o1, Percent o2) {
-		int returnVal = CoreUtils.nullSafeBigDecimalComparator(
+		int returnVal = CoreUtils.nullSafeComparator(
 				o1.getBigDecimalValue(), o2.getBigDecimalValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;

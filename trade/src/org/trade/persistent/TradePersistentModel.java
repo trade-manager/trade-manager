@@ -755,7 +755,7 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 			if (!tradeOrder.getIsFilled()
-					&& CoreUtils.nullSafeIntegerComparator(
+					&& CoreUtils.nullSafeComparator(
 							tradeOrder.getQuantity(),
 							tradeOrder.getFilledQuantity()) == 0) {
 				tradeOrder.setIsFilled(true);
@@ -808,7 +808,7 @@ public class TradePersistentModel implements PersistentModel {
 			 */
 			Money comms = new Money(totalCommission);
 			if ((totalFilledQuantity > 0 && CoreUtils
-					.nullSafeIntegerComparator(totalFilledQuantity,
+					.nullSafeComparator(totalFilledQuantity,
 							trade.getTotalQuantity()) != 0)) {
 				trade.setTotalQuantity(totalFilledQuantity);
 				trade.setOpenQuantity(totalOpenQuantity);
@@ -854,7 +854,7 @@ public class TradePersistentModel implements PersistentModel {
 				 * event after the order may have been filled) have changed
 				 * update the trade.
 				 */
-				if (CoreUtils.nullSafeBigDecimalComparator(
+				if (CoreUtils.nullSafeComparator(
 						comms.getBigDecimalValue(), trade.getTotalCommission()) != 0) {
 					trade.setTotalCommission(comms.getBigDecimalValue());
 					trade = (Trade) this.persistAspect(trade);

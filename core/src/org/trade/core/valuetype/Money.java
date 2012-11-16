@@ -522,7 +522,7 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * @return int
 	 */
 	public int compareTo(final Money other) {
-		return CoreUtils.nullSafeBigDecimalComparator(
+		return CoreUtils.nullSafeComparator(
 				this.getBigDecimalValue(), other.getBigDecimalValue());
 	}
 
@@ -534,7 +534,7 @@ public class Money extends ValueType implements Comparator<Money>,
 	 */
 	public int compare(Money o1, Money o2) {
 
-		int returnVal = CoreUtils.nullSafeBigDecimalComparator(
+		int returnVal = CoreUtils.nullSafeComparator(
 				o1.getBigDecimalValue(), o2.getBigDecimalValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;

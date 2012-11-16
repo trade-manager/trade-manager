@@ -1054,12 +1054,12 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		public int compare(TradeOrder o1, TradeOrder o2) {
 			m_ascending = true;
 			int returnVal = 0;
-			if (CoreUtils.nullSafeDateComparator(o1.getFilledDate(),
+			if (CoreUtils.nullSafeComparator(o1.getFilledDate(),
 					o2.getFilledDate()) == 0) {
-				returnVal = CoreUtils.nullSafeStringComparator(o1.getAction(),
+				returnVal = CoreUtils.nullSafeComparator(o1.getAction(),
 						o2.getAction());
 			} else {
-				returnVal = CoreUtils.nullSafeDateComparator(
+				returnVal = CoreUtils.nullSafeComparator(
 						o1.getFilledDate(), o2.getFilledDate());
 			}
 

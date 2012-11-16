@@ -201,7 +201,6 @@ public class Tradestrategy extends Aspect implements Serializable {
 		this.chartDays = chartDays;
 	}
 
-
 	/**
 	 * Method getStatus.
 	 * 
@@ -529,19 +528,18 @@ public class Tradestrategy extends Aspect implements Serializable {
 			m_ascending = true;
 			int returnVal = 0;
 
-			if (CoreUtils.nullSafeDateComparator(o1.getTradingday().getOpen(),
-					o2.getTradingday().getOpen()) == 0) {
-				if (CoreUtils.nullSafeStringComparator(o1.getSide(),
-						o2.getSide()) == 0) {
-					returnVal = CoreUtils.nullSafeStringComparator(
-							o1.getTier(), o2.getTier());
+			if (CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2
+					.getTradingday().getOpen()) == 0) {
+				if (CoreUtils.nullSafeComparator(o1.getSide(), o2.getSide()) == 0) {
+					returnVal = CoreUtils.nullSafeComparator(o1.getTier(),
+							o2.getTier());
 				} else {
-					returnVal = CoreUtils.nullSafeStringComparator(
-							o1.getSide(), o2.getSide());
+					returnVal = CoreUtils.nullSafeComparator(o1.getSide(),
+							o2.getSide());
 				}
 
 			} else {
-				returnVal = CoreUtils.nullSafeDateComparator(o1.getTradingday()
+				returnVal = CoreUtils.nullSafeComparator(o1.getTradingday()
 						.getOpen(), o2.getTradingday().getOpen());
 
 			}
@@ -552,25 +550,24 @@ public class Tradestrategy extends Aspect implements Serializable {
 			return returnVal;
 		}
 	};
-	
+
 	public static final Comparator<Tradestrategy> TRADINGDAY_CONTRACT = new Comparator<Tradestrategy>() {
 		public int compare(Tradestrategy o1, Tradestrategy o2) {
 			m_ascending = true;
 			int returnVal = 0;
 
-			if (CoreUtils.nullSafeDateComparator(o1.getTradingday().getOpen(),
-					o2.getTradingday().getOpen()) == 0) {
-				if (CoreUtils.nullSafeObjectComparator(o1.getContract(),
-						o2.getContract()) == 0) {
-					returnVal = CoreUtils.nullSafeIntegerComparator(
-							o1.getChartDays(), o2.getChartDays());
+			if (CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2
+					.getTradingday().getOpen()) == 0) {
+				if (o1.getContract().equals(o2.getContract())) {
+					returnVal = CoreUtils.nullSafeComparator(o1.getChartDays(),
+							o2.getChartDays());
 				} else {
-					returnVal = CoreUtils.nullSafeObjectComparator(
-							o1.getContract(), o2.getContract());
+					returnVal = o1.getContract().getSymbol()
+							.compareTo(o2.getContract().getSymbol());
 				}
 
 			} else {
-				returnVal = CoreUtils.nullSafeDateComparator(o1.getTradingday()
+				returnVal = CoreUtils.nullSafeComparator(o1.getTradingday()
 						.getOpen(), o2.getTradingday().getOpen());
 
 			}

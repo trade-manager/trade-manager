@@ -816,13 +816,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			 * twice on order fills.
 			 */
 			boolean changed = false;
-			if (CoreUtils.nullSafeStringComparator(
-					transientInstance.getStatus(), status.toUpperCase()) != 0) {
+			if (CoreUtils.nullSafeComparator(transientInstance.getStatus(),
+					status.toUpperCase()) != 0) {
 				transientInstance.setStatus(status.toUpperCase());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeStringComparator(
-					transientInstance.getWhyHeld(), whyHeld) != 0) {
+			if (CoreUtils.nullSafeComparator(transientInstance.getWhyHeld(),
+					whyHeld) != 0) {
 				transientInstance.setWhyHeld(whyHeld);
 				changed = true;
 			}
@@ -1046,7 +1046,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 							this.fireHistoricalDataComplete(tradestrategy);
 							onReqRealTimeBars(contract, false);
 						} else {
-							this.onCancelBrokerData(contract);
+							this.onCancelBrokerData(tradestrategy);
 						}
 					} else {
 
@@ -1171,117 +1171,116 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 		boolean changed = false;
 		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-		if (CoreUtils.nullSafeIntegerComparator(order.getOrderKey(),
-				ibOrder.m_orderId) == 0) {
-			if (CoreUtils.nullSafeStringComparator(order.getStatus(),
+		if (CoreUtils
+				.nullSafeComparator(order.getOrderKey(), ibOrder.m_orderId) == 0) {
+			if (CoreUtils.nullSafeComparator(order.getStatus(),
 					ibOrderState.m_status.toUpperCase()) != 0) {
 				order.setStatus(ibOrderState.m_status.toUpperCase());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeStringComparator(order.getWarningMessage(),
+			if (CoreUtils.nullSafeComparator(order.getWarningMessage(),
 					ibOrderState.m_warningText) != 0) {
 				order.setWarningMessage(ibOrderState.m_warningText);
 				changed = true;
 			}
 			Money comms = new Money(ibOrderState.m_commission);
-			if (CoreUtils.nullSafeMoneyComparator(comms, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeBigDecimalComparator(
-							order.getCommission(), comms.getBigDecimalValue()) != 0) {
+			if (CoreUtils
+					.nullSafeComparator(comms, new Money(Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(order.getCommission(),
+							comms.getBigDecimalValue()) != 0) {
 				order.setCommission(comms.getBigDecimalValue());
 				changed = true;
 
 			}
-			if (CoreUtils.nullSafeIntegerComparator(order.getClientId(),
+			if (CoreUtils.nullSafeComparator(order.getClientId(),
 					ibOrder.m_clientId) != 0) {
 				order.setClientId(ibOrder.m_clientId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeStringComparator(order.getAction(),
+			if (CoreUtils.nullSafeComparator(order.getAction(),
 					ibOrder.m_action) != 0) {
 				order.setAction(ibOrder.m_action);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeIntegerComparator(order.getQuantity(),
+			if (CoreUtils.nullSafeComparator(order.getQuantity(),
 					ibOrder.m_totalQuantity) != 0) {
 				order.setQuantity(ibOrder.m_totalQuantity);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeStringComparator(order.getOrderType(),
+			if (CoreUtils.nullSafeComparator(order.getOrderType(),
 					ibOrder.m_orderType.replaceAll("\\s+", "")) != 0) {
 				order.setOrderType(ibOrder.m_orderType.replaceAll("\\s+", ""));
 				changed = true;
 			}
 			Money lmtPrice = new Money(ibOrder.m_lmtPrice);
-			if (CoreUtils.nullSafeMoneyComparator(lmtPrice, new Money(
+			if (CoreUtils.nullSafeComparator(lmtPrice, new Money(
 					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeBigDecimalComparator(
-							order.getLimitPrice(),
+					&& CoreUtils.nullSafeComparator(order.getLimitPrice(),
 							lmtPrice.getBigDecimalValue()) != 0) {
 				order.setLimitPrice(lmtPrice.getBigDecimalValue());
 				changed = true;
 			}
 			Money auxPrice = new Money(ibOrder.m_auxPrice);
-			if (CoreUtils.nullSafeMoneyComparator(auxPrice, new Money(
+			if (CoreUtils.nullSafeComparator(auxPrice, new Money(
 					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeBigDecimalComparator(
-							order.getAuxPrice(), auxPrice.getBigDecimalValue()) != 0) {
+					&& CoreUtils.nullSafeComparator(order.getAuxPrice(),
+							auxPrice.getBigDecimalValue()) != 0) {
 				order.setAuxPrice(auxPrice.getBigDecimalValue());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeStringComparator(order.getTimeInForce(),
+			if (CoreUtils.nullSafeComparator(order.getTimeInForce(),
 					ibOrder.m_tif) != 0) {
 				order.setTimeInForce(ibOrder.m_tif);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeStringComparator(order.getOcaGroupName(),
+			if (CoreUtils.nullSafeComparator(order.getOcaGroupName(),
 					ibOrder.m_ocaGroup) != 0) {
 				order.setOcaGroupName(ibOrder.m_ocaGroup);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeIntegerComparator(order.getOcaType(),
+			if (CoreUtils.nullSafeComparator(order.getOcaType(),
 					ibOrder.m_ocaType) != 0) {
 				order.setOcaType(ibOrder.m_ocaType);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeStringComparator(order.getOrderReference(),
+			if (CoreUtils.nullSafeComparator(order.getOrderReference(),
 					ibOrder.m_orderRef) != 0) {
 				order.setOrderReference(ibOrder.m_orderRef);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeIntegerComparator(order.getPermId(),
+			if (CoreUtils.nullSafeComparator(order.getPermId(),
 					ibOrder.m_permId) != 0) {
 				order.setPermId(ibOrder.m_permId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeIntegerComparator(order.getParentId(),
+			if (CoreUtils.nullSafeComparator(order.getParentId(),
 					ibOrder.m_parentId) != 0) {
 				order.setParentId(ibOrder.m_parentId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeBooleanComparator(order.getTransmit(),
+			if (CoreUtils.nullSafeComparator(order.getTransmit(),
 					ibOrder.m_transmit) != 0) {
 				order.setTransmit(ibOrder.m_transmit);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeIntegerComparator(order.getDisplayQuantity(),
+			if (CoreUtils.nullSafeComparator(order.getDisplayQuantity(),
 					ibOrder.m_displaySize) != 0) {
 				order.setDisplayQuantity(ibOrder.m_displaySize);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeIntegerComparator(order.getTriggerMethod(),
+			if (CoreUtils.nullSafeComparator(order.getTriggerMethod(),
 					ibOrder.m_triggerMethod) != 0) {
 				order.setTriggerMethod(ibOrder.m_triggerMethod);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeBooleanComparator(order.getHidden(),
+			if (CoreUtils.nullSafeComparator(order.getHidden(),
 					ibOrder.m_hidden) != 0) {
 				order.setHidden(ibOrder.m_hidden);
 				changed = true;
 			}
 			if (null != ibOrder.m_goodAfterTime) {
 				Date goodAfterTime = m_sdfGMT.parse(ibOrder.m_goodAfterTime);
-				if (CoreUtils.nullSafeDateComparator(order.getGoodAfterTime(),
+				if (CoreUtils.nullSafeComparator(order.getGoodAfterTime(),
 						goodAfterTime) != 0) {
 					order.setGoodAfterTime(goodAfterTime);
 					changed = true;
@@ -1290,7 +1289,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 			if (null != ibOrder.m_goodTillDate) {
 				Date goodTillDate = m_sdfGMT.parse(ibOrder.m_goodTillDate);
-				if (CoreUtils.nullSafeDateComparator(order.getGoodTillTime(),
+				if (CoreUtils.nullSafeComparator(order.getGoodTillTime(),
 						goodTillDate) != 0) {
 					order.setGoodTillTime(goodTillDate);
 					changed = true;
@@ -1298,13 +1297,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			}
 			Integer overridePercentageConstraints = new Integer(
 					(ibOrder.m_overridePercentageConstraints ? 1 : 0));
-			if (CoreUtils.nullSafeIntegerComparator(
-					order.getOverrideConstraints(),
+			if (CoreUtils.nullSafeComparator(order.getOverrideConstraints(),
 					overridePercentageConstraints) != 0) {
 				order.setOverrideConstraints(overridePercentageConstraints);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeBooleanComparator(order.getAllOrNothing(),
+			if (CoreUtils.nullSafeComparator(order.getAllOrNothing(),
 					ibOrder.m_allOrNone) != 0) {
 				order.setAllOrNothing(ibOrder.m_allOrNone);
 				changed = true;
@@ -1391,24 +1389,26 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			}
 			OrderState state = (OrderState) objectToCompare;
 
-			if (CoreUtils.nullSafeMoneyComparator(new Money(m_commission),
+			if (CoreUtils.nullSafeComparator(new Money(m_commission),
 					new Money(state.m_commission)) != 0
-					|| (CoreUtils.nullSafeMoneyComparator(new Money(
-							m_minCommission), new Money(state.m_minCommission)) != 0)
-					|| (CoreUtils.nullSafeMoneyComparator(new Money(
-							m_maxCommission), new Money(state.m_maxCommission)) != 0)) {
+					|| (CoreUtils.nullSafeComparator(
+							new Money(m_minCommission), new Money(
+									state.m_minCommission)) != 0)
+					|| (CoreUtils.nullSafeComparator(
+							new Money(m_maxCommission), new Money(
+									state.m_maxCommission)) != 0)) {
 				return false;
 			}
 
-			if ((CoreUtils.nullSafeStringComparator(m_status, state.m_status) != 0)
-					|| (CoreUtils.nullSafeStringComparator(m_initMargin,
+			if ((CoreUtils.nullSafeComparator(m_status, state.m_status) != 0)
+					|| (CoreUtils.nullSafeComparator(m_initMargin,
 							state.m_initMargin) != 0)
-					|| (CoreUtils.nullSafeStringComparator(m_maintMargin,
+					|| (CoreUtils.nullSafeComparator(m_maintMargin,
 							state.m_maintMargin) != 0)
-					|| (CoreUtils.nullSafeStringComparator(m_equityWithLoan,
+					|| (CoreUtils.nullSafeComparator(m_equityWithLoan,
 							state.m_equityWithLoan) != 0)
-					|| (CoreUtils.nullSafeStringComparator(
-							m_commissionCurrency, state.m_commissionCurrency) != 0)) {
+					|| (CoreUtils.nullSafeComparator(m_commissionCurrency,
+							state.m_commissionCurrency) != 0)) {
 				return false;
 			}
 			return true;

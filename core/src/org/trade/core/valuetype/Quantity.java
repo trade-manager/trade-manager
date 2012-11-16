@@ -458,7 +458,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 * @return int
 	 */
 	public int compareTo(final Quantity other) {
-		return CoreUtils.nullSafeBigIntegerComparator(
+		return CoreUtils.nullSafeComparator(
 				this.getBigIntegerValue(), other.getBigIntegerValue());
 	}
 
@@ -470,7 +470,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 */
 	public int compare(Quantity o1, Quantity o2) {
 
-		int returnVal = CoreUtils.nullSafeBigIntegerComparator(
+		int returnVal = CoreUtils.nullSafeComparator(
 				o1.getBigIntegerValue(), o2.getBigIntegerValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;

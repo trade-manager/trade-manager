@@ -318,7 +318,7 @@ public class Tradingday extends Aspect implements java.io.Serializable {
 			int returnVal = 0;
 			m_ascending = false;
 
-			returnVal = CoreUtils.nullSafeDateComparator(o1.getOpen(),
+			returnVal = CoreUtils.nullSafeComparator(o1.getOpen(),
 					o2.getOpen());
 
 			if (m_ascending.equals(Boolean.FALSE)) {

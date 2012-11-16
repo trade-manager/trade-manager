@@ -37,6 +37,7 @@ package org.trade.core.dao;
 
 import java.io.Serializable;
 
+
 /**
  */
 public abstract class Aspect extends Object implements Serializable {
@@ -55,7 +56,9 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Constructor for Aspect.
-	 * @param context Object
+	 * 
+	 * @param context
+	 *            Object
 	 */
 	public Aspect(Object context) {
 		m_context = context;
@@ -63,6 +66,7 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Method getContext.
+	 * 
 	 * @return Object
 	 */
 	public Object getContext() {
@@ -71,6 +75,7 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Method getId.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getId() {
@@ -79,7 +84,9 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Method setId.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 */
 	public void setId(Integer id) {
 		this.id = id;
@@ -87,6 +94,7 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Method getVersion.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getVersion() {
@@ -95,7 +103,9 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Method setVersion.
-	 * @param version Integer
+	 * 
+	 * @param version
+	 *            Integer
 	 */
 	public void setVersion(Integer version) {
 		this.version = version;
@@ -103,7 +113,9 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Method equals.
-	 * @param objectToCompare Object
+	 * 
+	 * @param objectToCompare
+	 *            Object
 	 * @return boolean
 	 */
 	public boolean equals(Object objectToCompare) {
@@ -128,6 +140,7 @@ public abstract class Aspect extends Object implements Serializable {
 
 	/**
 	 * Method hashCode.
+	 * 
 	 * @return int
 	 */
 	public int hashCode() {

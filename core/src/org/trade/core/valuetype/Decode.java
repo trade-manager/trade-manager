@@ -582,7 +582,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * @return int
 	 */
 	public int compareTo(final Decode other) {
-		return CoreUtils.nullSafeStringComparator(this.getDisplayName(),
+		return CoreUtils.nullSafeComparator(this.getDisplayName(),
 				other.getDisplayName());
 	}
 
@@ -593,7 +593,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * @return int
 	 */
 	public int compare(Decode o1, Decode o2) {
-		int returnVal = CoreUtils.nullSafeStringComparator(o1.getDisplayName(),
+		int returnVal = CoreUtils.nullSafeComparator(o1.getDisplayName(),
 				o2.getDisplayName());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;

@@ -213,14 +213,14 @@ public class Date extends ValueType implements Comparator<Date>,
 	 * @return int
 	 */
 	public int compareTo(final Date other) {
-		int result = CoreUtils.nullSafeDateComparator(this.getDate(),
+		int result = CoreUtils.nullSafeComparator(this.getDate(),
 				other.getDate());
 		if (result != 0) {
 			return result;
 		}
 
 		return CoreUtils
-				.nullSafeDateComparator(this.getDate(), other.getDate());
+				.nullSafeComparator(this.getDate(), other.getDate());
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 * @return int
 	 */
 	public int compare(Date o1, Date o2) {
-		int returnVal = CoreUtils.nullSafeDateComparator(o1.getDate(),
+		int returnVal = CoreUtils.nullSafeComparator(o1.getDate(),
 				o2.getDate());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;

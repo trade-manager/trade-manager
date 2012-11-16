@@ -73,29 +73,29 @@ public class CoreUtilsTest extends TestCase {
 	public void testNullSafe() {
 		try {
 
-			int returnVal = CoreUtils.nullSafeBigDecimalComparator(null,
+			int returnVal = CoreUtils.nullSafeComparator(null,
 					new BigDecimal(1.23));
 			assertEquals(-1, returnVal);
 
-			returnVal = CoreUtils.nullSafeBigDecimalComparator(new BigDecimal(
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(
 					1.23), null);
 			assertEquals(1, returnVal);
 
-			returnVal = CoreUtils.nullSafeBigDecimalComparator(null, null);
+			returnVal = CoreUtils.nullSafeComparator(null, null);
 			assertEquals(0, returnVal);
 
-			returnVal = CoreUtils.nullSafeBigDecimalComparator(new BigDecimal(
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(
 					1.23), new BigDecimal(1.24));
 			assertEquals(-1, returnVal);
 			
-			returnVal = CoreUtils.nullSafeBigDecimalComparator(new BigDecimal(
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(
 					1.25), new BigDecimal(1.24));
 			assertEquals(1, returnVal);
 
-			returnVal = CoreUtils.nullSafeIntegerComparator(null, 1);
+			returnVal = CoreUtils.nullSafeComparator(null, 1);
 			assertEquals(-1, returnVal);
 
-			returnVal = CoreUtils.nullSafeStringComparator(Action.BUY, "BUY");
+			returnVal = CoreUtils.nullSafeComparator(Action.BUY, "BUY");
 			assertEquals(0, returnVal);
 
 		} catch (Exception ex) {

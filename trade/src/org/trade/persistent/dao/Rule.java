@@ -269,7 +269,7 @@ public class Rule extends Aspect implements java.io.Serializable {
 
 	public static final Comparator<Rule> VERSION_ORDER = new Comparator<Rule>() {
 		public int compare(Rule o1, Rule o2) {
-			return CoreUtils.nullSafeIntegerComparator(o1.getVersion(),
+			return CoreUtils.nullSafeComparator(o1.getVersion(),
 					o2.getVersion());
 		}
 	};

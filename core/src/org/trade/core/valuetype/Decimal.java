@@ -520,7 +520,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	 * @return int
 	 */
 	public int compareTo(final Decimal other) {
-		return CoreUtils.nullSafeBigDecimalComparator(
+		return CoreUtils.nullSafeComparator(
 				this.getBigDecimalValue(), other.getBigDecimalValue());
 	}
 
@@ -532,7 +532,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	 */
 	public int compare(Decimal o1, Decimal o2) {
 
-		int returnVal = CoreUtils.nullSafeBigDecimalComparator(
+		int returnVal = CoreUtils.nullSafeComparator(
 				o1.getBigDecimalValue(), o2.getBigDecimalValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
