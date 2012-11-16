@@ -579,4 +579,26 @@ public class CoreUtils {
 		}
 		return (one.equals(two) ? 1 : -1);
 	}
+
+	/**
+	 * Method nullSafeObjectComparator.
+	 * 
+	 * @param one
+	 *            T
+	 * @param two
+	 *            T
+	 * @return int
+	 */
+
+	public static <T> int nullSafeComparator(T one, T two) {
+		if (one == null ^ two == null) {
+			return (one == null) ? -1 : 1;
+		}
+
+		if (one == null && two == null) {
+			return 0;
+		}
+		return (one.equals(two) ? 1 : -1);
+	}
+
 }
