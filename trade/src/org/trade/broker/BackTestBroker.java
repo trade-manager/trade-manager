@@ -446,7 +446,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		this.tradestrategy.getDatasetContainer().clearBaseCandleSeries();
 		this.tradestrategy.setDatasetContainer(null);
 		_log.info("BackTestBroker done for: "
-				+ tradestrategy.getContract().getSymbol());
+				+ tradestrategy.getContract().getSymbol()
+				+ " idTradestrategy: "
+				+ this.tradestrategy.getIdTradeStrategy());
 	}
 
 	/**

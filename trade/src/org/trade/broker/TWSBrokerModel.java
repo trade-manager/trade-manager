@@ -685,25 +685,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	/**
 	 * Method onCancelBrokerData.
 	 * 
-	 * @param contract
-	 *            Contract
-	 * @see org.trade.broker.BrokerModel#onCancelBrokerData(Contract)
-	 */
-	public void onCancelBrokerData(Contract contract) {
-		synchronized (m_historyDataRequests) {
-			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
-				if (m_client.isConnected()) {
-					m_client.cancelHistoricalData(contract.getIdContract());
-				}
-				m_historyDataRequests.remove(contract.getIdContract());
-				m_historyDataRequests.notifyAll();
-			}
-		}
-	}
-
-	/**
-	 * Method onCancelBrokerData.
-	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
@@ -720,7 +701,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 				}
 				if (contract.getTradestrategies().isEmpty()) {
-					onCancelBrokerData(contract);
+					if (m_client.isConnected()) {
+						m_client.cancelHistoricalData(contract.getIdContract());
+					}
+					m_historyDataRequests.remove(contract.getIdContract());
+					m_historyDataRequests.notifyAll();
 				}
 			}
 		}
@@ -846,16 +831,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		}
 	}
 
-	/*
+	/**
+	 * Method execDetails.
+	 * 
 	 * When orders are filled the the exceDetails is fired followed by
 	 * openOrder() and orderStatus() the order methods fire twice. openOrder
 	 * gives us the commission amount on the second fire and order status from
 	 * both.
-	 * 
-	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
-	 */
-	/**
-	 * Method execDetails.
 	 * 
 	 * @param reqId
 	 *            int
@@ -960,14 +942,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		}
 	}
 
-	/*
-	 * This method is called to feed in open orders.
-	 * 
-	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
-	 */
-
 	/**
 	 * Method openOrder.
+	 * 
+	 * This method is called to feed in open orders.
 	 * 
 	 * @param orderId
 	 *            int
@@ -977,8 +955,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.Order
 	 * @param orderState
 	 *            OrderState
-	 * @see com.ib.client.EWrapper#openOrder(int, com.ib.client.Contract,
-	 *      com.ib.client.Order, OrderState)
+	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
 	public void openOrder(int orderId, com.ib.client.Contract contractIB,
 			com.ib.client.Order order, OrderState orderState) {
@@ -1057,14 +1034,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		this.fireOpenOrderEnd(openOrders);
 	}
 
-	/*
-	 * This method is called whenever the status of an order changes. It is also
-	 * fired after reconnecting to TWS if the client has any open orders.
-	 * 
-	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
-	 */
 	/**
 	 * Method orderStatus.
+	 * 
+	 * This method is called whenever the status of an order changes. It is also
+	 * fired after reconnecting to TWS if the client has any open orders.
 	 * 
 	 * @param orderId
 	 *            int
@@ -1086,8 +1060,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            int
 	 * @param whyHeld
 	 *            String
-	 * @see com.ib.client.EWrapper#orderStatus(int, String, int, int, double,
-	 *      int, int, double, int, String)
+	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
 	public void orderStatus(int orderId, String status, int filled,
 			int remaining, double avgFillPrice, int permId, int parentId,
@@ -1107,13 +1080,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 * twice on order fills.
 			 */
 			boolean changed = false;
-			if (CoreUtils.nullSafeComparator(
-					transientInstance.getStatus(), status.toUpperCase()) != 0) {
+			if (CoreUtils.nullSafeComparator(transientInstance.getStatus(),
+					status.toUpperCase()) != 0) {
 				transientInstance.setStatus(status.toUpperCase());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientInstance.getWhyHeld(), whyHeld) != 0) {
+			if (CoreUtils.nullSafeComparator(transientInstance.getWhyHeld(),
+					whyHeld) != 0) {
 				transientInstance.setWhyHeld(whyHeld);
 				changed = true;
 			}
@@ -2343,8 +2316,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		boolean changed = false;
 		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-		if (CoreUtils.nullSafeComparator(order.getOrderKey(),
-				ibOrder.m_orderId) == 0) {
+		if (CoreUtils
+				.nullSafeComparator(order.getOrderKey(), ibOrder.m_orderId) == 0) {
 			if (CoreUtils.nullSafeComparator(order.getStatus(),
 					ibOrderState.m_status.toUpperCase()) != 0) {
 				order.setStatus(ibOrderState.m_status.toUpperCase());
@@ -2356,10 +2329,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				changed = true;
 			}
 			Money comms = new Money(ibOrderState.m_commission);
-			if (CoreUtils.nullSafeComparator(comms, new Money(
-					Double.MAX_VALUE)) != 0) {
-				if (CoreUtils.nullSafeComparator(
-						order.getCommission(), comms.getBigDecimalValue()) != 0) {
+			if (CoreUtils
+					.nullSafeComparator(comms, new Money(Double.MAX_VALUE)) != 0) {
+				if (CoreUtils.nullSafeComparator(order.getCommission(),
+						comms.getBigDecimalValue()) != 0) {
 					order.setCommission(comms.getBigDecimalValue());
 					changed = true;
 				}
@@ -2388,8 +2361,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			Money lmtPrice = new Money(ibOrder.m_lmtPrice);
 			if (CoreUtils.nullSafeComparator(lmtPrice, new Money(
 					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(
-							order.getLimitPrice(),
+					&& CoreUtils.nullSafeComparator(order.getLimitPrice(),
 							lmtPrice.getBigDecimalValue()) != 0) {
 				order.setLimitPrice(lmtPrice.getBigDecimalValue());
 				changed = true;
@@ -2397,8 +2369,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			Money auxPrice = new Money(ibOrder.m_auxPrice);
 			if (CoreUtils.nullSafeComparator(auxPrice, new Money(
 					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(
-							order.getAuxPrice(), auxPrice.getBigDecimalValue()) != 0) {
+					&& CoreUtils.nullSafeComparator(order.getAuxPrice(),
+							auxPrice.getBigDecimalValue()) != 0) {
 				order.setAuxPrice(auxPrice.getBigDecimalValue());
 				changed = true;
 			}
@@ -2471,8 +2443,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 			Integer overridePercentageConstraints = new Integer(
 					(ibOrder.m_overridePercentageConstraints ? 1 : 0));
-			if (CoreUtils.nullSafeComparator(
-					order.getOverrideConstraints(),
+			if (CoreUtils.nullSafeComparator(order.getOverrideConstraints(),
 					overridePercentageConstraints) != 0) {
 				order.setOverrideConstraints(overridePercentageConstraints);
 				changed = true;

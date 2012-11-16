@@ -489,7 +489,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		removeAllMessageListener();
 		this.datasetContainer.getBaseCandleSeries().removeChangeListener(this);
 		_log.info("Rule engine done: " + getSymbol() + " class: "
-				+ this.getClass().getName());
+				+ this.getClass().getName() + " idTradestrategy: "
+				+ this.tradestrategy.getIdTradeStrategy());
 	}
 
 	/*

@@ -610,15 +610,16 @@ public class Contract extends Aspect implements java.io.Serializable {
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
-	public void removeTradestrategy(Tradestrategy tradestrategy) {
+	public boolean removeTradestrategy(Tradestrategy tradestrategy) {
 		for (ListIterator<Tradestrategy> itemIter = this.tradestrategies
 				.listIterator(); itemIter.hasNext();) {
 			Tradestrategy item = itemIter.next();
 			if (item.equals(tradestrategy)) {
 				itemIter.remove();
-				break;
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -626,7 +627,7 @@ public class Contract extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return List<Tradestrategy>
 	 */
-//	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	// @OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
 	@Transient
 	public List<Tradestrategy> getTradestrategies() {
 		return this.tradestrategies;

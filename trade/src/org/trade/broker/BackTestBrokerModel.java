@@ -38,6 +38,7 @@ package org.trade.broker;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ListIterator;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -293,8 +294,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			 */
 			// if (!tradestrategy.getDatasetContainer().isRunning())
 			// tradestrategy.getDatasetContainer().execute();
-
-			m_historyDataRequests.put(contract.getIdContract(), contract);
+			synchronized (m_historyDataRequests) {
+				m_historyDataRequests.put(contract.getIdContract(), contract);
+			}
 
 			if (this.isBrokerDataOnly()) {
 				/*
@@ -342,7 +344,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 						false);
 			}
 
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
 			throw new BrokerModelException(contract.getIdContract(), 3020,
 					"Error broker data Symbol: " + contract.getSymbol()
 							+ " Msg: " + ex.getMessage());
@@ -475,21 +477,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	/**
 	 * Method onCancelBrokerData.
 	 * 
-	 * @param contract
-	 *            Contract
-	 */
-	public void onCancelBrokerData(Contract contract) {
-		synchronized (m_historyDataRequests) {
-			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
-				m_historyDataRequests.remove(contract.getIdContract());
-				m_historyDataRequests.notifyAll();
-			}
-		}
-	}
-
-	/**
-	 * Method onCancelBrokerData.
-	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
@@ -499,14 +486,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 					.getIdContract())) {
 				Contract contract = m_historyDataRequests.get(tradestrategy
 						.getContract().getIdContract());
-				for (Tradestrategy item : contract.getTradestrategies()) {
-					if (item.equals(tradestrategy)) {
-						contract.removeTradestrategy(tradestrategy);
-						break;
-					}
-				}
+				contract.removeTradestrategy(tradestrategy);
 				if (contract.getTradestrategies().isEmpty()) {
-					onCancelBrokerData(contract);
+					m_historyDataRequests.remove(contract.getIdContract());
+					m_historyDataRequests.notifyAll();
 				}
 			}
 		}
@@ -619,17 +602,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 		}
 	}
 
-	/*
+	/**
+	 * Method execDetails.
+	 * 
 	 * When orders are filled the the exceDetails is fired followed by
 	 * openOrder() and orderStatus() the order methods fire twice. openOrder
 	 * gives us the commission amount on the second fire and order status from
 	 * both. Apart from that I have no idea why they fire twice. I assume its to
 	 * do with the margin and account updates.
-	 * 
-	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
-	 */
-	/**
-	 * Method execDetails.
 	 * 
 	 * @param reqId
 	 *            int
@@ -637,6 +617,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	 *            com.ib.client.Contract
 	 * @param execution
 	 *            Execution
+	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
 	public void execDetails(int reqId, com.ib.client.Contract contractIB,
 			Execution execution) {
@@ -689,14 +670,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	}
 
-	/*
-	 * This method is called to feed in open orders.
-	 * 
-	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
-	 */
-
 	/**
 	 * Method openOrder.
+	 * 
+	 * This method is called to feed in open orders.
 	 * 
 	 * @param orderId
 	 *            int
@@ -706,6 +683,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	 *            com.ib.client.Order
 	 * @param orderState
 	 *            OrderState
+	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
 	public void openOrder(int orderId, com.ib.client.Contract contractIB,
 			com.ib.client.Order order, OrderState orderState) {
@@ -769,14 +747,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 
 	}
 
-	/*
-	 * This method is called whenever the status of an order changes. It is also
-	 * fired after reconnecting to TWS if the client has any open orders.
-	 * 
-	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
-	 */
 	/**
 	 * Method orderStatus.
+	 * 
+	 * This method is called whenever the status of an order changes. It is also
+	 * fired after reconnecting to TWS if the client has any open orders.
 	 * 
 	 * @param orderId
 	 *            int
@@ -798,6 +773,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 	 *            int
 	 * @param whyHeld
 	 *            String
+	 * 
+	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
 	public void orderStatus(int orderId, String status, int filled,
 			int remaining, double avgFillPrice, int permId, int parentId,
@@ -1020,8 +997,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			// strategy is selected to trade and that the market is open
 			if (m_historyDataRequests.containsKey(reqId)) {
 				Contract contract = m_historyDataRequests.get(reqId);
-				for (Tradestrategy tradestrategy : contract
-						.getTradestrategies()) {
+				for (ListIterator<Tradestrategy> itemIter = contract
+						.getTradestrategies().listIterator(); itemIter
+						.hasNext();) {
+					Tradestrategy tradestrategy = itemIter.next();
 
 					if (dateString.contains("finished-")) {
 
@@ -1046,7 +1025,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 							this.fireHistoricalDataComplete(tradestrategy);
 							onReqRealTimeBars(contract, false);
 						} else {
-							this.onCancelBrokerData(tradestrategy);
+							itemIter.remove();
 						}
 					} else {
 
@@ -1084,10 +1063,16 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 						}
 					}
 				}
+				synchronized (m_historyDataRequests) {
+					if (contract.getTradestrategies().isEmpty()) {
+						m_historyDataRequests.remove(contract.getIdContract());
+						m_historyDataRequests.notifyAll();
+					}
+				}
 			}
 
-		} catch (BrokerModelException e) {
-			error(reqId, 3130, e.getMessage());
+		} catch (BrokerModelException ex) {
+			error(reqId, 3130, ex.getMessage());
 		}
 	}
 
