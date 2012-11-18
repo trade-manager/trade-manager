@@ -2022,18 +2022,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						continue;
 					Collections.sort(tradingday.getTradestrategies(),
 							Tradestrategy.TRADINGDAY_CONTRACT);
-					Contract prevContract = null;
-					Integer prevBarSize = null;
-					Integer prevChartDays = null;
+					Contract currContract = null;
+					Integer currBarSize = null;
+					Integer currChartDays = null;
 
 					for (ListIterator<Tradestrategy> itemIter = tradingday
 							.getTradestrategies().listIterator(); itemIter
 							.hasNext();) {
 						Tradestrategy tradestrategy = itemIter.next();
-						if (null == prevContract) {
-							prevContract = tradestrategy.getContract();
-							prevChartDays = tradestrategy.getChartDays();
-							prevBarSize = tradestrategy.getBarSize();
+						if (null == currContract) {
+							currContract = tradestrategy.getContract();
+							currChartDays = tradestrategy.getChartDays();
+							currBarSize = tradestrategy.getBarSize();
 						}
 						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 							/*
@@ -2100,40 +2100,37 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							}
 
 							if (tradestrategy.getContract()
-									.equals(prevContract)
+									.equals(currContract)
 									&& tradestrategy.getBarSize().equals(
-											prevBarSize)
+											currBarSize)
 									&& tradestrategy.getChartDays().equals(
-											prevChartDays)) {
+											currChartDays)) {
+
 								if (m_brokerModel
-										.isHistoricalDataRunning(tradestrategy)) {
+										.isHistoricalDataRunning(currContract)) {
 									m_runningContractRequests.put(
 											tradestrategy.getIdTradeStrategy(),
 											tradestrategy);
 								} else {
-									prevContract
+									currContract
 											.addTradestrategy(tradestrategy);
 								}
-
-								_log.error("doInBackground Added: "
-										+ tradestrategy.toString());
-								if (itemIter.hasNext())
-									continue;
+							} else {
+								totalSumbitted = submitBrokerRequest(
+										currContract, tradingday.getOpen(),
+										tradingday.getClose(), currBarSize,
+										currChartDays, totalSumbitted);
+								currContract = tradestrategy.getContract();
+								currChartDays = tradestrategy.getChartDays();
+								currBarSize = tradestrategy.getBarSize();
+								currContract.addTradestrategy(tradestrategy);
 							}
-
-							totalSumbitted = submitBrokerRequest(prevContract,
-									tradingday.getOpen(),
-									tradingday.getClose(), prevBarSize,
-									prevChartDays, totalSumbitted);
-							_log.error("doInBackground total submitted: "
-									+ totalSumbitted + " Symbol: "
-									+ prevContract.getSymbol());
-							prevContract = tradestrategy.getContract();
-							prevChartDays = tradestrategy.getChartDays();
-							prevBarSize = tradestrategy.getBarSize();
 						}
-					}
 
+					}
+					totalSumbitted = submitBrokerRequest(currContract,
+							tradingday.getOpen(), tradingday.getClose(),
+							currBarSize, currChartDays, totalSumbitted);
 					/*
 					 * Every 30 submitted contracts try to run any that could
 					 * not be run due to a conflict.
@@ -2165,13 +2162,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.getHistoricalData().size()) / this.grandTotal) * 100d);
 						setProgress(percent);
 						this.brokerManagerModel.getHistoricalData().wait();
-						_log.error("Run down grandTotal: "
-								+ grandTotal
-								+ " totalSub: "
-								+ totalSumbitted
-								+ " to Process : "
-								+ this.brokerManagerModel.getHistoricalData()
-										.size());
 					}
 				}
 				setProgress(100);
