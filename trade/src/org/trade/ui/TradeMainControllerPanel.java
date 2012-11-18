@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1975,7 +1974,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private Tradingdays tradingdays = null;
 		private int grandTotal = 0;
 		private long startTime = 0;
-		private final ConcurrentHashMap<Integer, Tradestrategy> m_runningContractRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
+		private final ConcurrentHashMap<Integer, Contract> m_runningContractRequests = new ConcurrentHashMap<Integer, Contract>();
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -2025,16 +2024,26 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					Contract currContract = null;
 					Integer currBarSize = null;
 					Integer currChartDays = null;
-
-					for (ListIterator<Tradestrategy> itemIter = tradingday
-							.getTradestrategies().listIterator(); itemIter
-							.hasNext();) {
-						Tradestrategy tradestrategy = itemIter.next();
-						if (null == currContract) {
+					for (Tradestrategy tradestrategy : tradingday
+							.getTradestrategies()) {
+						if (tradestrategy.getContract().equals(currContract)
+								&& tradestrategy.getBarSize().equals(
+										currBarSize)
+								&& tradestrategy.getChartDays().equals(
+										currChartDays)) {
+							currContract.addTradestrategy(tradestrategy);
+						} else {
 							currContract = tradestrategy.getContract();
 							currChartDays = tradestrategy.getChartDays();
 							currBarSize = tradestrategy.getBarSize();
+							currContract.addTradestrategy(tradestrategy);
 						}
+					}
+
+					currContract = null;
+
+					for (Tradestrategy tradestrategy : tradingday
+							.getTradestrategies()) {
 						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 							/*
 							 * If running in test mode create the test broker
@@ -2098,35 +2107,25 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									}
 								}
 							}
-
-							if (tradestrategy.getContract()
-									.equals(currContract)
-									&& tradestrategy.getBarSize().equals(
-											currBarSize)
-									&& tradestrategy.getChartDays().equals(
-											currChartDays)) {
-
+							if (null != currContract
+									&& !tradestrategy.getContract().equals(
+											currContract)) {
 								if (m_brokerModel
 										.isHistoricalDataRunning(currContract)) {
 									m_runningContractRequests.put(
-											tradestrategy.getIdTradeStrategy(),
-											tradestrategy);
+											currContract.getIdContract(),
+											currContract);
 								} else {
-									currContract
-											.addTradestrategy(tradestrategy);
+									totalSumbitted = submitBrokerRequest(
+											currContract, tradingday.getOpen(),
+											tradingday.getClose(), currBarSize,
+											currChartDays, totalSumbitted);
 								}
-							} else {
-								totalSumbitted = submitBrokerRequest(
-										currContract, tradingday.getOpen(),
-										tradingday.getClose(), currBarSize,
-										currChartDays, totalSumbitted);
 								currContract = tradestrategy.getContract();
-								currChartDays = tradestrategy.getChartDays();
-								currBarSize = tradestrategy.getBarSize();
-								currContract.addTradestrategy(tradestrategy);
+							} else {
+								currContract = tradestrategy.getContract();
 							}
 						}
-
 					}
 					totalSumbitted = submitBrokerRequest(currContract,
 							tradingday.getOpen(), tradingday.getClose(),
@@ -2135,13 +2134,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					 * Every 30 submitted contracts try to run any that could
 					 * not be run due to a conflict.
 					 */
-					if (totalSumbitted > reSumbittedAt) {
-						reSumbittedAt = totalSumbitted + 30;
-						totalSumbitted = reSubmitContracts(totalSumbitted,
-								m_runningContractRequests);
-						_log.error("reSubmitContracts every 30 total: "
-								+ grandTotal + " totalSub: " + totalSumbitted);
-					}
+//					if (totalSumbitted > reSumbittedAt) {
+//						reSumbittedAt = totalSumbitted + 30;
+//						totalSumbitted = reSubmitContracts(totalSumbitted,
+//								m_runningContractRequests);
+//						_log.error("reSubmitContracts every 30 total: "
+//								+ grandTotal + " totalSub: " + totalSumbitted);
+//					}
 
 				}
 				if (!m_runningContractRequests.isEmpty()) {
@@ -2358,31 +2357,30 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @throws BrokerModelException
 		 * @throws InterruptedException
 		 */
-		private int reSubmitContracts(
-				int totalSumbitted,
-				ConcurrentHashMap<Integer, Tradestrategy> runningContractRequests)
+		private int reSubmitContracts(int totalSumbitted,
+				ConcurrentHashMap<Integer, Contract> runningContractRequests)
 				throws BrokerModelException, InterruptedException {
 			synchronized (this.brokerManagerModel.getHistoricalData()) {
 				while (((this.brokerManagerModel.getHistoricalData().size() > 0) && !this
 						.isCancelled()) || !runningContractRequests.isEmpty()) {
-					for (Integer idTradestrategy : runningContractRequests
-							.keySet()) {
-						Tradestrategy tradestrategy = runningContractRequests
-								.get(idTradestrategy);
-						if (!m_brokerModel
-								.isHistoricalDataRunning(tradestrategy)) {
-							totalSumbitted = submitBrokerRequest(
-									tradestrategy.getContract(), tradestrategy
+					for (Integer idContract : runningContractRequests.keySet()) {
+						Contract contract = runningContractRequests
+								.get(idContract);
+						if (!m_brokerModel.isHistoricalDataRunning(contract)) {
+							totalSumbitted = submitBrokerRequest(contract,
+									contract.getTradestrategies().get(0)
 											.getTradingday().getOpen(),
-									tradestrategy.getTradingday().getClose(),
-									tradestrategy.getBarSize(),
-									tradestrategy.getChartDays(),
-									totalSumbitted);
+									contract.getTradestrategies().get(0)
+											.getTradingday().getClose(),
+									contract.getTradestrategies().get(0)
+											.getBarSize(), contract
+											.getTradestrategies().get(0)
+											.getChartDays(), totalSumbitted);
 
 							_log.error("reSubmitContracts total submitted: "
 									+ totalSumbitted + " Symbol: "
-									+ tradestrategy.getContract().getSymbol());
-							runningContractRequests.remove(idTradestrategy);
+									+ contract.getSymbol());
+							runningContractRequests.remove(idContract);
 						}
 					}
 					for (Contract contract : this.brokerManagerModel
