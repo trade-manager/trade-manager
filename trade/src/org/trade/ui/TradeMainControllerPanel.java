@@ -2362,7 +2362,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 				if (m_brokerModel.isHistoricalDataRunning(tradestrategy
 						.getContract())) {
-					reProcessTradingday.addTradestrategy(tradestrategy);
+					if (!reProcessTradingday.existTradestrategy(tradestrategy))
+						reProcessTradingday.addTradestrategy(tradestrategy);
 				} else {
 					toProcessTradingday.addTradestrategy(tradestrategy);
 					if (tradestrategy.getContract().equals(currContract)
@@ -2377,6 +2378,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						currContract.addTradestrategy(tradestrategy);
 					}
 				}
+			}
+			for (Tradestrategy tradestrategy : toProcessTradingday.getTradestrategies()) {
+				if (reProcessTradingday.existTradestrategy(tradestrategy))
+					reProcessTradingday.removeTradestrategy(tradestrategy);	
 			}
 			return toProcessTradingday;
 		}

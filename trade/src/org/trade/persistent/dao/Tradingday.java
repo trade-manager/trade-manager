@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -311,6 +312,24 @@ public class Tradingday extends Aspect implements java.io.Serializable,
 	}
 
 	/**
+	 * Method removeTradestrategies.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public boolean removeTradestrategy(Tradestrategy tradestrategy) {
+		for (ListIterator<Tradestrategy> itemIter = this.tradestrategies
+				.listIterator(); itemIter.hasNext();) {
+			Tradestrategy item = itemIter.next();
+			if (item.equals(tradestrategy)) {
+				itemIter.remove();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Method getCandles.
 	 * 
 	 * @return List<Candle>
@@ -474,11 +493,10 @@ public class Tradingday extends Aspect implements java.io.Serializable,
 	 */
 	public Tradingday clone() throws CloneNotSupportedException {
 
-			Tradingday tradingday = (Tradingday) super.clone();
-			List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
-					0);
-			tradingday.setTradestrategies(tradestrategies);
-			return tradingday;
+		Tradingday tradingday = (Tradingday) super.clone();
+		List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
+		tradingday.setTradestrategies(tradestrategies);
+		return tradingday;
 	}
 
 	public void clear() {
