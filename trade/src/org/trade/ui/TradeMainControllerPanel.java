@@ -2242,9 +2242,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Contract prevContract = null;
 			Integer prevBarSize = null;
 			Integer prevChartDays = null;
-			for (ListIterator<Tradestrategy> itemIter = tradingday
-					.getTradestrategies().listIterator(); itemIter.hasNext();) {
-				Tradestrategy tradestrategy = itemIter.next();
+			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
+
 				if (null == prevContract) {
 					prevContract = tradestrategy.getContract();
 					prevBarSize = tradestrategy.getBarSize();
@@ -2318,6 +2317,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 			}
+			totalSumbitted = submitBrokerRequest(prevContract,
+					tradingday.getOpen(), tradingday.getClose(), prevBarSize,
+					prevChartDays, totalSumbitted);
 			return totalSumbitted;
 		}
 
