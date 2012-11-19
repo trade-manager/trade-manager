@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -2007,7 +2006,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				this.startTime = System.currentTimeMillis();
 				int totalSumbitted = 0;
-				int reSumbittedAt = 30;
+				int reSumbittedAt = 20;
 				// Initialize the progress bar
 				getProgressBar().setMaximum(100);
 				setProgress(0);
@@ -2026,8 +2025,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									m_runningContractRequests), totalSumbitted);
 
 					/*
-					 * Every 30 submitted contracts try to run any that could
-					 * not be run due to a conflict.
+					 * Every reSumbittedAt value submitted contracts try to run
+					 * any that could not be run due to a conflict.
 					 */
 					if (totalSumbitted > reSumbittedAt) {
 						reSumbittedAt = totalSumbitted + 30;
@@ -2040,6 +2039,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 											m_runningContractRequests),
 									totalSumbitted);
 						}
+					}
+				}
+				while (!m_runningContractRequests.isEmpty()) {
+					for (Integer idTradeingday : m_runningContractRequests
+							.keySet()) {
+						Tradingday reProcessTradingday = m_runningContractRequests
+								.get(idTradeingday);
+						totalSumbitted = processTradingday(
+								getTradingdayToProcess(reProcessTradingday,
+										m_runningContractRequests),
+								totalSumbitted);
 					}
 				}
 
@@ -2317,14 +2327,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 			}
-			totalSumbitted = submitBrokerRequest(prevContract,
-					tradingday.getOpen(), tradingday.getClose(), prevBarSize,
-					prevChartDays, totalSumbitted);
+			if (null != prevContract) {
+				totalSumbitted = submitBrokerRequest(prevContract,
+						tradingday.getOpen(), tradingday.getClose(),
+						prevBarSize, prevChartDays, totalSumbitted);
+			}
+
 			return totalSumbitted;
 		}
 
 		/**
-		 * Method reSubmitContracts.
+		 * Method getTradingdayToProcess. Get a tradingdays worth of strategies
+		 * that have contracts with many tradestrategies. If the contract is
+		 * already running add it to the set to be reprocessed later.
 		 * 
 		 * @param tradingday
 		 *            Tradingday
@@ -2348,12 +2363,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getIdTradingDay())) {
 				reProcessTradingday = runningContractRequests.get(tradingday
 						.getIdTradingDay());
-
 			} else {
 				reProcessTradingday = tradingday.clone();
-				runningContractRequests.put(
-						reProcessTradingday.getIdTradingDay(),
-						reProcessTradingday);
+
 			}
 			Tradingday toProcessTradingday = tradingday.clone();
 			Contract currContract = null;
@@ -2379,47 +2391,21 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 			}
-			for (Tradestrategy tradestrategy : toProcessTradingday.getTradestrategies()) {
+			for (Tradestrategy tradestrategy : toProcessTradingday
+					.getTradestrategies()) {
 				if (reProcessTradingday.existTradestrategy(tradestrategy))
-					reProcessTradingday.removeTradestrategy(tradestrategy);	
+					reProcessTradingday.removeTradestrategy(tradestrategy);
+			}
+			if (reProcessTradingday.getTradestrategies().isEmpty()) {
+				runningContractRequests.remove(reProcessTradingday
+						.getIdTradingDay());
+			}
+			if (!reProcessTradingday.getTradestrategies().isEmpty()) {
+				runningContractRequests.put(
+						reProcessTradingday.getIdTradingDay(),
+						reProcessTradingday);
 			}
 			return toProcessTradingday;
-		}
-
-		/**
-		 * Method reSubmitContracts.
-		 * 
-		 * @param totalSumbitted
-		 *            int
-		 * @param runningContractRequests
-		 *            ConcurrentHashMap<Integer, Tradestrategy>
-		 * @return int
-		 * @throws BrokerModelException
-		 * @throws InterruptedException
-		 * @throws CloneNotSupportedException
-		 * @throws PersistentModelException
-		 */
-		private int reSubmitContracts(int totalSumbitted,
-				ConcurrentHashMap<Integer, Tradingday> runningContractRequests)
-				throws BrokerModelException, InterruptedException,
-				CloneNotSupportedException, PersistentModelException {
-			synchronized (this.brokerManagerModel.getHistoricalData()) {
-				while (((this.brokerManagerModel.getHistoricalData().size() > 0) && !this
-						.isCancelled()) || !runningContractRequests.isEmpty()) {
-					for (Integer idTradingday : runningContractRequests
-							.keySet()) {
-						Tradingday tradingday = runningContractRequests
-								.get(idTradingday);
-						totalSumbitted = processTradingday(
-								getTradingdayToProcess(tradingday,
-										m_runningContractRequests),
-								totalSumbitted);
-
-					}
-					this.brokerManagerModel.getHistoricalData().wait();
-				}
-			}
-			return totalSumbitted;
 		}
 	}
 

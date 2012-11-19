@@ -56,8 +56,9 @@ public class TradingdayTableModel extends TableModel {
 
 	private static final String OPEN = "       Open*       ";
 	private static final String CLOSE = "       Close*      ";
-	private static final String MKTBIAS = "    Market Bias    ";
 	private static final String MKTGAP = "    Market Gap     ";
+	private static final String MKTBIAS = "    Market Bias    ";
+
 	private static final String MKTBAR = "    Market Bar     ";
 	private static final String[] columnHeaderToolTip = { "Market open time",
 			"Market close time", "Market bias for the day i.e S&P500 bar",
@@ -73,8 +74,8 @@ public class TradingdayTableModel extends TableModel {
 		columnNames = new String[5];
 		columnNames[0] = OPEN;
 		columnNames[1] = CLOSE;
-		columnNames[2] = MKTBIAS;
-		columnNames[3] = MKTGAP;
+		columnNames[2] = MKTGAP;
+		columnNames[3] = MKTBIAS;
 		columnNames[4] = MKTBAR;
 	}
 
@@ -155,11 +156,11 @@ public class TradingdayTableModel extends TableModel {
 			break;
 		}
 		case 2: {
-			element.setMarketBias(((MarketBar) value).getCode());
+			element.setMarketGap(((MarketBar) value).getCode());
 			break;
 		}
 		case 3: {
-			element.setMarketGap(((MarketBar) value).getCode());
+			element.setMarketBias(((MarketBar) value).getCode());
 			break;
 		}
 		case 4: {
@@ -229,15 +230,15 @@ public class TradingdayTableModel extends TableModel {
 	public void getNewRow(Vector<Object> newRow, Tradingday element) {
 		newRow.addElement(new Date(element.getOpen()));
 		newRow.addElement(new Date(element.getClose()));
-		if (null == element.getMarketBias()) {
-			newRow.addElement(new MarketBar());
-		} else {
-			newRow.addElement(MarketBar.newInstance((element.getMarketBias())));
-		}
 		if (null == element.getMarketGap()) {
 			newRow.addElement(new MarketBar());
 		} else {
 			newRow.addElement(MarketBar.newInstance((element.getMarketGap())));
+		}
+		if (null == element.getMarketBias()) {
+			newRow.addElement(new MarketBar());
+		} else {
+			newRow.addElement(MarketBar.newInstance((element.getMarketBias())));
 		}
 		if (null == element.getMarketBar()) {
 			newRow.addElement(new MarketBar());
