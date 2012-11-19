@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1974,7 +1975,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private Tradingdays tradingdays = null;
 		private int grandTotal = 0;
 		private long startTime = 0;
-		private final ConcurrentHashMap<Integer, Tradestrategy> m_runningContractRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
+		private final ConcurrentHashMap<Integer, Tradingday> m_runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -2019,139 +2020,29 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							.get(date);
 					if (tradingday.getTradestrategies().isEmpty())
 						continue;
-					Collections.sort(tradingday.getTradestrategies(),
-							Tradestrategy.TRADINGDAY_CONTRACT);
-					// Contract currContract = null;
-					// Integer currBarSize = null;
-					// Integer currChartDays = null;
-					// for (Tradestrategy tradestrategy : tradingday
-					// .getTradestrategies()) {
-					// if (tradestrategy.getContract().equals(currContract)
-					// && tradestrategy.getBarSize().equals(
-					// currBarSize)
-					// && tradestrategy.getChartDays().equals(
-					// currChartDays)) {
-					// currContract.addTradestrategy(tradestrategy);
-					// } else {
-					// currContract = tradestrategy.getContract();
-					// currChartDays = tradestrategy.getChartDays();
-					// currBarSize = tradestrategy.getBarSize();
-					// currContract.addTradestrategy(tradestrategy);
-					// }
-					// }
 
-					for (Tradestrategy tradestrategy : tradingday
-							.getTradestrategies()) {
-						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
-							/*
-							 * If running in test mode create the test broker
-							 * client.
-							 */
-							if (!m_brokerModel.isConnected()) {
-								BackTestBroker m_client = new BackTestBroker(
-										tradestrategy.getDatasetContainer(),
-										tradestrategy.getIdTradeStrategy(),
-										m_brokerModel);
-								tradestrategy.getDatasetContainer()
-										.setBackTestWorker(m_client);
-							}
-							tradestrategy.getDatasetContainer()
-									.getBaseCandleSeries()
-									.setBarSize(tradestrategy.getBarSize());
-							tradestrategy.getDatasetContainer()
-									.clearBaseCandleSeries();
-							/*
-							 * Fire all the requests to TWS to get chart data
-							 * After data has been retrieved save the data Only
-							 * allow a maximum of 60 requests in a 10min period
-							 * to avoid TWS pacing errors
-							 */
-							CandleDataset candleDataset = (CandleDataset) tradestrategy
-									.getDatasetContainer().getIndicators(
-											IndicatorSeries.CandleSeries);
-
-							if (null != candleDataset) {
-								for (int seriesIndex = 0; seriesIndex < candleDataset
-										.getSeriesCount(); seriesIndex++) {
-
-									Tradestrategy indicatorTradestrategy = populateChildTradestrategy(
-											tradestrategy, candleDataset,
-											seriesIndex);
-									if (!m_indicatorTradestrategy
-											.containsKey(indicatorTradestrategy
-													.getIdTradeStrategy())) {
-										if (m_brokerModel.isConnected()) {
-											m_indicatorTradestrategy
-													.put(indicatorTradestrategy
-															.getIdTradeStrategy(),
-															indicatorTradestrategy);
-
-											this.grandTotal++;
-											indicatorTradestrategy
-													.getContract()
-													.addTradestrategy(
-															indicatorTradestrategy);
-											totalSumbitted = submitBrokerRequest(
-													indicatorTradestrategy
-															.getContract(),
-													tradingday.getOpen(),
-													tradingday.getClose(),
-													indicatorTradestrategy
-															.getBarSize(),
-													indicatorTradestrategy
-															.getChartDays(),
-													totalSumbitted);
-										}
-									}
-								}
-							}
-
-							if (m_brokerModel
-									.isHistoricalDataRunning(tradestrategy
-											.getContract())) {
-								m_runningContractRequests.put(
-										tradestrategy.getIdTradeStrategy(),
-										tradestrategy);
-							} else {
-								if (tradestrategy.getContract()
-										.getTradestrategies().isEmpty())
-									tradestrategy.getContract()
-											.addTradestrategy(tradestrategy);
-								totalSumbitted = submitBrokerRequest(
-										tradestrategy.getContract(),
-										tradingday.getOpen(),
-										tradingday.getClose(),
-										tradestrategy.getBarSize(),
-										tradestrategy.getChartDays(),
-										totalSumbitted);
-							}
-						}
-					}
+					totalSumbitted = processTradingday(
+							getTradingdayToProcess(tradingday,
+									m_runningContractRequests), totalSumbitted);
 
 					/*
 					 * Every 30 submitted contracts try to run any that could
 					 * not be run due to a conflict.
 					 */
-					// if (totalSumbitted > reSumbittedAt) {
-					// reSumbittedAt = totalSumbitted + 30;
-					// totalSumbitted = reSubmitContracts(totalSumbitted,
-					// m_runningContractRequests);
-					// _log.error("reSubmitContracts every 30 total: "
-					// + grandTotal + " totalSub: " + totalSumbitted);
-					// }
+					if (totalSumbitted > reSumbittedAt) {
+						reSumbittedAt = totalSumbitted + 30;
+						for (Integer idTradeingday : m_runningContractRequests
+								.keySet()) {
+							Tradingday reProcessTradingday = m_runningContractRequests
+									.get(idTradeingday);
+							totalSumbitted = processTradingday(
+									getTradingdayToProcess(reProcessTradingday,
+											m_runningContractRequests),
+									totalSumbitted);
+						}
+					}
+				}
 
-				}
-				if (!m_runningContractRequests.isEmpty()) {
-					totalSumbitted = reSubmitContracts(totalSumbitted,
-							m_runningContractRequests);
-					_log.error("reSubmitContracts end total: "
-							+ grandTotal
-							+ " totalSub: "
-							+ totalSumbitted
-							+ " to Process : "
-							+ this.brokerManagerModel.getHistoricalData()
-									.size());
-				}
 				synchronized (this.brokerManagerModel.getHistoricalData()) {
 					while ((this.brokerManagerModel.getHistoricalData().size() > 0)
 							&& !this.isCancelled()) {
@@ -2344,53 +2235,179 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			return indicatorTradestrategy;
 		}
 
+		private int processTradingday(Tradingday tradingday, int totalSumbitted)
+				throws BrokerModelException, InterruptedException,
+				CloneNotSupportedException, PersistentModelException {
+
+			Contract prevContract = null;
+			Integer prevBarSize = null;
+			Integer prevChartDays = null;
+			for (ListIterator<Tradestrategy> itemIter = tradingday
+					.getTradestrategies().listIterator(); itemIter.hasNext();) {
+				Tradestrategy tradestrategy = itemIter.next();
+				if (null == prevContract) {
+					prevContract = tradestrategy.getContract();
+					prevBarSize = tradestrategy.getBarSize();
+					prevChartDays = tradestrategy.getChartDays();
+				}
+
+				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
+					/*
+					 * If running in test mode create the test broker client.
+					 */
+					if (!m_brokerModel.isConnected()) {
+						BackTestBroker m_client = new BackTestBroker(
+								tradestrategy.getDatasetContainer(),
+								tradestrategy.getIdTradeStrategy(),
+								m_brokerModel);
+						tradestrategy.getDatasetContainer().setBackTestWorker(
+								m_client);
+					}
+					tradestrategy.getDatasetContainer().getBaseCandleSeries()
+							.setBarSize(tradestrategy.getBarSize());
+					tradestrategy.getDatasetContainer().clearBaseCandleSeries();
+					/*
+					 * Fire all the requests to TWS to get chart data After data
+					 * has been retrieved save the data Only allow a maximum of
+					 * 60 requests in a 10min period to avoid TWS pacing errors
+					 */
+					CandleDataset candleDataset = (CandleDataset) tradestrategy
+							.getDatasetContainer().getIndicators(
+									IndicatorSeries.CandleSeries);
+
+					if (null != candleDataset) {
+						for (int seriesIndex = 0; seriesIndex < candleDataset
+								.getSeriesCount(); seriesIndex++) {
+
+							Tradestrategy indicatorTradestrategy = populateChildTradestrategy(
+									tradestrategy, candleDataset, seriesIndex);
+							if (!m_indicatorTradestrategy
+									.containsKey(indicatorTradestrategy
+											.getIdTradeStrategy())) {
+								if (m_brokerModel.isConnected()) {
+									m_indicatorTradestrategy.put(
+											indicatorTradestrategy
+													.getIdTradeStrategy(),
+											indicatorTradestrategy);
+
+									this.grandTotal++;
+									indicatorTradestrategy.getContract()
+											.addTradestrategy(
+													indicatorTradestrategy);
+									totalSumbitted = submitBrokerRequest(
+											indicatorTradestrategy
+													.getContract(),
+											tradingday.getOpen(),
+											tradingday.getClose(),
+											indicatorTradestrategy.getBarSize(),
+											indicatorTradestrategy
+													.getChartDays(),
+											totalSumbitted);
+								}
+							}
+						}
+					}
+
+					if (!prevContract.equals(tradestrategy.getContract())) {
+						totalSumbitted = submitBrokerRequest(prevContract,
+								tradingday.getOpen(), tradingday.getClose(),
+								prevBarSize, prevChartDays, totalSumbitted);
+						prevContract = tradestrategy.getContract();
+						prevBarSize = tradestrategy.getBarSize();
+						prevChartDays = tradestrategy.getChartDays();
+					}
+				}
+			}
+			return totalSumbitted;
+		}
+
+		/**
+		 * Method reSubmitContracts.
+		 * 
+		 * @param tradingday
+		 *            Tradingday
+		 * 
+		 * @param runningContractRequests
+		 *            ConcurrentHashMap<Integer, Tradingday>
+		 * 
+		 * @return Tradingday
+		 * @throws CloneNotSupportedException
+		 */
+
+		private Tradingday getTradingdayToProcess(Tradingday tradingday,
+				ConcurrentHashMap<Integer, Tradingday> runningContractRequests)
+				throws CloneNotSupportedException {
+
+			Collections.sort(tradingday.getTradestrategies(),
+					Tradestrategy.TRADINGDAY_CONTRACT);
+
+			Tradingday reProcessTradingday = null;
+			if (runningContractRequests.containsKey(tradingday
+					.getIdTradingDay())) {
+				reProcessTradingday = runningContractRequests.get(tradingday
+						.getIdTradingDay());
+
+			} else {
+				reProcessTradingday = tradingday.clone();
+				runningContractRequests.put(
+						reProcessTradingday.getIdTradingDay(),
+						reProcessTradingday);
+			}
+			Tradingday toProcessTradingday = tradingday.clone();
+			Contract currContract = null;
+			Integer currBarSize = null;
+			Integer currChartDays = null;
+			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
+				if (m_brokerModel.isHistoricalDataRunning(tradestrategy
+						.getContract())) {
+					reProcessTradingday.addTradestrategy(tradestrategy);
+				} else {
+					toProcessTradingday.addTradestrategy(tradestrategy);
+					if (tradestrategy.getContract().equals(currContract)
+							&& tradestrategy.getBarSize().equals(currBarSize)
+							&& tradestrategy.getChartDays().equals(
+									currChartDays)) {
+						currContract.addTradestrategy(tradestrategy);
+					} else {
+						currContract = tradestrategy.getContract();
+						currChartDays = tradestrategy.getChartDays();
+						currBarSize = tradestrategy.getBarSize();
+						currContract.addTradestrategy(tradestrategy);
+					}
+				}
+			}
+			return toProcessTradingday;
+		}
+
 		/**
 		 * Method reSubmitContracts.
 		 * 
 		 * @param totalSumbitted
 		 *            int
-		 * @param candleDataset
-		 *            ConcurrentHashMap<Integer, Contract>
+		 * @param runningContractRequests
+		 *            ConcurrentHashMap<Integer, Tradestrategy>
 		 * @return int
 		 * @throws BrokerModelException
 		 * @throws InterruptedException
+		 * @throws CloneNotSupportedException
+		 * @throws PersistentModelException
 		 */
-		private int reSubmitContracts(
-				int totalSumbitted,
-				ConcurrentHashMap<Integer, Tradestrategy> runningContractRequests)
-				throws BrokerModelException, InterruptedException {
+		private int reSubmitContracts(int totalSumbitted,
+				ConcurrentHashMap<Integer, Tradingday> runningContractRequests)
+				throws BrokerModelException, InterruptedException,
+				CloneNotSupportedException, PersistentModelException {
 			synchronized (this.brokerManagerModel.getHistoricalData()) {
 				while (((this.brokerManagerModel.getHistoricalData().size() > 0) && !this
 						.isCancelled()) || !runningContractRequests.isEmpty()) {
-					for (Integer idTradestrategy : runningContractRequests
+					for (Integer idTradingday : runningContractRequests
 							.keySet()) {
-						Tradestrategy tradestrategy = runningContractRequests
-								.get(idTradestrategy);
-						if (!m_brokerModel
-								.isHistoricalDataRunning(tradestrategy
-										.getContract())) {
-							tradestrategy.getContract().addTradestrategy(
-									tradestrategy);
-							totalSumbitted = submitBrokerRequest(
-									tradestrategy.getContract(), tradestrategy
-											.getTradingday().getOpen(),
-									tradestrategy.getTradingday().getClose(),
-									tradestrategy.getBarSize(),
-									tradestrategy.getChartDays(),
-									totalSumbitted);
+						Tradingday tradingday = runningContractRequests
+								.get(idTradingday);
+						totalSumbitted = processTradingday(
+								getTradingdayToProcess(tradingday,
+										m_runningContractRequests),
+								totalSumbitted);
 
-							_log.error("reSubmitContracts total submitted: "
-									+ totalSumbitted + " Symbol: "
-									+ tradestrategy.getContract().getSymbol());
-							runningContractRequests.remove(idTradestrategy);
-						}
-					}
-					for (Contract contract : this.brokerManagerModel
-							.getHistoricalData().values()) {
-						_log.error("reSubmitContracts total contracts left: "
-								+ this.brokerManagerModel.getHistoricalData()
-										.size() + " Symbol: "
-								+ contract.getSymbol());
 					}
 					this.brokerManagerModel.getHistoricalData().wait();
 				}
