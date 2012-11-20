@@ -1090,6 +1090,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (m_brokerModel.isConnected()) {
 				doCancel();
 				m_brokerModel.disconnect();
+			} else {
+				tradingdayPanel.setConnected(false);
+				contractPanel.setConnected(false);
+				simulatedMode(true);
 			}
 		} catch (BrokerModelException ex) {
 			this.setErrorMessage("Could Not Disconnect From TWS",
@@ -2332,7 +2336,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						tradingday.getOpen(), tradingday.getClose(),
 						prevBarSize, prevChartDays, totalSumbitted);
 			}
-
 			return totalSumbitted;
 		}
 
