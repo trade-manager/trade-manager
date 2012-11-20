@@ -45,7 +45,7 @@ CREATE  TABLE IF NOT EXISTS contract (
   expiry DATETIME NULL ,
   idContractIB INT NULL ,
   industry VARCHAR(80) NULL ,
-  localSymbol VARCHAR(6) NULL ,
+  localSymbol VARCHAR(10) NULL ,
   minTick DECIMAL(10,2) NULL ,
   priceMagnifier DECIMAL(10,2) NULL ,
   primaryExchange VARCHAR(10) NULL ,

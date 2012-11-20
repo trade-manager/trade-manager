@@ -44,7 +44,7 @@ rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/buil
 
 rem Clean all the orders from the DB and reload the default data
 
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanTradeOrdersDB
+java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanTradeOrdersDB
 
 pause
 

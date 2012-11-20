@@ -398,7 +398,7 @@ public class Contract extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "localSymbol", length = 6)
+	@Column(name = "localSymbol", length = 10)
 	public String getLocalSymbol() {
 		return this.localSymbol;
 	}
