@@ -206,7 +206,7 @@ CREATE  TABLE IF NOT EXISTS trade (
   version INT NULL,
   idTradeStrategy INT NOT NULL ,
   PRIMARY KEY (idTrade) ,
-  INDEX trade_Trade1 (idTradeStrategy ASC) ,
+  INDEX trade_TradeStrategy1 (idTradeStrategy ASC) ,
   CONSTRAINT fk_Trade_TradeStrategy1
     FOREIGN KEY (idTradeStrategy )
     REFERENCES tradestrategy (idTradeStrategy )
