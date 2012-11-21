@@ -2263,11 +2263,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					prevBarSize = tradestrategy.getBarSize();
 					prevChartDays = tradestrategy.getChartDays();
 				}
+				/*
+				 * Refresh the data set container as these may have changed.
+				 */
+				tradestrategy.setDatasetContainer(null);
 
 				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 					/*
 					 * If running in test mode create the test broker client.
 					 */
+
 					if (!m_brokerModel.isConnected()) {
 						BackTestBroker m_client = new BackTestBroker(
 								tradestrategy.getDatasetContainer(),
@@ -2276,9 +2281,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						tradestrategy.getDatasetContainer().setBackTestWorker(
 								m_client);
 					}
-					tradestrategy.getDatasetContainer().getBaseCandleSeries()
-							.setBarSize(tradestrategy.getBarSize());
-					tradestrategy.getDatasetContainer().clearBaseCandleSeries();
+
 					/*
 					 * Fire all the requests to TWS to get chart data After data
 					 * has been retrieved save the data Only allow a maximum of
