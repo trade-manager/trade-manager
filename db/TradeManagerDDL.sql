@@ -56,7 +56,7 @@ CREATE  TABLE IF NOT EXISTS contract (
   tradingClass VARCHAR(80) NULL ,
   version INT NULL,
   PRIMARY KEY (idContract) ,
-  UNIQUE INDEX contract_UNIQUE (secType ASC, symbol ASC,exchange ASC,currency ASC) )
+  UNIQUE INDEX contract_uq (secType ASC, symbol ASC,exchange ASC,currency ASC) )
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -82,8 +82,8 @@ CREATE  TABLE IF NOT EXISTS tradeaccount (
   updateDate DATETIME NULL ,
   version INT NULL,
   PRIMARY KEY (idTradeAccount) ,
-  UNIQUE INDEX name_UNIQUE (name ASC),
-  UNIQUE INDEX accountNumber_UNIQUE (accountNumber ASC) )
+  UNIQUE INDEX tradeaccount_name_uq (name ASC),
+  UNIQUE INDEX accountNumber_uq (accountNumber ASC) )
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -103,7 +103,7 @@ CREATE  TABLE IF NOT EXISTS tradingday (
   marketBar VARCHAR(10) NULL ,
   version INT NULL,
   PRIMARY KEY (idTradingDay) ,
-  UNIQUE INDEX open_UNIQUE (open ASC, close ASC))
+  UNIQUE INDEX open_close_uq (open ASC, close ASC))
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -123,13 +123,14 @@ CREATE  TABLE IF NOT EXISTS strategy (
   idStrategyManager INT NULL ,
   version INT NULL,
   PRIMARY KEY (idStrategy) ,
-  UNIQUE INDEX name_UNIQUE (name ASC) ,
-  INDEX strategy_Strategy1 (idStrategyManager ASC) ,
-  CONSTRAINT fk_Strategy_Strategy1
+  UNIQUE INDEX strategy_name_uq (name ASC) ,
+  INDEX strategy_Strategy1_idx (idStrategyManager ASC) ,
+  CONSTRAINT strategy_Strategy1_fk
     FOREIGN KEY (idStrategyManager )
     REFERENCES strategy (idStrategy )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION) ENGINE = InnoDB;
+    ON UPDATE NO ACTION) 
+ENGINE = InnoDB;
 
 SHOW WARNINGS;
 
@@ -157,32 +158,31 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
   idStrategy INT NOT NULL ,
   idTradeAccount INT NOT NULL ,
   PRIMARY KEY (idTradeStrategy) ,
-  INDEX tradeStrategy_TradingDay1 (idTradingDay ASC) ,
-  INDEX tradeStrategy_Contract1 (idContract ASC) ,
-  INDEX tradeStrategy_Stategy1 (idStrategy ASC) ,
-  INDEX tradeStrategy_TradeAccount1 (idTradeAccount ASC) ,
-  UNIQUE INDEX tradeStrategy_UNIQUE (idTradingDay ASC, idContract ASC, idStrategy ASC, idTradeAccount ASC, barSize ASC), CONSTRAINT fk_TradeStrategy_TradingDay1
+  INDEX tradeStrategy_TradingDay1_idx (idTradingDay ASC) ,
+  INDEX tradeStrategy_Contract1_idx  (idContract ASC) ,
+  INDEX tradeStrategy_Stategy1_idx  (idStrategy ASC) ,
+  INDEX tradeStrategy_TradeAccount1_idx  (idTradeAccount ASC) ,
+  UNIQUE INDEX tradeStrategy_uq (idTradingDay ASC, idContract ASC, idStrategy ASC, idTradeAccount ASC, barSize ASC), 
+  CONSTRAINT tradeStrategy_TradingDay1_fk
     FOREIGN KEY (idTradingDay )
     REFERENCES tradingday (idTradingDay )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_TradeStrategy_Contract1
+  CONSTRAINT tradeStrategy_Contract1_fk
     FOREIGN KEY (idContract )
     REFERENCES contract (idContract )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_TradeStrategy_Stategy1
+  CONSTRAINT tradeStrategy_Stategy1_fk
     FOREIGN KEY (idStrategy )
     REFERENCES strategy (idStrategy )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_Trade_TradeAccount1
+  CONSTRAINT trade_TradeAccount1_fk
     FOREIGN KEY (idTradeAccount)
     REFERENCES tradeaccount (idTradeAccount)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  INDEX fk_Trade_TradeStrategy1 (idTradeStrategy ASC)
-)
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -206,8 +206,8 @@ CREATE  TABLE IF NOT EXISTS trade (
   version INT NULL,
   idTradeStrategy INT NOT NULL ,
   PRIMARY KEY (idTrade) ,
-  INDEX trade_TradeStrategy1 (idTradeStrategy ASC) ,
-  CONSTRAINT fk_Trade_TradeStrategy1
+  INDEX trade_TradeStrategy1_idx (idTradeStrategy ASC) ,
+  CONSTRAINT trade_TradeStrategy1_fk
     FOREIGN KEY (idTradeStrategy )
     REFERENCES tradestrategy (idTradeStrategy )
     ON DELETE CASCADE
@@ -261,9 +261,9 @@ CREATE  TABLE IF NOT EXISTS tradeorder (
   version INT NULL,
   idTrade INT NOT NULL ,
   PRIMARY KEY (idTradeOrder) ,
-  INDEX tradeOrder_Trade1 (idTrade ASC) ,
-  UNIQUE INDEX tradeorderKey_UNIQUE (orderKey ASC) ,
-  CONSTRAINT fk_TradeOrder_Trade1
+  INDEX tradeOrder_Trade1_idx (idTrade ASC) ,
+  UNIQUE INDEX tradeorderKey_uq (orderKey ASC) ,
+  CONSTRAINT tradeOrder_Trade1_fk
     FOREIGN KEY (idTrade )
     REFERENCES trade (idTrade )
     ON DELETE CASCADE
@@ -292,9 +292,9 @@ CREATE  TABLE IF NOT EXISTS tradeorderfill (
   version INT NULL,
   idTradeOrder INT NOT NULL ,
   PRIMARY KEY (idTradeOrderFill) ,
-  INDEX tradeOrderFill_Order1 (idTradeOrder ASC) ,
-  UNIQUE INDEX execId_UNIQUE (execId ASC, idTradeOrder ASC) ,
-  CONSTRAINT fk_TradeOrderFill_Order1
+  INDEX tradeOrderFill_Order1_idx (idTradeOrder ASC) ,
+  UNIQUE INDEX execId_uq (execId ASC, idTradeOrder ASC) ,
+  CONSTRAINT tradeOrderFill_Order1_fk
     FOREIGN KEY (idTradeOrder )
     REFERENCES tradeorder (idTradeOrder )
     ON DELETE CASCADE
@@ -327,15 +327,15 @@ CREATE  TABLE IF NOT EXISTS candle (
   idContract INT NOT NULL ,
   idTradingDay INT NOT NULL ,
   PRIMARY KEY (idCandle) ,
-  INDEX candle_Contract1 (idContract ASC) ,
-  INDEX candle_TradingDay1 (idTradingDay ASC) ,
-  UNIQUE INDEX uq_Candle (idTradingDay ASC, idContract ASC, startPeriod ASC, endPeriod ASC) ,
-  CONSTRAINT fk_Candle_Contract1
+  INDEX candle_Contract1_idx (idContract ASC) ,
+  INDEX candle_TradingDay1_idx (idTradingDay ASC) ,
+  UNIQUE INDEX candle_uq (idTradingDay ASC, idContract ASC, startPeriod ASC, endPeriod ASC) ,
+  CONSTRAINT candle_Contract1_fk
     FOREIGN KEY (idContract )
     REFERENCES contract (idContract )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_Candle_TradingDay1
+  CONSTRAINT candle_TradingDay1_fk
     FOREIGN KEY (idTradingDay )
     REFERENCES tradingday (idTradingDay )
     ON DELETE NO ACTION
@@ -359,9 +359,9 @@ CREATE  TABLE IF NOT EXISTS rule (
   updateDate DATETIME NOT NULL,
   idStrategy INT NOT NULL,
   PRIMARY KEY (idRule),
-  INDEX rule_Stategy1 (idStrategy ASC),
-  UNIQUE INDEX idStrategy_version_UNIQUE (idStrategy ASC, version ASC),
-  CONSTRAINT fk_Rule_Stategy1
+  INDEX rule_Stategy1_idx (idStrategy ASC),
+  UNIQUE INDEX idStrategy_version_uq (idStrategy ASC, version ASC),
+  CONSTRAINT rule_Stategy1_fk
     FOREIGN KEY (idStrategy )
     REFERENCES strategy (idStrategy )
     ON DELETE NO ACTION
@@ -387,9 +387,9 @@ CREATE  TABLE IF NOT EXISTS indicatorseries (
   version INT NULL,
   idStrategy INT NULL ,
   PRIMARY KEY (idIndicatorSeries) ,
-  INDEX indicator_Strategy1 (idStrategy ASC) ,
-  UNIQUE INDEX indicatorSeries_UNIQUE (idStrategy ASC, type ASC, name ASC),
-  CONSTRAINT fk_Indicator_Strategy1
+  INDEX indicator_Strategy1_idx (idStrategy ASC) ,
+  UNIQUE INDEX indicatorSeries_uq (idStrategy ASC, type ASC, name ASC),
+  CONSTRAINT indicator_Strategy1_fk
     FOREIGN KEY (idStrategy )
     REFERENCES strategy (idStrategy )
     ON DELETE NO ACTION
@@ -411,7 +411,7 @@ CREATE  TABLE IF NOT EXISTS codetype (
   description VARCHAR(100) NULL ,
   version INT NULL,
   PRIMARY KEY (idCodeType) ,
-  UNIQUE INDEX name_UNIQUE (name ASC) )
+  UNIQUE INDEX codetype_name_uq (name ASC) )
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -431,8 +431,8 @@ CREATE  TABLE IF NOT EXISTS codeattribute (
   version INT NULL,
   idCodeType INT NOT NULL ,
   PRIMARY KEY (idCodeAttribute) ,
-  INDEX codeAttribute_CodeType1 (idCodeType ASC) ,
-  CONSTRAINT fk_CodeAttribute_CodeType1
+  INDEX codeAttribute_CodeType1_idx (idCodeType ASC) ,
+  CONSTRAINT codeAttribute_CodeType1_fk
     FOREIGN KEY (idCodeType )
     REFERENCES codetype (idCodeType )
     ON DELETE NO ACTION
@@ -454,14 +454,14 @@ CREATE  TABLE IF NOT EXISTS codevalue (
   idCodeAttribute INT NOT NULL ,
   idIndicatorSeries INT NULL ,
   PRIMARY KEY (idCodeValue) ,
-  INDEX codeValue_CodeAttribute1 (idCodeAttribute ASC) ,
-  INDEX codeValue_IndicatorSeries1 (idIndicatorSeries ASC) ,
-  CONSTRAINT fk_CodeValue_CodeAttribute1
+  INDEX codeValue_CodeAttribute1_idx (idCodeAttribute ASC) ,
+  INDEX codeValue_IndicatorSeries1_idx (idIndicatorSeries ASC) ,
+  CONSTRAINT codeValue_CodeAttribute1_fk
     FOREIGN KEY (idCodeAttribute )
     REFERENCES codeattribute (idCodeAttribute )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_CodeValue_IndicatorSeries1
+  CONSTRAINT codeValue_IndicatorSeries1_fk
     FOREIGN KEY (idIndicatorSeries )
     REFERENCES indicatorseries (idIndicatorSeries )
     ON DELETE NO ACTION
