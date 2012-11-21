@@ -145,7 +145,7 @@ public class CandleHome {
 	 * @return List<Candle>
 	 */
 	public List<Candle> findByContractAndDateRange(Integer idContract,
-			Date startPeriod, Date endPeriod) {
+			Date startPeriod, Date endPeriod, Integer barSize) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -292,7 +292,7 @@ public class CandleHome {
 	 * @return Candle
 	 */
 	public Candle findByUniqueKey(Integer idTradingday, Integer idContract,
-			Date startPeriod, Date endPeriod) {
+			Date startPeriod, Date endPeriod, Integer barSize) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();

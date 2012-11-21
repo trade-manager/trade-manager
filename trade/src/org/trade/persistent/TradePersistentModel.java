@@ -660,7 +660,8 @@ public class TradePersistentModel implements PersistentModel {
 							candleItem.getCandle().getContract()
 									.getIdContract(), candleItem.getCandle()
 									.getStartPeriod(), candleItem.getCandle()
-									.getEndPeriod());
+									.getEndPeriod(), candleItem.getCandle()
+									.getBarSize());
 					/*
 					 * Candle exists set the id and version so we can merge the
 					 * incoming candle.
@@ -755,8 +756,7 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 			if (!tradeOrder.getIsFilled()
-					&& CoreUtils.nullSafeComparator(
-							tradeOrder.getQuantity(),
+					&& CoreUtils.nullSafeComparator(tradeOrder.getQuantity(),
 							tradeOrder.getFilledQuantity()) == 0) {
 				tradeOrder.setIsFilled(true);
 				tradeOrder.setStatus(OrderStatus.FILLED);
@@ -807,9 +807,8 @@ public class TradePersistentModel implements PersistentModel {
 			 * values.
 			 */
 			Money comms = new Money(totalCommission);
-			if ((totalFilledQuantity > 0 && CoreUtils
-					.nullSafeComparator(totalFilledQuantity,
-							trade.getTotalQuantity()) != 0)) {
+			if ((totalFilledQuantity > 0 && CoreUtils.nullSafeComparator(
+					totalFilledQuantity, trade.getTotalQuantity()) != 0)) {
 				trade.setTotalQuantity(totalFilledQuantity);
 				trade.setOpenQuantity(totalOpenQuantity);
 				Money filledValue = new Money(totalFilledValue);
@@ -854,8 +853,8 @@ public class TradePersistentModel implements PersistentModel {
 				 * event after the order may have been filled) have changed
 				 * update the trade.
 				 */
-				if (CoreUtils.nullSafeComparator(
-						comms.getBigDecimalValue(), trade.getTotalCommission()) != 0) {
+				if (CoreUtils.nullSafeComparator(comms.getBigDecimalValue(),
+						trade.getTotalCommission()) != 0) {
 					trade.setTotalCommission(comms.getBigDecimalValue());
 					trade = (Trade) this.persistAspect(trade);
 				}

@@ -614,7 +614,10 @@ public class Tradestrategy extends Aspect implements Serializable {
 								.getName()
 								.equals(tradestrategy.getTradeAccount()
 										.getName())) {
-							return true;
+							if (this.getBarSize().equals(
+									tradestrategy.getBarSize())) {
+								return true;
+							}
 						}
 					}
 				}

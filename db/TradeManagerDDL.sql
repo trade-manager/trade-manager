@@ -161,8 +161,7 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
   INDEX fk_TradeStrategy_Contract1 (idContract ASC) ,
   INDEX fk_TradeStrategy_Stategy1 (idStrategy ASC) ,
   INDEX fk_Trade_TradeAccount1 (idTradeAccount ASC) ,
-  UNIQUE INDEX unique_tradeStrategy (idTradingDay ASC, idContract ASC, idStrategy ASC, idTradeAccount ASC) ,
-  CONSTRAINT fk_TradeStrategy_TradingDay1
+  UNIQUE INDEX unique_tradeStrategy (idTradingDay ASC, idContract ASC, idStrategy ASC, idTradeAccount ASC, barSize ASC), CONSTRAINT fk_TradeStrategy_TradingDay1
     FOREIGN KEY (idTradingDay )
     REFERENCES tradingday (idTradingDay )
     ON DELETE NO ACTION
