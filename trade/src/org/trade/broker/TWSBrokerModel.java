@@ -1929,11 +1929,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * Check to see if the trading day is today and this
 					 * strategy is selected to trade and that the market is open
 					 */
-					if (TradingCalendar.getTodayBusinessDayStart().equals(
-							tradestrategy.getTradingday().getOpen())
-							&& !TradingCalendar.isAfterHours()) {
-						try {
-							this.fireHistoricalDataComplete(tradestrategy);
+					this.fireHistoricalDataComplete(tradestrategy);
+					
+					if (tradestrategy.getTradingday().getClose()
+							.after(new Date())) {
+						try {						
 							this.onReqRealTimeBars(contract, tradestrategy
 									.getStrategy().getMarketData());
 						} catch (BrokerModelException e) {
