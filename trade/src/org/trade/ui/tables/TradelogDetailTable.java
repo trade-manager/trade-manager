@@ -52,6 +52,7 @@ import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
 import org.trade.ui.widget.DateEditor;
+import org.trade.ui.widget.DateField;
 import org.trade.ui.widget.DateRenderer;
 import org.trade.ui.widget.DecodeTableEditor;
 
@@ -65,7 +66,9 @@ public class TradelogDetailTable extends Table {
 
 	/**
 	 * Constructor for TradelogDetailTable.
-	 * @param model TableModel
+	 * 
+	 * @param model
+	 *            TableModel
 	 * @throws ValueTypeException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -95,8 +98,9 @@ public class TradelogDetailTable extends Table {
 		this.setDefaultEditor(Action.class, actionEditor);
 
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
-		DateEditor eDate = new DateEditor(new org.trade.core.valuetype.Date(
-				new Date()), DATETIMEFORMAT, Calendar.DAY_OF_MONTH);
+		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
+				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
+				Calendar.DAY_OF_MONTH);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

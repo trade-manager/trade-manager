@@ -48,6 +48,7 @@ import org.trade.dictionary.valuetype.IndicatorSeries;
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
 import org.trade.ui.widget.DateEditor;
+import org.trade.ui.widget.DateField;
 import org.trade.ui.widget.DateRenderer;
 import org.trade.ui.widget.DecodeTableEditor;
 
@@ -73,7 +74,7 @@ public class ConfigurationTable extends Table {
 				(new Currency()).getCodesDecodes()));
 
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
-		DateEditor eDate = new DateEditor(new org.trade.core.valuetype.Date(
+		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),new org.trade.core.valuetype.Date(
 				new Date()), DATETIMEFORMAT, Calendar.MINUTE);
 		DecodeTableEditor dataTypeEditor = new DecodeTableEditor(new JComboBox(
 				(new DataType()).getCodesDecodes()));

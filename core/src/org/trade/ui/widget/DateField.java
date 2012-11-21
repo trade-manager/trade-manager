@@ -70,7 +70,9 @@ public class DateField extends JTextField {
 
 	/**
 	 * Constructor for DateField.
-	 * @param mask String
+	 * 
+	 * @param mask
+	 *            String
 	 */
 	public DateField(String mask) {
 		super(mask);
@@ -83,6 +85,7 @@ public class DateField extends JTextField {
 
 	/**
 	 * Method createDefaultModel.
+	 * 
 	 * @return Document
 	 */
 	protected Document createDefaultModel() {
@@ -92,23 +95,22 @@ public class DateField extends JTextField {
 
 	/**
 	 * Method getDate.
+	 * 
 	 * @return Date
 	 */
 	public Date getDate() {
-		Date date = null;
-
 		try {
-			date = new Date(dateFormat.parse(this.getText().trim()));
+			return new Date(dateFormat.parse(this.getText().trim()));
 		} catch (ParseException e) {
-			date = (Date.NULLIPDATE);
+			return (Date.NULLIPDATE);
 		}
-
-		return date;
 	}
 
 	/**
 	 * Method setDate.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 */
 	public void setDate(Date date) {
 		if (date.equals(Date.NULLIPDATE)) {
@@ -120,7 +122,9 @@ public class DateField extends JTextField {
 
 	/**
 	 * Method setDate.
-	 * @param date java.util.Date
+	 * 
+	 * @param date
+	 *            java.util.Date
 	 */
 	public void setDate(java.util.Date date) {
 		if (date.equals(Date.NULLIPDATE)) {
@@ -132,6 +136,7 @@ public class DateField extends JTextField {
 
 	/**
 	 * Method isValid.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isValid() {
@@ -167,11 +172,16 @@ public class DateField extends JTextField {
 
 		/**
 		 * Method insertString.
-		 * @param offs int
-		 * @param str String
-		 * @param a AttributeSet
+		 * 
+		 * @param offs
+		 *            int
+		 * @param str
+		 *            String
+		 * @param a
+		 *            AttributeSet
 		 * @throws BadLocationException
-		 * @see javax.swing.text.Document#insertString(int, String, AttributeSet)
+		 * @see javax.swing.text.Document#insertString(int, String,
+		 *      AttributeSet)
 		 */
 		public void insertString(int offs, String str, AttributeSet a)
 				throws BadLocationException {

@@ -39,47 +39,59 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
-import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.SpinnerDateModel;
-import javax.swing.table.TableCellEditor;
-
 import org.trade.core.valuetype.Date;
 
 /**
  */
-public class DateEditor extends AbstractCellEditor implements TableCellEditor {
+public class DateEditor extends DefaultCellEditor {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8851345801047150318L;
 
-	final JSpinner spinner = new JSpinner();
+	private final JSpinner spinner = new JSpinner();
 
-	// Initializes the spinner.
 	/**
-	 * Constructor for DateEditor.
-	 * @param date Date
-	 * @param mask String
-	 * @param field int
+	 * Constructor for DateEditor. Initializes the spinner.
+	 * 
+	 * @param date
+	 *            Date
+	 * @param mask
+	 *            String
+	 * @param field
+	 *            int
 	 */
-	public DateEditor(Date date, String mask, int field) {
+	public DateEditor(final DateField dateField, Date date, String mask,
+			int field) {
+		super(dateField);
+		dateField.setDate(date);
 		spinner.setModel(new SpinnerDateModel(date.getDate(), null, null, field));
-		JSpinner.DateEditor de = new JSpinner.DateEditor(spinner, mask);
-		spinner.setEditor(de);
+		final JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner,
+				mask);
+		spinner.setEditor(editor);
 	}
 
-	// Prepares the spinner component and returns it.
 	/**
-	 * Method getTableCellEditorComponent.
-	 * @param table JTable
-	 * @param value Object
-	 * @param isSelected boolean
-	 * @param row int
-	 * @param column int
+	 * Method getTableCellEditorComponent. Prepares the spinner component and
+	 * returns it.
+	 * 
+	 * @param table
+	 *            JTable
+	 * @param value
+	 *            Object
+	 * @param isSelected
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return Component
-	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable, Object, boolean, int, int)
+	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable,
+	 *      Object, boolean, int, int)
 	 */
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected, int row, int column) {
@@ -91,10 +103,11 @@ public class DateEditor extends AbstractCellEditor implements TableCellEditor {
 		return spinner;
 	}
 
-	// Enables the editor only for double-clicks.
 	/**
-	 * Method isCellEditable.
-	 * @param evt EventObject
+	 * Method isCellEditable. Enables the editor only for double-clicks.
+	 * 
+	 * @param evt
+	 *            EventObject
 	 * @return boolean
 	 * @see javax.swing.CellEditor#isCellEditable(EventObject)
 	 */
@@ -105,9 +118,9 @@ public class DateEditor extends AbstractCellEditor implements TableCellEditor {
 		return true;
 	}
 
-	// Returns the spinners current value.
 	/**
-	 * Method getCellEditorValue.
+	 * Method getCellEditorValue. Returns the spinners current value.
+	 * 
 	 * @return Object
 	 * @see javax.swing.CellEditor#getCellEditorValue()
 	 */

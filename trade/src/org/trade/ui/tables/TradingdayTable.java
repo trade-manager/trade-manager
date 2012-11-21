@@ -53,6 +53,7 @@ import org.trade.dictionary.valuetype.MarketBar;
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
 import org.trade.ui.widget.DateEditor;
+import org.trade.ui.widget.DateField;
 import org.trade.ui.widget.DateRenderer;
 import org.trade.ui.widget.DecodeTableEditor;
 
@@ -78,8 +79,9 @@ public class TradingdayTable extends Table {
 				new JComboBox((new MarketBar()).getCodesDecodes()));
 		this.setDefaultEditor(MarketBar.class, marketBarEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
-		DateEditor eDate = new DateEditor(new org.trade.core.valuetype.Date(
-				new Date()), DATETIMEFORMAT, Calendar.MINUTE);
+		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
+				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
+				Calendar.MINUTE);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setFont(new Font("Monospaced", Font.PLAIN, 12));

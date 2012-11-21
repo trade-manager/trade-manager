@@ -68,6 +68,7 @@ import org.trade.ui.models.TradestrategyTableModel;
 import org.trade.ui.tables.renderer.DAOStrategyManagerRenderer;
 import org.trade.ui.tables.renderer.DAOStrategyRenderer;
 import org.trade.ui.widget.DateEditor;
+import org.trade.ui.widget.DateField;
 import org.trade.ui.widget.DateRenderer;
 import org.trade.ui.widget.DecodeTableEditor;
 import org.trade.ui.widget.StringEditor;
@@ -100,8 +101,9 @@ public class TradestrategyTable extends Table {
 			throws ValueTypeException, ParseException {
 		super(model);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
-		DateEditor eDate = new DateEditor(new org.trade.core.valuetype.Date(
-				new Date()), DATETIMEFORMAT, Calendar.MONTH);
+		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
+				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
+				Calendar.MONTH);
 
 		this.getColumn("Expiry").setCellEditor(eDate);
 		this.getColumn("Expiry").setCellRenderer(rDate);

@@ -54,6 +54,7 @@ import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
 import org.trade.ui.widget.DateEditor;
+import org.trade.ui.widget.DateField;
 import org.trade.ui.widget.DateRenderer;
 import org.trade.ui.widget.DecodeTableEditor;
 import org.trade.ui.widget.StringEditor;
@@ -111,8 +112,9 @@ public class TradeOrderTable extends Table {
 		this.setDefaultEditor(TriggerMethod.class, triggerMethodEditor);
 		this.setDefaultEditor(OrderStatus.class, orderStatusEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
-		DateEditor eDate = new DateEditor(new org.trade.core.valuetype.Date(
-				new Date()), DATETIMEFORMAT, Calendar.DAY_OF_MONTH);
+		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
+				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
+				Calendar.DAY_OF_MONTH);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
