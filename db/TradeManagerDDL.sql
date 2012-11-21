@@ -124,7 +124,7 @@ CREATE  TABLE IF NOT EXISTS strategy (
   version INT NULL,
   PRIMARY KEY (idStrategy) ,
   UNIQUE INDEX name_UNIQUE (name ASC) ,
-  INDEX fk_Strategy_Strategy1 (idStrategyManager ASC) ,
+  INDEX strategy_Strategy1 (idStrategyManager ASC) ,
   CONSTRAINT fk_Strategy_Strategy1
     FOREIGN KEY (idStrategyManager )
     REFERENCES strategy (idStrategy )
@@ -157,11 +157,11 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
   idStrategy INT NOT NULL ,
   idTradeAccount INT NOT NULL ,
   PRIMARY KEY (idTradeStrategy) ,
-  INDEX fk_TradeStrategy_TradingDay1 (idTradingDay ASC) ,
-  INDEX fk_TradeStrategy_Contract1 (idContract ASC) ,
-  INDEX fk_TradeStrategy_Stategy1 (idStrategy ASC) ,
-  INDEX fk_Trade_TradeAccount1 (idTradeAccount ASC) ,
-  UNIQUE INDEX unique_tradeStrategy (idTradingDay ASC, idContract ASC, idStrategy ASC, idTradeAccount ASC, barSize ASC), CONSTRAINT fk_TradeStrategy_TradingDay1
+  INDEX tradeStrategy_TradingDay1 (idTradingDay ASC) ,
+  INDEX tradeStrategy_Contract1 (idContract ASC) ,
+  INDEX tradeStrategy_Stategy1 (idStrategy ASC) ,
+  INDEX tradeStrategy_TradeAccount1 (idTradeAccount ASC) ,
+  UNIQUE INDEX tradeStrategy_UNIQUE (idTradingDay ASC, idContract ASC, idStrategy ASC, idTradeAccount ASC, barSize ASC), CONSTRAINT fk_TradeStrategy_TradingDay1
     FOREIGN KEY (idTradingDay )
     REFERENCES tradingday (idTradingDay )
     ON DELETE NO ACTION
@@ -206,6 +206,7 @@ CREATE  TABLE IF NOT EXISTS trade (
   version INT NULL,
   idTradeStrategy INT NOT NULL ,
   PRIMARY KEY (idTrade) ,
+  INDEX trade_Trade1 (idTradeStrategy ASC) ,
   CONSTRAINT fk_Trade_TradeStrategy1
     FOREIGN KEY (idTradeStrategy )
     REFERENCES tradestrategy (idTradeStrategy )
@@ -260,7 +261,7 @@ CREATE  TABLE IF NOT EXISTS tradeorder (
   version INT NULL,
   idTrade INT NOT NULL ,
   PRIMARY KEY (idTradeOrder) ,
-  INDEX fk_TradeOrder_Trade1 (idTrade ASC) ,
+  INDEX tradeOrder_Trade1 (idTrade ASC) ,
   UNIQUE INDEX tradeorderKey_UNIQUE (orderKey ASC) ,
   CONSTRAINT fk_TradeOrder_Trade1
     FOREIGN KEY (idTrade )
@@ -291,7 +292,7 @@ CREATE  TABLE IF NOT EXISTS tradeorderfill (
   version INT NULL,
   idTradeOrder INT NOT NULL ,
   PRIMARY KEY (idTradeOrderFill) ,
-  INDEX fk_TradeOrderFill_Order1 (idTradeOrder ASC) ,
+  INDEX tradeOrderFill_Order1 (idTradeOrder ASC) ,
   UNIQUE INDEX execId_UNIQUE (execId ASC, idTradeOrder ASC) ,
   CONSTRAINT fk_TradeOrderFill_Order1
     FOREIGN KEY (idTradeOrder )
@@ -326,8 +327,8 @@ CREATE  TABLE IF NOT EXISTS candle (
   idContract INT NOT NULL ,
   idTradingDay INT NOT NULL ,
   PRIMARY KEY (idCandle) ,
-  INDEX fk_Candle_Contract1 (idContract ASC) ,
-  INDEX fk_Candle_TradingDay1 (idTradingDay ASC) ,
+  INDEX candle_Contract1 (idContract ASC) ,
+  INDEX candle_TradingDay1 (idTradingDay ASC) ,
   UNIQUE INDEX uq_Candle (idTradingDay ASC, idContract ASC, startPeriod ASC, endPeriod ASC) ,
   CONSTRAINT fk_Candle_Contract1
     FOREIGN KEY (idContract )
@@ -358,7 +359,7 @@ CREATE  TABLE IF NOT EXISTS rule (
   updateDate DATETIME NOT NULL,
   idStrategy INT NOT NULL,
   PRIMARY KEY (idRule),
-  INDEX fk_Rule_Stategy1 (idStrategy ASC),
+  INDEX rule_Stategy1 (idStrategy ASC),
   UNIQUE INDEX idStrategy_version_UNIQUE (idStrategy ASC, version ASC),
   CONSTRAINT fk_Rule_Stategy1
     FOREIGN KEY (idStrategy )
@@ -386,7 +387,7 @@ CREATE  TABLE IF NOT EXISTS indicatorseries (
   version INT NULL,
   idStrategy INT NULL ,
   PRIMARY KEY (idIndicatorSeries) ,
-  INDEX fk_Indicator_Strategy1 (idStrategy ASC) ,
+  INDEX indicator_Strategy1 (idStrategy ASC) ,
   UNIQUE INDEX indicatorSeries_UNIQUE (idStrategy ASC, type ASC, name ASC),
   CONSTRAINT fk_Indicator_Strategy1
     FOREIGN KEY (idStrategy )
@@ -430,7 +431,7 @@ CREATE  TABLE IF NOT EXISTS codeattribute (
   version INT NULL,
   idCodeType INT NOT NULL ,
   PRIMARY KEY (idCodeAttribute) ,
-  INDEX fk_CodeAttribute_CodeType1 (idCodeType ASC) ,
+  INDEX codeAttribute_CodeType1 (idCodeType ASC) ,
   CONSTRAINT fk_CodeAttribute_CodeType1
     FOREIGN KEY (idCodeType )
     REFERENCES codetype (idCodeType )
@@ -453,8 +454,8 @@ CREATE  TABLE IF NOT EXISTS codevalue (
   idCodeAttribute INT NOT NULL ,
   idIndicatorSeries INT NULL ,
   PRIMARY KEY (idCodeValue) ,
-  INDEX fk_CodeValue_CodeAttribute1 (idCodeAttribute ASC) ,
-  INDEX fk_CodeValue_IndicatorSeries1 (idIndicatorSeries ASC) ,
+  INDEX codeValue_CodeAttribute1 (idCodeAttribute ASC) ,
+  INDEX codeValue_IndicatorSeries1 (idIndicatorSeries ASC) ,
   CONSTRAINT fk_CodeValue_CodeAttribute1
     FOREIGN KEY (idCodeAttribute )
     REFERENCES codeattribute (idCodeAttribute )
