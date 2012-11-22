@@ -67,8 +67,8 @@ public class TradingCalendar {
 			.getLogger(TradingCalendar.class);
 
 	private static final TimeZone TIMEZONE = TimeZone.getDefault();
-	public static final Date NULLDATE = (new GregorianCalendar(0, 0, 0, 0, 0,
-			0)).getTime();
+	public static final Date NULLDATE = (new GregorianCalendar(0, 0, 0, 0, 0, 0))
+			.getTime();
 	public static final HashMap<Integer, int[]> HOLIDAYS = new HashMap<Integer, int[]>();
 	private static GregorianCalendar CALENDAR_NY;
 	private static SimpleDateFormat dateFormat;
@@ -76,6 +76,7 @@ public class TradingCalendar {
 	private static Integer openMinute = new Integer(30);
 	private static Integer closeHour = new Integer(16);
 	private static Integer closeMinute = new Integer(0);
+	private static Integer closeDayOffset = new Integer(0);
 
 	/*
 	 * Initialize the calendar form the properties file. If values are not found
@@ -101,6 +102,13 @@ public class TradingCalendar {
 			closeHour = new Integer(close.substring(0, close.indexOf(":")));
 			closeMinute = new Integer(close.substring(close.indexOf(":") + 1,
 					close.length()));
+			/*
+			 * If the close time if before or equal to the open time assume its
+			 * the next day.
+			 */
+			if (closeHour <= openHour && closeMinute <= openMinute) {
+				closeDayOffset++;
+			}
 		} catch (IOException ex) {
 			_log.warn("Property trade.market.close not set in config.properties will use default 4:00pm EST");
 		}
@@ -119,14 +127,16 @@ public class TradingCalendar {
 	/**
 	 * Add Years to a date-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return boolean
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static boolean inDaylightTime(Date date) {
 		synchronized (CALENDAR_NY) {
 			return CALENDAR_NY.getTimeZone().inDaylightTime(date);
@@ -136,15 +146,18 @@ public class TradingCalendar {
 	/**
 	 * Add Years to a date-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
-	 * @param noYears int
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
+	 * @param noYears
+	 *            int
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date addYear(Date date, int noYears) {
 		if ((date != null) && (noYears != 0)) {
 			synchronized (CALENDAR_NY) {
@@ -160,15 +173,18 @@ public class TradingCalendar {
 	/**
 	 * Add months to a date-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
-	 * @param noMonths int
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
+	 * @param noMonths
+	 *            int
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date addMonth(Date date, int noMonths) {
 		if ((date != null) && (noMonths != 0)) {
 			synchronized (CALENDAR_NY) {
@@ -184,15 +200,18 @@ public class TradingCalendar {
 	/**
 	 * Add days to a date-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
-	 * @param noDays int
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
+	 * @param noDays
+	 *            int
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date addDays(Date date, int noDays) {
 		if ((date != null) && (noDays != 0)) {
 			synchronized (CALENDAR_NY) {
@@ -208,8 +227,11 @@ public class TradingCalendar {
 
 	/**
 	 * Method addBusinessDays.
-	 * @param date Date
-	 * @param noDays int
+	 * 
+	 * @param date
+	 *            Date
+	 * @param noDays
+	 *            int
 	 * @return Date
 	 */
 	public static Date addBusinessDays(Date date, int noDays) {
@@ -246,15 +268,18 @@ public class TradingCalendar {
 	/**
 	 * Add days to a date-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
-	 * @param noHours int
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
+	 * @param noHours
+	 *            int
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date addHours(Date date, int noHours) {
 		if ((date != null) && (noHours != 0)) {
 			synchronized (CALENDAR_NY) {
@@ -270,15 +295,18 @@ public class TradingCalendar {
 	/**
 	 * Add days to a date-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
-	 * @param noMinutes int
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
+	 * @param noMinutes
+	 *            int
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date addMinutes(Date date, int noMinutes) {
 		if ((date != null) && (noMinutes != 0)) {
 			synchronized (CALENDAR_NY) {
@@ -294,15 +322,18 @@ public class TradingCalendar {
 	/**
 	 * Add days to a date-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
-	 * @param noSeconds int
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
+	 * @param noSeconds
+	 *            int
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date addSeconds(Date date, int noSeconds) {
 		if ((date != null) && (noSeconds != 0)) {
 			synchronized (CALENDAR_NY) {
@@ -318,15 +349,18 @@ public class TradingCalendar {
 	/**
 	 * Returns the difference in days-
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date1 Date
-	 * @param date2 Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date1
+	 *            Date
+	 * @param date2
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int daysDiff(Date date1, Date date2) {
 		if ((date1 != null) && (date2 != null)) {
 			Double value = new Double((new BigDecimal(
@@ -341,14 +375,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Year for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getYear(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -362,14 +398,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Second for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getSecond(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -383,14 +421,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Minute for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getMinute(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -404,14 +444,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Hour of day (24 hour clock )for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getHourOfDay(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -425,14 +467,16 @@ public class TradingCalendar {
 	/**
 	 * Return the AM or PM for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return String
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static String getAMPM(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -450,14 +494,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Hour for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getHour(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -471,14 +517,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Month for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getMonth(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -492,14 +540,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param millis long
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param millis
+	 *            long
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date getDate(long millis) {
 		synchronized (CALENDAR_NY) {
 			CALENDAR_NY.setTimeInMillis(millis);
@@ -510,14 +560,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getDayOfYear(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -531,14 +583,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getDayOfMonth(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -552,14 +606,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return int
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static int getDayOfWeek(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
@@ -573,14 +629,16 @@ public class TradingCalendar {
 	/**
 	 * Get the date formated to the standard format string
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return String
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static String getFormattedDate(Date date) {
 		return dateFormat.format(date);
 	}
@@ -588,15 +646,18 @@ public class TradingCalendar {
 	/**
 	 * Get the date formated to the standard format string
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
-	 * @param format String
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
+	 * @param format
+	 *            String
 	 * @return String
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static String getFormattedDate(Date date, String format) {
 		if (format != null) {
 			SimpleDateFormat newDateFormat = new SimpleDateFormat(format);
@@ -609,15 +670,18 @@ public class TradingCalendar {
 	/**
 	 * Set the date in the standard CALENDAR_NY to the dtring date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date String
-	 * @param format String
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            String
+	 * @param format
+	 *            String
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date getFormattedDate(String date, String format) {
 		Date newDate = null;
 
@@ -634,14 +698,16 @@ public class TradingCalendar {
 	/**
 	 * Set the date in the standard calendar to the dtring date
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date String
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            String
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date getFormattedDate(String date) {
 		Date newDate = null;
 
@@ -659,13 +725,14 @@ public class TradingCalendar {
 	/**
 	 * Get the date equal to zero
 	 * 
-	
 	 * 
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @return Date
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static Date getNullJavaDate() {
 		return NULLDATE;
 	}
@@ -673,21 +740,25 @@ public class TradingCalendar {
 	/**
 	 * Is the date equal to zero
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param date Date
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param date
+	 *            Date
 	 * @return boolean
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static boolean isNullDate(Date date) {
 		return date.equals(NULLDATE);
 	}
 
 	/**
 	 * Method setHolidays.
-	 * @param yearAndDays String
+	 * 
+	 * @param yearAndDays
+	 *            String
 	 */
 	private static void setHolidays(String yearAndDays) {
 		StringTokenizer st = new StringTokenizer(yearAndDays, ",");
@@ -710,6 +781,7 @@ public class TradingCalendar {
 
 	/**
 	 * Method getTodayBusinessDayStart.
+	 * 
 	 * @return Date
 	 */
 	public static Date getTodayBusinessDayStart() {
@@ -725,6 +797,7 @@ public class TradingCalendar {
 
 	/**
 	 * Method getTodayBusinessDayEnd.
+	 * 
 	 * @return Date
 	 */
 	public static Date getTodayBusinessDayEnd() {
@@ -740,7 +813,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method getBusinessDayStart.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return Date
 	 */
 	public static Date getBusinessDayStart(Date date) {
@@ -756,12 +831,15 @@ public class TradingCalendar {
 
 	/**
 	 * Method getBusinessDayEnd.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return Date
 	 */
 	public static Date getBusinessDayEnd(Date date) {
 		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
+			CALENDAR_NY.setTime(TradingCalendar.addBusinessDays(date,
+					closeDayOffset));
 			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, closeHour);
 			CALENDAR_NY.set(Calendar.MINUTE, closeMinute);
 			CALENDAR_NY.set(Calendar.SECOND, 0);
@@ -772,9 +850,13 @@ public class TradingCalendar {
 
 	/**
 	 * Method getSpecificTime.
-	 * @param date Date
-	 * @param hrs int
-	 * @param minutes int
+	 * 
+	 * @param date
+	 *            Date
+	 * @param hrs
+	 *            int
+	 * @param minutes
+	 *            int
 	 * @return Date
 	 */
 	public static Date getSpecificTime(Date date, int hrs, int minutes) {
@@ -790,10 +872,15 @@ public class TradingCalendar {
 
 	/**
 	 * Method getSpecificTime.
-	 * @param date Date
-	 * @param hrs int
-	 * @param minutes int
-	 * @param seconds int
+	 * 
+	 * @param date
+	 *            Date
+	 * @param hrs
+	 *            int
+	 * @param minutes
+	 *            int
+	 * @param seconds
+	 *            int
 	 * @return Date
 	 */
 	public static Date getSpecificTime(Date date, int hrs, int minutes,
@@ -810,6 +897,7 @@ public class TradingCalendar {
 
 	/**
 	 * Method getYearStart.
+	 * 
 	 * @return Date
 	 */
 	public static Date getYearStart() {
@@ -828,7 +916,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method isTradingDay.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return boolean
 	 */
 	public static boolean isTradingDay(Date date) {
@@ -845,7 +935,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method isMarketHours.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return boolean
 	 */
 	public static boolean isMarketHours(Date date) {
@@ -857,6 +949,7 @@ public class TradingCalendar {
 
 	/**
 	 * Method isPreMarket.
+	 * 
 	 * @return boolean
 	 */
 	public static boolean isPreMarket() {
@@ -865,7 +958,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method isPreMarket.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return boolean
 	 */
 	public static boolean isPreMarket(Date date) {
@@ -877,6 +972,7 @@ public class TradingCalendar {
 
 	/**
 	 * Method isAfterHours.
+	 * 
 	 * @return boolean
 	 */
 	public static boolean isAfterHours() {
@@ -889,7 +985,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method isAfterHours.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return boolean
 	 */
 	public static boolean isAfterHours(Date date) {
@@ -902,8 +1000,11 @@ public class TradingCalendar {
 
 	/**
 	 * Method sameDay.
-	 * @param date1 Date
-	 * @param date2 Date
+	 * 
+	 * @param date1
+	 *            Date
+	 * @param date2
+	 *            Date
 	 * @return boolean
 	 */
 	public static boolean sameDay(Date date1, Date date2) {
@@ -916,8 +1017,11 @@ public class TradingCalendar {
 
 	/**
 	 * Method sameDay.
-	 * @param date1 Calendar
-	 * @param date2 Calendar
+	 * 
+	 * @param date1
+	 *            Calendar
+	 * @param date2
+	 *            Calendar
 	 * @return boolean
 	 */
 	public static boolean sameDay(Calendar date1, Calendar date2) {
@@ -929,7 +1033,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method getMostRecentTradingDay.
-	 * @param input Date
+	 * 
+	 * @param input
+	 *            Date
 	 * @return Date
 	 */
 	public static Date getMostRecentTradingDay(Date input) {
@@ -946,7 +1052,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method getPrevTradingDay.
-	 * @param input Date
+	 * 
+	 * @param input
+	 *            Date
 	 * @return Date
 	 */
 	public static Date getPrevTradingDay(Date input) {
@@ -958,7 +1066,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method getNextTradingDay.
-	 * @param input Date
+	 * 
+	 * @param input
+	 *            Date
 	 * @return Date
 	 */
 	public static Date getNextTradingDay(Date input) {
@@ -977,7 +1087,9 @@ public class TradingCalendar {
 
 	/**
 	 * Method isHoliday.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 * @return boolean
 	 */
 	public static boolean isHoliday(Date date) {
@@ -997,6 +1109,7 @@ public class TradingCalendar {
 
 	/**
 	 * Method firstMondayAfter2010.
+	 * 
 	 * @return long
 	 */
 	public static long firstMondayAfter2010() {
