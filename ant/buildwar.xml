@@ -43,7 +43,7 @@
 		<tstamp/>
 		<fileset dir="${pathname.library.external}" id="fileset.external.library.dist">
 			<include name="jsyntaxpane-0.9.5-b29.jar" />
-			<include name="tws-9.66.jar" />				
+			<include name="tws-9.67.jar" />				
 			<include name="jfreechart-1.0.14.jar" />
 			<include name="jcommon-1.0.17.jar" />
 			<include name="swt.jar" />

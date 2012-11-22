@@ -66,6 +66,7 @@ import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
 
+import com.ib.client.CommissionReport;
 import com.ib.client.ContractDetails;
 import com.ib.client.EClientSocket;
 import com.ib.client.EWrapper;
@@ -1930,10 +1931,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * strategy is selected to trade and that the market is open
 					 */
 					this.fireHistoricalDataComplete(tradestrategy);
-					
+
 					if (tradestrategy.getTradingday().getClose()
 							.after(new Date())) {
-						try {						
+						try {
 							this.onReqRealTimeBars(contract, tradestrategy
 									.getStrategy().getMarketData());
 						} catch (BrokerModelException e) {
@@ -2145,6 +2146,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#tickSnapshotEnd(int)
 	 */
 	public void tickSnapshotEnd(int reqId) {
+
+	}
+
+	/**
+	 * Method commissionReport.
+	 * 
+	 * @param commsReport
+	 *            com.ib.client.CommissionReport
+	 */
+	public void commissionReport(CommissionReport commsReport) {
+		// TODO Auto-generated method stub
 
 	}
 
