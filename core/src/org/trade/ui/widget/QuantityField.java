@@ -71,6 +71,7 @@ public class QuantityField extends JFormattedTextField {
 
 	/**
 	 * Method getQuantity.
+	 * 
 	 * @return Quantity
 	 */
 	public Quantity getQuantity() {
@@ -84,7 +85,9 @@ public class QuantityField extends JFormattedTextField {
 
 	/**
 	 * Method setQuantity.
-	 * @param number Quantity
+	 * 
+	 * @param number
+	 *            Quantity
 	 */
 	public void setQuantity(Quantity number) {
 		this.setValue(number.getIntegerValue());

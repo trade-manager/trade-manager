@@ -49,7 +49,9 @@ public class DecimalEditor extends DefaultCellEditor {
 
 	/**
 	 * Constructor for DecimalEditor.
-	 * @param textField DecimalField
+	 * 
+	 * @param textField
+	 *            DecimalField
 	 */
 	public DecimalEditor(final DecimalField textField) {
 		super(textField);
@@ -63,7 +65,7 @@ public class DecimalEditor extends DefaultCellEditor {
 			private static final long serialVersionUID = -5844604630045985498L;
 
 			public void setValue(Object value) {
-				textField.setDecimal((Decimal)value);
+				textField.setDecimal((Decimal) value);
 			}
 
 			public Object getCellEditorValue() {

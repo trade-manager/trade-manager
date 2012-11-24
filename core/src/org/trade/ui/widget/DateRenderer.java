@@ -52,7 +52,9 @@ public class DateRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Constructor for DateRenderer.
-	 * @param mask String
+	 * 
+	 * @param mask
+	 *            String
 	 */
 	public DateRenderer(String mask) {
 		super();
@@ -64,7 +66,9 @@ public class DateRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 */
 	protected void setValue(Object value) {
 

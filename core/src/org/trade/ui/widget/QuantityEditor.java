@@ -49,7 +49,9 @@ public class QuantityEditor extends DefaultCellEditor {
 
 	/**
 	 * Constructor for QuantityEditor.
-	 * @param textField QuantityField
+	 * 
+	 * @param textField
+	 *            QuantityField
 	 */
 	public QuantityEditor(final QuantityField textField) {
 		super(textField);

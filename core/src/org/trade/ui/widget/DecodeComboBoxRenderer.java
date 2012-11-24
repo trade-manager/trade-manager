@@ -56,15 +56,22 @@ public class DecodeComboBoxRenderer extends DefaultListCellRenderer {
 
 	/**
 	 * Method getListCellRendererComponent.
-	 * @param list JList
-	 * @param value Object
-	 * @param index int
-	 * @param isSelected boolean
-	 * @param cellHasFocus boolean
+	 * 
+	 * @param list
+	 *            JList
+	 * @param value
+	 *            Object
+	 * @param index
+	 *            int
+	 * @param isSelected
+	 *            boolean
+	 * @param cellHasFocus
+	 *            boolean
 	 * @return Component
 	 */
-	public Component getListCellRendererComponent(@SuppressWarnings("rawtypes") JList list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus) {
+	public Component getListCellRendererComponent(
+			@SuppressWarnings("rawtypes") JList list, Object value, int index,
+			boolean isSelected, boolean cellHasFocus) {
 		if (value != null) {
 			this.setText(value.toString());
 			setBackground(isSelected ? Color.red : Color.white);

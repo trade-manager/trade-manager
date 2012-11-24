@@ -113,8 +113,9 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	 * has changed. Replaces the current UI object with the latest version from
 	 * the <code>UIManager</code>.
 	 * 
-	
-	 * @see JComponent#updateUI */
+	 * 
+	 * @see JComponent#updateUI
+	 */
 	public void updateUI() {
 		super.updateUI();
 		setForeground(null);
@@ -132,14 +133,18 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	 *            the value to assign to the cell at <code>[row, column]</code>
 	 * @param isSelected
 	 *            true if cell is selected
-	
+	 * 
 	 * @param row
 	 *            the row of the cell to render
 	 * @param column
 	 *            the column of the cell to render
-	
-	 * @param hasFocus boolean
-	 * @return the default table cell renderer * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
+	 * 
+	 * @param hasFocus
+	 *            boolean
+	 * @return the default table cell renderer * @see
+	 *         javax.swing.table.TableCellRenderer
+	 *         #getTableCellRendererComponent(JTable, Object, boolean, boolean,
+	 *         int, int)
 	 */
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
@@ -205,11 +210,17 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	/**
 	 * Overridden for performance reasons. See the <a
 	 * href="#override">Implementation Note</a> for more information.
-	 * @param tm long
-	 * @param x int
-	 * @param y int
-	 * @param width int
-	 * @param height int
+	 * 
+	 * @param tm
+	 *            long
+	 * @param x
+	 *            int
+	 * @param y
+	 *            int
+	 * @param width
+	 *            int
+	 * @param height
+	 *            int
 	 */
 	public void repaint(long tm, int x, int y, int width, int height) {
 	}
@@ -217,7 +228,9 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	/**
 	 * Overridden for performance reasons. See the <a
 	 * href="#override">Implementation Note</a> for more information.
-	 * @param r Rectangle
+	 * 
+	 * @param r
+	 *            Rectangle
 	 */
 	public void repaint(Rectangle r) {
 	}
@@ -225,9 +238,13 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	/**
 	 * Overridden for performance reasons. See the <a
 	 * href="#override">Implementation Note</a> for more information.
-	 * @param propertyName String
-	 * @param oldValue Object
-	 * @param newValue Object
+	 * 
+	 * @param propertyName
+	 *            String
+	 * @param oldValue
+	 *            Object
+	 * @param newValue
+	 *            Object
 	 */
 	protected void firePropertyChange(String propertyName, Object oldValue,
 			Object newValue) {
@@ -240,9 +257,13 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	/**
 	 * Overridden for performance reasons. See the <a
 	 * href="#override">Implementation Note</a> for more information.
-	 * @param propertyName String
-	 * @param oldValue boolean
-	 * @param newValue boolean
+	 * 
+	 * @param propertyName
+	 *            String
+	 * @param oldValue
+	 *            boolean
+	 * @param newValue
+	 *            boolean
 	 */
 	public void firePropertyChange(String propertyName, boolean oldValue,
 			boolean newValue) {
@@ -254,9 +275,10 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	 * @param value
 	 *            the string value for this cell; if value is <code>null</code>
 	 *            it sets the text value to an empty string
-	
 	 * 
-	 * @see JLabel#setText */
+	 * 
+	 * @see JLabel#setText
+	 */
 	protected void setValue(Object value) {
 		boolean selected = false;
 

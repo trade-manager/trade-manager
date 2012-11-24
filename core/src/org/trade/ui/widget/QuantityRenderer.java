@@ -61,7 +61,9 @@ public class QuantityRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 */
 	protected void setValue(Object value) {
 		if (value == null) {

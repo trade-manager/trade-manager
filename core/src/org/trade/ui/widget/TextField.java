@@ -62,7 +62,9 @@ public class TextField extends JTextField implements FocusListener {
 
 	/**
 	 * Constructor for TextField.
-	 * @param mask String
+	 * 
+	 * @param mask
+	 *            String
 	 */
 	public TextField(String mask) {
 		super();
@@ -81,6 +83,7 @@ public class TextField extends JTextField implements FocusListener {
 
 	/**
 	 * Method createDefaultModel.
+	 * 
 	 * @return Document
 	 */
 	protected Document createDefaultModel() {
@@ -101,6 +104,7 @@ public class TextField extends JTextField implements FocusListener {
 
 	/**
 	 * Method getText.
+	 * 
 	 * @return String
 	 */
 	public String getText() {
@@ -113,7 +117,9 @@ public class TextField extends JTextField implements FocusListener {
 
 	/**
 	 * Method focusGained.
-	 * @param evt FocusEvent
+	 * 
+	 * @param evt
+	 *            FocusEvent
 	 * @see java.awt.event.FocusListener#focusGained(FocusEvent)
 	 */
 	public void focusGained(FocusEvent evt) {
@@ -123,7 +129,9 @@ public class TextField extends JTextField implements FocusListener {
 
 	/**
 	 * Method focusLost.
-	 * @param evt FocusEvent
+	 * 
+	 * @param evt
+	 *            FocusEvent
 	 * @see java.awt.event.FocusListener#focusLost(FocusEvent)
 	 */
 	public void focusLost(FocusEvent evt) {
@@ -135,6 +143,7 @@ public class TextField extends JTextField implements FocusListener {
 
 	/**
 	 * Method isValid.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isValid() {
@@ -156,7 +165,7 @@ public class TextField extends JTextField implements FocusListener {
 	}
 
 	/**
-	
+	 * 
 	 * @version $Id: TextField.java,v 1.2 2001/12/28 21:14:55 simon Exp $
 	 * @author Simon Allen
 	 */
@@ -168,11 +177,16 @@ public class TextField extends JTextField implements FocusListener {
 
 		/**
 		 * Method insertString.
-		 * @param offs int
-		 * @param str String
-		 * @param a AttributeSet
+		 * 
+		 * @param offs
+		 *            int
+		 * @param str
+		 *            String
+		 * @param a
+		 *            AttributeSet
 		 * @throws BadLocationException
-		 * @see javax.swing.text.Document#insertString(int, String, AttributeSet)
+		 * @see javax.swing.text.Document#insertString(int, String,
+		 *      AttributeSet)
 		 */
 		public void insertString(int offs, String str, AttributeSet a)
 				throws BadLocationException {

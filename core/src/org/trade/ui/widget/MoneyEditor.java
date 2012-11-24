@@ -48,7 +48,9 @@ public class MoneyEditor extends DefaultCellEditor {
 
 	/**
 	 * Constructor for MoneyEditor.
-	 * @param textField MoneyField
+	 * 
+	 * @param textField
+	 *            MoneyField
 	 */
 	public MoneyEditor(final MoneyField textField) {
 		super(textField);

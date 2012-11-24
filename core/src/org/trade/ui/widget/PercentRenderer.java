@@ -66,7 +66,9 @@ public class PercentRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 */
 	protected void setValue(Object value) {
 		if (value == null) {
@@ -87,14 +89,22 @@ public class PercentRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Method getTableCellRendererComponent.
-	 * @param table JTable
-	 * @param object Object
-	 * @param isSelected boolean
-	 * @param hasFocus boolean
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param table
+	 *            JTable
+	 * @param object
+	 *            Object
+	 * @param isSelected
+	 *            boolean
+	 * @param hasFocus
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return Component
-	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
+	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
+	 *      Object, boolean, boolean, int, int)
 	 */
 	public synchronized Component getTableCellRendererComponent(JTable table,
 			Object object, boolean isSelected, boolean hasFocus, int row,

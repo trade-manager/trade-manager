@@ -43,7 +43,6 @@ import javax.swing.text.NumberFormatter;
 
 import org.trade.core.valuetype.Decimal;
 
-
 /**
  * 
  * @version $Id: DecimalField.java,v 1.2 2001/12/28 21:14:55 simon Exp $
@@ -70,6 +69,7 @@ public class DecimalField extends JFormattedTextField {
 
 	/**
 	 * Method getDecimal.
+	 * 
 	 * @return Decimal
 	 */
 	public Decimal getDecimal() {
@@ -83,7 +83,9 @@ public class DecimalField extends JFormattedTextField {
 
 	/**
 	 * Method setDecimal.
-	 * @param number Decimal
+	 * 
+	 * @param number
+	 *            Decimal
 	 */
 	public void setDecimal(Decimal number) {
 		this.setValue(number.doubleValue());

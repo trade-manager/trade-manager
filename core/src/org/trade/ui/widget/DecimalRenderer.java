@@ -42,6 +42,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.trade.core.valuetype.Decimal;
+
 /**
  * 
  * @version $Id: DecimalRenderer.java,v 1.2 2002/01/24 00:05:23 simon Exp $
@@ -64,7 +65,9 @@ public class DecimalRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 */
 	protected void setValue(Object value) {
 		if (value == null) {

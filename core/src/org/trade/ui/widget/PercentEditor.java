@@ -48,7 +48,9 @@ public class PercentEditor extends DefaultCellEditor {
 
 	/**
 	 * Constructor for PercentEditor.
-	 * @param textField PercentField
+	 * 
+	 * @param textField
+	 *            PercentField
 	 */
 	public PercentEditor(final PercentField textField) {
 		super(textField);

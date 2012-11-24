@@ -21,7 +21,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
 
 	/**
 	 * Constructor for ButtonEditor.
-	 * @param button BaseButton
+	 * 
+	 * @param button
+	 *            BaseButton
 	 */
 	public ButtonEditor(BaseButton button) {
 		this.button = button;
@@ -30,6 +32,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
 	// Implement the one CellEditor method that AbstractCellEditor doesn't.
 	/**
 	 * Method getCellEditorValue.
+	 * 
 	 * @return Object
 	 * @see javax.swing.CellEditor#getCellEditorValue()
 	 */
@@ -40,13 +43,20 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
 	// Implement the one method defined by TableCellEditor.
 	/**
 	 * Method getTableCellEditorComponent.
-	 * @param table JTable
-	 * @param value Object
-	 * @param isSelected boolean
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param table
+	 *            JTable
+	 * @param value
+	 *            Object
+	 * @param isSelected
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return Component
-	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable, Object, boolean, int, int)
+	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable,
+	 *      Object, boolean, int, int)
 	 */
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected, int row, int column) {

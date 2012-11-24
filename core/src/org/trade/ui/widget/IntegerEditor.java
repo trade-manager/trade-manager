@@ -47,7 +47,9 @@ public class IntegerEditor extends DefaultCellEditor {
 
 	/**
 	 * Constructor for IntegerEditor.
-	 * @param textField IntegerField
+	 * 
+	 * @param textField
+	 *            IntegerField
 	 */
 	public IntegerEditor(final IntegerField textField) {
 		super(textField);

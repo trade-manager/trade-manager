@@ -53,8 +53,9 @@ public class YesNoTableEditor extends DefaultCellEditor {
 	/**
 	 * Constructs a DefaultCellEditor object that uses a check box.
 	 * 
-	
-	 * @param checkBox JCheckBox
+	 * 
+	 * @param checkBox
+	 *            JCheckBox
 	 */
 	public YesNoTableEditor(final JCheckBox checkBox) {
 		super(checkBox);
