@@ -1839,8 +1839,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            String
 	 * @see com.ib.client.EWrapper#managedAccounts(String)
 	 */
-	public void managedAccounts(String accountNumber) {
-		this.fireManagedAccountsUpdated(accountNumber);
+	public void managedAccounts(String accountNumbers) {
+		_log.info("Managed accounts: " + accountNumbers);
+		this.fireManagedAccountsUpdated(accountNumbers);
 	}
 
 	/**

@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1156,17 +1157,31 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.broker.BrokerChangeListener#managedAccountsUpdated(String)
 	 */
 
-	public void managedAccountsUpdated(String accountNumber) {
+	public void managedAccountsUpdated(String accountNumbers) {
 		try {
 
 			TradeAccount tradeAccount = m_tradePersistentModel
-					.findTradeAccountByNumber(accountNumber);
+					.findTradeAccountByNumber(accountNumbers);
 			if (null == tradeAccount) {
-				tradeAccount = new TradeAccount(accountNumber, accountNumber,
-						Currency.USD, true);
-				tradeAccount = (TradeAccount) m_tradePersistentModel
-						.persistAspect(tradeAccount);
-				m_tradePersistentModel.resetDefaultTradeAccount(tradeAccount);
+
+				Scanner scanLine = new Scanner(accountNumbers);
+				scanLine.useDelimiter("\\,");
+
+				while (scanLine.hasNext()) {
+					String accountNumber = scanLine.next();
+					if (null == tradeAccount) {
+						tradeAccount = new TradeAccount(accountNumber,
+								accountNumber, Currency.USD, true);
+					} else {
+						tradeAccount = new TradeAccount(accountNumber,
+								accountNumber, Currency.USD, false);
+					}
+
+					tradeAccount = (TradeAccount) m_tradePersistentModel
+							.persistAspect(tradeAccount);
+				}
+				scanLine.close();
+
 				DBTableLookupServiceProvider.clearLookup();
 				tradingdayPanel.doWindowActivated();
 			} else {
@@ -1178,7 +1193,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 			m_brokerModel.onSubscribeAccountUpdates(true, tradeAccount);
 			this.setStatusBarMessage("Connected to IB Account: "
-					+ accountNumber, BasePanel.INFORMATION);
+					+ accountNumbers, BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);
