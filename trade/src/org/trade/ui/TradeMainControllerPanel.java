@@ -1186,40 +1186,39 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void managedAccountsUpdated(String accountNumbers) {
 		try {
 
-			TradeAccount tradeAccount = m_tradePersistentModel
-					.findTradeAccountByNumber(accountNumbers);
-			if (null == tradeAccount) {
+			Scanner scanLine = new Scanner(accountNumbers);
 
-				Scanner scanLine = new Scanner(accountNumbers);
-				scanLine.useDelimiter("\\,");
+			scanLine.useDelimiter("\\,");
+			TradeAccount tradeAccount = null;
+			TradeAccount defaultTradeAccount = null;
 
-				while (scanLine.hasNext()) {
-					String accountNumber = scanLine.next();
-					if (null == tradeAccount) {
-						tradeAccount = new TradeAccount(accountNumber,
-								accountNumber, Currency.USD, true);
-					} else {
-						tradeAccount = new TradeAccount(accountNumber,
-								accountNumber, Currency.USD, false);
-					}
+			while (scanLine.hasNext()) {
+				String accountNumber = scanLine.next();
 
+				tradeAccount = m_tradePersistentModel
+						.findTradeAccountByNumber(accountNumber);
+				if (null == tradeAccount) {
+					tradeAccount = new TradeAccount(accountNumber,
+							accountNumber, Currency.USD, false);
 					tradeAccount = (TradeAccount) m_tradePersistentModel
 							.persistAspect(tradeAccount);
 				}
-				scanLine.close();
-
-				DBTableLookupServiceProvider.clearLookup();
-				tradingdayPanel.doWindowActivated();
-			} else {
-				if (!tradeAccount.getIsDefault()) {
-					tradeAccount.setIsDefault(true);
-					m_tradePersistentModel
-							.resetDefaultTradeAccount(tradeAccount);
-				}
+				if (null == defaultTradeAccount)
+					defaultTradeAccount = tradeAccount;
 			}
-			m_brokerModel.onSubscribeAccountUpdates(true, tradeAccount);
+			scanLine.close();
+			if (!defaultTradeAccount.getIsDefault()) {
+				defaultTradeAccount.setIsDefault(true);
+				m_tradePersistentModel
+						.resetDefaultTradeAccount(defaultTradeAccount);
+			}
+			DBTableLookupServiceProvider.clearLookup();
+			tradingdayPanel.doWindowActivated();
+
+			m_brokerModel.onSubscribeAccountUpdates(true, defaultTradeAccount);
 			this.setStatusBarMessage("Connected to IB Account: "
-					+ accountNumbers, BasePanel.INFORMATION);
+					+ defaultTradeAccount.getAccountNumber(),
+					BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);
