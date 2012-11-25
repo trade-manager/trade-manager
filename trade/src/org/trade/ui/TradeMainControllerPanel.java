@@ -1193,18 +1193,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			TradeAccount defaultTradeAccount = null;
 
 			while (scanLine.hasNext()) {
-				String accountNumber = scanLine.next();
-
-				tradeAccount = m_tradePersistentModel
-						.findTradeAccountByNumber(accountNumber);
-				if (null == tradeAccount) {
-					tradeAccount = new TradeAccount(accountNumber,
-							accountNumber, Currency.USD, false);
-					tradeAccount = (TradeAccount) m_tradePersistentModel
-							.persistAspect(tradeAccount);
+				String accountNumber = scanLine.next().trim();
+				if (accountNumber.length() > 0) {
+					tradeAccount = m_tradePersistentModel
+							.findTradeAccountByNumber(accountNumber);
+					if (null == tradeAccount) {
+						tradeAccount = new TradeAccount(accountNumber,
+								accountNumber, Currency.USD, false);
+						tradeAccount = (TradeAccount) m_tradePersistentModel
+								.persistAspect(tradeAccount);
+					}
+					if (null == defaultTradeAccount)
+						defaultTradeAccount = tradeAccount;
 				}
-				if (null == defaultTradeAccount)
-					defaultTradeAccount = tradeAccount;
 			}
 			scanLine.close();
 			if (!defaultTradeAccount.getIsDefault()) {
