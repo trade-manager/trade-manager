@@ -68,6 +68,7 @@ import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.Currency;
+import org.trade.dictionary.valuetype.DAOTradeAccount;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
@@ -1135,6 +1136,21 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							"Information", JOptionPane.YES_NO_OPTION);
 			if (result == JOptionPane.YES_OPTION) {
 				m_brokerModel.onReqManagedAccount();
+			} else {
+				DAOTradeAccount code = DAOTradeAccount.newInstance();
+				TradeAccount tradeAccount = (TradeAccount) code.getObject();
+				result = JOptionPane
+						.showConfirmDialog(
+								this.getFrame(),
+								"Do you want to subscribe to the current default account: "
+										+ tradeAccount.getAccountNumber()
+										+ " ?"
+										+ "\n"
+										+ "See Configuration Tab TradeAccount for default.",
+								"Information", JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					managedAccountsUpdated(tradeAccount.getAccountNumber());
+				}
 			}
 
 		} catch (Exception ex) {
