@@ -59,9 +59,13 @@ public class StringField extends JFormattedTextField implements FocusListener {
 
 	/**
 	 * Constructor for StringField.
-	 * @param mask MaskFormatter
-	 * @param validCharacters String
-	 * @param placeHolder String
+	 * 
+	 * @param mask
+	 *            MaskFormatter
+	 * @param validCharacters
+	 *            String
+	 * @param placeHolder
+	 *            String
 	 */
 	public StringField(MaskFormatter mask, String validCharacters,
 			String placeHolder) {
@@ -85,7 +89,9 @@ public class StringField extends JFormattedTextField implements FocusListener {
 
 	/**
 	 * Constructor for StringField.
-	 * @param columns int
+	 * 
+	 * @param columns
+	 *            int
 	 */
 	public StringField(int columns) {
 		super();
@@ -97,7 +103,9 @@ public class StringField extends JFormattedTextField implements FocusListener {
 	/**
 	 * Called when one of the fields gets the focus so that we can select the
 	 * focused field.
-	 * @param e FocusEvent
+	 * 
+	 * @param e
+	 *            FocusEvent
 	 * @see java.awt.event.FocusListener#focusGained(FocusEvent)
 	 */
 	public void focusGained(FocusEvent e) {
@@ -110,7 +118,9 @@ public class StringField extends JFormattedTextField implements FocusListener {
 	// Workaround for formatted text field focus side effects.
 	/**
 	 * Method selectItLater.
-	 * @param c Component
+	 * 
+	 * @param c
+	 *            Component
 	 */
 	protected void selectItLater(Component c) {
 		if (c instanceof JFormattedTextField) {
@@ -126,7 +136,9 @@ public class StringField extends JFormattedTextField implements FocusListener {
 	// Needed for FocusListener interface.
 	/**
 	 * Method focusLost.
-	 * @param e FocusEvent
+	 * 
+	 * @param e
+	 *            FocusEvent
 	 * @see java.awt.event.FocusListener#focusLost(FocusEvent)
 	 */
 	public void focusLost(FocusEvent e) {

@@ -1705,7 +1705,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			} else {
 				orderKey = new AtomicInteger(maxKey + 1);
 			}
-			m_client.reqManagedAccts();
 			this.fireConnectionOpened();
 
 		} catch (Exception ex) {

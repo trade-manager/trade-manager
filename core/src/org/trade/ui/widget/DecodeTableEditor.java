@@ -48,9 +48,12 @@ public class DecodeTableEditor extends DefaultCellEditor {
 
 	/**
 	 * Constructor for DecodeTableEditor.
-	 * @param comboBox JComboBox
+	 * 
+	 * @param comboBox
+	 *            JComboBox
 	 */
-	public DecodeTableEditor(@SuppressWarnings("rawtypes") final JComboBox comboBox) {
+	public DecodeTableEditor(
+			@SuppressWarnings("rawtypes") final JComboBox comboBox) {
 		super(comboBox);
 	}
 }

@@ -47,7 +47,9 @@ public class StringEditor extends DefaultCellEditor {
 
 	/**
 	 * Constructor for StringEditor.
-	 * @param textField StringField
+	 * 
+	 * @param textField
+	 *            StringField
 	 */
 	public StringEditor(final StringField textField) {
 		super(textField);

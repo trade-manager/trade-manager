@@ -49,7 +49,7 @@ import org.trade.core.valuetype.Money;
  * @version $Id: MoneyField.java,v 1.2 2001/12/28 21:14:55 simon Exp $
  * @author Simon Allen
  */
-public class MoneyField extends JFormattedTextField{
+public class MoneyField extends JFormattedTextField {
 	/**
 	 * 
 	 */
@@ -62,8 +62,7 @@ public class MoneyField extends JFormattedTextField{
 		editFormat.setMinimumFractionDigits(2);
 		this.setFormatterFactory(new DefaultFormatterFactory(
 				new NumberFormatter(displayFormat), new NumberFormatter(
-						displayFormat), new NumberFormatter(
-						editFormat)));
+						displayFormat), new NumberFormatter(editFormat)));
 		this.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.setValue(new Double(0));
 		this.setColumns(10);
@@ -71,6 +70,7 @@ public class MoneyField extends JFormattedTextField{
 
 	/**
 	 * Method getMoney.
+	 * 
 	 * @return Money
 	 */
 	public Money getMoney() {
@@ -84,7 +84,9 @@ public class MoneyField extends JFormattedTextField{
 
 	/**
 	 * Method setMoney.
-	 * @param number Money
+	 * 
+	 * @param number
+	 *            Money
 	 */
 	public void setMoney(Money number) {
 		super.setValue(number.doubleValue());

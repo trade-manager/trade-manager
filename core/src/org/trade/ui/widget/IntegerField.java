@@ -47,7 +47,7 @@ import javax.swing.text.NumberFormatter;
  * @version $Id: IntegerField.java,v 1.2 2001/12/28 21:14:55 simon Exp $
  * @author Simon Allen
  */
-public class IntegerField extends JFormattedTextField{
+public class IntegerField extends JFormattedTextField {
 	/**
 * 
 */
@@ -69,6 +69,7 @@ public class IntegerField extends JFormattedTextField{
 
 	/**
 	 * Method getInteger.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getInteger() {
@@ -82,7 +83,9 @@ public class IntegerField extends JFormattedTextField{
 
 	/**
 	 * Method setInteger.
-	 * @param number Integer
+	 * 
+	 * @param number
+	 *            Integer
 	 */
 	public void setInteger(Integer number) {
 		this.setValue(number);

@@ -65,10 +65,12 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 
 	protected transient Decode originalValue;
 	protected transient Vector<ActionListener> listeners;
-	
+
 	/**
 	 * Constructor for DecodeComboBoxEditor.
-	 * @param model Vector<?>
+	 * 
+	 * @param model
+	 *            Vector<?>
 	 */
 	@SuppressWarnings("unchecked")
 	public DecodeComboBoxEditor(Vector<?> model) {
@@ -81,6 +83,7 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 	/**
 	 * Return the component that should be added to the tree hierarchy for this
 	 * editor
+	 * 
 	 * @return Component
 	 * @see javax.swing.ComboBoxEditor#getEditorComponent()
 	 */
@@ -88,7 +91,10 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 		return this;
 	}
 
-	/** Set the item that should be edited. Cancel any editing if necessary * @param anObject Object
+	/**
+	 * Set the item that should be edited. Cancel any editing if necessary * @param
+	 * anObject Object
+	 * 
 	 * @see javax.swing.ComboBoxEditor#setItem(Object)
 	 */
 	public void setItem(Object anObject) {
@@ -101,14 +107,18 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 		}
 	}
 
-	/** Return the edited item * @return Object
+	/**
+	 * Return the edited item * @return Object
+	 * 
 	 * @see javax.swing.ComboBoxEditor#getItem()
 	 */
 	public Object getItem() {
 		return getSelectedItem();
 	}
 
-	/** Ask the editor to start editing and to select everything * @see javax.swing.ComboBoxEditor#selectAll()
+	/**
+	 * Ask the editor to start editing and to select everything * @see
+	 * javax.swing.ComboBoxEditor#selectAll()
 	 */
 	public void selectAll() {
 	}
@@ -116,14 +126,18 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 	/**
 	 * Add an ActionListener. An action event is generated when the edited item
 	 * changes
-	 * @param l ActionListener
+	 * 
+	 * @param l
+	 *            ActionListener
 	 * @see javax.swing.ComboBoxEditor#addActionListener(ActionListener)
 	 */
 	public void addActionListener(ActionListener l) {
 		listeners.addElement(l);
 	}
 
-	/** Remove an ActionListener * @param l ActionListener
+	/**
+	 * Remove an ActionListener * @param l ActionListener
+	 * 
 	 * @see javax.swing.ComboBoxEditor#removeActionListener(ActionListener)
 	 */
 	public void removeActionListener(ActionListener l) {
@@ -156,7 +170,9 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 
 	/**
 	 * Method itemStateChanged.
-	 * @param evt ItemEvent
+	 * 
+	 * @param evt
+	 *            ItemEvent
 	 * @see java.awt.event.ItemListener#itemStateChanged(ItemEvent)
 	 */
 	public void itemStateChanged(ItemEvent evt) {
@@ -165,7 +181,9 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 
 	/**
 	 * Method focusGained.
-	 * @param evt FocusEvent
+	 * 
+	 * @param evt
+	 *            FocusEvent
 	 * @see java.awt.event.FocusListener#focusGained(FocusEvent)
 	 */
 	public void focusGained(FocusEvent evt) {
@@ -173,7 +191,9 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 
 	/**
 	 * Method focusLost.
-	 * @param evt FocusEvent
+	 * 
+	 * @param evt
+	 *            FocusEvent
 	 * @see java.awt.event.FocusListener#focusLost(FocusEvent)
 	 */
 	public void focusLost(FocusEvent evt) {

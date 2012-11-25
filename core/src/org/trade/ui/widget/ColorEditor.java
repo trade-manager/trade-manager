@@ -45,7 +45,9 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor,
 
 	/**
 	 * Handles events from the editor button and from the dialog's OK button.
-	 * @param e ActionEvent
+	 * 
+	 * @param e
+	 *            ActionEvent
 	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
@@ -67,6 +69,7 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor,
 	// Implement the one CellEditor method that AbstractCellEditor doesn't.
 	/**
 	 * Method getCellEditorValue.
+	 * 
 	 * @return Object
 	 * @see javax.swing.CellEditor#getCellEditorValue()
 	 */
@@ -77,13 +80,20 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor,
 	// Implement the one method defined by TableCellEditor.
 	/**
 	 * Method getTableCellEditorComponent.
-	 * @param table JTable
-	 * @param value Object
-	 * @param isSelected boolean
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param table
+	 *            JTable
+	 * @param value
+	 *            Object
+	 * @param isSelected
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return Component
-	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable, Object, boolean, int, int)
+	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable,
+	 *      Object, boolean, int, int)
 	 */
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected, int row, int column) {

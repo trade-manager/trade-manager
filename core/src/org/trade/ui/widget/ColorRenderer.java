@@ -22,7 +22,9 @@ public class ColorRenderer extends JLabel implements TableCellRenderer {
 
 	/**
 	 * Constructor for ColorRenderer.
-	 * @param isBordered boolean
+	 * 
+	 * @param isBordered
+	 *            boolean
 	 */
 	public ColorRenderer(boolean isBordered) {
 		this.isBordered = isBordered;
@@ -31,14 +33,22 @@ public class ColorRenderer extends JLabel implements TableCellRenderer {
 
 	/**
 	 * Method getTableCellRendererComponent.
-	 * @param table JTable
-	 * @param color Object
-	 * @param isSelected boolean
-	 * @param hasFocus boolean
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param table
+	 *            JTable
+	 * @param color
+	 *            Object
+	 * @param isSelected
+	 *            boolean
+	 * @param hasFocus
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return Component
-	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
+	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
+	 *      Object, boolean, boolean, int, int)
 	 */
 	public Component getTableCellRendererComponent(JTable table, Object color,
 			boolean isSelected, boolean hasFocus, int row, int column) {

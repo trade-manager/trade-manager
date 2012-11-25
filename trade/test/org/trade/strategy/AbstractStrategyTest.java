@@ -36,6 +36,7 @@
 package org.trade.strategy;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Vector;
 
@@ -67,6 +68,7 @@ import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
+import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeAccount;
 import org.trade.persistent.dao.TradeOrder;
@@ -438,9 +440,18 @@ public class AbstractStrategyTest extends TestCase {
 			 * which is > than 50% of $100,000 So we should see it adjust to
 			 * $50,000/$20.01 = 2498 rounded to nearest 100 i.e Quantity = 2500.
 			 */
+			Money price = new Money(20.00);
+			DAOEntryLimit entryLimits = new DAOEntryLimit();
+			Entrylimit entryLimit = entryLimits.getValue(price);
+			entryLimit.setPercentOfMargin(new BigDecimal(0.5));
+			tradePersistentModel.persistAspect(entryLimit);
+
 			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
 					Action.BUY, new Money(20.00), new Money(19.98), true);
+			
 			assertEquals(2500, result.getQuantity(), 0);
+			entryLimit.setPercentOfMargin(new BigDecimal(0));
+			tradePersistentModel.persistAspect(entryLimit);
 
 		} catch (Exception ex) {
 			fail("Error testAddPennyAndRoundStop Msg:" + ex.getMessage());

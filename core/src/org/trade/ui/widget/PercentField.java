@@ -48,7 +48,7 @@ import org.trade.core.valuetype.Percent;
  * @version $Id: PercentField.java,v 1.2 2001/12/28 21:14:55 simon Exp $
  * @author Simon Allen
  */
-public class PercentField extends JFormattedTextField{
+public class PercentField extends JFormattedTextField {
 	/**
 	 * 
 	 */
@@ -71,6 +71,7 @@ public class PercentField extends JFormattedTextField{
 
 	/**
 	 * Method getPercent.
+	 * 
 	 * @return Percent
 	 */
 	public Percent getPercent() {
@@ -84,7 +85,9 @@ public class PercentField extends JFormattedTextField{
 
 	/**
 	 * Method setPercent.
-	 * @param number Percent
+	 * 
+	 * @param number
+	 *            Percent
 	 */
 	public void setPercent(Percent number) {
 		this.setValue(number.doubleValue());
