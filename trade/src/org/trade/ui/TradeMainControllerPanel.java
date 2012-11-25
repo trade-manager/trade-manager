@@ -1125,6 +1125,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (null != todayTradingday) {
 				m_brokerModel.onReqAllExecutions(todayTradingday.getOpen());
 			}
+			int result = JOptionPane
+					.showConfirmDialog(
+							this.getFrame(),
+							"Do you want to subscribe to account data?"
+									+ "\n"
+									+ "Only FA or STL customers can request managed accounts list.",
+							"Information", JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				m_brokerModel.onReqManagedAccount();
+			}
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding excecutions.", ex.getMessage(),
