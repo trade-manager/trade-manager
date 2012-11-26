@@ -1149,11 +1149,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	/**
 	 * This method is fired from an event in the Broker Model. The managed
-	 * account for this connection. Note each instance of TWS is connected to
-	 * one account only. As login in TWS are by account.
+	 * accounts for this connection. Note each instance of TWS is connected to
+	 * one master account only. The list of accounts is parsed. This first
+	 * account is considered the master and will me made the default on request.
 	 * 
 	 * @param accountNumber
-	 *            String the account number.
+	 *            String csv list of managed accounts.
 	 * @see org.trade.broker.BrokerChangeListener#managedAccountsUpdated(String)
 	 */
 
