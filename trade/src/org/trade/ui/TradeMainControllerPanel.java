@@ -1159,11 +1159,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 
 	public void managedAccountsUpdated(String accountNumbers) {
+		Scanner scanLine = new Scanner(accountNumbers);
+		scanLine.useDelimiter("\\,");
+		
 		try {
-
-			Scanner scanLine = new Scanner(accountNumbers);
-
-			scanLine.useDelimiter("\\,");
 			TradeAccount masterTradeAccount = null;
 
 			while (scanLine.hasNext()) {
@@ -1181,7 +1180,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						masterTradeAccount = tradeAccount;
 				}
 			}
-			scanLine.close();
+
 			DBTableLookupServiceProvider.clearLookup();
 			if (!masterTradeAccount.getIsDefault()) {
 				DAOTradeAccount code = DAOTradeAccount.newInstance();
@@ -1211,6 +1210,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);
+		} finally {
+			scanLine.close();
 		}
 	}
 
