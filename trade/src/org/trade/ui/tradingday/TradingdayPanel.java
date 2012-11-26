@@ -632,7 +632,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
 					"Acct #:", false, bold);
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),
-					CoreUtils.padRight(tradeAccount.toString(), 10), false,
+					CoreUtils.padRight(tradeAccount.toString(), 15), false,
 					null);
 
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),

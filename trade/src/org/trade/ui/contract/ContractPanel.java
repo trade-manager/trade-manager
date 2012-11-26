@@ -915,7 +915,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Account:",
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padRight(account, 10), false, null);
+					CoreUtils.padRight(account, 15), false, null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Risk:",
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
