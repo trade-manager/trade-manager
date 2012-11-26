@@ -1127,32 +1127,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (null != todayTradingday) {
 				m_brokerModel.onReqAllExecutions(todayTradingday.getOpen());
 			}
-			int result = JOptionPane
-					.showConfirmDialog(
-							this.getFrame(),
-							"Do you want to subscribe to account data?"
-									+ "\n"
-									+ "Only FA or STL customers can request managed accounts list.",
-							"Information", JOptionPane.YES_NO_OPTION);
-			if (result == JOptionPane.YES_OPTION) {
-				m_brokerModel.onReqManagedAccount();
-			} else {
-				DAOTradeAccount code = DAOTradeAccount.newInstance();
-				TradeAccount tradeAccount = (TradeAccount) code.getObject();
-				result = JOptionPane
-						.showConfirmDialog(
-								this.getFrame(),
-								"Do you want to subscribe to the current default account: "
-										+ tradeAccount.getAccountNumber()
-										+ " ?"
-										+ "\n"
-										+ "See Configuration Tab TradeAccount for default.",
-								"Information", JOptionPane.YES_NO_OPTION);
-				if (result == JOptionPane.YES_OPTION) {
-					managedAccountsUpdated(tradeAccount.getAccountNumber());
-				}
-			}
-
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding excecutions.", ex.getMessage(),
 					ex);
@@ -1189,13 +1163,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Scanner scanLine = new Scanner(accountNumbers);
 
 			scanLine.useDelimiter("\\,");
-			TradeAccount tradeAccount = null;
-			TradeAccount defaultTradeAccount = null;
+			TradeAccount masterTradeAccount = null;
 
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
 				if (accountNumber.length() > 0) {
-					tradeAccount = m_tradePersistentModel
+					TradeAccount tradeAccount = m_tradePersistentModel
 							.findTradeAccountByNumber(accountNumber);
 					if (null == tradeAccount) {
 						tradeAccount = new TradeAccount(accountNumber,
@@ -1203,22 +1176,36 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						tradeAccount = (TradeAccount) m_tradePersistentModel
 								.persistAspect(tradeAccount);
 					}
-					if (null == defaultTradeAccount)
-						defaultTradeAccount = tradeAccount;
+					if (null == masterTradeAccount)
+						masterTradeAccount = tradeAccount;
 				}
 			}
 			scanLine.close();
-			if (!defaultTradeAccount.getIsDefault()) {
-				defaultTradeAccount.setIsDefault(true);
-				m_tradePersistentModel
-						.resetDefaultTradeAccount(defaultTradeAccount);
-			}
 			DBTableLookupServiceProvider.clearLookup();
-			tradingdayPanel.doWindowActivated();
+			if (!masterTradeAccount.getIsDefault()) {
+				DAOTradeAccount code = DAOTradeAccount.newInstance();
+				TradeAccount defaultTradeAccount = (TradeAccount) code
+						.getObject();
+				if (!defaultTradeAccount.getAccountNumber().equals(
+						masterTradeAccount.getAccountNumber())) {
 
-			m_brokerModel.onSubscribeAccountUpdates(true, defaultTradeAccount);
+					int result = JOptionPane.showConfirmDialog(this.getFrame(),
+							"Do you want to make account: "
+									+ masterTradeAccount.getAccountNumber()
+									+ " the default account?", "Information",
+							JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						masterTradeAccount.setIsDefault(true);
+						m_tradePersistentModel
+								.resetDefaultTradeAccount(masterTradeAccount);
+					}
+				}
+			}
+
+			tradingdayPanel.doWindowActivated();
+			m_brokerModel.onSubscribeAccountUpdates(true, masterTradeAccount);
 			this.setStatusBarMessage("Connected to IB Account: "
-					+ defaultTradeAccount.getAccountNumber(),
+					+ masterTradeAccount.getAccountNumber(),
 					BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
