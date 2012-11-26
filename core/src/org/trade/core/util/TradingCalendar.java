@@ -106,7 +106,7 @@ public class TradingCalendar {
 			 * If the close time if before or equal to the open time assume its
 			 * the next day.
 			 */
-			if (closeHour <= openHour
+			if (closeHour < openHour
 					|| (closeHour == openHour && closeMinute <= openMinute)) {
 				closeDayOffset++;
 			}
