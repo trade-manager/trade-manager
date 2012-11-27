@@ -453,7 +453,7 @@ public class ConfigProperties {
 			 */
 			File file = new File(propertyFileLocation);
 			/*
-			 * The name of the Decodes to be renumbered. Copy the output into
+			 * The name of the Decodes to be renumbered. Copy the output BELOW into
 			 * the properties file and remember to set the _NumOfItems to the
 			 * last value.
 			 */
@@ -482,8 +482,8 @@ public class ConfigProperties {
 				if (null != token && token.contains(codeName)) {
 
 					if (null != delimiter) {
-						// _log.info("token: " + token);
-						// _log.info("delimiter: " + delimiter);
+						 _log.info("token: " + token);
+						 _log.info("delimiter: " + delimiter);
 						if (null != token
 								&& !token.endsWith(lookupServiceProvideName)) {
 							if (!delimiter.equals(oldDelimiter)) {
