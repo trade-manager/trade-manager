@@ -86,6 +86,7 @@ public class Contract extends Aspect implements java.io.Serializable {
 	private String localSymbol;
 	private BigDecimal minTick;
 	private BigDecimal priceMagnifier;
+	private BigDecimal priceMultiplier;
 	private String primaryExchange;
 	private String symbol;
 	private String secType;
@@ -114,12 +115,13 @@ public class Contract extends Aspect implements java.io.Serializable {
 	 *            Date
 	 */
 	public Contract(String secType, String symbol, String exchange,
-			String currency, Date expiry) {
+			String currency, Date expiry, BigDecimal priceMultiplier) {
 		this.currency = currency;
 		this.exchange = exchange;
 		this.symbol = symbol;
 		this.secType = secType;
 		this.expiry = expiry;
+		this.priceMultiplier = priceMultiplier;
 	}
 
 	/**
@@ -451,6 +453,26 @@ public class Contract extends Aspect implements java.io.Serializable {
 	 */
 	public void setPriceMagnifier(BigDecimal priceMagnifier) {
 		this.priceMagnifier = priceMagnifier;
+	}
+
+	/**
+	 * Method getPriceMultiplier.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "priceMultiplier", precision = 10)
+	public BigDecimal getPriceMultiplier() {
+		return this.priceMultiplier;
+	}
+
+	/**
+	 * Method setPriceMultiplier.
+	 * 
+	 * @param priceMultiplier
+	 *            BigDecimal
+	 */
+	public void setPriceMultiplier(BigDecimal priceMultiplier) {
+		this.priceMultiplier = priceMultiplier;
 	}
 
 	/**

@@ -48,6 +48,7 @@ CREATE  TABLE IF NOT EXISTS contract (
   localSymbol VARCHAR(10) NULL ,
   minTick DECIMAL(10,2) NULL ,
   priceMagnifier DECIMAL(10,2) NULL ,
+  priceMultiplier DECIMAL(10,2) NULL ,
   primaryExchange VARCHAR(10) NULL ,
   symbol VARCHAR(10) NOT NULL ,
   secType VARCHAR(4) NOT NULL ,

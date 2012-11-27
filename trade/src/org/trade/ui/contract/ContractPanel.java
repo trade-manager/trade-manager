@@ -899,7 +899,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
 					CoreUtils.padRight(symbol, 10), false, null);
-
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Side:",
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),

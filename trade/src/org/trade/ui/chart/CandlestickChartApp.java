@@ -255,7 +255,7 @@ public class CandlestickChartApp extends BasePanel {
 			String name = daoStrategy.getName();
 			Strategy strategy = home.findByName(name);
 			Contract contract = new Contract(SECType.STOCK, symbol,
-					Exchange.SMART, Currency.USD, null);
+					Exchange.SMART, Currency.USD, null, null);
 			Date today = new Date();
 			Date startDate = TradingCalendar.addMonth(today, -3);
 
@@ -343,7 +343,7 @@ public class CandlestickChartApp extends BasePanel {
 			String name = daoStrategy.getName();
 			Strategy strategy = home.findByName(name);
 			Contract contract = new Contract(SECType.STOCK, symbol,
-					Exchange.SMART, Currency.USD, null);
+					Exchange.SMART, Currency.USD, null, null);
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
 					contract, periodSeconds);

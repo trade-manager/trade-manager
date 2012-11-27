@@ -146,13 +146,21 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Constructor for CandleSeries.
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public CandleSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -164,19 +172,21 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Returns the contract ID.
 	 * 
-	
-	 * @return contractId. */
+	 * 
+	 * @return contractId.
+	 */
 	@Transient
 	public Contract getContract() {
 		if (null == this.contract) {
 			this.contract = new Contract(this.getSecType(), this.getSymbol(),
-					this.getExchange(), this.getCurrency(), null);
+					this.getExchange(), this.getCurrency(), null, null);
 		}
 		return this.contract;
 	}
 
 	/**
 	 * Method getSymbol.
+	 * 
 	 * @return String
 	 */
 	@Transient
@@ -192,7 +202,9 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method setSymbol.
-	 * @param symbol String
+	 * 
+	 * @param symbol
+	 *            String
 	 */
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
@@ -200,6 +212,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getCurrency.
+	 * 
 	 * @return String
 	 */
 	@Transient
@@ -215,7 +228,9 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method setCurrency.
-	 * @param currency String
+	 * 
+	 * @param currency
+	 *            String
 	 */
 	public void setCurrency(String currency) {
 		this.currency = currency;
@@ -223,6 +238,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getExchange.
+	 * 
 	 * @return String
 	 */
 	@Transient
@@ -238,7 +254,9 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method setExchange.
-	 * @param exchange String
+	 * 
+	 * @param exchange
+	 *            String
 	 */
 	public void setExchange(String exchange) {
 		this.exchange = exchange;
@@ -246,6 +264,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getSecType.
+	 * 
 	 * @return String
 	 */
 	@Transient
@@ -261,7 +280,9 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method setSecType.
-	 * @param secType String
+	 * 
+	 * @param secType
+	 *            String
 	 */
 	public void setSecType(String secType) {
 		this.secType = secType;
@@ -273,8 +294,9 @@ public class CandleSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * @return The time period.
+	 */
 	public RegularTimePeriod getPeriod(int index) {
 		final CandleItem item = (CandleItem) getDataItem(index);
 		return item.getPeriod();
@@ -283,10 +305,11 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Returns the time period for the specified item.
 	 * 
-	
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * 
+	 * @return The time period.
+	 */
 	@Transient
 	public int getBarSize() {
 		return this.barSize;
@@ -295,10 +318,11 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Returns the time period for the specified item.
 	 * 
-	
 	 * 
-	
-	 * @param barSize Integer
+	 * 
+	 * 
+	 * @param barSize
+	 *            Integer
 	 */
 	public void setBarSize(Integer barSize) {
 		this.barSize = barSize;
@@ -310,8 +334,9 @@ public class CandleSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The data item. */
+	 * 
+	 * @return The data item.
+	 */
 	public ComparableObjectItem getDataItem(int index) {
 		return super.getDataItem(index);
 	}
@@ -335,8 +360,10 @@ public class CandleSeries extends IndicatorSeries {
 	 *            the vwap-value.
 	 * @param tradeCount
 	 *            the tradeCount-value.
-	 * @param contract Contract
-	 * @param lastUpdateDate Date
+	 * @param contract
+	 *            Contract
+	 * @param lastUpdateDate
+	 *            Date
 	 */
 	public void add(Contract contract, RegularTimePeriod period, double open,
 			double high, double low, double close, long volume, double vwap,
@@ -355,13 +382,15 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Adds a data item to the series.
 	 * 
-	
-	
-	
-	
-	
-	 * @param candleItem CandleItem
-	 * @param notify boolean
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param candleItem
+	 *            CandleItem
+	 * @param notify
+	 *            boolean
 	 */
 	public void add(CandleItem candleItem, boolean notify) {
 		if (getItemCount() > 0) {
@@ -381,8 +410,9 @@ public class CandleSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
-	
-	 * @return exists */
+	 * 
+	 * @return exists
+	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
@@ -419,21 +449,22 @@ public class CandleSeries extends IndicatorSeries {
 	 *            the volume weighted price.
 	 * @param tradeCount
 	 *            the number of trades.
-	
+	 * 
 	 * @param rollupInterval
 	 *            the interval to roll up Vwap
-	
-	 * @return completedCandle the last completed candle or -1 if still building */
+	 * 
+	 * @return completedCandle the last completed candle or -1 if still building
+	 */
 	int buildCandle(Date time, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			int rollupInterval) {
 
 		int index = this.indexOf(time);
-//		 _log.info("Symbol :" + this.getSymbol() + "Bar Time: " + time
-//		 + " Index: " + index + " open: " + open + " high: " + high
-//		 + " low: " + low + " close: " + close + " volume: " + volume
-//		 + " vwap: " + vwap + " tradeCount: " + tradeCount
-//		 + " rollupInterval: " + rollupInterval);
+		// _log.info("Symbol :" + this.getSymbol() + "Bar Time: " + time
+		// + " Index: " + index + " open: " + open + " high: " + high
+		// + " low: " + low + " close: " + close + " volume: " + volume
+		// + " vwap: " + vwap + " tradeCount: " + tradeCount
+		// + " rollupInterval: " + rollupInterval);
 
 		this.setCalcVwap(rollupInterval, volume, vwap);
 		CandleItem candle = null;
@@ -477,8 +508,8 @@ public class CandleSeries extends IndicatorSeries {
 					time = TradingCalendar.addMinutes(time, -30);
 				}
 			}
-			long periods = (time.getTime() / 1000 - startBusDate
-					.getTime() / 1000) / this.getBarSize();
+			long periods = (time.getTime() / 1000 - startBusDate.getTime() / 1000)
+					/ this.getBarSize();
 			long startPeriod = startBusDate.getTime()
 					+ (periods * this.getBarSize() * 1000);
 			Date start = new Date(startPeriod);
@@ -505,6 +536,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */
@@ -534,11 +566,13 @@ public class CandleSeries extends IndicatorSeries {
 	 * Uses a rollup Vwap based on a greater time period. So 5 sec bars rolled
 	 * up to 5min bars will rollup interval of 5min/5sec = 60.
 	 * 
-	
+	 * 
 	 * @param rollupInterval
 	 *            the rollup Interval.
-	 * @param volume long
-	 * @param vwap double
+	 * @param volume
+	 *            long
+	 * @param vwap
+	 *            double
 	 */
 
 	public void setCalcVwap(int rollupInterval, long volume, double vwap) {
@@ -574,6 +608,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getVwapHigh.
+	 * 
 	 * @return double
 	 */
 	@Transient
@@ -583,6 +618,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getVwapLow.
+	 * 
 	 * @return double
 	 */
 	@Transient
@@ -592,6 +628,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getVwap.
+	 * 
 	 * @return double
 	 */
 	@Transient
@@ -607,15 +644,18 @@ public class CandleSeries extends IndicatorSeries {
 	 * Checks to see if the previous number or bars make a V shape using the x,y
 	 * vwap values.
 	 * 
-	
 	 * 
-	
 	 * 
-	
-	
-	 * @param source CandleSeries
-	 * @param skip int
-	 * @throws ValueTypeException */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
+	 * @throws ValueTypeException
+	 */
 
 	public void updateSeries(CandleSeries source, int skip) {
 
@@ -637,9 +677,13 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getAverageBar.
-	 * @param startDate Date
-	 * @param endDate Date
-	 * @param wieghted boolean
+	 * 
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
+	 * @param wieghted
+	 *            boolean
 	 * @return Candle
 	 */
 	public Candle getAverageBar(Date startDate, Date endDate, boolean wieghted) {
@@ -707,8 +751,11 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getBar.
-	 * @param startDate Date
-	 * @param endDate Date
+	 * 
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
 	 * @return Candle
 	 */
 	public Candle getBar(Date startDate, Date endDate) {
@@ -770,6 +817,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getPercentChangeFromClose.
+	 * 
 	 * @return Percent
 	 */
 	@Transient
@@ -779,6 +827,7 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method getPercentChangeFromOpen.
+	 * 
 	 * @return Percent
 	 */
 	@Transient
@@ -788,7 +837,9 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method updatePercentChanged.
-	 * @param candleItem CandleItem
+	 * 
+	 * @param candleItem
+	 *            CandleItem
 	 */
 	public void updatePercentChanged(CandleItem candleItem) {
 
@@ -839,8 +890,11 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Method createSeries.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	@Override
 	public void createSeries(CandleDataset source, int seriesIndex) {

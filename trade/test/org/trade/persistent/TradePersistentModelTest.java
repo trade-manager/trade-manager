@@ -137,7 +137,7 @@ public class TradePersistentModelTest extends TestCase {
 
 			String symbol = "TEST1";
 			Contract contract = new Contract(SECType.STOCK, symbol,
-					Exchange.SMART, Currency.USD, null);
+					Exchange.SMART, Currency.USD, null, null);
 
 			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 					.getMostRecentTradingDay(new Date()));

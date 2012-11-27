@@ -128,7 +128,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private static final SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
 			"yyyyMMdd HH:mm:ss z");
 	private static final SimpleDateFormat m_sdfExpiry = new SimpleDateFormat(
-			"yyyyMM");
+			"yyyyMMdd");
 
 	public TWSBrokerModel() {
 		try {
@@ -1726,6 +1726,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			synchronized (m_contractRequests) {
 				if (m_contractRequests.containsKey(reqId)) {
 					Contract transientContract = m_contractRequests.get(reqId);
+					TWSBrokerModel.logContractDetails(contractDetails);
 					TWSBrokerModel.populateContract(contractDetails,
 							transientContract);
 					m_tradePersistentModel.persistContract(transientContract);
@@ -1903,83 +1904,88 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (m_historyDataRequests.containsKey(reqId)) {
 			Contract contract = m_historyDataRequests.get(reqId);
 
-			for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
-				if (dateString.contains("finished-")) {
-					// _log.info("HistoricalData complete: "
-					// + tradestrategy.getContract().getSymbol());
-					synchronized (m_historyDataRequests) {
-						m_historyDataRequests.remove(reqId);
-						m_historyDataRequests.notifyAll();
-						_log.info("Historical data complete for: "
-								+ tradestrategy.getIdTradeStrategy());
-					}
-					try {
-						/*
-						 * The last one has arrived the reqId is the
-						 * tradeStrategyId. Remove this from the processing
-						 * vector.
-						 */
-						CandleSeries candleSeries = tradestrategy
-								.getDatasetContainer().getBaseCandleSeries();
-						m_tradePersistentModel
-								.persistCandleSeries(candleSeries);
-					} catch (Exception ex) {
-						error(reqId, 3240, ex.getMessage());
-					}
-					/*
-					 * Check to see if the trading day is today and this
-					 * strategy is selected to trade and that the market is open
-					 */
+			if (dateString.contains("finished-")) {
+				// _log.info("HistoricalData complete: "
+				// + tradestrategy.getContract().getSymbol());
+
+				/*
+				 * The last one has arrived the reqId is the tradeStrategyId.
+				 * Remove this from the processing vector.
+				 */
+				synchronized (m_historyDataRequests) {
+					m_historyDataRequests.remove(reqId);
+					m_historyDataRequests.notifyAll();
+					_log.info("Historical data complete for: " + reqId);
+				}
+				try {
+
+					Tradestrategy tradestrategy = contract.getTradestrategies()
+							.get(0);
+					CandleSeries candleSeries = tradestrategy
+							.getDatasetContainer().getBaseCandleSeries();
+					m_tradePersistentModel.persistCandleSeries(candleSeries);
+				} catch (Exception ex) {
+					error(reqId, 3240, ex.getMessage());
+				}
+				/*
+				 * Check to see if the trading day is today and this strategy is
+				 * selected to trade and that the market is open
+				 */
+				for (Tradestrategy tradestrategy : contract
+						.getTradestrategies()) {
 					this.fireHistoricalDataComplete(tradestrategy);
 
 					if (tradestrategy.getTradingday().getClose()
 							.after(new Date())) {
-						try {
-							this.onReqRealTimeBars(contract, tradestrategy
-									.getStrategy().getMarketData());
-						} catch (BrokerModelException e) {
-							error(reqId, 3250, e.getMessage());
+						if (!this.isRealtimeBarsRunning(contract)) {
+							try {
+								this.onReqRealTimeBars(contract, tradestrategy
+										.getStrategy().getMarketData());
+							} catch (BrokerModelException ex) {
+								error(reqId, 3250, ex.getMessage());
+							}
 						}
 					} else {
 						tradestrategy.getDatasetContainer().cancel();
-						_log.info("Historical data complete for: "
-								+ contract.getSymbol());
 					}
+				}
 
-				} else {
+			} else {
 
-					Date date = null;
-					try {
-						/*
-						 * There is a bug in the TWS interface format for dates
-						 * should always be milli sec but when 1 day is selected
-						 * as the period the dates come through as yyyyMMdd.
-						 */
-						if (dateString.length() == 8) {
-							SimpleDateFormat sdf = new SimpleDateFormat(
-									"yyyyMMdd");
-							date = sdf.parse(dateString);
-							date = TradingCalendar.getBusinessDayStart(date);
-
-						} else {
-							date = TradingCalendar.getDate(Long
-									.parseLong(dateString) * 1000);
-						}
-					} catch (Exception ex) {
-						error(reqId, 3260, ex.getMessage());
-						return;
-					}
-
+				Date date = null;
+				try {
 					/*
-					 * Only store data that is during mkt hours
+					 * There is a bug in the TWS interface format for dates
+					 * should always be milli sec but when 1 day is selected as
+					 * the period the dates come through as yyyyMMdd.
 					 */
-					if (TradingCalendar.isMarketHours(date)) {
+					if (dateString.length() == 8) {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+						date = sdf.parse(dateString);
+						date = TradingCalendar.getBusinessDayStart(date);
+
+					} else {
+						date = TradingCalendar.getDate(Long
+								.parseLong(dateString) * 1000);
+					}
+				} catch (Exception ex) {
+					error(reqId, 3260, ex.getMessage());
+					return;
+				}
+
+				/*
+				 * Only store data that is during mkt hours
+				 */
+				if (TradingCalendar.isMarketHours(date)) {
+					for (Tradestrategy tradestrategy : contract
+							.getTradestrategies()) {
 						tradestrategy.getDatasetContainer().buildCandle(date,
 								open, high, low, close, volume, vwap,
 								tradeCount, 1);
 					}
 				}
 			}
+
 		}
 	}
 
@@ -2207,7 +2213,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != contract.getExpiry()) {
 			if (SECType.FUTURE.equals(contract.getSecType())) {
 				m_sdfExpiry.setTimeZone(TimeZone.getTimeZone("GMT"));
-				ibContract.m_expiry = m_sdfExpiry.format(contract.getExpiry());
+				ibContract.m_expiry = m_sdfExpiry.format(contract.getExpiry())
+						.substring(0, 6);
 			}
 		}
 		if (null != contract.getCurrency()) {
@@ -2528,6 +2535,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			transientContract.setPriceMagnifier(new BigDecimal(
 					contractDetails.m_priceMagnifier));
 		}
+		if (null != contractDetails.m_summary.m_multiplier) {
+			transientContract.setPriceMultiplier(new BigDecimal(
+					contractDetails.m_summary.m_multiplier));
+		}
 		if (null != contractDetails.m_subcategory) {
 			transientContract.setSubCategory(contractDetails.m_subcategory);
 		}
@@ -2659,15 +2670,44 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param contect
 	 *            com.ib.client.Contract
 	 */
-	public static void logContract(com.ib.client.Contract contect) {
-		_log.info("Symbol: " + contect.m_symbol + " Sec Type: "
-				+ contect.m_secType + " Exchange: " + contect.m_exchange
-				+ " Con Id: " + contect.m_conId + " Currency: "
-				+ contect.m_currency + " SecIdType: " + contect.m_secIdType
-				+ " Primary Exch: " + contect.m_primaryExch + " Local Symbol: "
-				+ contect.m_localSymbol + " SecId: " + contect.m_secId
-				+ " Multiplier: " + contect.m_multiplier + " Expiry: "
-				+ contect.m_expiry);
+	public static void logContract(com.ib.client.Contract contract) {
+		_log.info("Symbol: " + contract.m_symbol + " Sec Type: "
+				+ contract.m_secType + " Exchange: " + contract.m_exchange
+				+ " Con Id: " + contract.m_conId + " Currency: "
+				+ contract.m_currency + " SecIdType: " + contract.m_secIdType
+				+ " Primary Exch: " + contract.m_primaryExch
+				+ " Local Symbol: " + contract.m_localSymbol + " SecId: "
+				+ contract.m_secId + " Multiplier: " + contract.m_multiplier
+				+ " Expiry: " + contract.m_expiry);
+	}
+
+	/**
+	 * Method logContractDetails.
+	 * 
+	 * @param contect
+	 *            com.ib.client.ContractDetails
+	 */
+	public static void logContractDetails(
+			com.ib.client.ContractDetails contractDetails) {
+		_log.info("Symbol: " + contractDetails.m_summary.m_symbol
+				+ " Sec Type: " + contractDetails.m_summary.m_secType
+				+ " Exchange: " + contractDetails.m_summary.m_exchange
+				+ " Con Id: " + contractDetails.m_summary.m_conId
+				+ " Currency: " + contractDetails.m_summary.m_currency
+				+ " SecIdType: " + contractDetails.m_summary.m_secIdType
+				+ " Primary Exch: " + contractDetails.m_summary.m_primaryExch
+				+ " Local Symbol: " + contractDetails.m_summary.m_localSymbol
+				+ " SecId: " + contractDetails.m_summary.m_secId
+				+ " Multiplier: " + contractDetails.m_summary.m_multiplier
+				+ " Category: " + contractDetails.m_category + " Expiry: "
+				+ contractDetails.m_summary.m_expiry + " ContractMonth: "
+				+ contractDetails.m_contractMonth + " Cusip: "
+				+ contractDetails.m_cusip + " Industry: "
+				+ contractDetails.m_industry + " IssueDate: "
+				+ contractDetails.m_issueDate + " MarketName: "
+				+ contractDetails.m_marketName + " MinTick: "
+				+ contractDetails.m_minTick + " PriceMagnifier: "
+				+ contractDetails.m_priceMagnifier);
 	}
 
 	/**

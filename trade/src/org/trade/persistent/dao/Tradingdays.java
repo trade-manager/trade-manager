@@ -492,6 +492,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			}
 			case 8: {
 				// Multiplier
+				if (token.length() > 0)
+					contract.setPriceMultiplier(new BigDecimal(token));
 				break;
 			}
 			case 9: {

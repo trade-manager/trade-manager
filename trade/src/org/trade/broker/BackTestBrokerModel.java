@@ -941,6 +941,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			synchronized (m_contractRequests) {
 				if (m_contractRequests.containsKey(reqId)) {
 					Contract transientContract = m_contractRequests.get(reqId);
+					TWSBrokerModel.logContractDetails(contractDetails);
 					TWSBrokerModel.populateContract(contractDetails,
 							transientContract);
 					m_tradePersistentModel.persistContract(transientContract);

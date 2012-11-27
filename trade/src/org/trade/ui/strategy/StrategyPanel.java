@@ -351,8 +351,8 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					.getServiceForInterface(BrokerModel._brokerTest, this);
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries("Test", new Contract(
-					SECType.STOCK, "Test", Exchange.SMART, Currency.USD, null),
-					BarSize.FIVE_MIN);
+					SECType.STOCK, "Test", Exchange.SMART, Currency.USD, null,
+					null), BarSize.FIVE_MIN);
 			candleDataset.addSeries(candleSeries);
 			StrategyData strategyData = new StrategyData(rule.getStrategy(),
 					candleDataset);

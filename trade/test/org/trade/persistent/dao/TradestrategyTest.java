@@ -64,6 +64,7 @@ public class TradestrategyTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -72,6 +73,7 @@ public class TradestrategyTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -185,6 +187,7 @@ public class TradestrategyTest extends TestCase {
 
 	/**
 	 * Method getTestTradestrategy.
+	 * 
 	 * @return Tradestrategy
 	 * @throws Exception
 	 */
@@ -205,7 +208,7 @@ public class TradestrategyTest extends TestCase {
 				Exchange.SMART, Currency.USD);
 		if (null == contract) {
 			contract = new Contract(SECType.STOCK, symbol, Exchange.SMART,
-					Currency.USD, null);
+					Currency.USD, null, null);
 			contract = (Contract) aspectHome.persist(contract);
 
 		} else {
@@ -238,6 +241,7 @@ public class TradestrategyTest extends TestCase {
 
 	/**
 	 * Method removeTestTradestrategy.
+	 * 
 	 * @throws Exception
 	 */
 	public static void removeTestTradestrategy() throws Exception {
@@ -267,7 +271,9 @@ public class TradestrategyTest extends TestCase {
 
 	/**
 	 * Method removeTrades.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @return Tradestrategy
 	 * @throws Exception
 	 */

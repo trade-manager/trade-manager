@@ -54,6 +54,7 @@ public class ContractTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -62,6 +63,7 @@ public class ContractTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -76,8 +78,8 @@ public class ContractTest extends TestCase {
 			// values in it by reading them from form object
 			AspectHome aspectHome = new AspectHome();
 			ContractHome contractHome = new ContractHome();
-			Contract transientInstance = new Contract(SECType.STOCK, "QQQ", Exchange.SMART,
-					Currency.USD, null);
+			Contract transientInstance = new Contract(SECType.STOCK, "QQQ",
+					Exchange.SMART, Currency.USD, null, null);
 			Contract contract = contractHome.findByUniqueKey(
 					transientInstance.getSecType(),
 					transientInstance.getSymbol(),

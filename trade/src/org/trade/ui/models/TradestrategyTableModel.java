@@ -364,9 +364,10 @@ public class TradestrategyTableModel extends TableModel {
 					.newInstance().getObject();
 			if (null == tradestrategy) {
 				tradestrategy = new Tradestrategy(new Contract(SECType.STOCK,
-						"", Exchange.SMART, Currency.USD, null), tradingday,
-						strategy, tradeAccount, new BigDecimal(riskAmount),
-						null, null, true, chartDays, barSize);
+						"", Exchange.SMART, Currency.USD, null, null),
+						tradingday, strategy, tradeAccount, new BigDecimal(
+								riskAmount), null, null, true, chartDays,
+						barSize);
 			} else {
 				tradestrategy.setTradingday(tradingday);
 			}
