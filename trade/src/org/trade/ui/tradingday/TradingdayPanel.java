@@ -337,15 +337,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		}
 	}
 
-	/**
-	 * Method getTradestrategyTable.
-	 * 
-	 * @return Table
-	 */
-	public Table getTradestrategyTable() {
-		return this.m_tradestrategyTable;
-	}
-
 	public void doWindowActivated() {
 		try {
 			@SuppressWarnings({ "rawtypes", "unchecked" })
