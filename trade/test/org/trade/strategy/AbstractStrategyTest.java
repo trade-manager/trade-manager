@@ -454,7 +454,67 @@ public class AbstractStrategyTest extends TestCase {
 			tradePersistentModel.persistAspect(entryLimit);
 
 		} catch (Exception ex) {
-			fail("Error testAddPennyAndRoundStop Msg:" + ex.getMessage());
+			fail("Error testCreateRiskOpenPositionMargin Msg:"
+					+ ex.getMessage());
+		}
+	}
+
+	@Test
+	public void testCreateRiskOpenPositionMargin1() {
+		try {
+			/*
+			 * Standard test account has $100,000 margin and % of Margin 50% i.e
+			 * $50,000 with $100 risk. So 2cent stop after round over whole
+			 * number give 3cent stop. Risk/Stop = 3333 shares * $20 = $66,666
+			 * which is > than 50% of $100,000 So we should see it adjust to
+			 * $50,000/$20.01 = 2498 rounded to nearest 100 i.e Quantity = 2500.
+			 */
+			Money price = new Money(45.75);
+			DAOEntryLimit entryLimits = new DAOEntryLimit();
+			Entrylimit entryLimit = entryLimits.getValue(price);
+			entryLimit.setPercentOfMargin(new BigDecimal(0.5));
+			tradePersistentModel.persistAspect(entryLimit);
+
+			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
+					Action.SELL, new Money(45.75), new Money(46.00), true);
+			assertEquals(400, result.getQuantity(), 0);
+			this.strategyProxy.getOpenPositionOrder().setAverageFilledPrice(
+					(new Money(45.74)).getBigDecimalValue());
+			this.strategyProxy.getOpenPositionOrder().setFilledQuantity(
+					this.strategyProxy.getOpenPositionOrder().getQuantity());
+			this.strategyProxy
+					.getOpenPositionOrder()
+					.getTrade()
+					.setOpenQuantity(
+							this.strategyProxy.getOpenPositionOrder()
+									.getQuantity());
+			/*
+			 * Position has been opened and not covered submit the target and
+			 * stop orders for the open quantity. Two targets at 4R and 7R Stop
+			 * and 2X actual stop this will be managed to 1R below
+			 * 
+			 * Make the stop -2R and manage to the Vwap MA of the opening bar.
+			 */
+			Money targetOnePrice = this.strategyProxy.createStopAndTargetOrder(
+					this.strategyProxy.getOpenPositionOrder(), 1, 4, 50, true);
+			this.strategyProxy.setTargetPrice(targetOnePrice);
+			this.strategyProxy.createStopAndTargetOrder(
+					this.strategyProxy.getOpenPositionOrder(), 1, 7, 50, true);
+			for (TradeOrder order : this.strategyProxy.getTradestrategy()
+					.getTrades().get(0).getTradeOrders()) {
+				_log.info("Key: " + order.getOrderKey() + " Qty: "
+						+ order.getQuantity() + " Aux Price: "
+						+ order.getAuxPrice() + " Lmt Price: "
+						+ order.getLimitPrice() + " Stop Price: "
+						+ order.getStopPrice());
+			}
+
+			entryLimit.setPercentOfMargin(new BigDecimal(0));
+			tradePersistentModel.persistAspect(entryLimit);
+
+		} catch (Exception ex) {
+			fail("Error testCreateRiskOpenPositionMargin1 Msg:"
+					+ ex.getMessage());
 		}
 	}
 
