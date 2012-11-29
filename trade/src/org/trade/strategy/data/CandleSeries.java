@@ -87,6 +87,7 @@ public class CandleSeries extends IndicatorSeries {
 	private String exchange;
 	private String secType;
 	private Date startTime;
+	private Date endTime;
 	private int barSize = 0;
 	private Double sumVwap = new Double(0);
 	private Long sumVolume = new Long(0);
@@ -115,13 +116,15 @@ public class CandleSeries extends IndicatorSeries {
 	 *            the length in minutes for each bar ie. 5, 15, 30, 60
 	 * 
 	 */
-	public CandleSeries(Contract contract, int barSize, Date startTime) {
+	public CandleSeries(Contract contract, int barSize, Date startTime,
+			Date endTime) {
 		super(contract.getSymbol(), IndicatorSeries.CandleSeries, true, 0,
 				false);
 		this.symbol = contract.getSymbol();
 		this.contract = contract;
 		this.barSize = barSize;
 		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 
 	/**
@@ -140,12 +143,13 @@ public class CandleSeries extends IndicatorSeries {
 	 */
 
 	public CandleSeries(String legend, Contract contract, int barSize,
-			Date startTime) {
+			Date startTime, Date endTime) {
 		super(legend, IndicatorSeries.CandleSeries, true, 0, false);
 		this.contract = contract;
 		this.symbol = contract.getSymbol();
 		this.barSize = barSize;
 		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 
 	/**
@@ -199,13 +203,33 @@ public class CandleSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Method setSymbol.
+	 * Method setStartTime.
 	 * 
 	 * @param startTime
 	 *            Date
 	 */
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
+	}
+
+	/**
+	 * Method getEndTime.
+	 * 
+	 * @return Date
+	 */
+	@Transient
+	public Date getEndTime() {
+		return this.endTime;
+	}
+
+	/**
+	 * Method setEndTime.
+	 * 
+	 * @param endTime
+	 *            Date
+	 */
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	/**
@@ -870,9 +894,10 @@ public class CandleSeries extends IndicatorSeries {
 				.getStart());
 		Date prevDayEnd = TradingCalendar.getBusinessDayEnd(prevDay);
 		prevDayEnd = TradingCalendar.addSeconds(prevDayEnd, -1);
-		Date prevDayStart = TradingCalendar.getBusinessDayStart(prevDay);
-		Date todayOpen = TradingCalendar.getBusinessDayStart(candleItem
-				.getPeriod().getStart());
+		Date prevDayStart = TradingCalendar.setTimeForDateTo(
+				this.getStartTime(), prevDay);
+		Date todayOpen = TradingCalendar.setTimeForDateTo(this.getStartTime(),
+				candleItem.getPeriod().getStart());
 		int index = this.indexOf(todayOpen);
 		if (index > -1) {
 			CandleItem openCandleItem = (CandleItem) this.getDataItem(index);

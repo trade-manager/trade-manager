@@ -912,9 +912,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			Candle candle = new Candle(null, open, high, low, close,
 					(volume / 100), (open + close) / 2, ((int) volume / 100),
 					new Date());
-			candle.setStartPeriod(TradingCalendar.getBusinessDayStart(time));
-			candle.setPeriod(TradingCalendar.getBusinessDayStart(time)
-					.toString());
+			candle.setStartPeriod(time);
+			candle.setPeriod(time.toString());
 			candle.setEndPeriod(TradingCalendar.addSeconds(
 					TradingCalendar.getBusinessDayEnd(time), -1));
 			candle.setLastUpdateDate(candle.getStartPeriod());

@@ -45,7 +45,6 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
-import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -639,18 +638,16 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 		try {
 			synchronized (candleItem) {
-				if (null == candleItem.getCandle().getTradingday()) {
-					Date open = TradingCalendar.getBusinessDayStart(candleItem
-							.getPeriod().getStart());
-					Tradingday tradingday = this.findTradingdayByOpenDate(open);
-					/*
-					 * This could be the previous day so we need to add a
-					 * trading day.
-					 */
+				if (null == candleItem.getCandle().getTradingday()
+						.getIdTradingDay()) {
+
+					Tradingday tradingday = this
+							.findTradingdayByOpenDate(candleItem.getCandle()
+									.getTradingday().getOpen());
+
 					if (null == tradingday) {
-						tradingday = Tradingday.newInstance(open);
 						tradingday = (Tradingday) m_aspectHome
-								.persist(tradingday);
+								.persist(candleItem.getCandle().getTradingday());
 					}
 					candleItem.getCandle().setTradingday(tradingday);
 				}

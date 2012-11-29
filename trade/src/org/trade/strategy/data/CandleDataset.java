@@ -586,14 +586,15 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @return CandleSeries
 	 */
 	public static CandleSeries createSeries(CandleDataset source,
-			int seriesIndex, Contract contract, int bars, Date startTime) {
+			int seriesIndex, Contract contract, int bars, Date startTime,
+			Date endTime) {
 
 		if (source.getSeries(seriesIndex) == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex)
-				.getContract(), bars, startTime);
+				.getContract(), bars, startTime, endTime);
 		series.updateSeries(source.getSeries(seriesIndex), 0);
 
 		return series;

@@ -310,7 +310,7 @@ public class CandlestickChartApp extends BasePanel {
 					.getTime() - TradingCalendar.getBusinessDayStart(today)
 					.getTime()) / 1000);
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
-					contract, daySeconds, startDate);
+					contract, daySeconds, startDate, today);
 			candleDataset.addSeries(candleSeries);
 			StrategyData datasetContainer = new StrategyData(strategy,
 					candleDataset);
@@ -348,7 +348,7 @@ public class CandlestickChartApp extends BasePanel {
 					Exchange.SMART, Currency.USD, null, null);
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
-					contract, periodSeconds, startDate);
+					contract, periodSeconds, startDate, today);
 			candleDataset.addSeries(candleSeries);
 			StrategyData datasetContainer = new StrategyData(strategy,
 					candleDataset);

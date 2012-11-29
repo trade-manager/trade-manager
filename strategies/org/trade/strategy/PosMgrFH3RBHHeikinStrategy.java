@@ -190,7 +190,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 								startPeriod, 9, 35))) {
 
 					CandleItem firstCandle = this.getCandle(TradingCalendar
-							.getBusinessDayStart(startPeriod));
+							.setTimeForDateTo(this.getTradestrategy()
+									.getTradingday().getOpen(), startPeriod));
 
 					if (Side.BOT.equals(getTrade().getSide())) {
 						if (currentCandle.getVwap() < firstCandle.getVwap()) {

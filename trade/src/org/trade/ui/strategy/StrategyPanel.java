@@ -354,7 +354,8 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			CandleSeries candleSeries = new CandleSeries("Test", new Contract(
 					SECType.STOCK, "Test", Exchange.SMART, Currency.USD, null,
 					null), BarSize.FIVE_MIN,
-					TradingCalendar.getBusinessDayStart(new Date()));
+					TradingCalendar.getBusinessDayStart(new Date()),
+					TradingCalendar.getBusinessDayEnd(new Date()));
 			candleDataset.addSeries(candleSeries);
 			StrategyData strategyData = new StrategyData(rule.getStrategy(),
 					candleDataset);

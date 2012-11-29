@@ -120,10 +120,13 @@ public class CandlePeriodTest extends TestCase {
 			Candle candle = this.tradestrategy
 					.getDatasetContainer()
 					.getBaseCandleSeries()
-					.getBar(TradingCalendar.getBusinessDayStart(TradingCalendar
+					.getBar(TradingCalendar.setTimeForDateTo(this.tradestrategy
+							.getTradingday().getOpen(), TradingCalendar
 							.getPrevTradingDay(startPeriod)),
-							TradingCalendar.getBusinessDayEnd(TradingCalendar
-									.getPrevTradingDay(startPeriod)));
+							TradingCalendar.setTimeForDateTo(this.tradestrategy
+									.getTradingday().getClose(),
+									TradingCalendar
+											.getPrevTradingDay(startPeriod)));
 			_log.info("Bar for Contract: " + candle.getContract().getSymbol()
 					+ " Start Period: " + candle.getPeriod() + " Open: "
 					+ candle.getOpen() + " High: " + candle.getHigh()
@@ -165,10 +168,14 @@ public class CandlePeriodTest extends TestCase {
 					.getDatasetContainer()
 					.getBaseCandleSeries()
 					.getAverageBar(
-							TradingCalendar.getBusinessDayStart(TradingCalendar
+							TradingCalendar.setTimeForDateTo(this.tradestrategy
+									.getTradingday().getOpen(), TradingCalendar
 									.getPrevTradingDay(startPeriod)),
-							TradingCalendar.getBusinessDayEnd(TradingCalendar
-									.getPrevTradingDay(startPeriod)), false);
+							TradingCalendar.setTimeForDateTo(this.tradestrategy
+									.getTradingday().getClose(),
+									TradingCalendar
+											.getPrevTradingDay(startPeriod)),
+							false);
 			_log.info("Non wieghted avg bar for Contract: "
 					+ candle.getContract().getSymbol() + " Start Period: "
 					+ candle.getPeriod() + " Open: " + candle.getOpen()
@@ -180,10 +187,14 @@ public class CandlePeriodTest extends TestCase {
 					.getDatasetContainer()
 					.getBaseCandleSeries()
 					.getAverageBar(
-							TradingCalendar.getBusinessDayStart(TradingCalendar
+							TradingCalendar.setTimeForDateTo(this.tradestrategy
+									.getTradingday().getOpen(), TradingCalendar
 									.getPrevTradingDay(startPeriod)),
-							TradingCalendar.getBusinessDayEnd(TradingCalendar
-									.getPrevTradingDay(startPeriod)), true);
+							TradingCalendar.setTimeForDateTo(this.tradestrategy
+									.getTradingday().getClose(),
+									TradingCalendar
+											.getPrevTradingDay(startPeriod)),
+							true);
 			_log.info("Wieghted avg bar for Contract: "
 					+ candle.getContract().getSymbol() + " Start Period: "
 					+ candle.getPeriod() + " Open: " + candle.getOpen()

@@ -86,8 +86,8 @@ public class CandleHome {
 				CandleItem candleItem = (CandleItem) candleSeries
 						.getDataItem(i);
 
-				Date open = TradingCalendar.getBusinessDayStart(candleItem
-						.getPeriod().getStart());
+				Date open = TradingCalendar.setTimeForDateTo(candleSeries
+						.getStartTime(), candleItem.getPeriod().getStart());
 
 				if ((null == tradingday)
 						|| (tradingday.getOpen().compareTo(open) != 0)) {

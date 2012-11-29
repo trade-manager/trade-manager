@@ -478,7 +478,7 @@ public class Tradestrategy extends Aspect implements Serializable {
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries(getContract()
 					.getSymbol(), getContract(), getBarSize(), this
-					.getTradingday().getOpen());
+					.getTradingday().getOpen(), this.getTradingday().getClose());
 			candleDataset.addSeries(candleSeries);
 			this.datasetContainer = new StrategyData(getStrategy(),
 					candleDataset);

@@ -63,6 +63,7 @@ import org.trade.persistent.dao.TradeAccount;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
+import org.trade.persistent.dao.Tradingday;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -2107,6 +2108,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 												dataItemIndex);
 								if (!candleItem.getCandle().getBarSize()
 										.equals(prevBarSize)) {
+									if (null == candleItem.getCandle()
+											.getTradingday()) {
+										Tradingday tradingday = new Tradingday(
+												TradingCalendar
+														.setTimeForDateTo(
+																datasetContainer
+																		.getBaseCandleSeries()
+																		.getStartTime(),
+																candleItem
+																		.getPeriod()
+																		.getStart()),
+												TradingCalendar
+														.setTimeForDateTo(
+																datasetContainer
+																		.getBaseCandleSeries()
+																		.getEndTime(),
+																candleItem
+																		.getPeriod()
+																		.getStart()));
+										candleItem.getCandle().setTradingday(
+												tradingday);
+									}
+
 									m_tradePersistentModel
 											.persistCandleItem(candleItem);
 									prevBarSize = candleItem.getCandle()

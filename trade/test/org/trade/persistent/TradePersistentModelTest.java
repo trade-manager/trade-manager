@@ -647,7 +647,8 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			CandleSeries candleSeries = new CandleSeries(
 					this.tradestrategy.getContract(), BarSize.FIVE_MIN,
-					this.tradestrategy.getTradingday().getOpen());
+					this.tradestrategy.getTradingday().getOpen(),
+					this.tradestrategy.getTradingday().getClose());
 			this.tradePersistentModel.persistCandleSeries(candleSeries);
 		} catch (Exception e) {
 			fail("Error testPersistTradingday Msg: " + e.getMessage());

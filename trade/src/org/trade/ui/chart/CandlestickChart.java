@@ -307,18 +307,15 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				(96 - segments15min));
 
 		if (datasetContainer.getCandleDataset().getSeries(0).getItemCount() > 0) {
-			startDate = TradingCalendar
-					.getBusinessDayStart(((CandleItem) datasetContainer
-							.getCandleDataset().getSeries(0).getDataItem(0))
-							.getPeriod().getStart());
-			endDate = TradingCalendar
-					.getBusinessDayStart(((CandleItem) datasetContainer
-							.getCandleDataset()
-							.getSeries(0)
-							.getDataItem(
-									datasetContainer.getCandleDataset()
-											.getSeries(0).getItemCount() - 1))
-							.getPeriod().getStart());
+			startDate = ((CandleItem) datasetContainer.getCandleDataset()
+					.getSeries(0).getDataItem(0)).getPeriod().getStart();
+			endDate = ((CandleItem) datasetContainer
+					.getCandleDataset()
+					.getSeries(0)
+					.getDataItem(
+							datasetContainer.getCandleDataset().getSeries(0)
+									.getItemCount() - 1)).getPeriod()
+					.getStart();
 			endDate = TradingCalendar.getNextTradingDay(endDate);
 		}
 		segmentedTimeline.setStartTime(startDate.getTime());
@@ -438,7 +435,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					xyplot.removeAnnotation(closePriceLine);
 				}
 
-				double x = TradingCalendar.getBusinessDayStart(
+				double x = TradingCalendar.setTimeForDateTo(
+						candleSeries.getStartTime(),
 						candleItem.getPeriod().getStart()).getTime();
 				closePriceLine = new XYTextAnnotation("("
 						+ dateFormat.format(candleItem.getLastUpdateDate())
@@ -512,9 +510,9 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			 */
 			for (int j = 0; j < 96; j++) {
 				Date segmentStartDate = TradingCalendar.addMinutes(
-						TradingCalendar.getSpecificTime(
-								TradingCalendar.getBusinessDayStart(startDate),
-								0, 0), j * 15);
+						TradingCalendar.getSpecificTime(TradingCalendar
+								.setTimeForDateTo(startDate, startDate), 0, 0),
+						j * 15);
 
 				if (!TradingCalendar.isTradingDay(segmentStartDate)
 						|| !TradingCalendar.isMarketHours(segmentStartDate)) {
