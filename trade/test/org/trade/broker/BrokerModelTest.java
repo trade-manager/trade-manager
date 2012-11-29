@@ -323,7 +323,7 @@ public class BrokerModelTest extends TestCase {
 	public void testOnBrokerData() {
 
 		try {
-
+			tradestrategy.getContract().addTradestrategy(tradestrategy);
 			m_brokerModel.onBrokerData(tradestrategy.getContract(),
 					tradestrategy.getTradingday().getOpen(), tradestrategy
 							.getTradingday().getClose(), tradestrategy
