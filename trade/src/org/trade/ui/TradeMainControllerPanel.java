@@ -413,15 +413,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						"Please save or refresh before running strategy ...\n",
 						BasePanel.WARNING);
 			} else {
-				Tradingday today = m_tradingdays.getTradingdays().get(
-						TradingCalendar.getBusinessDayStart(new Date()));
-				if (null == today) {
-					this.setStatusBarMessage(
-							"Market is not open for any of the selected trading days ...\n",
-							BasePanel.INFORMATION);
-				} else {
-					runStrategy(m_tradingdays, false);
-				}
+				runStrategy(m_tradingdays, false);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error running Trade Strategies.",
@@ -1161,7 +1153,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void managedAccountsUpdated(String accountNumbers) {
 		Scanner scanLine = new Scanner(accountNumbers);
 		scanLine.useDelimiter("\\,");
-		
+
 		try {
 			TradeAccount masterTradeAccount = null;
 
@@ -1639,13 +1631,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						}
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
 							Date endDate = TradingCalendar
-									.getBusinessDayEnd(TradingCalendar
-											.getMostRecentTradingDay(TradingCalendar
-													.addBusinessDays(
-															tradestrategy
-																	.getTradingday()
-																	.getClose(),
-															0)));
+									.setTimeForDateTo(
+											tradestrategy.getTradingday()
+													.getClose(),
+											TradingCalendar
+													.getMostRecentTradingDay(TradingCalendar
+															.addBusinessDays(
+																	tradestrategy
+																			.getTradingday()
+																			.getClose(),
+																	0)));
 							Date startDate = TradingCalendar.addDays(endDate,
 									(-1 * (tradestrategy.getChartDays() - 1)));
 							startDate = TradingCalendar

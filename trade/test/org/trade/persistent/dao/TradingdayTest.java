@@ -49,6 +49,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -59,6 +60,7 @@ public class TradingdayTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -67,6 +69,7 @@ public class TradingdayTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -84,7 +87,9 @@ public class TradingdayTest extends TestCase {
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Date open = TradingCalendar.getMostRecentTradingDay(new Date());
-			Tradingday transientInstance = tradingdayHome.findByOpen(open);
+			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
+					TradingCalendar.getBusinessDayStart(open),
+					TradingCalendar.getBusinessDayStart(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}
@@ -108,7 +113,9 @@ public class TradingdayTest extends TestCase {
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Date open = TradingCalendar.getMostRecentTradingDay(new Date());
-			Tradingday transientInstance = tradingdayHome.findByOpen(open);
+			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
+					TradingCalendar.getBusinessDayStart(open),
+					TradingCalendar.getBusinessDayStart(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}

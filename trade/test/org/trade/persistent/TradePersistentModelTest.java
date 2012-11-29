@@ -660,7 +660,8 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			CandleItem candleItem = new CandleItem(
-					this.tradestrategy.getContract(), new CandlePeriod(),
+					this.tradestrategy.getContract(),
+					this.tradestrategy.getTradingday(), new CandlePeriod(),
 					100.23, 100.23, 100.23, 100.23, 10000000L, 100.23, 100,
 					new Date());
 			this.tradePersistentModel.persistCandleItem(candleItem);
@@ -945,8 +946,9 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			Tradingday result = this.tradePersistentModel
-					.findTradingdayByOpenDate(this.tradestrategy
-							.getTradingday().getOpen());
+					.findTradingdayByOpenCloseDate(this.tradestrategy
+							.getTradingday().getOpen(), this.tradestrategy
+							.getTradingday().getClose());
 			assertNotNull(result);
 		} catch (Exception e) {
 			fail("Error testFindTradingdayByOpenDate Msg: " + e.getMessage());

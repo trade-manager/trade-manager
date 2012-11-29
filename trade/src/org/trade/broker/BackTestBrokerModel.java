@@ -318,10 +318,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 										TWSBrokerModel.getIBContract(contract));
 					}
 
-					endDate = TradingCalendar.getBusinessDayEnd(TradingCalendar
-							.getMostRecentTradingDay(TradingCalendar
-									.addBusinessDays(endDate,
-											backfillOffsetDays)));
+					endDate = TradingCalendar.setTimeForDateTo(endDate,
+							TradingCalendar
+									.getMostRecentTradingDay(TradingCalendar
+											.addBusinessDays(endDate,
+													backfillOffsetDays)));
 					m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 					String endDateTime = m_sdfGMT.format(endDate);
 

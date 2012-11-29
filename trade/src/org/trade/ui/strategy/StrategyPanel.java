@@ -78,7 +78,6 @@ import org.trade.broker.BrokerModel;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
-import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.Currency;
@@ -353,9 +352,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries("Test", new Contract(
 					SECType.STOCK, "Test", Exchange.SMART, Currency.USD, null,
-					null), BarSize.FIVE_MIN,
-					TradingCalendar.getBusinessDayStart(new Date()),
-					TradingCalendar.getBusinessDayEnd(new Date()));
+					null), BarSize.FIVE_MIN, new Date(), new Date());
 			candleDataset.addSeries(candleSeries);
 			StrategyData strategyData = new StrategyData(rule.getStrategy(),
 					candleDataset);

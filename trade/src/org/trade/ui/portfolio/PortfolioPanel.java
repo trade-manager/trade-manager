@@ -251,15 +251,16 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	public void doSearch() {
 
 		try {
-			Date start = TradingCalendar
-					.getBusinessDayStart((Date) spinnerStart.getValue());
-			Date end = TradingCalendar.getBusinessDayEnd((Date) spinnerEnd
-					.getValue());
+			Date startDate = TradingCalendar.getSpecificTime(
+					(Date) spinnerStart.getValue(), 0, 0, 0);
+			Date endDate = TradingCalendar.getSpecificTime(
+					(Date) spinnerEnd.getValue(), 23, 59, 59);
 			m_tradelogReport = m_tradePersistentModel.findTradelogReport(
-					this.tradeAccount, start, end, filterButton.isSelected());
+					this.tradeAccount, startDate, endDate,
+					filterButton.isSelected());
 			if (null == m_tradelogReport) {
-				this.setStatusBarMessage("Did not find trading day : " + start,
-						INFORMATION);
+				this.setStatusBarMessage("Did not find trading day : "
+						+ startDate, INFORMATION);
 			} else {
 				m_tradelogDetailModel.setData(m_tradelogReport);
 				m_tradelogSummaryModel.setData(m_tradelogReport);

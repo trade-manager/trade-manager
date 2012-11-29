@@ -192,9 +192,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradingdayByOpenDate(Date)
 	 */
-	public Tradingday findTradingdayByOpenDate(Date date)
-			throws PersistentModelException {
-		return m_tradingdayHome.findByOpen(date);
+	public Tradingday findTradingdayByOpenCloseDate(Date openDate,
+			Date closeDate) throws PersistentModelException {
+		return m_tradingdayHome.findByOpenCloseDate(openDate, closeDate);
 	}
 
 	/**
@@ -641,9 +641,9 @@ public class TradePersistentModel implements PersistentModel {
 				if (null == candleItem.getCandle().getTradingday()
 						.getIdTradingDay()) {
 
-					Tradingday tradingday = this
-							.findTradingdayByOpenDate(candleItem.getCandle()
-									.getTradingday().getOpen());
+					Tradingday tradingday = this.findTradingdayByOpenCloseDate(
+							candleItem.getCandle().getTradingday().getOpen(),
+							candleItem.getCandle().getTradingday().getClose());
 
 					if (null == tradingday) {
 						tradingday = (Tradingday) m_aspectHome

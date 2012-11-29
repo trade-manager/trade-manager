@@ -73,7 +73,9 @@ public class TradingdayHome {
 	 */
 	/**
 	 * Method persist.
-	 * @param detachedInstance Tradingday
+	 * 
+	 * @param detachedInstance
+	 *            Tradingday
 	 * @throws Exception
 	 */
 	public void persist(Tradingday detachedInstance) throws Exception {
@@ -206,7 +208,9 @@ public class TradingdayHome {
 
 	/**
 	 * Method findTradingdayById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Tradingday
 	 */
 	public Tradingday findTradingdayById(Integer id) {
@@ -236,8 +240,11 @@ public class TradingdayHome {
 
 	/**
 	 * Method findTradingdaysByDateRange.
-	 * @param startDate Date
-	 * @param endDate Date
+	 * 
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
 	 * @return Tradingdays
 	 */
 	public Tradingdays findTradingdaysByDateRange(Date startDate, Date endDate) {
@@ -293,10 +300,12 @@ public class TradingdayHome {
 
 	/**
 	 * Method findByOpen.
-	 * @param open Date
+	 * 
+	 * @param open
+	 *            Date
 	 * @return Tradingday
 	 */
-	public Tradingday findByOpen(Date open) {
+	public Tradingday findByOpenCloseDate(Date openDate, Date closeDate) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -306,8 +315,10 @@ public class TradingdayHome {
 					.createQuery(Tradingday.class);
 			Root<Tradingday> from = query.from(Tradingday.class);
 			query.select(from);
-
-			query.where(builder.equal(from.get("open"), open));
+			if (null != openDate)
+				query.where(builder.equal(from.get("open"), openDate));
+			if (null != closeDate)
+				query.where(builder.equal(from.get("close"), closeDate));
 			List<Tradingday> items = entityManager.createQuery(query)
 					.getResultList();
 			for (Tradingday tradingday : items) {
@@ -333,7 +344,9 @@ public class TradingdayHome {
 
 	/**
 	 * Method findStrategyByName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 * @return Strategy
 	 */
 	private Strategy findStrategyByName(String name) {
@@ -360,7 +373,9 @@ public class TradingdayHome {
 
 	/**
 	 * Method findTradingdayByOpenDate.
-	 * @param open Date
+	 * 
+	 * @param open
+	 *            Date
 	 * @return Tradingday
 	 */
 	private Tradingday findTradingdayByOpenDate(Date open) {
@@ -389,7 +404,9 @@ public class TradingdayHome {
 
 	/**
 	 * Method findTradestrategyByDate.
-	 * @param open Date
+	 * 
+	 * @param open
+	 *            Date
 	 * @return List<Tradestrategy>
 	 */
 	private List<Tradestrategy> findTradestrategyByDate(Date open) {
@@ -423,11 +440,17 @@ public class TradingdayHome {
 
 	/**
 	 * Method findContractByUniqueKey.
-	 * @param SECType String
-	 * @param symbol String
-	 * @param exchange String
-	 * @param currency String
-	 * @param expiryDate Date
+	 * 
+	 * @param SECType
+	 *            String
+	 * @param symbol
+	 *            String
+	 * @param exchange
+	 *            String
+	 * @param currency
+	 *            String
+	 * @param expiryDate
+	 *            Date
 	 * @return Contract
 	 */
 	private Contract findContractByUniqueKey(String SECType, String symbol,

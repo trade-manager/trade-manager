@@ -355,7 +355,7 @@ public interface PersistentModel {
 	 * @return Tradingday
 	 * @throws PersistentModelException
 	 */
-	Tradingday findTradingdayByOpenDate(Date date)
+	Tradingday findTradingdayByOpenCloseDate(Date openDate, Date closeDate)
 			throws PersistentModelException;
 
 	/**

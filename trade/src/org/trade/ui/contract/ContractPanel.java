@@ -635,7 +635,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		if (tradestrategy.getDatasetContainer().getBaseCandleSeries().isEmpty()) {
 
-			endDate = TradingCalendar.getBusinessDayEnd(TradingCalendar
+			endDate = TradingCalendar.setTimeForDateTo(tradestrategy
+					.getTradingday().getClose(), TradingCalendar
 					.getMostRecentTradingDay(TradingCalendar.addBusinessDays(
 							tradestrategy.getTradingday().getClose(),
 							backfillOffsetDays)));

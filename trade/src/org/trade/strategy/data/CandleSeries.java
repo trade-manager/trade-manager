@@ -55,6 +55,7 @@ import org.trade.core.valuetype.ValueTypeException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
+import org.trade.persistent.dao.Tradingday;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.CandlePeriod;
 
@@ -413,9 +414,10 @@ public class CandleSeries extends IndicatorSeries {
 	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public void add(Contract contract, RegularTimePeriod period, double open,
-			double high, double low, double close, long volume, double vwap,
-			int tradeCount, Date lastUpdateDate) {
+	public void add(Contract contract, Tradingday tradingday,
+			RegularTimePeriod period, double open, double high, double low,
+			double close, long volume, double vwap, int tradeCount,
+			Date lastUpdateDate) {
 		if (getItemCount() > 0) {
 			CandleItem item0 = (CandleItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
@@ -423,8 +425,8 @@ public class CandleSeries extends IndicatorSeries {
 						"Can't mix RegularTimePeriod class types.");
 			}
 		}
-		super.add(new CandleItem(contract, period, open, high, low, close,
-				volume, vwap, tradeCount, lastUpdateDate), true);
+		super.add(new CandleItem(contract, tradingday, period, open, high, low,
+				close, volume, vwap, tradeCount, lastUpdateDate), true);
 	}
 
 	/**
@@ -560,10 +562,14 @@ public class CandleSeries extends IndicatorSeries {
 			long startPeriod = startBusDate.getTime()
 					+ (periods * this.getBarSize() * 1000);
 			Date start = new Date(startPeriod);
-			candle = new CandleItem(this.getContract(), new CandlePeriod(start,
-					this.getBarSize()), open, high, low, close, volume,
-					(this.getVwap() == 0 ? close : this.getVwap()), tradeCount,
-					time);
+			Tradingday tradingday = new Tradingday(
+					TradingCalendar
+							.setTimeForDateTo(this.getStartTime(), start),
+					TradingCalendar.setTimeForDateTo(this.getEndTime(), start));
+			candle = new CandleItem(this.getContract(), tradingday,
+					new CandlePeriod(start, this.getBarSize()), open, high,
+					low, close, volume, (this.getVwap() == 0 ? close
+							: this.getVwap()), tradeCount, time);
 			this.add(candle, false);
 			index = this.indexOf(start);
 		}
@@ -892,7 +898,8 @@ public class CandleSeries extends IndicatorSeries {
 
 		Date prevDay = TradingCalendar.getPrevTradingDay(candleItem.getPeriod()
 				.getStart());
-		Date prevDayEnd = TradingCalendar.getBusinessDayEnd(prevDay);
+		Date prevDayEnd = TradingCalendar.setTimeForDateTo(this.getEndTime(),
+				prevDay);
 		prevDayEnd = TradingCalendar.addSeconds(prevDayEnd, -1);
 		Date prevDayStart = TradingCalendar.setTimeForDateTo(
 				this.getStartTime(), prevDay);

@@ -413,10 +413,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public void doSearch() {
 		try {
 			this.clearStatusBarMessage();
-			Date startDate = TradingCalendar
-					.getBusinessDayStart(((Date) spinnerStart.getValue()));
-			Date endDate = TradingCalendar
-					.getBusinessDayStart(((Date) spinnerEnd.getValue()));
+			Date startDate = TradingCalendar.getSpecificTime(
+					(Date) spinnerStart.getValue(), 0, 0, 0);
+			Date endDate = TradingCalendar.getSpecificTime(
+					(Date) spinnerEnd.getValue(), 23, 59, 59);
 			if (endDate.before(startDate)) {
 				startDate = endDate;
 				spinnerStart.setValue(startDate);

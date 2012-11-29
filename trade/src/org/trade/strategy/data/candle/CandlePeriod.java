@@ -53,6 +53,7 @@ import org.trade.core.util.TradingCalendar;
 /**
  * Represents a minute. This class is immutable, which is a requirement for all
  * {@link RegularTimePeriod} subclasses.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -121,8 +122,11 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 
 	/**
 	 * Constructs a new seconds Period, based on the system date/time.
-	 * @param startTime Date
-	 * @param secondsLength int
+	 * 
+	 * @param startTime
+	 *            Date
+	 * @param secondsLength
+	 *            int
 	 */
 	public CandlePeriod(Date startTime, int secondsLength) {
 		if (null == startTime) {
@@ -150,7 +154,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 
 	/**
 	 * Constructs a new second, based on the date/time.
-	 * @param date Date
+	 * 
+	 * @param date
+	 *            Date
 	 */
 	public CandlePeriod(Date date) {
 		this(date, date);
@@ -159,15 +165,22 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Constructs a new second.
 	 * 
-	
-	
-	 * @param startSecond int
-	 * @param endSecond int
-	 * @param startMinute int
-	 * @param endMinute int
-	 * @param startHour int
-	 * @param endHour int
-	 * @param day Day
+	 * 
+	 * 
+	 * @param startSecond
+	 *            int
+	 * @param endSecond
+	 *            int
+	 * @param startMinute
+	 *            int
+	 * @param endMinute
+	 *            int
+	 * @param startHour
+	 *            int
+	 * @param endHour
+	 *            int
+	 * @param day
+	 *            Day
 	 */
 	public CandlePeriod(int startSecond, int endSecond, int startMinute,
 			int endMinute, int startHour, int endHour, Day day) {
@@ -186,13 +199,15 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Constructs a new second, based on the supplied date/time and timezone.
 	 * 
-	
-	
-	
+	 * 
+	 * 
+	 * 
 	 * 
 	 * @since 1.0.13
-	 * @param startTime Date
-	 * @param endTime Date
+	 * @param startTime
+	 *            Date
+	 * @param endTime
+	 *            Date
 	 */
 	public CandlePeriod(Date startTime, Date endTime) {
 		if (startTime == null) {
@@ -221,20 +236,26 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Creates a new second.
 	 * 
-	
-	
+	 * 
+	 * 
 	 * @param day
 	 *            the day (1-31).
 	 * @param month
 	 *            the month (1-12).
 	 * @param year
 	 *            the year (1900-9999).
-	 * @param startSecond int
-	 * @param endSecond int
-	 * @param startMinute int
-	 * @param endMinute int
-	 * @param startHour int
-	 * @param endHour int
+	 * @param startSecond
+	 *            int
+	 * @param endSecond
+	 *            int
+	 * @param startMinute
+	 *            int
+	 * @param endMinute
+	 *            int
+	 * @param startHour
+	 *            int
+	 * @param endHour
+	 *            int
 	 */
 	public CandlePeriod(int startSecond, int endSecond, int startMinute,
 			int endMinute, int startHour, int endHour, int day, int month,
@@ -246,10 +267,11 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the day.
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.3
-	 * @return The day. */
+	 * @return The day.
+	 */
 	public int getNumberOfSeconds() {
 		return this.secondsLength;
 	}
@@ -257,10 +279,11 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the day.
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.3
-	 * @return The day. */
+	 * @return The day.
+	 */
 	public Day getDay() {
 		return this.day;
 	}
@@ -268,8 +291,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the hour.
 	 * 
-	
-	 * @return The hour (never <code>null</code>). */
+	 * 
+	 * @return The hour (never <code>null</code>).
+	 */
 	public Hour getStartHour() {
 		return new Hour(this.startHour, this.day);
 	}
@@ -277,8 +301,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the hour.
 	 * 
-	
-	 * @return The hour (never <code>null</code>). */
+	 * 
+	 * @return The hour (never <code>null</code>).
+	 */
 	public Hour getEndHour() {
 		return new Hour(this.endHour, this.day);
 	}
@@ -286,8 +311,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the minute.
 	 * 
-	
-	 * @return The minute. */
+	 * 
+	 * @return The minute.
+	 */
 	public Minute getStartMinute() {
 		return new Minute(this.startMinute, new Hour(this.startHour, this.day));
 	}
@@ -295,8 +321,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the minute.
 	 * 
-	
-	 * @return The minute. */
+	 * 
+	 * @return The minute.
+	 */
 	public Minute getEndMinute() {
 		return new Minute(this.endMinute, new Hour(this.endHour, this.day));
 	}
@@ -304,8 +331,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the second.
 	 * 
-	
-	 * @return The second. */
+	 * 
+	 * @return The second.
+	 */
 	public int getStartSecond() {
 		return this.startSecond;
 	}
@@ -313,8 +341,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the second.
 	 * 
-	
-	 * @return The second. */
+	 * 
+	 * @return The second.
+	 */
 	public int getEndSecond() {
 		return this.endSecond;
 	}
@@ -325,10 +354,11 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * calendar instance passed in the most recent call to the
 	 * {@link #peg(Calendar)} method.
 	 * 
-	
 	 * 
-	
-	 * @return The first millisecond of the minute. * @see #getLastMillisecond() */
+	 * 
+	 * 
+	 * @return The first millisecond of the minute. * @see #getLastMillisecond()
+	 */
 	public long getFirstMillisecond() {
 		return this.firstMillisecond;
 	}
@@ -339,10 +369,11 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * calendar instance passed in the most recent call to the
 	 * {@link #peg(Calendar)} method.
 	 * 
-	
 	 * 
-	
-	 * @return The last millisecond of the minute. * @see #getFirstMillisecond() */
+	 * 
+	 * 
+	 * @return The last millisecond of the minute. * @see #getFirstMillisecond()
+	 */
 	public long getLastMillisecond() {
 		return this.lastMillisecond;
 	}
@@ -364,16 +395,13 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the second preceding this one.
 	 * 
-	
-	 * @return The second preceding this one. */
+	 * 
+	 * @return The second preceding this one.
+	 */
 	public RegularTimePeriod previous() {
 		CandlePeriod result = null;
 		Date prevDate = TradingCalendar.addSeconds(this.getStart(), -1
 				* secondsLength);
-		if (prevDate
-				.before(TradingCalendar.getBusinessDayStart(this.getStart()))) {
-			prevDate = TradingCalendar.getPrevTradingDay(this.getStart());
-		}
 		result = new CandlePeriod(prevDate, secondsLength);
 
 		return result;
@@ -382,16 +410,14 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns the second following this one.
 	 * 
-	
-	 * @return The second following this one. */
+	 * 
+	 * @return The second following this one.
+	 */
 	public RegularTimePeriod next() {
 		CandlePeriod result = null;
 
 		Date nextDate = TradingCalendar.addSeconds(this.getStart(),
 				secondsLength);
-		if (nextDate.after(TradingCalendar.getBusinessDayEnd(this.getStart()))) {
-			nextDate = TradingCalendar.getNextTradingDay(this.getStart());
-		}
 		result = new CandlePeriod(nextDate, secondsLength);
 
 		return result;
@@ -400,8 +426,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns a serial index number for the second.
 	 * 
-	
-	 * @return The serial index number. */
+	 * 
+	 * @return The serial index number.
+	 */
 	public long getSerialIndex() {
 
 		long hourIndex = (this.day.getSerialIndex() * 24L) + this.startHour;
@@ -411,8 +438,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	/**
 	 * Returns a serial index number for the minute.
 	 * 
-	
-	 * @return The serial index number. */
+	 * 
+	 * @return The serial index number.
+	 */
 	public long getDaySerialIndex() {
 
 		long hourIndex = this.startHour;
@@ -426,11 +454,12 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 *            the calendar which defines the timezone (<code>null</code> not
 	 *            permitted).
 	 * 
-	
 	 * 
-	
-	 * @return The first millisecond. * @throws NullPointerException
-	 *             if <code>calendar</code> is <code>null</code>. */
+	 * 
+	 * 
+	 * @return The first millisecond. * @throws NullPointerException if
+	 *         <code>calendar</code> is <code>null</code>.
+	 */
 	public long getFirstMillisecond(Calendar calendar) {
 		int year = this.day.getYear();
 		int month = this.day.getMonth() - 1;
@@ -450,11 +479,12 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * @param calendar
 	 *            the calendar / timezone (<code>null</code> not permitted).
 	 * 
-	
 	 * 
-	
-	 * @return The last millisecond. * @throws NullPointerException
-	 *             if <code>calendar</code> is <code>null</code>. */
+	 * 
+	 * 
+	 * @return The last millisecond. * @throws NullPointerException if
+	 *         <code>calendar</code> is <code>null</code>.
+	 */
 	public long getLastMillisecond(Calendar calendar) {
 		int year = this.day.getYear();
 		int month = this.day.getMonth() - 1;
@@ -477,9 +507,10 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * @param obj
 	 *            the object to compare (<code>null</code> permitted).
 	 * 
-	
+	 * 
 	 * @return <code>true</code> if the minute and hour value of this and the
-	 *         object are the same. */
+	 *         object are the same.
+	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -514,8 +545,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * <code>http://developer.java.sun.com/developer/Books/effectivejava
 	 * /Chapter3.pdf</code>
 	 * 
-	
-	 * @return A hash code. */
+	 * 
+	 * @return A hash code.
+	 */
 	public int hashCode() {
 		int result = 17;
 		result = (37 * result) + this.startSecond;
@@ -537,8 +569,9 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * @param o1
 	 *            object to compare.
 	 * 
-	
-	 * @return negative == before, zero == same, positive == after. */
+	 * 
+	 * @return negative == before, zero == same, positive == after.
+	 */
 	public int compareTo(Object o1) {
 		int result;
 
@@ -589,9 +622,10 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * @param s
 	 *            the minute string to parse.
 	 * 
-	
+	 * 
 	 * @return <code>null</code>, if the string is not parseable, the minute
-	 *         otherwise. */
+	 *         otherwise.
+	 */
 	public static CandlePeriod parseMinute(String s) {
 		CandlePeriod result = null;
 		s = s.trim();
@@ -624,6 +658,7 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

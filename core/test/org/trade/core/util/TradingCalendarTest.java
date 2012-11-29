@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Some tests for the {@link TradingCalendar} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -55,6 +56,7 @@ public class TradingCalendarTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -63,6 +65,7 @@ public class TradingCalendarTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -81,6 +84,17 @@ public class TradingCalendarTest extends TestCase {
 			_log.error("Error creating class: " + ex.getMessage(), ex);
 			fail("Error creating class: " + ex.getCause().getMessage());
 		}
+	}
+
+	@Test
+	public void testSetTimeForDateTo() {
+		Date date = new Date();
+		Date busdayStartDate = TradingCalendar.getBusinessDayStart(date);
+		Date setDate = TradingCalendar.setTimeForDateTo(busdayStartDate, date);
+		_log.info("busdayStartDate: " + busdayStartDate.getTime());
+		_log.info("date: " + date.getTime());
+		_log.info("setDate: " + setDate.getTime());
+		assertEquals(busdayStartDate, setDate);
 	}
 
 	@Test
