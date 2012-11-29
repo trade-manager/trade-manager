@@ -85,7 +85,7 @@ public class StrategyData extends Worker {
 		candleDataset = new CandleDataset();
 		candleDataset.addSeries(CandleDataset.createSeries(baseCandleDataset,
 				0, getBaseCandleSeries().getContract(), getBaseCandleSeries()
-						.getBarSize()));
+						.getBarSize(), getBaseCandleSeries().getStartTime()));
 		for (IndicatorSeries indicator : strategy.getIndicatorSeries()) {
 
 			try {

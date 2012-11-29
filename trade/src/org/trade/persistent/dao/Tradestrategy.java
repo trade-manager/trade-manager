@@ -477,7 +477,8 @@ public class Tradestrategy extends Aspect implements Serializable {
 		if (null == this.datasetContainer) {
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries(getContract()
-					.getSymbol(), getContract(), getBarSize());
+					.getSymbol(), getContract(), getBarSize(), this
+					.getTradingday().getOpen());
 			candleDataset.addSeries(candleSeries);
 			this.datasetContainer = new StrategyData(getStrategy(),
 					candleDataset);
@@ -559,8 +560,14 @@ public class Tradestrategy extends Aspect implements Serializable {
 			if (CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2
 					.getTradingday().getOpen()) == 0) {
 				if (o1.getContract().equals(o2.getContract())) {
-					returnVal = CoreUtils.nullSafeComparator(o1.getChartDays(),
-							o2.getChartDays());
+					if (CoreUtils.nullSafeComparator(o1.getBarSize(),
+							o2.getBarSize()) == 0) {
+						returnVal = CoreUtils.nullSafeComparator(
+								o1.getChartDays(), o2.getChartDays());
+					} else {
+						returnVal = CoreUtils.nullSafeComparator(
+								o1.getBarSize(), o2.getBarSize());
+					}
 				} else {
 					returnVal = o1.getContract().getSymbol()
 							.compareTo(o2.getContract().getSymbol());

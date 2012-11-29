@@ -38,6 +38,7 @@ package org.trade.strategy.data;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -79,10 +80,11 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * Returns the position within each time period that is used for the X value
 	 * when the collection is used as an {@link XYDataset}.
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.11
-	 * @return The anchor position (never <code>null</code>). */
+	 * @return The anchor position (never <code>null</code>).
+	 */
 	public TimePeriodAnchor getXPosition() {
 		return this.xPosition;
 	}
@@ -128,8 +130,10 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * 
 	 * @param series
 	 *            the series (<code>null</code> not permitted).
-	 * @param index int
-	 * @see org.trade.strategy.data.IndicatorDataset#setSeries(int, IndicatorSeries)
+	 * @param index
+	 *            int
+	 * @see org.trade.strategy.data.IndicatorDataset#setSeries(int,
+	 *      IndicatorSeries)
 	 */
 	public void setSeries(int index, IndicatorSeries series) {
 		if (series == null) {
@@ -162,7 +166,6 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * Adds a series to the collection and sends a {@link DatasetChangeEvent} to
 	 * all registered listeners.
 	 * 
-	
 	 */
 	public void seriesUpdated() {
 		fireDatasetChanged();
@@ -171,8 +174,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	/**
 	 * Returns the number of series in the collection.
 	 * 
-	
-	 * @return The series count. * @see org.jfree.data.general.SeriesDataset#getSeriesCount()
+	 * 
+	 * @return The series count. * @see
+	 *         org.jfree.data.general.SeriesDataset#getSeriesCount()
 	 */
 	public int getSeriesCount() {
 		return this.data.size();
@@ -184,12 +188,13 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param series
 	 *            the series index (zero-based).
 	 * 
-	
 	 * 
-	
-	 * @return The series. * @throws IllegalArgumentException
-	 *             if <code>series</code> is not in the range <code>0</code> to
-	 *             <code>getSeriesCount() - 1</code>. * @see org.trade.strategy.data.IndicatorDataset#getSeries(int)
+	 * 
+	 * 
+	 * @return The series. * @throws IllegalArgumentException if
+	 *         <code>series</code> is not in the range <code>0</code> to
+	 *         <code>getSeriesCount() - 1</code>. * @see
+	 *         org.trade.strategy.data.IndicatorDataset#getSeries(int)
 	 */
 	public CandleSeries getSeries(int series) {
 		if ((series < 0) || (series >= getSeriesCount())) {
@@ -205,11 +210,12 @@ public class CandleDataset extends AbstractXYDataset implements
 	 *            the series index (in the range <code>0</code> to
 	 *            <code>getSeriesCount() - 1</code>).
 	 * 
-	
 	 * 
-	
-	 * @return The key for a series. * @throws IllegalArgumentException
-	 *             if <code>series</code> is not in the specified range. * @see org.jfree.data.general.SeriesDataset#getSeriesKey(int)
+	 * 
+	 * 
+	 * @return The key for a series. * @throws IllegalArgumentException if
+	 *         <code>series</code> is not in the specified range. * @see
+	 *         org.jfree.data.general.SeriesDataset#getSeriesKey(int)
 	 */
 	public Comparable<?> getSeriesKey(int series) {
 		// defer argument checking
@@ -222,12 +228,13 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param series
 	 *            the series (zero-based index).
 	 * 
-	
 	 * 
-	
-	 * @return The item count. * @throws IllegalArgumentException
-	 *             if <code>series</code> is not in the range <code>0</code> to
-	 *             <code>getSeriesCount() - 1</code>. * @see org.jfree.data.xy.XYDataset#getItemCount(int)
+	 * 
+	 * 
+	 * @return The item count. * @throws IllegalArgumentException if
+	 *         <code>series</code> is not in the range <code>0</code> to
+	 *         <code>getSeriesCount() - 1</code>. * @see
+	 *         org.jfree.data.xy.XYDataset#getItemCount(int)
 	 */
 	public int getItemCount(int series) {
 		// defer argument checking
@@ -240,8 +247,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param period
 	 *            the time period (<code>null</code> not permitted).
 	 * 
-	
-	 * @return The x-value. */
+	 * 
+	 * @return The x-value.
+	 */
 	protected synchronized long getX(RegularTimePeriod period) {
 		long result = 0L;
 		if (this.xPosition == TimePeriodAnchor.START) {
@@ -262,8 +270,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The x-value. * @see org.jfree.data.xy.XYDataset#getXValue(int, int)
+	 * 
+	 * @return The x-value. * @see org.jfree.data.xy.XYDataset#getXValue(int,
+	 *         int)
 	 */
 	public double getXValue(int series, int item) {
 		CandleSeries s = (CandleSeries) this.data.get(series);
@@ -280,7 +289,7 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
+	 * 
 	 * @return The x-value. * @see org.jfree.data.xy.XYDataset#getX(int, int)
 	 */
 	public Number getX(int series, int item) {
@@ -295,7 +304,7 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
+	 * 
 	 * @return The y-value. * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
@@ -312,8 +321,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The open-value. * @see org.jfree.data.xy.OHLCDataset#getOpenValue(int, int)
+	 * 
+	 * @return The open-value. * @see
+	 *         org.jfree.data.xy.OHLCDataset#getOpenValue(int, int)
 	 */
 	public double getOpenValue(int series, int item) {
 		CandleSeries s = (CandleSeries) this.data.get(series);
@@ -329,8 +339,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The open-value. * @see org.jfree.data.xy.OHLCDataset#getOpen(int, int)
+	 * 
+	 * @return The open-value. * @see org.jfree.data.xy.OHLCDataset#getOpen(int,
+	 *         int)
 	 */
 	public Number getOpen(int series, int item) {
 		return new Double(getOpenValue(series, item));
@@ -344,8 +355,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The close-value. * @see org.jfree.data.xy.OHLCDataset#getCloseValue(int, int)
+	 * 
+	 * @return The close-value. * @see
+	 *         org.jfree.data.xy.OHLCDataset#getCloseValue(int, int)
 	 */
 	public double getCloseValue(int series, int item) {
 		CandleSeries s = (CandleSeries) this.data.get(series);
@@ -361,8 +373,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The close-value. * @see org.jfree.data.xy.OHLCDataset#getClose(int, int)
+	 * 
+	 * @return The close-value. * @see
+	 *         org.jfree.data.xy.OHLCDataset#getClose(int, int)
 	 */
 	public Number getClose(int series, int item) {
 		return new Double(getCloseValue(series, item));
@@ -376,8 +389,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The high-value. * @see org.jfree.data.xy.OHLCDataset#getHighValue(int, int)
+	 * 
+	 * @return The high-value. * @see
+	 *         org.jfree.data.xy.OHLCDataset#getHighValue(int, int)
 	 */
 	public double getHighValue(int series, int item) {
 		CandleSeries s = (CandleSeries) this.data.get(series);
@@ -393,8 +407,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The high-value. * @see org.jfree.data.xy.OHLCDataset#getHigh(int, int)
+	 * 
+	 * @return The high-value. * @see org.jfree.data.xy.OHLCDataset#getHigh(int,
+	 *         int)
 	 */
 	public Number getHigh(int series, int item) {
 		return new Double(getHighValue(series, item));
@@ -408,8 +423,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The low-value. * @see org.jfree.data.xy.OHLCDataset#getLowValue(int, int)
+	 * 
+	 * @return The low-value. * @see
+	 *         org.jfree.data.xy.OHLCDataset#getLowValue(int, int)
 	 */
 	public double getLowValue(int series, int item) {
 		CandleSeries s = (CandleSeries) this.data.get(series);
@@ -425,8 +441,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The low-value. * @see org.jfree.data.xy.OHLCDataset#getLow(int, int)
+	 * 
+	 * @return The low-value. * @see org.jfree.data.xy.OHLCDataset#getLow(int,
+	 *         int)
 	 */
 	public Number getLow(int series, int item) {
 		return new Double(getLowValue(series, item));
@@ -441,8 +458,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index (ignored).
 	 * 
-	
-	 * @return <code>null</code>. * @see org.jfree.data.xy.OHLCDataset#getVolume(int, int)
+	 * 
+	 * @return <code>null</code>. * @see
+	 *         org.jfree.data.xy.OHLCDataset#getVolume(int, int)
 	 */
 	public Number getVolume(int series, int item) {
 		return new Double(getVolumeValue(series, item));
@@ -457,8 +475,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index (ignored).
 	 * 
-	
-	 * @return <code>Double.NaN</code>. * @see org.jfree.data.xy.OHLCDataset#getVolumeValue(int, int)
+	 * 
+	 * @return <code>Double.NaN</code>. * @see
+	 *         org.jfree.data.xy.OHLCDataset#getVolumeValue(int, int)
 	 */
 	public double getVolumeValue(int series, int item) {
 		CandleSeries s = (CandleSeries) this.data.get(series);
@@ -474,8 +493,10 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Vwap. * @see org.trade.strategy.data.candle.OHLCVwapDataset#getVwapValue(int, int)
+	 * 
+	 * @return The Vwap. * @see
+	 *         org.trade.strategy.data.candle.OHLCVwapDataset#getVwapValue(int,
+	 *         int)
 	 */
 	public double getVwapValue(int series, int item) {
 		CandleSeries s = (CandleSeries) this.data.get(series);
@@ -491,8 +512,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Vwap. * @see org.trade.strategy.data.candle.OHLCVwapDataset#getVwap(int, int)
+	 * 
+	 * @return The Vwap. * @see
+	 *         org.trade.strategy.data.candle.OHLCVwapDataset#getVwap(int, int)
 	 */
 	public Number getVwap(int series, int item) {
 		return new Double(getVwapValue(series, item));
@@ -504,8 +526,9 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param obj
 	 *            the object (<code>null</code> permitted).
 	 * 
-	
-	 * @return A boolean. */
+	 * 
+	 * @return A boolean.
+	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -523,11 +546,12 @@ public class CandleDataset extends AbstractXYDataset implements
 	/**
 	 * Returns a clone of this instance.
 	 * 
-	
 	 * 
-	
-	 * @return A clone. * @throws CloneNotSupportedException
-	 *             if there is a problem. */
+	 * 
+	 * 
+	 * @return A clone. * @throws CloneNotSupportedException if there is a
+	 *         problem.
+	 */
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		CandleDataset clone = (CandleDataset) super.clone();
@@ -538,6 +562,7 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method clear.
+	 * 
 	 * @see org.trade.strategy.data.IndicatorDataset#clear()
 	 */
 	public void clear() {
@@ -549,21 +574,26 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method createSeries.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
-	 * @param contract Contract
-	 * @param bars int
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
+	 * @param contract
+	 *            Contract
+	 * @param bars
+	 *            int
 	 * @return CandleSeries
 	 */
 	public static CandleSeries createSeries(CandleDataset source,
-			int seriesIndex, Contract contract, int bars) {
+			int seriesIndex, Contract contract, int bars, Date startTime) {
 
 		if (source.getSeries(seriesIndex) == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex)
-				.getContract(), bars);
+				.getContract(), bars, startTime);
 		series.updateSeries(source.getSeries(seriesIndex), 0);
 
 		return series;
@@ -572,8 +602,11 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method populateSeries.
-	 * @param datasetContainer StrategyData
-	 * @param candles List<Candle>
+	 * 
+	 * @param datasetContainer
+	 *            StrategyData
+	 * @param candles
+	 *            List<Candle>
 	 */
 	public static void populateSeries(StrategyData datasetContainer,
 			List<Candle> candles) {
@@ -591,9 +624,13 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method updateDataset.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
-	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset, int)
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
+	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
+	 *      int)
 	 */
 	public void updateDataset(CandleDataset source, int seriesIndex) {
 		if (source == null) {
@@ -610,6 +647,7 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method getRenderer.
+	 * 
 	 * @return XYItemRenderer
 	 * @see org.trade.strategy.data.IndicatorDataset#getRenderer()
 	 */
@@ -621,7 +659,9 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method getSeriesColor.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return Color
 	 * @see org.trade.strategy.data.IndicatorDataset#getSeriesColor(int)
 	 */
@@ -631,17 +671,21 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method getDisplaySeries.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#getDisplaySeries(int)
 	 */
 	public boolean getDisplaySeries(int seriesIndex) {
 		return this.getSeries(seriesIndex).getDisplaySeries();
 	}
-	
+
 	/**
 	 * Method getSubChart.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#getSubChart(int)
 	 */
@@ -651,7 +695,9 @@ public class CandleDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method getType.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return String
 	 * @see org.trade.strategy.data.IndicatorDataset#getType(int)
 	 */

@@ -831,6 +831,30 @@ public class TradingCalendar {
 	}
 
 	/**
+	 * Method setTimeForDateTo. Returns the date set to the time of another
+	 * date.
+	 * 
+	 * @param openClose
+	 *            The time you want to use to set the date to.
+	 * @param date
+	 *            Date you want the time set for.
+	 * 
+	 * @return Date the tradingday open date for this date.
+	 */
+	public static Date setTimeForDateTo(Date openClose, Date date) {
+		synchronized (CALENDAR_NY) {
+			CALENDAR_NY.setTime(date);
+			CALENDAR_NY.set(Calendar.HOUR_OF_DAY,
+					TradingCalendar.getHour(openClose));
+			CALENDAR_NY.set(Calendar.MINUTE,
+					TradingCalendar.getMinute(openClose));
+			CALENDAR_NY.set(Calendar.SECOND, 0);
+			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
+			return CALENDAR_NY.getTime();
+		}
+	}
+
+	/**
 	 * Method getBusinessDayEnd.
 	 * 
 	 * @param date
@@ -1124,5 +1148,17 @@ public class TradingCalendar {
 			// preceding code won't work with JDK 1.3
 			return CALENDAR_NY.getTime().getTime();
 		}
+	}
+
+	/**
+	 * Method firstMondayAfter2010.
+	 * 
+	 * @return long
+	 */
+	public static boolean between(Date date, Date firstDate, Date lastDate) {
+		if ((date.after(firstDate) || date.equals(firstDate))
+				&& (date.before(lastDate) || date.equals(lastDate)))
+			return true;
+		return false;
 	}
 }

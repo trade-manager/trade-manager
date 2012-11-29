@@ -998,71 +998,74 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 			// strategy is selected to trade and that the market is open
 			if (m_historyDataRequests.containsKey(reqId)) {
 				Contract contract = m_historyDataRequests.get(reqId);
-				for (ListIterator<Tradestrategy> itemIter = contract
-						.getTradestrategies().listIterator(); itemIter
-						.hasNext();) {
-					Tradestrategy tradestrategy = itemIter.next();
+				if (dateString.contains("finished-")) {
 
-					if (dateString.contains("finished-")) {
+					try {
 
-						try {
-							/*
-							 * The last one has arrived the reqId is the
-							 * tradeStrategyId. Remove this from the processing
-							 * vector.
-							 */
-							CandleSeries candleSeries = tradestrategy
-									.getDatasetContainer()
-									.getBaseCandleSeries();
-							if (!candleSeries.isEmpty()) {
-								m_tradePersistentModel
-										.persistCandleSeries(candleSeries);
-							}
-
-						} catch (Exception ex) {
-							error(reqId, 3240, ex.getMessage());
-						}
+						Tradestrategy tradestrategy = contract
+								.getTradestrategies().get(0);
+						CandleSeries candleSeries = tradestrategy
+								.getDatasetContainer().getBaseCandleSeries();
+						m_tradePersistentModel
+								.persistCandleSeries(candleSeries);
+					} catch (Exception ex) {
+						error(reqId, 3240, ex.getMessage());
+					}
+					for (ListIterator<Tradestrategy> itemIter = contract
+							.getTradestrategies().listIterator(); itemIter
+							.hasNext();) {
+						Tradestrategy tradestrategy = itemIter.next();
 						if (tradestrategy.getTrade()) {
 							this.fireHistoricalDataComplete(tradestrategy);
 							onReqRealTimeBars(contract, false);
 						} else {
 							itemIter.remove();
 						}
-					} else {
+					}
+				} else {
 
-						Date date = null;
-						try {
-							/*
-							 * There is a bug in the TWS interface format for
-							 * dates should always be milli sec but when 1 day
-							 * is selected as the period the dates come through
-							 * as yyyyMMdd.
-							 */
-							if (dateString.length() == 8) {
-								SimpleDateFormat sdf = new SimpleDateFormat(
-										"yyyyMMdd");
-								date = sdf.parse(dateString);
-								date = TradingCalendar
-										.getBusinessDayStart(date);
-
-							} else {
-								date = TradingCalendar.getDate(Long
-										.parseLong(dateString) * 1000);
-							}
-						} catch (Exception ex) {
-							error(reqId, 3260, ex.getMessage());
-							return;
-						}
-
+					Date date = null;
+					try {
 						/*
-						 * Only store data that is during mkt hours
+						 * There is a bug in the TWS interface format for dates
+						 * should always be milli sec but when 1 day is selected
+						 * as the period the dates come through as yyyyMMdd.
 						 */
-						if (TradingCalendar.isMarketHours(date)) {
+						if (dateString.length() == 8) {
+							SimpleDateFormat sdf = new SimpleDateFormat(
+									"yyyyMMdd");
+							date = sdf.parse(dateString);
+
+						} else {
+							date = TradingCalendar.getDate(Long
+									.parseLong(dateString) * 1000);
+						}
+					} catch (Exception ex) {
+						error(reqId, 3260, ex.getMessage());
+						return;
+					}
+
+					for (Tradestrategy tradestrategy : contract
+							.getTradestrategies()) {
+						/*
+						 * For daily bars set the time to the open time.
+						 */
+						if (tradestrategy.getBarSize() == 1) {
+							date = TradingCalendar.setTimeForDateTo(
+									tradestrategy.getTradingday().getOpen(),
+									date);
+						}
+						if (TradingCalendar.between(date, TradingCalendar
+								.setTimeForDateTo(tradestrategy.getTradingday()
+										.getOpen(), date), TradingCalendar
+								.setTimeForDateTo(tradestrategy.getTradingday()
+										.getClose(), date)))
 							tradestrategy.getDatasetContainer().buildCandle(
 									date, open, high, low, close, volume, vwap,
 									tradeCount, 1);
-						}
+
 					}
+
 				}
 				synchronized (m_historyDataRequests) {
 					if (contract.getTradestrategies().isEmpty()) {

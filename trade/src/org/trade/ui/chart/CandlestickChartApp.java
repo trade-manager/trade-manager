@@ -310,7 +310,7 @@ public class CandlestickChartApp extends BasePanel {
 					.getTime() - TradingCalendar.getBusinessDayStart(today)
 					.getTime()) / 1000);
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
-					contract, daySeconds);
+					contract, daySeconds, startDate);
 			candleDataset.addSeries(candleSeries);
 			StrategyData datasetContainer = new StrategyData(strategy,
 					candleDataset);
@@ -336,7 +336,9 @@ public class CandlestickChartApp extends BasePanel {
 	protected static StrategyData getPriceDataSetYahooIntraday(String symbol,
 			int days, int periodSeconds) {
 		try {
-
+			Date today = new Date();
+			Date startDate = TradingCalendar.addDays(today, days * -1);
+			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
 			Strategy daoStrategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
 			StrategyHome home = new StrategyHome();
@@ -346,13 +348,10 @@ public class CandlestickChartApp extends BasePanel {
 					Exchange.SMART, Currency.USD, null, null);
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
-					contract, periodSeconds);
+					contract, periodSeconds, startDate);
 			candleDataset.addSeries(candleSeries);
 			StrategyData datasetContainer = new StrategyData(strategy,
 					candleDataset);
-			Date today = new Date();
-			Date startDate = TradingCalendar.addDays(today, days * -1);
-			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
 
 			/*
 			 * Yahoo finance

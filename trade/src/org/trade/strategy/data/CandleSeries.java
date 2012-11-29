@@ -86,6 +86,7 @@ public class CandleSeries extends IndicatorSeries {
 	private String currency;
 	private String exchange;
 	private String secType;
+	private Date startTime;
 	private int barSize = 0;
 	private Double sumVwap = new Double(0);
 	private Long sumVolume = new Long(0);
@@ -114,12 +115,13 @@ public class CandleSeries extends IndicatorSeries {
 	 *            the length in minutes for each bar ie. 5, 15, 30, 60
 	 * 
 	 */
-	public CandleSeries(Contract contract, int barSize) {
+	public CandleSeries(Contract contract, int barSize, Date startTime) {
 		super(contract.getSymbol(), IndicatorSeries.CandleSeries, true, 0,
 				false);
 		this.symbol = contract.getSymbol();
 		this.contract = contract;
 		this.barSize = barSize;
+		this.startTime = startTime;
 	}
 
 	/**
@@ -137,11 +139,13 @@ public class CandleSeries extends IndicatorSeries {
 	 * 
 	 */
 
-	public CandleSeries(String legend, Contract contract, int barSize) {
+	public CandleSeries(String legend, Contract contract, int barSize,
+			Date startTime) {
 		super(legend, IndicatorSeries.CandleSeries, true, 0, false);
 		this.contract = contract;
 		this.symbol = contract.getSymbol();
 		this.barSize = barSize;
+		this.startTime = startTime;
 	}
 
 	/**
@@ -182,6 +186,26 @@ public class CandleSeries extends IndicatorSeries {
 					this.getExchange(), this.getCurrency(), null, null);
 		}
 		return this.contract;
+	}
+
+	/**
+	 * Method getStartTime.
+	 * 
+	 * @return Date
+	 */
+	@Transient
+	public Date getStartTime() {
+		return this.startTime;
+	}
+
+	/**
+	 * Method setSymbol.
+	 * 
+	 * @param startTime
+	 *            Date
+	 */
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
 	/**
@@ -498,13 +522,12 @@ public class CandleSeries extends IndicatorSeries {
 			 * For 60min time period start the clock at 9:00am. This matches
 			 * most charting platforms.
 			 */
-			Date startBusDate = TradingCalendar.getBusinessDayStart(time);
+			Date startBusDate = TradingCalendar.setTimeForDateTo(
+					this.getStartTime(), time);
 			if (3600 == this.getBarSize()) {
-				startBusDate = TradingCalendar.addMinutes(
-						TradingCalendar.getBusinessDayStart(time), -30);
+				startBusDate = TradingCalendar.addMinutes(startBusDate, -30);
 				if (TradingCalendar.getMinute(time) == 30
-						&& TradingCalendar.getBusinessDayStart(time).equals(
-								time)) {
+						&& startBusDate.equals(time)) {
 					time = TradingCalendar.addMinutes(time, -30);
 				}
 			}

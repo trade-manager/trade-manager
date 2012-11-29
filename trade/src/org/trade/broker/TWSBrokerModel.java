@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -1962,7 +1963,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					if (dateString.length() == 8) {
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 						date = sdf.parse(dateString);
-						date = TradingCalendar.getBusinessDayStart(date);
 
 					} else {
 						date = TradingCalendar.getDate(Long
@@ -1973,19 +1973,26 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					return;
 				}
 
-				/*
-				 * Only store data that is during mkt hours
-				 */
-				if (TradingCalendar.isMarketHours(date)) {
-					for (Tradestrategy tradestrategy : contract
-							.getTradestrategies()) {
+				for (Tradestrategy tradestrategy : contract
+						.getTradestrategies()) {
+					/*
+					 * For daily bars set the time to the open time.
+					 */
+					if (tradestrategy.getBarSize() == 1) {
+						date = TradingCalendar.setTimeForDateTo(tradestrategy
+								.getTradingday().getOpen(), date);
+					}
+					if (TradingCalendar.between(date, TradingCalendar
+							.setTimeForDateTo(tradestrategy.getTradingday()
+									.getOpen(), date), TradingCalendar
+							.setTimeForDateTo(tradestrategy.getTradingday()
+									.getClose(), date)))
 						tradestrategy.getDatasetContainer().buildCandle(date,
 								open, high, low, close, volume, vwap,
 								tradeCount, 1);
-					}
+
 				}
 			}
-
 		}
 	}
 
@@ -2073,6 +2080,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				if (TradingCalendar.isMarketHours(date)) {
 					Contract contract = m_realTimeBarsRequests.get(reqId);
 					synchronized (contract) {
+						Collections.sort(contract.getTradestrategies(),
+								Tradestrategy.TRADINGDAY_CONTRACT);
+						Integer prevBarSize = null;
 						for (Tradestrategy tradestrategy : contract
 								.getTradestrategies()) {
 							StrategyData datasetContainer = tradestrategy
@@ -2080,10 +2090,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							/*
 							 * RollupInterval is the number of bar that rollup
 							 * to make the bar. So for real time we have 5sec
-							 * bars rolling up to the backfillBarInterval in
-							 * minutes we assume 5 mins *60/5 seconds = 60. i.e
-							 * 60 seconds values summed together give us the
-							 * rolling vwap and volume values.
+							 * bars rolling up to the barSize so for 5min bars
+							 * calc is 5min *60/5 seconds = 60. i.e 60 values
+							 * summed together give us the rolling vwap and
+							 * volume values.
 							 */
 
 							int dataItemIndex = datasetContainer.buildCandle(
@@ -2095,8 +2105,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								CandleItem candleItem = (CandleItem) datasetContainer
 										.getBaseCandleSeries().getDataItem(
 												dataItemIndex);
-								m_tradePersistentModel
-										.persistCandleItem(candleItem);
+								if (!candleItem.getCandle().getBarSize()
+										.equals(prevBarSize)) {
+									m_tradePersistentModel
+											.persistCandleItem(candleItem);
+									prevBarSize = candleItem.getCandle()
+											.getBarSize();
+								}
 							}
 						}
 					}
