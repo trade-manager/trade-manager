@@ -120,10 +120,10 @@ public class CandlePeriodTest extends TestCase {
 			Candle candle = this.tradestrategy
 					.getDatasetContainer()
 					.getBaseCandleSeries()
-					.getBar(TradingCalendar.setTimeForDateTo(this.tradestrategy
+					.getBar(TradingCalendar.getSpecificTime(this.tradestrategy
 							.getTradingday().getOpen(), TradingCalendar
 							.getPrevTradingDay(startPeriod)),
-							TradingCalendar.setTimeForDateTo(this.tradestrategy
+							TradingCalendar.getSpecificTime(this.tradestrategy
 									.getTradingday().getClose(),
 									TradingCalendar
 											.getPrevTradingDay(startPeriod)));
@@ -168,10 +168,10 @@ public class CandlePeriodTest extends TestCase {
 					.getDatasetContainer()
 					.getBaseCandleSeries()
 					.getAverageBar(
-							TradingCalendar.setTimeForDateTo(this.tradestrategy
+							TradingCalendar.getSpecificTime(this.tradestrategy
 									.getTradingday().getOpen(), TradingCalendar
 									.getPrevTradingDay(startPeriod)),
-							TradingCalendar.setTimeForDateTo(this.tradestrategy
+							TradingCalendar.getSpecificTime(this.tradestrategy
 									.getTradingday().getClose(),
 									TradingCalendar
 											.getPrevTradingDay(startPeriod)),
@@ -187,10 +187,10 @@ public class CandlePeriodTest extends TestCase {
 					.getDatasetContainer()
 					.getBaseCandleSeries()
 					.getAverageBar(
-							TradingCalendar.setTimeForDateTo(this.tradestrategy
+							TradingCalendar.getSpecificTime(this.tradestrategy
 									.getTradingday().getOpen(), TradingCalendar
 									.getPrevTradingDay(startPeriod)),
-							TradingCalendar.setTimeForDateTo(this.tradestrategy
+							TradingCalendar.getSpecificTime(this.tradestrategy
 									.getTradingday().getClose(),
 									TradingCalendar
 											.getPrevTradingDay(startPeriod)),

@@ -129,10 +129,6 @@ public class TradingCalendar {
 	 * Add Years to a date-
 	 * 
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @return boolean
@@ -146,11 +142,6 @@ public class TradingCalendar {
 
 	/**
 	 * Add Years to a date-
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -174,11 +165,6 @@ public class TradingCalendar {
 	/**
 	 * Add months to a date-
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @param noMonths
@@ -201,11 +187,6 @@ public class TradingCalendar {
 	/**
 	 * Add days to a date-
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @param noDays
@@ -218,7 +199,6 @@ public class TradingCalendar {
 			synchronized (CALENDAR_NY) {
 				CALENDAR_NY.setTime(date);
 				CALENDAR_NY.add(Calendar.DAY_OF_YEAR, noDays);
-
 				return CALENDAR_NY.getTime();
 			}
 		} else {
@@ -269,11 +249,6 @@ public class TradingCalendar {
 	/**
 	 * Add days to a date-
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @param noHours
@@ -296,11 +271,6 @@ public class TradingCalendar {
 	/**
 	 * Add days to a date-
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @param noMinutes
@@ -322,11 +292,6 @@ public class TradingCalendar {
 
 	/**
 	 * Add days to a date-
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -351,10 +316,6 @@ public class TradingCalendar {
 	 * Returns the difference in days-
 	 * 
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date1
 	 *            Date
 	 * @param date2
@@ -376,11 +337,6 @@ public class TradingCalendar {
 	/**
 	 * Return the Year for this date
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @return int
@@ -398,11 +354,6 @@ public class TradingCalendar {
 
 	/**
 	 * Return the Second for this date
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -422,11 +373,6 @@ public class TradingCalendar {
 	/**
 	 * Return the Minute for this date
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @return int
@@ -445,11 +391,6 @@ public class TradingCalendar {
 	/**
 	 * Return the Hour of day (24 hour clock )for this date
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @return int
@@ -467,11 +408,6 @@ public class TradingCalendar {
 
 	/**
 	 * Return the AM or PM for this date
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -495,11 +431,6 @@ public class TradingCalendar {
 	/**
 	 * Return the Hour for this date
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @return int
@@ -517,11 +448,6 @@ public class TradingCalendar {
 
 	/**
 	 * Return the Month for this date
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -541,11 +467,6 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param millis
 	 *            long
 	 * @return Date
@@ -560,11 +481,6 @@ public class TradingCalendar {
 
 	/**
 	 * Return the Day for this date
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -584,11 +500,6 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @return int
@@ -606,11 +517,6 @@ public class TradingCalendar {
 
 	/**
 	 * Return the Day for this date
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -630,11 +536,6 @@ public class TradingCalendar {
 	/**
 	 * Get the date formated to the standard format string
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            Date
 	 * @return String
@@ -646,11 +547,6 @@ public class TradingCalendar {
 
 	/**
 	 * Get the date formated to the standard format string
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -670,11 +566,6 @@ public class TradingCalendar {
 
 	/**
 	 * Set the date in the standard CALENDAR_NY to the dtring date
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            String
@@ -700,10 +591,6 @@ public class TradingCalendar {
 	 * Set the date in the standard calendar to the dtring date
 	 * 
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param date
 	 *            String
 	 * @return Date
@@ -726,11 +613,6 @@ public class TradingCalendar {
 	/**
 	 * Get the date equal to zero
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @return Date
 	 * @exception * @see
 	 */
@@ -740,11 +622,6 @@ public class TradingCalendar {
 
 	/**
 	 * Is the date equal to zero
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param date
 	 *            Date
@@ -831,30 +708,6 @@ public class TradingCalendar {
 	}
 
 	/**
-	 * Method setTimeForDateTo. Returns the date set to the time of another
-	 * date.
-	 * 
-	 * @param openClose
-	 *            The time you want to use to set the date to.
-	 * @param date
-	 *            Date you want the time set for.
-	 * 
-	 * @return Date the tradingday open date for this date.
-	 */
-	public static Date setTimeForDateTo(Date openClose, Date date) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY,
-					TradingCalendar.getHour(openClose));
-			CALENDAR_NY.set(Calendar.MINUTE,
-					TradingCalendar.getMinute(openClose));
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
 	 * Method getBusinessDayEnd.
 	 * 
 	 * @param date
@@ -908,13 +761,39 @@ public class TradingCalendar {
 	 *            int
 	 * @return Date
 	 */
-	public static Date getSpecificTime(Date date, int hrs, int minutes,
+	public static Date getSpecificTime(final Date date, int hrs, int minutes,
 			int seconds) {
 		synchronized (CALENDAR_NY) {
 			CALENDAR_NY.setTime(date);
 			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, hrs);
 			CALENDAR_NY.set(Calendar.MINUTE, minutes);
 			CALENDAR_NY.set(Calendar.SECOND, seconds);
+			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
+			return CALENDAR_NY.getTime();
+		}
+	}
+
+	/**
+	 * Method setTimeForDateTo. Returns the date set to the time of another
+	 * date.
+	 * 
+	 * @param openClose
+	 *            The time you want to use to set the date to.
+	 * @param date
+	 *            Date you want the time set for.
+	 * 
+	 * @return Date the tradingday open date for this date.
+	 */
+	public static Date getSpecificTime(Date openClose, Date date) {
+		synchronized (CALENDAR_NY) {
+			CALENDAR_NY.setTime(openClose);
+			int hour = CALENDAR_NY.get(Calendar.HOUR_OF_DAY);
+			int minute = CALENDAR_NY.get(Calendar.MINUTE);
+			int second = CALENDAR_NY.get(Calendar.SECOND);
+			CALENDAR_NY.setTime(date);
+			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, hour);
+			CALENDAR_NY.set(Calendar.MINUTE, minute);
+			CALENDAR_NY.set(Calendar.SECOND, second);
 			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
 			return CALENDAR_NY.getTime();
 		}
@@ -967,6 +846,22 @@ public class TradingCalendar {
 	 */
 	public static boolean isMarketHours(Date date) {
 		if (!isAfterHours(date) && !isPreMarket(date)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Method isMarketHours.
+	 * 
+	 * @param date
+	 *            Date
+	 * @return boolean
+	 */
+	public static boolean isMarketHours(Date openDate, Date closeDate, Date date) {
+		if (TradingCalendar.between(date,
+				TradingCalendar.getSpecificTime(openDate, date),
+				TradingCalendar.getSpecificTime(closeDate, date))) {
 			return true;
 		}
 		return false;
@@ -1135,6 +1030,7 @@ public class TradingCalendar {
 	/**
 	 * Method firstMondayAfter2010.
 	 * 
+	 * 
 	 * @return long
 	 */
 	public static long firstMondayAfter2010() {
@@ -1151,13 +1047,20 @@ public class TradingCalendar {
 	}
 
 	/**
-	 * Method firstMondayAfter2010.
+	 * Method between. *
 	 * 
-	 * @return long
+	 * @param date
+	 *            Date
+	 * @param openDate
+	 *            Date
+	 * @param closeDate
+	 *            Date
+	 * 
+	 * @return boolean
 	 */
-	public static boolean between(Date date, Date firstDate, Date lastDate) {
-		if ((date.after(firstDate) || date.equals(firstDate))
-				&& (date.before(lastDate) || date.equals(lastDate)))
+	public static boolean between(Date date, Date openDate, Date closeDate) {
+		if ((date.after(openDate) || date.equals(openDate))
+				&& (date.before(closeDate)))
 			return true;
 		return false;
 	}

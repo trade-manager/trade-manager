@@ -123,7 +123,9 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 				 * Only open trades when the market is open and the candle is
 				 * for the Tradestrategies trading day.
 				 */
-				if (TradingCalendar.isMarketHours(startPeriod)
+				if (TradingCalendar.isMarketHours(getTradestrategy()
+						.getTradingday().getOpen(), getTradestrategy()
+						.getTradingday().getClose(), startPeriod)
 						&& TradingCalendar.sameDay(getTradestrategy()
 								.getTradingday().getOpen(), startPeriod)) {
 

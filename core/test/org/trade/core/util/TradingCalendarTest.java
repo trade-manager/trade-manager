@@ -87,14 +87,30 @@ public class TradingCalendarTest extends TestCase {
 	}
 
 	@Test
-	public void testSetTimeForDateTo() {
-		Date date = new Date();
-		Date busdayStartDate = TradingCalendar.getBusinessDayStart(date);
-		Date setDate = TradingCalendar.setTimeForDateTo(busdayStartDate, date);
-		_log.info("busdayStartDate: " + busdayStartDate.getTime());
-		_log.info("date: " + date.getTime());
-		_log.info("setDate: " + setDate.getTime());
-		assertEquals(busdayStartDate, setDate);
+	public void testGetSpecificTime() {
+		Date date = TradingCalendar.addDays(new Date(), -1);
+		_log.info("date: " + date);
+		Date busdayStartDate = TradingCalendar.getBusinessDayStart(new Date());
+		_log.info("busdayStartDate: " + busdayStartDate);
+		Date setDate = TradingCalendar.getSpecificTime(busdayStartDate, date);
+
+		_log.info("setDate: " + setDate);
+		assertEquals(TradingCalendar.getHourOfDay(busdayStartDate), TradingCalendar.getHourOfDay(setDate));
+		assertEquals(TradingCalendar.getMinute(busdayStartDate), TradingCalendar.getMinute(setDate));
+
+	}
+	
+	@Test
+	public void testisMarketHours() {
+		Date date = TradingCalendar.addDays(new Date(), -1);
+		_log.info("date: " + date);
+		Date openDate = TradingCalendar.getBusinessDayStart(new Date());
+		Date closeDate = TradingCalendar.getBusinessDayEnd(new Date());
+		_log.info("Busday openDate: " + openDate);
+		_log.info("Busday closeDate: " + closeDate);
+
+		assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
+
 	}
 
 	@Test

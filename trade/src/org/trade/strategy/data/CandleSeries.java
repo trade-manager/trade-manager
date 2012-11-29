@@ -548,7 +548,7 @@ public class CandleSeries extends IndicatorSeries {
 			 * For 60min time period start the clock at 9:00am. This matches
 			 * most charting platforms.
 			 */
-			Date startBusDate = TradingCalendar.setTimeForDateTo(
+			Date startBusDate = TradingCalendar.getSpecificTime(
 					this.getStartTime(), time);
 			if (3600 == this.getBarSize()) {
 				startBusDate = TradingCalendar.addMinutes(startBusDate, -30);
@@ -563,9 +563,8 @@ public class CandleSeries extends IndicatorSeries {
 					+ (periods * this.getBarSize() * 1000);
 			Date start = new Date(startPeriod);
 			Tradingday tradingday = new Tradingday(
-					TradingCalendar
-							.setTimeForDateTo(this.getStartTime(), start),
-					TradingCalendar.setTimeForDateTo(this.getEndTime(), start));
+					TradingCalendar.getSpecificTime(this.getStartTime(), start),
+					TradingCalendar.getSpecificTime(this.getEndTime(), start));
 			candle = new CandleItem(this.getContract(), tradingday,
 					new CandlePeriod(start, this.getBarSize()), open, high,
 					low, close, volume, (this.getVwap() == 0 ? close
@@ -898,12 +897,12 @@ public class CandleSeries extends IndicatorSeries {
 
 		Date prevDay = TradingCalendar.getPrevTradingDay(candleItem.getPeriod()
 				.getStart());
-		Date prevDayEnd = TradingCalendar.setTimeForDateTo(this.getEndTime(),
+		Date prevDayEnd = TradingCalendar.getSpecificTime(this.getEndTime(),
 				prevDay);
 		prevDayEnd = TradingCalendar.addSeconds(prevDayEnd, -1);
-		Date prevDayStart = TradingCalendar.setTimeForDateTo(
+		Date prevDayStart = TradingCalendar.getSpecificTime(
 				this.getStartTime(), prevDay);
-		Date todayOpen = TradingCalendar.setTimeForDateTo(this.getStartTime(),
+		Date todayOpen = TradingCalendar.getSpecificTime(this.getStartTime(),
 				candleItem.getPeriod().getStart());
 		int index = this.indexOf(todayOpen);
 		if (index > -1) {

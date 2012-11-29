@@ -1631,7 +1631,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						}
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
 							Date endDate = TradingCalendar
-									.setTimeForDateTo(
+									.getSpecificTime(
 											tradestrategy.getTradingday()
 													.getClose(),
 											TradingCalendar

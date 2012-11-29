@@ -456,9 +456,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @see javax.swing.event.TreeSelectionListener#valueChanged(TreeSelectionEvent)
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
-		// Returns the last path element of the selection.
-		// This method is useful only when the selection model allows a single
-		// selection.
+		
+		/*
+		 * Returns the last path element of the selection.This method is useful
+		 * only when the selection model allows a single selection.
+		 */
+
 		try {
 			TreePath path = e.getNewLeadSelectionPath();
 			if (null == path) {
@@ -635,7 +638,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		if (tradestrategy.getDatasetContainer().getBaseCandleSeries().isEmpty()) {
 
-			endDate = TradingCalendar.setTimeForDateTo(tradestrategy
+			endDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getClose(), TradingCalendar
 					.getMostRecentTradingDay(TradingCalendar.addBusinessDays(
 							tradestrategy.getTradingday().getClose(),

@@ -318,7 +318,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 										TWSBrokerModel.getIBContract(contract));
 					}
 
-					endDate = TradingCalendar.setTimeForDateTo(endDate,
+					endDate = TradingCalendar.getSpecificTime(endDate,
 							TradingCalendar
 									.getMostRecentTradingDay(TradingCalendar
 											.addBusinessDays(endDate,
@@ -1052,19 +1052,17 @@ public class BackTestBrokerModel extends AbstractBrokerModel {
 						 * For daily bars set the time to the open time.
 						 */
 						if (tradestrategy.getBarSize() == 1) {
-							date = TradingCalendar.setTimeForDateTo(
+							date = TradingCalendar.getSpecificTime(
 									tradestrategy.getTradingday().getOpen(),
 									date);
 						}
-						if (TradingCalendar.between(date, TradingCalendar
-								.setTimeForDateTo(tradestrategy.getTradingday()
-										.getOpen(), date), TradingCalendar
-								.setTimeForDateTo(tradestrategy.getTradingday()
-										.getClose(), date)))
+						if (TradingCalendar.isMarketHours(tradestrategy
+								.getTradingday().getOpen(), tradestrategy
+								.getTradingday().getClose(), date)) {
 							tradestrategy.getDatasetContainer().buildCandle(
 									date, open, high, low, close, volume, vwap,
 									tradeCount, 1);
-
+						}
 					}
 
 				}

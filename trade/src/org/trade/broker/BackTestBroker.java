@@ -898,7 +898,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		in.readLine();
 		while ((inputLine = in.readLine()) != null) {
 			StringTokenizer st = new StringTokenizer(inputLine, ",");
-			Date time = TradingCalendar.setTimeForDateTo(startDate,
+			Date time = TradingCalendar.getSpecificTime(startDate,
 					df.parse(st.nextToken()));
 			double open = Double.parseDouble(st.nextToken());
 			double high = Double.parseDouble(st.nextToken());
@@ -915,7 +915,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			candle.setStartPeriod(time);
 			candle.setPeriod(time.toString());
 			candle.setEndPeriod(TradingCalendar.addSeconds(
-					TradingCalendar.setTimeForDateTo(endDate, time), -1));
+					TradingCalendar.getSpecificTime(endDate, time), -1));
 			candle.setLastUpdateDate(candle.getStartPeriod());
 			candles.add(candle);
 

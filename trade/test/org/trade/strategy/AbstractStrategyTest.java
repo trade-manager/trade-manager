@@ -448,7 +448,7 @@ public class AbstractStrategyTest extends TestCase {
 
 			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
 					Action.BUY, new Money(20.00), new Money(19.98), true);
-			
+
 			assertEquals(2500, result.getQuantity(), 0);
 			entryLimit.setPercentOfMargin(new BigDecimal(0));
 			tradePersistentModel.persistAspect(entryLimit);
@@ -853,7 +853,9 @@ public class AbstractStrategyTest extends TestCase {
 					 * Only manage trades when the market is open and the candle
 					 * is for this Tradestrategies trading day.
 					 */
-					if (TradingCalendar.isMarketHours(startPeriod)
+					if (TradingCalendar.isMarketHours(getTradestrategy()
+							.getTradingday().getOpen(), getTradestrategy()
+							.getTradingday().getClose(), startPeriod)
 							&& TradingCalendar.sameDay(getTradestrategy()
 									.getTradingday().getOpen(), startPeriod)) {
 

@@ -320,7 +320,9 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		}
 		segmentedTimeline.setStartTime(startDate.getTime());
 		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate,
-				endDate, segmentedTimeline));
+				endDate, datasetContainer.getBaseCandleSeries().getStartTime(),
+				datasetContainer.getBaseCandleSeries().getEndTime(),
+				segmentedTimeline));
 		dateAxis.setTimeline(segmentedTimeline);
 
 		// Build Combined Plot
@@ -435,7 +437,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					xyplot.removeAnnotation(closePriceLine);
 				}
 
-				double x = TradingCalendar.setTimeForDateTo(
+				double x = TradingCalendar.getSpecificTime(
 						candleSeries.getStartTime(),
 						candleItem.getPeriod().getStart()).getTime();
 				closePriceLine = new XYTextAnnotation("("
@@ -499,12 +501,11 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * @return List<Date>
 	 */
 	private List<Date> getNonTradingPeriods(Date startDate, Date endDate,
-			SegmentedTimeline segmentedTimeline) {
+			Date openDate, Date closeDate, SegmentedTimeline segmentedTimeline) {
 		/*
 		 * Add all 15min periods that are not trading times.
 		 */
 		List<Date> noneTradingSegments = new ArrayList<Date>();
-		Date date = startDate;
 		do {
 			/*
 			 * 96 15min periods per day
@@ -512,19 +513,20 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			for (int j = 0; j < 96; j++) {
 				Date segmentStartDate = TradingCalendar.addMinutes(
 						TradingCalendar.getSpecificTime(TradingCalendar
-								.setTimeForDateTo(startDate, date), 0, 0),
+								.getSpecificTime(openDate, startDate), 0, 0),
 						j * 15);
-
 				if (!TradingCalendar.isTradingDay(segmentStartDate)
-						|| !TradingCalendar.isMarketHours(segmentStartDate)) {
+						|| !TradingCalendar.isMarketHours(openDate, closeDate,
+								segmentStartDate)) {
 					Segment segment = segmentedTimeline
 							.getSegment(segmentStartDate);
-					if (segment.inIncludeSegments())
+					if (segment.inIncludeSegments()) {
 						noneTradingSegments.add(segmentStartDate);
+					}
 				}
 			}
-			date = TradingCalendar.addDays(date, 1);
-		} while (endDate.after(date));
+			startDate = TradingCalendar.addDays(startDate, 1);
+		} while (endDate.after(startDate));
 
 		return noneTradingSegments;
 	}
