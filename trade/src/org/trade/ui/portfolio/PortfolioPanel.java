@@ -255,6 +255,10 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 					(Date) spinnerStart.getValue(), 0, 0, 0);
 			Date endDate = TradingCalendar.getSpecificTime(
 					(Date) spinnerEnd.getValue(), 23, 59, 59);
+			if (endDate.before(startDate)) {
+				startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
+				spinnerStart.setValue(startDate);
+			}
 			m_tradelogReport = m_tradePersistentModel.findTradelogReport(
 					this.tradeAccount, startDate, endDate,
 					filterButton.isSelected());

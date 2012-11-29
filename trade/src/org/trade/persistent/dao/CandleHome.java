@@ -50,7 +50,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
-import org.trade.core.util.TradingCalendar;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.candle.CandleItem;
 
@@ -86,29 +85,30 @@ public class CandleHome {
 				CandleItem candleItem = (CandleItem) candleSeries
 						.getDataItem(i);
 
-				Date open = TradingCalendar.getSpecificTime(candleSeries
-						.getStartTime(), candleItem.getPeriod().getStart());
+				if (!candleItem.getCandle().getTradingday().equals(tradingday)) {
 
-				if ((null == tradingday)
-						|| (tradingday.getOpen().compareTo(open) != 0)) {
-
-					tradingday = findTradingdayByDate(open);
+					tradingday = findTradingdayByDate(candleItem.getCandle()
+							.getTradingday().getOpen(), candleItem.getCandle()
+							.getTradingday().getClose());
 					if (null == tradingday) {
-						// If trading day still null need to add this
-						tradingday = Tradingday.newInstance(open);
-						entityManager.persist(tradingday);
+						entityManager.persist(candleItem.getCandle()
+								.getTradingday());
+						entityManager.getTransaction().commit();
+						entityManager.getTransaction().begin();
+						tradingday = candleItem.getCandle().getTradingday();
+					} else {
+						Integer idTradingday = tradingday.getIdTradingDay();
+						Integer idContract = contract.getIdContract();
+						Integer barSize = candleSeries.getBarSize();
+						String hqlDelete = "delete Candle where idContract = :idContract and idTradingday = :idTradingday and barSize = :barSize";
+						entityManager.createQuery(hqlDelete)
+								.setParameter("idContract", idContract)
+								.setParameter("idTradingday", idTradingday)
+								.setParameter("barSize", barSize)
+								.executeUpdate();
+						entityManager.getTransaction().commit();
+						entityManager.getTransaction().begin();
 					}
-
-					Integer idTradingday = tradingday.getIdTradingDay();
-					Integer idContract = contract.getIdContract();
-					Integer barSize = candleSeries.getBarSize();
-					String hqlDelete = "delete Candle where idContract = :idContract and idTradingday = :idTradingday and barSize = :barSize";
-					entityManager.createQuery(hqlDelete)
-							.setParameter("idContract", idContract)
-							.setParameter("idTradingday", idTradingday)
-							.setParameter("barSize", barSize).executeUpdate();
-					entityManager.getTransaction().commit();
-					entityManager.getTransaction().begin();
 				}
 
 				Candle transientInstance = candleItem.getCandle();
@@ -417,7 +417,7 @@ public class CandleHome {
 	 *            Date
 	 * @return Tradingday
 	 */
-	private Tradingday findTradingdayByDate(Date open) {
+	private Tradingday findTradingdayByDate(Date open, Date close) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -426,7 +426,10 @@ public class CandleHome {
 					.createQuery(Tradingday.class);
 			Root<Tradingday> from = query.from(Tradingday.class);
 			query.select(from);
-			query.where(builder.equal(from.get("open"), open));
+			if (null != open)
+				query.where(builder.equal(from.get("open"), open));
+			if (null != close)
+				query.where(builder.equal(from.get("close"), close));
 			List<Tradingday> items = entityManager.createQuery(query)
 					.getResultList();
 

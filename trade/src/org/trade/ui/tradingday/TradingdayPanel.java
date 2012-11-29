@@ -418,7 +418,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			Date endDate = TradingCalendar.getSpecificTime(
 					(Date) spinnerEnd.getValue(), 23, 59, 59);
 			if (endDate.before(startDate)) {
-				startDate = endDate;
+				startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
 				spinnerStart.setValue(startDate);
 			}
 			/*

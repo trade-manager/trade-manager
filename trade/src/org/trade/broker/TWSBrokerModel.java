@@ -1985,21 +1985,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					if (TradingCalendar.isMarketHours(tradestrategy
 							.getTradingday().getOpen(), tradestrategy
 							.getTradingday().getClose(), date)) {
-						_log.info("HistoricalData bar: "
-								+ tradestrategy.getContract().getSymbol()
-								+ " date:"
-								+ date
-								+ " between: "
-								+ TradingCalendar.getSpecificTime(tradestrategy
-										.getTradingday().getOpen(), date)
-								+ " and "
-								+ TradingCalendar.getSpecificTime(tradestrategy
-										.getTradingday().getClose(), date));
 						tradestrategy.getDatasetContainer().buildCandle(date,
 								open, high, low, close, volume, vwap,
 								tradeCount, 1);
 					}
-
 				}
 			}
 		}
