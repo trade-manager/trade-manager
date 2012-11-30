@@ -101,16 +101,19 @@ public class TradingCalendarTest extends TestCase {
 	}
 	
 	@Test
-	public void testisMarketHours() {
-		Date date = TradingCalendar.addDays(new Date(), -1);
-		_log.info("date: " + date);
+	public void testIsMarketHours() {
+
 		Date openDate = TradingCalendar.getBusinessDayStart(new Date());
 		Date closeDate = TradingCalendar.getBusinessDayEnd(new Date());
 		_log.info("Busday openDate: " + openDate);
 		_log.info("Busday closeDate: " + closeDate);
-
+		Date date = TradingCalendar.addDays(new Date(), -1);
+		date = TradingCalendar.getSpecificTime(date, 9, 30);
+		_log.info("date: " + date);
 		assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
-
+		date = TradingCalendar.getSpecificTime(date, 16, 00);
+		_log.info("date: " + date);
+		assertFalse(TradingCalendar.isMarketHours(openDate, closeDate, date));
 	}
 
 	@Test
