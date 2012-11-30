@@ -39,6 +39,7 @@ import java.util.Date;
 import java.util.EventListener;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.trade.broker.client.BackTestBroker;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.TradeAccount;
 import org.trade.persistent.dao.TradeOrder;
@@ -124,6 +125,15 @@ public interface BrokerModel {
 	 */
 	Integer getNextRequestId();
 
+	/**
+	 * Method getBackTestBroker.
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
+	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
+	 */
+	 BackTestBroker getBackTestBroker(Integer idTradestrategy);
+	
 	/**
 	 * Method onSubscribeAccountUpdates.
 	 * 

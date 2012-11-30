@@ -58,7 +58,6 @@ import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.broker.BackTestBroker;
 import org.trade.broker.BrokerChangeListener;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
@@ -1890,9 +1889,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * For back test the back tester listens to the strategy for orders
 			 * being created/completed.
 			 */
-			strategy.addMessageListener(tradestrategy.getDatasetContainer()
-					.getBackTestWorker());
-			tradestrategy.getDatasetContainer().getBackTestWorker().execute();
+			strategy.addMessageListener(m_brokerModel
+					.getBackTestBroker(tradestrategy.getIdTradeStrategy()));
+			m_brokerModel.getBackTestBroker(tradestrategy.getIdTradeStrategy())
+					.execute();
 		}
 		strategy.execute();
 		m_strategyWorkers.put(key, strategy);
@@ -2252,10 +2252,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				indicatorTradestrategy.setIdTradeStrategy(m_brokerModel
 						.getNextRequestId());
 				indicatorTradestrategy.setDirty(false);
-				indicatorTradestrategy.getDatasetContainer()
-						.setBackTestWorker(
-								tradestrategy.getDatasetContainer()
-										.getBackTestWorker());
 			}
 
 			CandleSeries childSeries = indicatorTradestrategy
@@ -2290,18 +2286,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				tradestrategy.setDatasetContainer(null);
 
 				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
-					/*
-					 * If running in test mode create the test broker client.
-					 */
-
-					if (!m_brokerModel.isConnected()) {
-						BackTestBroker m_client = new BackTestBroker(
-								tradestrategy.getDatasetContainer(),
-								tradestrategy.getIdTradeStrategy(),
-								m_brokerModel);
-						tradestrategy.getDatasetContainer().setBackTestWorker(
-								m_client);
-					}
 
 					/*
 					 * Fire all the requests to TWS to get chart data After data

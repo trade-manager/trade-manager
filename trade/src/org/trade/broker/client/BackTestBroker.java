@@ -33,7 +33,7 @@
  * -------
  *
  */
-package org.trade.broker;
+package org.trade.broker.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,7 +56,7 @@ import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.broker.BackTestBrokerModel.OrderState;
+import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
@@ -73,6 +73,7 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
+import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.strategy.StrategyChangeListener;
 import org.trade.strategy.StrategyRuleException;
@@ -81,9 +82,6 @@ import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
-
-import com.ib.client.ContractDetails;
-import com.ib.client.Execution;
 
 /**
  */
@@ -97,7 +95,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	private StrategyData datasetContainer = null;
 	private Tradestrategy tradestrategy = null;
 	private Integer idTradestrategy = null;
-	private BackTestBrokerModel brokerModel = null;
+	private ClientWrapper brokerModel = null;
 	private static TimeZone localTimeZone = null;
 	private static final SimpleDateFormat m_sdf = new SimpleDateFormat(
 			"yyyyMMdd HH:mm:ss");
@@ -120,9 +118,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 *            BrokerModel
 	 */
 	public BackTestBroker(StrategyData datasetContainer,
-			Integer idTradestrategy, BrokerModel brokerModel) {
+			Integer idTradestrategy, ClientWrapper brokerModel) {
 		this.idTradestrategy = idTradestrategy;
-		this.brokerModel = (BackTestBrokerModel) brokerModel;
+		this.brokerModel = brokerModel;
 		this.datasetContainer = datasetContainer;
 		try {
 			localTimeZone = TimeZone.getTimeZone((ConfigProperties
@@ -144,11 +142,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 *            com.ib.client.Contract
 	 * @throws BrokerModelException
 	 */
-	public void reqContractDetails(int reqId, com.ib.client.Contract ibContract)
+	public void reqContractDetails(int reqId, Contract contract)
 			throws BrokerModelException {
 		try {
-			ContractDetails contractDetails = getYahooContractDetails(reqId,
-					ibContract.m_symbol);
+			Contract contractDetails = getYahooContractDetails(reqId,
+					contract.getSymbol());
 
 			this.brokerModel.contractDetails(reqId, contractDetails);
 		} catch (Exception ex) {
@@ -178,7 +176,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 *            int
 	 * @throws BrokerModelException
 	 */
-	public void reqHistoricalData(int reqId, com.ib.client.Contract ibContract,
+	public void reqHistoricalData(int reqId, Contract contract,
 			String endDateTime, String durationStr, String barSizeSetting,
 			String whatToShow, int useRTH, int formatDateInteger)
 			throws BrokerModelException {
@@ -201,10 +199,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					+ chartDays.getCode());
 
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
-				this.getYahooPriceDataDay(reqId, ibContract.m_symbol,
+				this.getYahooPriceDataDay(reqId, contract.getSymbol(),
 						startDate, endDate);
 			} else {
-				this.getYahooPriceDataIntraday(reqId, ibContract.m_symbol,
+				this.getYahooPriceDataIntraday(reqId, contract.getSymbol(),
 						Integer.parseInt(chartDays.getCode()), startDate);
 			}
 
@@ -478,11 +476,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				 * Can't use the com.ib.client.OrderState as constructor is no
 				 * visible.
 				 */
-				OrderState orderState = this.brokerModel.new OrderState();
+				OrderState orderState = new OrderState();
 				orderState.m_status = OrderStatus.SUBMITTED;
-				this.brokerModel.openOrder(order.getOrderKey(),
-						TWSBrokerModel.getIBContract(contract),
-						TWSBrokerModel.getIBOrder(order), orderState);
+				this.brokerModel.openOrder(order.getOrderKey(), contract,
+						order, orderState);
 				/*
 				 * TODO we should read the orders back after any call to the
 				 * broker interface.
@@ -644,32 +641,30 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	private void createOrderExecution(Contract contract, TradeOrder order,
 			BigDecimal filledPrice, Date date) throws IOException {
 
-		Execution execution = new Execution();
-		execution.m_avgPrice = filledPrice.doubleValue();
-		execution.m_cumQty = order.getQuantity().intValue();
-		execution.m_clientId = order.getClientId().intValue();
-		execution.m_exchange = "BATS";
-		execution.m_price = filledPrice.doubleValue();
-		execution.m_orderId = order.getOrderKey();
-		execution.m_time = m_sdf.format(date);
+		TradeOrderfill execution = new TradeOrderfill();
+		execution.setTradeOrder(order);
+		execution.setAveragePrice(filledPrice);
+		execution.setCumulativeQuantity(order.getQuantity());
+		execution.setExchange("BATS");
+		execution.setPrice(filledPrice);
+		execution.setTime(date);
 		if (Action.BUY.equals(order.getAction())) {
-			execution.m_side = Side.BOT;
+			execution.setSide(Side.BOT);
 		} else {
-			execution.m_side = Side.SLD;
+			execution.setSide(Side.SLD);
 		}
-		execution.m_shares = order.getQuantity().intValue();
-		execution.m_execId = String.valueOf(execId++);
-		this.brokerModel.execDetails(execution.m_orderId,
-				TWSBrokerModel.getIBContract(contract), execution);
-		OrderState orderState = this.brokerModel.new OrderState();
+		execution.setQuantity(order.getQuantity());
+		execution.setExecId(String.valueOf(execId++));
+		this.brokerModel.execDetails(execution.getTradeOrder().getOrderKey(),
+				contract, execution);
+		OrderState orderState = new OrderState();
 		orderState.m_status = OrderStatus.FILLED;
-		orderState.m_commission = execution.m_shares * 0.005d;
+		orderState.m_commission = execution.getQuantity() * 0.005d;
 		if (orderState.m_commission < 1) {
 			orderState.m_commission = 1;
 		}
-		this.brokerModel.openOrder(order.getOrderKey(),
-				TWSBrokerModel.getIBContract(contract),
-				TWSBrokerModel.getIBOrder(order), orderState);
+		this.brokerModel.openOrder(order.getOrderKey(), contract, order,
+				orderState);
 	}
 
 	/**
@@ -683,11 +678,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 */
 	private void cancelOrder(Contract contract, TradeOrder order)
 			throws IOException {
-		OrderState orderState = this.brokerModel.new OrderState();
+		OrderState orderState = new OrderState();
 		orderState.m_status = OrderStatus.CANCELLED;
-		this.brokerModel.openOrder(order.getOrderKey(),
-				TWSBrokerModel.getIBContract(contract),
-				TWSBrokerModel.getIBOrder(order), orderState);
+		this.brokerModel.openOrder(order.getOrderKey(), contract, order,
+				orderState);
 		order.setStatus(OrderStatus.CANCELLED);
 	}
 
@@ -768,13 +762,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 * @return ContractDetails
 	 * @throws IOException
 	 */
-	private ContractDetails getYahooContractDetails(int reqId, String symbol)
+	private Contract getYahooContractDetails(int reqId, String symbol)
 			throws IOException {
 
 		/*
 		 * Yahoo finance http://finance.yahoo.com/d/quotes.csv?s=XOM&f=n
 		 */
-		ContractDetails contractDetails = new ContractDetails();
+		Contract contractDetails = new Contract();
 
 		String strUrl = "http://finance.yahoo.com/d/quotes.csv?s=" + symbol
 				+ "&f=n";
@@ -787,8 +781,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		while ((inputLine = in.readLine()) != null) {
 			StringTokenizer scanLine = new StringTokenizer(inputLine, ",");
 			while (scanLine.hasMoreTokens()) {
-				contractDetails.m_longName = scanLine.nextToken().replaceAll(
-						"\"", "");
+				contractDetails.setDescription(scanLine.nextToken().replaceAll(
+						"\"", ""));
 			}
 		}
 		in.close();

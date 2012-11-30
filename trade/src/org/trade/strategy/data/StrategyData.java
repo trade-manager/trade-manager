@@ -43,7 +43,6 @@ import java.util.Vector;
 import org.jfree.data.time.RegularTimePeriod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.broker.BackTestBroker;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
@@ -61,7 +60,6 @@ public class StrategyData extends Worker {
 
 	private CandleDataset baseCandleDataset = null;
 	private CandleDataset candleDataset = null;
-	private BackTestBroker backTestWorker = null;
 	private Strategy strategy = null;
 	private List<IndicatorDataset> indicators = new ArrayList<IndicatorDataset>();
 
@@ -412,25 +410,6 @@ public class StrategyData extends Worker {
 	 */
 	public Strategy getStrategy() {
 		return this.strategy;
-	}
-
-	/**
-	 * Method getBackTestWorker.
-	 * 
-	 * @return BackTestBroker
-	 */
-	public BackTestBroker getBackTestWorker() {
-		return this.backTestWorker;
-	}
-
-	/**
-	 * Method setBackTestWorker.
-	 * 
-	 * @param backTestWorker
-	 *            BackTestBroker
-	 */
-	public void setBackTestWorker(BackTestBroker backTestWorker) {
-		this.backTestWorker = backTestWorker;
 	}
 
 	/**

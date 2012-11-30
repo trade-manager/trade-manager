@@ -48,6 +48,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.trade.broker.client.BackTestBroker;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
@@ -219,6 +220,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		onCancelAllRealtimeData();
 		this.fireConnectionClosed();
 		error(0, 1101, "Error Connection was closed! ");
+	}
+
+	/**
+	 * Method getBackTestBroker.
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
+	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
+	 */
+	public BackTestBroker getBackTestBroker(Integer idTradestrategy) {
+		return null;
 	}
 
 	/**

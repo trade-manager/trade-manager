@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BackTestBrokerModel;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
-import org.trade.broker.TWSBrokerModel;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
@@ -79,8 +78,6 @@ import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.ui.TradeAppLoadConfig;
-
-import com.ib.client.Execution;
 
 /**
  */
@@ -211,22 +208,20 @@ public class AbstractStrategyTest extends TestCase {
 			openOrder.setFilledDate(new Date());
 			openOrder.setIsFilled(true);
 			openOrder.setFilledQuantity(openOrder.getQuantity());
-			Execution execution = new Execution();
-			execution.m_time = TradingCalendar.getFormattedDate(new Date());
-			execution.m_exchange = "SMART";
-			execution.m_side = "BOT";
-			execution.m_shares = openOrder.getQuantity().intValue();
-			execution.m_price = openOrder.getAverageFilledPrice().doubleValue();
-			execution.m_avgPrice = openOrder.getAverageFilledPrice()
-					.doubleValue();
-			execution.m_cumQty = openOrder.getQuantity().intValue();
-			execution.m_orderId = openOrder.getOrderKey();
+			TradeOrderfill execution = new TradeOrderfill();
+			execution.setTradeOrder(openOrder);
+			execution.setTime(new Date());
+			execution.setExchange("SMART");
+			execution.setSide("BOT");
+			execution.setQuantity(openOrder.getQuantity());
+			execution.setAveragePrice(openOrder.getAverageFilledPrice());
+			execution.setPrice(openOrder.getAverageFilledPrice());
+			execution.setCumulativeQuantity(openOrder.getQuantity());
 			tradePersistentModel.persistTrade(openOrder.getTrade());
 
-			((BackTestBrokerModel) m_brokerModel)
-					.execDetails(openOrder.getOrderKey(), TWSBrokerModel
-							.getIBContract(this.tradestrategy.getContract()),
-							execution);
+			((BackTestBrokerModel) m_brokerModel).execDetails(
+					openOrder.getOrderKey(), this.tradestrategy.getContract(),
+					execution);
 
 			// Position has been open
 			// submit the target and stop orders.
