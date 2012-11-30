@@ -910,11 +910,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * time data has started, so fire of the strategy for this
 			 * tradestrategy.
 			 */
-			if (m_brokerModel.isBrokerDataOnly()) {
-				if (!m_brokerModel.isConnected()) {
-					m_brokerModel.onCancelBrokerData(tradestrategy);
-				}
-			} else {
+			if (!m_brokerModel.isBrokerDataOnly()) {
 				if (tradestrategy.getTrade()) {
 					boolean isOpen = false;
 					for (Trade trade : tradestrategy.getTrades()) {

@@ -194,10 +194,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			Date startDate = TradingCalendar.addDays(endDate,
 					(Integer.parseInt(chartDays.getCode()) - 1) * -1);
 			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
+			startDate = TradingCalendar.getSpecificTime(startDate, 0, 0);
 
-			// _log.info(" Start Date: " + startDate + " End Date: " + endDate
-			// + " BarSize: " + barSize.getCode() + " ChartDays: "
-			// + chartDays.getCode());
+			_log.info(" Start Date: " + startDate + " End Date: " + endDate
+					+ " BarSize: " + barSize.getCode() + " ChartDays: "
+					+ chartDays.getCode());
 
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
 				this.getYahooPriceDataDay(reqId, ibContract.m_symbol,

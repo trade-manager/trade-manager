@@ -1912,11 +1912,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 * The last one has arrived the reqId is the tradeStrategyId.
 				 * Remove this from the processing vector.
 				 */
+
 				synchronized (m_historyDataRequests) {
 					m_historyDataRequests.remove(reqId);
 					m_historyDataRequests.notifyAll();
 					_log.info("Historical data complete for: " + reqId);
 				}
+
 				try {
 
 					Tradestrategy tradestrategy = contract.getTradestrategies()
@@ -1934,7 +1936,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				for (Tradestrategy tradestrategy : contract
 						.getTradestrategies()) {
 					this.fireHistoricalDataComplete(tradestrategy);
-
 					if (tradestrategy.getTradingday().getClose()
 							.after(new Date())) {
 						if (!this.isRealtimeBarsRunning(contract)) {
