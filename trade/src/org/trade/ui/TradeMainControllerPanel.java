@@ -1891,8 +1891,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			strategy.addMessageListener(m_brokerModel
 					.getBackTestBroker(tradestrategy.getIdTradeStrategy()));
-			m_brokerModel.getBackTestBroker(tradestrategy.getIdTradeStrategy())
-					.execute();
 		}
 		strategy.execute();
 		m_strategyWorkers.put(key, strategy);

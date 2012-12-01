@@ -1049,6 +1049,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				// _log.info("HistoricalData complete: "
 				// + tradestrategy.getContract().getSymbol());
 
+				synchronized (m_historyDataRequests) {
+					m_historyDataRequests.remove(reqId);
+					m_historyDataRequests.notifyAll();
+					_log.info("Historical data complete for: " + reqId);
+				}
+
 				/*
 				 * The last one has arrived the reqId is the tradeStrategyId.
 				 * Remove this from the processing vector.
@@ -1064,40 +1070,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				} catch (Exception ex) {
 					error(reqId, 3240, ex.getMessage());
 				}
-				/*
-				 * Check to see if the trading day is today and this strategy is
-				 * selected to trade and that the market is open
-				 */
-				for (ListIterator<Tradestrategy> iterItem = contract
-						.getTradestrategies().listIterator(); iterItem
-						.hasNext();) {
-					Tradestrategy tradestrategy = iterItem.next();
-					if (tradestrategy.getTrade()) {
-						this.fireHistoricalDataComplete(tradestrategy);
-						if (tradestrategy.getTradingday().getClose()
-								.after(new Date())) {
-							if (!this.isRealtimeBarsRunning(contract)) {
-								try {
-									this.onReqRealTimeBars(contract,
-											tradestrategy.getStrategy()
-													.getMarketData());
-								} catch (BrokerModelException ex) {
-									error(reqId, 3250, ex.getMessage());
-								}
-							}
-						}
-					} else {
-						iterItem.remove();
-					}
-				}
-				if (this.isBrokerDataOnly()
-						|| contract.getTradestrategies().isEmpty()) {
-					synchronized (m_historyDataRequests) {
-						m_historyDataRequests.remove(reqId);
-						m_historyDataRequests.notifyAll();
-						_log.info("Historical data complete for: " + reqId);
-					}
-				}
+
 			} else {
 
 				Date date = null;
@@ -1166,7 +1139,39 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public void realtimeBar(int reqId, long time, double open, double high,
 			double low, double close, long volume, double vwap, int tradeCount) {
-		// Called when a candle finishes
+		/*
+		 * Check to see if the trading day is today and this strategy is
+		 * selected to trade and that the market is open
+		 */
+		Contract contract = m_historyDataRequests.get(reqId);
+
+		for (ListIterator<Tradestrategy> iterItem = contract
+				.getTradestrategies().listIterator(); iterItem.hasNext();) {
+			Tradestrategy tradestrategy = iterItem.next();
+			if (tradestrategy.getTrade()) {
+				this.fireHistoricalDataComplete(tradestrategy);
+				if (tradestrategy.getTradingday().getClose().after(new Date())) {
+					if (!this.isRealtimeBarsRunning(contract)) {
+						try {
+							this.onReqRealTimeBars(contract, tradestrategy
+									.getStrategy().getMarketData());
+						} catch (BrokerModelException ex) {
+							error(reqId, 3250, ex.getMessage());
+						}
+					}
+				}
+			} else {
+				iterItem.remove();
+			}
+		}
+		if (contract.getTradestrategies().isEmpty()) {
+
+			synchronized (m_historyDataRequests) {
+				m_historyDataRequests.remove(reqId);
+				m_historyDataRequests.notifyAll();
+				_log.info("Historical data complete for: " + reqId);
+			}
+		}
 	}
 
 	/**
@@ -1378,7 +1383,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		if (null != contractDetails.getLocalSymbol()) {
 			transientContract.setLocalSymbol(contractDetails.getLocalSymbol());
 		}
-		if (0 != contractDetails.getIdContractIB()) {
+		if (null != contractDetails.getIdContractIB()) {
 			transientContract
 					.setIdContractIB(contractDetails.getIdContractIB());
 		}
