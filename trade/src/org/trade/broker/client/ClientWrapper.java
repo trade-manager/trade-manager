@@ -56,7 +56,7 @@ public interface ClientWrapper {
 	void openOrder(int orderId, Contract contract, TradeOrder order,
 			OrderState orderState);
 
-	void openOrderEnd();
+//	void openOrderEnd();
 
 	void nextValidId(int orderId);
 

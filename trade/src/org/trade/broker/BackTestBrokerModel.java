@@ -94,6 +94,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	private Integer backfillDateFormat = 2;
 	private String backfillWhatToShow;
 	private Integer backfillOffsetDays = 0;
+	private Integer backfillUseRTH = 1;
 
 	private static final SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
 			"yyyyMMdd HH:mm:ss z");
@@ -107,6 +108,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 							this);
 			backfillWhatToShow = ConfigProperties
 					.getPropAsString("trade.backfill.whatToShow");
+			backfillUseRTH = ConfigProperties
+					.getPropAsInt("trade.backfill.useRTH");
 			int maxKey = m_tradePersistentModel.findTradeOrderByMaxKey();
 			if (maxKey < 100000) {
 				maxKey = 100000;
@@ -375,18 +378,26 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					BackTestBrokerModel.logContract(contract);
 					m_client.reqContractDetails(reqId, contract);
 				}
-			}
-			endDate = TradingCalendar.getSpecificTime(endDate, TradingCalendar
-					.getMostRecentTradingDay(TradingCalendar.addBusinessDays(
-							endDate, backfillOffsetDays)));
-			m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
-			String endDateTime = m_sdfGMT.format(endDate);
+				endDate = TradingCalendar.getSpecificTime(endDate,
+						TradingCalendar.getMostRecentTradingDay(TradingCalendar
+								.addBusinessDays(endDate, backfillOffsetDays)));
+				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
+				String endDateTime = m_sdfGMT.format(endDate);
 
-			m_client.reqHistoricalData(contract.getIdContract(), contract,
-					endDateTime, ChartDays.newInstance(chartDays)
-							.getDisplayName(), BarSize.newInstance(barSize)
-							.getDisplayName(), backfillWhatToShow, 1,
-					backfillDateFormat);
+				m_client.reqHistoricalData(contract.getIdContract(), contract,
+						endDateTime, ChartDays.newInstance(chartDays)
+								.getDisplayName(), BarSize.newInstance(barSize)
+								.getDisplayName(), backfillWhatToShow, 1,
+						backfillDateFormat);
+			} else {
+
+				/*
+				 * Bar interval is set to 5= 5sec this is the only thing
+				 * supported by TWS for live data.
+				 */
+				m_client.reqRealTimeBars(contract.getIdContract(), contract, 5,
+						backfillWhatToShow, (backfillUseRTH > 0));
+			}
 
 		} catch (Throwable ex) {
 			throw new BrokerModelException(contract.getIdContract(), 3020,

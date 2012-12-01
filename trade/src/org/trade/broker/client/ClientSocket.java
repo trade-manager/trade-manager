@@ -80,4 +80,9 @@ public class ClientSocket {
 	public synchronized void reqContractDetails(int reqId, Contract contract) {
 
 	}
+
+	public synchronized void reqRealTimeBars(int tickerId, Contract contract,
+			int barSize, String whatToShow, boolean useRTH) {
+
+	}
 }
