@@ -122,8 +122,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		}
 	}
 
-
-
 	/**
 	 * Method strategyComplete.
 	 * 
@@ -625,40 +623,44 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						.findContractByUniqueKey(series.getSecType(),
 								series.getSymbol(), series.getExchange(),
 								series.getCurrency());
-				Tradestrategy childTradestrategy = new Tradestrategy(contract,
-						tradestrategy.getTradingday(), new Strategy(),
-						tradestrategy.getTradeAccount(), new BigDecimal(0),
-						null, null, false, tradestrategy.getChartDays(),
-						tradestrategy.getBarSize());
-				childTradestrategy.setDirty(false);
+				if (null != contract) {
 
-				List<Candle> indicatorCandles = this.tradePersistentModel
-						.findCandlesByContractDateRangeBarSize(
-								childTradestrategy.getContract()
-										.getIdContract(), startDate, endDate,
-								childTradestrategy.getBarSize());
-				if (indicatorCandles.isEmpty()) {
-					_log.info("No chart data available for "
-							+ childTradestrategy.getContract().getSymbol());
-				} else {
-					CandleDataset.populateSeries(
-							childTradestrategy.getDatasetContainer(),
-							indicatorCandles);
-					indicatorCandles.clear();
+					Tradestrategy childTradestrategy = new Tradestrategy(
+							contract, tradestrategy.getTradingday(),
+							new Strategy(), tradestrategy.getTradeAccount(),
+							new BigDecimal(0), null, null, false,
+							tradestrategy.getChartDays(),
+							tradestrategy.getBarSize());
+					childTradestrategy.setDirty(false);
 
-					CandleSeries childSeries = childTradestrategy
-							.getDatasetContainer().getBaseCandleSeries();
-					childSeries.setDisplaySeries(series.getDisplaySeries());
-					childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
-					childSeries.setSymbol(series.getSymbol());
-					childSeries.setSecType(series.getSecType());
-					childSeries.setCurrency(series.getCurrency());
-					childSeries.setExchange(series.getExchange());
-					candleDataset.setSeries(seriesIndex, childSeries);
+					List<Candle> indicatorCandles = this.tradePersistentModel
+							.findCandlesByContractDateRangeBarSize(
+									childTradestrategy.getContract()
+											.getIdContract(), startDate,
+									endDate, childTradestrategy.getBarSize());
+					if (indicatorCandles.isEmpty()) {
+						_log.info("No chart data available for "
+								+ childTradestrategy.getContract().getSymbol());
+					} else {
+						CandleDataset.populateSeries(
+								childTradestrategy.getDatasetContainer(),
+								indicatorCandles);
+						indicatorCandles.clear();
+
+						CandleSeries childSeries = childTradestrategy
+								.getDatasetContainer().getBaseCandleSeries();
+						childSeries.setDisplaySeries(series.getDisplaySeries());
+						childSeries.setSeriesRGBColor(series
+								.getSeriesRGBColor());
+						childSeries.setSymbol(series.getSymbol());
+						childSeries.setSecType(series.getSecType());
+						childSeries.setCurrency(series.getCurrency());
+						childSeries.setExchange(series.getExchange());
+						candleDataset.setSeries(seriesIndex, childSeries);
+					}
 				}
 			}
 		}
 	}
-
 
 }

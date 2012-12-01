@@ -329,6 +329,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		 * Bar interval is set to 5= 5sec this is the only thing supported by
 		 * TWS for live data.
 		 */
+		synchronized (m_historyDataRequests) {
+			m_historyDataRequests.put(contract.getIdContract(), contract);
+		}
 		m_client.reqRealTimeBars(contract.getIdContract(), contract, 5,
 				backfillWhatToShow, (backfillUseRTH > 0));
 	}
@@ -360,23 +363,15 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								+ contract.getSymbol()
 								+ " Please wait or cancel.");
 			}
-			/*
-			 * When running data via the TWS API we start the DatasetContainers
-			 * internal thread to process candle updates and all indicator
-			 * updates. That reduces the delay to the broker interface thread
-			 * for messages coming in.
-			 */
-			// if (!tradestrategy.getDatasetContainer().isRunning())
-			// tradestrategy.getDatasetContainer().execute();
-			synchronized (m_historyDataRequests) {
-				m_historyDataRequests.put(contract.getIdContract(), contract);
-			}
 
 			if (this.isBrokerDataOnly()) {
 				/*
 				 * This will use the Yahoo API to get the data.
 				 */
-
+				synchronized (m_historyDataRequests) {
+					m_historyDataRequests.put(contract.getIdContract(),
+							contract);
+				}
 				if (null == contract.getDescription()) {
 					Integer reqId = getNextRequestId();
 					m_contractRequests.put(reqId, contract);
