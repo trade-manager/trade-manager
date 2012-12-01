@@ -325,6 +325,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public void onReqRealTimeBars(Contract contract, boolean mktData)
 			throws BrokerModelException {
+		/*
+		 * Bar interval is set to 5= 5sec this is the only thing supported by
+		 * TWS for live data.
+		 */
+		m_client.reqRealTimeBars(contract.getIdContract(), contract, 5,
+				backfillWhatToShow, (backfillUseRTH > 0));
 	}
 
 	/**
@@ -390,13 +396,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								.getDisplayName(), backfillWhatToShow, 1,
 						backfillDateFormat);
 			} else {
-
-				/*
-				 * Bar interval is set to 5= 5sec this is the only thing
-				 * supported by TWS for live data.
-				 */
-				m_client.reqRealTimeBars(contract.getIdContract(), contract, 5,
-						backfillWhatToShow, (backfillUseRTH > 0));
+				onReqRealTimeBars(contract, false);
 			}
 
 		} catch (Throwable ex) {
@@ -1150,16 +1150,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			Tradestrategy tradestrategy = iterItem.next();
 			if (tradestrategy.getTrade()) {
 				this.fireHistoricalDataComplete(tradestrategy);
-				if (tradestrategy.getTradingday().getClose().after(new Date())) {
-					if (!this.isRealtimeBarsRunning(contract)) {
-						try {
-							this.onReqRealTimeBars(contract, tradestrategy
-									.getStrategy().getMarketData());
-						} catch (BrokerModelException ex) {
-							error(reqId, 3250, ex.getMessage());
-						}
-					}
-				}
 			} else {
 				iterItem.remove();
 			}

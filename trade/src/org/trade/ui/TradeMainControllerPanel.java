@@ -2303,7 +2303,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							if (!m_indicatorTradestrategy
 									.containsKey(indicatorTradestrategy
 											.getIdTradeStrategy())) {
-								if (m_brokerModel.isConnected()) {
+								if (m_brokerModel.isConnected()
+										|| m_brokerModel.isBrokerDataOnly()) {
 									m_indicatorTradestrategy.put(
 											indicatorTradestrategy
 													.getIdTradeStrategy(),
