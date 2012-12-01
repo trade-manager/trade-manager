@@ -37,7 +37,6 @@ package org.trade.core.dao;
 
 import java.io.Serializable;
 
-
 /**
  */
 public abstract class Aspect extends Object implements Serializable {

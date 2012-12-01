@@ -91,7 +91,8 @@ public class ContractTest extends TestCase {
 				aspectHome.remove(contract);
 				_log.info("Delete Contract");
 			}
-			aspectHome.persist(transientInstance);
+			transientInstance = (Contract) aspectHome
+					.persist(transientInstance);
 
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 

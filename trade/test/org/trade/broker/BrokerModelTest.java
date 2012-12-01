@@ -517,6 +517,8 @@ public class BrokerModelTest extends TestCase {
 	public void testOnReqRealTimeBars() {
 
 		try {
+			this.tradestrategy.getContract().addTradestrategy(
+					this.tradestrategy);
 			m_brokerModel.onReqRealTimeBars(this.tradestrategy.getContract(),
 					false);
 		} catch (Exception ex) {

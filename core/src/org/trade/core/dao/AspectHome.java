@@ -57,10 +57,12 @@ public class AspectHome {
 
 	/**
 	 * Method persist.
-	 * @param transientInstance Aspect
+	 * 
+	 * @param transientInstance
+	 *            Aspect
 	 * @return Aspect
 	 */
-	public synchronized Aspect persist(Aspect transientInstance) {
+	public synchronized  Aspect persist(Aspect transientInstance) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -86,7 +88,9 @@ public class AspectHome {
 
 	/**
 	 * Method remove.
-	 * @param transientInstance Aspect
+	 * 
+	 * @param transientInstance
+	 *            Aspect
 	 */
 	public synchronized void remove(Aspect transientInstance) {
 
@@ -113,7 +117,9 @@ public class AspectHome {
 
 	/**
 	 * Method findByClassName.
-	 * @param className String
+	 * 
+	 * @param className
+	 *            String
 	 * @return Aspects
 	 * @throws ClassNotFoundException
 	 */
@@ -150,9 +156,13 @@ public class AspectHome {
 
 	/**
 	 * Method findByClassNameFieldName.
-	 * @param className String
-	 * @param fieldname String
-	 * @param value String
+	 * 
+	 * @param className
+	 *            String
+	 * @param fieldname
+	 *            String
+	 * @param value
+	 *            String
 	 * @return Aspects
 	 * @throws ClassNotFoundException
 	 */
@@ -191,10 +201,12 @@ public class AspectHome {
 
 	/**
 	 * Method findById.
-	 * @param transientInstance Aspect
+	 * 
+	 * @param transientInstance
+	 *            Aspect
 	 * @return Aspect
 	 */
-	public Aspect findById(Aspect transientInstance) {
+	public <T extends Aspect> Aspect findById(Aspect transientInstance) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
