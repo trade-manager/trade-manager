@@ -133,7 +133,7 @@ public class ClientSocket {
 		}
 	}
 
-	public synchronized void removeBackTestBroker(Integer idTradestrategy) {
+	public void removeBackTestBroker(Integer idTradestrategy) {
 		BackTestBroker backTestBroker = m_backTestBroker.get(idTradestrategy);
 		if (null != backTestBroker) {
 			if (backTestBroker.isDone() || backTestBroker.isCancelled()) {
@@ -168,8 +168,8 @@ public class ClientSocket {
 		}
 	}
 
-	public synchronized void reqRealTimeBars(int reqId, Contract contract,
-			int barSize, String whatToShow, boolean useRTH) {
+	public void reqRealTimeBars(int reqId, Contract contract, int barSize,
+			String whatToShow, boolean useRTH) {
 		for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
 			BackTestBroker backTestBroker = new BackTestBroker(
 					tradestrategy.getDatasetContainer(),
