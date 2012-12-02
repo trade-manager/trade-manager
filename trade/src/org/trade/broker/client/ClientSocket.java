@@ -100,30 +100,45 @@ public class ClientSocket {
 			throws BrokerModelException {
 
 		try {
-			Date endDate = m_sdfGMT.parse(endDateTime);
-			ChartDays chartDays = ChartDays.newInstance();
-			chartDays.setDisplayName(durationStr);
 
-			BarSize barSize = BarSize.newInstance();
-			barSize.setDisplayName(barSizeSetting);
+			if (null != endDateTime) {
+				Date endDate = m_sdfGMT.parse(endDateTime);
+				ChartDays chartDays = ChartDays.newInstance();
+				chartDays.setDisplayName(durationStr);
 
-			Date startDate = TradingCalendar.addDays(endDate,
-					(Integer.parseInt(chartDays.getCode()) - 1) * -1);
-			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
-			startDate = TradingCalendar.getSpecificTime(startDate, 0, 0);
+				BarSize barSize = BarSize.newInstance();
+				barSize.setDisplayName(barSizeSetting);
 
-			_log.info(" Start Date: " + startDate + " End Date: " + endDate
-					+ " BarSize: " + barSize.getCode() + " ChartDays: "
-					+ chartDays.getCode());
+				Date startDate = TradingCalendar.addDays(endDate,
+						(Integer.parseInt(chartDays.getCode()) - 1) * -1);
+				startDate = TradingCalendar.getMostRecentTradingDay(startDate);
+				startDate = TradingCalendar.getSpecificTime(startDate, 0, 0);
 
-			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
-				this.getYahooPriceDataDay(reqId, contract.getSymbol(),
-						startDate, endDate);
+				_log.info(" Start Date: " + startDate + " End Date: " + endDate
+						+ " BarSize: " + barSize.getCode() + " ChartDays: "
+						+ chartDays.getCode());
+
+				if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
+					this.getYahooPriceDataDay(reqId, contract.getSymbol(),
+							startDate, endDate);
+				} else {
+					this.getYahooPriceDataIntraday(reqId, contract.getSymbol(),
+							Integer.parseInt(chartDays.getCode()), startDate);
+				}
 			} else {
-				this.getYahooPriceDataIntraday(reqId, contract.getSymbol(),
-						Integer.parseInt(chartDays.getCode()), startDate);
+				for (Tradestrategy tradestrategy : contract
+						.getTradestrategies()) {
+					if (tradestrategy.getTrade()) {
+						BackTestBroker backTestBroker = new BackTestBroker(
+								tradestrategy.getDatasetContainer(),
+								tradestrategy.getIdTradeStrategy(), m_client);
+						m_backTestBroker.put(
+								tradestrategy.getIdTradeStrategy(),
+								backTestBroker);
+						backTestBroker.execute();
+					}
+				}
 			}
-
 			m_client.historicalData(reqId, "finished- at yyyyMMdd HH:mm:ss", 0,
 					0, 0, 0, 0, 0, 0, false);
 
@@ -179,6 +194,7 @@ public class ClientSocket {
 		try {
 			Contract contractDetails = getYahooContractDetails(reqId,
 					contract.getSymbol());
+
 			m_client.contractDetails(reqId, contractDetails);
 		} catch (Exception ex) {
 			throw new BrokerModelException(0, 6000,
@@ -202,17 +218,6 @@ public class ClientSocket {
 	 */
 	public void reqRealTimeBars(int reqId, Contract contract, int barSize,
 			String whatToShow, boolean useRTH) {
-		for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
-			if(tradestrategy.getTrade()){
-				BackTestBroker backTestBroker = new BackTestBroker(
-						tradestrategy.getDatasetContainer(),
-						tradestrategy.getIdTradeStrategy(), m_client);
-				m_backTestBroker.put(tradestrategy.getIdTradeStrategy(),
-						backTestBroker);
-				backTestBroker.execute();
-			}
-		}
-		m_client.realtimeBar(reqId, 0, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	/**

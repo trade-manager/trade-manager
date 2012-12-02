@@ -203,7 +203,8 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency) throws PersistentModelException;
+			String exchange, String currency, Date expiry)
+			throws PersistentModelException;
 
 	/**
 	 * Method findTradestrategyById.

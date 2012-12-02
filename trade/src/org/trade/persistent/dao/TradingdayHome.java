@@ -44,11 +44,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
+import org.trade.core.util.TradingCalendar;
 import org.trade.strategy.data.IndicatorSeries;
 
 /**
@@ -484,11 +486,20 @@ public class TradingdayHome {
 				predicates.add(predicate);
 			}
 			if (null != expiryDate) {
-				Predicate predicate = builder.equal(from.get("expiry"),
-						expiryDate);
-				predicates.add(predicate);
-			}
 
+				Integer yearExpiry = TradingCalendar.getYear(expiryDate);
+				Expression<Integer> year = builder.function("year",
+						Integer.class, from.get("expiry"));
+				Predicate predicateYear = builder.equal(year, yearExpiry);
+				predicates.add(predicateYear);
+
+				Integer monthExpiry = TradingCalendar.getMonth(expiryDate);
+				Expression<Integer> month = builder.function("month",
+						Integer.class, from.get("expiry"));
+				Predicate predicateMonth = builder.equal(month, new Integer(
+						1 + monthExpiry.intValue()));
+				predicates.add(predicateMonth);
+			}
 			query.where(predicates.toArray(new Predicate[] {}));
 			TypedQuery<Contract> typedQuery = entityManager.createQuery(query);
 			List<Contract> items = typedQuery.getResultList();

@@ -56,8 +56,6 @@ public interface ClientWrapper {
 	void openOrder(int orderId, Contract contract, TradeOrder order,
 			OrderState orderState);
 
-//	void openOrderEnd();
-
 	void nextValidId(int orderId);
 
 	void contractDetails(int reqId, Contract contract);
@@ -74,8 +72,6 @@ public interface ClientWrapper {
 
 	void realtimeBar(int reqId, long time, double open, double high,
 			double low, double close, long volume, double wap, int count);
-
-	void currentTime(long time);
 
 	void onCancelRealtimeBars(Tradestrategy tradestrategy);
 

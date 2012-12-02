@@ -2124,8 +2124,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (m_brokerModel.isHistoricalDataRunning(contract)) {
 				return totalSumbitted;
 			}
-			//_log.info("submitBrokerRequest: " + contract.getSymbol()
-			//		+ " Date: " + startDate);
+			_log.info("submitBrokerRequest: " + contract.getSymbol()
+					+ " Date: " + startDate);
 
 			m_brokerModel.onBrokerData(contract, startDate, endDate, barSize,
 					chartDays);
@@ -2238,7 +2238,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							series.getContract().getSecType(), series
 									.getContract().getSymbol(), series
 									.getContract().getExchange(), series
-									.getContract().getCurrency());
+									.getContract().getCurrency(), series
+									.getContract().getExpiry());
 					if (null == contract) {
 						contract = (Contract) m_tradePersistentModel
 								.persistAspect(series.getContract());

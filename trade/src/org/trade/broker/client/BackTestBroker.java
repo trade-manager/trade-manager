@@ -622,44 +622,43 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				Contract contract = this.tradePersistentModel
 						.findContractByUniqueKey(series.getSecType(),
 								series.getSymbol(), series.getExchange(),
-								series.getCurrency());
-				if (null != contract) {
+								series.getCurrency(), null);
+				if (null != contract)
+					continue;
 
-					Tradestrategy childTradestrategy = new Tradestrategy(
-							contract, tradestrategy.getTradingday(),
-							new Strategy(), tradestrategy.getTradeAccount(),
-							new BigDecimal(0), null, null, false,
-							tradestrategy.getChartDays(),
-							tradestrategy.getBarSize());
-					childTradestrategy.setDirty(false);
+				Tradestrategy childTradestrategy = new Tradestrategy(contract,
+						tradestrategy.getTradingday(), new Strategy(),
+						tradestrategy.getTradeAccount(), new BigDecimal(0),
+						null, null, false, tradestrategy.getChartDays(),
+						tradestrategy.getBarSize());
+				childTradestrategy.setDirty(false);
 
-					List<Candle> indicatorCandles = this.tradePersistentModel
-							.findCandlesByContractDateRangeBarSize(
-									childTradestrategy.getContract()
-											.getIdContract(), startDate,
-									endDate, childTradestrategy.getBarSize());
-					if (indicatorCandles.isEmpty()) {
-						_log.info("No chart data available for "
-								+ childTradestrategy.getContract().getSymbol());
-					} else {
-						CandleDataset.populateSeries(
-								childTradestrategy.getDatasetContainer(),
-								indicatorCandles);
-						indicatorCandles.clear();
+				List<Candle> indicatorCandles = this.tradePersistentModel
+						.findCandlesByContractDateRangeBarSize(
+								childTradestrategy.getContract()
+										.getIdContract(), startDate, endDate,
+								childTradestrategy.getBarSize());
+				if (indicatorCandles.isEmpty()) {
+					_log.info("No chart data available for "
+							+ childTradestrategy.getContract().getSymbol());
+				} else {
+					CandleDataset.populateSeries(
+							childTradestrategy.getDatasetContainer(),
+							indicatorCandles);
+					indicatorCandles.clear();
 
-						CandleSeries childSeries = childTradestrategy
-								.getDatasetContainer().getBaseCandleSeries();
-						childSeries.setDisplaySeries(series.getDisplaySeries());
-						childSeries.setSeriesRGBColor(series
-								.getSeriesRGBColor());
-						childSeries.setSymbol(series.getSymbol());
-						childSeries.setSecType(series.getSecType());
-						childSeries.setCurrency(series.getCurrency());
-						childSeries.setExchange(series.getExchange());
-						candleDataset.setSeries(seriesIndex, childSeries);
-					}
+					CandleSeries childSeries = childTradestrategy
+							.getDatasetContainer().getBaseCandleSeries();
+					childSeries.setDisplaySeries(series.getDisplaySeries());
+					childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
+					childSeries.setSymbol(series.getSymbol());
+					childSeries.setSecType(series.getSecType());
+					childSeries.setCurrency(series.getCurrency());
+					childSeries.setExchange(series.getExchange());
+					candleDataset.setSeries(seriesIndex, childSeries);
 				}
 			}
+
 		}
 	}
 

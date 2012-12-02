@@ -35,12 +35,16 @@
  */
 package org.trade.persistent.dao;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.AspectHome;
+import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.Exchange;
 import org.trade.dictionary.valuetype.SECType;
@@ -80,19 +84,65 @@ public class ContractTest extends TestCase {
 			ContractHome contractHome = new ContractHome();
 			Contract transientInstance = new Contract(SECType.STOCK, "QQQ",
 					Exchange.SMART, Currency.USD, null, null);
+
+			transientInstance = (Contract) aspectHome
+					.persist(transientInstance);
+			_log.info("Contract added Id:" + transientInstance.getIdContract());
+
 			Contract contract = contractHome.findByUniqueKey(
 					transientInstance.getSecType(),
 					transientInstance.getSymbol(),
 					transientInstance.getExchange(),
-					transientInstance.getCurrency());
+					transientInstance.getCurrency(), null);
+			assertNotNull("Contract not found: " + contract.getSymbol(),
+					contract);
 
 			if (null != contract) {
-				_log.info("Found ContractId:" + contract.getIdContract());
 				aspectHome.remove(contract);
-				_log.info("Delete Contract");
+				_log.info("Contract deleted Id:"
+						+ transientInstance.getIdContract());
+
 			}
+
+		} catch (Exception e) {
+			fail("Error adding row " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testFindDeleteAddFuture() {
+
+		try {
+
+			// Create new instance of Strategy and set
+			// values in it by reading them from form object
+			AspectHome aspectHome = new AspectHome();
+			ContractHome contractHome = new ContractHome();
+			Date expiry = TradingCalendar.addMonth(new Date(), 1);
+			expiry = TradingCalendar.getSpecificTime(expiry, 19, 0, 0, 0);
+			_log.info("Expiry Date: " + expiry);
+			Contract transientInstance = new Contract(SECType.FUTURE, "ES",
+					Exchange.SMART, Currency.USD, expiry, new BigDecimal(50));
 			transientInstance = (Contract) aspectHome
 					.persist(transientInstance);
+			_log.info("Contract added Id:" + transientInstance.getIdContract());
+
+			expiry = TradingCalendar.addDays(expiry, 1);
+			_log.info("Expiry Date: " + expiry);
+			Contract contract = contractHome.findByUniqueKey(
+					transientInstance.getSecType(),
+					transientInstance.getSymbol(),
+					transientInstance.getExchange(),
+					transientInstance.getCurrency(), expiry);
+			assertNotNull("Contract not found: " + contract.getSymbol(),
+					contract);
+
+			if (null != contract) {
+				aspectHome.remove(contract);
+				_log.info("Contract deleted Id:"
+						+ transientInstance.getIdContract());
+
+			}
 
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 

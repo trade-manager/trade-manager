@@ -100,8 +100,9 @@ public class TradingdayTableModel extends TableModel {
 	 */
 	public boolean isCellEditable(int row, int column) {
 		Date openDate = (Date) this.getValueAt(row, 0);
-		Tradingday element = getData().getTradingdays().get(openDate.getDate());
-		if (null != element.getIdTradingDay()) {
+		Tradingday tradingday = getData().getTradingdays().get(
+				openDate.getDate());
+		if (Tradingdays.hasTrades(tradingday)) {
 			if ((column == 0) || (column == 1)) {
 				return false;
 			}

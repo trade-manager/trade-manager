@@ -456,7 +456,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @see javax.swing.event.TreeSelectionListener#valueChanged(TreeSelectionEvent)
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
-		
+
 		/*
 		 * Returns the last path element of the selection.This method is useful
 		 * only when the selection model allows a single selection.
@@ -702,7 +702,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				Contract contract = m_tradePersistentModel
 						.findContractByUniqueKey(series.getSecType(),
 								series.getSymbol(), series.getExchange(),
-								series.getCurrency());
+								series.getCurrency(), null);
 				if (null != contract) {
 					Tradestrategy childTradestrategy = new Tradestrategy(
 							contract, tradestrategy.getTradingday(),

@@ -718,7 +718,7 @@ public class TradePersistentModelTest extends TestCase {
 							.getSecType(), this.tradestrategy.getContract()
 							.getSymbol(), this.tradestrategy.getContract()
 							.getExchange(), this.tradestrategy.getContract()
-							.getCurrency());
+							.getCurrency(), null);
 			assertNotNull(result);
 		} catch (Exception e) {
 			fail("Error testFindContractByUniqueKey Msg: " + e.getMessage());

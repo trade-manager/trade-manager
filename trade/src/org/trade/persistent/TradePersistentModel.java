@@ -232,9 +232,10 @@ public class TradePersistentModel implements PersistentModel {
 	 *      String, String, String)
 	 */
 	public Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency) throws PersistentModelException {
+			String exchange, String currency, Date expiry)
+			throws PersistentModelException {
 		return m_contractHome.findByUniqueKey(SECType, symbol, exchange,
-				currency);
+				currency, expiry);
 	}
 
 	/**
@@ -552,7 +553,8 @@ public class TradePersistentModel implements PersistentModel {
 						transientInstance.getSecType(),
 						transientInstance.getSymbol(),
 						transientInstance.getExchange(),
-						transientInstance.getCurrency());
+						transientInstance.getCurrency(),
+						transientInstance.getExpiry());
 				if (null != currentContract) {
 					transientInstance.setIdContract(currentContract
 							.getIdContract());
