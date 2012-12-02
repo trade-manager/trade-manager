@@ -36,6 +36,7 @@
 package org.trade.persistent.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -43,10 +44,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
+import org.trade.core.util.TradingCalendar;
 
 /**
  */
@@ -61,14 +64,19 @@ public class ContractHome {
 
 	/**
 	 * Method findByUniqueKey.
-	 * @param SECType String
-	 * @param symbol String
-	 * @param exchange String
-	 * @param currency String
+	 * 
+	 * @param SECType
+	 *            String
+	 * @param symbol
+	 *            String
+	 * @param exchange
+	 *            String
+	 * @param currency
+	 *            String
 	 * @return Contract
 	 */
 	public Contract findByUniqueKey(String SECType, String symbol,
-			String exchange, String currency) {
+			String exchange, String currency, Date expiryDate) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -98,7 +106,21 @@ public class ContractHome {
 						currency);
 				predicates.add(predicate);
 			}
+			if (null != expiryDate) {
 
+				Integer yearExpiry = TradingCalendar.getYear(expiryDate);
+				Expression<Integer> year = builder.function("year",
+						Integer.class, from.get("expiry"));
+				Predicate predicateYear = builder.equal(year, yearExpiry);
+				predicates.add(predicateYear);
+
+				Integer monthExpiry = TradingCalendar.getMonth(expiryDate);
+				Expression<Integer> month = builder.function("month",
+						Integer.class, from.get("expiry"));
+				Predicate predicateMonth = builder.equal(month, new Integer(
+						1 + monthExpiry.intValue()));
+				predicates.add(predicateMonth);
+			}
 			query.where(predicates.toArray(new Predicate[] {}));
 			TypedQuery<Contract> typedQuery = entityManager.createQuery(query);
 			List<Contract> items = typedQuery.getResultList();
@@ -117,7 +139,9 @@ public class ContractHome {
 
 	/**
 	 * Method findById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Contract
 	 */
 	public Contract findById(Integer id) {

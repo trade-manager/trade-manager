@@ -205,7 +205,7 @@ public class TradestrategyTest extends TestCase {
 				.getMostRecentTradingDay(new Date()));
 
 		Contract contract = contractHome.findByUniqueKey(SECType.STOCK, symbol,
-				Exchange.SMART, Currency.USD);
+				Exchange.SMART, Currency.USD, null);
 		if (null == contract) {
 			contract = new Contract(SECType.STOCK, symbol, Exchange.SMART,
 					Currency.USD, null, null);
@@ -250,7 +250,7 @@ public class TradestrategyTest extends TestCase {
 		TradestrategyHome tradestrategyHome = new TradestrategyHome();
 		AspectHome aspectHome = new AspectHome();
 		Contract contract = contractHome.findByUniqueKey(SECType.STOCK, symbol,
-				Exchange.SMART, Currency.USD);
+				Exchange.SMART, Currency.USD, null);
 		if (null != contract) {
 			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 					.getMostRecentTradingDay(new Date()));

@@ -774,6 +774,34 @@ public class TradingCalendar {
 	}
 
 	/**
+	 * Method getSpecificTime.
+	 * 
+	 * @param date
+	 *            Date
+	 * @param dayOfMonth
+	 *            int
+	 * @param hrs
+	 *            int
+	 * @param minutes
+	 *            int
+	 * @param seconds
+	 *            int
+	 * @return Date
+	 */
+	public static Date getSpecificTime(final Date date, int dayOfMonth,
+			int hrs, int minutes, int seconds) {
+		synchronized (CALENDAR_NY) {
+			CALENDAR_NY.setTime(date);
+			CALENDAR_NY.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, hrs);
+			CALENDAR_NY.set(Calendar.MINUTE, minutes);
+			CALENDAR_NY.set(Calendar.SECOND, seconds);
+			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
+			return CALENDAR_NY.getTime();
+		}
+	}
+
+	/**
 	 * Method setTimeForDateTo. Returns the date set to the time of another
 	 * date.
 	 * 

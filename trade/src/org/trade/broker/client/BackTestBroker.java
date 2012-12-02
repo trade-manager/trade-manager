@@ -622,7 +622,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				Contract contract = this.tradePersistentModel
 						.findContractByUniqueKey(series.getSecType(),
 								series.getSymbol(), series.getExchange(),
-								series.getCurrency());
+								series.getCurrency(), null);
 				if (null != contract) {
 
 					Tradestrategy childTradestrategy = new Tradestrategy(

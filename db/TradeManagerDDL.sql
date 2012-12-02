@@ -57,7 +57,7 @@ CREATE  TABLE IF NOT EXISTS contract (
   tradingClass VARCHAR(80) NULL ,
   version INT NULL,
   PRIMARY KEY (idContract) ,
-  UNIQUE INDEX contract_uq (secType ASC, symbol ASC,exchange ASC,currency ASC) )
+  UNIQUE INDEX contract_uq (secType ASC, symbol ASC, exchange ASC, currency ASC, expiry ASC) )
 ENGINE = InnoDB;
 
 SHOW WARNINGS;

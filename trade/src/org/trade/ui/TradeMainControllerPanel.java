@@ -2238,7 +2238,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							series.getContract().getSecType(), series
 									.getContract().getSymbol(), series
 									.getContract().getExchange(), series
-									.getContract().getCurrency());
+									.getContract().getCurrency(), series
+									.getContract().getExpiry());
 					if (null == contract) {
 						contract = (Contract) m_tradePersistentModel
 								.persistAspect(series.getContract());
