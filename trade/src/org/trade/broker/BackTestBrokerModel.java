@@ -1132,14 +1132,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @param tradeCount
 	 *            int
 	 */
-	public void realtimeBar(int reqId, long time, double open, double high,
+	public synchronized void realtimeBar(int reqId, long time, double open, double high,
 			double low, double close, long volume, double vwap, int tradeCount) {
 		/*
 		 * Check to see if the trading day is today and this strategy is
 		 * selected to trade and that the market is open
 		 */
 		Contract contract = m_historyDataRequests.get(reqId);
-
 		for (ListIterator<Tradestrategy> iterItem = contract
 				.getTradestrategies().listIterator(); iterItem.hasNext();) {
 			Tradestrategy tradestrategy = iterItem.next();
@@ -1150,7 +1149,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			}
 		}
 		if (contract.getTradestrategies().isEmpty()) {
-
 			synchronized (m_historyDataRequests) {
 				m_historyDataRequests.remove(reqId);
 				m_historyDataRequests.notifyAll();

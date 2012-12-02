@@ -94,7 +94,7 @@ public class ClientSocket {
 	 *            int
 	 * @throws BrokerModelException
 	 */
-	public void reqHistoricalData(int reqId, Contract contract,
+	public synchronized void reqHistoricalData(int reqId, Contract contract,
 			String endDateTime, String durationStr, String barSizeSetting,
 			String whatToShow, int useRTH, int formatDateInteger)
 			throws BrokerModelException {
@@ -155,7 +155,7 @@ public class ClientSocket {
 	 *            com.ib.client.Contract
 	 * @throws BrokerModelException
 	 */
-	public void reqContractDetails(int reqId, Contract contract)
+	public synchronized void reqContractDetails(int reqId, Contract contract)
 			throws BrokerModelException {
 		try {
 			Contract contractDetails = getYahooContractDetails(reqId,
@@ -168,8 +168,8 @@ public class ClientSocket {
 		}
 	}
 
-	public void reqRealTimeBars(int reqId, Contract contract, int barSize,
-			String whatToShow, boolean useRTH) {
+	public synchronized void reqRealTimeBars(int reqId, Contract contract,
+			int barSize, String whatToShow, boolean useRTH) {
 		for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
 			BackTestBroker backTestBroker = new BackTestBroker(
 					tradestrategy.getDatasetContainer(),
