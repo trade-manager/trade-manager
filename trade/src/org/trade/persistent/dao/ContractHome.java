@@ -73,6 +73,8 @@ public class ContractHome {
 	 *            String
 	 * @param currency
 	 *            String
+	 	 * @param expiryDate
+	 *            Date
 	 * @return Contract
 	 */
 	public Contract findByUniqueKey(String SECType, String symbol,

@@ -486,18 +486,20 @@ public class TradingdayHome {
 				predicates.add(predicate);
 			}
 			if (null != expiryDate) {
-				Integer monthExpiry = TradingCalendar.getMonth(expiryDate);
+
 				Integer yearExpiry = TradingCalendar.getYear(expiryDate);
 				Expression<Integer> year = builder.function("year",
 						Integer.class, from.get("expiry"));
-				Expression<Integer> month = builder.function("month",
-						Integer.class, from.get("expiry"));
 				Predicate predicateYear = builder.equal(year, yearExpiry);
 				predicates.add(predicateYear);
-				Predicate predicateMonth = builder.equal(month, monthExpiry);
+
+				Integer monthExpiry = TradingCalendar.getMonth(expiryDate);
+				Expression<Integer> month = builder.function("month",
+						Integer.class, from.get("expiry"));
+				Predicate predicateMonth = builder.equal(month, new Integer(
+						1 + monthExpiry.intValue()));
 				predicates.add(predicateMonth);
 			}
-
 			query.where(predicates.toArray(new Predicate[] {}));
 			TypedQuery<Contract> typedQuery = entityManager.createQuery(query);
 			List<Contract> items = typedQuery.getResultList();

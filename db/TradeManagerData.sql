@@ -107,6 +107,7 @@ INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfP
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (6,'80.01','140','0.12','0.02','0','20', '0.20', '0.10',0);
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (7,'140.01','300','0.30','0.02','0','10', '0.25', '0.15',0);
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (8,'300.01','1000','0.30','0.02','0','10', '0.25', '0.20',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (9,'1000.01','3000','0.60','0.02','0','10', '0.5', '0.20',0);
 
 COMMIT;
 

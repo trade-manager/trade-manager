@@ -122,17 +122,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	}
 
 	/**
-	 * Method currentTime.
-	 * 
-	 * @param time
-	 *            long
-	 * @see com.ib.client.EWrapper#currentTime(long)
-	 */
-	public void currentTime(long time) {
-
-	}
-
-	/**
 	 * Method getHistoricalData.
 	 * 
 	 * @return ConcurrentHashMap<Integer,Contract>
@@ -325,15 +314,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public void onReqRealTimeBars(Contract contract, boolean mktData)
 			throws BrokerModelException {
-		/*
-		 * Bar interval is set to 5= 5sec this is the only thing supported by
-		 * TWS for live data.
-		 */
-		synchronized (m_historyDataRequests) {
-			m_historyDataRequests.put(contract.getIdContract(), contract);
-		}
-		m_client.reqRealTimeBars(contract.getIdContract(), contract, 5,
-				backfillWhatToShow, (backfillUseRTH > 0));
 	}
 
 	/**
@@ -363,15 +343,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								+ contract.getSymbol()
 								+ " Please wait or cancel.");
 			}
-
+			synchronized (m_historyDataRequests) {
+				m_historyDataRequests.put(contract.getIdContract(), contract);
+			}
 			if (this.isBrokerDataOnly()) {
 				/*
 				 * This will use the Yahoo API to get the data.
 				 */
-				synchronized (m_historyDataRequests) {
-					m_historyDataRequests.put(contract.getIdContract(),
-							contract);
-				}
+
 				if (null == contract.getDescription()) {
 					Integer reqId = getNextRequestId();
 					m_contractRequests.put(reqId, contract);
@@ -388,10 +367,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				m_client.reqHistoricalData(contract.getIdContract(), contract,
 						endDateTime, ChartDays.newInstance(chartDays)
 								.getDisplayName(), BarSize.newInstance(barSize)
-								.getDisplayName(), backfillWhatToShow, 1,
-						backfillDateFormat);
+								.getDisplayName(), backfillWhatToShow,
+						backfillUseRTH, backfillDateFormat);
 			} else {
-				onReqRealTimeBars(contract, false);
+				m_client.reqHistoricalData(contract.getIdContract(), contract,
+						null,
+						ChartDays.newInstance(chartDays).getDisplayName(),
+						BarSize.newInstance(barSize).getDisplayName(),
+						backfillWhatToShow, backfillUseRTH, backfillDateFormat);
 			}
 
 		} catch (Throwable ex) {
@@ -1041,12 +1024,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				// _log.info("HistoricalData complete: "
 				// + tradestrategy.getContract().getSymbol());
 
-				synchronized (m_historyDataRequests) {
-					m_historyDataRequests.remove(reqId);
-					m_historyDataRequests.notifyAll();
-					_log.info("Historical data complete for: " + reqId);
-				}
-
 				/*
 				 * The last one has arrived the reqId is the tradeStrategyId.
 				 * Remove this from the processing vector.
@@ -1059,8 +1036,31 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
+
 				} catch (Exception ex) {
 					error(reqId, 3240, ex.getMessage());
+				}
+
+				/*
+				 * Check to see if the trading day is today and this strategy is
+				 * selected to trade and that the market is open
+				 */
+				for (ListIterator<Tradestrategy> iterItem = contract
+						.getTradestrategies().listIterator(); iterItem
+						.hasNext();) {
+					Tradestrategy tradestrategy = iterItem.next();
+					if (tradestrategy.getTrade() && !this.isBrokerDataOnly()) {
+						this.fireHistoricalDataComplete(tradestrategy);
+					} else {
+						iterItem.remove();
+					}
+				}
+				if (contract.getTradestrategies().isEmpty()) {
+					synchronized (m_historyDataRequests) {
+						m_historyDataRequests.remove(reqId);
+						m_historyDataRequests.notifyAll();
+						_log.info("Historical data complete for: " + reqId);
+					}
 				}
 
 			} else {
@@ -1104,7 +1104,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -1132,27 +1131,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	public synchronized void realtimeBar(int reqId, long time, double open,
 			double high, double low, double close, long volume, double vwap,
 			int tradeCount) {
-		/*
-		 * Check to see if the trading day is today and this strategy is
-		 * selected to trade and that the market is open
-		 */
-		Contract contract = m_historyDataRequests.get(reqId);
-		for (ListIterator<Tradestrategy> iterItem = contract
-				.getTradestrategies().listIterator(); iterItem.hasNext();) {
-			Tradestrategy tradestrategy = iterItem.next();
-			if (tradestrategy.getTrade()) {
-				this.fireHistoricalDataComplete(tradestrategy);
-			} else {
-				iterItem.remove();
-			}
-		}
-		if (contract.getTradestrategies().isEmpty()) {
-			synchronized (m_historyDataRequests) {
-				m_historyDataRequests.remove(reqId);
-				m_historyDataRequests.notifyAll();
-				_log.info("Historical data complete for: " + reqId);
-			}
-		}
 	}
 
 	/**

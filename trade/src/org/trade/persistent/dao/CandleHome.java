@@ -75,6 +75,8 @@ public class CandleHome {
 			throws Exception {
 
 		try {
+			if (candleSeries.isEmpty())
+				return;
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingday tradingday = null;

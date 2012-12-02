@@ -493,12 +493,11 @@ public class PivotSeries extends IndicatorSeries {
 					// + entryLimit.getPivotRange());
 					// _log.info(calcPivot.getPrint());
 
-					if (entryLimit.getPivotRange().doubleValue() <= pivotRange
+					if (null != entryLimit && entryLimit.getPivotRange().doubleValue() <= pivotRange
 							.doubleValue()) {
 						Money pivotPrice = new Money(pivotCandle.getVwap());
 						dataItem = new PivotItem(pivotCandle.getPeriod(),
 								pivotPrice.getBigDecimalValue(), pivotSide);
-
 					}
 				} catch (Exception ex) {
 					_log.error(
