@@ -94,7 +94,7 @@ public class ClientSocket {
 	 *            int
 	 * @throws BrokerModelException
 	 */
-	public synchronized void reqHistoricalData(int reqId, Contract contract,
+	public void reqHistoricalData(int reqId, Contract contract,
 			String endDateTime, String durationStr, String barSizeSetting,
 			String whatToShow, int useRTH, int formatDateInteger)
 			throws BrokerModelException {
@@ -133,14 +133,36 @@ public class ClientSocket {
 		}
 	}
 
+	/**
+	 * Method removeBackTestBroker.
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
+	 */
+
 	public void removeBackTestBroker(Integer idTradestrategy) {
-		BackTestBroker backTestBroker = m_backTestBroker.get(idTradestrategy);
-		if (null != backTestBroker) {
-			if (backTestBroker.isDone() || backTestBroker.isCancelled()) {
-				m_backTestBroker.remove(idTradestrategy);
+		synchronized (m_backTestBroker) {
+			BackTestBroker backTestBroker = m_backTestBroker
+					.get(idTradestrategy);
+			if (null != backTestBroker) {
+				_log.error("removeBackTestBroker removed for: "
+						+ idTradestrategy);
+				if (backTestBroker.isDone() || backTestBroker.isCancelled()) {
+					m_backTestBroker.remove(idTradestrategy);
+				}
 			}
+
 		}
 	}
+
+	/**
+	 * Method getBackTestBroker.
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
+	 * 
+	 * @return BackTestBroker
+	 */
 
 	public BackTestBroker getBackTestBroker(Integer idTradestrategy) {
 		return m_backTestBroker.get(idTradestrategy);
@@ -155,7 +177,7 @@ public class ClientSocket {
 	 *            com.ib.client.Contract
 	 * @throws BrokerModelException
 	 */
-	public synchronized void reqContractDetails(int reqId, Contract contract)
+	public void reqContractDetails(int reqId, Contract contract)
 			throws BrokerModelException {
 		try {
 			Contract contractDetails = getYahooContractDetails(reqId,
@@ -168,8 +190,22 @@ public class ClientSocket {
 		}
 	}
 
-	public synchronized void reqRealTimeBars(int reqId, Contract contract,
-			int barSize, String whatToShow, boolean useRTH) {
+	/**
+	 * Method getBackTestBroker.
+	 * 
+	 * @param reqId
+	 *            int
+	 * @param contract
+	 *            Contract
+	 * @param barSize
+	 *            int
+	 * @param whatToShow
+	 *            String
+	 * @param useRTH
+	 *            boolean
+	 */
+	public void reqRealTimeBars(int reqId, Contract contract, int barSize,
+			String whatToShow, boolean useRTH) {
 		for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
 			BackTestBroker backTestBroker = new BackTestBroker(
 					tradestrategy.getDatasetContainer(),
@@ -276,8 +312,6 @@ public class ClientSocket {
 		}
 		in.close();
 	}
-
-	// http://finance.yahoo.com/d/quotes.csv?s=XOM+BBDb.TO+JNJ+MSFT&f=n
 
 	/**
 	 * Method getYahooPriceDataDay.

@@ -541,10 +541,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					m_historyDataRequests.remove(contract.getIdContract());
 					m_historyDataRequests.notifyAll();
 				}
-				m_client.removeBackTestBroker(tradestrategy
-						.getIdTradeStrategy());
 			}
 		}
+		m_client.removeBackTestBroker(tradestrategy.getIdTradeStrategy());
 	}
 
 	/**
@@ -584,14 +583,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				if (contract.getTradestrategies().isEmpty()) {
 					onCancelRealtimeBars(contract);
 				}
-				m_client.removeBackTestBroker(tradestrategy
-						.getIdTradeStrategy());
 			}
 		}
 	}
 
 	/**
-	 * Method onPlaceOrder.
+	 * Method onPlaceOrd
 	 * 
 	 * @param contract
 	 *            Contract
@@ -1132,8 +1129,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @param tradeCount
 	 *            int
 	 */
-	public synchronized void realtimeBar(int reqId, long time, double open, double high,
-			double low, double close, long volume, double vwap, int tradeCount) {
+	public synchronized void realtimeBar(int reqId, long time, double open,
+			double high, double low, double close, long volume, double vwap,
+			int tradeCount) {
 		/*
 		 * Check to see if the trading day is today and this strategy is
 		 * selected to trade and that the market is open
