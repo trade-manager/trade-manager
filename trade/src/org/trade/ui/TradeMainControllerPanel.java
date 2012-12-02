@@ -2124,8 +2124,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (m_brokerModel.isHistoricalDataRunning(contract)) {
 				return totalSumbitted;
 			}
-			_log.info("submitBrokerRequest: " + contract.getSymbol()
-					+ " Date: " + startDate);
+			//_log.info("submitBrokerRequest: " + contract.getSymbol()
+			//		+ " Date: " + startDate);
 
 			m_brokerModel.onBrokerData(contract, startDate, endDate, barSize,
 					chartDays);

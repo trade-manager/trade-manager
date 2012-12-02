@@ -145,13 +145,10 @@ public class ClientSocket {
 			BackTestBroker backTestBroker = m_backTestBroker
 					.get(idTradestrategy);
 			if (null != backTestBroker) {
-				_log.error("removeBackTestBroker removed for: "
-						+ idTradestrategy);
 				if (backTestBroker.isDone() || backTestBroker.isCancelled()) {
 					m_backTestBroker.remove(idTradestrategy);
 				}
 			}
-
 		}
 	}
 
@@ -182,7 +179,6 @@ public class ClientSocket {
 		try {
 			Contract contractDetails = getYahooContractDetails(reqId,
 					contract.getSymbol());
-
 			m_client.contractDetails(reqId, contractDetails);
 		} catch (Exception ex) {
 			throw new BrokerModelException(0, 6000,
@@ -207,12 +203,14 @@ public class ClientSocket {
 	public void reqRealTimeBars(int reqId, Contract contract, int barSize,
 			String whatToShow, boolean useRTH) {
 		for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
-			BackTestBroker backTestBroker = new BackTestBroker(
-					tradestrategy.getDatasetContainer(),
-					tradestrategy.getIdTradeStrategy(), m_client);
-			m_backTestBroker.put(tradestrategy.getIdTradeStrategy(),
-					backTestBroker);
-			backTestBroker.execute();
+			if(tradestrategy.getTrade()){
+				BackTestBroker backTestBroker = new BackTestBroker(
+						tradestrategy.getDatasetContainer(),
+						tradestrategy.getIdTradeStrategy(), m_client);
+				m_backTestBroker.put(tradestrategy.getIdTradeStrategy(),
+						backTestBroker);
+				backTestBroker.execute();
+			}
 		}
 		m_client.realtimeBar(reqId, 0, 0, 0, 0, 0, 0, 0, 0);
 	}
