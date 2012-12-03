@@ -646,9 +646,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			startDate = TradingCalendar.addDays(endDate,
 					(-1 * (tradestrategy.getChartDays() - 1)));
 			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
-			if (startDate.after(tradestrategy.getTradingday().getOpen())) {
-				startDate = tradestrategy.getTradingday().getOpen();
-			}
+			startDate = TradingCalendar.getSpecificTime(tradestrategy
+					.getTradingday().getOpen(), startDate);
 			List<Candle> candles = m_tradePersistentModel
 					.findCandlesByContractDateRangeBarSize(tradestrategy
 							.getContract().getIdContract(), startDate, endDate,

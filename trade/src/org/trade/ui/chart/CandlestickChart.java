@@ -297,9 +297,11 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		 * Calculate the number of 15min segments in this trading day. i.e.
 		 * 6.5hrs/15min = 26 and there are a total of 96 = one day
 		 */
-		int segments15min = (int) (TradingCalendar.getTodayBusinessDayEnd()
-				.getTime() - TradingCalendar.getTodayBusinessDayStart()
-				.getTime())
+		
+		System.out.println("startDate: "+startDate + "endDate: " + endDate);
+		int segments15min = (int) (TradingCalendar.getSpecificTime(endDate,
+				endDate).getTime() - TradingCalendar.getSpecificTime(startDate,
+				endDate).getTime())
 				/ (1000 * 60 * 15);
 
 		SegmentedTimeline segmentedTimeline = new SegmentedTimeline(
