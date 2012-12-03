@@ -364,6 +364,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 				String endDateTime = m_sdfGMT.format(endDate);
 
+				_log.info("onBrokerData Symbol: " + contract.getSymbol()
+						+ " end Time: " + endDateTime + " Period length: "
+						+ chartDays + " Bar size: " + barSize + " WhatToShow: "
+						+ backfillWhatToShow + " Regular Trading Hrs: "
+						+ backfillUseRTH + " Date format: "
+						+ backfillDateFormat);
+				
 				m_client.reqHistoricalData(contract.getIdContract(), contract,
 						endDateTime, ChartDays.newInstance(chartDays)
 								.getDisplayName(), BarSize.newInstance(barSize)

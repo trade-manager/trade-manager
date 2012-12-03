@@ -506,9 +506,10 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 				writer.flush();
 				writer.close();
 				fileWriter.close();
+				this.setStatusBarMessage("File: " + fileName + " saved.",
+						BasePanel.INFORMATION);
 			} catch (Exception ex) {
 				setErrorMessage("Error Reading Writing.", ex.getMessage(), ex);
-
 			}
 		}
 	}
