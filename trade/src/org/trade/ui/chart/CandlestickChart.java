@@ -80,6 +80,7 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.Action;
+import org.trade.persistent.dao.Tradingday;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorDataset;
 import org.trade.strategy.data.IndicatorSeries;
@@ -115,7 +116,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            StrategyData
 	 */
 	public CandlestickChart(final String title, StrategyData datasetContainer,
-			Date startDate, Date endDate) {
+			Tradingday tradingday) {
 
 		this.datasetContainer = datasetContainer;
 		// Used to mark the current price
@@ -124,7 +125,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		valueMarker = new ValueMarker(0.00, Color.black, stroke);
 
 		this.setLayout(new BorderLayout());
-		m_chart = createChart(this.datasetContainer, title, startDate, endDate);
+		m_chart = createChart(this.datasetContainer, title, tradingday);
 
 		BlockContainer container = new BlockContainer(new BorderArrangement());
 		container.add(titleLegend1, RectangleEdge.LEFT);
@@ -269,7 +270,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * @return JFreeChart
 	 */
 	private JFreeChart createChart(StrategyData datasetContainer, String title,
-			Date startDate, Date endDate) {
+			Tradingday tradingday) {
 
 		DateAxis dateAxis = new DateAxis("Date");
 		dateAxis.setVerticalTickLabels(true);
@@ -297,16 +298,16 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		 * Calculate the number of 15min segments in this trading day. i.e.
 		 * 6.5hrs/15min = 26 and there are a total of 96 = one day
 		 */
-		
-		System.out.println("startDate: "+startDate + "endDate: " + endDate);
-		int segments15min = (int) (TradingCalendar.getSpecificTime(endDate,
-				endDate).getTime() - TradingCalendar.getSpecificTime(startDate,
-				endDate).getTime())
-				/ (1000 * 60 * 15);
+
+		int segments15min = (int) (tradingday.getClose().getTime() - tradingday
+				.getOpen().getTime()) / (1000 * 60 * 15);
 
 		SegmentedTimeline segmentedTimeline = new SegmentedTimeline(
 				SegmentedTimeline.FIFTEEN_MINUTE_SEGMENT_SIZE, segments15min,
 				(96 - segments15min));
+
+		Date startDate = tradingday.getOpen();
+		Date endDate = tradingday.getClose();
 
 		if (datasetContainer.getCandleDataset().getSeries(0).getItemCount() > 0) {
 			startDate = ((CandleItem) datasetContainer.getCandleDataset()
@@ -322,8 +323,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		}
 		segmentedTimeline.setStartTime(startDate.getTime());
 		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate,
-				endDate, datasetContainer.getBaseCandleSeries().getStartTime(),
-				datasetContainer.getBaseCandleSeries().getEndTime(),
+				endDate, tradingday.getOpen(), tradingday.getClose(),
 				segmentedTimeline));
 		dateAxis.setTimeline(segmentedTimeline);
 

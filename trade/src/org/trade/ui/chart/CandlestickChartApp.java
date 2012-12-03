@@ -97,7 +97,7 @@ public class CandlestickChartApp extends BasePanel {
 							.getPriceDataSetYahooIntraday(symbol, numberOfDays,
 									BarSize.FIVE_MIN);
 					CandlestickChart chart = new CandlestickChart(symbol, data,
-							null, null);
+							Tradingday.newInstance(new Date()));
 					CandlestickChartApp panel = new CandlestickChartApp(chart);
 
 					frame.getContentPane().add(panel);

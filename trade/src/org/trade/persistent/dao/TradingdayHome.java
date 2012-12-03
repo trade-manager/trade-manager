@@ -64,20 +64,13 @@ public class TradingdayHome {
 
 	}
 
-	/*
-	 * This method saves all the trade-strategies for all the tradingdays from
-	 * the Trading Tab.
-	 * 
-	 * @param detachedInstance Tradingdays as set of tradingdays with associated
-	 * tradestrategies.
-	 * 
-	 * @throws Exception if persist fails or we have two of the same.
-	 */
 	/**
-	 * Method persist.
+	 * Method persist. This method saves all the trade-strategies for all the
+	 * tradingdays from the Trading Tab.
 	 * 
 	 * @param detachedInstance
-	 *            Tradingday
+	 *            Tradingday as set of tradingdays with associated
+	 *            tradestrategies.
 	 * @throws Exception
 	 */
 	public void persist(Tradingday detachedInstance) throws Exception {
@@ -91,9 +84,12 @@ public class TradingdayHome {
 			 */
 			Tradingday tradingday = null;
 			if (null == detachedInstance.getIdTradingDay()) {
-				tradingday = this.findTradingdayByOpenDate(detachedInstance
-						.getOpen());
-				if (null == tradingday) {
+				tradingday = this
+						.findTradingdayByOpenCloseDate(
+								detachedInstance.getOpen(),
+								detachedInstance.getClose());
+				if (null == tradingday
+						&& !detachedInstance.getTradestrategies().isEmpty()) {
 					entityManager.persist(detachedInstance);
 				}
 				entityManager.getTransaction().commit();
@@ -380,7 +376,8 @@ public class TradingdayHome {
 	 *            Date
 	 * @return Tradingday
 	 */
-	private Tradingday findTradingdayByOpenDate(Date open) {
+	private Tradingday findTradingdayByOpenCloseDate(Date openDate,
+			Date closeDate) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -390,7 +387,10 @@ public class TradingdayHome {
 			Root<Tradingday> from = query.from(Tradingday.class);
 			query.select(from);
 
-			query.where(builder.equal(from.get("open"), open));
+			if (null != openDate)
+				query.where(builder.equal(from.get("open"), openDate));
+			if (null != closeDate)
+				query.where(builder.equal(from.get("close"), closeDate));
 			List<Tradingday> items = entityManager.createQuery(query)
 					.getResultList();
 

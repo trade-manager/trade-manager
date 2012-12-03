@@ -665,8 +665,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			}
 		}
 
-		ChartPanel chartPanel = new ChartPanel(tradestrategy, startDate,
-				endDate);
+		ChartPanel chartPanel = new ChartPanel(tradestrategy);
 		return chartPanel;
 	}
 
@@ -1031,7 +1030,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 * @param tradestrategy
 		 *            Tradestrategy
 		 */
-		ChartPanel(Tradestrategy tradestrategy, Date startDate, Date endDate) {
+		ChartPanel(Tradestrategy tradestrategy) {
 			this.tradestrategy = tradestrategy;
 			String ledgend = "("
 					+ tradestrategy.getContract().getSymbol()
@@ -1039,7 +1038,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					+ (tradestrategy.getContract().getDescription() == null ? "Contract details not available."
 							: tradestrategy.getContract().getDescription());
 			this.candlestickChart = new CandlestickChart(ledgend,
-					tradestrategy.getDatasetContainer(), startDate, endDate);
+					tradestrategy.getDatasetContainer(),
+					tradestrategy.getTradingday());
 			candlestickChart.setName(tradestrategy.getContract().getSymbol());
 			this.setLayout(new BorderLayout());
 			this.add(candlestickChart, null);
