@@ -321,6 +321,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	}
 
 	public void doWindowActivated() {
+		doRefresh();
 	}
 
 	/**
