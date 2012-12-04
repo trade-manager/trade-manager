@@ -333,7 +333,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
 	 *      )
 	 */
-	public void onBrokerData(Contract contract, Date startDate, Date endDate,
+	public void onBrokerData(Contract contract, Date endDate,
 			Integer barSize, Integer chartDays) throws BrokerModelException {
 
 		try {

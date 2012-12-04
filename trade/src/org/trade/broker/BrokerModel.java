@@ -132,8 +132,8 @@ public interface BrokerModel {
 	 *            Integer
 	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
 	 */
-	 BackTestBroker getBackTestBroker(Integer idTradestrategy);
-	
+	BackTestBroker getBackTestBroker(Integer idTradestrategy);
+
 	/**
 	 * Method onSubscribeAccountUpdates.
 	 * 
@@ -192,8 +192,8 @@ public interface BrokerModel {
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
 	 *      )
 	 */
-	public void onBrokerData(Contract contract, Date startDate, Date endDate,
-			Integer barSize, Integer chartDays) throws BrokerModelException;
+	public void onBrokerData(Contract contract, Date endDate, Integer barSize,
+			Integer chartDays) throws BrokerModelException;
 
 	/**
 	 * Method onReqRealTimeBars.
@@ -286,7 +286,7 @@ public interface BrokerModel {
 	 *            Tradestrategy
 	 */
 	void onCancelRealtimeBars(Tradestrategy tradestrategy);
-	
+
 	/**
 	 * Method onCancelBrokerData.
 	 * 

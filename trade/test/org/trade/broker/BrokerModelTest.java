@@ -325,9 +325,8 @@ public class BrokerModelTest extends TestCase {
 		try {
 			tradestrategy.getContract().addTradestrategy(tradestrategy);
 			m_brokerModel.onBrokerData(tradestrategy.getContract(),
-					tradestrategy.getTradingday().getOpen(), tradestrategy
-							.getTradingday().getClose(), tradestrategy
-							.getBarSize(), tradestrategy.getChartDays());
+					tradestrategy.getTradingday().getClose(),
+					tradestrategy.getBarSize(), tradestrategy.getChartDays());
 
 			IndicatorSeries candleseries = this.tradestrategy
 					.getDatasetContainer().getCandleDataset().getSeries(0);

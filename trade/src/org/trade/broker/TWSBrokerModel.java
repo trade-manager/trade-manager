@@ -478,8 +478,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
 	 *      )
 	 */
-	public void onBrokerData(Contract contract, Date startDate, Date endDate,
-			Integer barSize, Integer chartDays) throws BrokerModelException {
+	public void onBrokerData(Contract contract, Date endDate, Integer barSize,
+			Integer chartDays) throws BrokerModelException {
 
 		try {
 
@@ -513,6 +513,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
 								.addBusinessDays(endDate, backfillOffsetDays)));
+
 				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 				String endDateTime = m_sdfGMT.format(endDate);
 

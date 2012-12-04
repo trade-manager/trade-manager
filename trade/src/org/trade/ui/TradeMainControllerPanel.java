@@ -2116,19 +2116,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @throws InterruptedException
 		 * @throws BrokerModelException
 		 */
-		private int submitBrokerRequest(Contract contract, Date startDate,
-				Date endDate, Integer barSize, Integer chartDays,
-				int totalSumbitted) throws InterruptedException,
-				BrokerModelException {
+		private int submitBrokerRequest(Contract contract, Date endDate,
+				Integer barSize, Integer chartDays, int totalSumbitted)
+				throws InterruptedException, BrokerModelException {
 
 			if (m_brokerModel.isHistoricalDataRunning(contract)) {
 				return totalSumbitted;
 			}
 			_log.info("submitBrokerRequest: " + contract.getSymbol()
-					+ " Date: " + startDate);
+					+ " endDate: " + endDate);
 
-			m_brokerModel.onBrokerData(contract, startDate, endDate, barSize,
-					chartDays);
+			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
 			totalSumbitted++;
 			// _log.info("Total: " + this.grandtotal + " totalSumbitted: "
 			// + totalSumbitted);
@@ -2321,7 +2319,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									totalSumbitted = submitBrokerRequest(
 											indicatorTradestrategy
 													.getContract(),
-											tradingday.getOpen(),
 											tradingday.getClose(),
 											indicatorTradestrategy.getBarSize(),
 											indicatorTradestrategy
@@ -2334,8 +2331,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 					if (!prevContract.equals(tradestrategy.getContract())) {
 						totalSumbitted = submitBrokerRequest(prevContract,
-								tradingday.getOpen(), tradingday.getClose(),
-								prevBarSize, prevChartDays, totalSumbitted);
+								tradingday.getClose(), prevBarSize,
+								prevChartDays, totalSumbitted);
 						prevContract = tradestrategy.getContract();
 						prevBarSize = tradestrategy.getBarSize();
 						prevChartDays = tradestrategy.getChartDays();
@@ -2344,8 +2341,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 			if (null != prevContract) {
 				totalSumbitted = submitBrokerRequest(prevContract,
-						tradingday.getOpen(), tradingday.getClose(),
-						prevBarSize, prevChartDays, totalSumbitted);
+						tradingday.getClose(), prevBarSize, prevChartDays,
+						totalSumbitted);
 			}
 			return totalSumbitted;
 		}
