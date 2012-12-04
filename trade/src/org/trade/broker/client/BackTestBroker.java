@@ -623,7 +623,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						.findContractByUniqueKey(series.getSecType(),
 								series.getSymbol(), series.getExchange(),
 								series.getCurrency(), null);
-				if (null != contract)
+				if (null == contract)
 					continue;
 
 				Tradestrategy childTradestrategy = new Tradestrategy(contract,

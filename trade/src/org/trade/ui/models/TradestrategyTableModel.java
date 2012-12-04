@@ -192,7 +192,8 @@ public class TradestrategyTableModel extends TableModel {
 			timer.stop();
 		this.m_data = data;
 		this.clearAll();
-		if (!getData().getTradestrategies().isEmpty()) {
+		if (null != getData().getTradestrategies()
+				&& !getData().getTradestrategies().isEmpty()) {
 			for (final Tradestrategy element : getData().getTradestrategies()) {
 				final Vector<Object> newRow = new Vector<Object>();
 				getNewRow(newRow, element);
