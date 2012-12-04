@@ -109,7 +109,7 @@ public class ClientSocket {
 				BarSize barSize = BarSize.newInstance();
 				barSize.setDisplayName(barSizeSetting);
 
-				Date startDate = TradingCalendar.addDays(endDate,
+				Date startDate = TradingCalendar.addBusinessDays(endDate,
 						(Integer.parseInt(chartDays.getCode()) - 1) * -1);
 				startDate = TradingCalendar.getMostRecentTradingDay(startDate);
 				startDate = TradingCalendar.getSpecificTime(startDate, 0, 0);
@@ -277,10 +277,9 @@ public class ClientSocket {
 		 * Yahoo finance http://chartapi.finance.yahoo.com/instrument/1.0/IBM
 		 * /chartdata;type=quote;range=1d/csv/
 		 */
-
+		int days = TradingCalendar.daysDiff(startDate, new Date());
 		String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/"
-				+ symbol + "/chartdata;type=quote;range=" + chartDays
-				+ "d/csv/";
+				+ symbol + "/chartdata;type=quote;range=" + days + "d/csv/";
 
 		// _log.info("URL : " + strUrl);
 		URL url = new URL(strUrl);
