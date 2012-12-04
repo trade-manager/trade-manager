@@ -532,8 +532,6 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					Segment segment = segmentedTimeline
 							.getSegment(segmentStartDate);
 					if (segment.inIncludeSegments()) {
-						_log.info("add non trading periods: "
-								+ segmentStartDate);
 						noneTradingSegments.add(segmentStartDate);
 					}
 				}
