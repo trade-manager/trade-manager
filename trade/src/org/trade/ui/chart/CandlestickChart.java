@@ -326,7 +326,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 							datasetContainer.getCandleDataset().getSeries(0)
 									.getItemCount() - 1)).getPeriod()
 					.getStart();
-			endDate = TradingCalendar.getNextTradingDay(endDate);
+			endDate = TradingCalendar.getSpecificTime(tradingday.getClose(),
+					endDate);
 		}
 		_log.info("segments15min: " + segments15min + " startDate: "
 				+ startDate + " endDate :" + endDate);
