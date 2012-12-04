@@ -76,6 +76,8 @@ import org.jfree.data.general.SeriesChangeListener;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
@@ -92,6 +94,9 @@ import org.trade.strategy.data.candle.CandleItem;
 public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	private static final long serialVersionUID = 2842422936659217811L;
+
+	private final static Logger _log = LoggerFactory
+			.getLogger(CandlestickChart.class);
 
 	private JFreeChart m_chart;
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -312,6 +317,11 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		if (datasetContainer.getCandleDataset().getSeries(0).getItemCount() > 0) {
 			startDate = ((CandleItem) datasetContainer.getCandleDataset()
 					.getSeries(0).getDataItem(0)).getPeriod().getStart();
+			if (startDate.after(TradingCalendar.getSpecificTime(
+					tradingday.getOpen(), startDate))) {
+				startDate = TradingCalendar.getSpecificTime(
+						tradingday.getOpen(), startDate);
+			}
 			endDate = ((CandleItem) datasetContainer
 					.getCandleDataset()
 					.getSeries(0)
@@ -321,6 +331,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					.getStart();
 			endDate = TradingCalendar.getNextTradingDay(endDate);
 		}
+		_log.info("segments15min: " + segments15min + " startDate: "
+				+ startDate + " endDate :" + endDate);
 		segmentedTimeline.setStartTime(startDate.getTime());
 		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate,
 				endDate, tradingday.getOpen(), tradingday.getClose(),
@@ -523,6 +535,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					Segment segment = segmentedTimeline
 							.getSegment(segmentStartDate);
 					if (segment.inIncludeSegments()) {
+						_log.info("add non trading periods: "
+								+ segmentStartDate);
 						noneTradingSegments.add(segmentStartDate);
 					}
 				}
