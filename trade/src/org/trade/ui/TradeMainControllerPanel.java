@@ -999,8 +999,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				m_brokerModel.addMessageListener(this);
 				m_brokerModel.onConnect(connectionPane.getHost(),
 						connectionPane.getPort(), connectionPane.getClientId());
-				simulatedMode(false);
-				this.setStatusBarMessage("Running live.", BasePanel.INFORMATION);
+				if(m_brokerModel.isConnected()){
+					simulatedMode(false);
+					this.setStatusBarMessage("Running live.", BasePanel.INFORMATION);	
+				}else{
+					tradingdayPanel.setConnected(false);
+					contractPanel.setConnected(false);
+					simulatedMode(true);
+				}
 			} else {
 				this.setStatusBarMessage("Running in test.",
 						BasePanel.INFORMATION);
@@ -1060,7 +1066,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.setStatusBarMessage("Information: " + ex.getMessage(),
 					BasePanel.INFORMATION);
 		} else {
-
 			this.setErrorMessage("Unknown Error Id Code: " + ex.getErrorCode(),
 					ex.getMessage(), ex);
 		}
