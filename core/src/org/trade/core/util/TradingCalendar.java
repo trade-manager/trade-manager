@@ -69,7 +69,8 @@ public class TradingCalendar {
 	private static final TimeZone TIMEZONE = TimeZone.getDefault();
 	public static final Date NULLDATE = (new GregorianCalendar(0, 0, 0, 0, 0, 0))
 			.getTime();
-	public static final HashMap<Integer, int[]> HOLIDAYS = new HashMap<Integer, int[]>();
+	private static final HashMap<Integer, int[]> HOLIDAYS = new HashMap<Integer, int[]>();
+	private static int[] NONTRADINGDAYS = new int[] {};
 	private static GregorianCalendar CALENDAR_NY;
 	private static SimpleDateFormat dateFormat;
 	private static Integer openHour = new Integer(9);
@@ -116,10 +117,21 @@ public class TradingCalendar {
 		try {
 			String thisyear = ConfigProperties
 					.getPropAsString("trade.holidays.thisyear");
-			setHolidays(thisyear);
+			parseHolidayIntegerCSVString(HOLIDAYS, thisyear);
 			String lastyear = ConfigProperties
 					.getPropAsString("trade.holidays.lastyear");
-			setHolidays(lastyear);
+			parseHolidayIntegerCSVString(HOLIDAYS, lastyear);
+			String nontradingdays = ConfigProperties
+					.getPropAsString("trade.market.nontradingdays");
+			StringTokenizer st = new StringTokenizer(nontradingdays, ",");
+			if (st.countTokens() > 0) {
+				NONTRADINGDAYS = new int[(st.countTokens())];
+				int i = 0;
+				while (st.hasMoreTokens()) {
+					NONTRADINGDAYS[(i)] = Integer.parseInt(st.nextToken());
+					i++;
+				}
+			}
 		} catch (IOException ex) {
 			_log.warn("Property trade.holidays.lastyear/trade.holidays.thisyear not set in config.properties");
 		}
@@ -222,8 +234,8 @@ public class TradingCalendar {
 				if (noDays > 0) {
 					for (int i = 0; i < noDays; i++) {
 						CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), 1));
-						if ((CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
-								|| (CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+						if (!TradingCalendar
+								.isTradingDay(CALENDAR_NY.getTime())
 								|| isHoliday(CALENDAR_NY.getTime())) {
 							noDays++;
 						}
@@ -232,8 +244,8 @@ public class TradingCalendar {
 				} else {
 					for (int i = 0; i > noDays; i--) {
 						CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), -1));
-						if ((CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
-								|| (CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+						if (!TradingCalendar
+								.isTradingDay(CALENDAR_NY.getTime())
 								|| isHoliday(CALENDAR_NY.getTime())) {
 							noDays--;
 						}
@@ -633,13 +645,16 @@ public class TradingCalendar {
 	}
 
 	/**
-	 * Method setHolidays.
+	 * Method parseHolidayIntegerCSVString.
 	 * 
-	 * @param yearAndDays
+	 * @param csvString
 	 *            String
+	 * @param HOLIDAYS
+	 *            HashMap<Integer, int[]>
 	 */
-	private static void setHolidays(String yearAndDays) {
-		StringTokenizer st = new StringTokenizer(yearAndDays, ",");
+	private static void parseHolidayIntegerCSVString(
+			HashMap<Integer, int[]> HOLIDAYS, String csvString) {
+		StringTokenizer st = new StringTokenizer(csvString, ",");
 		if (st.countTokens() > 0) {
 
 			int[] dates = new int[(st.countTokens() - 1)];
@@ -720,6 +735,28 @@ public class TradingCalendar {
 					closeDayOffset));
 			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, closeHour);
 			CALENDAR_NY.set(Calendar.MINUTE, closeMinute);
+			CALENDAR_NY.set(Calendar.SECOND, 0);
+			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
+			return CALENDAR_NY.getTime();
+		}
+	}
+
+	/**
+	 * Method getSpecificTime.
+	 * 
+	 * @param date
+	 *            Date
+	 * @param dayOfWeek
+	 *            int
+	 * 
+	 * @return Date
+	 */
+	public static Date getSpecificTime(final Date date, int dayOfWeek) {
+		synchronized (CALENDAR_NY) {
+			CALENDAR_NY.setTime(date);
+			CALENDAR_NY.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, 0);
+			CALENDAR_NY.set(Calendar.MINUTE, 0);
 			CALENDAR_NY.set(Calendar.SECOND, 0);
 			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
 			return CALENDAR_NY.getTime();
@@ -856,10 +893,12 @@ public class TradingCalendar {
 	public static boolean isTradingDay(Date date) {
 		synchronized (CALENDAR_NY) {
 			CALENDAR_NY.setTime(date);
-			if ((CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
-					|| (CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-					|| isHoliday(date)) {
-				return false;
+			if (null != NONTRADINGDAYS) {
+				for (int hol : NONTRADINGDAYS) {
+					if (hol == CALENDAR_NY.get(Calendar.DAY_OF_WEEK)) {
+						return false;
+					}
+				}
 			}
 			return true;
 		}
@@ -989,8 +1028,7 @@ public class TradingCalendar {
 	public static Date getMostRecentTradingDay(Date input) {
 		synchronized (CALENDAR_NY) {
 			CALENDAR_NY.setTime(TradingCalendar.getBusinessDayStart(input));
-			while ((CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
-					|| (CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+			while (!TradingCalendar.isTradingDay(CALENDAR_NY.getTime())
 					|| isHoliday(CALENDAR_NY.getTime())) {
 				CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), -1));
 			}
@@ -1024,9 +1062,8 @@ public class TradingCalendar {
 			Date nextTradingday = addDays(input, 1);
 			CALENDAR_NY.setTime(TradingCalendar
 					.getBusinessDayStart(nextTradingday));
-			while ((CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
-					|| (CALENDAR_NY.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-					|| isHoliday(CALENDAR_NY.getTime())) {
+			while (!TradingCalendar.isTradingDay(CALENDAR_NY.getTime())
+					|| TradingCalendar.isHoliday(CALENDAR_NY.getTime())) {
 				CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), 1));
 			}
 			return CALENDAR_NY.getTime();

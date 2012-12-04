@@ -35,6 +35,7 @@
  */
 package org.trade.core.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -95,11 +96,13 @@ public class TradingCalendarTest extends TestCase {
 		Date setDate = TradingCalendar.getSpecificTime(busdayStartDate, date);
 
 		_log.info("setDate: " + setDate);
-		assertEquals(TradingCalendar.getHourOfDay(busdayStartDate), TradingCalendar.getHourOfDay(setDate));
-		assertEquals(TradingCalendar.getMinute(busdayStartDate), TradingCalendar.getMinute(setDate));
+		assertEquals(TradingCalendar.getHourOfDay(busdayStartDate),
+				TradingCalendar.getHourOfDay(setDate));
+		assertEquals(TradingCalendar.getMinute(busdayStartDate),
+				TradingCalendar.getMinute(setDate));
 
 	}
-	
+
 	@Test
 	public void testIsMarketHours() {
 
@@ -117,6 +120,15 @@ public class TradingCalendarTest extends TestCase {
 	}
 
 	@Test
+	public void testIsTradingday() {
+
+		Date date = TradingCalendar.getBusinessDayStart(new Date());
+		assertTrue(TradingCalendar.isTradingDay(date));
+		date = TradingCalendar.getSpecificTime(date, Calendar.SUNDAY);
+		assertFalse(TradingCalendar.isTradingDay(date));
+	}
+
+	@Test
 	public void testNextRequestId() {
 		AtomicInteger reqId = null;
 		Date date = new Date();
@@ -125,4 +137,5 @@ public class TradingCalendarTest extends TestCase {
 		_log.info("reqId: " + reqId);
 		_log.info("reqId: " + reqId.incrementAndGet());
 	}
+
 }
