@@ -103,7 +103,7 @@ public class TradingdayTableModel extends TableModel {
 		Tradingday tradingday = getData().getTradingdays().get(
 				openDate.getDate());
 		if (Tradingdays.hasTrades(tradingday)) {
-			if ((column == 0) || (column == 1)) {
+			if ((columnNames[column] == OPEN) || (columnNames[column] == CLOSE)) {
 				return false;
 			}
 		}
@@ -128,6 +128,32 @@ public class TradingdayTableModel extends TableModel {
 			}
 			fireTableDataChanged();
 		}
+	}
+
+	/**
+	 * Method getValueAt.
+	 * 
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
+	 * @return value Object
+	 */
+
+	public Object getValueAt(int row, int column) {
+		if (columnNames[column] == CLOSE) {
+			Date closeDate = ((Date) super.getValueAt(row, column));
+			Date openDate = ((Date) super.getValueAt(row, 0));
+			if (null != openDate && null != closeDate) {
+				if (closeDate.getDate().before(openDate.getDate())) {
+					return new Date(TradingCalendar.getSpecificTime(closeDate
+							.getDate(), TradingCalendar.addBusinessDays(
+							closeDate.getDate(), 1)));
+				}
+			}
+		}
+		return super.getValueAt(row, column);
 	}
 
 	/**

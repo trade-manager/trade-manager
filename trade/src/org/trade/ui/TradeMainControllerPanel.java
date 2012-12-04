@@ -515,6 +515,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						boolean dirty = false;
 						for (Tradingday tradingday : m_tradingdays
 								.getTradingdays().values()) {
+							if (tradingday.getClose().before(
+									tradingday.getOpen())
+									|| tradingday.getClose().equals(
+											tradingday.getOpen())) {
+								String msg = "Tradingday Open "
+										+ tradingday.getOpen()
+										+ " cannot be after trading day close "
+										+ tradingday.getClose();
+								setErrorMessage("Error Tradingday", msg,
+										new PersistentModelException(msg));
+							}
 							if (tradingday.isDirty()) {
 								dirty = true;
 								for (Tradestrategy tradestrategy : tradingday
@@ -999,10 +1010,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				m_brokerModel.addMessageListener(this);
 				m_brokerModel.onConnect(connectionPane.getHost(),
 						connectionPane.getPort(), connectionPane.getClientId());
-				if(m_brokerModel.isConnected()){
+				if (m_brokerModel.isConnected()) {
 					simulatedMode(false);
-					this.setStatusBarMessage("Running live.", BasePanel.INFORMATION);	
-				}else{
+					this.setStatusBarMessage("Running live.",
+							BasePanel.INFORMATION);
+				} else {
 					tradingdayPanel.setConnected(false);
 					contractPanel.setConnected(false);
 					simulatedMode(true);

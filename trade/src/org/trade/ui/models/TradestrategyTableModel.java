@@ -174,8 +174,11 @@ public class TradestrategyTableModel extends TableModel {
 			}
 		}
 
-		if ((column == 0) || (column == 6) || (column == 11) || (column == 12)
-				|| (column == 13)) {
+		if ((columnNames[column] == DATE)
+				|| (columnNames[column] == STRATEGY_MGR)
+				|| (columnNames[column] == PERCENTCHGFRCLOSE)
+				|| (columnNames[column] == PERCENTCHGFROPEN)
+				|| (columnNames[column] == STATUS)) {
 			return false;
 		}
 		return true;

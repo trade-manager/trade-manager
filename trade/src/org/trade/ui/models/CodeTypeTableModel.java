@@ -103,12 +103,10 @@ public class CodeTypeTableModel extends AspectTableModel {
 		switch (column) {
 		case 0: {
 			element.setName((String) value);
-
 			break;
 		}
 		case 1: {
 			element.setDescription((String) value);
-
 			break;
 		}
 		default: {

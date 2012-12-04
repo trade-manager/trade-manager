@@ -122,8 +122,13 @@ public class TradeOrderTableModel extends TableModel {
 				return false;
 			}
 		}
-		if ((column == 0) || (column == 1) || (column == 8) || (column == 10)
-				|| (column == 11) || (column == 12) || (column == 13)) {
+		if ((columnNames[column] == SYMBOL)
+				|| (columnNames[column] == ORDER_KEY)
+				|| (columnNames[column] == STATUS)
+				|| (columnNames[column] == AVG_PRICE)
+				|| (columnNames[column] == FILLED_DATE)
+				|| (columnNames[column] == FILLED_QTY)
+				|| (columnNames[column] == STOP_PRICE)) {
 			return false;
 		}
 		return true;

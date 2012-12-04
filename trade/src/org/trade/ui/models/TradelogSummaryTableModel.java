@@ -128,11 +128,6 @@ public class TradelogSummaryTableModel extends TableModel {
 	/**
 	 * setData() -
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param data
 	 *            TradelogReport
 	 * @exception * @see
@@ -155,11 +150,6 @@ public class TradelogSummaryTableModel extends TableModel {
 
 	/**
 	 * getData() -
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param value
 	 *            Object
@@ -234,11 +224,6 @@ public class TradelogSummaryTableModel extends TableModel {
 
 	/**
 	 * deleteRow() -
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param selectedRow
 	 *            int

@@ -84,12 +84,9 @@ public class TradelogDetailTableModel extends TableModel {
 	/**
 	 * OrderModel() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public TradelogDetailTableModel() {
 		// Get the column names and cache them.
 		// Then we can close the connection.
@@ -115,8 +112,11 @@ public class TradelogDetailTableModel extends TableModel {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -126,6 +126,7 @@ public class TradelogDetailTableModel extends TableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return TradelogReport
 	 */
 	public TradelogReport getData() {
@@ -134,7 +135,9 @@ public class TradelogDetailTableModel extends TableModel {
 
 	/**
 	 * Method setData.
-	 * @param data TradelogReport
+	 * 
+	 * @param data
+	 *            TradelogReport
 	 */
 	public void setData(TradelogReport data) {
 
@@ -154,15 +157,14 @@ public class TradelogDetailTableModel extends TableModel {
 	/**
 	 * getData() -
 	 * 
-	
-	 * 
-	
-	
-	
-	 * @param value Object
-	 * @param row int
-	 * @param column int
-	 * @exception * @see */
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
+	 * @exception * @see
+	 */
 	public void populateDAO(Object value, int row, int column) {
 		final TradelogDetail element = getData().getTradelogDetail().get(row);
 
@@ -244,13 +246,10 @@ public class TradelogDetailTableModel extends TableModel {
 	/**
 	 * deleteRow() -
 	 * 
-	
-	 * 
-	
-	
-	
-	 * @param selectedRow int
-	 * @exception * @see */
+	 * @param selectedRow
+	 *            int
+	 * @exception * @see
+	 */
 	public void deleteRow(int selectedRow) {
 
 		int i = 0;
@@ -268,7 +267,9 @@ public class TradelogDetailTableModel extends TableModel {
 
 	/**
 	 * Method addRow.
-	 * @param element TradelogDetail
+	 * 
+	 * @param element
+	 *            TradelogDetail
 	 */
 	public void addRow(TradelogDetail element) {
 
@@ -279,7 +280,6 @@ public class TradelogDetailTableModel extends TableModel {
 		rows.add(newRow);
 
 		// Tell the listeners a new table has arrived.
-
 		fireTableChanged(new TableModelEvent(this));
 
 	}
@@ -294,14 +294,16 @@ public class TradelogDetailTableModel extends TableModel {
 		rows.add(newRow);
 
 		// Tell the listeners a new table has arrived.
-
 		fireTableChanged(new TableModelEvent(this));
 	}
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element TradelogDetail
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            TradelogDetail
 	 */
 	public void getNewRow(Vector<Object> newRow, TradelogDetail element) {
 
@@ -346,8 +348,7 @@ public class TradelogDetailTableModel extends TableModel {
 		if (null == element.getSide()) {
 			newRow.addElement(new Side());
 		} else {
-			newRow.addElement(Side.newInstance((element
-					.getSide())));
+			newRow.addElement(Side.newInstance((element.getSide())));
 		}
 		if (null == element.getAction()) {
 			newRow.addElement(new Action());
@@ -359,13 +360,11 @@ public class TradelogDetailTableModel extends TableModel {
 		} else {
 			newRow.addElement(new Money(element.getStopPrice()));
 		}
-
 		if (null == element.getOrderStatus()) {
 			newRow.addElement(new OrderStatus());
 		} else {
 			newRow.addElement(OrderStatus.newInstance(element.getOrderStatus()));
 		}
-
 		if (null == element.getFilledDate()) {
 			newRow.addElement(new Date());
 		} else {

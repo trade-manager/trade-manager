@@ -123,7 +123,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 		if (column == 0) {
 			return false;
 		}
-		if (column == 1) {
+		if (columnNames[column] == TYPE) {
 			IndicatorSeries element = getData().getIndicatorSeries().get(row);
 			if (null != element.getIdIndicatorSeries()) {
 				return false;
