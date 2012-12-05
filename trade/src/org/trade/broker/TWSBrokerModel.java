@@ -1019,6 +1019,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.getStatus())) {
 						// Let the controller know a position was closed
 						this.fireTradeOrderCancelled(transientInstance);
+					} else {
+						this.fireTradeOrderStatusChanged(transientInstance);
 					}
 				}
 			}

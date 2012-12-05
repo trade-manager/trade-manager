@@ -787,7 +787,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	}
 
 	public void openOrderEnd() {
-
 	}
 
 	/**
@@ -858,8 +857,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
 					// Let the controller know a position was closed
 					this.fireTradeOrderCancelled(transientInstance);
-				} else {
-					this.fireTradeOrderStatusChanged(transientInstance);
 				}
 			}
 		} catch (Exception ex) {
