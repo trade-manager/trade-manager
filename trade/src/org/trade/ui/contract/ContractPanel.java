@@ -260,6 +260,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			Dimension d = m_tradeOrderTable.getPreferredSize();
 			// Make changes to [i]d[/i] if you like...
 			m_tradeOrderTable.setPreferredScrollableViewportSize(d);
+			jScrollPane2.addMouseListener(m_tradeOrderTable);
 
 			m_tradeLabel = new JEditorPane("text/rtf", "");
 			this.setTradeLabel(null, null);
