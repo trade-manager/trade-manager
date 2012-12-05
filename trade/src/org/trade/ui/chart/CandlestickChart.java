@@ -517,6 +517,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		/*
 		 * Add all 15min periods that are not trading times.
 		 */
+
 		List<Date> noneTradingSegments = new ArrayList<Date>();
 		do {
 			/*
@@ -524,8 +525,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			 */
 			for (int j = 0; j < 96; j++) {
 				Date segmentStartDate = TradingCalendar.addMinutes(
-						TradingCalendar.getSpecificTime(TradingCalendar
-								.getSpecificTime(openDate, startDate), 0, 0),
+						TradingCalendar.getSpecificTime(openDate, startDate),
 						j * 15);
 				if (!TradingCalendar.isTradingDay(segmentStartDate)
 						|| !TradingCalendar.isMarketHours(openDate, closeDate,
