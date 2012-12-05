@@ -147,9 +147,11 @@ public class TradingdayTableModel extends TableModel {
 			Date openDate = ((Date) super.getValueAt(row, 0));
 			if (null != openDate && null != closeDate) {
 				if (closeDate.getDate().before(openDate.getDate())) {
-					return new Date(TradingCalendar.getSpecificTime(closeDate
-							.getDate(), TradingCalendar.addBusinessDays(
-							closeDate.getDate(), 1)));
+					Date date = new Date(TradingCalendar.getSpecificTime(
+							closeDate.getDate(), TradingCalendar
+									.addBusinessDays(closeDate.getDate(), 1)));
+					this.populateDAO(date, row, column);
+					return date;
 				}
 			}
 		}
