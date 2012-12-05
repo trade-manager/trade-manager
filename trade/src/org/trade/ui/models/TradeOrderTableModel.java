@@ -152,7 +152,9 @@ public class TradeOrderTableModel extends TableModel {
 						OrderType.MKT)
 						|| ((OrderType) super.getValueAt(row, 3)).getCode()
 								.equals(OrderType.STP)) {
-					return new Money(0);
+					Money zero = new Money(0);
+					populateDAO(zero, row, column);
+					return zero;
 				}
 			}
 		}
@@ -160,7 +162,9 @@ public class TradeOrderTableModel extends TableModel {
 			if (null != super.getValueAt(row, 3)) {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.LMT)) {
-					return new Money(0);
+					Money zero = new Money(0);
+					populateDAO(zero, row, column);
+					return zero;
 				}
 			}
 
