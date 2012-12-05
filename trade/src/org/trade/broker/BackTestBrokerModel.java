@@ -333,8 +333,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
 	 *      )
 	 */
-	public void onBrokerData(Contract contract, Date endDate,
-			Integer barSize, Integer chartDays) throws BrokerModelException {
+	public void onBrokerData(Contract contract, Date endDate, Integer barSize,
+			Integer chartDays) throws BrokerModelException {
 
 		try {
 			if (this.isHistoricalDataRunning(contract)) {
@@ -370,7 +370,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						+ backfillWhatToShow + " Regular Trading Hrs: "
 						+ backfillUseRTH + " Date format: "
 						+ backfillDateFormat);
-				
+
 				m_client.reqHistoricalData(contract.getIdContract(), contract,
 						endDateTime, ChartDays.newInstance(chartDays)
 								.getDisplayName(), BarSize.newInstance(barSize)
@@ -854,11 +854,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				TWSBrokerModel.logOrderStatus(orderId, status, filled,
 						remaining, avgFillPrice, permId, parentId,
 						lastFillPrice, clientId, whyHeld);
-
 				m_tradePersistentModel.persistTradeOrder(transientInstance);
 				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
 					// Let the controller know a position was closed
 					this.fireTradeOrderCancelled(transientInstance);
+				} else {
+					this.fireTradeOrderStatusChanged(transientInstance);
 				}
 			}
 		} catch (Exception ex) {

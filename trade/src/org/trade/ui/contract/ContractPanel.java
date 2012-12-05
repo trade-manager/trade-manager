@@ -433,7 +433,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 										currentTab.getCandlestickChart());
 							}
 						}
-
 					} catch (PersistentModelException ex) {
 						setErrorMessage("Error saving Trade Strategies.",
 								ex.getMessage(), ex);

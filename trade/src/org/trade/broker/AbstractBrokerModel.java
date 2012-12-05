@@ -56,6 +56,7 @@ import org.trade.persistent.dao.Tradestrategy;
 /**
  * An abstract implementation of the {@link BrokerModel} interface, containing a
  * mechanism for registering change listeners.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -84,8 +85,9 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * @param listener
 	 *            the object to register.
 	 * 
-	
-	 * @see #removeChangeListener(BrokerChangeListener) */
+	 * 
+	 * @see #removeChangeListener(BrokerChangeListener)
+	 */
 	public void addMessageListener(BrokerChangeListener listener) {
 		this.listenerList.add(BrokerChangeListener.class, listener);
 	}
@@ -97,8 +99,9 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * @param listener
 	 *            the object to deregister.
 	 * 
-	
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	public void removeMessageListener(BrokerChangeListener listener) {
 		this.listenerList.remove(BrokerChangeListener.class, listener);
 	}
@@ -111,11 +114,13 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * @param listener
 	 *            the listener.
 	 * 
-	
 	 * 
-	
-	
-	 * @return A boolean. * @see #addChangeListener(BrokerChangeListener) * @see #removeChangeListener(BrokerChangeListener) */
+	 * 
+	 * 
+	 * 
+	 * @return A boolean. * @see #addChangeListener(BrokerChangeListener) * @see
+	 *         #removeChangeListener(BrokerChangeListener)
+	 */
 	public boolean hasListener(EventListener listener) {
 		List<Object> list = Arrays.asList(this.listenerList.getListenerList());
 		return list.contains(listener);
@@ -125,8 +130,9 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel has opened
 	 * a connection.
 	 * 
-	
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireConnectionOpened() {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -140,8 +146,9 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel has closed
 	 * a connection.
 	 * 
-	
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireConnectionClosed() {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -155,9 +162,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel has
 	 * received all the order executions.
 	 * 
-	
-	 * @param execDetails ConcurrentHashMap<Integer,TradeOrder>
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param execDetails
+	 *            ConcurrentHashMap<Integer,TradeOrder>
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireExecutionDetailsEnd(
 			ConcurrentHashMap<Integer, TradeOrder> execDetails) {
 		Object[] listeners = this.listenerList.getListenerList();
@@ -173,9 +182,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel has
 	 * complete the historical data request for this tradestrategy.
 	 * 
-	
-	 * @param tradestrategy Tradestrategy
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireHistoricalDataComplete(Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -190,9 +201,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel received an
 	 * update to managed accounts.
 	 * 
-	
-	 * @param accountNumber String
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param accountNumber
+	 *            String
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireManagedAccountsUpdated(String accountNumber) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -207,9 +220,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel received an
 	 * update to an account.
 	 * 
-	
-	 * @param accountNumber String
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param accountNumber
+	 *            String
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireUpdateAccountTime(String accountNumber) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -224,9 +239,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel received an
 	 * error.
 	 * 
-	
-	 * @param brokerError BrokerModelException
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param brokerError
+	 *            BrokerModelException
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireBrokerError(BrokerModelException brokerError) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -241,9 +258,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel has opened
 	 * a trade position.
 	 * 
-	
-	 * @param tradeOrder TradeOrder
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireTradeOrderFilled(TradeOrder tradeOrder) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -255,12 +274,33 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	}
 
 	/**
+	 * Notifies all registered listeners that the brokerManagerModel has opened
+	 * a trade position.
+	 * 
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
+	protected void fireTradeOrderStatusChanged(TradeOrder tradeOrder) {
+		Object[] listeners = this.listenerList.getListenerList();
+		for (int i = listeners.length - 2; i >= 0; i -= 2) {
+			if (listeners[i] == BrokerChangeListener.class) {
+				((BrokerChangeListener) listeners[i + 1])
+						.tradeOrderStatusChanged(tradeOrder);
+			}
+		}
+	}
+
+	/**
 	 * Notifies all registered listeners that the brokerManagerModel has closed
 	 * a trade position.
 	 * 
-	
-	 * @param trade Trade
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param trade
+	 *            Trade
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void firePositionClosed(Trade trade) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -269,13 +309,16 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 			}
 		}
 	}
-	
+
 	/**
-	 * Notifies all registered listeners that the brokerManagerModel has received a cancelled order
+	 * Notifies all registered listeners that the brokerManagerModel has
+	 * received a cancelled order
 	 * 
-	
-	 * @param tradeOrder TradeOrder
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireTradeOrderCancelled(TradeOrder tradeOrder) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -290,9 +333,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * Notifies all registered listeners that the brokerManagerModel has
 	 * received all the open orders.
 	 * 
-	
-	 * @param openOrders ConcurrentHashMap<Integer,TradeOrder>
-	 * @see #addChangeListener(BrokerChangeListener) */
+	 * 
+	 * @param openOrders
+	 *            ConcurrentHashMap<Integer,TradeOrder>
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
 	protected void fireOpenOrderEnd(
 			ConcurrentHashMap<Integer, TradeOrder> openOrders) {
 		Object[] listeners = this.listenerList.getListenerList();
@@ -306,6 +351,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 
 	/**
 	 * Method isBrokerDataOnly.
+	 * 
 	 * @return boolean
 	 * @see org.trade.broker.BrokerModel#isBrokerDataOnly()
 	 */
@@ -315,7 +361,9 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 
 	/**
 	 * Method setBrokerDataOnly.
-	 * @param brokerDataOnly boolean
+	 * 
+	 * @param brokerDataOnly
+	 *            boolean
 	 * @see org.trade.broker.BrokerModel#setBrokerDataOnly(boolean)
 	 */
 	public void setBrokerDataOnly(boolean brokerDataOnly) {
@@ -327,11 +375,12 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * will NOT include the {@link BrokerChangeListener} references that have
 	 * been registered with this brokerManagerModel.
 	 * 
-	
 	 * 
-	
-	 * @return A clone. * @throws CloneNotSupportedException
-	 *             if the dataset does not support cloning. */
+	 * 
+	 * 
+	 * @return A clone. * @throws CloneNotSupportedException if the dataset does
+	 *         not support cloning.
+	 */
 	public Object clone() throws CloneNotSupportedException {
 		AbstractBrokerModel clone = (AbstractBrokerModel) super.clone();
 		clone.listenerList = new EventListenerList();
@@ -344,9 +393,10 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * @param stream
 	 *            the output stream.
 	 * 
-	
+	 * 
 	 * @throws IOException
-	 *             if there is an I/O problem. */
+	 *             if there is an I/O problem.
+	 */
 	private void writeObject(ObjectOutputStream stream) throws IOException {
 		stream.defaultWriteObject();
 	}
@@ -357,11 +407,12 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * @param stream
 	 *            the input stream.
 	 * 
-	
-	
+	 * 
+	 * 
 	 * @throws IOException
 	 *             if there is an I/O problem. * @throws ClassNotFoundException
-	 *             if there is a problem loading a class. */
+	 *             if there is a problem loading a class.
+	 */
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
 		stream.defaultReadObject();
@@ -385,9 +436,10 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * readObject or validateObject methods. Notify them that this
 	 * brokerManagerModel has changed.
 	 * 
-	
+	 * 
 	 * @exception InvalidObjectException
-	 *                If the object cannot validate itself. * @see java.io.ObjectInputValidation#validateObject()
+	 *                If the object cannot validate itself. * @see
+	 *                java.io.ObjectInputValidation#validateObject()
 	 */
 	public void validateObject() throws InvalidObjectException {
 		fireConnectionOpened();

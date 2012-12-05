@@ -653,9 +653,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * manager if so start the manager and close the strategy that opened the
 	 * position.
 	 * 
-	 * 
-	 * 
-	 * 
 	 * @param tradeOrder
 	 *            TradeOrder
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderFilled(TradeOrder)
@@ -663,7 +660,28 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void tradeOrderFilled(TradeOrder tradeOrder) {
 
 		try {
+			Tradestrategy tradestrategy = m_tradingdays
+					.getTradestrategy(tradeOrder.getTrade()
+							.getTradestrategyId().getIdTradeStrategy());
 
+			if (null == tradestrategy) {
+				this.setStatusBarMessage(
+						"Warning position opened but Tradestrategy not found for Order Key: "
+								+ tradeOrder.getOrderKey()
+								+ " in the current Tradingday Tab selection.",
+						BasePanel.WARNING);
+				return;
+			}
+			if (!tradestrategy.getTrade()) {
+				this.setStatusBarMessage(
+						"Warning position opened for Symbol: "
+								+ tradestrategy.getContract().getSymbol()
+								+ "  but this tradestrategy is not set to trade. A manual order was created Key: "
+								+ tradeOrder.getOrderKey(), BasePanel.WARNING);
+				return;
+			}
+
+			contractPanel.doRefresh(tradestrategy);
 			/*
 			 * If the order opens a position and the stop price is set then this
 			 * is an open order created via a strategy. Check to see that we
@@ -673,27 +691,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (tradeOrder.getIsOpenPosition()
 					&& null != tradeOrder.getStopPrice()) {
 
-				Tradestrategy tradestrategy = m_tradingdays
-						.getTradestrategy(tradeOrder.getTrade()
-								.getTradestrategyId().getIdTradeStrategy());
-
-				if (null == tradestrategy) {
-					this.setStatusBarMessage(
-							"Warning position opened but Tradestrategy not found for Order Key: "
-									+ tradeOrder.getOrderKey()
-									+ " in the current Tradingday Tab selection.",
-							BasePanel.WARNING);
-					return;
-				}
-				if (!tradestrategy.getTrade()) {
-					this.setStatusBarMessage(
-							"Warning position opened for Symbol: "
-									+ tradestrategy.getContract().getSymbol()
-									+ "  but this tradestrategy is not set to trade. A manual order was created Key: "
-									+ tradeOrder.getOrderKey(),
-							BasePanel.WARNING);
-					return;
-				}
 				/*
 				 * If this Strategy has a manager start the Strategy Manager.
 				 */
@@ -734,9 +731,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * This method is fired when the Brokermodel has completed
 	 * executionDetails() or openOrder() and the order that was CANCELLED.
 	 * 
-	 * 
-	 * 
-	 * 
 	 * @param tradeOrder
 	 *            TradeOrder
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderCancelled(TradeOrder)
@@ -747,9 +741,51 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Tradestrategy tradestrategy = m_tradingdays
 					.getTradestrategy(tradeOrder.getTrade()
 							.getTradestrategyId().getIdTradeStrategy());
+			if (null == tradestrategy) {
+				this.setStatusBarMessage(
+						"Warning position opened but Tradestrategy not found for Order Key: "
+								+ tradeOrder.getOrderKey()
+								+ " in the current Tradingday Tab selection.",
+						BasePanel.WARNING);
+				return;
+			}
+
 			_log.info("Trade Order cancelled for Symbol: "
 					+ tradestrategy.getContract().getSymbol() + " order key: "
 					+ tradeOrder.getOrderKey());
+
+			contractPanel.doRefresh(tradestrategy);
+		} catch (Exception ex) {
+			this.setErrorMessage("Error starting PositionManagerRule.",
+					ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 * This method is fired when the Brokermodel has completed orderStatus().
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 * @see org.trade.broker.BrokerChangeListener#tradeOrderCancelled(TradeOrder)
+	 */
+	public void tradeOrderStatusChanged(TradeOrder tradeOrder) {
+
+		try {
+			Tradestrategy tradestrategy = m_tradingdays
+					.getTradestrategy(tradeOrder.getTrade()
+							.getTradestrategyId().getIdTradeStrategy());
+			if (null == tradestrategy) {
+				this.setStatusBarMessage(
+						"Warning position opened but Tradestrategy not found for Order Key: "
+								+ tradeOrder.getOrderKey()
+								+ " in the current Tradingday Tab selection.",
+						BasePanel.WARNING);
+				return;
+			}
+			_log.info("Trade Order cancelled for Symbol: "
+					+ tradestrategy.getContract().getSymbol() + " order key: "
+					+ tradeOrder.getOrderKey());
+			contractPanel.doRefresh(tradestrategy);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
 					ex.getMessage(), ex);
@@ -760,9 +796,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * This method is fired when the Brokermodel has completed
 	 * executionDetails() or openOrder() and the position was closed by the
 	 * order.
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param trade
 	 *            Trade
