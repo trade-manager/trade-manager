@@ -217,13 +217,17 @@ public class TradestrategyTableModel extends TableModel {
 			if (null != barSize && null != period) {
 				if (barSize.equals(new Integer(30)) && period > 1) {
 					chartDays = ChartDays.newInstance(new Integer(1));
+					this.populateDAO(chartDays, row, column);
+					return chartDays;
 				} else if ((barSize <= 1800 || barSize == 1) && period > 5) {
 					chartDays = ChartDays.newInstance(new Integer(5));
+					this.populateDAO(chartDays, row, column);
+					return chartDays;
 				} else if ((barSize == 3600 || barSize == 1) && period > 30) {
 					chartDays = ChartDays.newInstance(new Integer(30));
+					this.populateDAO(chartDays, row, column);
+					return chartDays;
 				}
-				this.populateDAO(chartDays, row, column);
-				return chartDays;
 			}
 		}
 		if (columnNames[column] == BAR_SIZE) {
@@ -234,13 +238,17 @@ public class TradestrategyTableModel extends TableModel {
 			if (null != barSize && null != period) {
 				if (period > 1 && (bar < 60 && bar != 1)) {
 					barSize = BarSize.newInstance(new Integer(60));
+					this.populateDAO(barSize, row, column);
+					return barSize;
 				} else if (period > 5 && (bar < 3600 && bar != 1)) {
 					barSize = BarSize.newInstance(new Integer(3600));
+					this.populateDAO(barSize, row, column);
+					return barSize;
 				} else if (period > 30 && bar != 1) {
 					barSize = BarSize.newInstance(new Integer(1));
+					this.populateDAO(barSize, row, column);
+					return barSize;
 				}
-				this.populateDAO(barSize, row, column);
-				return barSize;
 			}
 		}
 		return super.getValueAt(row, column);
