@@ -202,7 +202,7 @@ public class TradestrategyTable extends Table {
 				result.append("<b>Min Tick: </b> ")
 						.append(contract.getMinTick()).append("<br/>");
 				result.append("<b>Trading Class: </b> ")
-						.append(contract.getTradingClass()).append("<br/>");
+						.append(contract.getTradingClass()).append("<br/></html>");
 				return result.toString();
 			}
 		}

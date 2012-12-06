@@ -97,7 +97,10 @@ public class TradestrategyTableModel extends TableModel {
 
 	private static final String[] columnHeaderToolTip = { "Trading day",
 			"Run strategy", null, "Trade bias", "For gaps the grade", null,
-			null, "Trading account", "Bar size for strategy",
+			null, "Trading account", "<html>Bar size for strategy <br/>" +
+					"<b>1 Y</b>(1 day), <b>6 M</b>(1 day), <b>3 M</b>(1 day) <b>1 M</b>(1 day, 1 hour)<br/>" + 
+					"<b>1 W</b>(1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins, 2 mins, 1 min)<br/>" +
+					"<b>1 D</b>(1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs)</html>",
 			"Historical data to pull in i.e 2D is today + yesterday",
 			"Risk amount for trade used to calculate position size",
 			"% Change from close", "% Change from open",
