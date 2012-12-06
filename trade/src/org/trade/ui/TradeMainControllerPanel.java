@@ -916,7 +916,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			JEditorPane disclaimerText;
 
 			disclaimerText = new JEditorPane(file.toURI().toURL());
-
+			disclaimerText.setEditable(false);
 			TextDialog disclaimer = new TextDialog(this.getFrame(),
 					"Disclaimer", false, disclaimerText);
 			disclaimer.pack();
