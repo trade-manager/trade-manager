@@ -58,12 +58,14 @@ public class TradingdayTableModel extends TableModel {
 	private static final String CLOSE = "       Close*      ";
 	private static final String MKTGAP = "    Market Gap     ";
 	private static final String MKTBIAS = "    Market Bias    ";
-
 	private static final String MKTBAR = "    Market Bar     ";
+
 	private static final String[] columnHeaderToolTip = {
 			"<html>The start time of your trading time-frame.<br>"
 					+ "This period must cover any rules defined in your strategy<br>"
-					+ "Note the default is set in the config.properties (<b>trade.market.open</b>)</html>",
+					+ "Note the default is set in the config.properties (<b>trade.market.open</b>)<br>"
+					+ "If trading outside regular market hrs set the following property to zero <br>"
+					+ "in the config.properties (<b>trade.backfill.useRTH</b>)</html>",
 			"<html>The end time of your trading time-frame.<br>"
 					+ "Note the default is set in the config.properties (<b>trade.market.close</b>)</html>",
 			"<html>Market gap from prev close <br>"

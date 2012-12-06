@@ -63,7 +63,8 @@ public class StrategyTableModel extends AspectTableModel {
 			"The name of the strategy",
 			null,
 			"<html>The java class name for the strategy.<br>"
-					+ "Note this file is stored in the strategy dir.</html>",
+					+ "This file is stored in the strategy dir.<br>"
+					+ "Note the dir is set in the config.properties (<b>trade.strategy.default.dir</b>)</html>",
 			"The strategy manager used to managed the open position",
 			"<html>If checked then TWS Mkt data api will run.<br>"
 					+ "This will cause the strategy to fire if last price<br>"
