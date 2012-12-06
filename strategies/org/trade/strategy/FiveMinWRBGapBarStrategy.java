@@ -138,11 +138,7 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 				 * Only manage trades when the market is open and the candle is
 				 * for the Tradestrategies trading day.
 				 */
-				if (TradingCalendar.isMarketHours(getTradestrategy()
-						.getTradingday().getOpen(), getTradestrategy()
-						.getTradingday().getClose(), startPeriod)
-						&& TradingCalendar.sameDay(getTradestrategy()
-								.getTradingday().getOpen(), startPeriod)) {
+				if (isDuringTradingday(startPeriod)) {
 
 					_log.info(getTradestrategy().getStrategy().getClassName()
 							+ " symbol: " + getSymbol() + " startPeriod: "

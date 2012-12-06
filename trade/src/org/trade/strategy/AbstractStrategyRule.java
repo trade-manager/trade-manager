@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
@@ -375,7 +376,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * at -1
 						 */
 						currentCandleCount = (candleSeries.getItemCount() - 1);
+						/*
+						 * Only manage trades when the market is open and the
+						 * candle is for the Tradestrategies trading day.
+						 */
 						runStrategy(candleSeries, true);
+
 					} else if (currentCandleCount == (candleSeries
 							.getItemCount() - 1)) {
 						/*
@@ -1590,6 +1596,24 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public Money setTargetPrice(Money targetPrice) {
 		return this.targetPrice = targetPrice;
+	}
+
+	/**
+	 * Method setTargetPrice.
+	 * 
+	 * @param dateTime
+	 *            Date
+	 * @return boolean
+	 */
+	public boolean isDuringTradingday(Date dateTime) {
+		if (TradingCalendar.isMarketHours(getTradestrategy().getTradingday()
+				.getOpen(), getTradestrategy().getTradingday().getClose(),
+				dateTime)
+				&& TradingCalendar.sameDay(getTradestrategy().getTradingday()
+						.getOpen(), dateTime)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
