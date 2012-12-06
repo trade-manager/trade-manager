@@ -68,10 +68,17 @@ public class IndicatorSeriesTableModel extends TableModel {
 	private static final String COLOR = "Color";
 	private static final String PROPERTIES = "Properties";
 
+	private static final String[] columnHeaderToolTip = {
+			"The name of the strategy", null,
+			"Specific name for this indicator i.e. 20-MA", null,
+			"If checked display on the main chart",
+			"If checked display this indicator as a sub-chart i.e Y-axis not $", null,
+			null };
+
 	Strategy m_data = null;
 
 	public IndicatorSeriesTableModel() {
-
+		super(columnHeaderToolTip);
 		// Get the column names and cache them.
 		// Then we can close the connection.
 		columnNames = new String[8];
@@ -87,6 +94,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Strategy
 	 */
 	public Strategy getData() {
@@ -95,7 +103,9 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Strategy
+	 * 
+	 * @param data
+	 *            Strategy
 	 */
 	public void setData(Strategy data) {
 
@@ -114,8 +124,11 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -134,9 +147,13 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -193,8 +210,11 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method replaceRow.
-	 * @param newElement IndicatorSeries
-	 * @param selectedRow int
+	 * 
+	 * @param newElement
+	 *            IndicatorSeries
+	 * @param selectedRow
+	 *            int
 	 */
 	public void replaceRow(IndicatorSeries newElement, int selectedRow) {
 
@@ -208,7 +228,9 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
 
@@ -227,13 +249,21 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method getIndicatorSeries.
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displaySeries Boolean
-	 * @param seriesRGBColory Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displaySeries
+	 *            Boolean
+	 * @param seriesRGBColory
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 * @return IndicatorSeries
 	 */
 	private IndicatorSeries getIndicatorSeries(Strategy strategy, String name,
@@ -279,8 +309,11 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element IndicatorSeries
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            IndicatorSeries
 	 */
 	public void getNewRow(Vector<Object> newRow, IndicatorSeries element) {
 

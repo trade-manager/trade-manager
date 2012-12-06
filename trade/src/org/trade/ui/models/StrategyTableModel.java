@@ -62,9 +62,12 @@ public class StrategyTableModel extends AspectTableModel {
 	private static final String[] columnHeaderToolTip = {
 			"The name of the strategy",
 			null,
-			"The java class name for the strategy this file is stored in the strategy dir",
+			"<html>The java class name for the strategy.<br>"
+					+ "Note this file is stored in the strategy dir.</html>",
 			"The strategy manager used to managed the open position",
-			"If checked then TWS Mkt data api will run. \n This will cause the strategy to fire if last price falls outside the currents bars H/L" };
+			"<html>If checked then TWS Mkt data api will run.<br>"
+					+ "This will cause the strategy to fire if last price<br>"
+					+ "falls outside the currents bars H/L</html>" };
 
 	private Aspects m_data = null;
 

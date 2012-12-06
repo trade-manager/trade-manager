@@ -95,17 +95,37 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String SEC_TYPE = "SEC Type*";
 	private static final String EXPIRY = "Expiry";
 
-	private static final String[] columnHeaderToolTip = { "Trading day",
-			"Run strategy", null, "Trade bias", "For gaps the grade", null,
-			null, "Trading account", "<html>Bar size for strategy <br/>" +
-					"<b>1 Y</b>(1 day), <b>6 M</b>(1 day), <b>3 M</b>(1 day) <b>1 M</b>(1 day, 1 hour)<br/>" + 
-					"<b>1 W</b>(1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins, 2 mins, 1 min)<br/>" +
-					"<b>1 D</b>(1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs)</html>",
-			"Historical data to pull in i.e 2D is today + yesterday",
-			"Risk amount for trade used to calculate position size",
-			"% Change from close", "% Change from open",
-			"Tradestrategy status", null, null, null,
-			"Expiry date for future contracts" };
+	private static final String[] columnHeaderToolTip = {
+			"Trading day",
+			"If checked the strategy will be run when run Strategy is selected",
+			null,
+			"<html>Your dirctional bias for this contract.<br>"
+					+ "Note this is only needed if your strategy uses it.</html>",
+			"<html>For gaps the grade<br>"
+					+ "See gap rules for tier grading criteria.<br>"
+					+ "Note this is only needed if your strategy uses it.</html>",
+			"<html>The strategy to trade with<br>"
+					+ "Note the default is set in the config.properties (<b>trade.strategy.default</b>)</html>",
+			null,
+			"Trading account",
+			"<html>Bar size for strategy <br/>"
+					+ "<b>1 Y</b>(1 day), <b>6 M</b>(1 day), <b>3 M</b>(1 day) <b>1 M</b>(1 day, 1 hour)<br/>"
+					+ "<b>1 W</b>(1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins, 2 mins, 1 min)<br/>"
+					+ "<b>1 D</b>(1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs)<br>"
+					+ "Note the default is set in the config.properties (<b>trade.backfill.barsize</b>)</html>",
+			"<html>Historical data to pull in i.e 2D is today + yesterday<br>"
+					+ "Note the default is set in the config.properties (<b>trade.backfill.duration</b>)</html>",
+			"<html>Risk amount for trade used to calculate position size<br>"
+					+ "Note the default is set in the config.properties (<b>trade.risk</b>)</html>",
+			"% Change from close",
+			"% Change from open",
+			"<html>Tradestrategy status<br>"
+					+ "Note this is updated by the application</html>",
+			null,
+			null,
+			null,
+			"<html>Expiry date for future contracts<br>"
+					+ "Format MM/YYYY</html>" };
 
 	private Tradingday m_data = null;
 	private Timer timer = null;

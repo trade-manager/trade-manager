@@ -60,10 +60,30 @@ public class TradingdayTableModel extends TableModel {
 	private static final String MKTBIAS = "    Market Bias    ";
 
 	private static final String MKTBAR = "    Market Bar     ";
-	private static final String[] columnHeaderToolTip = { "Market open time",
-			"Market close time", "Market bias for the day i.e S&P500 bar",
-			"Market gap from prev close i.e. S&P500 bar",
-			"Actual market bar i.e. S&P500" };
+	private static final String[] columnHeaderToolTip = {
+			"<html>The start time of your trading time-frame.<br>"
+					+ "This period must cover any rules defined in your strategy<br>"
+					+ "Note the default is set in the config.properties (<b>trade.market.open</b>)</html>",
+			"<html>The end time of your trading time-frame.<br>"
+					+ "Note the default is set in the config.properties (<b>trade.market.close</b>)</html>",
+			"<html>Market gap from prev close <br>"
+					+ "For stocks this is usually referes to S&P500 bar<br>"
+					+ "<b>+NRB</b>=Green narrow range bar<br>"
+					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>"
+					+ "<b>-WRB</b>=Red wide range bar<br>"
+					+ "<b>Darling Doji</b>=Green cross</html>",
+			"<html>Your Market bias for the day<br>"
+					+ "For stocks this is usually referes to S&P500<br>"
+					+ "<b>+NRB</b>=Green narrow range bar<br>"
+					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>"
+					+ "<b>-WRB</b>=Red wide range bar<br>"
+					+ "<b>Darling Doji</b>=Green cross</html>",
+
+			"<html>Actual market bar i.e. S&P500<br>"
+					+ "<b>+NRB</b>=Green narrow range bar<br>"
+					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>"
+					+ "<b>-WRB</b>=Red wide range bar<br>"
+					+ "<b>Darling Doji</b>=Green cross</html>" };
 
 	private Tradingdays m_data = null;
 
