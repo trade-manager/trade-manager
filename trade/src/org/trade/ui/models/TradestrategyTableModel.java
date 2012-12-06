@@ -185,6 +185,68 @@ public class TradestrategyTableModel extends TableModel {
 	}
 
 	/**
+	 * Method getValueAt.
+	 * 
+	 * 1 Y 1 day
+	 * 
+	 * 6 M 1 day
+	 * 
+	 * 3 M 1 day
+	 * 
+	 * 1 M 1 day, 1 hour
+	 * 
+	 * 1 W 1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins,
+	 * 2 mins, 1 min
+	 * 
+	 * 1 D 1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs
+	 * 
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
+	 * @return value Object
+	 */
+
+	public Object getValueAt(int row, int column) {
+		if (columnNames[column] == CHART_HISTORY) {
+			Integer barSize = new Integer(
+					((BarSize) super.getValueAt(row, 8)).getCode());
+			ChartDays chartDays = (ChartDays) super.getValueAt(row, column);
+			Integer period = new Integer(chartDays.getCode());
+			if (null != barSize && null != period) {
+				if (barSize.equals(new Integer(30)) && period > 1) {
+					chartDays = ChartDays.newInstance(new Integer(1));
+				} else if ((barSize <= 1800 || barSize == 1) && period > 5) {
+					chartDays = ChartDays.newInstance(new Integer(5));
+				} else if ((barSize == 3600 || barSize == 1) && period > 30) {
+					chartDays = ChartDays.newInstance(new Integer(30));
+				}
+				this.populateDAO(chartDays, row, column);
+				return chartDays;
+			}
+		}
+		if (columnNames[column] == BAR_SIZE) {
+			BarSize barSize = (BarSize) super.getValueAt(row, column);
+			Integer bar = new Integer(barSize.getCode());
+			Integer period = new Integer(
+					((ChartDays) super.getValueAt(row, 9)).getCode());
+			if (null != barSize && null != period) {
+				if (period > 1 && (bar < 60 && bar != 1)) {
+					barSize = BarSize.newInstance(new Integer(60));
+				} else if (period > 5 && (bar < 3600 && bar != 1)) {
+					barSize = BarSize.newInstance(new Integer(3600));
+				} else if (period > 30 && bar != 1) {
+					barSize = BarSize.newInstance(new Integer(1));
+				}
+				this.populateDAO(barSize, row, column);
+				return barSize;
+			}
+		}
+		return super.getValueAt(row, column);
+	}
+
+	/**
 	 * Method setData.
 	 * 
 	 * @param data

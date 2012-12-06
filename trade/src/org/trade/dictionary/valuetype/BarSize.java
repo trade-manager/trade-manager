@@ -43,9 +43,9 @@ public class BarSize extends Decode {
 
 	private static final long serialVersionUID = -5381026427696898592L;
 	public static final String DECODE = "BAR_SIZE";
-	public static final int FIVE_MIN = 300;
-	public static final int HOUR_MIN = 3600;
-	public static final int DAY = 1;
+	public static final Integer FIVE_MIN = 300;
+	public static final Integer HOUR_MIN = 3600;
+	public static final Integer DAY = 1;
 
 	public BarSize() {
 		super(DECODE);
