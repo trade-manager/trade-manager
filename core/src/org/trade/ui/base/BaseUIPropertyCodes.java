@@ -75,6 +75,7 @@ public class BaseUIPropertyCodes extends Decode {
 	public final static String CONNECT = "CONNECT";
 	public final static String DELETE = "DELETE";
 	public final static String DISCONNECT = "DISCONNECT";
+	public final static String DISCLAIMER = "DISCLAIMER";
 	public final static String EXECUTE = "EXECUTE";
 	public final static String EXECUTE_STATEMENT = "EXECUTE_STATEMENT";
 	public final static String EXIT = "EXIT";

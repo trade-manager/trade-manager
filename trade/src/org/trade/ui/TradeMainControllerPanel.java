@@ -51,6 +51,7 @@ import java.util.Scanner;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -907,6 +908,26 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doHelp() {
 		doAbout();
+	}
+
+	public void doDisclaimer() {
+		try {
+			File file = new File("docs/Disclaimer.html");
+			JEditorPane disclaimerText;
+
+			disclaimerText = new JEditorPane(file.toURI().toURL());
+
+			TextDialog disclaimer = new TextDialog(this.getFrame(),
+					"Disclaimer", false, disclaimerText);
+			disclaimer.pack();
+			disclaimer.setSize(this.getFrame().getSize());
+			disclaimer.setLocationRelativeTo(this);
+			disclaimer.setVisible(true);
+		} catch (Exception ex) {
+			this.setErrorMessage("Could not load about help.", ex.getMessage(),
+					ex);
+		}
+
 	}
 
 	/**

@@ -87,6 +87,8 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 			BaseUIPropertyCodes.CONNECT);
 	private final BaseMenuItem disconnect = new BaseMenuItem(null,
 			BaseUIPropertyCodes.DISCONNECT);
+	private final BaseMenuItem disclaimer = new BaseMenuItem(null,
+			BaseUIPropertyCodes.DISCLAIMER);
 
 	/**
 	 * Constructor for TradeMainPanelMenu.
@@ -192,6 +194,11 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 				messageEvent(disconnect.getMethod());
 			}
 		});
+		disclaimer.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				messageEvent(disclaimer.getMethod());
+			}
+		});
 
 		final BaseMenuItem close = new BaseMenuItem(null,
 				BaseUIPropertyCodes.CLOSE);
@@ -255,6 +262,8 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 		actionMenu.add(refreshMenu, 5);
 		actionMenu.add(deleteMenu, 6);
 		actionMenu.add(propertiesMenu, 7);
+		
+		helpMenu.add(disclaimer, 1);
 
 		// windowMenu.add(close, 0);
 		// windowMenu.add(closeAll, 1);

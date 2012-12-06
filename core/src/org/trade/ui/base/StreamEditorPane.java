@@ -118,6 +118,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * Constructor for StreamEditorPane.
 	 * @param type String
+	 * @throws IOException 
 	 */
 	public StreamEditorPane(String type) {
 		super();

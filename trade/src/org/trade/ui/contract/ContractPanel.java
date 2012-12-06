@@ -221,10 +221,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel6.add(jLabel4, null);
 			jPanel6.add(periodEditorComboBox, null);
 
-			// FlowLayout flowLayout3 = new FlowLayout();
-			// flowLayout3.setAlignment(FlowLayout.RIGHT);
-			// JPanel jPanel12 = new JPanel(flowLayout3);
-
 			JPanel jPanel12 = new JPanel(new BorderLayout());
 			m_strategyLabel = new JEditorPane("text/rtf", "");
 			setStrategyLabel(null);
