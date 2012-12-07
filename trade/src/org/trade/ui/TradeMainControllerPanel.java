@@ -36,6 +36,7 @@
 package org.trade.ui;
 
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.print.PageFormat;
@@ -920,7 +921,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			TextDialog disclaimer = new TextDialog(this.getFrame(),
 					"Disclaimer", false, disclaimerText);
 			disclaimer.pack();
-			disclaimer.setSize(this.getFrame().getSize());
+			disclaimer.setSize(new Dimension((int) (this.getFrame().getSize()
+					.getWidth() / 2), (int) (this.getFrame().getSize()
+					.getHeight() / 2)));
 			disclaimer.setLocationRelativeTo(this);
 			disclaimer.setVisible(true);
 		} catch (Exception ex) {

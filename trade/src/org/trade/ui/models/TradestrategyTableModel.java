@@ -98,7 +98,9 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String[] columnHeaderToolTip = {
 			"Trading day",
 			"If checked the strategy will be run when run Strategy is selected",
-			null,
+			"<html>Contract symbol<br>"
+					+ "Tradestrategies are unique based on Symbol/SECType/Exchange/Currency/Expiry date<br>"
+					+ "Note the default on add is set in the config.properties (<b>trade.tradingtab.default.add</b>)</html>",
 			"<html>Your dirctional bias for this contract.<br>"
 					+ "Note this is only needed if your strategy uses it.</html>",
 			"<html>For gaps the grade<br>"

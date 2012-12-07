@@ -97,7 +97,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 	public FiveMinGapBarStrategy(BrokerModel brokerManagerModel,
 			StrategyData datasetContainer, Integer idTradestrategy) {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
-
 	}
 
 	/**
