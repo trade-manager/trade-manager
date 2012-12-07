@@ -96,10 +96,11 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String EXPIRY = "Expiry";
 
 	private static final String[] columnHeaderToolTip = {
-			"Trading day",
-			"If checked the strategy will be run when run Strategy is selected",
+			"<html>Trading day<br>"
+					+ "Tradestrategies are unique based on Tradingday/Contract/Tradeaccount/Strategy/BarSize</html>",
+			"If checked the Tradestrategy will trade",
 			"<html>Contract symbol<br>"
-					+ "Tradestrategies are unique based on Symbol/SECType/Exchange/Currency/Expiry date<br>"
+					+ "Contracts are unique based on Symbol/SECType/Exchange/Currency/Expiry date<br>"
 					+ "Note the default on add is set in the config.properties (<b>trade.tradingtab.default.add</b>)</html>",
 			"<html>Your dirctional bias for this contract.<br>"
 					+ "Note this is only needed if your strategy uses it.</html>",
