@@ -241,15 +241,15 @@ public class TradestrategyTableModel extends TableModel {
 			ChartDays chartDays = (ChartDays) super.getValueAt(row, column);
 			Integer period = new Integer(chartDays.getCode());
 			if (null != barSize && null != period) {
-				if (barSize.equals(new Integer(30)) && period > 1) {
+				if (barSize == 30 && period > 1) {
 					chartDays = ChartDays.newInstance(new Integer(1));
 					this.populateDAO(chartDays, row, column);
 					return chartDays;
-				} else if ((barSize <= 1800 || barSize == 1) && period > 5) {
+				} else if ((barSize <= 1800 && barSize != 1) && period > 5) {
 					chartDays = ChartDays.newInstance(new Integer(5));
 					this.populateDAO(chartDays, row, column);
 					return chartDays;
-				} else if ((barSize == 3600 || barSize == 1) && period > 30) {
+				} else if ((barSize == 3600 && barSize != 1) && period > 30) {
 					chartDays = ChartDays.newInstance(new Integer(30));
 					this.populateDAO(chartDays, row, column);
 					return chartDays;
