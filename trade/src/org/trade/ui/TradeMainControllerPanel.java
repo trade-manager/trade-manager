@@ -922,8 +922,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					"Disclaimer", false, disclaimerText);
 			disclaimer.pack();
 			disclaimer.setSize(new Dimension((int) (this.getFrame().getSize()
-					.getWidth() / 2), (int) (this.getFrame().getSize()
-					.getHeight() / 2)));
+					.getWidth() * 2 / 3), (int) (this.getFrame().getSize()
+					.getHeight() * 2 / 3)));
 			disclaimer.setLocationRelativeTo(this);
 			disclaimer.setVisible(true);
 		} catch (Exception ex) {
