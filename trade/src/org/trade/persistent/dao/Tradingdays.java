@@ -48,6 +48,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.trade.core.dao.Aspect;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.BarSize;
+import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOTradeAccount;
@@ -328,11 +330,20 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 			Integer chartDays = ConfigProperties
 					.getPropAsInt("trade.backfill.duration");
+			if (!ChartDays.newInstance(chartDays).isValid())
+				chartDays = new Integer(2);
+
 			Integer barSize = ConfigProperties
 					.getPropAsInt("trade.backfill.barsize");
+			if (!BarSize.newInstance(barSize).isValid())
+				barSize = new Integer(300);
+
 			Integer riskAmount = ConfigProperties.getPropAsInt("trade.risk");
 			String strategyName = ConfigProperties
 					.getPropAsString("trade.strategy.default");
+			if (!DAOStrategy.newInstance(strategyName).isValid())
+				strategyName = DAOStrategy.newInstance().getCode();
+
 			Strategy strategy = (Strategy) DAOStrategy
 					.newInstance(strategyName).getObject();
 			TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
@@ -554,5 +565,4 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		scanLine.close();
 		return tradestrategy;
 	}
-
 }
