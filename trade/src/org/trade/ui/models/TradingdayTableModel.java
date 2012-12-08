@@ -165,9 +165,10 @@ public class TradingdayTableModel extends TableModel {
 
 	public Object getValueAt(int row, int column) {
 		if (columnNames[column] == CLOSE) {
-			Date closeDate = ((Date) super.getValueAt(row, column));
-			Date openDate = ((Date) super.getValueAt(row, 0));
-			if (null != openDate && null != closeDate) {
+			if (null != super.getValueAt(row, column)
+					&& null != super.getValueAt(row, 0)) {
+				Date closeDate = ((Date) super.getValueAt(row, column));
+				Date openDate = ((Date) super.getValueAt(row, 0));
 				if (closeDate.getDate().before(openDate.getDate())) {
 					Date date = new Date(TradingCalendar.getSpecificTime(
 							closeDate.getDate(), TradingCalendar

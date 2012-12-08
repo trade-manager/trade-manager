@@ -235,49 +235,80 @@ public class TradestrategyTableModel extends TableModel {
 	 */
 
 	public Object getValueAt(int row, int column) {
-		if (columnNames[column] == CHART_HISTORY) {
-			Integer barSize = new Integer(
-					((BarSize) super.getValueAt(row, 8)).getCode());
-			ChartDays chartDays = (ChartDays) super.getValueAt(row, column);
-			Integer period = new Integer(chartDays.getCode());
-			if (null != barSize && null != period) {
-				if (barSize == 30 && period > 1) {
-					chartDays = ChartDays.newInstance(new Integer(1));
-					this.populateDAO(chartDays, row, column);
-					return chartDays;
-				} else if ((barSize <= 1800 && barSize != 1) && period > 5) {
-					chartDays = ChartDays.newInstance(new Integer(5));
-					this.populateDAO(chartDays, row, column);
-					return chartDays;
-				} else if ((barSize == 3600 && barSize != 1) && period > 30) {
-					chartDays = ChartDays.newInstance(new Integer(30));
-					this.populateDAO(chartDays, row, column);
-					return chartDays;
+		if (columnNames[column] == BAR_SIZE) {
+			if (((ChartDays) super.getValueAt(row, 9)).isValid()) {
+				Integer bar = null;
+				if (!((BarSize) super.getValueAt(row, column)).isValid()) {
+					bar = new Integer(300);
+				} else {
+					bar = new Integer(
+							((BarSize) super.getValueAt(row, column)).getCode());
+				}
+
+				Integer period = new Integer(((ChartDays) super.getValueAt(row,
+						9)).getCode());
+				if (period > 1 && (bar < 60 && bar != 1)) {
+					BarSize barSize = BarSize.newInstance(new Integer(60));
+					this.setValueAt(barSize, row, column);
+					return barSize;
+				} else if (period > 5 && (bar < 3600 && bar != 1)) {
+					BarSize barSize = BarSize.newInstance(new Integer(3600));
+					this.setValueAt(barSize, row, column);
+					return barSize;
+				} else if (period > 30 && bar != 1) {
+					BarSize barSize = BarSize.newInstance(new Integer(1));
+					this.setValueAt(barSize, row, column);
+					return barSize;
 				}
 			}
 		}
-		if (columnNames[column] == BAR_SIZE) {
-			BarSize barSize = (BarSize) super.getValueAt(row, column);
-			Integer bar = new Integer(barSize.getCode());
-			Integer period = new Integer(
-					((ChartDays) super.getValueAt(row, 9)).getCode());
-			if (null != barSize && null != period) {
-				if (period > 1 && (bar < 60 && bar != 1)) {
-					barSize = BarSize.newInstance(new Integer(60));
-					this.populateDAO(barSize, row, column);
-					return barSize;
-				} else if (period > 5 && (bar < 3600 && bar != 1)) {
-					barSize = BarSize.newInstance(new Integer(3600));
-					this.populateDAO(barSize, row, column);
-					return barSize;
-				} else if (period > 30 && bar != 1) {
-					barSize = BarSize.newInstance(new Integer(1));
-					this.populateDAO(barSize, row, column);
-					return barSize;
+		if (columnNames[column] == CHART_HISTORY) {
+			if (((BarSize) super.getValueAt(row, 8)).isValid()) {
+				Integer barSize = new Integer(((BarSize) super.getValueAt(row,
+						8)).getCode());
+
+				Integer period = null;
+				if (!((ChartDays) super.getValueAt(row, column)).isValid()) {
+					period = new Integer(2);
+				} else {
+					period = new Integer(((ChartDays) super.getValueAt(row,
+							column)).getCode());
+				}
+				if (barSize == 30 && period > 1) {
+					ChartDays chartDays = ChartDays.newInstance(new Integer(1));
+					this.setValueAt(chartDays, row, column);
+					return chartDays;
+				} else if ((barSize <= 1800 && barSize != 1) && period > 5) {
+					ChartDays chartDays = ChartDays.newInstance(new Integer(5));
+					this.setValueAt(chartDays, row, column);
+					return chartDays;
+				} else if ((barSize == 3600 && barSize != 1) && period > 30) {
+					ChartDays chartDays = ChartDays
+							.newInstance(new Integer(30));
+					this.setValueAt(chartDays, row, column);
+					return chartDays;
 				}
 			}
 		}
 		return super.getValueAt(row, column);
+	}
+
+	/**
+	 * Method setValueAt.
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
+	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
+	 */
+	public void setValueAt(Object value, int row, int column) {
+		this.populateDAO(value, row, column);
+		Vector<Object> dataRow = rows.get(row);
+		dataRow.setElementAt(value, column);
+		// fireTableCellUpdated(row, column);
 	}
 
 	/**
@@ -486,7 +517,7 @@ public class TradestrategyTableModel extends TableModel {
 			getNewRow(newRow, tradestrategy);
 			rows.add(newRow);
 			// Tell the listeners a new table has arrived.
-			fireTableChanged(new TableModelEvent(this));
+			this.fireTableChanged(new TableModelEvent(this));
 		}
 	}
 
