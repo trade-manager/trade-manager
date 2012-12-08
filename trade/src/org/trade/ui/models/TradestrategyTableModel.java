@@ -236,58 +236,44 @@ public class TradestrategyTableModel extends TableModel {
 
 	public Object getValueAt(int row, int column) {
 		if (columnNames[column] == BAR_SIZE) {
-			if (((ChartDays) super.getValueAt(row, 9)).isValid()) {
-				Integer period = new Integer(((ChartDays) super.getValueAt(row,
-						9)).getCode());
-				Integer bar = null;
-				if (((BarSize) super.getValueAt(row, column)).isValid()) {
-					bar = new Integer(
-							((BarSize) super.getValueAt(row, column)).getCode());
-				} else {
-					bar = new Integer(300);
-				}
 
-				if (period > 1 && (bar < 60 && bar != 1)) {
-					BarSize barSize = BarSize.newInstance(new Integer(60));
-					this.setValueAt(barSize, row, column);
-					return barSize;
-				} else if (period > 5 && (bar < 3600 && bar != 1)) {
-					BarSize barSize = BarSize.newInstance(new Integer(3600));
-					this.setValueAt(barSize, row, column);
-					return barSize;
-				} else if (period > 30 && bar != 1) {
-					BarSize barSize = BarSize.newInstance(new Integer(1));
-					this.setValueAt(barSize, row, column);
-					return barSize;
-				}
+			Integer period = new Integer(
+					((ChartDays) super.getValueAt(row, 9)).getCode());
+			Integer bar = new Integer(
+					((BarSize) super.getValueAt(row, column)).getCode());
+
+			if (period > 1 && (bar < 60 && bar != 1)) {
+				BarSize barSize = BarSize.newInstance(new Integer(60));
+				this.setValueAt(barSize, row, column);
+				return barSize;
+			} else if (period > 5 && (bar < 3600 && bar != 1)) {
+				BarSize barSize = BarSize.newInstance(new Integer(3600));
+				this.setValueAt(barSize, row, column);
+				return barSize;
+			} else if (period > 30 && bar != 1) {
+				BarSize barSize = BarSize.newInstance(new Integer(1));
+				this.setValueAt(barSize, row, column);
+				return barSize;
 			}
 		}
 		if (columnNames[column] == CHART_HISTORY) {
-			if (((BarSize) super.getValueAt(row, 8)).isValid()) {
-				Integer barSize = new Integer(((BarSize) super.getValueAt(row,
-						8)).getCode());
+			Integer barSize = new Integer(
+					((BarSize) super.getValueAt(row, 8)).getCode());
+			Integer period = new Integer(((ChartDays) super.getValueAt(row,
+					column)).getCode());
 
-				Integer period = null;
-				if (((ChartDays) super.getValueAt(row, column)).isValid()) {
-					period = new Integer(((ChartDays) super.getValueAt(row,
-							column)).getCode());
-				} else {
-					period = new Integer(2);
-				}
-				if (barSize == 30 && period > 1) {
-					ChartDays chartDays = ChartDays.newInstance(new Integer(1));
-					this.setValueAt(chartDays, row, column);
-					return chartDays;
-				} else if ((barSize <= 1800 && barSize != 1) && period > 5) {
-					ChartDays chartDays = ChartDays.newInstance(new Integer(5));
-					this.setValueAt(chartDays, row, column);
-					return chartDays;
-				} else if ((barSize == 3600 && barSize != 1) && period > 30) {
-					ChartDays chartDays = ChartDays
-							.newInstance(new Integer(30));
-					this.setValueAt(chartDays, row, column);
-					return chartDays;
-				}
+			if (barSize == 30 && period > 1) {
+				ChartDays chartDays = ChartDays.newInstance(new Integer(1));
+				this.setValueAt(chartDays, row, column);
+				return chartDays;
+			} else if ((barSize <= 1800 && barSize != 1) && period > 5) {
+				ChartDays chartDays = ChartDays.newInstance(new Integer(5));
+				this.setValueAt(chartDays, row, column);
+				return chartDays;
+			} else if ((barSize == 3600 && barSize != 1) && period > 30) {
+				ChartDays chartDays = ChartDays.newInstance(new Integer(30));
+				this.setValueAt(chartDays, row, column);
+				return chartDays;
 			}
 		}
 		return super.getValueAt(row, column);
@@ -475,11 +461,20 @@ public class TradestrategyTableModel extends TableModel {
 
 				chartDays = ConfigProperties
 						.getPropAsInt("trade.backfill.duration");
+				if (!ChartDays.newInstance(chartDays).isValid())
+					chartDays = new Integer(2);
+
 				barSize = ConfigProperties
 						.getPropAsInt("trade.backfill.barsize");
+				if (!BarSize.newInstance(barSize).isValid())
+					barSize = new Integer(300);
+
 				riskAmount = ConfigProperties.getPropAsInt("trade.risk");
 				strategyName = ConfigProperties
 						.getPropAsString("trade.strategy.default");
+				if (!DAOStrategy.newInstance(strategyName).isValid())
+					strategyName = DAOStrategy.newInstance().getCode();
+
 				if (null != strategyName) {
 					strategy = (Strategy) DAOStrategy.newInstance(strategyName)
 							.getObject();
