@@ -237,16 +237,16 @@ public class TradestrategyTableModel extends TableModel {
 	public Object getValueAt(int row, int column) {
 		if (columnNames[column] == BAR_SIZE) {
 			if (((ChartDays) super.getValueAt(row, 9)).isValid()) {
-				Integer bar = null;
-				if (!((BarSize) super.getValueAt(row, column)).isValid()) {
-					bar = new Integer(300);
-				} else {
-					bar = new Integer(
-							((BarSize) super.getValueAt(row, column)).getCode());
-				}
-
 				Integer period = new Integer(((ChartDays) super.getValueAt(row,
 						9)).getCode());
+				Integer bar = null;
+				if (((BarSize) super.getValueAt(row, column)).isValid()) {
+					bar = new Integer(
+							((BarSize) super.getValueAt(row, column)).getCode());
+				} else {
+					bar = new Integer(300);
+				}
+
 				if (period > 1 && (bar < 60 && bar != 1)) {
 					BarSize barSize = BarSize.newInstance(new Integer(60));
 					this.setValueAt(barSize, row, column);
@@ -268,11 +268,11 @@ public class TradestrategyTableModel extends TableModel {
 						8)).getCode());
 
 				Integer period = null;
-				if (!((ChartDays) super.getValueAt(row, column)).isValid()) {
-					period = new Integer(2);
-				} else {
+				if (((ChartDays) super.getValueAt(row, column)).isValid()) {
 					period = new Integer(((ChartDays) super.getValueAt(row,
 							column)).getCode());
+				} else {
+					period = new Integer(2);
 				}
 				if (barSize == 30 && period > 1) {
 					ChartDays chartDays = ChartDays.newInstance(new Integer(1));
@@ -308,7 +308,7 @@ public class TradestrategyTableModel extends TableModel {
 		this.populateDAO(value, row, column);
 		Vector<Object> dataRow = rows.get(row);
 		dataRow.setElementAt(value, column);
-		// fireTableCellUpdated(row, column);
+		fireTableCellUpdated(row, column);
 	}
 
 	/**

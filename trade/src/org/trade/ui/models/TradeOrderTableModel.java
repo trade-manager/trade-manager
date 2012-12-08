@@ -153,7 +153,7 @@ public class TradeOrderTableModel extends TableModel {
 						|| ((OrderType) super.getValueAt(row, 3)).getCode()
 								.equals(OrderType.STP)) {
 					Money zero = new Money(0);
-					populateDAO(zero, row, column);
+					this.setValueAt(zero, row, column);
 					return zero;
 				}
 			}
@@ -163,12 +163,31 @@ public class TradeOrderTableModel extends TableModel {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.LMT)) {
 					Money zero = new Money(0);
-					populateDAO(zero, row, column);
+					this.setValueAt(zero, row, column);
 					return zero;
 				}
 			}
 		}
 		return super.getValueAt(row, column);
+	}
+	
+
+	/**
+	 * Method setValueAt.
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
+	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
+	 */
+	public void setValueAt(Object value, int row, int column) {
+		this.populateDAO(value, row, column);
+		Vector<Object> dataRow = rows.get(row);
+		dataRow.setElementAt(value, column);
+		fireTableCellUpdated(row, column);
 	}
 
 	/**

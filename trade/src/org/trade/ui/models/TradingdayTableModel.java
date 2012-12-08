@@ -173,12 +173,30 @@ public class TradingdayTableModel extends TableModel {
 					Date date = new Date(TradingCalendar.getSpecificTime(
 							closeDate.getDate(), TradingCalendar
 									.addBusinessDays(closeDate.getDate(), 1)));
-					this.populateDAO(date, row, column);
+					this.setValueAt(date, row, column);
 					return date;
 				}
 			}
 		}
 		return super.getValueAt(row, column);
+	}
+
+	/**
+	 * Method setValueAt.
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
+	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
+	 */
+	public void setValueAt(Object value, int row, int column) {
+		this.populateDAO(value, row, column);
+		Vector<Object> dataRow = rows.get(row);
+		dataRow.setElementAt(value, column);
+		fireTableCellUpdated(row, column);
 	}
 
 	/**
