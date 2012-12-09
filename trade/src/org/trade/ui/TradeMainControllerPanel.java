@@ -2120,6 +2120,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					totalSumbitted = processTradingday(
 							getTradingdayToProcess(tradingday,
 									m_runningContractRequests), totalSumbitted);
+					
+					if (this.brokerManagerModel.isBrokerDataOnly()) {
+						Thread.sleep(2000);
+					}
 
 					/*
 					 * Every reSumbittedAt value submitted contracts try to run
@@ -2135,6 +2139,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									getTradingdayToProcess(reProcessTradingday,
 											m_runningContractRequests),
 									totalSumbitted);
+							if (this.brokerManagerModel.isBrokerDataOnly()) {
+								Thread.sleep(2000);
+							}
 						}
 					}
 				}
@@ -2147,6 +2154,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								getTradingdayToProcess(reProcessTradingday,
 										m_runningContractRequests),
 								totalSumbitted);
+						if (this.brokerManagerModel.isBrokerDataOnly()) {
+							Thread.sleep(2000);
+						}
 					}
 				}
 
