@@ -1741,11 +1741,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			synchronized (m_contractRequests) {
 				if (m_contractRequests.containsKey(reqId)) {
-					Contract transientContract = m_contractRequests.get(reqId);
+					Contract transientInstance = m_contractRequests.get(reqId);
+					if (null != transientInstance.getIdContract())
+						transientInstance = m_tradePersistentModel
+								.findContractById(transientInstance
+										.getIdContract());
 					TWSBrokerModel.logContractDetails(contractDetails);
-					TWSBrokerModel.populateContract(contractDetails,
-							transientContract);
-					m_tradePersistentModel.persistContract(transientContract);
+					if (TWSBrokerModel.populateContract(contractDetails,
+							transientInstance)) {
+						Contract contract = m_tradePersistentModel
+								.persistContract(transientInstance);
+						m_contractRequests.replace(reqId, contract);
+					}
 				} else {
 					error(reqId, 3220, "Contract details not found for reqId: "
 							+ reqId);
@@ -2517,64 +2524,124 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            Contract
 	 * @throws ParseException
 	 */
-	public static void populateContract(
+	public static boolean populateContract(
 			com.ib.client.ContractDetails contractDetails,
 			Contract transientContract) throws ParseException {
-		if (null != contractDetails.m_summary.m_localSymbol) {
-			transientContract
-					.setLocalSymbol(contractDetails.m_summary.m_localSymbol);
-		}
-		if (0 != contractDetails.m_summary.m_conId) {
-			transientContract
-					.setIdContractIB(contractDetails.m_summary.m_conId);
-		}
-		if (null != contractDetails.m_summary.m_primaryExch) {
-			transientContract
-					.setPrimaryExchange(contractDetails.m_summary.m_primaryExch);
-		}
-		if (null != contractDetails.m_summary.m_exchange) {
-			transientContract.setExchange(contractDetails.m_summary.m_exchange);
+
+		boolean changed = false;
+		if (CoreUtils.nullSafeComparator(transientContract.getSymbol(),
+				contractDetails.m_summary.m_symbol) == 0) {
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getLocalSymbol(),
+					contractDetails.m_summary.m_localSymbol) != 0) {
+				transientContract
+						.setLocalSymbol(contractDetails.m_summary.m_localSymbol);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getIdContractIB(),
+					contractDetails.m_summary.m_conId) != 0) {
+				transientContract
+						.setIdContractIB(contractDetails.m_summary.m_conId);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getPrimaryExchange(),
+					contractDetails.m_summary.m_primaryExch) != 0) {
+				transientContract
+						.setPrimaryExchange(contractDetails.m_summary.m_primaryExch);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getExchange(),
+					contractDetails.m_summary.m_exchange) != 0) {
+				transientContract
+						.setExchange(contractDetails.m_summary.m_exchange);
+				changed = true;
+			}
+			if (null != contractDetails.m_summary.m_expiry) {
+				m_sdfExpiry.setTimeZone(TimeZone.getTimeZone("GMT"));
+				Date expiryDate = m_sdfExpiry
+						.parse(contractDetails.m_summary.m_expiry);
+				if (CoreUtils.nullSafeComparator(transientContract.getExpiry(),
+						expiryDate) != 0) {
+					transientContract.setExpiry(expiryDate);
+					changed = true;
+				}
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getSecTypeId(),
+					contractDetails.m_summary.m_secIdType) != 0) {
+				transientContract
+						.setSecTypeId(contractDetails.m_summary.m_secIdType);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getDescription(),
+					contractDetails.m_longName) != 0) {
+				transientContract.setDescription(contractDetails.m_longName);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getCurrency(),
+					contractDetails.m_summary.m_currency) != 0) {
+				transientContract
+						.setCurrency(contractDetails.m_summary.m_currency);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getCategory(),
+					contractDetails.m_category) != 0) {
+				transientContract.setCategory(contractDetails.m_category);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getIndustry(),
+					contractDetails.m_industry) != 0) {
+				transientContract.setIndustry(contractDetails.m_industry);
+				changed = true;
+			}
+			Money minTick = new Money(contractDetails.m_minTick);
+			if (CoreUtils.nullSafeComparator(minTick, new Money(
+					Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(
+							transientContract.getMinTick(),
+							minTick.getBigDecimalValue()) != 0) {
+				transientContract.setMinTick(minTick.getBigDecimalValue());
+				changed = true;
+			}
+			Money priceMagnifier = new Money(contractDetails.m_priceMagnifier);
+			if (CoreUtils.nullSafeComparator(priceMagnifier, new Money(
+					Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(
+							transientContract.getPriceMagnifier(),
+							priceMagnifier.getBigDecimalValue()) != 0) {
+				transientContract.setPriceMagnifier(priceMagnifier
+						.getBigDecimalValue());
+				changed = true;
+			}
+
+			Money multiplier = new Money(contractDetails.m_summary.m_multiplier);
+			if (CoreUtils.nullSafeComparator(multiplier, new Money(
+					Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(
+							transientContract.getPriceMultiplier(),
+							multiplier.getBigDecimalValue()) != 0) {
+				transientContract.setPriceMultiplier(multiplier
+						.getBigDecimalValue());
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getSubCategory(),
+					contractDetails.m_subcategory) != 0) {
+				transientContract.setSubCategory(contractDetails.m_subcategory);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getTradingClass(),
+					contractDetails.m_tradingClass) != 0) {
+				transientContract
+						.setTradingClass(contractDetails.m_tradingClass);
+				changed = true;
+			}
 		}
 
-		if (null != contractDetails.m_summary.m_expiry) {
-			m_sdfExpiry.setTimeZone(TimeZone.getTimeZone("GMT"));
-			transientContract.setExpiry(m_sdfExpiry
-					.parse(contractDetails.m_summary.m_expiry));
-		}
-		if (null != contractDetails.m_summary.m_secIdType) {
-			transientContract
-					.setSecTypeId(contractDetails.m_summary.m_secIdType);
-		}
-		if (null != contractDetails.m_longName) {
-			transientContract.setDescription(contractDetails.m_longName);
-		}
-		if (null != contractDetails.m_summary.m_currency) {
-			transientContract.setCurrency(contractDetails.m_summary.m_currency);
-		}
-		if (null != contractDetails.m_category) {
-			transientContract.setCategory(contractDetails.m_category);
-		}
-		if (null != contractDetails.m_industry) {
-			transientContract.setIndustry(contractDetails.m_industry);
-		}
-		if (0 != contractDetails.m_minTick) {
-			transientContract.setMinTick(new BigDecimal(
-					contractDetails.m_minTick));
-		}
-		if (0 != contractDetails.m_priceMagnifier) {
-			transientContract.setPriceMagnifier(new BigDecimal(
-					contractDetails.m_priceMagnifier));
-		}
-		if (null != contractDetails.m_summary.m_multiplier) {
-			transientContract.setPriceMultiplier(new BigDecimal(
-					contractDetails.m_summary.m_multiplier));
-		}
-		if (null != contractDetails.m_subcategory) {
-			transientContract.setSubCategory(contractDetails.m_subcategory);
-		}
-		if (null != contractDetails.m_tradingClass) {
-			transientContract.setTradingClass(contractDetails.m_tradingClass);
-		}
+		return changed;
 	}
 
 	/**
