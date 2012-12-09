@@ -2202,8 +2202,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
 			totalSumbitted++;
-			_log.info("Total: " + this.grandTotal + " totalSumbitted: "
-					+ totalSumbitted);
+			// _log.info("Total: " + this.grandTotal + " totalSumbitted: "
+			// + totalSumbitted);
 			/*
 			 * Need to slow things down as limit is 60 including real time bars
 			 * requests. When connected to TWS. Note only TWSManager return true
