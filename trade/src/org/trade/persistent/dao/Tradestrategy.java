@@ -174,7 +174,7 @@ public class Tradestrategy extends Aspect implements Serializable {
 	 */
 	public void setBarSize(Integer barSize) {
 		this.barSize = barSize;
-		if (null != barSize && barSize < 30) {
+		if (null != barSize && barSize == 1) {
 			int daySeconds = (int) ((this.getTradingday().getClose().getTime() - this
 					.getTradingday().getOpen().getTime()) / 1000);
 			this.barSize = daySeconds * barSize;

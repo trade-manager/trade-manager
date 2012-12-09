@@ -2001,7 +2001,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					/*
 					 * For daily bars set the time to the open time.
 					 */
-					if (tradestrategy.getBarSize() == 1) {
+					if (tradestrategy.getBarSize() > 3600) {
 						date = TradingCalendar.getSpecificTime(tradestrategy
 								.getTradingday().getOpen(), date);
 					}
