@@ -41,7 +41,6 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.dictionary.valuetype.Action;
 
 /**
  * Some tests for the {@link TradingCalendar} class.
@@ -94,9 +93,6 @@ public class CoreUtilsTest extends TestCase {
 
 			returnVal = CoreUtils.nullSafeComparator(null, 1);
 			assertEquals(-1, returnVal);
-
-			returnVal = CoreUtils.nullSafeComparator(Action.BUY, "BUY");
-			assertEquals(0, returnVal);
 
 		} catch (Exception ex) {
 			_log.error("Error creating class: " + ex.getMessage(), ex);

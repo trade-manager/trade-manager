@@ -55,12 +55,20 @@ public class AppMain {
 	public AppMain() {
 		frame = new AppFrame();
 
-		frame.setSize(1200, 900);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double appWidth = screenSize.getWidth() * 0.9;
+		double appHieght = screenSize.getHeight() * 0.9;
+		if (appHieght > 900)
+			appHieght = 900;
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		if (appWidth > 1200)
+			appWidth = 1200;
 
-		frame.setLocation((d.width - frame.getSize().width) / 2,
-				(d.height - frame.getSize().height) / 2);
+		frame.setSize((int) appWidth, (int) appHieght);
+		frame.setLocation((int) ((screenSize.getWidth() - frame.getSize()
+				.getWidth()) / 2), (int) ((screenSize.getHeight() - frame
+				.getSize().getHeight()) / 2));
+		
 		frame.setIconImage(ImageBuilder.getImage("trade.gif"));
 		frame.validate();
 		frame.repaint();
