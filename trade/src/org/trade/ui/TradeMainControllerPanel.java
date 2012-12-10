@@ -2071,6 +2071,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private Tradingdays tradingdays = null;
 		private int grandTotal = 0;
 		private long startTime = 0;
+		private long lastSubmittedTime = 0;
 		private final ConcurrentHashMap<Integer, Tradingday> m_runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 
 		/**
@@ -2102,6 +2103,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							+ tradingday.getTradestrategies().size();
 				}
 				this.startTime = System.currentTimeMillis();
+				this.lastSubmittedTime = startTime;
 				int totalSumbitted = 0;
 				int reSumbittedAt = 20;
 				// Initialize the progress bar
@@ -2120,11 +2122,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					totalSumbitted = processTradingday(
 							getTradingdayToProcess(tradingday,
 									m_runningContractRequests), totalSumbitted);
-					
-					if (this.brokerManagerModel.isBrokerDataOnly()) {
-						Thread.sleep(2000);
-					}
-
 					/*
 					 * Every reSumbittedAt value submitted contracts try to run
 					 * any that could not be run due to a conflict.
@@ -2139,9 +2136,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									getTradingdayToProcess(reProcessTradingday,
 											m_runningContractRequests),
 									totalSumbitted);
-							if (this.brokerManagerModel.isBrokerDataOnly()) {
-								Thread.sleep(2000);
-							}
 						}
 					}
 				}
@@ -2154,9 +2148,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								getTradingdayToProcess(reProcessTradingday,
 										m_runningContractRequests),
 								totalSumbitted);
-						if (this.brokerManagerModel.isBrokerDataOnly()) {
-							Thread.sleep(2000);
-						}
 					}
 				}
 
@@ -2210,8 +2201,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			_log.info("submitBrokerRequest: " + contract.getSymbol()
 					+ " endDate: " + endDate);
 
+			hasSubmittedInSeconds(totalSumbitted, 2);
 			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
 			totalSumbitted++;
+
 			// _log.info("Total: " + this.grandTotal + " totalSumbitted: "
 			// + totalSumbitted);
 			/*
@@ -2253,11 +2246,28 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			return totalSumbitted;
 		}
 
-		/*
-		 * This method process the publish method from doInBackground().
-		 */
 		/**
-		 * Method process.
+		 * Method hasSubmittedInSeconds. Make sure no more than six requests
+		 * every 2 seconds.
+		 * 
+		 * @param totalSumbitted
+		 *            int
+		 * @throws InterruptedException
+		 */
+		private void hasSubmittedInSeconds(int totalSumbitted, int seconds)
+				throws InterruptedException {
+			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
+					&& m_brokerModel.isConnected()) {
+				if (System.currentTimeMillis() - this.lastSubmittedTime < (seconds * 1000)) {
+					Thread.sleep(2000);
+				}
+				this.lastSubmittedTime = System.currentTimeMillis();
+			}
+		}
+
+		/**
+		 * Method process.This method process the publish method from
+		 * doInBackground().
 		 * 
 		 * @param messages
 		 *            List<String>
