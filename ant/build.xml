@@ -17,7 +17,7 @@
 			<pathelement location="${build}" />
 			<fileset dir="${component.base}/lib">
 				<include name="jsyntaxpane-0.9.5-b29.jar" />
-				<include name="tws-9.67.jar" />				
+				<include name="tws-9.67.jar" />
 				<include name="jfreechart-1.0.14.jar" />
 				<include name="jcommon-1.0.17.jar" />
 				<include name="swt.jar" />
@@ -38,12 +38,12 @@
 				<include name="slf4j-api-1.6.1.jar" />
 				<include name="slf4j-log4j12-1.6.1.jar" />
 				<include name="log4j-1.2.16.jar" />
-				<include name="commons-collections-3.2.1.jar" />				
+				<include name="commons-collections-3.2.1.jar" />
 				<include name="junit-4.8.2.jar" />
-				<include name="validation-api-1.0.0.GA.jar" />			      
+				<include name="validation-api-1.0.0.GA.jar" />
 			</fileset>
 			<fileset dir="${env.JAVA_HOME}/lib">
-				<include name="tools.jar"/>
+				<include name="tools.jar" />
 			</fileset>
 		</path>
 	</target>
@@ -55,12 +55,12 @@
 		<delete dir="${dist}" />
 		<mkdir dir="${dist}" />
 		<!-- compile the source -->
-		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false" >
-			<compilerarg value="-Xlint:none"/>
+		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false">
+			<compilerarg value="-Xlint:none" />
 			<classpath refid="build.classpath" />
 		</javac>
-		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false" >
-			<compilerarg value="-Xlint:none"/>
+		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false">
+			<compilerarg value="-Xlint:none" />
 			<classpath refid="build.classpath" />
 		</javac>
 		<!-- make the jar -->
@@ -84,40 +84,40 @@
 			</fileset>
 		</jar>
 		<!-- delete the temp directory -->
-		<delete dir="${build}" />		
+		<delete dir="${build}" />
 		<!-- With just specific files <zip destfile="${name}.zip" basedir="${base}"  /> 
 	      <zip destfile="${name}.zip" basedir="${base}"  excludes="src/**, test/**, .classpath, .project, config.properties, *.log*" />	
-		-->		 
-		<zip destfile="${name}.zip" basedir="${base}" excludes="reports/**, .classpath, .project, .git/**, .gitignore, config.properties, *.log*" /> 				
+		-->
+		<zip destfile="${name}.zip" basedir="${base}" excludes="reports/**, .classpath, .project, .git/**, .gitignore, config.properties, *.log*" />
 	</target>
 	<target name="createTables" depends="initialise">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" >
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/TradeManagerDDL.sql"/>
+			<transaction src="../db/TradeManagerDDL.sql" />
 		</sql>
 	</target>
 	<target name="createDB" depends="createUser" description="Creates the database and inserts default data">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" >
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/TradeManagerData.sql"/>
+			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="createUser" depends="createTables">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" delimiter="//" >
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" delimiter="//">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/DropCreateUserProc.sql"/>
+			<transaction src="../db/DropCreateUserProc.sql" />
 		</sql>
 	</target>
 	<target name="cleanDB" depends="initialise" description="Deletes all data in the database and sets up default data.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" >
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/TradeManagerData.sql"/>
+			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="cleanTradeOrdersDB" depends="initialise" description="Clears the database of TradeOrders for testing.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" >
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/ClearTradeOrdersData.sql"/>
+			<transaction src="../db/ClearTradeOrdersData.sql" />
 		</sql>
 	</target>
 	<target name="all" depends="compile" description="Compiles and package in jar files all the Trade Manager related code.">
