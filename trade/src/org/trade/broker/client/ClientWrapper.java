@@ -77,4 +77,8 @@ public interface ClientWrapper {
 
 	void onCancelBrokerData(Tradestrategy tradestrategy);
 
+	void onCancelRealtimeBars(Contract contract);
+
+	void onCancelBrokerData(Contract contract);
+
 }

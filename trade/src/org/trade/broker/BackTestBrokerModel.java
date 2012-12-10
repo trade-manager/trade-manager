@@ -190,7 +190,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
 	 */
 	public BackTestBroker getBackTestBroker(Integer idTradestrategy) {
-		return m_client.getBackTestBroker(idTradestrategy);
+		return (BackTestBroker) m_client.getBackTestBroker(idTradestrategy);
 	}
 
 	/**
@@ -350,13 +350,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				/*
 				 * This will use the Yahoo API to get the data.
 				 */
-
-				if (null == contract.getDescription()) {
-					Integer reqId = getNextRequestId();
-					m_contractRequests.put(reqId, contract);
-
-					BackTestBrokerModel.logContract(contract);
-					m_client.reqContractDetails(reqId, contract);
+				synchronized (m_contractRequests) {
+					m_contractRequests.put(contract.getIdContract(), contract);
 				}
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
@@ -512,6 +507,22 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#onCancelContractDetails(Contract)
 	 */
 	public void onCancelContractDetails(Contract contract) {
+	}
+
+	/**
+	 * Method onCancelRealtimeBars.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
+	 */
+	public void onCancelBrokerData(Contract contract) {
+		synchronized (m_historyDataRequests) {
+			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
+				m_historyDataRequests.remove(contract.getIdContract());
+				m_historyDataRequests.notifyAll();
+			}
+		}
 	}
 
 	/**

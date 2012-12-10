@@ -35,8 +35,8 @@
  */
 package org.trade.broker.client;
 
-import java.io.IOException;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -661,5 +661,4 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 		}
 	}
-
 }
