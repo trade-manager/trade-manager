@@ -117,13 +117,13 @@ public class CandleSeries extends IndicatorSeries {
 	 *            the length in minutes for each bar ie. 5, 15, 30, 60
 	 * 
 	 */
-	public CandleSeries(Contract contract, int barSize, Date startTime,
+	public CandleSeries(CandleSeries series, int barSize, Date startTime,
 			Date endTime) {
-		super(contract.getSymbol(), IndicatorSeries.CandleSeries, true, 0,
-				false);
-		this.symbol = contract.getSymbol();
-		this.contract = contract;
-		this.barSize = barSize;
+		super(series.getContract().getSymbol(), IndicatorSeries.CandleSeries,
+				series.getDisplaySeries(), 0, series.getSubChart());
+		this.symbol = series.getContract().getSymbol();
+		this.contract = series.getContract();
+		this.barSize = series.getBarSize();
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}

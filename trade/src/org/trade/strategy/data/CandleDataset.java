@@ -594,7 +594,8 @@ public class CandleDataset extends AbstractXYDataset implements
 		}
 
 		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex)
-				.getContract(), bars, startTime, endTime);
+				, bars, startTime, endTime);
+
 		series.updateSeries(source.getSeries(seriesIndex), 0);
 
 		return series;

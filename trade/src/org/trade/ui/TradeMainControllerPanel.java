@@ -2201,9 +2201,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			_log.info("submitBrokerRequest: " + contract.getSymbol()
 					+ " endDate: " + endDate);
 
+			totalSumbitted++;
 			hasSubmittedInSeconds(totalSumbitted, 2);
 			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
-			totalSumbitted++;
 
 			// _log.info("Total: " + this.grandTotal + " totalSumbitted: "
 			// + totalSumbitted);
@@ -2342,7 +2342,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						tradestrategy.getTradeAccount(), new BigDecimal(0),
 						null, null, false, tradestrategy.getChartDays(),
 						tradestrategy.getBarSize());
-
 				indicatorTradestrategy.setIdTradeStrategy(m_brokerModel
 						.getNextRequestId());
 				indicatorTradestrategy.setDirty(false);
@@ -2352,6 +2351,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getDatasetContainer().getBaseCandleSeries();
 			childSeries.setDisplaySeries(series.getDisplaySeries());
 			childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
+			childSeries.setSubChart(series.getSubChart());
 			childSeries.setSymbol(series.getSymbol());
 			childSeries.setSecType(series.getSecType());
 			childSeries.setCurrency(series.getCurrency());
