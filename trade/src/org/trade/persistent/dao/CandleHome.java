@@ -211,7 +211,7 @@ public class CandleHome {
 	 * @return List<Candle>
 	 */
 	public List<Candle> findCandlesByContractDateRangeBarSize(
-			Integer idContract, Date startDate, Date endDate, Integer barSize) {
+			Integer idContract, Date startOpenDate, Date endOpenDate, Integer barSize) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -222,26 +222,26 @@ public class CandleHome {
 			query.select(from);
 			query.orderBy(builder.asc(from.get("startPeriod")));
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			if (null != startDate) {
-				Join<Candle, Tradingday> tradingdayStartDate = from
-						.join("tradingday");
-				Predicate predicateStartDate = builder.greaterThanOrEqualTo(
-						tradingdayStartDate.get("open").as(Date.class),
-						startDate);
-				predicates.add(predicateStartDate);
-			}
-			if (null != endDate) {
-				Join<Candle, Tradingday> tradingdayEndDate = from
-						.join("tradingday");
-				Predicate predicateEndDate = builder.lessThanOrEqualTo(
-						tradingdayEndDate.get("open").as(Date.class), endDate);
-				predicates.add(predicateEndDate);
-			}
 			if (null != idContract) {
 				Join<Candle, Contract> contract = from.join("contract");
 				Predicate predicateContract = builder.equal(
 						contract.get("idContract"), idContract);
 				predicates.add(predicateContract);
+			}
+			if (null != startOpenDate) {
+				Join<Candle, Tradingday> tradingdayStartDate = from
+						.join("tradingday");
+				Predicate predicateStartDate = builder.greaterThanOrEqualTo(
+						tradingdayStartDate.get("open").as(Date.class),
+						startOpenDate);
+				predicates.add(predicateStartDate);
+			}
+			if (null != endOpenDate) {
+				Join<Candle, Tradingday> tradingdayEndDate = from
+						.join("tradingday");
+				Predicate predicateEndDate = builder.lessThanOrEqualTo(
+						tradingdayEndDate.get("open").as(Date.class), endOpenDate);
+				predicates.add(predicateEndDate);
 			}
 			if (null != barSize) {
 				Expression<Integer> expBarSize = from.get("barSize");
