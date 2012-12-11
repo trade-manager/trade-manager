@@ -2259,6 +2259,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 					&& m_brokerModel.isConnected()) {
 				if (System.currentTimeMillis() - this.lastSubmittedTime < (seconds * 1000)) {
+					_log.info("hasSubmittedInSeconds Sleep 2seconds : "
+							+ totalSumbitted);
 					Thread.sleep(2000);
 				}
 				this.lastSubmittedTime = System.currentTimeMillis();
