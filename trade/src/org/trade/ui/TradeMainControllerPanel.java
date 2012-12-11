@@ -2258,9 +2258,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				throws InterruptedException {
 			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 					&& m_brokerModel.isConnected()) {
-				if (System.currentTimeMillis() - this.lastSubmittedTime < (seconds * 1000)) {
-					_log.info("hasSubmittedInSeconds Sleep 2seconds : "
-							+ totalSumbitted);
+				if (System.currentTimeMillis() - this.lastSubmittedTime < (2000)) {
+					_log.info("hasSubmittedInSeconds Sleep " + seconds
+							+ " seconds : " + totalSumbitted);
 					Thread.sleep((long) (seconds * 1000));
 				}
 				this.lastSubmittedTime = System.currentTimeMillis();
