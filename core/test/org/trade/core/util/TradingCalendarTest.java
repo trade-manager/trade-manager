@@ -129,6 +129,21 @@ public class TradingCalendarTest extends TestCase {
 	}
 
 	@Test
+	public void testIsGreaterThan365() {
+		Integer chartDays = 365;
+		Date endDate = TradingCalendar.addDays(new Date(), 0);
+		if (TradingCalendar.daysDiff(
+				TradingCalendar.addDays(endDate, (chartDays * -1)), new Date()) > TradingCalendar
+				.getDaysInYear(endDate)) {
+			chartDays = TradingCalendar.getDaysInYear(endDate)
+					- TradingCalendar.daysDiff(endDate, new Date());
+		}
+		_log.info("chartDays: " + chartDays);
+		assertEquals(365, chartDays.intValue());
+
+	}
+
+	@Test
 	public void testNextRequestId() {
 		AtomicInteger reqId = null;
 		Date date = new Date();

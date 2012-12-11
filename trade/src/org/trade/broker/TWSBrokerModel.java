@@ -516,6 +516,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 				String endDateTime = m_sdfGMT.format(endDate);
 
+				/*
+				 * TWS API data has a limit of one calendar year of data. So
+				 * apply this limit to the chartDays.
+				 */
+				if (TradingCalendar.daysDiff(
+						TradingCalendar.addDays(endDate, (chartDays * -1)),
+						new Date()) > TradingCalendar.getDaysInYear(endDate)) {
+					chartDays = TradingCalendar.getDaysInYear(endDate)
+							- TradingCalendar.daysDiff(endDate, new Date());
+				}
+
 				_log.info("onBrokerData Symbol: " + contract.getSymbol()
 						+ " end Time: " + endDateTime + " Period length: "
 						+ chartDays + " Bar size: " + barSize + " WhatToShow: "

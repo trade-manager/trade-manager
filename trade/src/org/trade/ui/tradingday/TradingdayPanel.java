@@ -555,11 +555,31 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 							BasePanel.INFORMATION);
 					return;
 				}
+				int selectedRow = 0;
+				Tradingday tradingday = null;
+				if (m_tradingdayTable.getSelectionModel()
+						.getLeadSelectionIndex() > -1) {
+					selectedRow = m_tradingdayTable.getSelectionModel()
+							.getLeadSelectionIndex();
+					org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) m_tradingdayModel
+							.getValueAt(m_tradingdayTable
+									.convertRowIndexToModel(selectedRow), 0);
+					tradingday = m_tradingdayModel.getData().getTradingday(
+							openDate.getDate());
+				}
 
-				m_tradingdays.populateDataFromFile(fileName);
+				if (null == tradingday) {
+					this.setStatusBarMessage(
+							"Please select or add a Tradingday.",
+							BasePanel.INFORMATION);
+					return;
+				}
+
+				m_tradingdays.populateDataFromFile(fileName, tradingday);
 				m_tradingdayModel.setData(m_tradingdays);
 				if (m_tradingdays.getTradingdays().size() > 0) {
-					m_tradingdayTable.setRowSelectionInterval(0, 0);
+					m_tradingdayTable.setRowSelectionInterval(selectedRow,
+							selectedRow);
 				}
 
 			}

@@ -308,7 +308,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            String
 	 * @throws Exception
 	 */
-	public synchronized void populateDataFromFile(String fileName)
+	public synchronized void populateDataFromFile(String fileName, Tradingday tradingday)
 			throws Exception {
 
 		/*
@@ -350,12 +350,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					.newInstance().getObject();
 			String strLine = "";
 
-			Tradingday toDayTradingday = this.getTradingday(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
-			if (null == toDayTradingday) {
-				toDayTradingday = Tradingday.newInstance(TradingCalendar
-						.getMostRecentTradingDay(new Date()));
-			}
+
 			// read comma separated file line by line
 
 			while ((strLine = bufferedReader.readLine()) != null) {
@@ -370,33 +365,33 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					}
 
 					if (null == tradestrategy.getTradingday()) {
-						tradestrategy.setTradingday(toDayTradingday);
-						toDayTradingday.addTradestrategy(tradestrategy);
+						tradestrategy.setTradingday(tradingday);
+						tradingday.addTradestrategy(tradestrategy);
 					} else {
-						Tradingday tradingday = this
+						Tradingday currTradingday = this
 								.getTradingday(tradestrategy.getTradingday()
 										.getOpen());
-						if (null != tradingday) {
+						if (null != currTradingday) {
 							if (null != tradestrategy.getTradingday()
 									.getMarketBar()
-									&& null == tradingday.getMarketBar()) {
-								tradingday.setMarketBar(tradestrategy
+									&& null == currTradingday.getMarketBar()) {
+								currTradingday.setMarketBar(tradestrategy
 										.getTradingday().getMarketBar());
 							}
 							if (null != tradestrategy.getTradingday()
 									.getMarketBias()
-									&& null == tradingday.getMarketBias()) {
-								tradingday.setMarketBias(tradestrategy
+									&& null == currTradingday.getMarketBias()) {
+								currTradingday.setMarketBias(tradestrategy
 										.getTradingday().getMarketBias());
 							}
 							if (null != tradestrategy.getTradingday()
 									.getMarketGap()
-									&& null == tradingday.getMarketGap()) {
-								tradingday.setMarketGap(tradestrategy
+									&& null == currTradingday.getMarketGap()) {
+								currTradingday.setMarketGap(tradestrategy
 										.getTradingday().getMarketGap());
 							}
-							tradestrategy.setTradingday(tradingday);
-							tradingday.addTradestrategy(tradestrategy);
+							tradestrategy.setTradingday(currTradingday);
+							currTradingday.addTradestrategy(tradestrategy);
 						} else {
 							tradestrategy.getTradingday().addTradestrategy(
 									tradestrategy);

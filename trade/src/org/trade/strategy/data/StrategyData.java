@@ -447,6 +447,10 @@ public class StrategyData extends Worker {
 		}
 		long volume = 100000;
 		int tradeCount = 100;
+		if (barSize == 1) {
+			barSize = ((int) start.getClose().getTime() / 1000)
+					- ((int) start.getOpen().getTime() / 1000);
+		}
 
 		long count = (((start.getClose().getTime() / 1000) - (start.getOpen()
 				.getTime() / 1000)) / barSize) * noDays;

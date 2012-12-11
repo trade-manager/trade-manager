@@ -89,9 +89,17 @@ public class CandleHome {
 
 				if (!candleItem.getCandle().getTradingday().equals(tradingday)) {
 
-					tradingday = findTradingdayByDate(candleItem.getCandle()
-							.getTradingday().getOpen(), candleItem.getCandle()
-							.getTradingday().getClose());
+					if (null == candleItem.getCandle().getTradingday()
+							.getIdTradingDay()) {
+						tradingday = findTradingdayByDate(candleItem
+								.getCandle().getTradingday().getOpen(),
+								candleItem.getCandle().getTradingday()
+										.getClose());
+					} else {
+						tradingday = findTradingdayById(candleItem.getCandle()
+								.getTradingday().getIdTradingDay());
+					}
+
 					if (null == tradingday) {
 						entityManager.persist(candleItem.getCandle()
 								.getTradingday());
@@ -406,6 +414,24 @@ public class CandleHome {
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			Contract instance = entityManager.find(Contract.class, id);
+			return instance;
+		} catch (RuntimeException re) {
+			throw re;
+		}
+	}
+
+	/**
+	 * Method findContractById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return Contract
+	 */
+	private Tradingday findTradingdayById(Integer id) {
+
+		try {
+			entityManager = EntityManagerHelper.getEntityManager();
+			Tradingday instance = entityManager.find(Tradingday.class, id);
 			return instance;
 		} catch (RuntimeException re) {
 			throw re;

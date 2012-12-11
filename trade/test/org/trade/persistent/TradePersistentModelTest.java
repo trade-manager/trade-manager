@@ -80,6 +80,7 @@ import org.trade.persistent.dao.Tradingdays;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorDataset;
 import org.trade.strategy.data.IndicatorSeries;
+import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.CandlePeriod;
 import org.trade.ui.TradeAppLoadConfig;
@@ -645,14 +646,20 @@ public class TradePersistentModelTest extends TestCase {
 	public void testPersistCandleSeries() {
 
 		try {
+
 			CandleSeries candleSeries = new CandleSeries(this.tradestrategy
 					.getDatasetContainer().getBaseCandleSeries(),
 					BarSize.FIVE_MIN, this.tradestrategy.getTradingday()
 							.getOpen(), this.tradestrategy.getTradingday()
 							.getClose());
+			StrategyData.doDummyData(candleSeries,
+					this.tradestrategy.getTradingday(), 5, BarSize.FIVE_MIN, true, 0);
+			long timeStart = System.currentTimeMillis();
 			this.tradePersistentModel.persistCandleSeries(candleSeries);
+			_log.info("Total time: " + (System.currentTimeMillis() - timeStart)
+					/ 1000);
 		} catch (Exception e) {
-			fail("Error testPersistTradingday Msg: " + e.getMessage());
+			fail("Error testPersistCandleSeries Msg: " + e.getMessage());
 		}
 	}
 

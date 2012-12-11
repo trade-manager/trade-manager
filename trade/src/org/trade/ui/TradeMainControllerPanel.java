@@ -2202,7 +2202,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					+ " endDate: " + endDate);
 
 			totalSumbitted++;
-			hasSubmittedInSeconds(totalSumbitted, 2);
+			hasSubmittedInSeconds(totalSumbitted, 2.5);
 			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
 
 			// _log.info("Total: " + this.grandTotal + " totalSumbitted: "
@@ -2254,14 +2254,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 *            int
 		 * @throws InterruptedException
 		 */
-		private void hasSubmittedInSeconds(int totalSumbitted, int seconds)
+		private void hasSubmittedInSeconds(int totalSumbitted, double seconds)
 				throws InterruptedException {
 			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 					&& m_brokerModel.isConnected()) {
 				if (System.currentTimeMillis() - this.lastSubmittedTime < (seconds * 1000)) {
 					_log.info("hasSubmittedInSeconds Sleep 2seconds : "
 							+ totalSumbitted);
-					Thread.sleep(2000);
+					Thread.sleep((long) (seconds * 1000));
 				}
 				this.lastSubmittedTime = System.currentTimeMillis();
 			}

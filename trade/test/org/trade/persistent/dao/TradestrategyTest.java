@@ -134,11 +134,12 @@ public class TradestrategyTest extends TestCase {
 			AspectHome aspectHome = new AspectHome();
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Tradingdays tradingdays = new Tradingdays();
-			tradingdays.add(Tradingday.newInstance(TradingCalendar
-					.getMostRecentTradingDay(new Date())));
+			Tradingday instance = Tradingday.newInstance(TradingCalendar
+					.getMostRecentTradingDay(new Date()));
+			tradingdays.add(instance);
 
 			String fileName = "db/GappersToDay10Test.csv";
-			tradingdays.populateDataFromFile(fileName);
+			tradingdays.populateDataFromFile(fileName, instance);
 			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
@@ -162,12 +163,13 @@ public class TradestrategyTest extends TestCase {
 			AspectHome aspectHome = new AspectHome();
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Tradingdays tradingdays = new Tradingdays();
-			tradingdays.add(Tradingday.newInstance(TradingCalendar
-					.getMostRecentTradingDay(new Date())));
+			Tradingday instance = Tradingday.newInstance(TradingCalendar
+					.getMostRecentTradingDay(new Date()));
+			tradingdays.add(instance);
 
 			String fileName = "db/GapperstodayJust1Test.csv";
 
-			tradingdays.populateDataFromFile(fileName);
+			tradingdays.populateDataFromFile(fileName, instance);
 			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday

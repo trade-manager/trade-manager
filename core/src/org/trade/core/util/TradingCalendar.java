@@ -533,13 +533,33 @@ public class TradingCalendar {
 	 * @param date
 	 *            Date
 	 * @return int
-	 * @exception * @see
 	 */
 	public static int getDayOfWeek(Date date) {
 		if (date != null) {
 			synchronized (CALENDAR_NY) {
 				CALENDAR_NY.setTime(date);
 				return CALENDAR_NY.get(Calendar.DAY_OF_WEEK);
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * getDaysInYear Return the Days in the year
+	 * 
+	 * @param date
+	 *            Date
+	 * @return int
+	 */
+	public static int getDaysInYear(Date date) {
+		if (date != null) {
+			synchronized (CALENDAR_NY) {
+				CALENDAR_NY.setTime(date);
+				if (CALENDAR_NY.isLeapYear(CALENDAR_NY.get(Calendar.YEAR))) {
+					return 366;
+				} else {
+					return 365;
+				}
 			}
 		}
 		return 0;
