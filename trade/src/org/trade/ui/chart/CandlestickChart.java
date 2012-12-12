@@ -281,7 +281,6 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		dateAxis.setVerticalTickLabels(true);
 		dateAxis.setDateFormatOverride(new SimpleDateFormat("dd/MM hh:mm"));
 		dateAxis.setTickMarkPosition(DateTickMarkPosition.START);
-
 		NumberAxis priceAxis = new NumberAxis("Price");
 		priceAxis.setAutoRange(true);
 		priceAxis.setAutoRangeIncludesZero(false);
@@ -349,11 +348,17 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			if (indicator.getDisplaySeries(0)) {
 
 				if (indicator.getSubChart(0)) {
-
-					org.trade.dictionary.valuetype.IndicatorSeries code = org.trade.dictionary.valuetype.IndicatorSeries
-							.newInstance(indicator.getType(0));
-					NumberAxis subPlotAxis = new NumberAxis(
-							code.getDisplayName());
+					String axisName = "Price";
+					if (IndicatorSeries.CandleSeries.equals(indicator
+							.getType(0))) {
+						axisName = ((CandleSeries) indicator.getSeries(0))
+								.getSymbol();
+					} else {
+						org.trade.dictionary.valuetype.IndicatorSeries code = org.trade.dictionary.valuetype.IndicatorSeries
+								.newInstance(indicator.getType(0));
+						axisName = code.getDisplayName();
+					}
+					NumberAxis subPlotAxis = new NumberAxis(axisName);
 					subPlotAxis.setAutoRange(true);
 					subPlotAxis.setAutoRangeIncludesZero(false);
 
@@ -386,7 +391,10 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 							.getType(0))) {
 						// add secondary axis
 						axixIndex++;
-						final NumberAxis axis2 = new NumberAxis("Price");
+
+						final NumberAxis axis2 = new NumberAxis(
+								((CandleSeries) indicator.getSeries(0))
+										.getSymbol());
 						axis2.setAutoRangeIncludesZero(false);
 						pricePlot.setRangeAxis(datasetIndex, axis2);
 						pricePlot.setRangeAxisLocation(i + 1,
