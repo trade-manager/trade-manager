@@ -130,10 +130,11 @@ public abstract class Aspect extends Object implements Serializable {
 		}
 		if (null == this.getId())
 			return false;
-		if (this.getId().equals(((Aspect) objectToCompare).getId())) {
-			return true;
+		if(this.getClass().equals(objectToCompare.getClass())){
+			if (this.getId().equals(((Aspect) objectToCompare).getId())) {
+				return true;
+			}
 		}
-
 		return false;
 	}
 

@@ -726,10 +726,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						childSeries.setDisplaySeries(series.getDisplaySeries());
 						childSeries.setSeriesRGBColor(series
 								.getSeriesRGBColor());
+						childSeries.setSubChart(series.getSubChart());
 						childSeries.setSymbol(series.getSymbol());
 						childSeries.setSecType(series.getSecType());
 						childSeries.setCurrency(series.getCurrency());
-						childSeries.setExchange(series.getExchange());
+						childSeries.setExchange(series.getExchange());						
 						candleDataset.setSeries(seriesIndex, childSeries);
 					}
 				}
