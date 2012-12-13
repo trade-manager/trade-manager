@@ -416,17 +416,21 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						if (null != tradestrategy.getIdTradeStrategy()) {
 							Tradestrategy refreshedTradestrategy = m_tradePersistentModel
 									.findTradestrategyById(tradestrategy);
-							m_tradeOrderModel.setData(refreshedTradestrategy);
-							RowSorter<?> rsDetail = m_tradeOrderTable
-									.getRowSorter();
-							rsDetail.setSortKeys(null);
 							ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 									.getSelectedComponent();
 							if (null != currentTab) {
-								currentTab
-										.setTradestrategy(refreshedTradestrategy);
-								setTradeLabel(refreshedTradestrategy,
-										currentTab.getCandlestickChart());
+								if (currentTab.getTradestrategy().equals(
+										refreshedTradestrategy)) {
+									m_tradeOrderModel
+											.setData(refreshedTradestrategy);
+									RowSorter<?> rsDetail = m_tradeOrderTable
+											.getRowSorter();
+									rsDetail.setSortKeys(null);
+									currentTab
+											.setTradestrategy(refreshedTradestrategy);
+									setTradeLabel(refreshedTradestrategy,
+											currentTab.getCandlestickChart());
+								}
 							}
 						}
 					} catch (PersistentModelException ex) {
@@ -730,7 +734,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						childSeries.setSymbol(series.getSymbol());
 						childSeries.setSecType(series.getSecType());
 						childSeries.setCurrency(series.getCurrency());
-						childSeries.setExchange(series.getExchange());						
+						childSeries.setExchange(series.getExchange());
 						candleDataset.setSeries(seriesIndex, childSeries);
 					}
 				}
