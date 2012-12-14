@@ -2072,7 +2072,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private int grandTotal = 0;
 		private long startTime = 0;
 		private long lastSubmittedTime = 0;
-		private final ConcurrentHashMap<Integer, Tradingday> m_runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -2096,6 +2095,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		public Void doInBackground() {
 
 			try {
+				ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 				this.grandTotal = 0;
 				for (Tradingday tradingday : this.tradingdays.getTradingdays()
 						.values()) {
@@ -2121,32 +2121,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 					totalSumbitted = processTradingday(
 							getTradingdayToProcess(tradingday,
-									m_runningContractRequests), totalSumbitted);
+									runningContractRequests), totalSumbitted);
 					/*
 					 * Every reSumbittedAt value submitted contracts try to run
 					 * any that could not be run due to a conflict.
 					 */
 					if (totalSumbitted > reSumbittedAt) {
 						reSumbittedAt = totalSumbitted + reSumbittedAt;
-						for (Integer idTradeingday : m_runningContractRequests
+						for (Integer idTradeingday : runningContractRequests
 								.keySet()) {
-							Tradingday reProcessTradingday = m_runningContractRequests
+							Tradingday reProcessTradingday = runningContractRequests
 									.get(idTradeingday);
 							totalSumbitted = processTradingday(
 									getTradingdayToProcess(reProcessTradingday,
-											m_runningContractRequests),
+											runningContractRequests),
 									totalSumbitted);
 						}
 					}
 				}
-				while (!m_runningContractRequests.isEmpty()) {
-					for (Integer idTradeingday : m_runningContractRequests
+				while (!runningContractRequests.isEmpty()) {
+					for (Integer idTradeingday : runningContractRequests
 							.keySet()) {
-						Tradingday reProcessTradingday = m_runningContractRequests
+						Tradingday reProcessTradingday = runningContractRequests
 								.get(idTradeingday);
 						totalSumbitted = processTradingday(
 								getTradingdayToProcess(reProcessTradingday,
-										m_runningContractRequests),
+										runningContractRequests),
 								totalSumbitted);
 					}
 				}
