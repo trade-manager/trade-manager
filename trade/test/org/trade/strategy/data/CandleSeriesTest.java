@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
+import org.trade.ui.TradeAppLoadConfig;
 
 public class CandleSeriesTest extends TestCase {
 
@@ -21,6 +22,7 @@ public class CandleSeriesTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		try {
+			TradeAppLoadConfig.loadAppProperties();
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
 		} catch (Exception e) {
 			fail("Error on setup " + e.getMessage());
