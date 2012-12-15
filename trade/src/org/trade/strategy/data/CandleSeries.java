@@ -601,7 +601,7 @@ public class CandleSeries extends IndicatorSeries {
 		clone.sumVolume = new Long(0);
 		clone.vwapHigh = new Double(0);
 		clone.vwapLow = new Double(99999);
-		clone.contract = this.getContract();
+		clone.contract = (Contract) this.getContract().clone();
 		clone.symbol = this.getSymbol();
 		clone.currency = this.getCurrency();
 		clone.exchange = this.getExchange();
