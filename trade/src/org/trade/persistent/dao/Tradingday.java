@@ -39,6 +39,7 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -71,8 +72,7 @@ import org.trade.core.util.TradingCalendar;
  */
 @Entity
 @Table(name = "tradingday")
-public class Tradingday extends Aspect implements java.io.Serializable,
-		Cloneable {
+public class Tradingday extends Aspect implements Serializable, Cloneable {
 
 	/**
 	 * 
@@ -488,10 +488,10 @@ public class Tradingday extends Aspect implements java.io.Serializable,
 	/**
 	 * Method clone.
 	 * 
-	 * @return Tradingday
+	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */
-	public Tradingday clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 
 		Tradingday tradingday = (Tradingday) super.clone();
 		List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);

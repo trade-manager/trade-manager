@@ -100,7 +100,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Constructor for IndicatorSeries.
-	 * @param type String
+	 * 
+	 * @param type
+	 *            String
 	 */
 	public IndicatorSeries(String type) {
 		super(type, true, false);
@@ -110,10 +112,15 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Constructor for IndicatorSeries.
-	 * @param type String
-	 * @param displaySeries Boolean
-	 * @param seriesRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param type
+	 *            String
+	 * @param displaySeries
+	 *            Boolean
+	 * @param seriesRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public IndicatorSeries(String type, Boolean displaySeries,
 			Integer seriesRGBColor, Boolean subChart) {
@@ -127,11 +134,17 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Constructor for IndicatorSeries.
-	 * @param name String
-	 * @param type String
-	 * @param displaySeries Boolean
-	 * @param seriesRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param displaySeries
+	 *            Boolean
+	 * @param seriesRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public IndicatorSeries(String name, String type, Boolean displaySeries,
 			Integer seriesRGBColor, Boolean subChart) {
@@ -145,13 +158,21 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Constructor for IndicatorSeries.
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displaySeries Boolean
-	 * @param seriesRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displaySeries
+	 *            Boolean
+	 * @param seriesRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public IndicatorSeries(Strategy strategy, String name, String type,
 			String description, Boolean displaySeries, Integer seriesRGBColor,
@@ -169,6 +190,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getIdIndicatorSeries.
+	 * 
 	 * @return Integer
 	 */
 	@Id
@@ -180,7 +202,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setIdIndicatorSeries.
-	 * @param idIndicatorSeries Integer
+	 * 
+	 * @param idIndicatorSeries
+	 *            Integer
 	 */
 	public void setIdIndicatorSeries(Integer idIndicatorSeries) {
 		this.idIndicatorSeries = idIndicatorSeries;
@@ -188,6 +212,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getName.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "name", length = 45)
@@ -197,7 +222,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -205,6 +232,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getType.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "type", length = 10, insertable = false, updatable = false, unique = true, nullable = false)
@@ -214,7 +242,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setType.
-	 * @param type String
+	 * 
+	 * @param type
+	 *            String
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -222,6 +252,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getDescription.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "description", length = 100)
@@ -231,7 +262,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setDescription.
-	 * @param description String
+	 * 
+	 * @param description
+	 *            String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -239,6 +272,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getSeriesRGBColor.
+	 * 
 	 * @return Integer
 	 */
 	@Column(name = "seriesRGBColor")
@@ -248,6 +282,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getSeriesColor.
+	 * 
 	 * @return Color
 	 */
 	@Transient
@@ -257,7 +292,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setSeriesRGBColor.
-	 * @param seriesRGBColor Integer
+	 * 
+	 * @param seriesRGBColor
+	 *            Integer
 	 */
 	public void setSeriesRGBColor(Integer seriesRGBColor) {
 		this.seriesRGBColor = seriesRGBColor;
@@ -265,6 +302,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getDisplaySeries.
+	 * 
 	 * @return Boolean
 	 */
 	@Column(name = "displaySeries", length = 1)
@@ -274,7 +312,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setDisplaySeries.
-	 * @param displaySeries Boolean
+	 * 
+	 * @param displaySeries
+	 *            Boolean
 	 */
 	public void setDisplaySeries(Boolean displaySeries) {
 		this.displaySeries = displaySeries;
@@ -282,6 +322,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getSubChart.
+	 * 
 	 * @return Boolean
 	 */
 	@Column(name = "subChart", length = 1)
@@ -291,15 +332,17 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setSubChart.
-	 * @param subChart Boolean
+	 * 
+	 * @param subChart
+	 *            Boolean
 	 */
 	public void setSubChart(Boolean subChart) {
 		this.subChart = subChart;
 	}
-	
 
 	/**
 	 * Method getVersion.
+	 * 
 	 * @return Integer
 	 */
 	@Column(name = "version")
@@ -309,7 +352,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setVersion.
-	 * @param version Integer
+	 * 
+	 * @param version
+	 *            Integer
 	 */
 	public void setVersion(Integer version) {
 		this.version = version;
@@ -317,6 +362,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getStrategy.
+	 * 
 	 * @return Strategy
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -327,7 +373,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setStrategy.
-	 * @param strategy Strategy
+	 * 
+	 * @param strategy
+	 *            Strategy
 	 */
 	public void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
@@ -335,6 +383,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method getCodeValues.
+	 * 
 	 * @return List<CodeValue>
 	 */
 	@OneToMany(mappedBy = "indicatorSeries", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
@@ -344,7 +393,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method setCodeValues.
-	 * @param codeValues List<CodeValue>
+	 * 
+	 * @param codeValues
+	 *            List<CodeValue>
 	 */
 	public void setCodeValues(List<CodeValue> codeValues) {
 		this.codeValues = codeValues;
@@ -352,7 +403,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method addCodeValue.
-	 * @param codeValue CodeValue
+	 * 
+	 * @param codeValue
+	 *            CodeValue
 	 */
 	public void addCodeValue(CodeValue codeValue) {
 		this.codeValues.add(codeValue);
@@ -368,7 +421,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * @param name
 	 *            the name of the attribute.
 	 * 
-	
+	 * 
 	 * @return The value of the attribute. * @throws Exception
 	 */
 
@@ -389,6 +442,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */
@@ -405,8 +459,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The data item. */
+	 * 
+	 * @return The data item.
+	 */
 	@Transient
 	public ComparableObjectItem getDataItem(int index) {
 		return super.getDataItem(index);
@@ -414,15 +469,21 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	/**
 	 * Method updateSeries.
-	 * @param source CandleSeries
-	 * @param skip int
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
 	 */
 	public abstract void updateSeries(CandleSeries source, int skip);
 
 	/**
 	 * Method createSeries.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	public abstract void createSeries(CandleDataset source, int seriesIndex);
 }

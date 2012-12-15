@@ -69,15 +69,22 @@ public class VolumeSeries extends IndicatorSeries {
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
 	 * 
-	
 	 * 
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 
 	public VolumeSeries(Strategy strategy, String name, String type,
@@ -89,14 +96,23 @@ public class VolumeSeries extends IndicatorSeries {
 
 	/**
 	 * Constructor for VolumeSeries.
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
-	 * @param barWidthInMilliseconds long
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
+	 * @param barWidthInMilliseconds
+	 *            long
 	 */
 	public VolumeSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -116,8 +132,9 @@ public class VolumeSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * @return The time period.
+	 */
 	public RegularTimePeriod getPeriod(int index) {
 		final VolumeItem item = (VolumeItem) getDataItem(index);
 		return item.getPeriod();
@@ -128,10 +145,12 @@ public class VolumeSeries extends IndicatorSeries {
 	 * 
 	 * @param period
 	 *            the period.
-	
-	
-	 * @param volume Long
-	 * @param side boolean
+	 * 
+	 * 
+	 * @param volume
+	 *            Long
+	 * @param side
+	 *            boolean
 	 */
 	public void add(RegularTimePeriod period, Long volume, boolean side) {
 		if (getItemCount() > 0) {
@@ -147,10 +166,11 @@ public class VolumeSeries extends IndicatorSeries {
 	/**
 	 * Adds a data item to the series.
 	 * 
-	
+	 * 
 	 * @param notify
 	 *            the notify listeners.
-	 * @param dataItem VolumeItem
+	 * @param dataItem
+	 *            VolumeItem
 	 */
 	public void add(VolumeItem dataItem, boolean notify) {
 		if (getItemCount() > 0) {
@@ -170,8 +190,9 @@ public class VolumeSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
-	
-	 * @return exists */
+	 * 
+	 * @return exists
+	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
@@ -189,8 +210,11 @@ public class VolumeSeries extends IndicatorSeries {
 
 	/**
 	 * Method createSeries.
-	 * @param candleDataset CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param candleDataset
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	public void createSeries(CandleDataset candleDataset, int seriesIndex) {
 
@@ -204,8 +228,11 @@ public class VolumeSeries extends IndicatorSeries {
 
 	/**
 	 * Method updateSeries.
-	 * @param source CandleSeries
-	 * @param skip int
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
 	 */
 	public void updateSeries(CandleSeries source, int skip) {
 
@@ -242,6 +269,7 @@ public class VolumeSeries extends IndicatorSeries {
 
 	/**
 	 * Method getBarWidthInMilliseconds.
+	 * 
 	 * @return long
 	 */
 	@Transient
@@ -251,7 +279,9 @@ public class VolumeSeries extends IndicatorSeries {
 
 	/**
 	 * Method setBarWidthInMilliseconds.
-	 * @param barWidthInMilliseconds long
+	 * 
+	 * @param barWidthInMilliseconds
+	 *            long
 	 */
 	public void setBarWidthInMilliseconds(long barWidthInMilliseconds) {
 		this.barWidthInMilliseconds = barWidthInMilliseconds;
@@ -259,6 +289,7 @@ public class VolumeSeries extends IndicatorSeries {
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */

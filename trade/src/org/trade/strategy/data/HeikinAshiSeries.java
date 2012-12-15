@@ -68,15 +68,22 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
 	 * 
-	
 	 * 
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 
 	public HeikinAshiSeries(Strategy strategy, String name, String type,
@@ -97,8 +104,9 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * @return The time period.
+	 */
 	public RegularTimePeriod getPeriod(int index) {
 		final HeikinAshiItem item = (HeikinAshiItem) getDataItem(index);
 		return item.getPeriod();
@@ -109,14 +117,20 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 * 
 	 * @param period
 	 *            the period.
-	
-	
-	 * @param contract Contract
-	 * @param open double
-	 * @param high double
-	 * @param low double
-	 * @param close double
-	 * @param lastUpdateDate Date
+	 * 
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param open
+	 *            double
+	 * @param high
+	 *            double
+	 * @param low
+	 *            double
+	 * @param close
+	 *            double
+	 * @param lastUpdateDate
+	 *            Date
 	 */
 	public void add(Contract contract, RegularTimePeriod period, double open,
 			double high, double low, double close, Date lastUpdateDate) {
@@ -134,10 +148,11 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	/**
 	 * Adds a data item to the series.
 	 * 
-	
+	 * 
 	 * @param notify
 	 *            the notify listeners.
-	 * @param dataItem HeikinAshiItem
+	 * @param dataItem
+	 *            HeikinAshiItem
 	 */
 	public void add(HeikinAshiItem dataItem, boolean notify) {
 		if (getItemCount() > 0) {
@@ -157,8 +172,9 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
-	
-	 * @return exists */
+	 * 
+	 * @return exists
+	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
@@ -177,8 +193,11 @@ public class HeikinAshiSeries extends IndicatorSeries {
 
 	/**
 	 * Method createSeries.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	public void createSeries(CandleDataset source, int seriesIndex) {
 
@@ -191,6 +210,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */
@@ -201,8 +221,11 @@ public class HeikinAshiSeries extends IndicatorSeries {
 
 	/**
 	 * Method updateSeries.
-	 * @param source CandleSeries
-	 * @param skip int
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
 	 */
 	public void updateSeries(CandleSeries source, int skip) {
 

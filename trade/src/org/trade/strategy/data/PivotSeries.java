@@ -90,15 +90,22 @@ public class PivotSeries extends IndicatorSeries {
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
 	 * 
-	
 	 * 
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public PivotSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -109,16 +116,27 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Constructor for PivotSeries.
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
-	 * @param side boolean
-	 * @param quadratic boolean
-	 * @param bars Integer
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
+	 * @param side
+	 *            boolean
+	 * @param quadratic
+	 *            boolean
+	 * @param bars
+	 *            Integer
 	 */
 	public PivotSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -141,8 +159,9 @@ public class PivotSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * @return The time period.
+	 */
 	public RegularTimePeriod getPeriod(int index) {
 		final PivotItem item = (PivotItem) getDataItem(index);
 		return item.getPeriod();
@@ -173,10 +192,11 @@ public class PivotSeries extends IndicatorSeries {
 	/**
 	 * Adds a data item to the series.
 	 * 
-	
+	 * 
 	 * @param notify
 	 *            the notify listeners.
-	 * @param dataItem PivotItem
+	 * @param dataItem
+	 *            PivotItem
 	 */
 	public void add(PivotItem dataItem, boolean notify) {
 		if (getItemCount() > 0) {
@@ -196,8 +216,9 @@ public class PivotSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
-	
-	 * @return exists */
+	 * 
+	 * @return exists
+	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
@@ -216,6 +237,7 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method getBars.
+	 * 
 	 * @return Integer
 	 */
 	@Transient
@@ -231,7 +253,9 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method setBars.
-	 * @param bars Integer
+	 * 
+	 * @param bars
+	 *            Integer
 	 */
 	public void setBars(Integer bars) {
 		this.bars = bars;
@@ -239,6 +263,7 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method getSide.
+	 * 
 	 * @return Boolean
 	 */
 	@Transient
@@ -254,7 +279,9 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method setSide.
-	 * @param side Boolean
+	 * 
+	 * @param side
+	 *            Boolean
 	 */
 	public void setSide(Boolean side) {
 		this.side = side;
@@ -262,6 +289,7 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method getQuadratic.
+	 * 
 	 * @return Boolean
 	 */
 	@Transient
@@ -277,7 +305,9 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method setQuadratic.
-	 * @param quadratic Boolean
+	 * 
+	 * @param quadratic
+	 *            Boolean
 	 */
 	public void setQuadratic(Boolean quadratic) {
 		this.quadratic = quadratic;
@@ -285,8 +315,11 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method createSeries.
-	 * @param candleDataset CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param candleDataset
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	public void createSeries(CandleDataset candleDataset, int seriesIndex) {
 
@@ -309,15 +342,18 @@ public class PivotSeries extends IndicatorSeries {
 	 * is > 0.6 from the x values calculate the new y values and now check the 5
 	 * values form a V shape. No pivot can be within 5 bars of another pivot.
 	 * 
-	
 	 * 
-	
 	 * 
-	
-	
-	 * @param source CandleSeries
-	 * @param skip int
-	 * @throws ValueTypeException */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
+	 * @throws ValueTypeException
+	 */
 
 	public void updateSeries(CandleSeries source, int skip) {
 
@@ -493,8 +529,9 @@ public class PivotSeries extends IndicatorSeries {
 					// + entryLimit.getPivotRange());
 					// _log.info(calcPivot.getPrint());
 
-					if (null != entryLimit && entryLimit.getPivotRange().doubleValue() <= pivotRange
-							.doubleValue()) {
+					if (null != entryLimit
+							&& entryLimit.getPivotRange().doubleValue() <= pivotRange
+									.doubleValue()) {
 						Money pivotPrice = new Money(pivotCandle.getVwap());
 						dataItem = new PivotItem(pivotCandle.getPeriod(),
 								pivotPrice.getBigDecimalValue(), pivotSide);
@@ -520,6 +557,7 @@ public class PivotSeries extends IndicatorSeries {
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */

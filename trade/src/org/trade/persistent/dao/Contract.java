@@ -39,6 +39,7 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,7 +69,7 @@ import org.trade.core.dao.Aspect;
  */
 @Entity
 @Table(name = "contract")
-public class Contract extends Aspect implements java.io.Serializable {
+public class Contract extends Aspect implements Serializable, Cloneable {
 
 	/**
 	 * 
@@ -711,6 +712,20 @@ public class Contract extends Aspect implements java.io.Serializable {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Method clone.
+	 * 
+	 * @return Object
+	 * @throws CloneNotSupportedException
+	 */
+	public Object clone() throws CloneNotSupportedException {
+
+		Contract contract = (Contract) super.clone();
+		List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
+		contract.setTradestrategies(tradestrategies);
+		return contract;
 	}
 
 	/**

@@ -71,7 +71,7 @@ import org.trade.strategy.data.StrategyData;
  */
 @Entity
 @Table(name = "tradestrategy")
-public class Tradestrategy extends Aspect implements Serializable {
+public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -2181676329258092177L;
 	private Integer chartDays;
@@ -634,16 +634,16 @@ public class Tradestrategy extends Aspect implements Serializable {
 	}
 
 	/*
-	 * Each trade position should have at least one open trade if no trades are
-	 * open close this strategy manager as it has nothing to do.
-	 * 
-	 * @return trade The open trade. Null mean no open position so close the
-	 * Strategy.
+
 	 */
 	/**
-	 * Method getOpenTrade.
+	 * Method getOpenTrade. Each trade position should have at least one open
+	 * trade if no trades are open close this strategy manager as it has nothing
+	 * to do.
 	 * 
-	 * @return Trade
+	 * @return Trade The open trade. Null mean no open position so close the
+	 *         Strategy.
+	 * 
 	 */
 	@Transient
 	public Trade getOpenTrade() {
@@ -655,4 +655,28 @@ public class Tradestrategy extends Aspect implements Serializable {
 		}
 		return null;
 	}
+
+	/**
+	 * Method clone.
+	 * 
+	 * @return Object
+	 * @throws CloneNotSupportedException
+	 */
+	public Object clone() throws CloneNotSupportedException {
+
+		Tradestrategy tradestrategy = (Tradestrategy) super.clone();
+		Contract contract = (Contract) this.getContract().clone();
+		tradestrategy.setContract(contract);
+		Tradingday tradingday = (Tradingday) this.getTradingday().clone();
+		tradestrategy.setTradingday(tradingday);
+		TradeAccount tradeAccount = (TradeAccount) this.getTradeAccount()
+				.clone();
+		tradestrategy.setTradeAccount(tradeAccount);
+		Strategy strategy = (Strategy) this.getStrategy().clone();
+		tradestrategy.setStrategy(strategy);
+		List<Trade> trade = new ArrayList<Trade>(0);
+		tradestrategy.setTrades(trade);
+		return tradestrategy;
+	}
+
 }

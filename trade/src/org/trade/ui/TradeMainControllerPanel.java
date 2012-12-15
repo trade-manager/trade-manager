@@ -2304,11 +2304,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @return Tradestrategy
 		 * @throws BrokerModelException
 		 * @throws PersistentModelException
+		 * @throws CloneNotSupportedException
 		 */
 		private Tradestrategy populateChildTradestrategy(
 				Tradestrategy tradestrategy, CandleDataset candleDataset,
 				int seriesIndex) throws BrokerModelException,
-				PersistentModelException {
+				PersistentModelException, CloneNotSupportedException {
 			CandleSeries series = candleDataset.getSeries(seriesIndex);
 			Tradestrategy indicatorTradestrategy = null;
 			for (Tradestrategy indicator : m_indicatorTradestrategy.values()) {
@@ -2471,10 +2472,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				reProcessTradingday = runningContractRequests.get(tradingday
 						.getIdTradingDay());
 			} else {
-				reProcessTradingday = tradingday.clone();
+				reProcessTradingday = (Tradingday) tradingday.clone();
 
 			}
-			Tradingday toProcessTradingday = tradingday.clone();
+			Tradingday toProcessTradingday = (Tradingday) tradingday.clone();
 			Contract currContract = null;
 			Integer currBarSize = null;
 			Integer currChartDays = null;

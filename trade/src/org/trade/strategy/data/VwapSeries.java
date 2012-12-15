@@ -67,15 +67,22 @@ public class VwapSeries extends IndicatorSeries {
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
 	 * 
-	
 	 * 
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public VwapSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -94,8 +101,9 @@ public class VwapSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * @return The time period.
+	 */
 	public RegularTimePeriod getPeriod(int index) {
 		final VwapItem item = (VwapItem) getDataItem(index);
 		return item.getPeriod();
@@ -106,9 +114,10 @@ public class VwapSeries extends IndicatorSeries {
 	 * 
 	 * @param period
 	 *            the period.
-	
-	
-	 * @param vwapPrice BigDecimal
+	 * 
+	 * 
+	 * @param vwapPrice
+	 *            BigDecimal
 	 */
 	public void add(RegularTimePeriod period, BigDecimal vwapPrice) {
 		if (getItemCount() > 0) {
@@ -124,10 +133,11 @@ public class VwapSeries extends IndicatorSeries {
 	/**
 	 * Adds a data item to the series.
 	 * 
-	
+	 * 
 	 * @param notify
 	 *            the notify listeners.
-	 * @param dataItem VwapItem
+	 * @param dataItem
+	 *            VwapItem
 	 */
 	public void add(VwapItem dataItem, boolean notify) {
 		if (getItemCount() > 0) {
@@ -147,8 +157,9 @@ public class VwapSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
-	
-	 * @return exists */
+	 * 
+	 * @return exists
+	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
@@ -167,8 +178,11 @@ public class VwapSeries extends IndicatorSeries {
 
 	/**
 	 * Method createSeries.
-	 * @param candleDataset CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param candleDataset
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	public void createSeries(CandleDataset candleDataset, int seriesIndex) {
 
@@ -182,8 +196,11 @@ public class VwapSeries extends IndicatorSeries {
 
 	/**
 	 * Method updateSeries.
-	 * @param source CandleSeries
-	 * @param skip int
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
 	 */
 	public void updateSeries(CandleSeries source, int skip) {
 
@@ -217,6 +234,7 @@ public class VwapSeries extends IndicatorSeries {
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */

@@ -85,15 +85,22 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
 	 * 
-	
 	 * 
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public MovingAverageSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -104,15 +111,25 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Constructor for MovingAverageSeries.
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
-	 * @param MAType String
-	 * @param length Integer
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
+	 * @param MAType
+	 *            String
+	 * @param length
+	 *            Integer
 	 */
 	public MovingAverageSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -129,6 +146,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */
@@ -145,8 +163,9 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * @return The time period.
+	 */
 	public RegularTimePeriod getPeriod(int index) {
 		final MovingAverageItem item = (MovingAverageItem) getDataItem(index);
 		return item.getPeriod();
@@ -159,8 +178,6 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 *            the period.
 	 * @param movingAverage
 	 *            the movingAverage.
-	
-	
 	 */
 	public void add(RegularTimePeriod period, BigDecimal movingAverage) {
 		if (getItemCount() > 0) {
@@ -176,10 +193,11 @@ public class MovingAverageSeries extends IndicatorSeries {
 	/**
 	 * Adds a data item to the series.
 	 * 
-	
+	 * 
 	 * @param notify
 	 *            the notify listeners.
-	 * @param dataItem MovingAverageItem
+	 * @param dataItem
+	 *            MovingAverageItem
 	 */
 	public void add(MovingAverageItem dataItem, boolean notify) {
 		if (getItemCount() > 0) {
@@ -199,8 +217,9 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
-	
-	 * @return exists */
+	 * 
+	 * @return exists
+	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
@@ -219,6 +238,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method getLength.
+	 * 
 	 * @return Integer
 	 */
 	@Transient
@@ -234,7 +254,9 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method setLength.
-	 * @param length Integer
+	 * 
+	 * @param length
+	 *            Integer
 	 */
 	public void setLength(Integer length) {
 		this.length = length;
@@ -242,6 +264,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method getMAType.
+	 * 
 	 * @return String
 	 */
 	@Transient
@@ -257,7 +280,9 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method setMAType.
-	 * @param MAType String
+	 * 
+	 * @param MAType
+	 *            String
 	 */
 	public void setMAType(String MAType) {
 		this.MAType = MAType;
@@ -265,8 +290,11 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method createSeries.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	public void createSeries(CandleDataset source, int seriesIndex) {
 
@@ -282,8 +310,11 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method updateSeries.
-	 * @param source CandleSeries
-	 * @param skip int
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
 	 */
 	public void updateSeries(CandleSeries source, int skip) {
 
@@ -358,10 +389,15 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	/**
 	 * Method calculateMA.
-	 * @param calcType String
-	 * @param yyValues LinkedList<Double>
-	 * @param volValues LinkedList<Long>
-	 * @param sum Double
+	 * 
+	 * @param calcType
+	 *            String
+	 * @param yyValues
+	 *            LinkedList<Double>
+	 * @param volValues
+	 *            LinkedList<Long>
+	 * @param sum
+	 *            Double
 	 * @return double
 	 */
 	private double calculateMA(String calcType, LinkedList<Double> yyValues,
