@@ -861,6 +861,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 									+ trade.getTotalCommission().doubleValue();
 						}
 					}
+					profitLoss = profitLoss - commision;
 					// Collections.sort(trade.getTradeOrders(), new
 					// TradeOrder());
 					TradeOrder prevTradeOrder = null;
@@ -922,7 +923,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
 					CoreUtils.padLeft(risk, 10), false, null);
-
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Profit:",
 					false, bold);
 			if (profitLoss < 0) {
