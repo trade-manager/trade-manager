@@ -682,8 +682,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								+ tradeOrder.getOrderKey(), BasePanel.WARNING);
 				return;
 			}
+			if (contractPanel.isSelected()) {
+				contractPanel.doRefresh(tradestrategy);
+			}
 
-			contractPanel.doRefresh(tradestrategy);
 			/*
 			 * If the order opens a position and the stop price is set then this
 			 * is an open order created via a strategy. Check to see that we
@@ -740,23 +742,26 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void tradeOrderCancelled(TradeOrder tradeOrder) {
 
 		try {
-			Tradestrategy tradestrategy = m_tradingdays
-					.getTradestrategy(tradeOrder.getTrade()
-							.getTradestrategyId().getIdTradeStrategy());
-			if (null == tradestrategy) {
-				this.setStatusBarMessage(
-						"Warning position opened but Tradestrategy not found for Order Key: "
-								+ tradeOrder.getOrderKey()
-								+ " in the current Tradingday Tab selection.",
-						BasePanel.WARNING);
-				return;
+
+			if (contractPanel.isSelected()) {
+				Tradestrategy tradestrategy = m_tradingdays
+						.getTradestrategy(tradeOrder.getTrade()
+								.getTradestrategyId().getIdTradeStrategy());
+				if (null == tradestrategy) {
+					this.setStatusBarMessage(
+							"Warning position opened but Tradestrategy not found for Order Key: "
+									+ tradeOrder.getOrderKey()
+									+ " in the current Tradingday Tab selection.",
+							BasePanel.WARNING);
+					return;
+				}
+
+				_log.info("Trade Order cancelled for Symbol: "
+						+ tradestrategy.getContract().getSymbol()
+						+ " order key: " + tradeOrder.getOrderKey());
+
+				contractPanel.doRefresh(tradestrategy);
 			}
-
-			_log.info("Trade Order cancelled for Symbol: "
-					+ tradestrategy.getContract().getSymbol() + " order key: "
-					+ tradeOrder.getOrderKey());
-
-			contractPanel.doRefresh(tradestrategy);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
 					ex.getMessage(), ex);
@@ -773,21 +778,24 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void tradeOrderStatusChanged(TradeOrder tradeOrder) {
 
 		try {
-			Tradestrategy tradestrategy = m_tradingdays
-					.getTradestrategy(tradeOrder.getTrade()
-							.getTradestrategyId().getIdTradeStrategy());
-			if (null == tradestrategy) {
-				this.setStatusBarMessage(
-						"Warning position opened but Tradestrategy not found for Order Key: "
-								+ tradeOrder.getOrderKey()
-								+ " in the current Tradingday Tab selection.",
-						BasePanel.WARNING);
-				return;
+			if (contractPanel.isSelected()) {
+				Tradestrategy tradestrategy = m_tradingdays
+						.getTradestrategy(tradeOrder.getTrade()
+								.getTradestrategyId().getIdTradeStrategy());
+				if (null == tradestrategy) {
+					this.setStatusBarMessage(
+							"Warning position opened but Tradestrategy not found for Order Key: "
+									+ tradeOrder.getOrderKey()
+									+ " in the current Tradingday Tab selection.",
+							BasePanel.WARNING);
+					return;
+				}
+				_log.info("Trade Order cancelled for Symbol: "
+						+ tradestrategy.getContract().getSymbol()
+						+ " order key: " + tradeOrder.getOrderKey());
+				contractPanel.doRefresh(tradestrategy);
 			}
-			_log.info("Trade Order cancelled for Symbol: "
-					+ tradestrategy.getContract().getSymbol() + " order key: "
-					+ tradeOrder.getOrderKey());
-			contractPanel.doRefresh(tradestrategy);
+
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
 					ex.getMessage(), ex);
@@ -805,11 +813,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	public void positionClosed(Trade trade) {
 		try {
-			Tradestrategy tradestrategy = m_tradingdays.getTradestrategy(trade
-					.getTradestrategyId().getIdTradeStrategy());
-			_log.info("Trade closed for Symbol: "
-					+ tradestrategy.getContract().getSymbol()
-					+ " Profit/Loss: " + trade.getProfitLoss());
+			if (m_brokerModel.isConnected()) {
+				Tradestrategy tradestrategy = m_tradePersistentModel
+						.findTradestrategyById(trade.getTradestrategyId()
+								.getIdTradeStrategy());
+				_log.info("Trade closed for Symbol: "
+						+ tradestrategy.getContract().getSymbol()
+						+ " Profit/Loss: " + trade.getProfitLoss());
+				m_tradingdays.getTradestrategy(
+						tradestrategy.getIdTradeStrategy()).setStatus(
+						tradestrategy.getStatus());
+				if (contractPanel.isSelected())
+					contractPanel.doRefresh(tradestrategy);
+			}
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error position closed : ", ex.getMessage(),
@@ -828,13 +844,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		try {
 			if (m_brokerModel.isConnected()) {
-				Tradestrategy reFreshedTradestrategy = m_tradePersistentModel
+				tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(tradestrategy
 								.getIdTradeStrategy());
 				m_tradingdays.getTradestrategy(
 						tradestrategy.getIdTradeStrategy()).setStatus(
-						reFreshedTradestrategy.getStatus());
-				contractPanel.doRefresh(tradestrategy);
+						tradestrategy.getStatus());
+				if (contractPanel.isSelected())
+					contractPanel.doRefresh(tradestrategy);
 			}
 
 		} catch (Exception ex) {
@@ -874,7 +891,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	public void positionCovered(Tradestrategy tradestrategy) {
 		try {
-			if (m_brokerModel.isConnected())
+			if (m_brokerModel.isConnected() && contractPanel.isSelected())
 				contractPanel.doRefresh(tradestrategy);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error positionCovered : ", ex.getMessage(),

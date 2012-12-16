@@ -85,15 +85,28 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method setSelected.
-	 * @param selected boolean
+	 * 
+	 * @param selected
+	 *            boolean
 	 */
 	public void setSelected(boolean selected) {
 		m_isSelected = selected;
 	}
 
 	/**
+	 * Method isSelected.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isSelected() {
+		return m_isSelected;
+	}
+
+	/**
 	 * Method setStatusBar.
-	 * @param statusBar JTextField
+	 * 
+	 * @param statusBar
+	 *            JTextField
 	 */
 	public void setStatusBar(JTextField statusBar) {
 		if (m_statusBar == null) {
@@ -103,7 +116,9 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method setProgressBar.
-	 * @param progressBar JProgressBar
+	 * 
+	 * @param progressBar
+	 *            JProgressBar
 	 */
 	public void setProgressBar(JProgressBar progressBar) {
 		if (m_progressBar == null) {
@@ -113,6 +128,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method getProgressBar.
+	 * 
 	 * @return JProgressBar
 	 */
 	public JProgressBar getProgressBar() {
@@ -125,8 +141,11 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method setStatusBarMessage.
-	 * @param message String
-	 * @param state int
+	 * 
+	 * @param message
+	 *            String
+	 * @param state
+	 *            int
 	 */
 	public void setStatusBarMessage(String message, int state) {
 		switch (state) {
@@ -163,6 +182,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method getFrame.
+	 * 
 	 * @return Frame
 	 */
 	protected Frame getFrame() {
@@ -178,9 +198,13 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method handleEvent.
-	 * @param e MessageEvent
-	 * @param parm Vector<Object>
-	 * @see org.trade.ui.base.MessageListener#handleEvent(MessageEvent, Vector<Object>)
+	 * 
+	 * @param e
+	 *            MessageEvent
+	 * @param parm
+	 *            Vector<Object>
+	 * @see org.trade.ui.base.MessageListener#handleEvent(MessageEvent,
+	 *      Vector<Object>)
 	 */
 	public void handleEvent(MessageEvent e, Vector<Object> parm) {
 
@@ -198,6 +222,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public abstract boolean doWindowDeActivated();
@@ -206,8 +231,11 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method doFireMethod.
-	 * @param methodName String
-	 * @param parm Vector<Object>
+	 * 
+	 * @param methodName
+	 *            String
+	 * @param parm
+	 *            Vector<Object>
 	 */
 	protected synchronized void doFireMethod(String methodName,
 			Vector<Object> parm) {
@@ -247,6 +275,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method getMenu.
+	 * 
 	 * @return BasePanelMenu
 	 */
 	public BasePanelMenu getMenu() {
@@ -255,7 +284,9 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method setMenu.
-	 * @param menu BasePanelMenu
+	 * 
+	 * @param menu
+	 *            BasePanelMenu
 	 */
 	public void setMenu(BasePanelMenu menu) {
 		menuBar = menu;
@@ -263,9 +294,13 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	/**
 	 * Method setErrorMessage.
-	 * @param title String
-	 * @param message String
-	 * @param ex Exception
+	 * 
+	 * @param title
+	 *            String
+	 * @param message
+	 *            String
+	 * @param ex
+	 *            Exception
 	 */
 	public void setErrorMessage(String title, String message, Exception ex) {
 		_log.error(message, ex);
