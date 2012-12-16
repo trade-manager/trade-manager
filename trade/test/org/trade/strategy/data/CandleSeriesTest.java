@@ -41,11 +41,16 @@ public class CandleSeriesTest extends TestCase {
 	@Test
 	public void testCandleSeriessClone() {
 		try {
+
+			CandleSeries candleSeries = this.tradestrategy
+					.getDatasetContainer().getBaseCandleSeries();
 			CandleSeries series = (CandleSeries) this.tradestrategy
 					.getDatasetContainer().getBaseCandleSeries().clone();
+			if (candleSeries.equals(series)) {
+				_log.info("CandleSeries: " + series.toString());
+			}			
+			assertEquals(series, candleSeries);
 
-			assertNotNull(series);
-			_log.info("CandleSeries: " + series.toString());
 		} catch (Exception e) {
 			fail("Error on testCandleSeriessClone " + e.getMessage());
 		}

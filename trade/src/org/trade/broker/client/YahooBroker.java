@@ -108,11 +108,10 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	public Void doInBackground() {
 
 		try {
-			Contract contractDetails = getYahooContractDetails(
-					contract.getIdContract(), contract.getSymbol());
+			setYahooContractDetails(contract.getIdContract(), contract);
 
-			this.brokerModel.contractDetails(contract.getIdContract(),
-					contractDetails);
+			this.brokerModel
+					.contractDetails(contract.getIdContract(), contract);
 			SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
 					"yyyyMMdd HH:mm:ss z");
 			m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -133,10 +132,10 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 					+ chartDays.getCode());
 
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
-				this.getYahooPriceDataDay(this.contract.getIdContract(),
+				this.setYahooPriceDataDay(this.contract.getIdContract(),
 						this.contract.getSymbol(), startDate, endDate);
 			} else {
-				this.getYahooPriceDataIntraday(this.contract.getIdContract(),
+				this.setYahooPriceDataIntraday(this.contract.getIdContract(),
 						this.contract.getSymbol(),
 						Integer.parseInt(chartDays.getCode()), startDate);
 			}
@@ -167,16 +166,14 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	 * @return ContractDetails
 	 * @throws IOException
 	 */
-	private Contract getYahooContractDetails(int reqId, String symbol)
+	private void setYahooContractDetails(int reqId, Contract contract)
 			throws IOException {
 
 		/*
 		 * Yahoo finance http://finance.yahoo.com/d/quotes.csv?s=XOM&f=n
 		 */
-		Contract contractDetails = new Contract();
-
-		String strUrl = "http://finance.yahoo.com/d/quotes.csv?s=" + symbol
-				+ "&f=n";
+		String strUrl = "http://finance.yahoo.com/d/quotes.csv?s="
+				+ contract.getSymbol() + "&f=n";
 
 		// _log.info("URL : " + strUrl);
 		URL url = new URL(strUrl);
@@ -186,12 +183,11 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 		while ((inputLine = in.readLine()) != null) {
 			StringTokenizer scanLine = new StringTokenizer(inputLine, ",");
 			while (scanLine.hasMoreTokens()) {
-				contractDetails.setDescription(scanLine.nextToken().replaceAll(
-						"\"", ""));
+				contract.setDescription(scanLine.nextToken().replaceAll("\"",
+						""));
 			}
 		}
 		in.close();
-		return contractDetails;
 	}
 
 	/**
@@ -207,7 +203,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	 *            Date
 	 * @throws IOException
 	 */
-	private void getYahooPriceDataIntraday(int reqId, String symbol,
+	private void setYahooPriceDataIntraday(int reqId, String symbol,
 			int chartDays, Date startDate) throws IOException {
 
 		/*
@@ -268,7 +264,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	private void getYahooPriceDataDay(int reqId, String symbol, Date startDate,
+	private void setYahooPriceDataDay(int reqId, String symbol, Date startDate,
 			Date endDate) throws IOException, ParseException {
 
 		/*
