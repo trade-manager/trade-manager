@@ -146,15 +146,18 @@ public class TradeOrderTableModel extends TableModel {
 	 */
 
 	public Object getValueAt(int row, int column) {
+
 		if (columnNames[column] == LMT_PRICE) {
 			if (((OrderType) super.getValueAt(row, 3)).isValid()) {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.MKT)
 						|| ((OrderType) super.getValueAt(row, 3)).getCode()
 								.equals(OrderType.STP)) {
-					Money zero = new Money(0);
-					this.setValueAt(zero, row, column);
-					return zero;
+					if (((Money) super.getValueAt(row, column)).doubleValue() != 0) {
+						Money zero = new Money(0);
+						this.setValueAt(zero, row, column);
+						return zero;
+					}
 				}
 			}
 		}
@@ -162,15 +165,16 @@ public class TradeOrderTableModel extends TableModel {
 			if (((OrderType) super.getValueAt(row, 3)).isValid()) {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.LMT)) {
-					Money zero = new Money(0);
-					this.setValueAt(zero, row, column);
-					return zero;
+					if (((Money) super.getValueAt(row, column)).doubleValue() != 0) {
+						Money zero = new Money(0);
+						this.setValueAt(zero, row, column);
+						return zero;
+					}
 				}
 			}
 		}
 		return super.getValueAt(row, column);
 	}
-	
 
 	/**
 	 * Method setValueAt.
@@ -247,7 +251,6 @@ public class TradeOrderTableModel extends TableModel {
 
 		switch (column) {
 		case 0: {
-
 			element.getTrade().getTradestrategy().getContract()
 					.setSymbol((String) value);
 			break;
