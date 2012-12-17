@@ -142,8 +142,7 @@ public class TradePersistentModelTest extends TestCase {
 
 			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 					.getMostRecentTradingDay(new Date()));
-			Date close = TradingCalendar.getBusinessDayEnd(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
+			Date close = TradingCalendar.getBusinessDayEnd(open);
 			Tradingdays tradingdays = this.tradePersistentModel
 					.findTradingdaysByDateRange(open, open);
 			Tradingday tradingday = tradingdays.getTradingday(open, close);
@@ -972,7 +971,7 @@ public class TradePersistentModelTest extends TestCase {
 			Tradingdays result = this.tradePersistentModel
 					.findTradingdaysByDateRange(this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
-							.getTradingday().getClose());
+							.getTradingday().getOpen());
 			assertNotNull(result);
 		} catch (Exception e) {
 			fail("Error testFindTradingdaysByDateRange Msg: " + e.getMessage());

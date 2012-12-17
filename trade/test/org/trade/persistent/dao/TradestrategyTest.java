@@ -232,6 +232,12 @@ public class TradestrategyTest extends TestCase {
 		}
 		TradingdayHome tradingdayHome = new TradingdayHome();
 		Tradingday tradingday = Tradingday.newInstance(open);
+		Tradingday instance = tradingdayHome.findByOpenCloseDate(
+				tradingday.getOpen(), tradingday.getClose());
+		if (null != instance){
+			tradingday.getTradestrategies().clear();
+			tradingday = instance;
+		}			
 		tradestrategy = new Tradestrategy(contract, tradingday, strategy,
 				tradeAccount, new BigDecimal(100), "BUY", "0", true,
 				ChartDays.TWO_DAYS, BarSize.FIVE_MIN);
