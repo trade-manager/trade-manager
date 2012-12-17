@@ -743,7 +743,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		try {
 
-			if (contractPanel.isSelected()) {
+			if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
 				Tradestrategy tradestrategy = m_tradingdays
 						.getTradestrategy(tradeOrder.getTrade()
 								.getTradestrategyId().getIdTradeStrategy());
@@ -778,7 +778,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void tradeOrderStatusChanged(TradeOrder tradeOrder) {
 
 		try {
-			if (contractPanel.isSelected()) {
+			if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
 				Tradestrategy tradestrategy = m_tradingdays
 						.getTradestrategy(tradeOrder.getTrade()
 								.getTradestrategyId().getIdTradeStrategy());

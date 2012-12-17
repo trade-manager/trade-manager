@@ -92,12 +92,11 @@ public class TradingdayHome {
 						&& !detachedInstance.getTradestrategies().isEmpty()) {
 					entityManager.persist(detachedInstance);
 				}
-				entityManager.getTransaction().commit();
 			} else {
 				tradingday = entityManager.merge(detachedInstance);
-				entityManager.getTransaction().commit();
 				detachedInstance.setVersion(tradingday.getVersion());
 			}
+			entityManager.getTransaction().commit();
 
 			for (Tradestrategy tradestrategy : detachedInstance
 					.getTradestrategies()) {
