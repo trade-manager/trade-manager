@@ -91,6 +91,11 @@ public class TradingdayHome {
 				if (null == tradingday
 						&& !detachedInstance.getTradestrategies().isEmpty()) {
 					entityManager.persist(detachedInstance);
+				} else {
+					throw new Exception("The following Tradingday Open: "
+							+ tradingday.getOpen() + " Close: "
+							+ tradingday.getClose()
+							+ " already exists. Search for this Tradingday");
 				}
 			} else {
 				tradingday = entityManager.merge(detachedInstance);

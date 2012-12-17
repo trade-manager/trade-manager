@@ -407,13 +407,13 @@ public class TradePersistentModel implements PersistentModel {
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
-					"Error removing Tradestrategy Trades. Please refresh before save.");
+					"Error removing Tradestrategy Trades. Please refresh before remove.");
 
 		} catch (Exception ex) {
 			throw new PersistentModelException(
 					"Error removing Tradestrategy Trades: "
-							+ transientInstance.getContract().getSymbol() + " "
-							+ ex.getMessage());
+							+ transientInstance.getContract().getSymbol()
+							+ "\n Msg: " + ex.getMessage());
 		}
 	}
 
@@ -531,7 +531,7 @@ public class TradePersistentModel implements PersistentModel {
 					"Error saving Tradingday please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException("Error saving Tradingday: "
-					+ transientInstance.getOpen() + " Msg: " + e.getMessage());
+					+ transientInstance.getOpen() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -568,7 +568,8 @@ public class TradePersistentModel implements PersistentModel {
 					"Error saving Contract please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException("Error saving Contract: "
-					+ transientInstance.getSymbol() + " Msg: " + e.getMessage());
+					+ transientInstance.getSymbol() + "\n Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -588,10 +589,10 @@ public class TradePersistentModel implements PersistentModel {
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
-					"Error saving Contract please refresh before save.");
+					"Error setting default account. Please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException("Error saving Trade Account: "
-					+ transientInstance.getAccountNumber() + " Msg: "
+					+ transientInstance.getAccountNumber() + "\n Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -624,7 +625,8 @@ public class TradePersistentModel implements PersistentModel {
 					"Error saving CandleSeries please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException("Error saving CandleSeries: "
-					+ candleSeries.getDescription() + " Msg: " + e.getMessage());
+					+ candleSeries.getDescription() + "\n Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -679,7 +681,7 @@ public class TradePersistentModel implements PersistentModel {
 					"Error saving Candle please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException("Error saving CandleItem: "
-					+ candleItem.getOpen() + " Msg: " + e.getMessage());
+					+ candleItem.getOpen() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -703,7 +705,7 @@ public class TradePersistentModel implements PersistentModel {
 					"Error saving Tradestrategy please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException(" Error saving Tradestrategy: "
-					+ transientInstance.getContract().getSymbol() + " Msg: "
+					+ transientInstance.getContract().getSymbol() + "\n Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -866,7 +868,7 @@ public class TradePersistentModel implements PersistentModel {
 					"Error saving TradeOrder please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException("Error saving TradeOrder: "
-					+ tradeOrder.getOrderKey() + " Msg: " + e.getMessage());
+					+ tradeOrder.getOrderKey() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -911,10 +913,10 @@ public class TradePersistentModel implements PersistentModel {
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
-					"Error saving TradeOrder please refresh before save.");
+					"Error saving TradeOrderfill please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving TradeOrder: "
-					+ tradeOrder.getOrderKey() + " Msg: " + e.getMessage());
+			throw new PersistentModelException("Error saving TradeOrderfill: "
+					+ tradeOrder.getOrderKey() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -940,7 +942,7 @@ public class TradePersistentModel implements PersistentModel {
 
 			throw new PersistentModelException("Error saving Trade: "
 					+ transientInstance.getTradestrategy().getContract()
-							.getSymbol() + " Msg: " + e.getMessage());
+							.getSymbol() + "\n Msg: " + e.getMessage());
 		}
 	}
 

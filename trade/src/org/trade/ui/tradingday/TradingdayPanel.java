@@ -493,22 +493,19 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		try {
 			this.clearStatusBarMessage();
 			tradingday = m_tradingdays.getTradingday(tradingday.getOpen());
-			if (null != tradingday) {
-				if (null != tradingday.getIdTradingDay()) {
-					Tradingday instance = m_tradePersistentModel
-							.findTradingdayById(tradingday.getIdTradingDay());
-					instance.populateDatasetContainer(tradingday);
-					m_tradingdays.replaceTradingday(tradingday.getOpen(),
-							instance);
-					int selectedRow = m_tradingdayTable.getSelectedRow();
-					m_tradingdayModel.setData(m_tradingdays);
-					if (selectedRow > -1) {
-						m_tradingdayTable.setRowSelectionInterval(selectedRow,
-								selectedRow);
-					} else {
-						m_tradestrategyModel.setData(instance);
-						enableTradestrategyButtons(null);
-					}
+			if (null != tradingday && null != tradingday.getIdTradingDay()) {
+				Tradingday instance = m_tradePersistentModel
+						.findTradingdayById(tradingday.getIdTradingDay());
+				instance.populateDatasetContainer(tradingday);
+				m_tradingdays.replaceTradingday(tradingday.getOpen(), instance);
+				int selectedRow = m_tradingdayTable.getSelectedRow();
+				m_tradingdayModel.setData(m_tradingdays);
+				if (selectedRow > -1) {
+					m_tradingdayTable.setRowSelectionInterval(selectedRow,
+							selectedRow);
+				} else {
+					m_tradestrategyModel.setData(instance);
+					enableTradestrategyButtons(null);
 				}
 			}
 		} catch (Exception ex) {
