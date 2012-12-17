@@ -122,8 +122,9 @@ public class TradingdayTableModel extends TableModel {
 	 */
 	public boolean isCellEditable(int row, int column) {
 		Date openDate = (Date) this.getValueAt(row, 0);
-		Tradingday tradingday = getData().getTradingdays().get(
-				openDate.getDate());
+		Date closeDate = (Date) this.getValueAt(row, 1);
+		Tradingday tradingday = getData().getTradingday(openDate.getDate(),
+				closeDate.getDate());
 		if (Tradingdays.hasTrades(tradingday)) {
 			if ((columnNames[column] == OPEN) || (columnNames[column] == CLOSE)) {
 				return false;
@@ -212,7 +213,9 @@ public class TradingdayTableModel extends TableModel {
 	public void populateDAO(Object value, int row, int column) {
 
 		Date openDate = (Date) this.getValueAt(row, 0);
-		Tradingday element = getData().getTradingdays().get(openDate.getDate());
+		Date closeDate = (Date) this.getValueAt(row, 0);
+		Tradingday element = getData().getTradingday(openDate.getDate(),
+				closeDate.getDate());
 
 		switch (column) {
 		case 0: {
@@ -254,7 +257,7 @@ public class TradingdayTableModel extends TableModel {
 		int i = 0;
 		for (Tradingday element : getData().getTradingdays().values()) {
 			if (i == selectedRow) {
-				getData().getTradingdays().remove(element.getOpen());
+				getData().remove(element);
 				if (!element.getTradestrategies().isEmpty()) {
 					element.clear();
 				}
@@ -279,14 +282,17 @@ public class TradingdayTableModel extends TableModel {
 		}
 		Tradingday element = Tradingday.newInstance(date);
 		element.setDirty(true);
-		getData().getTradingdays().put(element.getOpen(), element);
+		if (null != getData().getTradingday(element.getOpen(),
+				element.getClose())) {
+			getData().add(element);
 
-		Vector<Object> newRow = new Vector<Object>();
-		getNewRow(newRow, element);
-		rows.add(newRow);
+			Vector<Object> newRow = new Vector<Object>();
+			getNewRow(newRow, element);
+			rows.add(newRow);
 
-		// Tell the listeners a new table has arrived.
-		fireTableChanged(new TableModelEvent(this));
+			// Tell the listeners a new table has arrived.
+			fireTableChanged(new TableModelEvent(this));
+		}
 	}
 
 	/**

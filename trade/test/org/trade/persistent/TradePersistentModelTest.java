@@ -142,10 +142,11 @@ public class TradePersistentModelTest extends TestCase {
 
 			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 					.getMostRecentTradingDay(new Date()));
-
+			Date close = TradingCalendar.getBusinessDayEnd(TradingCalendar
+					.getMostRecentTradingDay(new Date()));
 			Tradingdays tradingdays = this.tradePersistentModel
 					.findTradingdaysByDateRange(open, open);
-			Tradingday tradingday = tradingdays.getTradingday(open);
+			Tradingday tradingday = tradingdays.getTradingday(open, close);
 			if (null == tradingday) {
 				tradingday = Tradingday.newInstance(open);
 				tradingdays.add(tradingday);
@@ -653,7 +654,8 @@ public class TradePersistentModelTest extends TestCase {
 							.getOpen(), this.tradestrategy.getTradingday()
 							.getClose());
 			StrategyData.doDummyData(candleSeries,
-					this.tradestrategy.getTradingday(), 5, BarSize.FIVE_MIN, true, 0);
+					this.tradestrategy.getTradingday(), 5, BarSize.FIVE_MIN,
+					true, 0);
 			long timeStart = System.currentTimeMillis();
 			this.tradePersistentModel.persistCandleSeries(candleSeries);
 			_log.info("Total time: " + (System.currentTimeMillis() - timeStart)
@@ -1235,12 +1237,15 @@ public class TradePersistentModelTest extends TestCase {
 						selectedRow);
 			}
 			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) tradingdayModel
-					.getValueAt(0, tradingdayTable.convertRowIndexToModel(0));
+					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 0);
+			org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) tradingdayModel
+					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 1);
 			Tradingday transferObject = tradingdayModel.getData()
-					.getTradingdays().get(openDate.getDate());
+					.getTradingday(openDate.getDate(), closeDate.getDate());
 			assertNotNull(transferObject);
 
-			assertNotNull(tradingdays.getTradingday(instance1.getOpen()));
+			assertNotNull(tradingdays.getTradingday(instance1.getOpen(),
+					instance1.getClose()));
 			String industry = transferObject.getTradestrategies().get(0)
 					.getContract().getIndustry();
 			assertNotNull(industry);

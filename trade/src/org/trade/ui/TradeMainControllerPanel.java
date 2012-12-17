@@ -584,8 +584,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			_log.info("Open orders received from TWS: "
 					+ openTradeOrders.size());
-			Tradingday todayTradingday = m_tradingdays
-					.getTradingday(TradingCalendar.getTodayBusinessDayStart());
+			Tradingday todayTradingday = m_tradingdays.getTradingday(
+					TradingCalendar.getTodayBusinessDayStart(),
+					TradingCalendar.getTodayBusinessDayEnd());
 			if (null == todayTradingday) {
 				return;
 			}
@@ -634,8 +635,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void executionDetailsEnd(
 			ConcurrentHashMap<Integer, TradeOrder> tradeOrders) {
 		try {
-			Tradingday todayTradingday = m_tradingdays
-					.getTradingday(TradingCalendar.getTodayBusinessDayStart());
+			Tradingday todayTradingday = m_tradingdays.getTradingday(
+					TradingCalendar.getTodayBusinessDayStart(),
+					TradingCalendar.getTodayBusinessDayEnd());
 			if (null == todayTradingday) {
 				return;
 			}
@@ -1195,8 +1197,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			tradingdayPanel.setConnected(true);
 			contractPanel.setConnected(true);
 			simulatedMode(false);
-			Tradingday todayTradingday = m_tradingdays
-					.getTradingday(TradingCalendar.getTodayBusinessDayStart());
+			Tradingday todayTradingday = m_tradingdays.getTradingday(
+					TradingCalendar.getTodayBusinessDayStart(),
+					TradingCalendar.getTodayBusinessDayEnd());
 
 			/*
 			 * Request all the executions for today. This will result in updates
@@ -1535,7 +1538,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						.findTradestrategyById(idTradestrategy);
 			}
 			if (null == m_tradingdays.getTradingday(tradestrategy
-					.getTradingday().getOpen())) {
+					.getTradingday().getOpen(), tradestrategy.getTradingday()
+					.getClose())) {
 				Tradingday tradingday = m_tradePersistentModel
 						.findTradingdayById(tradestrategy.getTradingday()
 								.getIdTradingDay());

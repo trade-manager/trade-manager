@@ -429,12 +429,13 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			 */
 			Tradingdays tradingdays = m_tradePersistentModel
 					.findTradingdaysByDateRange(startDate, endDate);
-			Tradingday todayTradingday = tradingdays
-					.getTradingday(TradingCalendar.getTodayBusinessDayStart());
+			Tradingday todayTradingday = tradingdays.getTradingday(
+					TradingCalendar.getTodayBusinessDayStart(),
+					TradingCalendar.getTodayBusinessDayEnd());
 			if (null != todayTradingday) {
-				Tradingday currTodayTradingday = m_tradingdays
-						.getTradingday(TradingCalendar
-								.getTodayBusinessDayStart());
+				Tradingday currTodayTradingday = m_tradingdays.getTradingday(
+						TradingCalendar.getTodayBusinessDayStart(),
+						TradingCalendar.getTodayBusinessDayEnd());
 				if (null != currTodayTradingday
 						&& !currTodayTradingday.getTradestrategies().isEmpty()
 						&& this.isConnected()) {
@@ -492,7 +493,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public void doRefresh(Tradingday tradingday) {
 		try {
 			this.clearStatusBarMessage();
-			tradingday = m_tradingdays.getTradingday(tradingday.getOpen());
+			tradingday = m_tradingdays.getTradingday(tradingday.getOpen(),
+					tradingday.getClose());
 			if (null != tradingday && null != tradingday.getIdTradingDay()) {
 				Tradingday instance = m_tradePersistentModel
 						.findTradingdayById(tradingday.getIdTradingDay());
@@ -561,8 +563,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) m_tradingdayModel
 							.getValueAt(m_tradingdayTable
 									.convertRowIndexToModel(selectedRow), 0);
+					org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) m_tradingdayModel
+							.getValueAt(m_tradingdayTable
+									.convertRowIndexToModel(selectedRow), 1);
 					tradingday = m_tradingdayModel.getData().getTradingday(
-							openDate.getDate());
+							openDate.getDate(), closeDate.getDate());
 				}
 
 				if (null == tradingday) {
@@ -845,8 +850,13 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 								.getValueAt(m_tradingdayTable
 										.convertRowIndexToModel(model
 												.getLeadSelectionIndex()), 0);
+						org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) m_tradingdayModel
+								.getValueAt(m_tradingdayTable
+										.convertRowIndexToModel(model
+												.getLeadSelectionIndex()), 1);
 						Tradingday transferObject = m_tradingdayModel.getData()
-								.getTradingday(openDate.getDate());
+								.getTradingday(openDate.getDate(),
+										closeDate.getDate());
 
 						m_tradestrategyModel.setData(transferObject);
 						refreshButton.setTransferObject(transferObject);

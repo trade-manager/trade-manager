@@ -157,12 +157,14 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * 
 	 * @param open
 	 *            Date
+	 * @param close
+	 *            Date
 	 * @return Tradingday
 	 */
-	public Tradingday getTradingday(Date open) {
+	public Tradingday getTradingday(Date open, Date close) {
 		for (Tradingday tradingday : this.tradingdays.values()) {
-			if (TradingCalendar.between(open, tradingday.getOpen(),
-					tradingday.getClose()))
+			if (tradingday.getOpen().equals(open)
+					&& tradingday.getClose().equals(close))
 				return tradingday;
 		}
 		return null;
@@ -308,8 +310,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            String
 	 * @throws Exception
 	 */
-	public synchronized void populateDataFromFile(String fileName, Tradingday tradingday)
-			throws Exception {
+	public synchronized void populateDataFromFile(String fileName,
+			Tradingday tradingday) throws Exception {
 
 		/*
 		 * CSV file format CSV file format is: DES, Underlying, Sec Type,
@@ -350,7 +352,6 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					.newInstance().getObject();
 			String strLine = "";
 
-
 			// read comma separated file line by line
 
 			while ((strLine = bufferedReader.readLine()) != null) {
@@ -368,9 +369,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 						tradestrategy.setTradingday(tradingday);
 						tradingday.addTradestrategy(tradestrategy);
 					} else {
-						Tradingday currTradingday = this
-								.getTradingday(tradestrategy.getTradingday()
-										.getOpen());
+						Tradingday currTradingday = this.getTradingday(
+								tradestrategy.getTradingday().getOpen(),
+								tradestrategy.getTradingday().getClose());
 						if (null != currTradingday) {
 							if (null != tradestrategy.getTradingday()
 									.getMarketBar()
