@@ -321,15 +321,14 @@ public class TradeOrderTableModel extends TableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-		final Vector<Object> currRow = rows.get(selectedRow);
-
 		int i = 0;
 		for (final Trade trade : getData().getTrades()) {
 			for (final TradeOrder element : trade.getTradeOrders()) {
 				if (i == selectedRow) {
 					trade.getTradeOrders().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
 					rows.remove(currRow);
-					fireTableChanged(new TableModelEvent(this));
+					this.fireTableChanged(new TableModelEvent(this));
 					break;
 				}
 				i++;
