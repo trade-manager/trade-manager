@@ -163,8 +163,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 */
 	public Tradingday getTradingday(Date open, Date close) {
 		for (Tradingday tradingday : this.tradingdays.values()) {
-			if (tradingday.getOpen().equals(open)
-					&& tradingday.getClose().equals(close))
+			if (tradingday.getOpen().compareTo(open) == 0
+					&& tradingday.getClose().compareTo(close) == 0)
 				return tradingday;
 		}
 		return null;

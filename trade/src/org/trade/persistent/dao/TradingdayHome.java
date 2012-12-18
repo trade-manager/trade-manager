@@ -88,14 +88,8 @@ public class TradingdayHome {
 						.findTradingdayByOpenCloseDate(
 								detachedInstance.getOpen(),
 								detachedInstance.getClose());
-				if (null == tradingday
-						&& !detachedInstance.getTradestrategies().isEmpty()) {
+				if (null == tradingday) {
 					entityManager.persist(detachedInstance);
-				} else {
-					throw new Exception("The following Tradingday Open: "
-							+ tradingday.getOpen() + " Close: "
-							+ tradingday.getClose()
-							+ " already exists. Search for this Tradingday");
 				}
 			} else {
 				tradingday = entityManager.merge(detachedInstance);

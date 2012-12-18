@@ -86,10 +86,10 @@ public class TradingdayTest extends TestCase {
 			_log.debug("Adding Tradingday");
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
-			Date open = TradingCalendar.getMostRecentTradingDay(new Date());
+			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
+					.getMostRecentTradingDay(new Date()));
 			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
-					TradingCalendar.getBusinessDayStart(open),
-					TradingCalendar.getBusinessDayStart(open));
+					open, TradingCalendar.getBusinessDayEnd(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}

@@ -1196,9 +1196,12 @@ public class TradePersistentModelTest extends TestCase {
 	public void testReassignStrategy() {
 
 		try {
+			Tradingday tradingday = this.tradePersistentModel
+					.findTradingdayById(this.tradestrategy.getTradingday()
+							.getIdTradingDay());
 			this.tradePersistentModel.reassignStrategy(this.tradestrategy
 					.getStrategy(), (Strategy) DAOStrategy.newInstance()
-					.getObject(), this.tradestrategy.getTradingday());
+					.getObject(), tradingday);
 		} catch (Exception e) {
 			fail("Error testReassignStrategy Msg: " + e.getMessage());
 		}
