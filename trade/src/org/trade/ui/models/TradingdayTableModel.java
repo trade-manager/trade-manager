@@ -213,7 +213,7 @@ public class TradingdayTableModel extends TableModel {
 	public void populateDAO(Object value, int row, int column) {
 
 		Date openDate = (Date) this.getValueAt(row, 0);
-		Date closeDate = (Date) this.getValueAt(row, 0);
+		Date closeDate = (Date) this.getValueAt(row, 1);
 		Tradingday element = getData().getTradingday(openDate.getDate(),
 				closeDate.getDate());
 
