@@ -235,8 +235,9 @@ public class TradestrategyTableModel extends TableModel {
 	 */
 
 	public Object getValueAt(int row, int column) {
-		if (columnNames[column] == BAR_SIZE) {
 
+		if (columnNames[column] == BAR_SIZE
+				&& null != super.getValueAt(row, column)) {
 			Integer period = new Integer(
 					((ChartDays) super.getValueAt(row, 9)).getCode());
 			Integer bar = new Integer(
@@ -256,7 +257,8 @@ public class TradestrategyTableModel extends TableModel {
 				return barSize;
 			}
 		}
-		if (columnNames[column] == CHART_HISTORY) {
+		if (columnNames[column] == CHART_HISTORY
+				&& null != super.getValueAt(row, column)) {
 			Integer barSize = new Integer(
 					((BarSize) super.getValueAt(row, 8)).getCode());
 			Integer period = new Integer(((ChartDays) super.getValueAt(row,

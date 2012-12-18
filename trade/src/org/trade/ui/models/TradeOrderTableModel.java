@@ -147,7 +147,8 @@ public class TradeOrderTableModel extends TableModel {
 
 	public Object getValueAt(int row, int column) {
 
-		if (columnNames[column] == LMT_PRICE) {
+		if (columnNames[column] == LMT_PRICE
+				&& null != super.getValueAt(row, column)) {
 			if (((OrderType) super.getValueAt(row, 3)).isValid()) {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.MKT)
@@ -161,7 +162,8 @@ public class TradeOrderTableModel extends TableModel {
 				}
 			}
 		}
-		if (columnNames[column] == AUX_PRICE) {
+		if (columnNames[column] == AUX_PRICE
+				&& null != super.getValueAt(row, column)) {
 			if (((OrderType) super.getValueAt(row, 3)).isValid()) {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.LMT)) {

@@ -46,6 +46,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.trade.core.dao.Aspect;
+import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
@@ -322,6 +323,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		 */
 		FileReader fileReader = null;
 		BufferedReader bufferedReader = null;
+		/*
+		 * Refresh the decode tables.
+		 */
+		DBTableLookupServiceProvider.clearLookup();
 		try {
 
 			if ((fileName == null) || fileName.equals("")) {
@@ -348,6 +353,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 			Strategy strategy = (Strategy) DAOStrategy
 					.newInstance(strategyName).getObject();
+
 			TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
 					.newInstance().getObject();
 			String strLine = "";
