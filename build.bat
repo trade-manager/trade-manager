@@ -32,7 +32,7 @@ java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xm
 
 rem Build and compile the test cases optional
 
-java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/buildtest.xml all
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/buildtest.xml all
 
 rem Create the database user and default data
 
