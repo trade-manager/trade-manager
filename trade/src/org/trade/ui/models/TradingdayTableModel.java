@@ -256,6 +256,7 @@ public class TradingdayTableModel extends TableModel {
 		if (!element.getTradestrategies().isEmpty())
 			element.getTradestrategies().clear();
 		getData().remove(element);
+		element.setDirty(true);
 		final Vector<Object> currRow = rows.get(selectedRow);
 		rows.remove(currRow);
 		this.fireTableRowsDeleted(selectedRow, selectedRow);

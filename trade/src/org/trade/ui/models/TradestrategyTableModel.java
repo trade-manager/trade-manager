@@ -464,6 +464,7 @@ public class TradestrategyTableModel extends TableModel {
 									.equals(exchange) && element.getContract()
 							.getSecType().equals(secType))) {
 				getData().getTradestrategies().remove(element);
+				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
 				this.fireTableRowsDeleted(selectedRow, selectedRow);

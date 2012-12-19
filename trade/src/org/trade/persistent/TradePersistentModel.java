@@ -523,9 +523,7 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 
 		try {
-			if (transientInstance.isDirty()) {
-				m_tradingdayHome.persist(transientInstance);
-			}
+			m_tradingdayHome.persist(transientInstance);
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error saving Tradingday please refresh before save.");
