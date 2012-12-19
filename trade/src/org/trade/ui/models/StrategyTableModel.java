@@ -36,9 +36,6 @@
 package org.trade.ui.models;
 
 import java.util.Vector;
-
-import javax.swing.event.TableModelEvent;
-
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
@@ -189,9 +186,8 @@ public class StrategyTableModel extends AspectTableModel {
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);
-
 		// Tell the listeners a new table has arrived.
-		fireTableChanged(new TableModelEvent(this));
+		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 	}
 
 	/**

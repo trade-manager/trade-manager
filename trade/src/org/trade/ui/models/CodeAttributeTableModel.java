@@ -36,7 +36,6 @@
 package org.trade.ui.models;
 
 import java.util.Vector;
-import javax.swing.event.TableModelEvent;
 
 import org.trade.core.util.CoreUtils;
 import org.trade.dictionary.valuetype.DataType;
@@ -171,7 +170,7 @@ public class CodeAttributeTableModel extends TableModel {
 		rows.add(newRow);
 
 		// Tell the listeners a new table has arrived.
-		fireTableChanged(new TableModelEvent(this));
+		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 
 	}
 

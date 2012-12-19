@@ -39,8 +39,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Vector;
-
-import javax.swing.event.TableModelEvent;
 import javax.swing.Timer;
 
 import org.trade.core.properties.ConfigProperties;
@@ -436,7 +434,8 @@ public class TradestrategyTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		String symbol = (String) this.getValueAt(selectedRow, 2);
+		String symbol = ((String) this.getValueAt(selectedRow, 2)).trim()
+				.toUpperCase();
 		final Strategy strategy = (Strategy) ((DAOStrategy) this.getValueAt(
 				selectedRow, 5)).getObject();
 		TradeAccount tradeAccount = (TradeAccount) ((DAOTradeAccount) this
@@ -537,8 +536,9 @@ public class TradestrategyTableModel extends TableModel {
 
 			getNewRow(newRow, tradestrategy);
 			rows.add(newRow);
+
 			// Tell the listeners a new table has arrived.
-			this.fireTableChanged(new TableModelEvent(this));
+			this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 		}
 	}
 

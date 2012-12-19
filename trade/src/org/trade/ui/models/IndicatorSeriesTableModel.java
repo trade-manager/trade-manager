@@ -237,7 +237,8 @@ public class IndicatorSeriesTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		String type = (String) this.getValueAt(selectedRow, 1);
+		String type = ((org.trade.dictionary.valuetype.IndicatorSeries) this
+				.getValueAt(selectedRow, 1)).getCode();
 		String name = (String) this.getValueAt(selectedRow, 2);
 		for (final IndicatorSeries element : getData().getIndicatorSeries()) {
 			if (CoreUtils.nullSafeComparator(element.getName(), name) == 0
@@ -305,10 +306,8 @@ public class IndicatorSeriesTableModel extends TableModel {
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);
-
 		// Tell the listeners a new table has arrived.
-		fireTableChanged(new TableModelEvent(this));
-
+		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 	}
 
 	/**

@@ -237,7 +237,7 @@ public class TradelogSummaryTableModel extends TableModel {
 				getData().getTradelogSummary().remove(element);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
+				this.fireTableRowsDeleted(selectedRow, selectedRow);
 				break;
 			}
 			i++;
@@ -257,10 +257,8 @@ public class TradelogSummaryTableModel extends TableModel {
 
 		getNewRow(newRow, element);
 		rows.add(newRow);
-
 		// Tell the listeners a new table has arrived.
-
-		fireTableChanged(new TableModelEvent(this));
+		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 
 	}
 

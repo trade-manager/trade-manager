@@ -36,9 +36,6 @@
 package org.trade.ui.models;
 
 import java.util.Vector;
-
-import javax.swing.event.TableModelEvent;
-
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Date;
 import org.trade.dictionary.valuetype.MarketBar;
@@ -254,16 +251,14 @@ public class TradingdayTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		if (null != this.getValueAt(selectedRow, 0)) {
-			Date open = (Date) this.getValueAt(selectedRow, 0);
-			Tradingday element = getData().getTradingdays().get(open.getDate());
-			if (!element.getTradestrategies().isEmpty())
-				element.getTradestrategies().clear();
-			getData().remove(element);
-			final Vector<Object> currRow = rows.get(selectedRow);
-			rows.remove(currRow);
-			this.fireTableRowsDeleted(selectedRow, selectedRow);
-		}
+		Date open = (Date) this.getValueAt(selectedRow, 0);
+		Tradingday element = getData().getTradingdays().get(open.getDate());
+		if (!element.getTradestrategies().isEmpty())
+			element.getTradestrategies().clear();
+		getData().remove(element);
+		final Vector<Object> currRow = rows.get(selectedRow);
+		rows.remove(currRow);
+		this.fireTableRowsDeleted(selectedRow, selectedRow);
 	}
 
 	public void addRow() {
@@ -283,9 +278,7 @@ public class TradingdayTableModel extends TableModel {
 		Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);
-
-		// Tell the listeners a new table has arrived.
-		fireTableChanged(new TableModelEvent(this));
+		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 	}
 
 	/**

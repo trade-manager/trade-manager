@@ -323,11 +323,12 @@ public class TradeOrderTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		Quantity orderKey = (Quantity) this.getValueAt(selectedRow, 1);
+		Integer orderKey = ((Quantity) this.getValueAt(selectedRow, 1))
+				.getIntegerValue();
 		for (final Trade trade : getData().getTrades()) {
 			for (final TradeOrder tradeOrder : trade.getTradeOrders()) {
 				if (CoreUtils.nullSafeComparator(tradeOrder.getOrderKey(),
-						orderKey.getBigIntegerValue().intValue()) == 0) {
+						orderKey) == 0) {
 					trade.getTradeOrders().remove(tradeOrder);
 					final Vector<Object> currRow = rows.get(selectedRow);
 					rows.remove(currRow);
@@ -351,10 +352,7 @@ public class TradeOrderTableModel extends TableModel {
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);
-
-		// Tell the listeners a new table has arrived.
-		fireTableChanged(new TableModelEvent(this));
-
+		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 	}
 
 	public void addRow() {
