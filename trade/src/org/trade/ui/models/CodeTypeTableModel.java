@@ -66,6 +66,7 @@ public class CodeTypeTableModel extends AspectTableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Aspects
 	 */
 	public Aspects getData() {
@@ -74,7 +75,9 @@ public class CodeTypeTableModel extends AspectTableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Aspects
+	 * 
+	 * @param data
+	 *            Aspects
 	 */
 	public void setData(Aspects data) {
 
@@ -92,9 +95,13 @@ public class CodeTypeTableModel extends AspectTableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -116,20 +123,22 @@ public class CodeTypeTableModel extends AspectTableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-
-		int i = 0;
-		for (final Aspect element : getData().getAspect()) {
-			if (i == selectedRow) {
-				getData().remove(element);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
-				break;
+		if (null != this.getValueAt(selectedRow, 0)) {
+			String name = (String) this.getValueAt(selectedRow, 0);
+			for (final Aspect element : getData().getAspect()) {
+				if (((CodeType) element).getName().equals(name)) {
+					getData().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					fireTableChanged(new TableModelEvent(this));
+					break;
+				}
 			}
-			i++;
 		}
 	}
 
@@ -148,8 +157,11 @@ public class CodeTypeTableModel extends AspectTableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element CodeType
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            CodeType
 	 */
 	public void getNewRow(Vector<Object> newRow, CodeType element) {
 		newRow.addElement(element.getName());

@@ -179,17 +179,17 @@ public class EntrylimitTableModel extends AspectTableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-
-		int i = 0;
-		for (final Aspect element : getData().getAspect()) {
-			if (i == selectedRow) {
-				getData().getAspect().remove(element);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
-				break;
+		if (null != this.getValueAt(selectedRow, 0)) {
+			Money startPrice = (Money) this.getValueAt(selectedRow, 0);
+			for (final Aspect element : getData().getAspect()) {
+				if (((Entrylimit) element).getStartPrice().equals(startPrice)) {
+					getData().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					fireTableChanged(new TableModelEvent(this));
+					break;
+				}
 			}
-			i++;
 		}
 	}
 

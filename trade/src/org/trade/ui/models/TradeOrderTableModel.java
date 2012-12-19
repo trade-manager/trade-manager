@@ -38,7 +38,6 @@ package org.trade.ui.models;
 import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
-
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Quantity;
@@ -321,17 +320,18 @@ public class TradeOrderTableModel extends TableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-		int i = 0;
-		for (final Trade trade : getData().getTrades()) {
-			for (final TradeOrder element : trade.getTradeOrders()) {
-				if (i == selectedRow) {
-					trade.getTradeOrders().remove(element);
-					final Vector<Object> currRow = rows.get(selectedRow);
-					rows.remove(currRow);
-					this.fireTableChanged(new TableModelEvent(this));
-					break;
+		if (null != this.getValueAt(selectedRow, 1)) {
+			String orderKey = (String) this.getValueAt(selectedRow, 1);
+			for (final Trade trade : getData().getTrades()) {
+				for (final TradeOrder tradeOrder : trade.getTradeOrders()) {
+					if (tradeOrder.getOrderKey().equals(orderKey)) {
+						trade.getTradeOrders().remove(tradeOrder);
+						final Vector<Object> currRow = rows.get(selectedRow);
+						rows.remove(currRow);
+						fireTableChanged(new TableModelEvent(this));
+						break;
+					}
 				}
-				i++;
 			}
 		}
 	}

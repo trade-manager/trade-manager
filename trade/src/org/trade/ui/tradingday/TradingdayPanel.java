@@ -864,6 +864,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 						enableTradestrategyButtons(null);
 
 					} else {
+						m_tradestrategyModel.setData(null);
 						refreshButton.setTransferObject(null);
 						m_tradestrategyTable.enablePopupMenu(false);
 					}

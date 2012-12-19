@@ -254,19 +254,15 @@ public class TradingdayTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		int i = 0;
-		for (Tradingday element : getData().getTradingdays().values()) {
-			if (i == selectedRow) {
-				getData().remove(element);
-				if (!element.getTradestrategies().isEmpty()) {
-					element.clear();
-				}
-				Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
-				break;
-			}
-			i++;
+		if (null != this.getValueAt(selectedRow, 0)) {
+			Date open = (Date) this.getValueAt(selectedRow, 0);
+			Tradingday element = getData().getTradingdays().get(open.getDate());
+			if (!element.getTradestrategies().isEmpty())
+				element.getTradestrategies().clear();
+			getData().remove(element);
+			final Vector<Object> currRow = rows.get(selectedRow);
+			rows.remove(currRow);
+			fireTableChanged(new TableModelEvent(this));
 		}
 	}
 

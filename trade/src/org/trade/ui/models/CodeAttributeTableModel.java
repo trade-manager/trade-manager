@@ -72,6 +72,7 @@ public class CodeAttributeTableModel extends TableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return CodeType
 	 */
 	public CodeType getData() {
@@ -80,7 +81,9 @@ public class CodeAttributeTableModel extends TableModel {
 
 	/**
 	 * Method setData.
-	 * @param data CodeType
+	 * 
+	 * @param data
+	 *            CodeType
 	 */
 	public void setData(CodeType data) {
 
@@ -99,9 +102,13 @@ public class CodeAttributeTableModel extends TableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -135,27 +142,29 @@ public class CodeAttributeTableModel extends TableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-
-		int i = 0;
-		for (final CodeAttribute element : getData().getCodeAttribute()) {
-			if (i == selectedRow) {
-				getData().getCodeAttribute().remove(element);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
-				break;
+		if (null != this.getValueAt(selectedRow, 0)) {
+			String name = (String) this.getValueAt(selectedRow, 0);
+			for (final CodeAttribute element : getData().getCodeAttribute()) {
+				if (element.getName().equals(name)) {
+					getData().getCodeAttribute().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					fireTableChanged(new TableModelEvent(this));
+					break;
+				}
 			}
-			i++;
 		}
 	}
 
 	public void addRow() {
 
-		final CodeAttribute element = new CodeAttribute(this.m_data,
-				"", "", null, "", null);
+		final CodeAttribute element = new CodeAttribute(this.m_data, "", "",
+				null, "", null);
 		getData().getCodeAttribute().add(element);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
@@ -168,8 +177,11 @@ public class CodeAttributeTableModel extends TableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element CodeAttribute
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            CodeAttribute
 	 */
 	public void getNewRow(Vector<Object> newRow, CodeAttribute element) {
 		newRow.addElement(element.getName());

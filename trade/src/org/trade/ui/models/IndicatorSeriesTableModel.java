@@ -69,11 +69,13 @@ public class IndicatorSeriesTableModel extends TableModel {
 	private static final String PROPERTIES = "Properties";
 
 	private static final String[] columnHeaderToolTip = {
-			"The name of the strategy", null,
-			"Specific name for this indicator i.e. 20-MA", null,
+			"The name of the strategy",
+			null,
+			"Specific name for this indicator i.e. 20-MA",
+			null,
 			"If checked display on the main chart",
-			"If checked display this indicator as a sub-chart i.e Y-axis not $", null,
-			null };
+			"If checked display this indicator as a sub-chart i.e Y-axis not $",
+			null, null };
 
 	Strategy m_data = null;
 
@@ -234,16 +236,19 @@ public class IndicatorSeriesTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		int i = 0;
-		for (final IndicatorSeries element : getData().getIndicatorSeries()) {
-			if (i == selectedRow) {
-				getData().getIndicatorSeries().remove(element);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
-				break;
+		if (null != this.getValueAt(selectedRow, 1)) {
+			String type = (String) this.getValueAt(selectedRow, 1);
+			String name = (String) this.getValueAt(selectedRow, 2);
+			for (final IndicatorSeries element : getData().getIndicatorSeries()) {
+				if (element.getName().equals(name)
+						&& element.getType().equals(type)) {
+					getData().getIndicatorSeries().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					fireTableChanged(new TableModelEvent(this));
+					break;
+				}
 			}
-			i++;
 		}
 	}
 

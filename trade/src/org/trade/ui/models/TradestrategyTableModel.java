@@ -434,18 +434,38 @@ public class TradestrategyTableModel extends TableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
+		if (null != this.getValueAt(selectedRow, 2)) {
+			String symbol = (String) this.getValueAt(selectedRow, 2);
+			final Strategy strategy = (Strategy) ((DAOStrategy) this
+					.getValueAt(selectedRow, 5)).getObject();
+			TradeAccount tradeAccount = (TradeAccount) ((DAOTradeAccount) this
+					.getValueAt(selectedRow, 7)).getObject();
+			Integer barSize = new Integer(((BarSize) this.getValueAt(
+					selectedRow, 8)).getCode());
+			String currency = ((Currency) this.getValueAt(selectedRow, 14))
+					.getCode();
+			String exchange = ((Exchange) this.getValueAt(selectedRow, 15))
+					.getCode();
+			String secType = ((SECType) this.getValueAt(selectedRow, 16))
+					.getCode();
 
-		int i = 0;
-		for (final Tradestrategy element : getData().getTradestrategies()) {
-			if (i == selectedRow) {
-				getData().getTradestrategies().remove(element);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				getData().setDirty(true);
-				fireTableChanged(new TableModelEvent(this));
-				break;
+			for (final Tradestrategy element : getData().getTradestrategies()) {
+				if (element.getContract().getSymbol().equals(symbol)
+						&& element.getStrategy().getName()
+								.equals(strategy.getName())
+						&& element.getTradeAccount().getAccountNumber()
+								.equals(tradeAccount.getAccountNumber())
+						&& element.getBarSize().equals(barSize)
+						&& element.getContract().getCurrency().equals(currency)
+						&& element.getContract().getExchange().equals(exchange)
+						&& element.getContract().getSecType().equals(secType)) {
+					getData().getTradestrategies().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					fireTableChanged(new TableModelEvent(this));
+					break;
+				}
 			}
-			i++;
 		}
 	}
 

@@ -167,16 +167,17 @@ public class StrategyTableModel extends AspectTableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		int i = 0;
-		for (final Aspect element : getData().getAspect()) {
-			if (i == selectedRow) {
-				getData().getAspect().remove(element);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
-				break;
+		if (null != this.getValueAt(selectedRow, 0)) {
+			String name = (String) this.getValueAt(selectedRow, 0);
+			for (final Aspect element : getData().getAspect()) {
+				if (((Strategy) element).getName().equals(name)) {
+					getData().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					fireTableChanged(new TableModelEvent(this));
+					break;
+				}
 			}
-			i++;
 		}
 	}
 

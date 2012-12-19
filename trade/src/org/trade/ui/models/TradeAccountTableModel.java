@@ -89,6 +89,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 	/**
 	 * Method getData.
+	 * 
 	 * @return Aspects
 	 */
 	public Aspects getData() {
@@ -97,7 +98,9 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 	/**
 	 * Method setData.
-	 * @param data Aspects
+	 * 
+	 * @param data
+	 *            Aspects
 	 */
 	public void setData(Aspects data) {
 
@@ -116,9 +119,13 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
@@ -177,20 +184,24 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
 
-		int i = 0;
-		for (final Aspect element : getData().getAspect()) {
-			if (i == selectedRow) {
-				getData().getAspect().remove(element);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
-				break;
+		if (null != this.getValueAt(selectedRow, 1)) {
+			String acctNumber = (String) this.getValueAt(selectedRow, 1);
+			for (final Aspect element : getData().getAspect()) {
+				if (((TradeAccount) element).getAccountNumber().equals(
+						acctNumber)) {
+					getData().remove(element);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					fireTableChanged(new TableModelEvent(this));
+					break;
+				}
 			}
-			i++;
 		}
 	}
 
@@ -208,8 +219,11 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 	/**
 	 * Method getNewRow.
-	 * @param newRow Vector<Object>
-	 * @param element TradeAccount
+	 * 
+	 * @param newRow
+	 *            Vector<Object>
+	 * @param element
+	 *            TradeAccount
 	 */
 	public void getNewRow(Vector<Object> newRow, TradeAccount element) {
 		newRow.addElement(element.getName());
