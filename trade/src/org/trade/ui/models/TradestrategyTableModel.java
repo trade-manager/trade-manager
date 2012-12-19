@@ -467,7 +467,7 @@ public class TradestrategyTableModel extends TableModel {
 				getData().getTradestrategies().remove(element);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
+				this.fireTableRowsDeleted(selectedRow, selectedRow);
 				break;
 			}
 		}

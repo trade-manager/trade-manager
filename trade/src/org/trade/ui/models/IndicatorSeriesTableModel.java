@@ -245,7 +245,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 				getData().getIndicatorSeries().remove(element);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
+				this.fireTableRowsDeleted(selectedRow, selectedRow);
 				break;
 			}
 		}

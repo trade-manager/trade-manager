@@ -137,7 +137,7 @@ public class CodeTypeTableModel extends AspectTableModel {
 				getData().remove(element);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
-				fireTableChanged(new TableModelEvent(this));
+				this.fireTableRowsDeleted(selectedRow, selectedRow);
 				break;
 			}
 		}
