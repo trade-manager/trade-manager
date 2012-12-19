@@ -479,6 +479,8 @@ public class TradestrategyTableModel extends TableModel {
 		Tradestrategy tradestrategy = null;
 		String strategyName = null;
 		Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
+		TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
+				.newInstance().getObject();
 		Integer chartDays = ChartDays.TWO_DAYS;
 		Integer barSize = BarSize.FIVE_MIN;
 		Integer riskAmount = new Integer(0);
@@ -512,8 +514,6 @@ public class TradestrategyTableModel extends TableModel {
 				// Do nothing
 			}
 
-			TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
-					.newInstance().getObject();
 			if (null == tradestrategy) {
 				tradestrategy = new Tradestrategy(new Contract(SECType.STOCK,
 						"", Exchange.SMART, Currency.USD, null, null),

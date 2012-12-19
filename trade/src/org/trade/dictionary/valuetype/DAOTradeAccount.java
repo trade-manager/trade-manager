@@ -58,21 +58,24 @@ public class DAOTradeAccount extends DAODecode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return DAOTradeAccount
 	 */
-	public static DAOTradeAccount newInstance(String value) {
+	public static DAOTradeAccount newInstance(String displayName) {
 		final DAOTradeAccount returnInstance = new DAOTradeAccount();
-		returnInstance.setValue(value);
+		returnInstance.setDisplayName(displayName);
 		return returnInstance;
 	}
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return DAOTradeAccount
 	 */
 	public static DAOTradeAccount newInstance() {
-		
+
 		try {
 			final DAOTradeAccount returnInstance = new DAOTradeAccount();
 			DAOTradeAccount code = null;
@@ -90,5 +93,14 @@ public class DAOTradeAccount extends DAODecode {
 		} catch (ValueTypeException e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Method convertToUppercase.
+	 * 
+	 * @return boolean
+	 */
+	protected boolean convertToUppercase() {
+		return false;
 	}
 }

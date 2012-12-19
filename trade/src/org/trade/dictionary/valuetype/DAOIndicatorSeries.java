@@ -57,9 +57,9 @@ public class DAOIndicatorSeries extends DAODecode {
 	 * @param value String
 	 * @return DAOIndicatorSeries
 	 */
-	public static DAOIndicatorSeries newInstance(String value) {
+	public static DAOIndicatorSeries newInstance(String displayName) {
 		final DAOIndicatorSeries returnInstance = new DAOIndicatorSeries();
-		returnInstance.setValue(value);
+		returnInstance.setDisplayName(displayName);
 		return returnInstance;
 	}
 
