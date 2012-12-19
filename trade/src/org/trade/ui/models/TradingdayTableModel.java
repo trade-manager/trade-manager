@@ -125,7 +125,7 @@ public class TradingdayTableModel extends TableModel {
 		Date closeDate = (Date) this.getValueAt(row, 1);
 		Tradingday tradingday = getData().getTradingday(openDate.getDate(),
 				closeDate.getDate());
-		if (Tradingdays.hasTrades(tradingday)) {
+		if (null != tradingday && Tradingdays.hasTrades(tradingday)) {
 			if ((columnNames[column] == OPEN) || (columnNames[column] == CLOSE)) {
 				return false;
 			}
@@ -282,17 +282,14 @@ public class TradingdayTableModel extends TableModel {
 		}
 		Tradingday element = Tradingday.newInstance(date);
 		element.setDirty(true);
-		if (null != getData().getTradingday(element.getOpen(),
-				element.getClose())) {
-			getData().add(element);
+		getData().add(element);
 
-			Vector<Object> newRow = new Vector<Object>();
-			getNewRow(newRow, element);
-			rows.add(newRow);
+		Vector<Object> newRow = new Vector<Object>();
+		getNewRow(newRow, element);
+		rows.add(newRow);
 
-			// Tell the listeners a new table has arrived.
-			fireTableChanged(new TableModelEvent(this));
-		}
+		// Tell the listeners a new table has arrived.
+		fireTableChanged(new TableModelEvent(this));
 	}
 
 	/**
