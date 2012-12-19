@@ -40,6 +40,7 @@ import javax.swing.event.TableModelEvent;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
+import org.trade.core.util.CoreUtils;
 import org.trade.persistent.dao.CodeType;
 
 /**
@@ -128,16 +129,16 @@ public class CodeTypeTableModel extends AspectTableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-		if (null != this.getValueAt(selectedRow, 0)) {
-			String name = (String) this.getValueAt(selectedRow, 0);
-			for (final Aspect element : getData().getAspect()) {
-				if (((CodeType) element).getName().equals(name)) {
-					getData().remove(element);
-					final Vector<Object> currRow = rows.get(selectedRow);
-					rows.remove(currRow);
-					fireTableChanged(new TableModelEvent(this));
-					break;
-				}
+
+		String name = (String) this.getValueAt(selectedRow, 0);
+		for (final Aspect element : getData().getAspect()) {
+			if (CoreUtils.nullSafeComparator(((CodeType) element).getName(),
+					name) == 0) {
+				getData().remove(element);
+				final Vector<Object> currRow = rows.get(selectedRow);
+				rows.remove(currRow);
+				fireTableChanged(new TableModelEvent(this));
+				break;
 			}
 		}
 	}

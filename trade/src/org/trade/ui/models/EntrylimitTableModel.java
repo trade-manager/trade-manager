@@ -41,6 +41,7 @@ import javax.swing.event.TableModelEvent;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
 import org.trade.core.valuetype.Quantity;
@@ -179,16 +180,17 @@ public class EntrylimitTableModel extends AspectTableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-		if (null != this.getValueAt(selectedRow, 0)) {
-			Money startPrice = (Money) this.getValueAt(selectedRow, 0);
-			for (final Aspect element : getData().getAspect()) {
-				if (((Entrylimit) element).getStartPrice().equals(startPrice)) {
-					getData().remove(element);
-					final Vector<Object> currRow = rows.get(selectedRow);
-					rows.remove(currRow);
-					fireTableChanged(new TableModelEvent(this));
-					break;
-				}
+
+		Money startPrice = (Money) this.getValueAt(selectedRow, 0);
+		for (final Aspect element : getData().getAspect()) {
+			if (CoreUtils.nullSafeComparator(
+					((Entrylimit) element).getStartPrice(),
+					startPrice.getBigDecimalValue()) == 0) {
+				getData().remove(element);
+				final Vector<Object> currRow = rows.get(selectedRow);
+				rows.remove(currRow);
+				fireTableChanged(new TableModelEvent(this));
+				break;
 			}
 		}
 	}

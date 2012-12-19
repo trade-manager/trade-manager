@@ -38,6 +38,7 @@ package org.trade.ui.models;
 import java.util.Vector;
 import javax.swing.event.TableModelEvent;
 
+import org.trade.core.util.CoreUtils;
 import org.trade.dictionary.valuetype.DataType;
 import org.trade.persistent.dao.CodeAttribute;
 import org.trade.persistent.dao.CodeType;
@@ -147,16 +148,15 @@ public class CodeAttributeTableModel extends TableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-		if (null != this.getValueAt(selectedRow, 0)) {
-			String name = (String) this.getValueAt(selectedRow, 0);
-			for (final CodeAttribute element : getData().getCodeAttribute()) {
-				if (element.getName().equals(name)) {
-					getData().getCodeAttribute().remove(element);
-					final Vector<Object> currRow = rows.get(selectedRow);
-					rows.remove(currRow);
-					fireTableChanged(new TableModelEvent(this));
-					break;
-				}
+
+		String name = (String) this.getValueAt(selectedRow, 0);
+		for (final CodeAttribute element : getData().getCodeAttribute()) {
+			if (CoreUtils.nullSafeComparator(element.getName(), name) == 0) {
+				getData().getCodeAttribute().remove(element);
+				final Vector<Object> currRow = rows.get(selectedRow);
+				rows.remove(currRow);
+				fireTableChanged(new TableModelEvent(this));
+				break;
 			}
 		}
 	}

@@ -41,6 +41,7 @@ import javax.swing.event.TableModelEvent;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.YesNo;
@@ -190,17 +191,15 @@ public class TradeAccountTableModel extends AspectTableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		if (null != this.getValueAt(selectedRow, 1)) {
-			String acctNumber = (String) this.getValueAt(selectedRow, 1);
-			for (final Aspect element : getData().getAspect()) {
-				if (((TradeAccount) element).getAccountNumber().equals(
-						acctNumber)) {
-					getData().remove(element);
-					final Vector<Object> currRow = rows.get(selectedRow);
-					rows.remove(currRow);
-					fireTableChanged(new TableModelEvent(this));
-					break;
-				}
+		String acctNumber = (String) this.getValueAt(selectedRow, 1);
+		for (final Aspect element : getData().getAspect()) {
+			if (CoreUtils.nullSafeComparator(
+					((TradeAccount) element).getAccountNumber(), acctNumber) == 0) {
+				getData().remove(element);
+				final Vector<Object> currRow = rows.get(selectedRow);
+				rows.remove(currRow);
+				fireTableChanged(new TableModelEvent(this));
+				break;
 			}
 		}
 	}

@@ -45,6 +45,7 @@ import javax.swing.event.TableModelEvent;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.persistent.dao.CodeValue;
@@ -236,18 +237,16 @@ public class IndicatorSeriesTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		if (null != this.getValueAt(selectedRow, 1)) {
-			String type = (String) this.getValueAt(selectedRow, 1);
-			String name = (String) this.getValueAt(selectedRow, 2);
-			for (final IndicatorSeries element : getData().getIndicatorSeries()) {
-				if (element.getName().equals(name)
-						&& element.getType().equals(type)) {
-					getData().getIndicatorSeries().remove(element);
-					final Vector<Object> currRow = rows.get(selectedRow);
-					rows.remove(currRow);
-					fireTableChanged(new TableModelEvent(this));
-					break;
-				}
+		String type = (String) this.getValueAt(selectedRow, 1);
+		String name = (String) this.getValueAt(selectedRow, 2);
+		for (final IndicatorSeries element : getData().getIndicatorSeries()) {
+			if (CoreUtils.nullSafeComparator(element.getName(), name) == 0
+					&& CoreUtils.nullSafeComparator(element.getType(), type) == 0) {
+				getData().getIndicatorSeries().remove(element);
+				final Vector<Object> currRow = rows.get(selectedRow);
+				rows.remove(currRow);
+				fireTableChanged(new TableModelEvent(this));
+				break;
 			}
 		}
 	}
