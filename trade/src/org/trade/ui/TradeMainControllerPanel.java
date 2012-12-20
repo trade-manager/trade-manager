@@ -342,7 +342,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doDelete(final Tradestrategy tradestrategy) {
 		try {
 			int result = JOptionPane.showConfirmDialog(this.getFrame(),
-					"Do you want to delete selected Tradestrategy?",
+					"Do you want to delete order for the selected Tradestrategy?",
 					"Information", JOptionPane.YES_NO_OPTION);
 			if (result == JOptionPane.YES_OPTION) {
 				Tradingdays tradingdays = new Tradingdays();

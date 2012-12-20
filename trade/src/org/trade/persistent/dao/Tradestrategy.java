@@ -84,7 +84,6 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private String status;
 	private String side;
 	private BigDecimal riskAmount;
-	private boolean dirty = false;
 	private Boolean trade = new Boolean(false);
 	private List<Trade> trades = new ArrayList<Trade>(0);
 	private StrategyData datasetContainer = null;
@@ -131,7 +130,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		this.side = side;
 		this.tier = tier;
 		this.trade = trade;
-		this.dirty = true;
+		super.setDirty(true);
+		this.getTradingday().setDirty(this.isDirty());
 	}
 
 	/**
@@ -501,27 +501,15 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method isDirty.
-	 * 
-	 * @return boolean
-	 */
-	@Transient
-	public boolean isDirty() {
-		return dirty;
-	}
-
-	/**
 	 * Method setDirty.
 	 * 
 	 * @param dirty
 	 *            boolean
 	 */
 	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-		if (this.dirty) {
-			this.getTradingday().setDirty(this.dirty);
-		}
-
+		super.setDirty(dirty);
+		if (dirty)
+			this.getTradingday().setDirty(dirty);
 	}
 
 	public static final Comparator<Tradestrategy> DATE_ORDER = new Comparator<Tradestrategy>() {

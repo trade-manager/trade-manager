@@ -57,7 +57,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
@@ -83,7 +82,6 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	private String marketBias;
 	private String marketGap;
 	private String marketBar;
-	private boolean dirty = false;
 	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
 			0);
 	private List<Candle> candles = new ArrayList<Candle>(0);
@@ -102,7 +100,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	public Tradingday(Date open, Date close) {
 		this.open = open;
 		this.close = close;
-		this.dirty = true;
+		super.setDirty(true);
 	}
 
 	/**
@@ -357,26 +355,6 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 */
 	public void addCandle(Candle candle) {
 		this.candles.add(candle);
-	}
-
-	/**
-	 * Method isDirty.
-	 * 
-	 * @return boolean
-	 */
-	@Transient
-	public boolean isDirty() {
-		return dirty;
-	}
-
-	/**
-	 * Method setDirty.
-	 * 
-	 * @param dirty
-	 *            boolean
-	 */
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
 	}
 
 	public static final Comparator<Tradingday> DATE_ORDER = new Comparator<Tradingday>() {

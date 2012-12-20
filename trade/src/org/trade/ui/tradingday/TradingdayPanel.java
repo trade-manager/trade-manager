@@ -371,8 +371,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
-		if (m_tradingdays.isDirty()
-				&& Tradingdays.hasTradestrategies(m_tradingdays)) {
+		if (m_tradingdays.isDirty()) {
 			setStatusBarMessage(
 					"Please Save or Refresh as changed are pending",
 					BasePanel.WARNING);
