@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
  *
- * Project Info:  org.trade
+ * Project Info:  org.trade test
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by

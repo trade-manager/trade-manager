@@ -127,9 +127,9 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
 			startDate = TradingCalendar.getSpecificTime(startDate, 0, 0);
 
-			_log.info(" Start Date: " + startDate + " End Date: " + endDate
-					+ " BarSize: " + barSize.getCode() + " ChartDays: "
-					+ chartDays.getCode());
+			_log.info("YahooBroker.doInBackground Start Date: " + startDate
+					+ " End Date: " + endDate + " BarSize: "
+					+ barSize.getCode() + " ChartDays: " + chartDays.getCode());
 
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
 				this.setYahooPriceDataDay(this.contract.getIdContract(),
@@ -137,7 +137,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 			} else {
 				this.setYahooPriceDataIntraday(this.contract.getIdContract(),
 						this.contract.getSymbol(),
-						Integer.parseInt(chartDays.getCode()), startDate);
+						Integer.parseInt(chartDays.getCode()), startDate,
+						endDate);
 			}
 			this.brokerModel.historicalData(this.contract.getIdContract(),
 					"finished- at yyyyMMdd HH:mm:ss", 0, 0, 0, 0, 0, 0, 0,
@@ -204,7 +205,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	 * @throws IOException
 	 */
 	private void setYahooPriceDataIntraday(int reqId, String symbol,
-			int chartDays, Date startDate) throws IOException {
+			int chartDays, Date startDate, Date endDate) throws IOException {
 
 		/*
 		 * Yahoo finance http://chartapi.finance.yahoo.com/instrument/1.0/IBM
@@ -214,7 +215,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 		String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/"
 				+ symbol + "/chartdata;type=quote;range=" + days + "d/csv/";
 
-		// _log.info("URL : " + strUrl);
+		_log.info("URL : " + strUrl);
 		URL url = new URL(strUrl);
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				url.openStream()));
@@ -237,7 +238,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 					// + high + " Low: " + low + " Close: " + close
 					// + " Volume: " + volume);
 
-					if (startDate.before(time)) {
+					if ((time.after(startDate) || time.equals(startDate))
+							&& time.before(endDate)) {
 						this.brokerModel
 								.historicalData(reqId, dateString, open, high,
 										low, close, ((int) volume / 100),
