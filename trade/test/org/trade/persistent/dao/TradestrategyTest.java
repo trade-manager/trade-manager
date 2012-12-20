@@ -234,10 +234,10 @@ public class TradestrategyTest extends TestCase {
 		Tradingday tradingday = Tradingday.newInstance(open);
 		Tradingday instance = tradingdayHome.findByOpenCloseDate(
 				tradingday.getOpen(), tradingday.getClose());
-		if (null != instance){
+		if (null != instance) {
 			tradingday.getTradestrategies().clear();
 			tradingday = instance;
-		}			
+		}
 		tradestrategy = new Tradestrategy(contract, tradingday, strategy,
 				tradeAccount, new BigDecimal(100), "BUY", "0", true,
 				ChartDays.TWO_DAYS, BarSize.FIVE_MIN);
@@ -272,7 +272,8 @@ public class TradestrategyTest extends TestCase {
 							tradeAccount.getAccountNumber());
 			if (null != tradestrategy) {
 				aspectHome.remove(tradestrategy);
-				aspectHome.remove(contract);
+				aspectHome.remove(tradestrategy.getContract());
+				aspectHome.remove(tradestrategy.getTradingday());
 			}
 		}
 	}
