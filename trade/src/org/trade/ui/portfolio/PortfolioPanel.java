@@ -56,6 +56,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SpinnerDateModel;
@@ -182,7 +183,10 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			jPanel6.add(filterButton, null);
 			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
 			JPanel jPanel5 = new JPanel(new BorderLayout());
-			jPanel5.add(jPanel6, BorderLayout.WEST);
+			JToolBar jToolBar = new JToolBar();
+			jToolBar.setLayout(new BorderLayout());
+			jToolBar.add(jPanel6);
+			jPanel5.add(jToolBar, BorderLayout.WEST);
 			jPanel5.add(jPanel1, BorderLayout.EAST);
 
 			m_tableTradelogSummary.setEnabled(false);

@@ -67,6 +67,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -243,8 +244,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			JPanel jPanel4 = new JPanel();
 			jPanel4.setLayout(new BorderLayout());
 
-			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
 			JLabel fromStrategy = new JLabel("From Strategy:");
 			strategyFromEditorComboBox = new DAODecodeComboBoxEditor(
 					(new DAOStrategy()).getCodesDecodes());
@@ -259,8 +258,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			strategyToEditorComboBox.setRenderer(new DecodeComboBoxRenderer());
 			strategyToEditorComboBox.setEditable(true);
 			strategyToEditorComboBox.addItemListener(this);
-
-			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
 			JScrollPane jScrollPane = new JScrollPane();
 			jScrollPane.getViewport().add(m_tradestrategyTable,
@@ -286,6 +283,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			spinnerEnd.setValue(tradingday.getOpen());
 
 			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel dateStartLabel = new JLabel("From Date:");
 			JLabel dateEndLabel = new JLabel("To Date:");
 			jPanel5.add(brokerDataButton, null);
@@ -293,20 +292,27 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel5.add(runStrategyButton, null);
 			jPanel5.add(cancelStrategiesButton, null);
 			jPanel5.add(deleteTradeOrderButton, null);
-			jPanel7.add(dateStartLabel, null);
-			jPanel7.add(spinnerStart, null);
-			jPanel7.add(dateEndLabel, null);
-			jPanel7.add(spinnerEnd, null);
-			jPanel6.add(fromStrategy, null);
-			jPanel6.add(strategyFromEditorComboBox, null);
-			jPanel6.add(toStrategy, null);
-			jPanel6.add(strategyToEditorComboBox, null);
-			jPanel6.add(reAssignButton, null);
-			jPanel6.add(ordersButton, null);
-			jPanel3.add(jPanel7, BorderLayout.WEST);
-			jPanel3.add(jPanel6, BorderLayout.EAST);
 			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
-			jPanel4.add(jPanel5, BorderLayout.NORTH);
+			JToolBar jToolBar1 = new JToolBar();
+			jToolBar1.setLayout(new BorderLayout());
+			jToolBar1.add(jPanel5, BorderLayout.WEST);
+			jPanel6.add(dateStartLabel, null);
+			jPanel6.add(spinnerStart, null);
+			jPanel6.add(dateEndLabel, null);
+			jPanel6.add(spinnerEnd, null);
+			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
+			jPanel7.add(fromStrategy, null);
+			jPanel7.add(strategyFromEditorComboBox, null);
+			jPanel7.add(toStrategy, null);
+			jPanel7.add(strategyToEditorComboBox, null);
+			jPanel7.add(reAssignButton, null);
+			jPanel7.add(ordersButton, null);
+			jPanel7.setBorder(new BevelBorder(BevelBorder.RAISED));
+
+			jPanel3.add(jPanel6, BorderLayout.WEST);
+			jPanel3.add(jPanel7, BorderLayout.EAST);
+
+			jPanel4.add(jToolBar1, BorderLayout.NORTH);
 			jPanel4.add(jScrollPane, BorderLayout.CENTER);
 
 			JScrollPane jScrollPane1 = new JScrollPane();
@@ -323,7 +329,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			tradeAccountLabel.setAutoscrolls(false);
 			tradeAccountLabel.setEditable(false);
 			JPanel jPanel8 = new JPanel(new BorderLayout());
-			jPanel3.setBorder(new BevelBorder(BevelBorder.RAISED));
+			jPanel3.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel8.add(tradeAccountLabel, BorderLayout.NORTH);
 			jPanel8.add(jPanel3, BorderLayout.SOUTH);
 			jPanel2.add(jPanel8, BorderLayout.NORTH);

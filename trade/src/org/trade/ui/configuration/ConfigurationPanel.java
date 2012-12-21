@@ -60,6 +60,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -160,7 +161,10 @@ public class ConfigurationPanel extends BasePanel {
 			jPanel5.add(refTable, null);
 			jPanel5.add(refTableEditorComboBox, null);
 			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
-			jPanel3.add(jPanel5, BorderLayout.WEST);
+			JToolBar jToolBar = new JToolBar();
+			jToolBar.setLayout(new BorderLayout());
+			jToolBar.add(jPanel5);
+			jPanel3.add(jToolBar, BorderLayout.WEST);
 
 			jPanel4.add(m_jScrollPane, BorderLayout.CENTER);		
 

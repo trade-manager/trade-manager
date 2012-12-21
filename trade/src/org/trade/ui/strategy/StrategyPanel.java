@@ -62,6 +62,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.JToolBar;
 import javax.swing.ToolTipManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.TreeSelectionEvent;
@@ -154,7 +155,11 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			jPanel1.add(compileButton);
 			jPanel1.setBorder(new BevelBorder(BevelBorder.RAISED));
 			JPanel jPanel2 = new JPanel(new BorderLayout());
-			jPanel2.add(jPanel1,BorderLayout.WEST );
+			jPanel2.add(jPanel1, BorderLayout.WEST);
+			JToolBar jToolBar = new JToolBar();
+			jToolBar.setLayout(new BorderLayout());
+			jToolBar.add(jPanel2);
+			
 			// create the message panel first so we can send messages to it...
 			messageText = new StreamEditorPane("text/rtf");
 			messageText.setFont(new Font("dialog", Font.PLAIN, 12));
@@ -165,7 +170,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			messagePanel.setBorder(BorderFactory.createCompoundBorder(
 					BorderFactory.createTitledBorder("Messages"),
 					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
-			
+
 			DefaultSyntaxKit.initKit();
 			sourceText = new JEditorPane();
 			JScrollPane jScrollPane1 = new JScrollPane(sourceText);
@@ -218,7 +223,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					JSplitPane.VERTICAL_SPLIT, true, split, messagePanel);
 			mainSplitPane.setResizeWeight(0.7d);
 			mainSplitPane.setOneTouchExpandable(true);
-			this.add(jPanel2, BorderLayout.NORTH);
+			this.add(jToolBar, BorderLayout.NORTH);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 
 			loadStrategiesFromFileSystem(this.strategies);

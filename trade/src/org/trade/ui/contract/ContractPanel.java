@@ -54,6 +54,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
@@ -226,7 +227,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel12.add(m_strategyLabel, null);
 			JPanel jPanel11 = new JPanel(new BorderLayout());
 			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
-			jPanel11.add(jPanel6, BorderLayout.WEST);
+			JToolBar jToolBar = new JToolBar();
+			jToolBar.setLayout(new BorderLayout());
+			jToolBar.add(jPanel6);
+			jPanel11.add(jToolBar, BorderLayout.WEST);
 			jPanel11.add(jPanel12, BorderLayout.CENTER);
 			JPanel jPanel7 = new JPanel(new BorderLayout());
 			jPanel7.add(m_jTabbedPaneContract, BorderLayout.CENTER);
@@ -242,7 +246,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel5.add(cancelButton, null);
 			jPanel5.add(refreshButton, null);
 			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
-			
+			JToolBar jToolBar1 = new JToolBar();
+			jToolBar1.setLayout(new BorderLayout());
+			jToolBar1.add(jPanel5);
 			JScrollPane jScrollPane2 = new JScrollPane();
 			jScrollPane2.getViewport().add(m_tradeOrderTable,
 					BorderLayout.CENTER);
@@ -258,7 +264,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeLabel.setEditable(false);
 			this.setTradeLabel(null, null);
 			JPanel jPanel17 = new JPanel(new BorderLayout());			
-			jPanel17.add(jPanel5, BorderLayout.WEST);
+			jPanel17.add(jToolBar1, BorderLayout.WEST);
 			jPanel17.add(m_tradeLabel, BorderLayout.CENTER);
 			jPanel16.add(jPanel17, BorderLayout.NORTH);
 			jPanel16.add(jScrollPane2, BorderLayout.CENTER);
