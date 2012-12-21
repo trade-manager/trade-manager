@@ -139,13 +139,9 @@ public class ConfigurationPanel extends BasePanel {
 			JPanel jPanel4 = new JPanel();
 			jPanel4.setLayout(new BorderLayout());
 			JPanel jPanel5 = new JPanel();
-			FlowLayout flowLayout2 = new FlowLayout();
-			flowLayout2.setAlignment(FlowLayout.LEFT);
-			jPanel5.setLayout(flowLayout2);
+			jPanel5.setLayout(new FlowLayout(FlowLayout.LEFT));
 			JPanel jPanel6 = new JPanel();
-			FlowLayout flowLayout3 = new FlowLayout();
-			flowLayout3.setAlignment(FlowLayout.RIGHT);
-			jPanel6.setLayout(flowLayout3);
+			jPanel6.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
 			JLabel refTable = new JLabel("Configuration:");
 			refTableEditorComboBox = new DecodeComboBoxEditor(ReferenceTable
@@ -171,9 +167,7 @@ public class ConfigurationPanel extends BasePanel {
 
 			jPanel3.add(jPanel5, BorderLayout.WEST);
 			jPanel3.add(jPanel6, BorderLayout.EAST);
-
-			jPanel4.add(m_jScrollPane, BorderLayout.CENTER);
-			jPanel4.add(jPanel3, BorderLayout.SOUTH);
+			jPanel4.add(m_jScrollPane, BorderLayout.CENTER);		
 
 			JScrollPane jScrollPane1 = new JScrollPane();
 			jScrollPane1.getViewport().add(jPanel4, BorderLayout.NORTH);
@@ -186,7 +180,7 @@ public class ConfigurationPanel extends BasePanel {
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
 			jPanel1.add(jSplitPane1, BorderLayout.CENTER);
-			jPanel1.add(jPanel3, BorderLayout.SOUTH);
+			jPanel1.add(jPanel3, BorderLayout.NORTH);
 			this.add(jPanel1, null);
 
 		} catch (Exception ex) {

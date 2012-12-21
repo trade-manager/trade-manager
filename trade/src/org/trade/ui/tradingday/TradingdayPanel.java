@@ -133,8 +133,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private String m_defaultDir = null;
 	private BaseButton ordersButton = null;
 	private BaseButton deleteTradeOrderButton = null;
-	private BaseButton refreshButton = null;
-	private BaseButton searchButton = null;
 	private BaseButton runStrategyButton = null;
 	private BaseButton testStrategyButton = null;
 	private BaseButton brokerDataButton = null;
@@ -194,8 +192,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			deleteTradeOrderButton = new BaseButton(this,
 					BaseUIPropertyCodes.DELETE);
 			deleteTradeOrderButton.setToolTipText("Delete Orders");
-			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
-			searchButton = new BaseButton(this, BaseUIPropertyCodes.SEARCH);
 			cancelStrategiesButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
 			cancelStrategiesButton.setToolTipText("Cancel Strategy");
@@ -247,10 +243,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			JPanel jPanel4 = new JPanel();
 			jPanel4.setLayout(new BorderLayout());
 
-			JPanel jPanel5 = new JPanel();
-			FlowLayout flowLayout2 = new FlowLayout();
-			flowLayout2.setAlignment(FlowLayout.LEFT);
-			jPanel5.setLayout(flowLayout2);
+			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			JLabel fromStrategy = new JLabel("From Strategy:");
 			strategyFromEditorComboBox = new DAODecodeComboBoxEditor(
@@ -267,10 +260,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			strategyToEditorComboBox.setEditable(true);
 			strategyToEditorComboBox.addItemListener(this);
 
-			JPanel jPanel6 = new JPanel();
-			FlowLayout flowLayout3 = new FlowLayout();
-			flowLayout3.setAlignment(FlowLayout.RIGHT);
-			jPanel6.setLayout(flowLayout3);
+			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
 			JScrollPane jScrollPane = new JScrollPane();
 			jScrollPane.getViewport().add(m_tradestrategyTable,
@@ -295,6 +285,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			spinnerEnd.setEditor(de1);
 			spinnerEnd.setValue(tradingday.getOpen());
 
+			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel dateStartLabel = new JLabel("From Date:");
 			JLabel dateEndLabel = new JLabel("To Date:");
 			jPanel5.add(brokerDataButton, null);
@@ -302,22 +293,20 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel5.add(runStrategyButton, null);
 			jPanel5.add(cancelStrategiesButton, null);
 			jPanel5.add(deleteTradeOrderButton, null);
-			jPanel5.add(refreshButton, null);
-			jPanel5.add(searchButton, null);
-			jPanel5.add(dateStartLabel, null);
-			jPanel5.add(spinnerStart, null);
-			jPanel5.add(dateEndLabel, null);
-			jPanel5.add(spinnerEnd, null);
+			jPanel7.add(dateStartLabel, null);
+			jPanel7.add(spinnerStart, null);
+			jPanel7.add(dateEndLabel, null);
+			jPanel7.add(spinnerEnd, null);
 			jPanel6.add(fromStrategy, null);
 			jPanel6.add(strategyFromEditorComboBox, null);
 			jPanel6.add(toStrategy, null);
 			jPanel6.add(strategyToEditorComboBox, null);
 			jPanel6.add(reAssignButton, null);
 			jPanel6.add(ordersButton, null);
-			jPanel3.add(jPanel5, BorderLayout.WEST);
+			jPanel3.add(jPanel7, BorderLayout.WEST);
 			jPanel3.add(jPanel6, BorderLayout.EAST);
 			jPanel4.add(jScrollPane, BorderLayout.CENTER);
-			jPanel4.add(jPanel3, BorderLayout.SOUTH);
+			jPanel4.add(jPanel5, BorderLayout.NORTH);
 
 			JScrollPane jScrollPane1 = new JScrollPane();
 			jScrollPane1.getViewport().add(m_tradingdayTable,
@@ -332,7 +321,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			tradeAccountLabel = new JEditorPane("text/rtf", "");
 			tradeAccountLabel.setAutoscrolls(false);
 			tradeAccountLabel.setEditable(false);
-			jPanel2.add(tradeAccountLabel, BorderLayout.NORTH);
+			JPanel jPanel8 = new JPanel(new BorderLayout());
+			jPanel8.add(tradeAccountLabel, BorderLayout.NORTH);
+			jPanel8.add(jPanel3, BorderLayout.SOUTH);
+			jPanel2.add(jPanel8, BorderLayout.NORTH);
 			jPanel2.add(jScrollPane1, BorderLayout.CENTER);
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel2, jPanel4);
@@ -699,8 +691,18 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	}
 
 	public void doRefresh() {
-		if (null != refreshButton.getTransferObject())
-			doRefresh((Tradingday) refreshButton.getTransferObject());
+		int row = m_tradingdayTable.getSelectedRow();
+		if (row > -1) {
+			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) m_tradingdayModel
+					.getValueAt(m_tradingdayTable.convertRowIndexToModel(row),
+							0);
+			org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) m_tradingdayModel
+					.getValueAt(m_tradingdayTable.convertRowIndexToModel(row),
+							1);
+			Tradingday tradingday = m_tradingdayModel.getData().getTradingday(
+					openDate.getDate(), closeDate.getDate());
+			doRefresh(tradingday);
+		}
 	}
 
 	/**
@@ -1188,13 +1190,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 										closeDate.getDate());
 
 						m_tradestrategyModel.setData(transferObject);
-						refreshButton.setTransferObject(transferObject);
 						m_tradestrategyTable.enablePopupMenu(true);
 						enableTradestrategyButtons(null);
 
 					} else {
 						m_tradestrategyModel.setData(null);
-						refreshButton.setTransferObject(null);
 						m_tradestrategyTable.enablePopupMenu(false);
 					}
 				}

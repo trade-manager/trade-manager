@@ -148,9 +148,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					UIPropertyCodes.newInstance(UIPropertyCodes.COMPILE));
 			newButton = new BaseButton(this, BaseUIPropertyCodes.NEW);
 			newButton.setToolTipText("Load Template");
-			FlowLayout flowLayout1 = new FlowLayout();
-			JPanel jPanel1 = new JPanel(flowLayout1);
-			flowLayout1.setAlignment(FlowLayout.LEFT);
+			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			jPanel1.add(newButton);
 			jPanel1.add(compileButton);
 			// create the message panel first so we can send messages to it...
@@ -163,7 +161,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			messagePanel.setBorder(BorderFactory.createCompoundBorder(
 					BorderFactory.createTitledBorder("Messages"),
 					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
-			messagePanel.add(jPanel1, BorderLayout.SOUTH);
+			
 			DefaultSyntaxKit.initKit();
 			sourceText = new JEditorPane();
 			JScrollPane jScrollPane1 = new JScrollPane(sourceText);
@@ -216,6 +214,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					JSplitPane.VERTICAL_SPLIT, true, split, messagePanel);
 			mainSplitPane.setResizeWeight(0.7d);
 			mainSplitPane.setOneTouchExpandable(true);
+			this.add(jPanel1, BorderLayout.NORTH);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 
 			loadStrategiesFromFileSystem(this.strategies);

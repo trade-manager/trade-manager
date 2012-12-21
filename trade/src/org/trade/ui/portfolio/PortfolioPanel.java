@@ -157,10 +157,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			jPanel2.add(jLabelTrades, BorderLayout.WEST);
 
-			JPanel jPanel6 = new JPanel();
-			FlowLayout flowLayout1 = new FlowLayout();
-			flowLayout1.setAlignment(FlowLayout.LEFT);
-			jPanel6.setLayout(flowLayout1);
+			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			spinnerStart.setModel(new SpinnerDateModel());
 			JSpinner.DateEditor dateStart = new JSpinner.DateEditor(
 					spinnerStart, DATEFORMAT);
@@ -196,8 +193,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			jScrollPane1.addMouseListener(m_tableTradelogSummary);
 			JPanel jPanel3 = new JPanel(new BorderLayout());
 			jPanel3.add(jScrollPane1, BorderLayout.CENTER);
-			jPanel3.add(jPanel1, BorderLayout.NORTH);
-
+			jPanel5.add(jPanel1, BorderLayout.EAST);
+			jPanel3.add(jPanel5, BorderLayout.NORTH);
 			m_tableTradelogDetail
 					.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			m_tableTradelogDetail
@@ -210,7 +207,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JPanel jPanel4 = new JPanel(new BorderLayout());
 			jPanel4.add(jScrollPane2, BorderLayout.CENTER);
 			jPanel4.add(jPanel2, BorderLayout.NORTH);
-			jPanel4.add(jPanel5, BorderLayout.SOUTH);
+			
 
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel3, jPanel4);
