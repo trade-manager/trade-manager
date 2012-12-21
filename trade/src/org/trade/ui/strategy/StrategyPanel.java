@@ -112,8 +112,6 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	private JTextArea commentText = null;
 	private StreamEditorPane messageText = null;
 	private BaseButton compileButton = null;
-	private BaseButton saveButton = null;
-	private BaseButton deleteButton = null;
 	private BaseButton newButton = null;
 	private StrategyTreeModel strategyTreeModel = null;
 	private PersistentModel tradePersistentModel = null;
@@ -148,17 +146,12 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			strategyTreeModel = new StrategyTreeModel(this.strategies);
 			compileButton = new BaseButton(this,
 					UIPropertyCodes.newInstance(UIPropertyCodes.COMPILE));
-			saveButton = new BaseButton(this, BaseUIPropertyCodes.SAVE);
-			saveButton.setToolTipText("Save and Deploy");
-			deleteButton = new BaseButton(this, BaseUIPropertyCodes.DELETE);
 			newButton = new BaseButton(this, BaseUIPropertyCodes.NEW);
 			newButton.setToolTipText("Load Template");
 			FlowLayout flowLayout1 = new FlowLayout();
 			JPanel jPanel1 = new JPanel(flowLayout1);
 			flowLayout1.setAlignment(FlowLayout.LEFT);
-			jPanel1.add(saveButton);
 			jPanel1.add(newButton);
-			jPanel1.add(deleteButton);
 			jPanel1.add(compileButton);
 			// create the message panel first so we can send messages to it...
 			messageText = new StreamEditorPane("text/rtf");
@@ -273,9 +266,6 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					}
 				}
 				compileButton.setTransferObject(rule);
-				saveButton.setTransferObject(rule);
-				deleteButton.setTransferObject(rule);
-
 				setContent(null);
 				messageText.setText(null);
 
@@ -423,16 +413,18 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 * @param rule
 	 *            Rule
 	 */
-	public void doSave(Rule rule) {
+	public void doSave() {
 		try {
 			/*
 			 * Check to see if the rule has change and its not a new rule.
 			 */
-			if (rule.getRule().length > 0) {
-				if ((new String(rule.getRule())).equals(getContent())) {
-					if (null != rule.getComment()
-							&& rule.getComment().equals(getComments())) {
-						if (null != rule.getIdRule()) {
+			if (this.currentRule.getRule().length > 0) {
+				if ((new String(this.currentRule.getRule()))
+						.equals(getContent())) {
+					if (null != this.currentRule.getComment()
+							&& this.currentRule.getComment().equals(
+									getComments())) {
+						if (null != this.currentRule.getIdRule()) {
 							return;
 						}
 					}
@@ -441,22 +433,22 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			String fileName = m_strategyDir + "/"
 					+ StrategyRule.PACKAGE.replace('.', '/');
 			String fileNameSource = fileName
-					+ rule.getStrategy().getClassName() + ".java";
+					+ this.currentRule.getStrategy().getClassName() + ".java";
 			String fileNameComments = fileName
-					+ rule.getStrategy().getClassName() + ".txt";
+					+ this.currentRule.getStrategy().getClassName() + ".txt";
 			int result = JOptionPane.NO_OPTION;
-			if (null != rule.getId()) {
+			if (null != this.currentRule.getId()) {
 				result = JOptionPane.showConfirmDialog(this.getFrame(),
 						"Do you want to version this strategy", "Information",
 						JOptionPane.YES_NO_OPTION);
 			}
 			if (result == JOptionPane.YES_OPTION) {
 				Integer version = this.tradePersistentModel
-						.findRuleByMaxVersion(rule.getStrategy());
-				Rule nextRule = new Rule(rule.getStrategy(), (version + 1),
-						commentText.getText(), new Date(), getContent()
-								.getBytes(), new Date());
-				rule.getStrategy().add(nextRule);
+						.findRuleByMaxVersion(this.currentRule.getStrategy());
+				Rule nextRule = new Rule(this.currentRule.getStrategy(),
+						(version + 1), commentText.getText(), new Date(),
+						getContent().getBytes(), new Date());
+				this.currentRule.getStrategy().add(nextRule);
 				this.tradePersistentModel.persistRule(nextRule);
 				doSaveFile(fileNameSource, getContent());
 				doSaveFile(fileNameComments, getComments());
@@ -465,25 +457,25 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 				 * changes made.
 				 */
 
-				Rule orginalRule = tradePersistentModel.findRuleById(rule
-						.getId());
-				rule.setComment(orginalRule.getComment());
-				rule.setCreateDate(orginalRule.getCreateDate());
-				rule.setRule(orginalRule.getRule());
+				Rule orginalRule = tradePersistentModel
+						.findRuleById(this.currentRule.getId());
+				this.currentRule.setComment(orginalRule.getComment());
+				this.currentRule.setCreateDate(orginalRule.getCreateDate());
+				this.currentRule.setRule(orginalRule.getRule());
 
-				this.setContent(new String(rule.getRule()));
-				commentText.setText(rule.getComment());
+				this.setContent(new String(this.currentRule.getRule()));
+				commentText.setText(this.currentRule.getComment());
 			} else {
 				if (getComments().length() > 0)
-					rule.setComment(getComments());
-				rule.setUpdateDate(new Date());
-				rule.setRule(getContent().getBytes());
-				this.tradePersistentModel.persistRule(rule);
+					this.currentRule.setComment(getComments());
+				this.currentRule.setUpdateDate(new Date());
+				this.currentRule.setRule(getContent().getBytes());
+				this.tradePersistentModel.persistRule(this.currentRule);
 				doSaveFile(fileNameSource, getContent());
 				doSaveFile(fileNameComments, getComments());
 			}
 			refreshTree();
-			rule.setDirty(false);
+			this.currentRule.setDirty(false);
 		} catch (Exception ex) {
 			setErrorMessage("Error saving strategy", ex.getMessage(), ex);
 		} finally {
@@ -524,7 +516,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 * @param rule
 	 *            Rule
 	 */
-	public void doDelete(Rule rule) {
+	public void doDelete() {
 		try {
 			int result = JOptionPane.showConfirmDialog(this.getFrame(),
 					"Do you want to delete selected rule?", "Information",
@@ -532,14 +524,14 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			if (result == JOptionPane.YES_OPTION) {
 				for (Strategy strategy : this.strategies) {
 					if (strategy.getIdStrategy().equals(
-							rule.getStrategy().getIdStrategy())) {
-						strategy.getRules().remove(rule);
-						this.tradePersistentModel.removeRule(rule);
+							this.currentRule.getStrategy().getIdStrategy())) {
+						strategy.getRules().remove(this.currentRule);
+						this.tradePersistentModel.removeRule(this.currentRule);
 					}
 				}
 				Integer version = this.tradePersistentModel
-						.findRuleByMaxVersion(rule.getStrategy());
-				if (version == rule.getVersion() && version > 1) {
+						.findRuleByMaxVersion(this.currentRule.getStrategy());
+				if (version == this.currentRule.getVersion() && version > 1) {
 					setMessageText(
 							"File system is out of sync with DB please re deploy the latest version.",
 							false, true, colorRedAttr);

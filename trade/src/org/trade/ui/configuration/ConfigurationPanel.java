@@ -228,25 +228,43 @@ public class ConfigurationPanel extends BasePanel {
 
 	public void doSave() {
 		try {
-System.out.println("doSave()");
-			int selectedRow = 0;
+
+			int selectedRow = m_table.getSelectedRow();
+			String className = "org.trade.persistent.dao."
+					+ ((ReferenceTable) refTableEditorComboBox
+							.getSelectedItem()).getCode();
+
 			for (ListIterator<Aspect> itemIter = m_aspects.getAspect()
 					.listIterator(); itemIter.hasNext();) {
 				Aspect item = itemIter.next();
-				Aspect mergedItem = m_tradePersistentModel.persistAspect(item);
+				if (item.isDirty()) {
+					item = m_tradePersistentModel.persistAspect(item);
+				}
+
 				/*
 				 * Replace the aspect with the mergedAspect then update the
 				 * tables and select the row for the saved data.
 				 */
-				if (item.getId().equals(mergedItem.getId())) {
-					itemIter.set(mergedItem);
-					m_tableModel.setData(m_aspects);
-					int row = m_table.convertRowIndexToView(selectedRow);
-					m_table.setRowSelectionInterval(row, row);
+				itemIter.set(item);
+			}
+
+			Aspects aspects = m_tradePersistentModel
+					.findAspectsByClassName(className);
+			for (Aspect currAspect : aspects.getAspect()) {
+				boolean exists = false;
+				for (Aspect aspect : m_aspects.getAspect()) {
+					if (aspect.getId().equals(currAspect.getId())) {
+						exists = true;
+					}
 				}
-				selectedRow++;
+				if (!exists)
+					m_tradePersistentModel.removeAspect(currAspect);
 			}
 			DBTableLookupServiceProvider.clearLookup();
+			m_tableModel.setData(m_aspects);
+			if (selectedRow == -1)
+				selectedRow = 0;
+			m_table.setRowSelectionInterval(selectedRow, selectedRow);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error saving item.", ex.getMessage(), ex);
 		}

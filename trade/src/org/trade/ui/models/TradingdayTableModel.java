@@ -273,7 +273,6 @@ public class TradingdayTableModel extends TableModel {
 			date = TradingCalendar.getNextTradingDay(date);
 		}
 		Tradingday element = Tradingday.newInstance(date);
-		element.setDirty(true);
 		getData().add(element);
 
 		Vector<Object> newRow = new Vector<Object>();

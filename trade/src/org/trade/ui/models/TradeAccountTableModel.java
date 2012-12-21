@@ -178,6 +178,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 		default: {
 		}
 		}
+		element.setDirty(true);
 	}
 
 	/**
@@ -193,6 +194,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 			if (CoreUtils.nullSafeComparator(
 					((TradeAccount) element).getAccountNumber(), acctNumber) == 0) {
 				getData().remove(element);
+				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
 				this.fireTableRowsDeleted(selectedRow, selectedRow);

@@ -168,6 +168,7 @@ public class EntrylimitTableModel extends AspectTableModel {
 		default: {
 		}
 		}
+		element.setDirty(true);
 	}
 
 	/**
@@ -184,6 +185,7 @@ public class EntrylimitTableModel extends AspectTableModel {
 					((Entrylimit) element).getStartPrice(),
 					startPrice.getBigDecimalValue()) == 0) {
 				getData().remove(element);
+				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
 				this.fireTableRowsDeleted(selectedRow, selectedRow);

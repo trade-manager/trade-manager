@@ -47,6 +47,7 @@ public class Aspects implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 3388042483785305102L;
 	private Integer idAspects;
+	private boolean dirty = false;
 	private List<Aspect> aspect = new ArrayList<Aspect>(0);
 
 	public Aspects() {
@@ -54,7 +55,9 @@ public class Aspects implements java.io.Serializable {
 
 	/**
 	 * Constructor for Aspects.
-	 * @param idAspects Integer
+	 * 
+	 * @param idAspects
+	 *            Integer
 	 */
 	public Aspects(Integer idAspects) {
 		this.idAspects = idAspects;
@@ -62,7 +65,9 @@ public class Aspects implements java.io.Serializable {
 
 	/**
 	 * Constructor for Aspects.
-	 * @param aspect List<Aspect>
+	 * 
+	 * @param aspect
+	 *            List<Aspect>
 	 */
 	public Aspects(List<Aspect> aspect) {
 		this.aspect = aspect;
@@ -70,8 +75,11 @@ public class Aspects implements java.io.Serializable {
 
 	/**
 	 * Constructor for Aspects.
-	 * @param idAspects Integer
-	 * @param aspect List<Aspect>
+	 * 
+	 * @param idAspects
+	 *            Integer
+	 * @param aspect
+	 *            List<Aspect>
 	 */
 	public Aspects(Integer idAspects, List<Aspect> aspect) {
 		this.idAspects = idAspects;
@@ -80,6 +88,7 @@ public class Aspects implements java.io.Serializable {
 
 	/**
 	 * Method getIdAspects.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getIdAspects() {
@@ -88,7 +97,9 @@ public class Aspects implements java.io.Serializable {
 
 	/**
 	 * Method setIdAspects.
-	 * @param idAspects Integer
+	 * 
+	 * @param idAspects
+	 *            Integer
 	 */
 	public void setIdAspects(Integer idAspects) {
 		this.idAspects = idAspects;
@@ -96,15 +107,20 @@ public class Aspects implements java.io.Serializable {
 
 	/**
 	 * Method add.
-	 * @param aspect Aspect
+	 * 
+	 * @param aspect
+	 *            Aspect
 	 */
 	public void add(Aspect aspect) {
 		this.aspect.add(aspect);
+		dirty = true;
 	}
 
 	/**
 	 * Method remove.
-	 * @param aspect Aspect
+	 * 
+	 * @param aspect
+	 *            Aspect
 	 */
 	public void remove(Aspect aspect) {
 		this.aspect.remove(aspect);
@@ -112,6 +128,7 @@ public class Aspects implements java.io.Serializable {
 
 	/**
 	 * Method getAspect.
+	 * 
 	 * @return List<Aspect>
 	 */
 	public List<Aspect> getAspect() {
@@ -119,11 +136,27 @@ public class Aspects implements java.io.Serializable {
 	}
 
 	/**
-	 * Method setAspect.
-	 * @param aspect List<Aspect>
+	 * Method setDirty.
+	 * 
+	 * @param dirty
+	 *            boolean
 	 */
-	public void setAspect(List<Aspect> aspect) {
-		this.aspect = aspect;
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	/**
+	 * Method isDirty.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isDirty() {
+		for (Aspect aspect : this.getAspect()) {
+			if (aspect.isDirty()) {
+				return true;
+			}
+		}
+		return this.dirty;
 	}
 
 	public void clear() {

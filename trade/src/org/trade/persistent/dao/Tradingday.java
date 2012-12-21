@@ -100,7 +100,6 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	public Tradingday(Date open, Date close) {
 		this.open = open;
 		this.close = close;
-		super.setDirty(true);
 	}
 
 	/**

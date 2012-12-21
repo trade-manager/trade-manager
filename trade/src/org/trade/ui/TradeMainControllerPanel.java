@@ -312,7 +312,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 	}
 
-
 	/**
 	 * This is fired from the Contract Tab when the Execute Order button is
 	 * pressed. This should be used to execute orders to the broker platform.
@@ -449,7 +448,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			runStrategy(tradingdays, false);
 		}
 	}
-
 
 	/**
 	 * This method is fired when the system connects to TWS, if there are open
@@ -1348,7 +1346,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 	}
 
-
 	/**
 	 * Method doTransfer.
 	 * 
@@ -1392,14 +1389,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            BasePanel
 	 */
 	public void tabChanged(BasePanel currBasePanel, BasePanel newBasePanel) {
-		this.m_menuBar.setEnabledDeleteSave(false);
+		this.m_menuBar.setEnabledDelete(false);
 		this.m_menuBar.setEnabledRunStrategy(false);
 		this.m_menuBar.setEnabledBrokerData(false);
 		this.m_menuBar.setEnabledTestStrategy(false);
 		if (tradingdayPanel == newBasePanel) {
 			if (null == brokerDataRequestProgressMonitor
 					|| brokerDataRequestProgressMonitor.isDone()) {
-				this.m_menuBar.setEnabledDeleteSave(true);
+				this.m_menuBar.setEnabledDelete(true);
 				if (m_brokerModel.isConnected()) {
 					this.m_menuBar.setEnabledRunStrategy(true);
 				} else {
@@ -1407,9 +1404,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				this.m_menuBar.setEnabledBrokerData(true);
 			}
+		} else if (strategyPanel == newBasePanel) {
+			this.m_menuBar.setEnabledDelete(true);
 		}
 	}
-
 
 	/**
 	 * Method runStrategy.

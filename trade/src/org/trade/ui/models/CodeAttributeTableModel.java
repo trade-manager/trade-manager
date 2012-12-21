@@ -138,6 +138,7 @@ public class CodeAttributeTableModel extends TableModel {
 		default: {
 		}
 		}
+		element.setDirty(true);
 	}
 
 	/**
@@ -152,6 +153,7 @@ public class CodeAttributeTableModel extends TableModel {
 		for (final CodeAttribute element : getData().getCodeAttribute()) {
 			if (CoreUtils.nullSafeComparator(element.getName(), name) == 0) {
 				getData().getCodeAttribute().remove(element);
+				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
 				this.fireTableRowsDeleted(selectedRow, selectedRow);

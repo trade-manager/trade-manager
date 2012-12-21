@@ -96,6 +96,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	private Boolean subChart;
 	private Strategy strategy;
 	protected Integer version;
+	private boolean dirty = false;
 	private List<CodeValue> codeValues = new ArrayList<CodeValue>(0);
 
 	/**
@@ -360,6 +361,26 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 		this.version = version;
 	}
 
+	/**
+	 * Method isDirty.
+	 * 
+	 * @return boolean
+	 */
+	@Transient
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * Method setDirty.
+	 * 
+	 * @param dirty
+	 *            boolean
+	 */
+
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
 	/**
 	 * Method getStrategy.
 	 * 

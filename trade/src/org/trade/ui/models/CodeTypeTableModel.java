@@ -118,6 +118,7 @@ public class CodeTypeTableModel extends AspectTableModel {
 		default: {
 		}
 		}
+		element.setDirty(true);
 	}
 
 	/**
@@ -133,6 +134,7 @@ public class CodeTypeTableModel extends AspectTableModel {
 			if (CoreUtils.nullSafeComparator(((CodeType) element).getName(),
 					name) == 0) {
 				getData().remove(element);
+				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
 				this.fireTableRowsDeleted(selectedRow, selectedRow);

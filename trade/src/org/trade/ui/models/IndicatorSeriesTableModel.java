@@ -209,6 +209,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 		default: {
 		}
 		}
+		element.setDirty(true);
 	}
 
 	/**
@@ -244,6 +245,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 			if (CoreUtils.nullSafeComparator(element.getName(), name) == 0
 					&& CoreUtils.nullSafeComparator(element.getType(), type) == 0) {
 				getData().getIndicatorSeries().remove(element);
+				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
 				this.fireTableRowsDeleted(selectedRow, selectedRow);
