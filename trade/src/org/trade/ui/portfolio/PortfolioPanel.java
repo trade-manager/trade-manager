@@ -150,14 +150,14 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 					m_tradelogDetailModel);
 			JLabel jLabelSummary = new JLabel(
 					"Summary Note Win/Loss Count = +\\- 1/2 Risk Unit");
-			JPanel jPanel1 = new JPanel(new BorderLayout());
-			jPanel1.add(jLabelSummary, BorderLayout.WEST);
+			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			jPanel1.add(jLabelSummary, null);
 
 			JLabel jLabelTrades = new JLabel("Trades");
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			jPanel2.add(jLabelTrades, BorderLayout.WEST);
 
-			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			
 			spinnerStart.setModel(new SpinnerDateModel());
 			JSpinner.DateEditor dateStart = new JSpinner.DateEditor(
 					spinnerStart, DATEFORMAT);
@@ -169,7 +169,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			spinnerEnd.setEditor(dateEnd);
 			spinnerEnd.setValue(TradingCalendar.getTodayBusinessDayStart());
 			filterButton.setSelected(false);
-
+			
+			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel startLabel = new JLabel("Start Date:");
 			JLabel endLabel = new JLabel("End Date:");
 			jPanel6.add(accountLabel, null);
@@ -179,9 +180,10 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			jPanel6.add(endLabel, null);
 			jPanel6.add(spinnerEnd, null);
 			jPanel6.add(filterButton, null);
-
+			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
 			JPanel jPanel5 = new JPanel(new BorderLayout());
-			jPanel5.add(jPanel6, null);
+			jPanel5.add(jPanel6, BorderLayout.WEST);
+			jPanel5.add(jPanel1, BorderLayout.EAST);
 
 			m_tableTradelogSummary.setEnabled(false);
 			m_tableTradelogSummary.setFont(new Font("Monospaced", Font.PLAIN,
@@ -193,7 +195,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			jScrollPane1.addMouseListener(m_tableTradelogSummary);
 			JPanel jPanel3 = new JPanel(new BorderLayout());
 			jPanel3.add(jScrollPane1, BorderLayout.CENTER);
-			jPanel5.add(jPanel1, BorderLayout.EAST);
+		
 			jPanel3.add(jPanel5, BorderLayout.NORTH);
 			m_tableTradelogDetail
 					.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

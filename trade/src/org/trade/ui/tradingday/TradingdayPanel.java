@@ -305,8 +305,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel6.add(ordersButton, null);
 			jPanel3.add(jPanel7, BorderLayout.WEST);
 			jPanel3.add(jPanel6, BorderLayout.EAST);
-			jPanel4.add(jScrollPane, BorderLayout.CENTER);
+			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
 			jPanel4.add(jPanel5, BorderLayout.NORTH);
+			jPanel4.add(jScrollPane, BorderLayout.CENTER);
 
 			JScrollPane jScrollPane1 = new JScrollPane();
 			jScrollPane1.getViewport().add(m_tradingdayTable,
@@ -322,6 +323,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			tradeAccountLabel.setAutoscrolls(false);
 			tradeAccountLabel.setEditable(false);
 			JPanel jPanel8 = new JPanel(new BorderLayout());
+			jPanel3.setBorder(new BevelBorder(BevelBorder.RAISED));
 			jPanel8.add(tradeAccountLabel, BorderLayout.NORTH);
 			jPanel8.add(jPanel3, BorderLayout.SOUTH);
 			jPanel2.add(jPanel8, BorderLayout.NORTH);

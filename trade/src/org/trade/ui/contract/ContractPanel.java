@@ -201,6 +201,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jScrollPane1Tree.getViewport().add(m_tree, BorderLayout.CENTER);
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			jPanel2.add(jScrollPane1Tree, BorderLayout.CENTER);
+			jPanel1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
 			// Chart Panel
@@ -224,6 +225,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_strategyLabel.setEditable(false);
 			jPanel12.add(m_strategyLabel, null);
 			JPanel jPanel11 = new JPanel(new BorderLayout());
+			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
 			jPanel11.add(jPanel6, BorderLayout.WEST);
 			jPanel11.add(jPanel12, BorderLayout.CENTER);
 			JPanel jPanel7 = new JPanel(new BorderLayout());
@@ -239,9 +241,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel5.add(executeButton, null);
 			jPanel5.add(cancelButton, null);
 			jPanel5.add(refreshButton, null);
-
-			JPanel jPanel10 = new JPanel(new BorderLayout());
-			jPanel10.add(jPanel5, BorderLayout.WEST);
+			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
+			
 			JScrollPane jScrollPane2 = new JScrollPane();
 			jScrollPane2.getViewport().add(m_tradeOrderTable,
 					BorderLayout.CENTER);
@@ -253,12 +254,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jScrollPane2.addMouseListener(m_tradeOrderTable);
 
 			m_tradeLabel = new JEditorPane("text/rtf", "");
-			this.setTradeLabel(null, null);
 			m_tradeLabel.setAutoscrolls(false);
 			m_tradeLabel.setEditable(false);
-			JPanel jPanel17 = new JPanel(new BorderLayout());
-			jPanel17.add(jPanel10, BorderLayout.NORTH);
-			jPanel17.add(m_tradeLabel, BorderLayout.SOUTH);
+			this.setTradeLabel(null, null);
+			JPanel jPanel17 = new JPanel(new BorderLayout());			
+			jPanel17.add(jPanel5, BorderLayout.WEST);
+			jPanel17.add(m_tradeLabel, BorderLayout.CENTER);
 			jPanel16.add(jPanel17, BorderLayout.NORTH);
 			jPanel16.add(jScrollPane2, BorderLayout.CENTER);
 

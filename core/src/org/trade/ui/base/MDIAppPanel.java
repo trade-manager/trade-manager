@@ -107,17 +107,11 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 			JPanel jPanel1 = new JPanel();
 			jPanel1.setLayout(new BorderLayout());
 
-			JPanel jPanelProgressBar = new JPanel();
-			FlowLayout flowLayout1 = new FlowLayout();
-			flowLayout1.setAlignment(FlowLayout.RIGHT);
-			jPanelProgressBar.setLayout(flowLayout1);
+			JPanel jPanelProgressBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			JProgressBar progressBar = new JProgressBar(0, 0);
 			jPanelProgressBar.add(progressBar);
 
-			JPanel jPanelClock = new JPanel();
-			FlowLayout flowLayout2 = new FlowLayout();
-			flowLayout2.setAlignment(FlowLayout.LEFT);
-			jPanelClock.setLayout(flowLayout2);
+			JPanel jPanelClock = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			Clock clock = new Clock();
 			jPanelClock.add(clock);
 

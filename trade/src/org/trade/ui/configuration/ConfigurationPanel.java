@@ -138,18 +138,13 @@ public class ConfigurationPanel extends BasePanel {
 			JPanel jPanel3 = new JPanel(new BorderLayout());
 			JPanel jPanel4 = new JPanel();
 			jPanel4.setLayout(new BorderLayout());
-			JPanel jPanel5 = new JPanel();
-			jPanel5.setLayout(new FlowLayout(FlowLayout.LEFT));
-			JPanel jPanel6 = new JPanel();
-			jPanel6.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			JLabel refTable = new JLabel("Configuration:");
 			refTableEditorComboBox = new DecodeComboBoxEditor(ReferenceTable
 					.newInstance().getCodesDecodes());
-
 			DecodeComboBoxRenderer refTableRenderer = new DecodeComboBoxRenderer();
 			refTableEditorComboBox.setRenderer(refTableRenderer);
-
 			refTableEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -164,9 +159,9 @@ public class ConfigurationPanel extends BasePanel {
 
 			jPanel5.add(refTable, null);
 			jPanel5.add(refTableEditorComboBox, null);
-
+			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
 			jPanel3.add(jPanel5, BorderLayout.WEST);
-			jPanel3.add(jPanel6, BorderLayout.EAST);
+
 			jPanel4.add(m_jScrollPane, BorderLayout.CENTER);		
 
 			JScrollPane jScrollPane1 = new JScrollPane();

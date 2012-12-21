@@ -63,6 +63,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ToolTipManager;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileFilter;
@@ -151,6 +152,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			jPanel1.add(newButton);
 			jPanel1.add(compileButton);
+			jPanel1.setBorder(new BevelBorder(BevelBorder.RAISED));
+			JPanel jPanel2 = new JPanel(new BorderLayout());
+			jPanel2.add(jPanel1,BorderLayout.WEST );
 			// create the message panel first so we can send messages to it...
 			messageText = new StreamEditorPane("text/rtf");
 			messageText.setFont(new Font("dialog", Font.PLAIN, 12));
@@ -214,7 +218,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					JSplitPane.VERTICAL_SPLIT, true, split, messagePanel);
 			mainSplitPane.setResizeWeight(0.7d);
 			mainSplitPane.setOneTouchExpandable(true);
-			this.add(jPanel1, BorderLayout.NORTH);
+			this.add(jPanel2, BorderLayout.NORTH);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 
 			loadStrategiesFromFileSystem(this.strategies);
