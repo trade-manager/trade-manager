@@ -129,7 +129,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private TradestrategyTableModel m_tradestrategyModel = null;
 	private Table m_tradingdayTable = null;
 	private Tradingdays m_tradingdays = null;
-	private ConcurrentHashMap<String, StrategyRule> m_strategyWorkers = null;
+	private static final ConcurrentHashMap<String, StrategyRule> m_strategyWorkers = new ConcurrentHashMap<String, StrategyRule>();
 
 	private String m_defaultDir = null;
 	private BaseButton ordersButton = null;
@@ -171,10 +171,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public TradingdayPanel(Tradingdays tradingdays, BasePanel controller,
-			PersistentModel tradePersistentModel,
-			ConcurrentHashMap<String, StrategyRule> strategyWorkers) {
+			PersistentModel tradePersistentModel) {
 		try {
-			m_strategyWorkers = strategyWorkers;
 			m_tradingdays = tradingdays;
 			m_tradePersistentModel = tradePersistentModel;
 			m_defaultDir = ConfigProperties
@@ -216,7 +214,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			}
 			m_tradestrategyModel.setData(tradingday);
 			m_tradestrategyTable = new TradestrategyTable(m_tradestrategyModel,
-					strategyWorkers);
+					m_strategyWorkers);
 			ToolTipManager.sharedInstance().registerComponent(
 					m_tradestrategyTable);
 			m_tradestrategyTable.getSelectionModel().addListSelectionListener(
@@ -919,6 +917,132 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	}
 
 	/**
+	 * Method isStrategyWorkerRunning.
+	 * 
+	 * @param tradingday
+	 *            Tradingday
+	 * @return boolean
+	 */
+	public boolean isStrategyWorkerRunning(Tradingday tradingday) {
+		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
+			if (isStrategyWorkerRunning(tradestrategy)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Method isStrategyWorkerRunning.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @return boolean
+	 */
+	public boolean isStrategyWorkerRunning(Tradestrategy tradestrategy) {
+
+		String key = tradestrategy.getStrategy().getClassName()
+				+ tradestrategy.getIdTradeStrategy();
+		if (isStrategyWorkerRunning(key)) {
+			return true;
+		}
+		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
+				+ tradestrategy.getIdTradeStrategy();
+		if (isStrategyWorkerRunning(key)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Method isStrategyWorkerRunning.
+	 * 
+	 * @param key
+	 *            String
+	 * @return boolean
+	 */
+	public boolean isStrategyWorkerRunning(String key) {
+		if (m_strategyWorkers.containsKey(key)) {
+			StrategyRule strategy = m_strategyWorkers.get(key);
+			if (!strategy.isDone()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Method addStrategyWorker.
+	 * 
+	 * @param key
+	 *            String
+	 * @param strategy
+	 *            StrategyRule
+	 */
+	public void addStrategyWorker(String key, StrategyRule strategy) {
+		m_strategyWorkers.put(key, strategy);
+	}
+
+	/**
+	 * Method killAllStrategyWorkersForTradestrategy.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void killAllStrategyWorkersForTradestrategy(
+			Tradestrategy tradestrategy) {
+		String key = null;
+
+		key = tradestrategy.getStrategy().getClassName()
+				+ tradestrategy.getIdTradeStrategy();
+		if (isStrategyWorkerRunning(key)) {
+			killStrategyWorker(key);
+		}
+		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
+				+ tradestrategy.getIdTradeStrategy();
+		if (isStrategyWorkerRunning(key)) {
+			killStrategyWorker(key);
+		}
+	}
+
+	/**
+	 * Method killStrategyWorker.
+	 * 
+	 * @param key
+	 *            String
+	 */
+	public void killStrategyWorker(String key) {
+		if (m_strategyWorkers.containsKey(key)) {
+			StrategyRule strategy = m_strategyWorkers.get(key);
+			if (!strategy.isDone()) {
+				strategy.cancel();
+			}
+		}
+	}
+
+	/**
+	 * Method killAllStrategyWorker.
+	 * 
+	 */
+	public void killAllStrategyWorker() {
+		for (String key : m_strategyWorkers.keySet()) {
+			killStrategyWorker(key);
+		}
+	}
+
+	/**
+	 * Method cleanStrategyWorker.
+	 * 
+	 */
+	public void cleanStrategyWorker() {
+		for (String key : m_strategyWorkers.keySet()) {
+			if (m_strategyWorkers.get(key).isDone()) {
+				m_strategyWorkers.remove(key);
+			}
+		}
+	}
+
+	/**
 	 * Method deleteTradeOrders.
 	 * 
 	 * @param tradingdays
@@ -967,71 +1091,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					}
 				});
 		deleteProgressMonitor.execute();
-	}
-
-	/**
-	 * Method isStrategyWorkerRunning.
-	 * 
-	 * @param key
-	 *            String
-	 * @return boolean
-	 */
-	private boolean isStrategyWorkerRunning(String key) {
-		if (m_strategyWorkers.containsKey(key)) {
-			StrategyRule strategy = m_strategyWorkers.get(key);
-			if (!strategy.isDone()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Method killStrategyWorker.
-	 * 
-	 * @param key
-	 *            String
-	 */
-	private void killStrategyWorker(String key) {
-		if (m_strategyWorkers.containsKey(key)) {
-			StrategyRule strategy = m_strategyWorkers.get(key);
-			if (!strategy.isDone()) {
-				strategy.cancel();
-			}
-			m_strategyWorkers.remove(key);
-		}
-	}
-
-	/**
-	 * Method killAllStrategyWorker.
-	 * 
-	 */
-	private void killAllStrategyWorker() {
-		for (String key : m_strategyWorkers.keySet()) {
-			killStrategyWorker(key);
-		}
-	}
-
-	/**
-	 * Method killAllStrategyWorkersForTradestrategy.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 */
-	private void killAllStrategyWorkersForTradestrategy(
-			Tradestrategy tradestrategy) {
-		String key = null;
-
-		key = tradestrategy.getStrategy().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			killStrategyWorker(key);
-		}
-		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			killStrategyWorker(key);
-		}
 	}
 
 	/**

@@ -119,7 +119,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private BrokerModel m_brokerModel = null;
 	private PersistentModel m_tradePersistentModel = null;
 	private BrokerDataRequestProgressMonitor brokerDataRequestProgressMonitor = null;
-	private static final ConcurrentHashMap<String, StrategyRule> m_strategyWorkers = new ConcurrentHashMap<String, StrategyRule>();
 	private static final ConcurrentHashMap<Integer, Tradestrategy> m_indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
 
 	private TradingdayPanel tradingdayPanel = null;
@@ -179,7 +178,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void openTradingdayView() {
 		tradingdayPanel = new TradingdayPanel(m_tradingdays, this,
-				m_tradePersistentModel, m_strategyWorkers);
+				m_tradePersistentModel);
 		getMenu().addMessageListener(tradingdayPanel);
 		this.addTab("Tradingday", tradingdayPanel);
 	}
@@ -588,7 +587,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 				if (null != tradestrategy.getStrategy().getStrategyManager()) {
 
-					if (!this.isStrategyWorkerRunning(tradestrategy
+					if (!tradingdayPanel.isStrategyWorkerRunning(tradestrategy
 							.getStrategy().getStrategyManager().getClassName()
 							+ tradestrategy.getIdTradeStrategy())) {
 						/*
@@ -596,8 +595,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						 * job is done.
 						 */
 
-						killStrategyWorker(tradestrategy.getStrategy()
-								.getClassName()
+						tradingdayPanel.killStrategyWorker(tradestrategy
+								.getStrategy().getClassName()
 								+ tradestrategy.getIdTradeStrategy());
 
 						_log.info("Start PositionManagerStrategy: "
@@ -1009,7 +1008,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 
 	public void doWindowClose() {
-		killAllStrategyWorker();
+		tradingdayPanel.killAllStrategyWorker();
 		doDisconnect();
 		doExit();
 	}
@@ -1053,7 +1052,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doDisconnect() {
 		try {
-			killAllStrategyWorker();
+			tradingdayPanel.killAllStrategyWorker();
 			if (m_brokerModel.isConnected()) {
 				doCancel();
 				m_brokerModel.disconnect();
@@ -1263,7 +1262,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				&& !brokerDataRequestProgressMonitor.isDone()) {
 			brokerDataRequestProgressMonitor.cancel(true);
 		}
-		killAllStrategyWorker();
+		tradingdayPanel.killAllStrategyWorker();
 		m_indicatorTradestrategy.clear();
 		refreshTradingdays(m_tradingdays);
 		this.setStatusBarMessage(
@@ -1291,8 +1290,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						BasePanel.INFORMATION);
 			}
 			// Cancel the StrategyWorker if running
-			if (this.isStrategyWorkerRunning(tradestrategy)) {
-				killAllStrategyWorkersForTradestrategy(tradestrategy);
+			if (tradingdayPanel.isStrategyWorkerRunning(tradestrategy)) {
+				tradingdayPanel
+						.killAllStrategyWorkersForTradestrategy(tradestrategy);
 				this.setStatusBarMessage(
 						"Strategy has been cancelled for Symbol: "
 								+ tradestrategy.getContract().getSymbol(),
@@ -1453,7 +1453,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				for (Tradingday tradingday : tradingdays.getTradingdays()
 						.values()) {
-					if (isStrategyWorkerRunning(tradingday)) {
+					if (tradingdayPanel.isStrategyWorkerRunning(tradingday)) {
 						this.setStatusBarMessage(
 								"Strategies already running please wait or cancel ...",
 								BasePanel.INFORMATION);
@@ -1549,7 +1549,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				m_menuBar.setEnabledTestStrategy(false);
 			}
 			m_menuBar.setEnabledSearchDeleteRefreshSave(false);
-			cleanStrategyWorker();
+			tradingdayPanel.cleanStrategyWorker();
 			/*
 			 * Now run a thread that gets and saves historical data from IB TWS.
 			 */
@@ -1576,112 +1576,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	}
 
 	/**
-	 * Method isStrategyWorkerRunning.
-	 * 
-	 * @param tradingday
-	 *            Tradingday
-	 * @return boolean
-	 */
-	private boolean isStrategyWorkerRunning(Tradingday tradingday) {
-		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-			if (isStrategyWorkerRunning(tradestrategy)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Method isStrategyWorkerRunning.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @return boolean
-	 */
-	private boolean isStrategyWorkerRunning(Tradestrategy tradestrategy) {
-
-		String key = tradestrategy.getStrategy().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			return true;
-		}
-		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Method isStrategyWorkerRunning.
-	 * 
-	 * @param key
-	 *            String
-	 * @return boolean
-	 */
-	private boolean isStrategyWorkerRunning(String key) {
-		if (m_strategyWorkers.containsKey(key)) {
-			StrategyRule strategy = m_strategyWorkers.get(key);
-			if (!strategy.isDone()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Method killStrategyWorker.
-	 * 
-	 * @param key
-	 *            String
-	 */
-	private void killStrategyWorker(String key) {
-		if (m_strategyWorkers.containsKey(key)) {
-			StrategyRule strategy = m_strategyWorkers.get(key);
-			if (!strategy.isDone()) {
-				strategy.cancel();
-			}
-		}
-	}
-
-	private void killAllStrategyWorker() {
-		for (String key : m_strategyWorkers.keySet()) {
-			killStrategyWorker(key);
-		}
-	}
-
-	private void cleanStrategyWorker() {
-		for (String key : m_strategyWorkers.keySet()) {
-			if (m_strategyWorkers.get(key).isDone()) {
-				m_strategyWorkers.remove(key);
-			}
-		}
-	}
-
-	/**
-	 * Method killAllStrategyWorkersForTradestrategy.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 */
-	private void killAllStrategyWorkersForTradestrategy(
-			Tradestrategy tradestrategy) {
-		String key = null;
-
-		key = tradestrategy.getStrategy().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			killStrategyWorker(key);
-		}
-		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			killStrategyWorker(key);
-		}
-	}
-
-	/**
 	 * Method createStrategy.
 	 * 
 	 * @param strategyClassName
@@ -1696,30 +1590,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		String key = strategyClassName + tradestrategy.getIdTradeStrategy();
 
 		// Only allow one strategy worker per tradestrategy
-		if (m_strategyWorkers.containsKey(key)) {
-			StrategyRule strategy = m_strategyWorkers.get(key);
-			if (strategy.isDone()) {
-				m_strategyWorkers.remove(key);
-				strategy = null;
-				_log.info("Strategy already running and complete: "
-						+ strategyClassName
-						+ " Symbol: "
-						+ tradestrategy.getContract().getSymbol()
-						+ " seriesCount: "
-						+ tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getItemCount());
-			} else {
-				throw new StrategyRuleException(1, 100,
-						"Strategy already running: "
-								+ strategyClassName
-								+ " Symbol: "
-								+ tradestrategy.getContract().getSymbol()
-								+ " Key: "
-								+ key
-								+ " seriesCount: "
-								+ tradestrategy.getDatasetContainer()
-										.getBaseCandleSeries().getItemCount());
-			}
+		if (tradingdayPanel.isStrategyWorkerRunning(key)) {
+			throw new StrategyRuleException(1, 100,
+					"Strategy already running: "
+							+ strategyClassName
+							+ " Symbol: "
+							+ tradestrategy.getContract().getSymbol()
+							+ " Key: "
+							+ key
+							+ " seriesCount: "
+							+ tradestrategy.getDatasetContainer()
+									.getBaseCandleSeries().getItemCount());
 		}
 
 		Vector<Object> parm = new Vector<Object>(0);
@@ -1742,7 +1623,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getBackTestBroker(tradestrategy.getIdTradeStrategy()));
 		}
 		strategy.execute();
-		m_strategyWorkers.put(key, strategy);
+		tradingdayPanel.addStrategyWorker(key, strategy);
 		_log.info("Start: "
 				+ strategyClassName
 				+ " Symbol: "
@@ -1801,7 +1682,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			m_menuBar.setEnabledRunStrategy(true);
 		} else {
 			m_menuBar.setEnabledTestStrategy(true);
-			cleanStrategyWorker();
+			tradingdayPanel.cleanStrategyWorker();
 		}
 		m_menuBar.setEnabledSearchDeleteRefreshSave(true);
 	}
@@ -2017,7 +1898,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			int percent = (int) (((double) (totalSumbitted - this.brokerManagerModel
 					.getHistoricalData().size()) / this.grandTotal) * 100d);
 			setProgress(percent);
-			cleanStrategyWorker();
 			return totalSumbitted;
 		}
 
