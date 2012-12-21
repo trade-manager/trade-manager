@@ -312,7 +312,6 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 		searchButton.setEnabled(enabled);
 		deleteButton.setEnabled(enabled);
 		deleteMenu.setEnabled(enabled);
-		this.enableSave(enabled);
 	}
 	/**
 	 * Method setEnabledDeleteSave.
@@ -321,6 +320,5 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 	public void setEnabledDeleteSave(boolean enabled) {
 		deleteButton.setEnabled(enabled);
 		deleteMenu.setEnabled(enabled);
-		this.enableSave(enabled);
 	}
 }

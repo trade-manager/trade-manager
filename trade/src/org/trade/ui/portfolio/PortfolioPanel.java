@@ -105,8 +105,6 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private TradelogSummaryTableModel m_tradelogSummaryModel = null;
 	private Table m_tableTradelogDetail = null;
 	private TradelogDetailTableModel m_tradelogDetailModel = null;
-	private BaseButton searchButton = null;
-	private BaseButton saveButton = null;
 	private BaseButton transferButton = null;
 	private JSpinner spinnerStart = new JSpinner();
 	private JSpinner spinnerEnd = new JSpinner();
@@ -131,10 +129,6 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			m_tradePersistentModel = tradePersistentModel;
 			m_csvDefaultDir = ConfigProperties
 					.getPropAsString("trade.csv.default.dir");
-
-			// This allows the controller to listen to these events
-			saveButton = new BaseButton(this, BaseUIPropertyCodes.SAVE);
-			searchButton = new BaseButton(this, BaseUIPropertyCodes.SEARCH);
 			transferButton = new BaseButton(controller,
 					BaseUIPropertyCodes.TRANSFER);
 			JLabel accountLabel = new JLabel("Account:");
@@ -181,9 +175,6 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 			JLabel startLabel = new JLabel("Start Date:");
 			JLabel endLabel = new JLabel("End Date:");
-			jPanel6.add(saveButton, null);
-			// jPanel6.add(fetchButton, null);
-			jPanel6.add(searchButton, null);
 			jPanel6.add(accountLabel, null);
 			jPanel6.add(tradeAccountEditorComboBox, null);
 			jPanel6.add(startLabel, null);

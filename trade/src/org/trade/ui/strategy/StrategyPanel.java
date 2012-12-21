@@ -114,7 +114,6 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	private BaseButton compileButton = null;
 	private BaseButton saveButton = null;
 	private BaseButton deleteButton = null;
-	private BaseButton refreshButton = null;
 	private BaseButton newButton = null;
 	private StrategyTreeModel strategyTreeModel = null;
 	private PersistentModel tradePersistentModel = null;
@@ -151,7 +150,6 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					UIPropertyCodes.newInstance(UIPropertyCodes.COMPILE));
 			saveButton = new BaseButton(this, BaseUIPropertyCodes.SAVE);
 			saveButton.setToolTipText("Save and Deploy");
-			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
 			deleteButton = new BaseButton(this, BaseUIPropertyCodes.DELETE);
 			newButton = new BaseButton(this, BaseUIPropertyCodes.NEW);
 			newButton.setToolTipText("Load Template");
@@ -160,7 +158,6 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			flowLayout1.setAlignment(FlowLayout.LEFT);
 			jPanel1.add(saveButton);
 			jPanel1.add(newButton);
-			jPanel1.add(refreshButton);
 			jPanel1.add(deleteButton);
 			jPanel1.add(compileButton);
 			// create the message panel first so we can send messages to it...

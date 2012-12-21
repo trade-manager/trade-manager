@@ -56,7 +56,6 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -107,9 +106,6 @@ public class ConfigurationPanel extends BasePanel {
 
 	private ConfigurationTable m_tableChild = null;
 	private TableModel m_tableModelChild = null;
-	private BaseButton saveButton = null;
-	private BaseButton deleteButton = null;
-	private BaseButton refreshButton = null;
 	private BaseButton propertiesButton = null;
 	private DecodeComboBoxEditor refTableEditorComboBox = null;
 
@@ -130,10 +126,6 @@ public class ConfigurationPanel extends BasePanel {
 			DAOEntryLimit.newInstance();
 			m_tradePersistentModel = tradePersistentModel;
 			m_jScrollPane = new JScrollPane();
-			// This allows the controller to listen to these events
-			saveButton = new BaseButton(this, BaseUIPropertyCodes.SAVE);
-			deleteButton = new BaseButton(this, BaseUIPropertyCodes.DELETE);
-			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
 			propertiesButton = new BaseButton(this,
 					BaseUIPropertyCodes.PROPERTIES, 0);
 			propertiesButton.setEnabled(false);
@@ -176,9 +168,6 @@ public class ConfigurationPanel extends BasePanel {
 
 			jPanel5.add(refTable, null);
 			jPanel5.add(refTableEditorComboBox, null);
-			jPanel5.add(saveButton, null);
-			jPanel5.add(refreshButton, null);
-			jPanel5.add(deleteButton, null);
 
 			jPanel3.add(jPanel5, BorderLayout.WEST);
 			jPanel3.add(jPanel6, BorderLayout.EAST);
@@ -233,19 +222,18 @@ public class ConfigurationPanel extends BasePanel {
 	/**
 	 * This is fired when the Save button is pressed.
 	 * 
-	 * @param instance
-	 *            Aspect the selected strategy to be saved.
 	 * 
 	 * 
 	 */
 
-	public void doSave(Aspect instance) {
+	public void doSave() {
 		try {
-			Aspect mergedItem = m_tradePersistentModel.persistAspect(instance);
+System.out.println("doSave()");
 			int selectedRow = 0;
 			for (ListIterator<Aspect> itemIter = m_aspects.getAspect()
 					.listIterator(); itemIter.hasNext();) {
 				Aspect item = itemIter.next();
+				Aspect mergedItem = m_tradePersistentModel.persistAspect(item);
 				/*
 				 * Replace the aspect with the mergedAspect then update the
 				 * tables and select the row for the saved data.
@@ -274,34 +262,6 @@ public class ConfigurationPanel extends BasePanel {
 					.getSelectedItem()).getCode());
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding item.", ex.getMessage(), ex);
-		}
-	}
-
-	/**
-	 * This is fired when the Delete button is pressed.
-	 * 
-	 * @param instance
-	 *            instance the selected strategy to be deleted.
-	 * 
-	 * 
-	 */
-	public void doDelete(Aspect instance) {
-
-		try {
-			int result = JOptionPane.showConfirmDialog(this.getFrame(),
-					"Do you want to delete selected item?", "Information",
-					JOptionPane.YES_NO_OPTION);
-			if (result == JOptionPane.YES_OPTION) {
-				m_tradePersistentModel.removeAspect(instance);
-				m_aspects.remove(instance);
-				m_tableModel.setData(m_aspects);
-				if (null != m_tableModelChild) {
-					m_tableModelChild.clearAll();
-				}
-				DBTableLookupServiceProvider.clearLookup();
-			}
-		} catch (Exception ex) {
-			this.setErrorMessage("Error deleting item.", ex.getMessage(), ex);
 		}
 	}
 
@@ -426,8 +386,6 @@ public class ConfigurationPanel extends BasePanel {
 							.getAspect()
 							.get(m_table.convertRowIndexToModel(model
 									.getLeadSelectionIndex()));
-					deleteButton.setTransferObject(transferObject);
-					saveButton.setTransferObject(transferObject);
 					propertiesButton.setEnabled(false);
 					setChildPanel(transferObject);
 				}

@@ -55,7 +55,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
@@ -313,51 +312,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 	}
 
-	/**
-	 * This is fired from any Tab when the Delete button is pressed. This should
-	 * be used to delete all the trading orders for the current trading days.
-	 * 
-	 */
-
-	public void doDelete() {
-		try {
-			deleteTradeOrders(m_tradingdays);
-		} catch (Exception ex) {
-			this.setErrorMessage("Error deleting TradeOrders.",
-					ex.getMessage(), ex);
-		}
-	}
-
-	/**
-	 * This is fired from the Trading Tab when the Delete button is pressed.
-	 * This should be used to delete a trade orders for a selected
-	 * tradestrategy.
-	 * 
-	 * @param tradestrategy
-	 *            the Tradestrategy that you would like to delete tradeorders
-	 *            for.
-	 * 
-	 */
-
-	public void doDelete(final Tradestrategy tradestrategy) {
-		try {
-			int result = JOptionPane.showConfirmDialog(this.getFrame(),
-					"Do you want to delete order for the selected Tradestrategy?",
-					"Information", JOptionPane.YES_NO_OPTION);
-			if (result == JOptionPane.YES_OPTION) {
-				Tradingdays tradingdays = new Tradingdays();
-				Tradingday tradingday = Tradingday.newInstance(tradestrategy
-						.getTradingday().getOpen());
-				tradingday.addTradestrategy(tradestrategy);
-				tradingdays.add(tradingday);
-				deleteTradeOrders(tradingdays);
-			}
-
-		} catch (Exception ex) {
-			this.setErrorMessage("Error deleting TradeOrders.",
-					ex.getMessage(), ex);
-		}
-	}
 
 	/**
 	 * This is fired from the Contract Tab when the Execute Order button is
@@ -496,73 +450,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 	}
 
-	/**
-	 * This is fired from the Tradingday Tab when the Save button on the toolbar
-	 * is pressed. This will save all the tradingdays/tradestrategies.
-	 * 
-	 */
-
-	public void doSave() {
-		try {
-
-			this.setStatusBarMessage("Save in progress ...\n",
-					BasePanel.INFORMATION);
-
-			// Save the Trading days
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						getFrame().setCursor(
-								Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-						boolean dirty = false;
-						for (Tradingday tradingday : m_tradingdays
-								.getTradingdays().values()) {
-							if (tradingday.getClose().before(
-									tradingday.getOpen())
-									|| tradingday.getClose().equals(
-											tradingday.getOpen())) {
-								String msg = "Tradingday Open "
-										+ tradingday.getOpen()
-										+ " cannot be after trading day close "
-										+ tradingday.getClose();
-								setErrorMessage("Error Tradingday", msg,
-										new PersistentModelException(msg));
-							}
-							if (tradingday.isDirty()) {
-								dirty = true;
-								for (Tradestrategy tradestrategy : tradingday
-										.getTradestrategies()) {
-									if (tradestrategy.isDirty()) {
-										if (null != tradestrategy
-												.getIdTradeStrategy()) {
-											m_brokerModel
-													.onCancelRealtimeBars(tradestrategy);
-											tradestrategy
-													.setDatasetContainer(null);
-										}
-										contractPanel.doClose(tradestrategy);
-									}
-								}
-								m_tradePersistentModel
-										.persistTradingday(tradingday);
-							}
-						}
-						if (dirty)
-							refreshTradingdays(m_tradingdays);
-						clearStatusBarMessage();
-						getFrame().setCursor(Cursor.getDefaultCursor());
-					} catch (PersistentModelException ex) {
-						setErrorMessage("Error saving Trade Strategies.",
-								ex.getMessage(), ex);
-					}
-				}
-			});
-
-		} catch (Exception ex) {
-			this.setErrorMessage("Error saving Trade Strategies.",
-					ex.getMessage(), ex);
-		}
-	}
 
 	/**
 	 * This method is fired when the system connects to TWS, if there are open
@@ -1461,67 +1348,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 	}
 
-	/**
-	 * This is fired from the main menu when the assigning Strategy button is
-	 * pressed. This will re assign all the tradestrategies..
-	 * 
-	 * 
-	 * @param strategies
-	 *            List<Strategy>
-	 */
-
-	public void doReAssign(List<Strategy> strategies) {
-
-		try {
-			/*
-			 * Check to see if any of the selected trading days has open
-			 * positions. If they do kill the strategy worker before deleting
-			 * trades.
-			 */
-			for (Tradingday tradingday : m_tradingdays.getTradingdays()
-					.values()) {
-				if (Tradingdays.hasTrades(tradingday)) {
-					JOptionPane
-							.showMessageDialog(
-									this.getFrame(),
-									"Tradingday: "
-											+ tradingday.getOpen()
-											+ " has trades. Please delete all trades before re-asigning strategies.",
-									"Warning", JOptionPane.OK_OPTION);
-					return;
-				}
-			}
-
-			int result = JOptionPane
-					.showConfirmDialog(
-							this.getFrame(),
-							"Are you sure you want to re-assign strategies for selected trading days?",
-							"Warning", JOptionPane.YES_NO_OPTION);
-
-			if (result == JOptionPane.YES_OPTION) {
-				this.setStatusBarMessage("Reassign in progress ...\n",
-						BasePanel.INFORMATION);
-				final ReAssignProgressMonitor reAssignProgressMonitor = new ReAssignProgressMonitor(
-						m_tradePersistentModel, m_tradingdays,
-						strategies.get(0), strategies.get(1));
-				reAssignProgressMonitor
-						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-							public void propertyChange(PropertyChangeEvent evt) {
-								if ("progress".equals(evt.getPropertyName())) {
-									int progress = (Integer) evt.getNewValue();
-									setProgressBarProgress(progress,
-											reAssignProgressMonitor);
-								}
-							}
-						});
-				reAssignProgressMonitor.execute();
-			}
-
-		} catch (Exception ex) {
-			this.setErrorMessage("Error re-assigning Strategies.",
-					ex.getMessage(), ex);
-		}
-	}
 
 	/**
 	 * Method doTransfer.
@@ -1584,57 +1410,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 	}
 
-	/**
-	 * Method deleteTradeOrders.
-	 * 
-	 * @param tradingdays
-	 *            Tradingdays
-	 */
-	private void deleteTradeOrders(Tradingdays tradingdays) {
-
-		/*
-		 * Check to see if any of the selected trading days has open positions.
-		 * If they do kill the strategy worker before deleting trades.
-		 */
-		for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
-			if (Tradingdays.hasOpenTrades(tradingday)) {
-				int result = JOptionPane
-						.showConfirmDialog(
-								this.getFrame(),
-								"Tradingday: "
-										+ tradingday.getOpen()
-										+ " has open positions. Do you want to continue",
-								"Warning", JOptionPane.YES_NO_OPTION);
-				if (result == JOptionPane.YES_OPTION) {
-					removeStrategyWorker(tradingday);
-				} else {
-					return;
-				}
-			}
-		}
-
-		int result = JOptionPane.showConfirmDialog(this.getFrame(),
-				"Are you sure you want to delete all Trade Orders?", "Warning",
-				JOptionPane.YES_NO_OPTION);
-		this.killAllStrategyWorker();
-		if (result == JOptionPane.YES_OPTION) {
-			this.setStatusBarMessage("Delete in progress ...\n",
-					BasePanel.INFORMATION);
-			final DeleteProgressMonitor deleteProgressMonitor = new DeleteProgressMonitor(
-					m_tradePersistentModel, tradingdays);
-			deleteProgressMonitor
-					.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-						public void propertyChange(PropertyChangeEvent evt) {
-							if ("progress".equals(evt.getPropertyName())) {
-								int progress = (Integer) evt.getNewValue();
-								setProgressBarProgress(progress,
-										deleteProgressMonitor);
-							}
-						}
-					});
-			deleteProgressMonitor.execute();
-		}
-	}
 
 	/**
 	 * Method runStrategy.
@@ -1838,25 +1613,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Method removeStrategyWorker.
-	 * 
-	 * @param tradingday
-	 *            Tradingday
-	 */
-	private void removeStrategyWorker(Tradingday tradingday) {
-		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-			killAllStrategyWorkersForTradestrategy(tradestrategy);
-			String key = tradestrategy.getStrategy().getClassName()
-					+ tradestrategy.getIdTradeStrategy();
-			m_strategyWorkers.remove(key);
-			key = tradestrategy.getStrategy().getStrategyManager()
-					.getClassName()
-					+ tradestrategy.getIdTradeStrategy();
-			m_strategyWorkers.remove(key);
-		}
 	}
 
 	/**
@@ -2535,190 +2291,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						reProcessTradingday);
 			}
 			return toProcessTradingday;
-		}
-	}
-
-	/**
-	 */
-	private class DeleteProgressMonitor extends SwingWorker<Void, String> {
-
-		private PersistentModel tradeManagerModel = null;
-		private Tradingdays tradingdays = null;
-		private int grandtotal = 0;
-		private long startTime = 0;
-
-		/**
-		 * Constructor for DeleteProgressMonitor.
-		 * 
-		 * @param tradeManagerModel
-		 *            PersistentModel
-		 * @param tradingdays
-		 *            Tradingdays
-		 */
-		public DeleteProgressMonitor(PersistentModel tradeManagerModel,
-				Tradingdays tradingdays) {
-			this.tradingdays = tradingdays;
-			this.tradeManagerModel = tradeManagerModel;
-		}
-
-		/**
-		 * Method doInBackground.
-		 * 
-		 * @return Void
-		 */
-		public Void doInBackground() {
-
-			try {
-				grandtotal = tradingdays.getTradingdays().size();
-				this.startTime = System.currentTimeMillis();
-				int totalComplete = 0;
-				// Initialize the progress bar
-				getProgressBar().setMaximum(100);
-				setProgress(0);
-				String message = null;
-				for (Tradingday tradingday : tradingdays.getTradingdays()
-						.values()) {
-					this.tradeManagerModel.removeTradingdayTrades(tradingday);
-					totalComplete++;
-					int percent = (int) (((double) (totalComplete) / grandtotal) * 100d);
-					setProgress(percent);
-				}
-				setProgress(100);
-				message = "Completed delete of Trade Order data total days processed: "
-						+ totalComplete
-						+ " in : "
-						+ ((System.currentTimeMillis() - this.startTime) / 1000)
-						+ " Seconds.";
-				_log.info(message);
-				publish(message);
-			} catch (Exception ex) {
-				setErrorMessage("Error deleting Trade Orders.",
-						ex.getMessage(), ex);
-			}
-			return null;
-		}
-
-		/*
-		 * This method process the publish method from doInBackground().
-		 */
-		/**
-		 * Method process.
-		 * 
-		 * @param messages
-		 *            List<String>
-		 */
-		protected void process(List<String> messages) {
-			setStatusBarMessage(messages.get(messages.size() - 1),
-					BasePanel.INFORMATION);
-		}
-
-		public void done() {
-			refreshTradingdays(this.tradingdays);
-			String message = "Completed delete of Trade Order data total days processed: "
-					+ grandtotal
-					+ " in : "
-					+ ((System.currentTimeMillis() - this.startTime) / 1000)
-					+ " Seconds.";
-			setStatusBarMessage(message, BasePanel.INFORMATION);
-		}
-	}
-
-	/**
-	 */
-	private class ReAssignProgressMonitor extends SwingWorker<Void, String> {
-
-		private PersistentModel tradeManagerModel = null;
-		private Tradingdays tradingdays = null;
-		private int grandtotal = 0;
-		private long startTime = 0;
-		private Strategy fromStrategy = null;
-		private Strategy toStrategy = null;
-
-		/**
-		 * Constructor for ReAssignProgressMonitor.
-		 * 
-		 * @param tradeManagerModel
-		 *            PersistentModel
-		 * @param tradingdays
-		 *            Tradingdays
-		 * @param fromStrategy
-		 *            Strategy
-		 * @param toStrategy
-		 *            Strategy
-		 */
-		public ReAssignProgressMonitor(PersistentModel tradeManagerModel,
-				Tradingdays tradingdays, Strategy fromStrategy,
-				Strategy toStrategy) {
-			this.tradingdays = tradingdays;
-			this.tradeManagerModel = tradeManagerModel;
-			this.fromStrategy = fromStrategy;
-			this.toStrategy = toStrategy;
-		}
-
-		/**
-		 * Method doInBackground.
-		 * 
-		 * @return Void
-		 */
-		public Void doInBackground() {
-
-			try {
-				this.grandtotal = tradingdays.getTradingdays().size();
-				this.startTime = System.currentTimeMillis();
-				int totalComplete = 0;
-				// Initialize the progress bar
-				getProgressBar().setMaximum(100);
-				setProgress(0);
-				String message = null;
-				this.toStrategy = this.tradeManagerModel
-						.findStrategyById(this.toStrategy.getIdStrategy());
-				for (Tradingday tradingday : tradingdays.getTradingdays()
-						.values()) {
-					this.tradeManagerModel.reassignStrategy(this.fromStrategy,
-							this.toStrategy, tradingday);
-
-					totalComplete++;
-					int percent = (int) (((double) (totalComplete) / this.grandtotal) * 100d);
-					setProgress(percent);
-				}
-				setProgress(100);
-				message = "Complete re-assign of Strategies total days processed: "
-						+ totalComplete
-						+ " in : "
-						+ ((System.currentTimeMillis() - this.startTime) / 1000)
-						+ " Seconds.";
-				_log.info(message);
-				publish(message);
-
-			} catch (Exception ex) {
-				setErrorMessage("Error reassigning strategy.", ex.getMessage(),
-						ex);
-			}
-			return null;
-		}
-
-		/*
-		 * This method process the publish method from doInBackground().
-		 */
-		/**
-		 * Method process.
-		 * 
-		 * @param messages
-		 *            List<String>
-		 */
-		protected void process(List<String> messages) {
-			setStatusBarMessage(messages.get(messages.size() - 1),
-					BasePanel.INFORMATION);
-		}
-
-		public void done() {
-			refreshTradingdays(this.tradingdays);
-			String message = "Complete re-assign of Strategies total days processed: "
-					+ grandtotal
-					+ " in : "
-					+ ((System.currentTimeMillis() - this.startTime) / 1000)
-					+ " Seconds.";
-			setStatusBarMessage(message, BasePanel.INFORMATION);
 		}
 	}
 }
