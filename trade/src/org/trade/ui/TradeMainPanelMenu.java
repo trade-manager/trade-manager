@@ -317,7 +317,9 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 	 * Method setEnabledDeleteSave.
 	 * @param enabled boolean
 	 */
-	public void setEnabledDelete(boolean enabled) {
+	public void setEnabledDelete(boolean enabled, String text) {
+		deleteMenu.setText(text);
+		deleteButton.setToolTipText(text);
 		deleteButton.setEnabled(enabled);
 		deleteMenu.setEnabled(enabled);
 	}

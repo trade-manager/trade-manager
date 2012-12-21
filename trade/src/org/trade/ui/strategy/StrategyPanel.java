@@ -159,7 +159,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
 			jToolBar.add(jPanel2);
-			
+
 			// create the message panel first so we can send messages to it...
 			messageText = new StreamEditorPane("text/rtf");
 			messageText.setFont(new Font("dialog", Font.PLAIN, 12));
@@ -426,6 +426,12 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			/*
 			 * Check to see if the rule has change and its not a new rule.
 			 */
+			if (this.currentRule == null) {
+				this.setStatusBarMessage("Please select a rule to be saved.",
+						BasePanel.INFORMATION);
+				return;
+			}
+
 			if (this.currentRule.getRule().length > 0) {
 				if ((new String(this.currentRule.getRule()))
 						.equals(getContent())) {
@@ -526,6 +532,12 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 */
 	public void doDelete() {
 		try {
+			if (this.currentRule == null) {
+				this.setStatusBarMessage("Please select a rule to be deleted.",
+						BasePanel.INFORMATION);
+				return;
+			}
+			
 			int result = JOptionPane.showConfirmDialog(this.getFrame(),
 					"Do you want to delete selected rule?", "Information",
 					JOptionPane.YES_NO_OPTION);

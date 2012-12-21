@@ -1389,14 +1389,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            BasePanel
 	 */
 	public void tabChanged(BasePanel currBasePanel, BasePanel newBasePanel) {
-		this.m_menuBar.setEnabledDelete(false);
+		this.m_menuBar.setEnabledDelete(false, "Delete all Order");
 		this.m_menuBar.setEnabledRunStrategy(false);
 		this.m_menuBar.setEnabledBrokerData(false);
 		this.m_menuBar.setEnabledTestStrategy(false);
 		if (tradingdayPanel == newBasePanel) {
 			if (null == brokerDataRequestProgressMonitor
 					|| brokerDataRequestProgressMonitor.isDone()) {
-				this.m_menuBar.setEnabledDelete(true);
+				this.m_menuBar.setEnabledDelete(true, "Delete all Order");
 				if (m_brokerModel.isConnected()) {
 					this.m_menuBar.setEnabledRunStrategy(true);
 				} else {
@@ -1405,7 +1405,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				this.m_menuBar.setEnabledBrokerData(true);
 			}
 		} else if (strategyPanel == newBasePanel) {
-			this.m_menuBar.setEnabledDelete(true);
+			this.m_menuBar.setEnabledDelete(true, "Delete rule");
 		}
 	}
 
