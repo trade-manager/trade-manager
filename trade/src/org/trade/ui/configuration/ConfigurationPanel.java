@@ -199,6 +199,12 @@ public class ConfigurationPanel extends BasePanel {
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
+		if (m_aspects.isDirty()) {
+			setStatusBarMessage(
+					"Please Save or Refresh as changed are pending",
+					BasePanel.WARNING);
+			return false;
+		}
 		return true;
 	}
 
@@ -242,7 +248,7 @@ public class ConfigurationPanel extends BasePanel {
 				 */
 				itemIter.set(item);
 			}
-
+			m_aspects.setDirty(true);
 			Aspects aspects = m_tradePersistentModel
 					.findAspectsByClassName(className);
 			for (Aspect currAspect : aspects.getAspect()) {

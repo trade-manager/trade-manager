@@ -62,7 +62,7 @@ public class AspectHome {
 	 *            Aspect
 	 * @return Aspect
 	 */
-	public synchronized  Aspect persist(Aspect transientInstance) {
+	public synchronized Aspect persist(Aspect transientInstance) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -70,11 +70,14 @@ public class AspectHome {
 			if (null == transientInstance.getId()) {
 				entityManager.persist(transientInstance);
 				entityManager.getTransaction().commit();
+				transientInstance.setDirty(false);
 				return transientInstance;
 			} else {
 				Aspect instance = entityManager.merge(transientInstance);
 				entityManager.getTransaction().commit();
 				transientInstance.setVersion(instance.getVersion());
+				transientInstance.setDirty(false);
+				instance.setDirty(false);
 				return instance;
 			}
 

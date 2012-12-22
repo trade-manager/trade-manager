@@ -210,6 +210,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 		}
 		}
 		element.setDirty(true);
+		this.getData().setDirty(true);
 	}
 
 	/**

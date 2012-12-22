@@ -1062,6 +1062,7 @@ public class TradePersistentModel implements PersistentModel {
 				for (Object item : strategies) {
 					aspects.add((Aspect) item);
 				}
+				aspects.setDirty(false);
 				return aspects;
 			} else {
 				return m_aspectHome.findByClassName(aspectClassName);
