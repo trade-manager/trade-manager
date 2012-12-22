@@ -237,12 +237,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Tradestrategy
 	 * @see #addChangeListener(StrategyChangeListener)
 	 */
-	protected void fireStrategyComplete(Tradestrategy tradestrategy) {
+	protected void fireStrategyComplete(String key, Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == StrategyChangeListener.class) {
-				((StrategyChangeListener) listeners[i + 1])
-						.strategyComplete(tradestrategy);
+				((StrategyChangeListener) listeners[i + 1]).strategyComplete(
+						key, tradestrategy);
 			}
 		}
 	}
@@ -490,12 +490,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public abstract void runStrategy(CandleSeries candleSeries, boolean newBar);
 
 	protected void done() {
-
-		this.fireStrategyComplete(this.tradestrategy);
+		this.fireStrategyComplete(this.getClass().getSimpleName()
+				+ this.tradestrategy.getIdTradeStrategy(), this.tradestrategy);
 		removeAllMessageListener();
 		this.datasetContainer.getBaseCandleSeries().removeChangeListener(this);
 		_log.info("Rule engine done: " + getSymbol() + " class: "
-				+ this.getClass().getName() + " idTradestrategy: "
+				+ this.getClass().getSimpleName() + " idTradestrategy: "
 				+ this.tradestrategy.getIdTradeStrategy());
 	}
 

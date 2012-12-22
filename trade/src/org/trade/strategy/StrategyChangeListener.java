@@ -54,7 +54,7 @@ public interface StrategyChangeListener extends EventListener {
 	 * @param tradestrategy Tradestrategy
 	 */
 
-	public void strategyComplete(Tradestrategy tradestrategy);
+	public void strategyComplete(String key, Tradestrategy tradestrategy);
 
 	/**
 	 * Method strategyStarted.

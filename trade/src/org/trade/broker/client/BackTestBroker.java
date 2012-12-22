@@ -35,7 +35,6 @@
  */
 package org.trade.broker.client;
 
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -129,7 +128,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
 	 */
-	public synchronized void strategyComplete(Tradestrategy tradestrategy) {
+	public synchronized void strategyComplete(String key,
+			Tradestrategy tradestrategy) {
 		synchronized (lockBackTestWorker) {
 			strategiesRunning.getAndDecrement();
 			lockBackTestWorker.notifyAll();

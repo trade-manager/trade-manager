@@ -726,7 +726,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
 	 */
-	public void strategyComplete(Tradestrategy tradestrategy) {
+	public void strategyComplete(String key, Tradestrategy tradestrategy) {
 
 		try {
 			if (m_brokerModel.isConnected()) {
@@ -739,7 +739,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				if (contractPanel.isSelected())
 					contractPanel.doRefresh(tradestrategy);
 			}
-			tradingdayPanel.removeStrategyWorker(tradestrategy);
+			tradingdayPanel.removeStrategyWorker(key);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error strategyComplete : ", ex.getMessage(),
