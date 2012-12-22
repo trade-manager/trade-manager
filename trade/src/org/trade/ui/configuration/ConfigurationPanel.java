@@ -164,9 +164,11 @@ public class ConfigurationPanel extends BasePanel {
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
 			jToolBar.add(jPanel5);
-			jPanel3.add(jToolBar, BorderLayout.WEST);
+			JPanel jPanel6 = new JPanel(new BorderLayout());
+			jPanel6.add(jToolBar, BorderLayout.WEST);
+			jPanel3.add(jPanel6, BorderLayout.WEST);
 
-			jPanel4.add(m_jScrollPane, BorderLayout.CENTER);		
+			jPanel4.add(m_jScrollPane, BorderLayout.CENTER);
 
 			JScrollPane jScrollPane1 = new JScrollPane();
 			jScrollPane1.getViewport().add(jPanel4, BorderLayout.NORTH);

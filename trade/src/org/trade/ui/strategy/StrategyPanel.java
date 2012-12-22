@@ -150,15 +150,13 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					UIPropertyCodes.newInstance(UIPropertyCodes.COMPILE));
 			newButton = new BaseButton(this, BaseUIPropertyCodes.NEW);
 			newButton.setToolTipText("Load Template");
-			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			JPanel jPanel1 = new JPanel(new FlowLayout());
 			jPanel1.add(newButton);
 			jPanel1.add(compileButton);
 			jPanel1.setBorder(new BevelBorder(BevelBorder.RAISED));
-			JPanel jPanel2 = new JPanel(new BorderLayout());
-			jPanel2.add(jPanel1, BorderLayout.WEST);
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
-			jToolBar.add(jPanel2);
+			jToolBar.add(jPanel1, BorderLayout.WEST);
 
 			// create the message panel first so we can send messages to it...
 			messageText = new StreamEditorPane("text/rtf");
