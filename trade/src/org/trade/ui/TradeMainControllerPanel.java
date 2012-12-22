@@ -739,6 +739,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				if (contractPanel.isSelected())
 					contractPanel.doRefresh(tradestrategy);
 			}
+			tradingdayPanel.removeStrategyWorker(tradestrategy);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error strategyComplete : ", ex.getMessage(),

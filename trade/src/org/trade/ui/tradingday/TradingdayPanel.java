@@ -984,6 +984,25 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	}
 
 	/**
+	 * Method addStrategyWorker.
+	 * 
+	 * @param key
+	 *            String
+	 * @param strategy
+	 *            StrategyRule
+	 */
+	public void removeStrategyWorker(Tradestrategy tradestrategy) {
+		String key = tradestrategy.getStrategy().getClassName()
+				+ tradestrategy.getIdTradeStrategy();
+		if (m_strategyWorkers.containsKey(key))
+			m_strategyWorkers.remove(key);
+		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
+				+ tradestrategy.getIdTradeStrategy();
+		if (m_strategyWorkers.containsKey(key))
+			m_strategyWorkers.remove(key);
+	}
+
+	/**
 	 * Method killAllStrategyWorkersForTradestrategy.
 	 * 
 	 * @param tradestrategy
@@ -991,9 +1010,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 */
 	public void killAllStrategyWorkersForTradestrategy(
 			Tradestrategy tradestrategy) {
-		String key = null;
-
-		key = tradestrategy.getStrategy().getClassName()
+		String key = tradestrategy.getStrategy().getClassName()
 				+ tradestrategy.getIdTradeStrategy();
 		if (isStrategyWorkerRunning(key)) {
 			killStrategyWorker(key);
