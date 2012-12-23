@@ -150,13 +150,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			m_tableTradelogDetail = new TradelogDetailTable(
 					m_tradelogDetailModel);
 			JLabel jLabelSummary = new JLabel(
-					"Summary Note Win/Loss Count = +\\- 1/2 Risk Unit");
+					"Note Win/Loss Count = +\\- 1/2 Risk Unit");
 			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			jPanel1.add(jLabelSummary, null);
-
-			JLabel jLabelTrades = new JLabel("Trades");
-			JPanel jPanel2 = new JPanel(new BorderLayout());
-			jPanel2.add(jLabelTrades, BorderLayout.WEST);
 
 			spinnerStart.setModel(new SpinnerDateModel());
 			JSpinner.DateEditor dateStart = new JSpinner.DateEditor(
@@ -214,7 +210,6 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			jScrollPane2.addMouseListener(m_tableTradelogDetail);
 			JPanel jPanel4 = new JPanel(new BorderLayout());
 			jPanel4.add(jScrollPane2, BorderLayout.CENTER);
-			jPanel4.add(jPanel2, BorderLayout.NORTH);
 
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel3, jPanel4);
