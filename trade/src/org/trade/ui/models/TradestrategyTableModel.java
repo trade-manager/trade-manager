@@ -292,10 +292,12 @@ public class TradestrategyTableModel extends TableModel {
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int column) {
-		this.populateDAO(value, row, column);
-		Vector<Object> dataRow = rows.get(row);
-		dataRow.setElementAt(value, column);
-		fireTableCellUpdated(row, column);
+		if (!getValueAt(row, column).equals(value)) {
+			this.populateDAO(value, row, column);
+			Vector<Object> dataRow = rows.get(row);
+			dataRow.setElementAt(value, column);
+			fireTableCellUpdated(row, column);
+		}
 	}
 
 	/**

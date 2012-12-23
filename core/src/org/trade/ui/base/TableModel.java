@@ -52,16 +52,20 @@ public abstract class TableModel extends AbstractTableModel {
 
 	public TableModel() {
 	}
-	
+
 	public TableModel(String[] columnHeaderToolTip) {
 		this.columnHeaderToolTip = columnHeaderToolTip;
 	}
 
 	/**
 	 * Method populateDAO.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 */
 	public abstract void populateDAO(Object value, int row, int column);
 
@@ -69,7 +73,9 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method deleteRow.
-	 * @param selectedRow int
+	 * 
+	 * @param selectedRow
+	 *            int
 	 */
 	public abstract void deleteRow(int selectedRow);
 
@@ -80,10 +86,12 @@ public abstract class TableModel extends AbstractTableModel {
 			this.fireTableRowsDeleted(0, rowSize);
 		}
 	}
-	
+
 	/**
 	 * Method getColumnHeaderToolTip.
-	 * @param column int
+	 * 
+	 * @param column
+	 *            int
 	 * @return String
 	 * @see javax.swing.table.TableModel#getColumnName(int)
 	 */
@@ -97,7 +105,9 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method getColumnName.
-	 * @param column int
+	 * 
+	 * @param column
+	 *            int
 	 * @return String
 	 * @see javax.swing.table.TableModel#getColumnName(int)
 	 */
@@ -111,7 +121,9 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method getColumnClass.
-	 * @param column int
+	 * 
+	 * @param column
+	 *            int
 	 * @return Class<?>
 	 * @see javax.swing.table.TableModel#getColumnClass(int)
 	 */
@@ -126,8 +138,11 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -137,6 +152,7 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method getColumnCount.
+	 * 
 	 * @return int
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 */
@@ -146,6 +162,7 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method getRowCount.
+	 * 
 	 * @return int
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
@@ -155,8 +172,11 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method getValueAt.
-	 * @param aRow int
-	 * @param aColumn int
+	 * 
+	 * @param aRow
+	 *            int
+	 * @param aColumn
+	 *            int
 	 * @return Object
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
@@ -170,23 +190,32 @@ public abstract class TableModel extends AbstractTableModel {
 
 	/**
 	 * Method setValueAt.
-	 * @param value Object
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param value
+	 *            Object
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int column) {
-		Object newValue = getColumnDataValue(getValueAt(row, column), value);
-		this.populateDAO(newValue, row, column);
-		Vector<Object> dataRow = rows.get(row);
-		dataRow.setElementAt(newValue, column);
-		fireTableCellUpdated(row, column);
+		if (!getValueAt(row, column).equals(value)) {
+			Object newValue = getColumnDataValue(getValueAt(row, column), value);
+			this.populateDAO(newValue, row, column);
+			Vector<Object> dataRow = rows.get(row);
+			dataRow.setElementAt(newValue, column);
+			fireTableCellUpdated(row, column);
+		}
 	}
 
 	/**
 	 * Method getColumnDataValue.
-	 * @param currValue Object
-	 * @param newValue Object
+	 * 
+	 * @param currValue
+	 *            Object
+	 * @param newValue
+	 *            Object
 	 * @return Object
 	 */
 	public Object getColumnDataValue(Object currValue, Object newValue) {
