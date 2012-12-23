@@ -147,6 +147,7 @@ public class CodeTypeTableModel extends AspectTableModel {
 
 		final CodeType element = new CodeType("", "");
 		getData().add(element);
+		getData().setDirty(true);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);

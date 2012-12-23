@@ -306,6 +306,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 				IndicatorSeries.MovingAverageSeries, indicatorName,
 				new Boolean(false), new Integer(0), new Boolean(false));
 		getData().getIndicatorSeries().add(element);
+		getData().setDirty(true);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);

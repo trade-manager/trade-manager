@@ -198,7 +198,7 @@ public class EntrylimitTableModel extends AspectTableModel {
 
 		final Entrylimit element = new Entrylimit();
 		getData().getAspect().add(element);
-
+		getData().setDirty(true);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);
