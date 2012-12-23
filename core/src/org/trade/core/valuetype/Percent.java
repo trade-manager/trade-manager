@@ -615,6 +615,26 @@ public class Percent extends ValueType implements Comparator<Percent>,
 		return returnVal;
 	}
 
+	/**
+	 * Method equals.
+	 * 
+	 * @param objectToCompare
+	 *            Object
+	 * @return boolean
+	 */
+	public boolean equals(Object objectToCompare) {
+
+		if (super.equals(objectToCompare))
+			return true;
+
+		if (objectToCompare instanceof Percent) {
+			if (CoreUtils.nullSafeComparator(
+					((Percent) objectToCompare).getBigDecimalValue(),
+					this.getBigDecimalValue()) == 0)
+				return true;
+		}
+		return false;
+	}
 	//
 	// Private Methods
 	//

@@ -90,7 +90,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Default Constructor. Create an object and initialize it to empty.
-	 * @param quantityString String
+	 * 
+	 * @param quantityString
+	 *            String
 	 */
 	public Quantity(String quantityString) {
 		if ((null != quantityString) && (quantityString.length() != 0)) {
@@ -110,7 +112,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Constructor for Quantity.
-	 * @param d int
+	 * 
+	 * @param d
+	 *            int
 	 */
 	public Quantity(int d) {
 		setInteger(new Integer(d));
@@ -118,7 +122,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Constructor for Quantity.
-	 * @param bd Integer
+	 * 
+	 * @param bd
+	 *            Integer
 	 */
 	public Quantity(Integer bd) {
 		setInteger(bd);
@@ -126,7 +132,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Constructor for Quantity.
-	 * @param quantity Quantity
+	 * 
+	 * @param quantity
+	 *            Quantity
 	 */
 	public Quantity(Quantity quantity) {
 		m_value = quantity.m_value;
@@ -138,7 +146,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 * Provides the format used for determining if this object is valid. The
 	 * format should be one of the format constants on this class. The default
 	 * format is NORMAL_11_2.
-	 * @param format String
+	 * 
+	 * @param format
+	 *            String
 	 */
 	public void setFormat(String format) {
 		m_format = format;
@@ -146,6 +156,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method getFormat.
+	 * 
 	 * @return String
 	 */
 	public String getFormat() {
@@ -154,6 +165,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * This maximum length includes the decimal point and digits to both sides.
+	 * 
 	 * @return int
 	 */
 	public int getMaxLength() {
@@ -173,6 +185,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * This indicates whether zero is an acceptable value for this instance.
 	 * Currently this is determined by the format returned by getFormat().
+	 * 
 	 * @return boolean
 	 */
 	public boolean canBeZero() {
@@ -190,6 +203,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * This indicates whether zero is an acceptable value for this instance.
 	 * Currently this is determined by the format returned by getFormat().
+	 * 
 	 * @return boolean
 	 */
 	public boolean canBeNegative() {
@@ -202,6 +216,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method isNegative.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isNegative() {
@@ -218,6 +233,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method isEmpty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isEmpty() {
@@ -233,6 +249,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * See description of superclass method. Overrode functionality to return
 	 * the BigDecimal this object is using intrnally.
+	 * 
 	 * @return Object
 	 */
 	public Object getSQLObject() {
@@ -243,8 +260,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 * Will throw a <code>NullPointerException</code> if this valuetype is
 	 * empty.
 	 * 
-	
-	 * @return A BigDecimal representing the monetary value. */
+	 * 
+	 * @return A BigDecimal representing the monetary value.
+	 */
 	public Integer getIntegerValue() {
 		assertDefined();
 
@@ -253,6 +271,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method getBigIntegerValue.
+	 * 
 	 * @return BigInteger
 	 */
 	public BigInteger getBigIntegerValue() {
@@ -267,6 +286,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
@@ -281,7 +301,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 * @throws ValueTypeException
 	 */
 	public void setValue(Object value) throws ValueTypeException {
@@ -300,11 +322,13 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * Adds two Money objects
 	 * 
-	
 	 * 
-	
-	 * @param quantity Quantity
-	 * @return Money the result */
+	 * 
+	 * 
+	 * @param quantity
+	 *            Quantity
+	 * @return Money the result
+	 */
 	public Quantity add(Quantity quantity) {
 		assertDefined();
 
@@ -323,11 +347,13 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * Subtracts two Money objects
 	 * 
-	
 	 * 
-	
-	 * @param quantity Quantity
-	 * @return Money the result */
+	 * 
+	 * 
+	 * @param quantity
+	 *            Quantity
+	 * @return Money the result
+	 */
 	public Quantity subtract(Quantity quantity) {
 		assertDefined();
 
@@ -342,11 +368,13 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * Compares two Money objects.
 	 * 
-	
 	 * 
-	
-	 * @param quantity Quantity
-	 * @return boolean result. */
+	 * 
+	 * 
+	 * @param quantity
+	 *            Quantity
+	 * @return boolean result.
+	 */
 	public boolean isLessThen(Quantity quantity) {
 		assertDefined();
 
@@ -359,11 +387,13 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * Compares two Money objects.
 	 * 
-	
 	 * 
-	
-	 * @param quantity Quantity
-	 * @return boolean result. */
+	 * 
+	 * 
+	 * @param quantity
+	 *            Quantity
+	 * @return boolean result.
+	 */
 	public boolean isLessThenOrEqualTo(Quantity quantity) {
 		assertDefined();
 
@@ -376,11 +406,13 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * Compares two Money objects.
 	 * 
-	
 	 * 
-	
-	 * @param quantity Quantity
-	 * @return boolean result. */
+	 * 
+	 * 
+	 * @param quantity
+	 *            Quantity
+	 * @return boolean result.
+	 */
 	public boolean isGreaterThen(Quantity quantity) {
 		assertDefined();
 
@@ -393,11 +425,13 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	/**
 	 * Compares two Money objects.
 	 * 
-	
 	 * 
-	
-	 * @param quantity Quantity
-	 * @return boolean result. */
+	 * 
+	 * 
+	 * @param quantity
+	 *            Quantity
+	 * @return boolean result.
+	 */
 	public boolean isGreaterThenOrEqualTo(Quantity quantity) {
 		assertDefined();
 
@@ -409,8 +443,11 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method isValid.
-	 * @param validator Validator
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param validator
+	 *            Validator
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
 	public boolean isValid(Validator validator,
@@ -420,8 +457,11 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method getDefaultValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param isMandatory
+	 *            boolean
 	 * @return Validator
 	 */
 	public Validator getDefaultValidator(IMessageFactory messageFactory,
@@ -435,12 +475,13 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 * Overrides Cloneable
 	 * 
 	 * 
-	
 	 * 
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return Object
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	public Object clone() {
 		try {
@@ -454,28 +495,54 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method compareTo.
-	 * @param other Quantity
+	 * 
+	 * @param other
+	 *            Quantity
 	 * @return int
 	 */
 	public int compareTo(final Quantity other) {
-		return CoreUtils.nullSafeComparator(
-				this.getBigIntegerValue(), other.getBigIntegerValue());
+		return CoreUtils.nullSafeComparator(this.getBigIntegerValue(),
+				other.getBigIntegerValue());
 	}
 
 	/**
 	 * Method compare.
-	 * @param o1 Quantity
-	 * @param o2 Quantity
+	 * 
+	 * @param o1
+	 *            Quantity
+	 * @param o2
+	 *            Quantity
 	 * @return int
 	 */
 	public int compare(Quantity o1, Quantity o2) {
 
-		int returnVal = CoreUtils.nullSafeComparator(
-				o1.getBigIntegerValue(), o2.getBigIntegerValue());
+		int returnVal = CoreUtils.nullSafeComparator(o1.getBigIntegerValue(),
+				o2.getBigIntegerValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
 		}
 		return returnVal;
+	}
+
+	/**
+	 * Method equals.
+	 * 
+	 * @param objectToCompare
+	 *            Object
+	 * @return boolean
+	 */
+	public boolean equals(Object objectToCompare) {
+
+		if (super.equals(objectToCompare))
+			return true;
+
+		if (objectToCompare instanceof Quantity) {
+			if (CoreUtils.nullSafeComparator(
+					((Quantity) objectToCompare).getBigIntegerValue(),
+					this.getBigIntegerValue()) == 0)
+				return true;
+		}
+		return false;
 	}
 
 	//
@@ -484,7 +551,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method setInteger.
-	 * @param value Integer
+	 * 
+	 * @param value
+	 *            Integer
 	 */
 	private void setInteger(Integer value) {
 		if (value == null) {
@@ -497,7 +566,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 
 	/**
 	 * Method notNull.
-	 * @param value Quantity
+	 * 
+	 * @param value
+	 *            Quantity
 	 * @return Integer
 	 */
 	private Integer notNull(Quantity value) {

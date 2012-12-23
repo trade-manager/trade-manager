@@ -113,7 +113,6 @@ public class Aspects implements java.io.Serializable {
 	 */
 	public void add(Aspect aspect) {
 		this.aspect.add(aspect);
-		dirty = true;
 	}
 
 	/**

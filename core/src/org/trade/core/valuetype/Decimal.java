@@ -539,6 +539,27 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 		}
 		return returnVal;
 	}
+	
+	/**
+	 * Method equals.
+	 * 
+	 * @param objectToCompare
+	 *            Object
+	 * @return boolean
+	 */
+	public boolean equals(Object objectToCompare) {
+
+		if (super.equals(objectToCompare))
+			return true;
+
+		if (objectToCompare instanceof Decimal) {
+			if (CoreUtils.nullSafeComparator(
+					((Decimal) objectToCompare).getBigDecimalValue(),
+					this.getBigDecimalValue()) == 0)
+				return true;
+		}
+		return false;
+	}
 
 	//
 	// Private Methods

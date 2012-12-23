@@ -248,7 +248,7 @@ public class ConfigurationPanel extends BasePanel {
 				 */
 				itemIter.set(item);
 			}
-			m_aspects.setDirty(true);
+			m_aspects.setDirty(false);
 			Aspects aspects = m_tradePersistentModel
 					.findAspectsByClassName(className);
 			for (Aspect currAspect : aspects.getAspect()) {

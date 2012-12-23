@@ -1152,33 +1152,22 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			transferButton.setTransferObject(null);
 		}
 
-		deleteTradeOrderButton.setEnabled(enable);
 		deleteTradeOrderButton.setTransferObject(transferObject);
-		cancelStrategiesButton.setEnabled(enable);
 		cancelStrategiesButton.setTransferObject(transferObject);
 		testStrategyButton.setTransferObject(transferObject);
 		ordersButton.setTransferObject(transferObject);
 		brokerDataButton.setTransferObject(transferObject);
 		runStrategyButton.setTransferObject(transferObject);
-		enable = false;
-		if (isConnected()) {
-			testStrategyButton.setEnabled(false);
-			if (null != transferObject) {
-				enable = true;
-			}
-			brokerDataButton.setEnabled(enable);
-			runStrategyButton.setEnabled(enable);
-			ordersButton.setEnabled(enable);
 
-		} else {
-			brokerDataButton.setEnabled(false);
-			runStrategyButton.setEnabled(false);
-			ordersButton.setEnabled(false);
-			if (null != transferObject) {
-				enable = true;
-			}
-			testStrategyButton.setEnabled(enable);
-		}
+		deleteTradeOrderButton.setEnabled(enable);
+		cancelStrategiesButton.setEnabled(enable);
+		testStrategyButton.setEnabled(enable);
+		brokerDataButton.setEnabled(enable);
+		runStrategyButton.setEnabled(false);
+		if (this.isConnected())
+			runStrategyButton.setEnabled(true);
+		ordersButton.setEnabled(enable);
+
 	}
 
 	/**

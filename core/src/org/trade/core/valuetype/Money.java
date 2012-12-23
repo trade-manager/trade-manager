@@ -541,6 +541,27 @@ public class Money extends ValueType implements Comparator<Money>,
 		}
 		return returnVal;
 	}
+	
+	/**
+	 * Method equals.
+	 * 
+	 * @param objectToCompare
+	 *            Object
+	 * @return boolean
+	 */
+	public boolean equals(Object objectToCompare) {
+
+		if (super.equals(objectToCompare))
+			return true;
+
+		if (objectToCompare instanceof Money) {
+			if (CoreUtils.nullSafeComparator(
+					((Money) objectToCompare).getBigDecimalValue(),
+					this.getBigDecimalValue()) == 0)
+				return true;
+		}
+		return false;
+	}
 
 	//
 	// Private Methods
