@@ -967,34 +967,26 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private void enableChartButtons(Tradestrategy transferObject)
 			throws Exception {
 
-		boolean enabled = false;
-		if (this.isConnected()) {
-			if (null != transferObject) {
-				enabled = true;
+		executeButton.setEnabled(false);
+		brokerDataButton.setEnabled(false);
+		cancelButton.setEnabled(false);
+		cancelStrategiesButton.setEnabled(false);
+		m_tradeOrderTable.enablePopupMenu(false);
+		periodEditorComboBox.setEnabled(false);
+		refreshButton.setEnabled(false);
+		if (null != transferObject) {
+			cancelStrategiesButton.setEnabled(true);
+			brokerDataButton.setEnabled(true);
+			periodEditorComboBox.setEnabled(true);
+			if (this.isConnected()) {
+				executeButton.setEnabled(true);
+				refreshButton.setEnabled(true);
+				cancelButton.setEnabled(true);
+				m_tradeOrderTable.enablePopupMenu(true);
 			}
-			executeButton.setEnabled(enabled);
-			brokerDataButton.setEnabled(enabled);
-			cancelButton.setEnabled(enabled);
-			cancelStrategiesButton.setEnabled(enabled);
-			m_tradeOrderTable.enablePopupMenu(enabled);
-
-		} else {
-			executeButton.setEnabled(enabled);
-			brokerDataButton.setEnabled(enabled);
-			cancelButton.setEnabled(enabled);
-			cancelStrategiesButton.setEnabled(enabled);
-			m_tradeOrderTable.enablePopupMenu(enabled);
-		}
-		if (null != transferObject) {
-			enabled = true;
-		}
-		refreshButton.setEnabled(enabled);
-		periodEditorComboBox.setEnabled(enabled);
-		brokerDataButton.setTransferObject(transferObject);
-		cancelStrategiesButton.setTransferObject(transferObject);
-		refreshButton.setTransferObject(transferObject);
-
-		if (null != transferObject) {
+			brokerDataButton.setTransferObject(transferObject);
+			cancelStrategiesButton.setTransferObject(transferObject);
+			refreshButton.setTransferObject(transferObject);
 			m_tradeOrderModel.setData(transferObject);
 			StringBuilder result = new StringBuilder("<html>");
 			result.append("<b>Primary Exch: </b> ")

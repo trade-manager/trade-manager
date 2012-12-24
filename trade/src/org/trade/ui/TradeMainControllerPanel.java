@@ -305,6 +305,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Tradingdays tradingdays = new Tradingdays();
 			Tradingday tradingday = Tradingday.newInstance(tradestrategy
 					.getTradingday().getOpen());
+			tradingday.setIdTradingDay(Integer.MAX_VALUE);
 			tradingday.addTradestrategy(tradestrategy);
 			tradingdays.add(tradingday);
 			runStrategy(tradingdays, true);
@@ -393,6 +394,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Tradingdays tradingdays = new Tradingdays();
 				Tradingday tradingday = Tradingday.newInstance(tradestrategy
 						.getTradingday().getOpen());
+				tradingday.setIdTradingDay(Integer.MAX_VALUE);
 				tradingday.addTradestrategy(tradestrategy);
 				tradingdays.add(tradingday);
 				runStrategy(tradingdays, false);
@@ -442,6 +444,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Tradingdays tradingdays = new Tradingdays();
 			Tradingday tradingday = Tradingday.newInstance(tradestrategy
 					.getTradingday().getOpen());
+			tradingday.setIdTradingDay(Integer.MAX_VALUE);
 			tradingday.addTradestrategy(tradestrategy);
 			tradingdays.add(tradingday);
 			runStrategy(tradingdays, false);
