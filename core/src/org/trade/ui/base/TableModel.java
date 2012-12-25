@@ -200,7 +200,7 @@ public abstract class TableModel extends AbstractTableModel {
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int column) {
-		if (!value.equals(getValueAt(row, column))) {
+		if (null != value && !value.equals(getValueAt(row, column))) {
 			Object newValue = getColumnDataValue(getValueAt(row, column), value);
 			this.populateDAO(newValue, row, column);
 			Vector<Object> dataRow = rows.get(row);

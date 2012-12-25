@@ -58,6 +58,7 @@ public class DAOStrategy extends DAODecode {
 
 	/**
 	 * Method getCodesDecodes.
+	 * 
 	 * @return Vector<Decode>
 	 * @throws ValueTypeException
 	 */
@@ -68,7 +69,21 @@ public class DAOStrategy extends DAODecode {
 		final Vector<Decode> decodesAll = super.getCodesDecodes();
 		for (final Decode decode : decodesAll) {
 			final Strategy strategy = (Strategy) decode.getObject();
-			if (null != strategy.getStrategyManager()) {
+			boolean isMgr = false;
+			if (null == strategy.getStrategyManager()) {
+				for (final Decode mgrdecode : decodesAll) {
+					final Strategy strategyMgr = (Strategy) mgrdecode
+							.getObject();
+					if (null != strategyMgr.getStrategyManager()) {
+						if (strategyMgr.getStrategyManager().getIdStrategy()
+								.equals(strategy.getIdStrategy())) {
+							isMgr = true;
+							break;
+						}
+					}
+				}
+			}
+			if (!isMgr) {
 				decodes.add(decode);
 			}
 		}
@@ -77,7 +92,9 @@ public class DAOStrategy extends DAODecode {
 
 	/**
 	 * Method newInstance.
-	 * @param displayName String
+	 * 
+	 * @param displayName
+	 *            String
 	 * @return DAOStrategy
 	 */
 	public static DAOStrategy newInstance(String displayName) {
@@ -88,6 +105,7 @@ public class DAOStrategy extends DAODecode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return DAOStrategy
 	 */
 	public static DAOStrategy newInstance() {

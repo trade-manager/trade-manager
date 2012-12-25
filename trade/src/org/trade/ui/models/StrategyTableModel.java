@@ -205,7 +205,7 @@ public class StrategyTableModel extends AspectTableModel {
 		newRow.addElement(element.getDescription());
 		newRow.addElement(element.getClassName());
 		if (null == element.getStrategyManager()) {
-			newRow.addElement("");
+			newRow.addElement(new Strategy());
 		} else {
 			newRow.addElement(DAOStrategyManager.newInstance(element
 					.getStrategyManager().getName()));
