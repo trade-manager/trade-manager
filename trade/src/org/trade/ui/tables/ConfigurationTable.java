@@ -74,8 +74,9 @@ public class ConfigurationTable extends Table {
 				(new Currency()).getCodesDecodes()));
 
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
-		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),new org.trade.core.valuetype.Date(
-				new Date()), DATETIMEFORMAT, Calendar.MINUTE);
+		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
+				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
+				Calendar.MINUTE);
 		DecodeTableEditor dataTypeEditor = new DecodeTableEditor(new JComboBox(
 				(new DataType()).getCodesDecodes()));
 		DecodeTableEditor indicatorSeriesEditor = new DecodeTableEditor(
@@ -94,6 +95,5 @@ public class ConfigurationTable extends Table {
 		this.setDefaultEditor(IndicatorSeries.class, indicatorSeriesEditor);
 		this.setDefaultEditor(DAOStrategyManager.class,
 				dAOStrategyManagerEditor);
-
 	}
 }

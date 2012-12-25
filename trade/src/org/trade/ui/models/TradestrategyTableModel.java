@@ -292,7 +292,7 @@ public class TradestrategyTableModel extends TableModel {
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int column) {
-		if (!getValueAt(row, column).equals(value)) {
+		if (!value.equals(getValueAt(row, column))) {
 			this.populateDAO(value, row, column);
 			Vector<Object> dataRow = rows.get(row);
 			dataRow.setElementAt(value, column);
@@ -363,8 +363,9 @@ public class TradestrategyTableModel extends TableModel {
 					.getObject();
 			element.setStrategy(strategy);
 
-			this.setValueAt(DAOStrategyManager.newInstance(strategy
-					.getStrategyManager().getName()), row, column + 1);
+			if (null != strategy.getStrategyManager())
+				this.setValueAt(DAOStrategyManager.newInstance(strategy
+						.getStrategyManager().getName()), row, column + 1);
 			break;
 		}
 		case 6: {
@@ -570,8 +571,13 @@ public class TradestrategyTableModel extends TableModel {
 		}
 		newRow.addElement(DAOStrategy.newInstance(element.getStrategy()
 				.getName()));
-		newRow.addElement(DAOStrategyManager.newInstance(element.getStrategy()
-				.getStrategyManager().getName()));
+		if (null == element.getStrategy().getStrategyManager()) {
+			newRow.addElement("");
+		} else {
+			newRow.addElement(DAOStrategyManager.newInstance(element
+					.getStrategy().getStrategyManager().getName()));
+		}
+
 		newRow.addElement(DAOTradeAccount.newInstance(element.getTradeAccount()
 				.getName()));
 		newRow.addElement(BarSize.newInstance(element.getBarSize()));

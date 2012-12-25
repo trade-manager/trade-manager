@@ -191,7 +191,7 @@ public class TradeOrderTableModel extends TableModel {
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int column) {
-		if (!getValueAt(row, column).equals(value)) {
+		if (!value.equals(getValueAt(row, column))) {
 			this.populateDAO(value, row, column);
 			Vector<Object> dataRow = rows.get(row);
 			dataRow.setElementAt(value, column);

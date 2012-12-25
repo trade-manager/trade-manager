@@ -262,13 +262,17 @@ public class ConfigurationPanel extends BasePanel {
 					m_tradePersistentModel.removeAspect(currAspect);
 			}
 			DBTableLookupServiceProvider.clearLookup();
-			m_tableModel.setData(m_aspects);
+			doRefresh();
 			if (selectedRow == -1)
 				selectedRow = 0;
 			m_table.setRowSelectionInterval(selectedRow, selectedRow);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error saving item.", ex.getMessage(), ex);
 		}
+	}
+
+	public void doSearch() {
+		doRefresh();
 	}
 
 	/**

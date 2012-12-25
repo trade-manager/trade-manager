@@ -1131,10 +1131,12 @@ public class TradePersistentModel implements PersistentModel {
 		try {
 			return m_aspectHome.persist(transientInstance);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Aspect please refresh before save.");
+			throw new PersistentModelException("Error saving "
+					+ transientInstance.getClass().getSimpleName()
+					+ " please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving Aspect: "
+			throw new PersistentModelException("Error saving  "
+					+ transientInstance.getClass().getSimpleName() + " : "
 					+ e.getMessage());
 		}
 	}
@@ -1149,7 +1151,17 @@ public class TradePersistentModel implements PersistentModel {
 	 */
 	public void removeAspect(Aspect transientInstance)
 			throws PersistentModelException {
-		m_aspectHome.remove(transientInstance);
+		try {
+			m_aspectHome.remove(transientInstance);
+		} catch (OptimisticLockException ex1) {
+			throw new PersistentModelException("Error removing "
+					+ transientInstance.getClass().getSimpleName()
+					+ " please refresh before save.");
+		} catch (Exception e) {
+			throw new PersistentModelException("Error removing  "
+					+ transientInstance.getClass().getSimpleName() + " : "
+					+ e.getMessage());
+		}
 	}
 
 	/**
@@ -1162,7 +1174,17 @@ public class TradePersistentModel implements PersistentModel {
 	 */
 	public void removeRule(Rule transientInstance)
 			throws PersistentModelException {
-		m_aspectHome.remove(transientInstance);
+		try {
+			m_aspectHome.remove(transientInstance);
+		} catch (OptimisticLockException ex1) {
+			throw new PersistentModelException(
+					"Error saving rule please refresh before save.");
+		} catch (Exception e) {
+			throw new PersistentModelException("Error saving rule: "
+					+ transientInstance.getIdRule() + "\n Msg: "
+					+ e.getMessage());
+		}
+
 	}
 
 	/**
