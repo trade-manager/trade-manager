@@ -363,9 +363,14 @@ public class TradestrategyTableModel extends TableModel {
 					.getObject();
 			element.setStrategy(strategy);
 
-			if (null != strategy.getStrategyManager())
+			if (null == strategy.getStrategyManager()) {
+				this.setValueAt(DAOStrategyManager.newInstance("None"), row,
+						column + 1);
+			} else {
 				this.setValueAt(DAOStrategyManager.newInstance(strategy
 						.getStrategyManager().getName()), row, column + 1);
+			}
+
 			break;
 		}
 		case 6: {
@@ -572,7 +577,7 @@ public class TradestrategyTableModel extends TableModel {
 		newRow.addElement(DAOStrategy.newInstance(element.getStrategy()
 				.getName()));
 		if (null == element.getStrategy().getStrategyManager()) {
-			newRow.addElement("");
+			newRow.addElement(DAOStrategyManager.newInstance("None"));
 		} else {
 			newRow.addElement(DAOStrategyManager.newInstance(element
 					.getStrategy().getStrategyManager().getName()));

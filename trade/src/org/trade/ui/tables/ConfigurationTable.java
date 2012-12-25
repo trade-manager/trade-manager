@@ -45,6 +45,7 @@ import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.dictionary.valuetype.DataType;
 import org.trade.dictionary.valuetype.IndicatorSeries;
+import org.trade.persistent.dao.Strategy;
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
 import org.trade.ui.widget.DateEditor;
@@ -85,7 +86,7 @@ public class ConfigurationTable extends Table {
 				(new DAOStrategyManager()).getCodesDecodes());
 		// Add a blank entry to the drop-down this String value will be used to
 		// set null in the StrategyTableModel table.
-		strategyManagerComboBox.insertItemAt("", 0);
+		strategyManagerComboBox.insertItemAt(new Strategy("None"), 0);
 		DecodeTableEditor dAOStrategyManagerEditor = new DecodeTableEditor(
 				strategyManagerComboBox);
 		this.setDefaultEditor(Currency.class, currencyEditor);

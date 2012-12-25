@@ -61,6 +61,7 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.Tier;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.StrategyRule;
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
@@ -128,8 +129,13 @@ public class TradestrategyTable extends Table {
 				strategyWorkers);
 		DecodeTableEditor strategyEditor = new DecodeTableEditor(new JComboBox(
 				(new DAOStrategy()).getCodesDecodes()));
+		JComboBox strategyManagerComboBox = new JComboBox(
+				(new DAOStrategyManager()).getCodesDecodes());
+		// Add a blank entry to the drop-down this String value will be used to
+		// set null in the StrategyTableModel table.
+		strategyManagerComboBox.insertItemAt(new Strategy("None"), 0);
 		DecodeTableEditor strategyManagerEditor = new DecodeTableEditor(
-				new JComboBox((new DAOStrategyManager()).getCodesDecodes()));
+				strategyManagerComboBox);
 		DecodeTableEditor tradeAccountEditor = new DecodeTableEditor(
 				new JComboBox((new DAOTradeAccount()).getCodesDecodes()));
 		DecodeTableEditor chartDaysEditor = new DecodeTableEditor(

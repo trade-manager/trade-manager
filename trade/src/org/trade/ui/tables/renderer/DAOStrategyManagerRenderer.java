@@ -82,7 +82,7 @@ public class DAOStrategyManagerRenderer extends DefaultTableCellRenderer {
 			setBackground(null);
 			super.getTableCellRendererComponent(table, dAOStrategyManager,
 					isSelected, hasFocus, row, column);
-			if (row > -1) {
+			if (row > -1 && ((DAOStrategyManager) dAOStrategyManager).isValid()) {
 				Tradestrategy transferObject = ((TradestrategyTableModel) table
 						.getModel()).getData().getTradestrategies()
 						.get(table.convertRowIndexToModel(row));
