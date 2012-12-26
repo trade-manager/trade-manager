@@ -311,7 +311,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			for (int index = 0; index < tabsCount; index++) {
 				doClose(new Integer(0));
 			}
-
+			m_tree.clearSelection();
 		} catch (Exception ex) {
 			this.setErrorMessage("Error removing all tabs.", ex.getMessage(),
 					ex);
@@ -332,6 +332,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					&& chart.getTradestrategy().getIdTradeStrategy()
 							.equals(tradestrategy.getIdTradeStrategy())) {
 				doClose(index);
+				m_tree.clearSelection();
 				break;
 			}
 		}
@@ -641,7 +642,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		Date startDate = null;
 		Date endDate = null;
-		
+
 		if (tradestrategy.getDatasetContainer().getBaseCandleSeries().isEmpty()) {
 			endDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getClose(), TradingCalendar
