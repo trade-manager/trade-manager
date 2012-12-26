@@ -60,7 +60,6 @@ public class StrategyData extends Worker {
 
 	private CandleDataset baseCandleDataset = null;
 	private CandleDataset candleDataset = null;
-	private Strategy strategy = null;
 	private List<IndicatorDataset> indicators = new ArrayList<IndicatorDataset>();
 
 	private boolean seriesChanged = true;
@@ -79,7 +78,6 @@ public class StrategyData extends Worker {
 	public StrategyData(Strategy strategy, CandleDataset baseCandleDataset) {
 
 		this.baseCandleDataset = baseCandleDataset;
-		this.strategy = strategy;
 		candleDataset = new CandleDataset();
 		candleDataset.addSeries(CandleDataset.createSeries(baseCandleDataset,
 				0, getBaseCandleSeries().getContract(), getBaseCandleSeries()
@@ -401,15 +399,6 @@ public class StrategyData extends Worker {
 	 */
 	public CandleDataset getCandleDataset() {
 		return candleDataset;
-	}
-
-	/**
-	 * Method getStrategy.
-	 * 
-	 * @return Strategy
-	 */
-	public Strategy getStrategy() {
-		return this.strategy;
 	}
 
 	/**

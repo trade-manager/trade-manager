@@ -302,6 +302,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					"Please save or refresh before running strategy ...\n",
 					BasePanel.WARNING);
 		} else {
+			contractPanel.doClose(tradestrategy);
 			Tradingdays tradingdays = new Tradingdays();
 			Tradingday tradingday = Tradingday.newInstance(tradestrategy
 					.getTradingday().getOpen());

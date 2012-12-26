@@ -155,6 +155,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			PersistentModel tradePersistentModel) {
 
 		try {
+			m_tradePersistentModel = tradePersistentModel;
+			m_tradingdays = tradingdays;
+
 			currencyFormater.setMinimumFractionDigits(2);
 			StyleConstants.setBold(bold, true);
 			StyleConstants.setBackground(colorRedAttr, Color.RED);
@@ -163,8 +166,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			backfillOffsetDays = ConfigProperties
 					.getPropAsInt("trade.backfill.offsetDays");
 			this.setLayout(new BorderLayout());
-			m_tradePersistentModel = tradePersistentModel;
-			m_tradingdays = tradingdays;
+
 			// This allows the controller to listen to these events
 			executeButton = new BaseButton(controller,
 					BaseUIPropertyCodes.EXECUTE);
@@ -485,7 +487,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				 * Refresh the tradestrategy this will get any orders that are
 				 * there. Then add the chart panel.
 				 */
-				tradestrategy = m_tradePersistentModel
+				Tradestrategy currTradestrategy = m_tradePersistentModel
 						.findTradestrategyById(tradestrategy);
 				int currentTabIndex = -1;
 				for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
@@ -500,7 +502,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					}
 				}
 				if (currentTabIndex == -1) {
-					ChartPanel chartPanel = createChartPanel(tradestrategy);
+					ChartPanel chartPanel = createChartPanel(currTradestrategy);
 					m_jTabbedPaneContract.add(chartPanel.getCandlestickChart()
 							.getName(), chartPanel);
 					currentTabIndex = m_jTabbedPaneContract.getTabCount() - 1;
@@ -508,6 +510,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							new TabbedCloseButton(m_jTabbedPaneContract, this));
 				}
 				m_jTabbedPaneContract.setSelectedIndex(currentTabIndex);
+				enableChartButtons(tradestrategy);
 			} else {
 				enableChartButtons(null);
 			}
@@ -519,13 +522,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		}
 	}
 
-	/*
-	 * This method may be called from this panel or the Portfolio Tab or Trading
-	 * Tab.
-	 */
-
 	/**
-	 * Method doTransfer.
+	 * Method doTransfer. This method may be called from this panel or the
+	 * Portfolio Tab or Trading Tab.
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
@@ -642,9 +641,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		Date startDate = null;
 		Date endDate = null;
-
+		
 		if (tradestrategy.getDatasetContainer().getBaseCandleSeries().isEmpty()) {
-
 			endDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getClose(), TradingCalendar
 					.getMostRecentTradingDay(TradingCalendar.addBusinessDays(

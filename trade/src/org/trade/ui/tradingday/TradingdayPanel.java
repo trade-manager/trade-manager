@@ -1163,11 +1163,12 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		cancelStrategiesButton.setEnabled(enable);
 		testStrategyButton.setEnabled(enable);
 		brokerDataButton.setEnabled(enable);
-		runStrategyButton.setEnabled(false);
-		if (this.isConnected())
-			runStrategyButton.setEnabled(true);
 		ordersButton.setEnabled(enable);
-
+		runStrategyButton.setEnabled(false);
+		if (this.isConnected() && null != transferObject){
+			runStrategyButton.setEnabled(true);	
+			testStrategyButton.setEnabled(false);
+		}
 	}
 
 	/**
