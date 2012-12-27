@@ -1497,6 +1497,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							if (result == JOptionPane.YES_OPTION) {
 								m_brokerModel
 										.onCancelRealtimeBars(tradestrategy);
+							} else {
+								continue;
 							}
 						}
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
