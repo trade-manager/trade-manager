@@ -90,12 +90,13 @@ public class TradingdayHome {
 								detachedInstance.getClose());
 				if (null == tradingday) {
 					entityManager.persist(detachedInstance);
+					entityManager.getTransaction().commit();
 				}
 			} else {
 				tradingday = entityManager.merge(detachedInstance);
+				entityManager.getTransaction().commit();
 				detachedInstance.setVersion(tradingday.getVersion());
 			}
-			entityManager.getTransaction().commit();
 
 			for (Tradestrategy tradestrategy : detachedInstance
 					.getTradestrategies()) {
@@ -146,15 +147,11 @@ public class TradingdayHome {
 						tradestrategy.setVersion(instance.getVersion());
 					}
 					tradestrategy.setDirty(false);
-					for (IndicatorSeries indicatorSeries : tradestrategy
-							.getStrategy().getIndicatorSeries()) {
-						indicatorSeries.getCodeValues().size();
-					}
 				}
 			}
 			entityManager.getTransaction().begin();
-			List<Tradestrategy> tradestrategies = findTradestrategyByDate(detachedInstance
-					.getOpen());
+			List<Tradestrategy> tradestrategies = findTradestrategyByIdTradingday(detachedInstance
+					.getIdTradingDay());
 
 			for (Tradestrategy tradestrategy : tradestrategies) {
 				boolean exists = false;
@@ -162,30 +159,20 @@ public class TradingdayHome {
 						.getTradestrategies()) {
 					if (newTradestrategy.equals(tradestrategy)) {
 						exists = true;
-						if (!tradestrategy.getIdTradeStrategy().equals(
-								newTradestrategy.getIdTradeStrategy())
-								|| (null == newTradestrategy
-										.getIdTradeStrategy())) {
-							throw new Exception("The following Contract:"
-									+ newTradestrategy.getContract()
-											.getSymbol()
-									+ " Strategy:"
-									+ newTradestrategy.getStrategy().getName()
-									+ " Tradingday: "
-									+ newTradestrategy.getTradingday()
-											.getOpen() + " already exists.");
-						}
+						break;
 					}
 				}
 				if (!exists) {
 					if (tradestrategy.getTrades().isEmpty()) {
 						entityManager.remove(tradestrategy);
 					} else {
-						throw new Exception("The following Contract:"
-								+ tradestrategy.getContract().getSymbol()
-								+ " Strategy:"
-								+ tradestrategy.getStrategy().getName()
-								+ " already exists with trades.");
+						throw new Exception(
+								"The following Contract:"
+										+ tradestrategy.getContract()
+												.getSymbol()
+										+ " Strategy:"
+										+ tradestrategy.getStrategy().getName()
+										+ " already exists with trades. \n Please delete orders before removing.");
 					}
 				}
 			}
@@ -357,6 +344,7 @@ public class TradingdayHome {
 			List<Strategy> items = entityManager.createQuery(query)
 					.getResultList();
 			if (items.size() > 0) {
+				items.get(0).getIndicatorSeries().size();
 				return items.get(0);
 			}
 			return null;
@@ -409,7 +397,8 @@ public class TradingdayHome {
 	 *            Date
 	 * @return List<Tradestrategy>
 	 */
-	private List<Tradestrategy> findTradestrategyByDate(Date open) {
+	private List<Tradestrategy> findTradestrategyByIdTradingday(
+			Integer idTradingday) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -420,11 +409,11 @@ public class TradingdayHome {
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
-			if (null != open) {
+			if (null != idTradingday) {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
-				Predicate predicate = builder.equal(tradingday.get("open"),
-						open);
+				Predicate predicate = builder.equal(
+						tradingday.get("idTradingDay"), idTradingday);
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));
