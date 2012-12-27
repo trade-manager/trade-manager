@@ -76,8 +76,6 @@ import org.jfree.data.general.SeriesChangeListener;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
@@ -94,9 +92,6 @@ import org.trade.strategy.data.candle.CandleItem;
 public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	private static final long serialVersionUID = 2842422936659217811L;
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(CandlestickChart.class);
 
 	private JFreeChart m_chart;
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -328,8 +323,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			endDate = TradingCalendar.getSpecificTime(tradingday.getClose(),
 					endDate);
 		}
-		_log.info("segments15min: " + segments15min + " startDate: "
-				+ startDate + " endDate :" + endDate);
+
 		segmentedTimeline.setStartTime(startDate.getTime());
 		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate,
 				endDate, tradingday.getOpen(), tradingday.getClose(),

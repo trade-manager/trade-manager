@@ -1974,6 +1974,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Tradestrategy tradestrategy, CandleDataset candleDataset,
 				int seriesIndex) throws BrokerModelException,
 				PersistentModelException, CloneNotSupportedException {
+			
 			CandleSeries series = candleDataset.getSeries(seriesIndex);
 			Tradestrategy indicatorTradestrategy = null;
 			for (Tradestrategy indicator : m_indicatorTradestrategy.values()) {
@@ -2047,12 +2048,20 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				tradestrategy.setDatasetContainer(null);
 
 				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
-
 					/*
 					 * Fire all the requests to TWS to get chart data After data
 					 * has been retrieved save the data Only allow a maximum of
 					 * 60 requests in a 10min period to avoid TWS pacing errors
 					 */
+					if (!prevContract.equals(tradestrategy.getContract())) {
+						totalSumbitted = submitBrokerRequest(prevContract,
+								tradingday.getClose(), prevBarSize,
+								prevChartDays, totalSumbitted);
+						prevContract = tradestrategy.getContract();
+						prevBarSize = tradestrategy.getBarSize();
+						prevChartDays = tradestrategy.getChartDays();
+					}
+
 					CandleDataset candleDataset = (CandleDataset) tradestrategy
 							.getDatasetContainer().getIndicators(
 									IndicatorSeries.CandleSeries);
@@ -2088,15 +2097,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								}
 							}
 						}
-					}
-
-					if (!prevContract.equals(tradestrategy.getContract())) {
-						totalSumbitted = submitBrokerRequest(prevContract,
-								tradingday.getClose(), prevBarSize,
-								prevChartDays, totalSumbitted);
-						prevContract = tradestrategy.getContract();
-						prevBarSize = tradestrategy.getBarSize();
-						prevChartDays = tradestrategy.getChartDays();
 					}
 				}
 			}
