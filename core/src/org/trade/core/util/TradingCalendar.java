@@ -114,13 +114,18 @@ public class TradingCalendar {
 		} catch (IOException ex) {
 			_log.warn("Property trade.market.close not set in config.properties will use default 4:00pm EST");
 		}
+		int year = 0;
 		try {
-			String thisyear = ConfigProperties
-					.getPropAsString("trade.holidays.thisyear");
-			parseHolidayIntegerCSVString(HOLIDAYS, thisyear);
-			String lastyear = ConfigProperties
-					.getPropAsString("trade.holidays.lastyear");
-			parseHolidayIntegerCSVString(HOLIDAYS, lastyear);
+			CALENDAR_NY.setTime(new Date());
+			year = CALENDAR_NY.get(Calendar.YEAR);
+			String holidaysString = ConfigProperties
+					.getPropAsString("trade.holidays." + year);
+			parseHolidayIntegerCSVString(HOLIDAYS, holidaysString);
+		} catch (IOException ex) {
+			_log.warn("Property trade.holidays." + year
+					+ " not set in org/trade/core/util/config.properties");
+		}
+		try {
 			String nontradingdays = ConfigProperties
 					.getPropAsString("trade.market.nontradingdays");
 			StringTokenizer st = new StringTokenizer(nontradingdays, ",");
@@ -133,7 +138,7 @@ public class TradingCalendar {
 				}
 			}
 		} catch (IOException ex) {
-			_log.warn("Property trade.holidays.lastyear/trade.holidays.thisyear not set in config.properties");
+			_log.warn("Property trade.market.nontradingdays not set in config.properties");
 		}
 	}
 
@@ -912,6 +917,9 @@ public class TradingCalendar {
 	 */
 	public static boolean isTradingDay(Date date) {
 		synchronized (CALENDAR_NY) {
+			if (isHoliday(date)) {
+				return false;
+			}
 			CALENDAR_NY.setTime(date);
 			if (null != NONTRADINGDAYS) {
 				for (int hol : NONTRADINGDAYS) {
@@ -1100,14 +1108,26 @@ public class TradingCalendar {
 	 */
 	public static boolean isHoliday(Date date) {
 		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
-			int[] hols = HOLIDAYS.get(CALENDAR_NY.get(Calendar.YEAR));
-			if (null != hols) {
-				for (int hol : hols) {
-					if (hol == CALENDAR_NY.get(Calendar.DAY_OF_YEAR)) {
-						return true;
+			int year = 0;
+			try {
+				CALENDAR_NY.setTime(date);
+				year = CALENDAR_NY.get(Calendar.YEAR);
+				int[] hols = HOLIDAYS.get(year);
+				if (null == hols || hols.length == 0) {
+					String holidaysString = ConfigProperties
+							.getPropAsString("trade.holidays." + year);
+					parseHolidayIntegerCSVString(HOLIDAYS, holidaysString);
+				}
+				if (null != hols) {
+					for (int hol : hols) {
+						if (hol == CALENDAR_NY.get(Calendar.DAY_OF_YEAR)) {
+							return true;
+						}
 					}
 				}
+			} catch (IOException ex) {
+				_log.warn("Property trade.holidays." + year
+						+ " not set in org/trade/core/util/config.properties");
 			}
 			return false;
 		}
