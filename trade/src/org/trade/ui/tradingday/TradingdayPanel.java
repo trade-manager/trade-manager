@@ -946,11 +946,15 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		if (isStrategyWorkerRunning(key)) {
 			return true;
 		}
-		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			return true;
+		if (null != tradestrategy.getStrategy().getStrategyManager()) {
+			key = tradestrategy.getStrategy().getStrategyManager()
+					.getClassName()
+					+ tradestrategy.getIdTradeStrategy();
+			if (isStrategyWorkerRunning(key)) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 
@@ -1165,8 +1169,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		brokerDataButton.setEnabled(enable);
 		ordersButton.setEnabled(enable);
 		runStrategyButton.setEnabled(false);
-		if (this.isConnected() && null != transferObject){
-			runStrategyButton.setEnabled(true);	
+		if (this.isConnected() && null != transferObject) {
+			runStrategyButton.setEnabled(true);
 			testStrategyButton.setEnabled(false);
 		}
 	}

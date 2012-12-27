@@ -332,7 +332,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					&& chart.getTradestrategy().getIdTradeStrategy()
 							.equals(tradestrategy.getIdTradeStrategy())) {
 				doClose(index);
-				m_tree.clearSelection();
 				break;
 			}
 		}
@@ -353,6 +352,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		chartPanel.getCandlestickChart().removeChart();
 		chartPanel = null;
 		m_jTabbedPaneContract.remove(index);
+		m_tree.clearSelection();
 	}
 
 	public void doDelete() {
