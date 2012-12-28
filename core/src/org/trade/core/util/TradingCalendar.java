@@ -120,7 +120,7 @@ public class TradingCalendar {
 			year = CALENDAR_NY.get(Calendar.YEAR);
 			String holidaysString = ConfigProperties
 					.getPropAsString("trade.holidays." + year);
-			parseHolidayIntegerCSVString(HOLIDAYS, holidaysString);
+			parseHolidayIntegerCSVString(HOLIDAYS, year, holidaysString);
 		} catch (IOException ex) {
 			_log.warn("Property trade.holidays." + year
 					+ " not set in org/trade/core/util/config.properties");
@@ -678,19 +678,13 @@ public class TradingCalendar {
 	 *            HashMap<Integer, int[]>
 	 */
 	private static void parseHolidayIntegerCSVString(
-			HashMap<Integer, int[]> HOLIDAYS, String csvString) {
+			HashMap<Integer, int[]> HOLIDAYS, Integer year, String csvString) {
 		StringTokenizer st = new StringTokenizer(csvString, ",");
 		if (st.countTokens() > 0) {
-
-			int[] dates = new int[(st.countTokens() - 1)];
-			Integer year = null;
+			int[] dates = new int[(st.countTokens())];
 			int i = 0;
 			while (st.hasMoreTokens()) {
-				if (i == 0) {
-					year = new Integer(st.nextToken());
-				} else {
-					dates[(i - 1)] = Integer.parseInt(st.nextToken());
-				}
+				dates[(i)] = Integer.parseInt(st.nextToken());
 				i++;
 			}
 			HOLIDAYS.put(year, dates);
@@ -1116,7 +1110,7 @@ public class TradingCalendar {
 				if (null == hols || hols.length == 0) {
 					String holidaysString = ConfigProperties
 							.getPropAsString("trade.holidays." + year);
-					parseHolidayIntegerCSVString(HOLIDAYS, holidaysString);
+					parseHolidayIntegerCSVString(HOLIDAYS, year, holidaysString);
 				}
 				if (null != hols) {
 					for (int hol : hols) {

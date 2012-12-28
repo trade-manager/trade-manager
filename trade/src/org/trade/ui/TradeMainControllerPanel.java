@@ -1954,28 +1954,25 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 
 		/**
-		 * Method populateChildTradestrategy. For any child indicators that are
+		 * Method getIndicatorTradestrategy. For any child indicators that are
 		 * candle based create a Tradestrategy that will get the data. If this
 		 * tradestrategy already exist share this with any other tradestrategy
 		 * that requires this.
 		 * 
 		 * @param tradestrategy
 		 *            Tradestrategy
-		 * @param candleDataset
-		 *            CandleDataset
-		 * @param seriesIndex
-		 *            int
+		 * @param series
+		 *            CandleSeries
 		 * @return Tradestrategy
 		 * @throws BrokerModelException
 		 * @throws PersistentModelException
 		 * @throws CloneNotSupportedException
 		 */
-		private Tradestrategy populateChildTradestrategy(
-				Tradestrategy tradestrategy, CandleDataset candleDataset,
-				int seriesIndex) throws BrokerModelException,
-				PersistentModelException, CloneNotSupportedException {
-			
-			CandleSeries series = candleDataset.getSeries(seriesIndex);
+		private Tradestrategy getIndicatorTradestrategy(
+				Tradestrategy tradestrategy, CandleSeries series)
+				throws BrokerModelException, PersistentModelException,
+				CloneNotSupportedException {
+
 			Tradestrategy indicatorTradestrategy = null;
 			for (Tradestrategy indicator : m_indicatorTradestrategy.values()) {
 				if (indicator.getContract().equals(series.getContract())
@@ -2024,7 +2021,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			childSeries.setSecType(series.getSecType());
 			childSeries.setCurrency(series.getCurrency());
 			childSeries.setExchange(series.getExchange());
-			candleDataset.setSeries(seriesIndex, childSeries);
+
 			return indicatorTradestrategy;
 		}
 
@@ -2048,11 +2045,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				tradestrategy.setDatasetContainer(null);
 
 				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
+
 					/*
 					 * Fire all the requests to TWS to get chart data After data
 					 * has been retrieved save the data Only allow a maximum of
 					 * 60 requests in a 10min period to avoid TWS pacing errors
 					 */
+
 					if (!prevContract.equals(tradestrategy.getContract())) {
 						totalSumbitted = submitBrokerRequest(prevContract,
 								tradingday.getClose(), prevBarSize,
@@ -2070,8 +2069,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						for (int seriesIndex = 0; seriesIndex < candleDataset
 								.getSeriesCount(); seriesIndex++) {
 
-							Tradestrategy indicatorTradestrategy = populateChildTradestrategy(
-									tradestrategy, candleDataset, seriesIndex);
+							CandleSeries series = candleDataset
+									.getSeries(seriesIndex);
+							Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
+									tradestrategy, series);
+							candleDataset.setSeries(seriesIndex,
+									indicatorTradestrategy
+											.getDatasetContainer()
+											.getBaseCandleSeries());
 							if (!m_indicatorTradestrategy
 									.containsKey(indicatorTradestrategy
 											.getIdTradeStrategy())) {
