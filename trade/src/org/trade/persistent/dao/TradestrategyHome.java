@@ -64,7 +64,9 @@ public class TradestrategyHome {
 
 	/**
 	 * Method findById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Tradestrategy
 	 */
 	public synchronized Tradestrategy findById(Integer id) {
@@ -95,7 +97,9 @@ public class TradestrategyHome {
 
 	/**
 	 * Method findByTradeId.
-	 * @param idTrade Integer
+	 * 
+	 * @param idTrade
+	 *            Integer
 	 * @return Tradestrategy
 	 */
 	public synchronized Tradestrategy findByTradeId(Integer idTrade) {
@@ -122,10 +126,11 @@ public class TradestrategyHome {
 	/**
 	 * Just used for testing.
 	 * 
-	
-	
-	 * @return List<Tradestrategy> a list of tradestrategies * @throws RuntimeException
-	 *             if there is a problem finding data */
+	 * 
+	 * 
+	 * @return List<Tradestrategy> a list of tradestrategies * @throws
+	 *         RuntimeException if there is a problem finding data
+	 */
 	public List<Tradestrategy> findAll() {
 
 		try {
@@ -159,10 +164,15 @@ public class TradestrategyHome {
 
 	/**
 	 * Method findTradestrategyByUniqueKeys.
-	 * @param open Date
-	 * @param strategyName String
-	 * @param idContract Integer
-	 * @param accountNumber String
+	 * 
+	 * @param open
+	 *            Date
+	 * @param strategyName
+	 *            String
+	 * @param idContract
+	 *            Integer
+	 * @param accountNumber
+	 *            String
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy findTradestrategyByUniqueKeys(Date open,

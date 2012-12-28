@@ -296,6 +296,14 @@ public interface BrokerModel {
 	void onCancelBrokerData(Tradestrategy tradestrategy);
 
 	/**
+	 * Method onCancelBrokerData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 */
+	void onCancelBrokerData(Contract contract);
+
+	/**
 	 * Method onCancelContractDetails.
 	 * 
 	 * @param contract

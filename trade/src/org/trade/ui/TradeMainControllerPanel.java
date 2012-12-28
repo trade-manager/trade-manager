@@ -1061,8 +1061,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		try {
 			tradingdayPanel.killAllStrategyWorker();
 			if (m_brokerModel.isConnected()) {
-				doCancel();
+				if ((null != brokerDataRequestProgressMonitor)
+						&& !brokerDataRequestProgressMonitor.isDone()) {
+					brokerDataRequestProgressMonitor.cancel(true);
+				}
 				m_brokerModel.disconnect();
+				m_indicatorTradestrategy.clear();
+				refreshTradingdays(m_tradingdays);
 			} else {
 				tradingdayPanel.setConnected(false);
 				contractPanel.setConnected(false);
@@ -1264,6 +1269,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doCancel() {
 
 		// Cancel the candleWorker if running
+		contractPanel.doCloseAll();
 		m_brokerModel.onCancelAllRealtimeData();
 		if ((null != brokerDataRequestProgressMonitor)
 				&& !brokerDataRequestProgressMonitor.isDone()) {

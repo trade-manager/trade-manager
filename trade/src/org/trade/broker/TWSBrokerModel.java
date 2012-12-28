@@ -656,11 +656,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void onCancelAllRealtimeData() {
 
 		if (m_client.isConnected()) {
-			for (Integer reqId : m_historyDataRequests.keySet()) {
-				m_client.cancelHistoricalData(reqId);
+			for (Contract contract : m_historyDataRequests.values())  {
+				this.onCancelBrokerData(contract);
 			}
-			for (Integer reqId : m_realTimeBarsRequests.keySet()) {
-				m_client.cancelRealTimeBars(reqId);
+			for (Contract contract : m_realTimeBarsRequests.values()) {
+				this.onCancelRealtimeBars(contract);
+			}
+			for (Contract contract : m_contractRequests.values()) {
+				this.onCancelContractDetails(contract);
 			}
 		}
 		m_contractRequests.clear();
@@ -734,6 +737,25 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		}
 	}
+	/**
+	 * Method onCancelBrokerData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
+	 */
+	public void onCancelBrokerData(Contract contract) {
+		synchronized (m_historyDataRequests) {
+			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
+				if (m_client.isConnected()) {
+					m_client.cancelHistoricalData(contract.getIdContract());
+				}
+				m_historyDataRequests.remove(contract.getIdContract());
+				m_historyDataRequests.notifyAll();
+			}
+		}
+	}
+	
 
 	/**
 	 * Method onCancelRealtimeBars.
