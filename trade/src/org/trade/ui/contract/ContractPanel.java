@@ -48,6 +48,7 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -194,15 +195,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			ToolTipManager.sharedInstance().registerComponent(m_tree);
 
 			JPanel jPanel1 = new JPanel(new BorderLayout());
-			JPanel jPanel3 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-			// Contract Panel
-			JLabel jLabel1 = new JLabel("Trading Day");
-			jPanel1.add(jLabel1, BorderLayout.WEST);
-			jPanel1.add(jPanel3, BorderLayout.EAST);
 			JScrollPane jScrollPane1Tree = new JScrollPane();
 			jScrollPane1Tree.getViewport().add(m_tree, BorderLayout.CENTER);
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			jPanel2.add(jScrollPane1Tree, BorderLayout.CENTER);
+			jPanel2.setBorder(BorderFactory.createCompoundBorder(
+					BorderFactory.createTitledBorder("Trading day"),
+					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 			jPanel1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
@@ -286,7 +285,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JSplitPane mainSplitPane = new JSplitPane(
 					JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
 			mainSplitPane.setOneTouchExpandable(true);
-			mainSplitPane.setResizeWeight(0.05d);
+			mainSplitPane.setResizeWeight(0.15d);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
 			enableChartButtons(null);
