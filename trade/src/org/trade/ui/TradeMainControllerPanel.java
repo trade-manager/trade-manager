@@ -2044,6 +2044,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					prevContract = tradestrategy.getContract();
 					prevBarSize = tradestrategy.getBarSize();
 					prevChartDays = tradestrategy.getChartDays();
+					m_indicatorTradestrategy.put(
+							tradestrategy.getIdTradeStrategy(), tradestrategy);
 				}
 				/*
 				 * Refresh the data set container as these may have changed.
@@ -2065,49 +2067,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						prevContract = tradestrategy.getContract();
 						prevBarSize = tradestrategy.getBarSize();
 						prevChartDays = tradestrategy.getChartDays();
-					}
-
-					CandleDataset candleDataset = (CandleDataset) tradestrategy
-							.getDatasetContainer().getIndicators(
-									IndicatorSeries.CandleSeries);
-
-					if (null != candleDataset) {
-						for (int seriesIndex = 0; seriesIndex < candleDataset
-								.getSeriesCount(); seriesIndex++) {
-
-							CandleSeries series = candleDataset
-									.getSeries(seriesIndex);
-							Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
-									tradestrategy, series);
-							candleDataset.setSeries(seriesIndex,
-									indicatorTradestrategy
-											.getDatasetContainer()
-											.getBaseCandleSeries());
-							if (!m_indicatorTradestrategy
-									.containsKey(indicatorTradestrategy
-											.getIdTradeStrategy())) {
-								if (m_brokerModel.isConnected()
-										|| m_brokerModel.isBrokerDataOnly()) {
-									m_indicatorTradestrategy.put(
-											indicatorTradestrategy
-													.getIdTradeStrategy(),
-											indicatorTradestrategy);
-
-									this.grandTotal++;
-									indicatorTradestrategy.getContract()
-											.addTradestrategy(
-													indicatorTradestrategy);
-									totalSumbitted = submitBrokerRequest(
-											indicatorTradestrategy
-													.getContract(),
-											tradingday.getClose(),
-											indicatorTradestrategy.getBarSize(),
-											indicatorTradestrategy
-													.getChartDays(),
-											totalSumbitted);
-								}
-							}
-						}
+						m_indicatorTradestrategy.put(
+								tradestrategy.getIdTradeStrategy(),
+								tradestrategy);
 					}
 				}
 			}
@@ -2115,6 +2077,50 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				totalSumbitted = submitBrokerRequest(prevContract,
 						tradingday.getClose(), prevBarSize, prevChartDays,
 						totalSumbitted);
+			}
+			/*
+			 * Now process the indicators that are candle based.
+			 */
+			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
+				CandleDataset candleDataset = (CandleDataset) tradestrategy
+						.getDatasetContainer().getIndicators(
+								IndicatorSeries.CandleSeries);
+
+				if (null != candleDataset) {
+					for (int seriesIndex = 0; seriesIndex < candleDataset
+							.getSeriesCount(); seriesIndex++) {
+
+						CandleSeries series = candleDataset
+								.getSeries(seriesIndex);
+						Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
+								tradestrategy, series);
+						candleDataset.setSeries(seriesIndex,
+								indicatorTradestrategy.getDatasetContainer()
+										.getBaseCandleSeries());
+						if (!m_indicatorTradestrategy
+								.containsKey(indicatorTradestrategy
+										.getIdTradeStrategy())) {
+							if (m_brokerModel.isConnected()
+									|| m_brokerModel.isBrokerDataOnly()) {
+								m_indicatorTradestrategy.put(
+										indicatorTradestrategy
+												.getIdTradeStrategy(),
+										indicatorTradestrategy);
+
+								this.grandTotal++;
+								indicatorTradestrategy.getContract()
+										.addTradestrategy(
+												indicatorTradestrategy);
+								totalSumbitted = submitBrokerRequest(
+										indicatorTradestrategy.getContract(),
+										tradingday.getClose(),
+										indicatorTradestrategy.getBarSize(),
+										indicatorTradestrategy.getChartDays(),
+										totalSumbitted);
+							}
+						}
+					}
+				}
 			}
 			return totalSumbitted;
 		}
