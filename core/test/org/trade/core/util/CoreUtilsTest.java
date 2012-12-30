@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Some tests for the {@link TradingCalendar} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -54,6 +55,7 @@ public class CoreUtilsTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -62,6 +64,7 @@ public class CoreUtilsTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -72,27 +75,27 @@ public class CoreUtilsTest extends TestCase {
 	public void testNullSafe() {
 		try {
 
-			int returnVal = CoreUtils.nullSafeComparator(null,
-					new BigDecimal(1.23));
-			assertEquals(-1, returnVal);
+			int returnVal = CoreUtils.nullSafeComparator(null, new BigDecimal(
+					1.23));
+			TestCase.assertEquals(-1, returnVal);
 
-			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(
-					1.23), null);
-			assertEquals(1, returnVal);
+			returnVal = CoreUtils
+					.nullSafeComparator(new BigDecimal(1.23), null);
+			TestCase.assertEquals(1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, null);
-			assertEquals(0, returnVal);
+			TestCase.assertEquals(0, returnVal);
 
-			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(
-					1.23), new BigDecimal(1.24));
-			assertEquals(-1, returnVal);
-			
-			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(
-					1.25), new BigDecimal(1.24));
-			assertEquals(1, returnVal);
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.23),
+					new BigDecimal(1.24));
+			TestCase.assertEquals(-1, returnVal);
+
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.25),
+					new BigDecimal(1.24));
+			TestCase.assertEquals(1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, 1);
-			assertEquals(-1, returnVal);
+			TestCase.assertEquals(-1, returnVal);
 
 		} catch (Exception ex) {
 			_log.error("Error creating class: " + ex.getMessage(), ex);

@@ -25,7 +25,7 @@ public class CandleSeriesTest extends TestCase {
 			TradeAppLoadConfig.loadAppProperties();
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
 		} catch (Exception e) {
-			fail("Error on setup " + e.getMessage());
+			TestCase.fail("Error on setup " + e.getMessage());
 		}
 	}
 
@@ -48,11 +48,11 @@ public class CandleSeriesTest extends TestCase {
 					.getDatasetContainer().getBaseCandleSeries().clone();
 			if (candleSeries.equals(series)) {
 				_log.info("CandleSeries: " + series.toString());
-			}			
-			assertEquals(series, candleSeries);
+			}
+			TestCase.assertEquals(series, candleSeries);
 
 		} catch (Exception e) {
-			fail("Error on testCandleSeriessClone " + e.getMessage());
+			TestCase.fail("Error on testCandleSeriessClone " + e.getMessage());
 		}
 	}
 

@@ -119,7 +119,7 @@ public class ValueTypeDAOTest extends TestCase {
 			}
 
 		} catch (Exception ex) {
-			fail("Error finding row " + ex.getMessage());
+			TestCase.fail("Error finding row " + ex.getMessage());
 		}
 	}
 
@@ -149,7 +149,7 @@ public class ValueTypeDAOTest extends TestCase {
 					+ entrylimit.getLimitAmount());
 
 		} catch (Exception ex) {
-			fail("Error finding row " + ex.getMessage());
+			TestCase.fail("Error finding row " + ex.getMessage());
 		}
 	}
 
@@ -170,11 +170,10 @@ public class ValueTypeDAOTest extends TestCase {
 				_log.info("DISPLAY_NAME:"
 						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
 								+ DAODecode._DISPLAY_NAME));
-
 			}
 
 		} catch (Exception ex) {
-			fail("Error finding row " + ex.getMessage());
+			TestCase.fail("Error finding row " + ex.getMessage());
 		}
 	}
 }

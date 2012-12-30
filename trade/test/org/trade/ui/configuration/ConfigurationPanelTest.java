@@ -55,6 +55,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -65,6 +66,7 @@ public class ConfigurationPanelTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -73,10 +75,10 @@ public class ConfigurationPanelTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-
 	}
 
 	@Test
@@ -93,11 +95,10 @@ public class ConfigurationPanelTest extends TestCase {
 			Integer value = (Integer) ClassFactory.getCreateClass(codeValue
 					.getCodeAttribute().getClassName(), parm, this);
 			_log.info("Value is: " + value);
-			assertEquals(20, value, 0);
+			TestCase.assertEquals(20, value, 0);
 
 		} catch (Exception ex) {
-			_log.error("Error creating class: " + ex.getMessage(), ex);
-			fail("Error creating class: " + ex.getCause().getMessage());
+			TestCase.fail("Error creating class: " + ex.getCause().getMessage());
 		}
 	}
 
@@ -115,11 +116,10 @@ public class ConfigurationPanelTest extends TestCase {
 			Boolean value = (Boolean) ClassFactory.getCreateClass(codeValue
 					.getCodeAttribute().getClassName(), parm, this);
 			_log.info("Value is: " + value);
-			assertEquals(new Boolean(true), value);
+			TestCase.assertEquals(new Boolean(true), value);
 
 		} catch (Exception ex) {
-			_log.error("Error creating class: " + ex.getMessage(), ex);
-			fail("Error creating class: " + ex.getCause().getMessage());
+			TestCase.fail("Error creating class: " + ex.getCause().getMessage());
 		}
 	}
 
@@ -136,11 +136,10 @@ public class ConfigurationPanelTest extends TestCase {
 
 			String value = (String) ClassFactory.getCreateClass(codeValue
 					.getCodeAttribute().getClassName(), parm, this);
-			assertEquals("Simple", value);
+			TestCase.assertEquals("Simple", value);
 			_log.info("Value is: " + value);
 		} catch (Exception ex) {
-			_log.error("Error creating class: " + ex.getMessage(), ex);
-			fail("Error creating class: " + ex.getCause().getMessage());
+			TestCase.fail("Error creating class: " + ex.getCause().getMessage());
 		}
 	}
 
@@ -162,11 +161,10 @@ public class ConfigurationPanelTest extends TestCase {
 							codeValue.getCodeAttribute().getClassName(), parm,
 							this);
 			value.setValue(CalculationType.LINEAR);
-			assertEquals(CalculationType.LINEAR, value.getCode());
+			TestCase.assertEquals(CalculationType.LINEAR, value.getCode());
 			_log.info("Value is: " + value);
 		} catch (Exception ex) {
-			_log.error("Error creating class: " + ex.getMessage(), ex);
-			fail("Error creating class: " + ex.getCause().getMessage());
+			TestCase.fail("Error creating class: " + ex.getCause().getMessage());
 		}
 	}
 
@@ -191,11 +189,10 @@ public class ConfigurationPanelTest extends TestCase {
 			IndicatorSeries value = (IndicatorSeries) ClassFactory
 					.getCreateClass(className, parm, this);
 
-			assertEquals(value.getClass().getName(), className);
+			TestCase.assertEquals(value.getClass().getName(), className);
 			_log.info("Value is: " + value);
 		} catch (Exception ex) {
-			_log.error("Error creating class: " + ex.getMessage(), ex);
-			fail("Error creating class: " + ex.getCause().getMessage());
+			TestCase.fail("Error creating class: " + ex.getCause().getMessage());
 		}
 	}
 }

@@ -98,7 +98,7 @@ public class TradingdayTest extends TestCase {
 					+ transientInstance.getIdTradingDay());
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -126,7 +126,7 @@ public class TradingdayTest extends TestCase {
 					+ transientInstance.getIdTradingDay());
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 }

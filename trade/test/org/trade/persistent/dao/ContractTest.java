@@ -94,8 +94,8 @@ public class ContractTest extends TestCase {
 					transientInstance.getSymbol(),
 					transientInstance.getExchange(),
 					transientInstance.getCurrency(), null);
-			assertNotNull("Contract not found: " + contract.getSymbol(),
-					contract);
+			TestCase.assertNotNull(
+					"Contract not found: " + contract.getSymbol(), contract);
 
 			if (null != contract) {
 				aspectHome.remove(contract);
@@ -105,7 +105,7 @@ public class ContractTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -134,20 +134,18 @@ public class ContractTest extends TestCase {
 					transientInstance.getSymbol(),
 					transientInstance.getExchange(),
 					transientInstance.getCurrency(), expiry);
-			assertNotNull("Contract not found: " + contract.getSymbol(),
-					contract);
+			TestCase.assertNotNull(
+					"Contract not found: " + contract.getSymbol(), contract);
 
 			if (null != contract) {
 				aspectHome.remove(contract);
 				_log.info("Contract deleted Id:"
 						+ transientInstance.getIdContract());
-
 			}
-
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 }

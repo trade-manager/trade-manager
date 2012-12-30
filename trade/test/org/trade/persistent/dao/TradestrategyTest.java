@@ -86,12 +86,12 @@ public class TradestrategyTest extends TestCase {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy();
-			assertNotNull(tradestrategy);
+			TestCase.assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 
 		} catch (Exception e) {
-			fail("Error testAddTradestrategy Msg: " + e.getMessage());
+			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
 
@@ -117,13 +117,13 @@ public class TradestrategyTest extends TestCase {
 					_log.info("testTradingdaysUpdate IdTradeStrategy:"
 							+ tradestrategy.getIdTradeStrategy() + "  Status: "
 							+ tradestrategy.getStatus());
-					assertEquals(TradestrategyStatus.OPEN,
+					TestCase.assertEquals(TradestrategyStatus.OPEN,
 							tradestrategy.getStatus());
 				}
 			}
 
 		} catch (Exception e) {
-			fail("Error update row " + e.getMessage());
+			TestCase.fail("Error update row " + e.getMessage());
 		}
 	}
 
@@ -152,7 +152,7 @@ public class TradestrategyTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -183,7 +183,7 @@ public class TradestrategyTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 

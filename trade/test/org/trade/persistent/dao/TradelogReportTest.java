@@ -47,6 +47,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -57,6 +58,7 @@ public class TradelogReportTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -65,6 +67,7 @@ public class TradelogReportTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -97,7 +100,7 @@ public class TradelogReportTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -126,7 +129,7 @@ public class TradelogReportTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 }

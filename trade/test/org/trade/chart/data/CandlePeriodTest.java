@@ -135,7 +135,7 @@ public class CandlePeriodTest extends TestCase {
 					+ " Volume: " + candle.getVolume());
 
 		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+			TestCase.fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -203,7 +203,7 @@ public class CandlePeriodTest extends TestCase {
 					+ candle.getVwap() + " Volume: " + candle.getVolume());
 
 		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+			TestCase.fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -219,7 +219,7 @@ public class CandlePeriodTest extends TestCase {
 			_log.info("Date EST time: " + sdf.format(date));
 
 		} catch (ParseException e) {
-			fail("Error :" + e.getMessage());
+			TestCase.fail("Error :" + e.getMessage());
 		}
 
 	}

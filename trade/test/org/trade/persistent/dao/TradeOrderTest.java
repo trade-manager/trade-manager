@@ -60,6 +60,7 @@ import com.ib.client.Execution;
 
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -75,6 +76,7 @@ public class TradeOrderTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -88,6 +90,7 @@ public class TradeOrderTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -128,7 +131,7 @@ public class TradeOrderTest extends TestCase {
 			tradeOrder.setIsOpenPosition(true);
 			tradeOrder.setStatus("SUBMITTED");
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
-			assertNotNull(tradeOrder);
+			TestCase.assertNotNull(tradeOrder);
 			_log.info("IdTrade: " + trade.getIdTrade() + " IdOrder: "
 					+ tradeOrder.getIdTradeOrder());
 			tradeOrder.getTrade().setOpenQuantity(tradeOrder.getQuantity());
@@ -150,7 +153,7 @@ public class TradeOrderTest extends TestCase {
 			assertNotNull(tradeOrder1);
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -247,7 +250,7 @@ public class TradeOrderTest extends TestCase {
 					+ tradeOrder1.getIdTradeOrder());
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -379,7 +382,7 @@ public class TradeOrderTest extends TestCase {
 				}
 			}
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -468,10 +471,8 @@ public class TradeOrderTest extends TestCase {
 
 			}
 
-		} catch (RuntimeException re) {
-			fail("Error adding row " + re.getMessage());
 		} catch (Exception ex) {
-			fail("Error adding row " + ex.getMessage());
+			TestCase.fail("Error adding row " + ex.getMessage());
 		}
 	}
 
@@ -482,10 +483,8 @@ public class TradeOrderTest extends TestCase {
 			Integer orderKey = tradePersistentModel.findTradeOrderByMaxKey();
 			_log.info("Max Order key: " + orderKey);
 
-		} catch (RuntimeException re) {
-			fail("Error adding row " + re.getMessage());
 		} catch (Exception ex) {
-			fail("Error adding row " + ex.getMessage());
+			TestCase.fail("Error adding row " + ex.getMessage());
 		}
 	}
 }

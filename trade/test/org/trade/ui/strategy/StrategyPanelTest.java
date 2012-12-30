@@ -60,10 +60,10 @@ public class StrategyPanelTest extends TestCase {
 			TradeAppLoadConfig.loadAppProperties();
 			m_templateName = ConfigProperties
 					.getPropAsString("trade.strategy.template");
-			assertNotNull(m_templateName);
+			TestCase.assertNotNull(m_templateName);
 			m_strategyDir = ConfigProperties
 					.getPropAsString("trade.strategy.default.dir");
-			assertNotNull(m_strategyDir);
+			TestCase.assertNotNull(m_strategyDir);
 			this.tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
@@ -86,7 +86,8 @@ public class StrategyPanelTest extends TestCase {
 				}
 			}
 		} catch (Exception ex) {
-			_log.error("Error getting Yahoo data msg: " + ex.getMessage(), ex);
+			TestCase.fail("Error getting Yahoo data msg: "
+					+ ex.getCause().getMessage());
 		}
 	}
 
@@ -122,15 +123,15 @@ public class StrategyPanelTest extends TestCase {
 					+ ".java";
 			String content = readFile(fileName);
 			sourceText.setText(content);
-			assertEquals(content, sourceText.getText());
+			TestCase.assertEquals(content, sourceText.getText());
 			writeFile(fileName, content);
 			String content1 = readFile(fileName);
 			sourceText.setText(null);
 			sourceText.setText(content1);
-			assertEquals(content1, sourceText.getText());
+			TestCase.assertEquals(content1, sourceText.getText());
 
 		} catch (Exception ex) {
-			fail("Error creating instance : " + ex.getMessage());
+			TestCase.fail("Error creating instance : " + ex.getMessage());
 		}
 	}
 
@@ -229,7 +230,7 @@ public class StrategyPanelTest extends TestCase {
 			strategyProxy.cancel();
 
 		} catch (Exception ex) {
-			fail("Error creating instance : " + ex.getMessage());
+			TestCase.fail("Error creating instance : " + ex.getMessage());
 		}
 	}
 
@@ -254,7 +255,7 @@ public class StrategyPanelTest extends TestCase {
 				if (version.equals(rule.getVersion()))
 					myRule = rule;
 			}
-			assertNotNull(myRule);
+			TestCase.assertNotNull(myRule);
 			String fileDir = m_tmpDir + "/"
 					+ StrategyRule.PACKAGE.replace('.', '/');
 			String className = strategy.getClassName() + ".java";
@@ -275,10 +276,10 @@ public class StrategyPanelTest extends TestCase {
 			StrategyRule strategyRule = (StrategyRule) dynacode
 					.newProxyInstance(StrategyRule.class, StrategyRule.PACKAGE
 							+ strategy.getClassName(), parm);
-			assertNotNull(strategyRule);
+			TestCase.assertNotNull(strategyRule);
 
 		} catch (Exception ex) {
-			fail("Error compiling rule : " + ex.getMessage());
+			TestCase.fail("Error compiling rule : " + ex.getMessage());
 		}
 	}
 
@@ -289,11 +290,11 @@ public class StrategyPanelTest extends TestCase {
 					this.tradePersistentModel);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
-			assertNotNull("No strategies", strategies);
-			assertEquals(false, strategies.isEmpty());
+			TestCase.assertNotNull("No strategies", strategies);
+			TestCase.assertEquals(false, strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
-			assertNotNull(strategy);
+			TestCase.assertNotNull(strategy);
 			Rule myrule = null;
 
 			Collections.sort(strategy.getRules(), Rule.VERSION_ORDER);
@@ -314,7 +315,7 @@ public class StrategyPanelTest extends TestCase {
 
 			strategyPanel.doCompile(myrule);
 		} catch (Exception ex) {
-			fail("Error saving rule : " + ex.getMessage());
+			TestCase.fail("Error saving rule : " + ex.getMessage());
 		}
 	}
 
@@ -325,11 +326,11 @@ public class StrategyPanelTest extends TestCase {
 					this.tradePersistentModel);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
-			assertNotNull("No strategies", strategies);
-			assertEquals(false, strategies.isEmpty());
+			TestCase.assertNotNull("No strategies", strategies);
+			TestCase.assertEquals(false, strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
-			assertNotNull(strategy);
+			TestCase.assertNotNull(strategy);
 			Rule myrule = null;
 
 			Collections.sort(strategy.getRules(), Rule.VERSION_ORDER);
@@ -362,11 +363,11 @@ public class StrategyPanelTest extends TestCase {
 					.getIdRule());
 
 			String javaCode = new String(ruleSaved.getRule());
-			assertEquals(javaCode, textArea.getText());
+			TestCase.assertEquals(javaCode, textArea.getText());
 			_log.info("Java file to Saved: " + javaCode);
 
 		} catch (Exception ex) {
-			fail("Error saving rule : " + ex.getMessage());
+			TestCase.fail("Error saving rule : " + ex.getMessage());
 		}
 	}
 }

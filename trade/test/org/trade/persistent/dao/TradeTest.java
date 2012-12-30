@@ -56,6 +56,7 @@ public class TradeTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -67,6 +68,7 @@ public class TradeTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -90,7 +92,7 @@ public class TradeTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -108,7 +110,7 @@ public class TradeTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 }

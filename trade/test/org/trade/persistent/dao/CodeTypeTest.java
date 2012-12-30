@@ -50,6 +50,7 @@ public class CodeTypeTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -58,6 +59,7 @@ public class CodeTypeTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -69,14 +71,14 @@ public class CodeTypeTest extends TestCase {
 		try {
 			CodeTypeHome codeTypeHome = new CodeTypeHome();
 			CodeType codeType = codeTypeHome.findByName("MovingAverage");
-			assertNotNull(codeType);
+			TestCase.assertNotNull(codeType);
 			_log.info("CodeType id: " + codeType.getIdCodeType());
 			CodeValue codeValue = codeTypeHome.findByAttributeName(
 					codeType.getName(), "Length");
-			assertNotNull(codeValue);
+			TestCase.assertNotNull(codeValue);
 			_log.info("CodeValue id: " + codeValue.getIdCodeValue());
 		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 }

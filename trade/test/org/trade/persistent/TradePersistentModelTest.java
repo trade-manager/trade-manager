@@ -169,9 +169,8 @@ public class TradePersistentModelTest extends TestCase {
 			_log.info("testTradingdaysRemoce IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 		} catch (Exception e) {
-			fail("Error testAddTradestrategy Msg: " + e.getMessage());
+			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
-
 	}
 
 	@Test
@@ -190,10 +189,11 @@ public class TradePersistentModelTest extends TestCase {
 						.findOpenTradeByTradestrategyId(this.tradestrategy
 								.getIdTradeStrategy());
 			}
-			assertNotNull(trade);
+			TestCase.assertNotNull(trade);
 
 		} catch (Exception e) {
-			fail("Error testFindTradeByTradestrategyId Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradeByTradestrategyId Msg: "
+					+ e.getMessage());
 		}
 
 	}
@@ -299,7 +299,7 @@ public class TradePersistentModelTest extends TestCase {
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
 			Trade openTrade = tradestrategyStpTgt.getOpenTrade();
-			assertNotNull("No open trade", openTrade);
+			TestCase.assertNotNull("No open trade", openTrade);
 
 			int buySellMultiplier = 1;
 			if (action.equals(Action.BUY)) {
@@ -465,7 +465,8 @@ public class TradePersistentModelTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error testLifeCycleTradeOrder Msg: " + e.getMessage());
+			TestCase.fail("Error testLifeCycleTradeOrder Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -478,7 +479,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradePersistentModel.persistTradingday(this.tradestrategy
 					.getTradingday());
 		} catch (Exception e) {
-			fail("Error testPersistTradingday Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistTradingday Msg: " + e.getMessage());
 		}
 	}
 
@@ -490,9 +491,10 @@ public class TradePersistentModelTest extends TestCase {
 					.removeTrades(this.tradestrategy);
 			Tradestrategy result = this.tradePersistentModel
 					.persistTradestrategy(this.tradestrategy);
-			assertNotNull(result.getId());
+			TestCase.assertNotNull(result.getId());
 		} catch (Exception e) {
-			fail("Error testPersistTradestrategy Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistTradestrategy Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -502,9 +504,9 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			Contract result = this.tradePersistentModel
 					.persistContract(this.tradestrategy.getContract());
-			assertNotNull(result.getId());
+			TestCase.assertNotNull(result.getId());
 		} catch (Exception e) {
-			fail("Error testPersistContract Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistContract Msg: " + e.getMessage());
 		}
 	}
 
@@ -516,7 +518,8 @@ public class TradePersistentModelTest extends TestCase {
 					.resetDefaultTradeAccount(this.tradestrategy
 							.getTradeAccount());
 		} catch (Exception e) {
-			fail("Error testResetDefaultTradeAccount Msg: " + e.getMessage());
+			TestCase.fail("Error testResetDefaultTradeAccount Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -533,9 +536,9 @@ public class TradePersistentModelTest extends TestCase {
 					.intValue());
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrder(tradeOrder);
-			assertNotNull(result.getId());
+			TestCase.assertNotNull(result.getId());
 		} catch (Exception e) {
-			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistTradeOrder Msg: " + e.getMessage());
 		}
 	}
 
@@ -614,17 +617,19 @@ public class TradePersistentModelTest extends TestCase {
 
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrderfill(tradeOrderSell);
-			assertFalse(result.getTrade().getIsOpen());
-			assertEquals((new Money(4000.00)).getBigDecimalValue(), result
-					.getTrade().getProfitLoss());
-			assertEquals((new Money(4.00)).getBigDecimalValue(), (new Money(
-					result.getTrade().getAveragePrice())).getBigDecimalValue());
-			assertEquals(new Integer(2000), result.getTrade()
+			TestCase.assertFalse(result.getTrade().getIsOpen());
+			TestCase.assertEquals((new Money(4000.00)).getBigDecimalValue(),
+					result.getTrade().getProfitLoss());
+			TestCase.assertEquals((new Money(4.00)).getBigDecimalValue(),
+					(new Money(result.getTrade().getAveragePrice()))
+							.getBigDecimalValue());
+			TestCase.assertEquals(new Integer(2000), result.getTrade()
 					.getTotalQuantity());
-			assertEquals(new Integer(0), result.getTrade().getOpenQuantity());
+			TestCase.assertEquals(new Integer(0), result.getTrade()
+					.getOpenQuantity());
 
 		} catch (Exception e) {
-			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistTradeOrder Msg: " + e.getMessage());
 		}
 	}
 
@@ -636,9 +641,9 @@ public class TradePersistentModelTest extends TestCase {
 					.removeTrades(this.tradestrategy);
 			Trade trade = new Trade(this.tradestrategy, Side.BOT);
 			Trade result = this.tradePersistentModel.persistTrade(trade);
-			assertNotNull(result.getId());
+			TestCase.assertNotNull(result.getId());
 		} catch (Exception e) {
-			fail("Error testPersistTrade Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistTrade Msg: " + e.getMessage());
 		}
 	}
 
@@ -660,7 +665,8 @@ public class TradePersistentModelTest extends TestCase {
 			_log.info("Total time: " + (System.currentTimeMillis() - timeStart)
 					/ 1000);
 		} catch (Exception e) {
-			fail("Error testPersistCandleSeries Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistCandleSeries Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -675,7 +681,7 @@ public class TradePersistentModelTest extends TestCase {
 					new Date());
 			this.tradePersistentModel.persistCandleItem(candleItem);
 		} catch (Exception e) {
-			fail("Error testPersistCandleItem Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistCandleItem Msg: " + e.getMessage());
 		}
 	}
 
@@ -686,9 +692,10 @@ public class TradePersistentModelTest extends TestCase {
 			TradeAccount result = this.tradePersistentModel
 					.findTradeAccountById(this.tradestrategy.getTradeAccount()
 							.getIdTradeAccount());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradeAccountById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradeAccountById Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -699,9 +706,10 @@ public class TradePersistentModelTest extends TestCase {
 			TradeAccount result = this.tradePersistentModel
 					.findTradeAccountByNumber(this.tradestrategy
 							.getTradeAccount().getAccountNumber());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradeAccountByNumber Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradeAccountByNumber Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -712,9 +720,9 @@ public class TradePersistentModelTest extends TestCase {
 			Contract result = this.tradePersistentModel
 					.findContractById(this.tradestrategy.getContract()
 							.getIdContract());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindContractById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindContractById Msg: " + e.getMessage());
 		}
 	}
 
@@ -728,9 +736,10 @@ public class TradePersistentModelTest extends TestCase {
 							.getSymbol(), this.tradestrategy.getContract()
 							.getExchange(), this.tradestrategy.getContract()
 							.getCurrency(), null);
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindContractByUniqueKey Msg: " + e.getMessage());
+			TestCase.fail("Error testFindContractByUniqueKey Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -740,9 +749,9 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy);
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradestrategyByTradestrategy Msg: "
+			TestCase.fail("Error testFindTradestrategyByTradestrategy Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -754,9 +763,10 @@ public class TradePersistentModelTest extends TestCase {
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradestrategyById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradestrategyById Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -770,9 +780,9 @@ public class TradePersistentModelTest extends TestCase {
 							.getStrategy().getName(), this.tradestrategy
 							.getContract().getIdContract(), this.tradestrategy
 							.getTradeAccount().getAccountNumber());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradestrategyByUniqueKeys Msg: "
+			TestCase.fail("Error testFindTradestrategyByUniqueKeys Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -783,9 +793,10 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			List<Tradestrategy> result = this.tradePersistentModel
 					.findAllTradestrategies();
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindAllTradestrategies Msg: " + e.getMessage());
+			TestCase.fail("Error testFindAllTradestrategies Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -798,9 +809,9 @@ public class TradePersistentModelTest extends TestCase {
 			Trade resultTrade = this.tradePersistentModel.persistTrade(trade);
 			Trade result = this.tradePersistentModel.findTradeById(resultTrade
 					.getIdTrade());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradeById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradeById Msg: " + e.getMessage());
 		}
 	}
 
@@ -816,9 +827,9 @@ public class TradePersistentModelTest extends TestCase {
 			Trade result = this.tradePersistentModel
 					.findOpenTradeByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindOpenTradeByTradestrategyId Msg: "
+			TestCase.fail("Error testFindOpenTradeByTradestrategyId Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -830,9 +841,10 @@ public class TradePersistentModelTest extends TestCase {
 			List<Trade> result = this.tradePersistentModel
 					.findTradesByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradesByTradestrategyId Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradesByTradestrategyId Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -848,10 +860,11 @@ public class TradePersistentModelTest extends TestCase {
 			Tradingday result = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 			this.tradePersistentModel.removeTradingdayTrades(result);
 		} catch (Exception e) {
-			fail("Error testRemoveTradingdayTrades Msg: " + e.getMessage());
+			TestCase.fail("Error testRemoveTradingdayTrades Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -867,10 +880,11 @@ public class TradePersistentModelTest extends TestCase {
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 			this.tradePersistentModel.removeTradestrategyTrades(result);
 		} catch (Exception e) {
-			fail("Error testRemoveTradestrategyTrades Msg: " + e.getMessage());
+			TestCase.fail("Error testRemoveTradestrategyTrades Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -891,9 +905,10 @@ public class TradePersistentModelTest extends TestCase {
 					.persistTradeOrder(tradeOrder);
 			TradeOrder result = this.tradePersistentModel
 					.findTradeOrderByKey(resultTradeOrder.getOrderKey());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradeOrderByKey Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradeOrderByKey Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -920,9 +935,10 @@ public class TradePersistentModelTest extends TestCase {
 			TradeOrderfill result = this.tradePersistentModel
 					.findTradeOrderfillByExecId(resultTradeOrder
 							.getTradeOrderfills().get(0).getExecId());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradeOrderfillByExecId Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradeOrderfillByExecId Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -931,9 +947,10 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			Integer result = this.tradePersistentModel.findTradeOrderByMaxKey();
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradeOrderByMaxKey Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradeOrderByMaxKey Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -944,9 +961,9 @@ public class TradePersistentModelTest extends TestCase {
 			Tradingday result = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradingdayById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradingdayById Msg: " + e.getMessage());
 		}
 	}
 
@@ -958,9 +975,10 @@ public class TradePersistentModelTest extends TestCase {
 					.findTradingdayByOpenCloseDate(this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getClose());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradingdayByOpenDate Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradingdayByOpenDate Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -972,9 +990,10 @@ public class TradePersistentModelTest extends TestCase {
 					.findTradingdaysByDateRange(this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getOpen());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradingdaysByDateRange Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradingdaysByDateRange Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -986,9 +1005,9 @@ public class TradePersistentModelTest extends TestCase {
 					.findTradelogReport(this.tradestrategy.getTradeAccount(),
 							TradingCalendar.getYearStart(), this.tradestrategy
 									.getTradingday().getClose(), true);
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindTradelogReport Msg: " + e.getMessage());
+			TestCase.fail("Error testFindTradelogReport Msg: " + e.getMessage());
 		}
 	}
 
@@ -1002,9 +1021,9 @@ public class TradePersistentModelTest extends TestCase {
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getClose(), this.tradestrategy
 							.getBarSize());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindCandlesByContractAndDateRange Msg: "
+			TestCase.fail("Error testFindCandlesByContractAndDateRange Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -1016,9 +1035,9 @@ public class TradePersistentModelTest extends TestCase {
 			Long result = this.tradePersistentModel.findCandleCount(
 					this.tradestrategy.getTradingday().getIdTradingDay(),
 					this.tradestrategy.getContract().getIdContract());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindCandleCount Msg: " + e.getMessage());
+			TestCase.fail("Error testFindCandleCount Msg: " + e.getMessage());
 		}
 	}
 
@@ -1031,10 +1050,10 @@ public class TradePersistentModelTest extends TestCase {
 			Rule rule = new Rule(this.tradestrategy.getStrategy(), version,
 					"Test", new Date(), new Date());
 			Aspect result = this.tradePersistentModel.persistRule(rule);
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 			this.tradePersistentModel.removeRule(rule);
 		} catch (Exception e) {
-			fail("Error testPersistRule Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistRule Msg: " + e.getMessage());
 		}
 	}
 
@@ -1047,13 +1066,13 @@ public class TradePersistentModelTest extends TestCase {
 			Rule rule = new Rule(this.tradestrategy.getStrategy(), version,
 					"Test", new Date(), new Date());
 			Aspect resultAspect = this.tradePersistentModel.persistRule(rule);
-			assertNotNull(resultAspect);
+			TestCase.assertNotNull(resultAspect);
 			Rule result = this.tradePersistentModel.findRuleById(resultAspect
 					.getId());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 			this.tradePersistentModel.removeRule(rule);
 		} catch (Exception e) {
-			fail("Error testFindRuleById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindRuleById Msg: " + e.getMessage());
 		}
 	}
 
@@ -1063,9 +1082,10 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			Integer result = this.tradePersistentModel
 					.findRuleByMaxVersion(this.tradestrategy.getStrategy());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindRuleByMaxVersion Msg: " + e.getMessage());
+			TestCase.fail("Error testFindRuleByMaxVersion Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -1076,9 +1096,9 @@ public class TradePersistentModelTest extends TestCase {
 			Strategy result = this.tradePersistentModel
 					.findStrategyById(this.tradestrategy.getStrategy()
 							.getIdStrategy());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindStrategyById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindStrategyById Msg: " + e.getMessage());
 		}
 	}
 
@@ -1089,9 +1109,9 @@ public class TradePersistentModelTest extends TestCase {
 			Strategy result = this.tradePersistentModel
 					.findStrategyByName(this.tradestrategy.getStrategy()
 							.getName());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindStrategyByName Msg: " + e.getMessage());
+			TestCase.fail("Error testFindStrategyByName Msg: " + e.getMessage());
 		}
 	}
 
@@ -1105,10 +1125,10 @@ public class TradePersistentModelTest extends TestCase {
 					"Test", new Date(), new Date());
 			Rule resultAspect = (Rule) this.tradePersistentModel
 					.persistRule(rule);
-			assertNotNull(resultAspect);
+			TestCase.assertNotNull(resultAspect);
 			this.tradePersistentModel.removeRule(resultAspect);
 		} catch (Exception e) {
-			fail("Error testRemoveRule Msg: " + e.getMessage());
+			TestCase.fail("Error testRemoveRule Msg: " + e.getMessage());
 		}
 	}
 
@@ -1117,9 +1137,9 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			List<Strategy> result = this.tradePersistentModel.findStrategies();
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindStrategies Msg: " + e.getMessage());
+			TestCase.fail("Error testFindStrategies Msg: " + e.getMessage());
 		}
 	}
 
@@ -1130,9 +1150,10 @@ public class TradePersistentModelTest extends TestCase {
 			Aspects result = this.tradePersistentModel
 					.findAspectsByClassName(this.tradestrategy.getClass()
 							.getName());
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindAspectsByClassName Msg: " + e.getMessage());
+			TestCase.fail("Error testFindAspectsByClassName Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -1148,11 +1169,11 @@ public class TradePersistentModelTest extends TestCase {
 				Aspects result = this.tradePersistentModel
 						.findAspectsByClassNameFieldName(
 								CodeType.class.getName(), "name", indicatorName);
-				assertNotNull(result);
+				TestCase.assertNotNull(result);
 			}
 
 		} catch (Exception e) {
-			fail("Error testFindAspectsByClassNameFieldName Msg: "
+			TestCase.fail("Error testFindAspectsByClassNameFieldName Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -1163,9 +1184,9 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			Aspect result = this.tradePersistentModel
 					.findAspectById(this.tradestrategy);
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testFindAspectById Msg: " + e.getMessage());
+			TestCase.fail("Error testFindAspectById Msg: " + e.getMessage());
 		}
 	}
 
@@ -1175,9 +1196,9 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			Aspect result = this.tradePersistentModel
 					.persistAspect(this.tradestrategy);
-			assertNotNull(result);
+			TestCase.assertNotNull(result);
 		} catch (Exception e) {
-			fail("Error testPersistAspect Msg: " + e.getMessage());
+			TestCase.fail("Error testPersistAspect Msg: " + e.getMessage());
 		}
 	}
 
@@ -1188,7 +1209,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradePersistentModel.removeAspect(this.tradestrategy);
 
 		} catch (Exception e) {
-			fail("Error testRemoveAspect Msg: " + e.getMessage());
+			TestCase.fail("Error testRemoveAspect Msg: " + e.getMessage());
 		}
 	}
 
@@ -1206,7 +1227,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradePersistentModel.reassignStrategy(
 					this.tradestrategy.getStrategy(), toStrategy, tradingday);
 		} catch (Exception e) {
-			fail("Error testReassignStrategy Msg: " + e.getMessage());
+			TestCase.fail("Error testReassignStrategy Msg: " + e.getMessage());
 		}
 	}
 
@@ -1247,16 +1268,16 @@ public class TradePersistentModelTest extends TestCase {
 					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 1);
 			Tradingday transferObject = tradingdayModel.getData()
 					.getTradingday(openDate.getDate(), closeDate.getDate());
-			assertNotNull(transferObject);
+			TestCase.assertNotNull(transferObject);
 
-			assertNotNull(tradingdays.getTradingday(instance1.getOpen(),
-					instance1.getClose()));
+			TestCase.assertNotNull(tradingdays.getTradingday(
+					instance1.getOpen(), instance1.getClose()));
 			String industry = transferObject.getTradestrategies().get(0)
 					.getContract().getIndustry();
-			assertNotNull(industry);
+			TestCase.assertNotNull(industry);
 
 		} catch (Exception e) {
-			fail("Error testReplaceTradingday Msg: " + e.getMessage());
+			TestCase.fail("Error testReplaceTradingday Msg: " + e.getMessage());
 		}
 	}
 }

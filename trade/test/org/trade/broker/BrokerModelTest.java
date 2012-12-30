@@ -111,7 +111,7 @@ public class BrokerModelTest extends TestCase {
 			// }
 
 		} catch (Exception e) {
-			fail("Error on setup " + e.getMessage());
+			TestCase.fail("Error on setup " + e.getMessage());
 		}
 	}
 
@@ -149,7 +149,7 @@ public class BrokerModelTest extends TestCase {
 					+ tradeOrder.getOrderKey());
 
 		} catch (Exception e) {
-			fail("Error testSubmitBuyOrder Msg: " + e.getMessage());
+			TestCase.fail("Error testSubmitBuyOrder Msg: " + e.getMessage());
 		}
 	}
 
@@ -180,7 +180,8 @@ public class BrokerModelTest extends TestCase {
 					+ tradeOrder.getOrderKey());
 
 		} catch (Exception e) {
-			fail("Error testSubmitSellShortOrder Msg: " + e.getMessage());
+			TestCase.fail("Error testSubmitSellShortOrder Msg: "
+					+ e.getMessage());
 		}
 	}
 
@@ -274,7 +275,7 @@ public class BrokerModelTest extends TestCase {
 					+ tradeOrder3.getOrderKey());
 
 		} catch (Exception e) {
-			fail("Error testSubmitComboOrder Msg: " + e.getMessage());
+			TestCase.fail("Error testSubmitComboOrder Msg: " + e.getMessage());
 		}
 	}
 
@@ -300,7 +301,7 @@ public class BrokerModelTest extends TestCase {
 			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
 					Action.BUY, new Money(price),
 					new Money(price.subtract(new BigDecimal(1.0))), false);
-			assertNotNull(openOrder);
+			TestCase.assertNotNull(openOrder);
 			openOrder.setAverageFilledPrice(price);
 			openOrder.setFilledQuantity(openOrder.getQuantity());
 
@@ -314,7 +315,7 @@ public class BrokerModelTest extends TestCase {
 			strategyProxy.cancel();
 
 		} catch (Exception e) {
-			fail("Error testSubmitBuyAndComboOrderViaStrategy Msg: "
+			TestCase.fail("Error testSubmitBuyAndComboOrderViaStrategy Msg: "
 					+ e.getMessage());
 		}
 	}
@@ -413,7 +414,7 @@ public class BrokerModelTest extends TestCase {
 			}
 
 		} catch (Exception e) {
-			fail("Error testOnBrokerData Msg: " + e.getMessage());
+			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
 		}
 	}
 
@@ -422,13 +423,13 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onConnect(host, port, clientId);
 			if (_broker.equals(BrokerModel._brokerTest)) {
-				assertFalse(m_brokerModel.isConnected());
+				TestCase.assertFalse(m_brokerModel.isConnected());
 			} else {
-				assertTrue(m_brokerModel.isConnected());
+				TestCase.assertTrue(m_brokerModel.isConnected());
 			}
 
 		} catch (Exception ex) {
-			fail("Error testOnConnect Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnConnect Msg: " + ex.getMessage());
 		}
 	}
 
@@ -438,12 +439,12 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.disconnect();
 			if (_broker.equals(BrokerModel._brokerTest)) {
-				assertFalse(m_brokerModel.isConnected());
+				TestCase.assertFalse(m_brokerModel.isConnected());
 			} else {
-				assertTrue(m_brokerModel.isConnected());
+				TestCase.assertTrue(m_brokerModel.isConnected());
 			}
 		} catch (Exception ex) {
-			fail("Error testDisconnect Msg: " + ex.getMessage());
+			TestCase.fail("Error testDisconnect Msg: " + ex.getMessage());
 		}
 	}
 
@@ -452,9 +453,9 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			Integer id = m_brokerModel.getNextRequestId();
-			assertNotNull(id);
+			TestCase.assertNotNull(id);
 		} catch (Exception ex) {
-			fail("Error testGetNextRequestId Msg: " + ex.getMessage());
+			TestCase.fail("Error testGetNextRequestId Msg: " + ex.getMessage());
 		}
 	}
 
@@ -465,7 +466,8 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onSubscribeAccountUpdates(true,
 					tradestrategy.getTradeAccount());
 		} catch (Exception ex) {
-			fail("Error testOnSubscribeAccountUpdates Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnSubscribeAccountUpdates Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -478,7 +480,8 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onCancelAccountUpdates(tradestrategy
 					.getTradeAccount().getAccountNumber());
 		} catch (Exception ex) {
-			fail("Error testOnCancelAccountUpdates Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnCancelAccountUpdates Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -488,7 +491,8 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onReqManagedAccount();
 		} catch (Exception ex) {
-			fail("Error testOnReqManagedAccount Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnReqManagedAccount Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -498,7 +502,8 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onReqAllOpenOrders();
 		} catch (Exception ex) {
-			fail("Error testOnReqAllOpenOrders Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnReqAllOpenOrders Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -508,7 +513,7 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onReqOpenOrders();
 		} catch (Exception ex) {
-			fail("Error testOnReqOpenOrders Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnReqOpenOrders Msg: " + ex.getMessage());
 		}
 	}
 
@@ -522,7 +527,7 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onReqRealTimeBars(this.tradestrategy.getContract(),
 					false);
 		} catch (Exception ex) {
-			fail("Error testOnReqRealTimeBars Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnReqRealTimeBars Msg: " + ex.getMessage());
 		}
 	}
 
@@ -533,7 +538,8 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onReqAllExecutions(this.tradestrategy.getTradingday()
 					.getOpen());
 		} catch (Exception ex) {
-			fail("Error testOnReqAllExecutions Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnReqAllExecutions Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -543,7 +549,7 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onReqExecutions(this.tradestrategy);
 		} catch (Exception ex) {
-			fail("Error testOnReqExecutions Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnReqExecutions Msg: " + ex.getMessage());
 		}
 	}
 
@@ -554,9 +560,10 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
 			boolean result = m_brokerModel
 					.isRealtimeBarsRunning(this.tradestrategy);
-			assertFalse(result);
+			TestCase.assertFalse(result);
 		} catch (Exception ex) {
-			fail("Error testIsRealtimeBarsRunning Msg: " + ex.getMessage());
+			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -569,9 +576,10 @@ public class BrokerModelTest extends TestCase {
 			boolean result = m_brokerModel
 					.isAccountUpdatesRunning(this.tradestrategy
 							.getTradeAccount().getAccountNumber());
-			assertFalse(result);
+			TestCase.assertFalse(result);
 		} catch (Exception ex) {
-			fail("Error testIsRealtimeBarsRunning Msg: " + ex.getMessage());
+			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -582,9 +590,10 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onCancelBrokerData(this.tradestrategy);
 			boolean result = m_brokerModel
 					.isHistoricalDataRunning(this.tradestrategy);
-			assertFalse(result);
+			TestCase.assertFalse(result);
 		} catch (Exception ex) {
-			fail("Error testIsHistoricalDataRunning Msg: " + ex.getMessage());
+			TestCase.fail("Error testIsHistoricalDataRunning Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -593,9 +602,11 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelAllRealtimeData();
-			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy));
+			TestCase.assertFalse(m_brokerModel
+					.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			fail("Error testOnCancelAllRealtimeData Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnCancelAllRealtimeData Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -604,9 +615,11 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
-			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy));
+			TestCase.assertFalse(m_brokerModel
+					.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			fail("Error testOnCancelRealtimeBars Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnCancelRealtimeBars Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -615,10 +628,11 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelBrokerData(this.tradestrategy);
-			assertFalse(m_brokerModel
+			TestCase.assertFalse(m_brokerModel
 					.isHistoricalDataRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			fail("Error testOnCancelBrokerData Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnCancelBrokerData Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -629,7 +643,8 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onCancelContractDetails(this.tradestrategy
 					.getContract());
 		} catch (Exception ex) {
-			fail("Error testOnCancelContractDetails Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnCancelContractDetails Msg: "
+					+ ex.getMessage());
 		}
 	}
 
@@ -639,7 +654,7 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onContractDetails(this.tradestrategy.getContract());
 		} catch (Exception ex) {
-			fail("Error testOnContractDetails Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnContractDetails Msg: " + ex.getMessage());
 		}
 	}
 
@@ -649,9 +664,9 @@ public class BrokerModelTest extends TestCase {
 		try {
 			ConcurrentHashMap<Integer, Contract> historicalDataList = m_brokerModel
 					.getHistoricalData();
-			assertNotNull(historicalDataList);
+			TestCase.assertNotNull(historicalDataList);
 		} catch (Exception ex) {
-			fail("Error testGetHistoricalData Msg: " + ex.getMessage());
+			TestCase.fail("Error testGetHistoricalData Msg: " + ex.getMessage());
 		}
 	}
 
@@ -667,9 +682,9 @@ public class BrokerModelTest extends TestCase {
 					OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
-			assertNotNull(tradeOrder);
+			TestCase.assertNotNull(tradeOrder);
 		} catch (Exception ex) {
-			fail("Error testOnPlaceOrder Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnPlaceOrder Msg: " + ex.getMessage());
 		}
 	}
 
@@ -687,7 +702,7 @@ public class BrokerModelTest extends TestCase {
 					this.tradestrategy.getContract(), tradeOrder);
 			m_brokerModel.onCancelOrder(tradeOrder);
 		} catch (Exception ex) {
-			fail("Error testOnCancelOrder Msg: " + ex.getMessage());
+			TestCase.fail("Error testOnCancelOrder Msg: " + ex.getMessage());
 		}
 	}
 
@@ -696,10 +711,9 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			boolean result = m_brokerModel.isBrokerDataOnly();
-			assertFalse(result);
+			TestCase.assertFalse(result);
 		} catch (Exception ex) {
-			fail("Error testIsBrokerDataOnly Msg: " + ex.getMessage());
+			TestCase.fail("Error testIsBrokerDataOnly Msg: " + ex.getMessage());
 		}
 	}
-
 }

@@ -96,9 +96,9 @@ public class TradingCalendarTest extends TestCase {
 		Date setDate = TradingCalendar.getSpecificTime(busdayStartDate, date);
 
 		_log.info("setDate: " + setDate);
-		assertEquals(TradingCalendar.getHourOfDay(busdayStartDate),
+		TestCase.assertEquals(TradingCalendar.getHourOfDay(busdayStartDate),
 				TradingCalendar.getHourOfDay(setDate));
-		assertEquals(TradingCalendar.getMinute(busdayStartDate),
+		TestCase.assertEquals(TradingCalendar.getMinute(busdayStartDate),
 				TradingCalendar.getMinute(setDate));
 
 	}
@@ -113,19 +113,19 @@ public class TradingCalendarTest extends TestCase {
 		Date date = TradingCalendar.addDays(new Date(), -1);
 		date = TradingCalendar.getSpecificTime(date, 9, 30);
 		_log.info("date: " + date);
-		assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
+		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
 		date = TradingCalendar.getSpecificTime(date, 16, 00);
 		_log.info("date: " + date);
-		assertFalse(TradingCalendar.isMarketHours(openDate, closeDate, date));
+		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate, date));
 	}
 
 	@Test
 	public void testIsTradingday() {
 
-		Date date = TradingCalendar.getBusinessDayStart(new Date());
-		assertTrue(TradingCalendar.isTradingDay(date));
+		Date date = TradingCalendar.getMostRecentTradingDay(new Date());
+		TestCase.assertTrue(TradingCalendar.isTradingDay(date));
 		date = TradingCalendar.getSpecificTime(date, Calendar.SUNDAY);
-		assertFalse(TradingCalendar.isTradingDay(date));
+		TestCase.assertFalse(TradingCalendar.isTradingDay(date));
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class TradingCalendarTest extends TestCase {
 					- TradingCalendar.daysDiff(endDate, new Date());
 		}
 		_log.info("chartDays: " + chartDays);
-		assertEquals(365, chartDays.intValue());
+		TestCase.assertEquals(365, chartDays.intValue());
 
 	}
 
@@ -151,6 +151,7 @@ public class TradingCalendarTest extends TestCase {
 		reqId = new AtomicInteger((int) (date.getTime() / 1000d));
 		_log.info("reqId: " + reqId);
 		_log.info("reqId: " + reqId.incrementAndGet());
+		TestCase.assertNotNull(reqId);
 	}
 
 }
