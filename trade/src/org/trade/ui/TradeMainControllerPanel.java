@@ -2039,7 +2039,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Integer prevBarSize = null;
 			Integer prevChartDays = null;
 			/*
-			 * Remove those that are not for today.
+			 * Remove those that are not running as these do not need to be
+			 * shared.
 			 */
 			for (Tradestrategy tradestrategy : m_indicatorTradestrategy
 					.values()) {
