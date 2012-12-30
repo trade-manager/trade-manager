@@ -2038,6 +2038,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Contract prevContract = null;
 			Integer prevBarSize = null;
 			Integer prevChartDays = null;
+			for (Tradestrategy indicator : m_indicatorTradestrategy.values()) {
+				if (!indicator.getTradingday().getClose().after(new Date())) {
+					m_indicatorTradestrategy.remove(indicator
+							.getIdTradeStrategy());
+				}
+			}
+
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 
 				if (null == prevContract) {
