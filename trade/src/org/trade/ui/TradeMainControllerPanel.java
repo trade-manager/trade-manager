@@ -2038,9 +2038,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Contract prevContract = null;
 			Integer prevBarSize = null;
 			Integer prevChartDays = null;
-			for (Tradestrategy indicator : m_indicatorTradestrategy.values()) {
-				if (!indicator.getTradingday().getClose().after(new Date())) {
-					m_indicatorTradestrategy.remove(indicator
+			/*
+			 * Remove those that are not for today.
+			 */
+			for (Tradestrategy tradestrategy : m_indicatorTradestrategy
+					.values()) {
+				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)
+						&& !m_brokerModel
+								.isHistoricalDataRunning(tradestrategy)) {
+					m_indicatorTradestrategy.remove(tradestrategy
 							.getIdTradeStrategy());
 				}
 			}
