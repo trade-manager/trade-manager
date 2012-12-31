@@ -276,7 +276,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			spinnerEnd.setValue(tradingday.getOpen());
 			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));			
+			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			JLabel dateStartLabel = new JLabel("From Date:");
 			JLabel dateEndLabel = new JLabel("To Date:");
@@ -289,7 +289,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			JToolBar jToolBar1 = new JToolBar();
 			jToolBar1.setLayout(new BorderLayout());
 			jToolBar1.add(jPanel5, BorderLayout.WEST);
-			
+
 			jPanel6.add(dateStartLabel, null);
 			jPanel6.add(spinnerStart, null);
 			jPanel6.add(dateEndLabel, null);
@@ -768,8 +768,19 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				if (m_tradingdays.getTradingdays().size() > 0) {
 					m_tradingdayTable.setRowSelectionInterval(selectedRow,
 							selectedRow);
-				}
+					spinnerEnd
+							.setValue(((org.trade.core.valuetype.Date) m_tradingdayModel
+									.getValueAt(m_tradingdayTable
+											.convertRowIndexToModel(0), 0))
+									.getDate());
 
+					spinnerStart
+							.setValue(((org.trade.core.valuetype.Date) m_tradingdayModel.getValueAt(
+									m_tradingdayTable
+											.convertRowIndexToModel(m_tradingdayModel
+													.getRowCount() - 1), 1))
+									.getDate());
+				}
 			}
 			this.clearStatusBarMessage();
 		} catch (Exception ex) {
