@@ -171,8 +171,8 @@ public class ConfigurationPanel extends BasePanel {
 					true, jPanel4, jPanel2);
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
-			jPanel1.add(jSplitPane1, BorderLayout.CENTER);
 			jPanel1.add(jToolBar, BorderLayout.NORTH);
+			jPanel1.add(jSplitPane1, BorderLayout.CENTER);
 			this.add(jPanel1, null);
 
 		} catch (Exception ex) {
