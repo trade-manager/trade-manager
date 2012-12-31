@@ -150,6 +150,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					UIPropertyCodes.newInstance(UIPropertyCodes.COMPILE));
 			newButton = new BaseButton(this, BaseUIPropertyCodes.NEW);
 			newButton.setToolTipText("Load Template");
+			
 			JPanel jPanel1 = new JPanel(new FlowLayout());
 			jPanel1.add(newButton);
 			jPanel1.add(compileButton);

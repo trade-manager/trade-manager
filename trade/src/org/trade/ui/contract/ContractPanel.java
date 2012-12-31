@@ -206,7 +206,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
 			// Chart Panel
-			JLabel jLabel4 = new JLabel("Period:");
+			JLabel jLabelPeriod = new JLabel("Period:");
 			periodEditorComboBox = new DecodeComboBoxEditor(
 					(new BarSize()).getCodesDecodes());
 			DecodeComboBoxRenderer periodRenderer = new DecodeComboBoxRenderer();
@@ -214,11 +214,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			periodEditorComboBox.setItem(BarSize.newInstance(BarSize.FIVE_MIN));
 			periodEditorComboBox.addItemListener(this);
 			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
 			jPanel6.add(closeAllButton, null);
 			jPanel6.add(brokerDataButton, null);
 			jPanel6.add(cancelStrategiesButton, null);
-			jPanel6.add(jLabel4, null);
+			jPanel6.add(jLabelPeriod, null);
 			jPanel6.add(periodEditorComboBox, null);
+			JToolBar jToolBar = new JToolBar();
+			jToolBar.setLayout(new BorderLayout());
+			jToolBar.add(jPanel6);
 
 			m_strategyLabel = new JEditorPane("text/rtf", "");
 			setStrategyLabel(null);
@@ -226,13 +230,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_strategyLabel.setEditable(false);
 			JPanel jPanel12 = new JPanel(new BorderLayout());
 			jPanel12.add(m_strategyLabel, null);
-			JPanel jPanel11 = new JPanel(new BorderLayout());
-			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
-			JToolBar jToolBar = new JToolBar();
-			jToolBar.setLayout(new BorderLayout());
-			jToolBar.add(jPanel6);
 			JPanel jPanel18 = new JPanel(new BorderLayout());
 			jPanel18.add(jToolBar, BorderLayout.WEST);
+			JPanel jPanel11 = new JPanel(new BorderLayout());
 			jPanel11.add(jPanel18, BorderLayout.WEST);
 			jPanel11.add(jPanel12, BorderLayout.CENTER);
 			JPanel jPanel7 = new JPanel(new BorderLayout());

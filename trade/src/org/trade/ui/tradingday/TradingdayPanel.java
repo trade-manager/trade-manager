@@ -232,15 +232,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_tradingdayTable.getSelectionModel().addListSelectionListener(
 					new TradingdayTableRowListener());
 
-			JPanel jPanel1 = new JPanel();
-			jPanel1.setLayout(new BorderLayout());
-
-			JPanel jPanel2 = new JPanel();
-			jPanel2.setLayout(new BorderLayout());
-
+			JPanel jPanel1 = new JPanel(new BorderLayout());
+			JPanel jPanel2 = new JPanel(new BorderLayout());
 			JPanel jPanel3 = new JPanel(new BorderLayout());
-			JPanel jPanel4 = new JPanel();
-			jPanel4.setLayout(new BorderLayout());
+			JPanel jPanel4 = new JPanel(new BorderLayout());
 
 			JLabel fromStrategy = new JLabel("From Strategy:");
 			strategyFromEditorComboBox = new DAODecodeComboBoxEditor(
@@ -279,10 +274,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					DATEFORMAT);
 			spinnerEnd.setEditor(de1);
 			spinnerEnd.setValue(tradingday.getOpen());
-
-			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));			
+
 			JLabel dateStartLabel = new JLabel("From Date:");
 			JLabel dateEndLabel = new JLabel("To Date:");
 			jPanel5.add(brokerDataButton, null);
@@ -294,6 +289,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			JToolBar jToolBar1 = new JToolBar();
 			jToolBar1.setLayout(new BorderLayout());
 			jToolBar1.add(jPanel5, BorderLayout.WEST);
+			
 			jPanel6.add(dateStartLabel, null);
 			jPanel6.add(spinnerStart, null);
 			jPanel6.add(dateEndLabel, null);

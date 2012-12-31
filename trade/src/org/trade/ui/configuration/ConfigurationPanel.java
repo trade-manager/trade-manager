@@ -132,15 +132,6 @@ public class ConfigurationPanel extends BasePanel {
 			propertiesButton.setEnabled(false);
 			this.setLayout(new BorderLayout());
 
-			JPanel jPanel1 = new JPanel();
-			jPanel1.setLayout(new BorderLayout());
-			JPanel jPanel2 = new JPanel();
-			jPanel2.setLayout(new BorderLayout());
-			JPanel jPanel3 = new JPanel(new BorderLayout());
-			JPanel jPanel4 = new JPanel();
-			jPanel4.setLayout(new BorderLayout());
-			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
 			JLabel refTable = new JLabel("Configuration:");
 			refTableEditorComboBox = new DecodeComboBoxEditor(ReferenceTable
 					.newInstance().getCodesDecodes());
@@ -158,30 +149,30 @@ public class ConfigurationPanel extends BasePanel {
 				}
 			});
 
-			jPanel5.add(refTable, null);
-			jPanel5.add(refTableEditorComboBox, null);
-			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
+			JPanel jPanel1 = new JPanel(new BorderLayout());
+			JPanel jPanel2 = new JPanel(new BorderLayout());
+			JPanel jPanel3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			JPanel jPanel4 = new JPanel(new BorderLayout());
+
+			jPanel3.add(refTable, null);
+			jPanel3.add(refTableEditorComboBox, null);
+			jPanel3.setBorder(new BevelBorder(BevelBorder.RAISED));
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
-			jToolBar.add(jPanel5);
-			JPanel jPanel6 = new JPanel(new BorderLayout());
-			jPanel6.add(jToolBar, BorderLayout.WEST);
-			jPanel3.add(jPanel6, BorderLayout.WEST);
+			jToolBar.add(jPanel3, BorderLayout.WEST);
 
 			jPanel4.add(m_jScrollPane, BorderLayout.CENTER);
-
 			JScrollPane jScrollPane1 = new JScrollPane();
 			jScrollPane1.getViewport().add(jPanel4, BorderLayout.NORTH);
 			jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
 			jPanel2.add(m_jScrollPane1, BorderLayout.CENTER);
-
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel4, jPanel2);
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
 			jPanel1.add(jSplitPane1, BorderLayout.CENTER);
-			jPanel1.add(jPanel3, BorderLayout.NORTH);
+			jPanel1.add(jToolBar, BorderLayout.NORTH);
 			this.add(jPanel1, null);
 
 		} catch (Exception ex) {
@@ -208,9 +199,18 @@ public class ConfigurationPanel extends BasePanel {
 		return true;
 	}
 
+	/**
+	 * Method doWindowClose.
+	 * 
+	 */
+
 	public void doWindowClose() {
 	}
 
+	/**
+	 * Method doWindowOpen.
+	 * 
+	 */
 	public void doWindowOpen() {
 		try {
 			this.addReferenceTablePanel(ReferenceTable.newInstance().getCode());
@@ -221,9 +221,7 @@ public class ConfigurationPanel extends BasePanel {
 	}
 
 	/**
-	 * This is fired when the Save button is pressed.
-	 * 
-	 * 
+	 * Method doSave.This is fired when the Save button is pressed.
 	 * 
 	 */
 
@@ -271,12 +269,16 @@ public class ConfigurationPanel extends BasePanel {
 		}
 	}
 
+	/**
+	 * Method doSearch This is fired when the Search button is pressed.
+	 * 
+	 */
 	public void doSearch() {
 		doRefresh();
 	}
 
 	/**
-	 * This is fired when the Refresh button is pressed.
+	 * Method doRefresh This is fired when the Refresh button is pressed.
 	 * 
 	 */
 	public void doRefresh() {
@@ -289,8 +291,8 @@ public class ConfigurationPanel extends BasePanel {
 	}
 
 	/**
-	 * This is fired when the tool-bar File open button is pressed or the main
-	 * menu Open File.
+	 * Method doOpen This is fired when the tool-bar File open button is pressed
+	 * or the main menu Open File.
 	 * 
 	 * 
 	 */
@@ -390,6 +392,7 @@ public class ConfigurationPanel extends BasePanel {
 	/**
 	 */
 	private class TableRowListener implements ListSelectionListener {
+
 		/**
 		 * Method valueChanged.
 		 * 
@@ -397,6 +400,7 @@ public class ConfigurationPanel extends BasePanel {
 		 *            ListSelectionEvent
 		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
+
 		public void valueChanged(ListSelectionEvent event) {
 			if (!event.getValueIsAdjusting()) {
 
