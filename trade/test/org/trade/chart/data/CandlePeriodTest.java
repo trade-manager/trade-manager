@@ -79,6 +79,7 @@ public class CandlePeriodTest extends TestCase {
 		tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+		TestCase.assertNotNull(this.tradestrategy);
 	}
 
 	/**
@@ -116,7 +117,8 @@ public class CandlePeriodTest extends TestCase {
 				CandleDataset.populateSeries(
 						this.tradestrategy.getDatasetContainer(), candles);
 			}
-
+			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
+					.getBaseCandleSeries().isEmpty());
 			Candle candle = this.tradestrategy
 					.getDatasetContainer()
 					.getBaseCandleSeries()
@@ -164,6 +166,8 @@ public class CandlePeriodTest extends TestCase {
 				CandleDataset.populateSeries(
 						this.tradestrategy.getDatasetContainer(), candles);
 			}
+			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
+					.getBaseCandleSeries().isEmpty());
 			Candle candle = this.tradestrategy
 					.getDatasetContainer()
 					.getBaseCandleSeries()
@@ -217,11 +221,10 @@ public class CandlePeriodTest extends TestCase {
 			_log.info("Date GMT time: " + date);
 			sdf.setTimeZone(TimeZone.getTimeZone("EST"));
 			_log.info("Date EST time: " + sdf.format(date));
-
+			TestCase.assertNotNull(date);
 		} catch (ParseException e) {
 			TestCase.fail("Error :" + e.getMessage());
 		}
-
 	}
 
 	@Test
@@ -237,6 +240,7 @@ public class CandlePeriodTest extends TestCase {
 			_log.info("Time is : " + period.toString() + " Start: "
 					+ period.getStart() + " End: " + period.getEnd());
 			period = period.next();
+			TestCase.assertNotNull(period);
 		}
 	}
 
@@ -253,6 +257,7 @@ public class CandlePeriodTest extends TestCase {
 			_log.info("Time is : " + period.toString() + " Start: "
 					+ period.getStart() + " End: " + period.getEnd());
 			period = period.previous();
+			TestCase.assertNotNull(period);
 		}
 	}
 
@@ -272,6 +277,6 @@ public class CandlePeriodTest extends TestCase {
 		_log.info("\n Bus Day Start : " + startBusDate.toString()
 				+ "\n Start: " + period.getStart() + "\n End: "
 				+ period.getEnd() + "\n Periods: " + periods);
-
+		TestCase.assertNotNull(period);
 	}
 }

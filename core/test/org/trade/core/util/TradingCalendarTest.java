@@ -80,6 +80,7 @@ public class TradingCalendarTest extends TestCase {
 			_log.info("Date: " + date);
 			_log.info("Date: " + TradingCalendar.addBusinessDays(date, -4));
 			_log.info("Date: " + TradingCalendar.addBusinessDays(date, -5));
+			TestCase.assertNotNull(date);
 
 		} catch (Exception ex) {
 			_log.error("Error creating class: " + ex.getMessage(), ex);
@@ -113,10 +114,12 @@ public class TradingCalendarTest extends TestCase {
 		Date date = TradingCalendar.addDays(new Date(), -1);
 		date = TradingCalendar.getSpecificTime(date, 9, 30);
 		_log.info("date: " + date);
-		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
+		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate,
+				date));
 		date = TradingCalendar.getSpecificTime(date, 16, 00);
 		_log.info("date: " + date);
-		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate, date));
+		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate,
+				date));
 	}
 
 	@Test
@@ -140,7 +143,6 @@ public class TradingCalendarTest extends TestCase {
 		}
 		_log.info("chartDays: " + chartDays);
 		TestCase.assertEquals(365, chartDays.intValue());
-
 	}
 
 	@Test
@@ -153,5 +155,4 @@ public class TradingCalendarTest extends TestCase {
 		_log.info("reqId: " + reqId.incrementAndGet());
 		TestCase.assertNotNull(reqId);
 	}
-
 }

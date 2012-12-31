@@ -44,9 +44,9 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 
-
 /**
  * Some tests for the {@link DataUtilities} class.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -59,6 +59,7 @@ public class AspectTest extends TestCase {
 
 	/**
 	 * Method setUp.
+	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -67,6 +68,7 @@ public class AspectTest extends TestCase {
 
 	/**
 	 * Method tearDown.
+	 * 
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -84,6 +86,7 @@ public class AspectTest extends TestCase {
 			_log.info("Find Aspects by className: " + className);
 
 			Aspects transientInstance = aspectHome.findByClassName(className);
+			TestCase.assertNotNull(transientInstance);
 			for (Aspect aspect : transientInstance.getAspect()) {
 				_log.info("Aspect added Id = " + aspect.getId());
 			}

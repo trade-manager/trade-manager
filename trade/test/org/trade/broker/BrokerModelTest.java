@@ -60,6 +60,7 @@ import org.trade.persistent.dao.TradestrategyTest;
 import org.trade.strategy.AbstractStrategyTest;
 import org.trade.strategy.AbstractStrategyTest.StrategyRuleTest;
 import org.trade.strategy.data.IndicatorSeries;
+import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.movingaverage.MovingAverageItem;
 import org.trade.strategy.data.vwap.VwapItem;
@@ -100,6 +101,7 @@ public class BrokerModelTest extends TestCase {
 			ConfigProperties.getPropAsString("trade.tws.host");
 			m_brokerModel.onConnect(host, port, clientId);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+			TestCase.assertNotNull(this.tradestrategy);
 			// try {
 			// do {
 			// Thread.sleep(3000);
@@ -147,6 +149,7 @@ public class BrokerModelTest extends TestCase {
 
 			_log.info("IdTrade: " + trade.getIdTrade() + " OrderKey: "
 					+ tradeOrder.getOrderKey());
+			TestCase.assertNotNull(tradeOrder);
 
 		} catch (Exception e) {
 			TestCase.fail("Error testSubmitBuyOrder Msg: " + e.getMessage());
@@ -178,6 +181,7 @@ public class BrokerModelTest extends TestCase {
 
 			_log.info("IdTrade: " + trade.getIdTrade() + " OrderKey: "
 					+ tradeOrder.getOrderKey());
+			TestCase.assertNotNull(tradeOrder);
 
 		} catch (Exception e) {
 			TestCase.fail("Error testSubmitSellShortOrder Msg: "
@@ -208,6 +212,7 @@ public class BrokerModelTest extends TestCase {
 			trade.addTradeOrder(tradeOrder);
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
+			TestCase.assertNotNull(tradeOrder);
 
 			TradeOrder tradeOrder1 = new TradeOrder(trade, Action.SELL,
 					OrderType.LMT, 50, price.subtract(new BigDecimal(1.0)),
@@ -221,7 +226,7 @@ public class BrokerModelTest extends TestCase {
 
 			tradeOrder1 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder1);
-
+			TestCase.assertNotNull(tradeOrder1);
 			TradeOrder tradeOrder2 = new TradeOrder(trade, Action.SELL,
 					OrderType.STP, 50, price.subtract(new BigDecimal(1.0)),
 					null, new Date());
@@ -233,7 +238,7 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder2.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder2 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder2);
-
+			TestCase.assertNotNull(tradeOrder2);
 			TradeOrder tradeOrder3 = new TradeOrder(trade, Action.SELL,
 					OrderType.STP, 50, price.subtract(new BigDecimal(2.0)),
 					null, new Date());
@@ -244,7 +249,7 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder3.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder3 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder3);
-
+			TestCase.assertNotNull(tradeOrder3);
 			_log.info("IdTrade: " + trade.getIdTrade() + " OrderKey2: "
 					+ tradeOrder2.getOrderKey() + " OrderKey2 Price: "
 					+ tradeOrder2.getLimitPrice() + " OrderKey3: "
@@ -273,6 +278,7 @@ public class BrokerModelTest extends TestCase {
 
 			_log.info("IdTrade: " + trade.getIdTrade() + " OrderKey: "
 					+ tradeOrder3.getOrderKey());
+			TestCase.assertNotNull(tradeOrder3);
 
 		} catch (Exception e) {
 			TestCase.fail("Error testSubmitComboOrder Msg: " + e.getMessage());
@@ -325,9 +331,17 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			tradestrategy.getContract().addTradestrategy(tradestrategy);
+			StrategyData.doDummyData(this.tradestrategy.getDatasetContainer()
+					.getCandleDataset().getSeries(0),
+					tradestrategy.getTradingday(),
+					tradestrategy.getChartDays(), tradestrategy.getBarSize(),
+					true, 0);
 			m_brokerModel.onBrokerData(tradestrategy.getContract(),
 					tradestrategy.getTradingday().getClose(),
 					tradestrategy.getBarSize(), tradestrategy.getChartDays());
+
+			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
+					.getCandleDataset().getSeries(0).isEmpty());
 
 			IndicatorSeries candleseries = this.tradestrategy
 					.getDatasetContainer().getCandleDataset().getSeries(0);
@@ -465,6 +479,10 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onSubscribeAccountUpdates(true,
 					tradestrategy.getTradeAccount());
+			TestCase.assertFalse(m_brokerModel
+					.isAccountUpdatesRunning(tradestrategy.getTradeAccount()
+							.getAccountNumber()));
+
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnSubscribeAccountUpdates Msg: "
 					+ ex.getMessage());
@@ -479,6 +497,9 @@ public class BrokerModelTest extends TestCase {
 					tradestrategy.getTradeAccount());
 			m_brokerModel.onCancelAccountUpdates(tradestrategy
 					.getTradeAccount().getAccountNumber());
+			TestCase.assertFalse(m_brokerModel
+					.isAccountUpdatesRunning(tradestrategy.getTradeAccount()
+							.getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnCancelAccountUpdates Msg: "
 					+ ex.getMessage());
@@ -490,6 +511,9 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onReqManagedAccount();
+			TestCase.assertFalse(m_brokerModel
+					.isAccountUpdatesRunning(tradestrategy.getTradeAccount()
+							.getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnReqManagedAccount Msg: "
 					+ ex.getMessage());
@@ -526,6 +550,8 @@ public class BrokerModelTest extends TestCase {
 					this.tradestrategy);
 			m_brokerModel.onReqRealTimeBars(this.tradestrategy.getContract(),
 					false);
+			TestCase.assertFalse(m_brokerModel
+					.isRealtimeBarsRunning(tradestrategy));
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnReqRealTimeBars Msg: " + ex.getMessage());
 		}
@@ -558,9 +584,8 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
-			boolean result = m_brokerModel
-					.isRealtimeBarsRunning(this.tradestrategy);
-			TestCase.assertFalse(result);
+			TestCase.assertFalse(m_brokerModel
+					.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
 					+ ex.getMessage());
@@ -573,10 +598,9 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onCancelAccountUpdates(this.tradestrategy
 					.getTradeAccount().getAccountNumber());
-			boolean result = m_brokerModel
+			TestCase.assertFalse(m_brokerModel
 					.isAccountUpdatesRunning(this.tradestrategy
-							.getTradeAccount().getAccountNumber());
-			TestCase.assertFalse(result);
+							.getTradeAccount().getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
 					+ ex.getMessage());
@@ -588,9 +612,8 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelBrokerData(this.tradestrategy);
-			boolean result = m_brokerModel
-					.isHistoricalDataRunning(this.tradestrategy);
-			TestCase.assertFalse(result);
+			TestCase.assertFalse(m_brokerModel
+					.isHistoricalDataRunning(this.tradestrategy));
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsHistoricalDataRunning Msg: "
 					+ ex.getMessage());
@@ -700,6 +723,7 @@ public class BrokerModelTest extends TestCase {
 					OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
+			TestCase.assertNotNull(tradeOrder);
 			m_brokerModel.onCancelOrder(tradeOrder);
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnCancelOrder Msg: " + ex.getMessage());
