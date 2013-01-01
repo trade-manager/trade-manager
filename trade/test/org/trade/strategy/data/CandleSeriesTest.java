@@ -24,6 +24,7 @@ public class CandleSeriesTest extends TestCase {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+			TestCase.assertNotNull(this.tradestrategy);
 		} catch (Exception e) {
 			TestCase.fail("Error on setup " + e.getMessage());
 		}

@@ -27,13 +27,15 @@ import org.trade.broker.BrokerModel;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
+import org.trade.dictionary.valuetype.BarSize;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
+import org.trade.persistent.dao.Tradingday;
 import org.trade.strategy.StrategyRule;
+import org.trade.strategy.data.StrategyData;
 import org.trade.ui.TradeAppLoadConfig;
 import org.trade.ui.base.StreamEditorPane;
 
@@ -68,6 +70,7 @@ public class StrategyPanelTest extends TestCase {
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+			TestCase.assertNotNull(this.tradestrategy);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
 			for (Strategy strategy : strategies) {
@@ -210,23 +213,11 @@ public class StrategyPanelTest extends TestCase {
 				_log.info(" Thread interupt: " + e.getMessage());
 			}
 
-			List<Candle> candles = tradePersistentModel
-					.findCandlesByContractDateRangeBarSize(this.tradestrategy
-							.getContract().getIdContract(), this.tradestrategy
-							.getTradingday().getOpen(), this.tradestrategy
-							.getTradingday().getOpen(), this.tradestrategy
-							.getBarSize());
-			for (Candle candle : candles) {
-				double high = candle.getHigh().doubleValue();
-				double low = candle.getLow().doubleValue();
-				double open = candle.getOpen().doubleValue();
-				double close = candle.getClose().doubleValue();
-				this.tradestrategy.getDatasetContainer().buildCandle(
-						candle.getStartPeriod(), open, high, low, close,
-						candle.getVolume(), candle.getVwap().doubleValue(),
-						candle.getTradeCount(), 1);
-				Thread.sleep(300);
-			}
+			StrategyData.doDummyData(tradestrategy.getDatasetContainer()
+					.getBaseCandleSeries(), Tradingday.newInstance(new Date()),
+					1, BarSize.FIVE_MIN, true, 1);
+			TestCase.assertFalse(tradestrategy.getDatasetContainer()
+					.getBaseCandleSeries().isEmpty());
 			strategyProxy.cancel();
 
 		} catch (Exception ex) {
@@ -312,7 +303,7 @@ public class StrategyPanelTest extends TestCase {
 				myrule.setVersion(myrule.getVersion() + 1);
 				myrule.setIdRule(null);
 			}
-
+			TestCase.assertNotNull(myrule);
 			strategyPanel.doCompile(myrule);
 		} catch (Exception ex) {
 			TestCase.fail("Error saving rule : " + ex.getMessage());
@@ -358,10 +349,11 @@ public class StrategyPanelTest extends TestCase {
 			String content = strategyPanel.readFile(fileName);
 			textArea.setText(content);
 			myrule.setRule(textArea.getText().getBytes());
-			this.tradePersistentModel.persistRule(myrule);
+			myrule = (Rule) this.tradePersistentModel.persistRule(myrule);
+			TestCase.assertNotNull(myrule.getIdRule());
 			Rule ruleSaved = this.tradePersistentModel.findRuleById(myrule
 					.getIdRule());
-
+			TestCase.assertNotNull(ruleSaved.getIdRule());
 			String javaCode = new String(ruleSaved.getRule());
 			TestCase.assertEquals(javaCode, textArea.getText());
 			_log.info("Java file to Saved: " + javaCode);
