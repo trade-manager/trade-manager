@@ -121,7 +121,6 @@ public class TradestrategyTest extends TestCase {
 							tradestrategy.getStatus());
 				}
 			}
-
 		} catch (Exception e) {
 			TestCase.fail("Error update row " + e.getMessage());
 		}
@@ -140,6 +139,7 @@ public class TradestrategyTest extends TestCase {
 
 			String fileName = "db/GappersToDay10Test.csv";
 			tradingdays.populateDataFromFile(fileName, instance);
+			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());
 			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
@@ -150,7 +150,6 @@ public class TradestrategyTest extends TestCase {
 					aspectHome.remove(tradestrategy.getContract());
 				}
 			}
-
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}
@@ -170,6 +169,7 @@ public class TradestrategyTest extends TestCase {
 			String fileName = "db/GapperstodayJust1Test.csv";
 
 			tradingdays.populateDataFromFile(fileName, instance);
+			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());
 			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
@@ -244,7 +244,6 @@ public class TradestrategyTest extends TestCase {
 		tradingday.addTradestrategy(tradestrategy);
 		tradingdayHome.persist(tradingday);
 		return tradestrategy;
-
 	}
 
 	/**

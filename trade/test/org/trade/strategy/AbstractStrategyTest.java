@@ -178,13 +178,11 @@ public class AbstractStrategyTest extends TestCase {
 						.getDatasetContainer().getBaseCandleSeries(),
 						this.tradestrategy.getTradingday(), 1,
 						BarSize.FIVE_MIN, true, 0);
-
 			} else {
 				StrategyData.doDummyData(this.tradestrategy
 						.getDatasetContainer().getBaseCandleSeries(),
 						this.tradestrategy.getTradingday(), 1,
 						BarSize.FIVE_MIN, false, 0);
-
 			}
 			strategyProxy.cancel();
 

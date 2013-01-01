@@ -85,9 +85,11 @@ public class StrategyTest extends TestCase {
 			if (null == transientInstance) {
 				transientInstance = new Strategy(name);
 			}
-			aspectHome.persist(transientInstance);
+			transientInstance = (Strategy) aspectHome
+					.persist(transientInstance);
 			_log.info("Strategy added Id = "
 					+ transientInstance.getIdStrategy());
+			TestCase.assertNotNull(transientInstance.getIdStrategy());
 
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());

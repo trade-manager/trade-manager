@@ -50,6 +50,7 @@ import org.trade.core.dao.AspectHome;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.strategy.data.StrategyData;
+import org.trade.strategy.data.candle.CandleItem;
 
 /**
  * Some tests for the {@link DataUtilities} class.
@@ -105,7 +106,9 @@ public class CandleTest extends TestCase {
 					transientInstance.setTradeCount(10);
 					transientInstance.setLastUpdateDate(period.getStart());
 
-					aspectHome.persist(transientInstance);
+					transientInstance = (Candle) aspectHome
+							.persist(transientInstance);
+					TestCase.assertNotNull(transientInstance.getIdCandle());
 					_log.info("testAddCandle IdCandle: "
 							+ transientInstance.getIdCandle());
 				}
@@ -133,11 +136,16 @@ public class CandleTest extends TestCase {
 						.getBaseCandleSeries(), Tradingday
 						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
 						true, 0);
+				TestCase.assertFalse(tradestrategy.getDatasetContainer()
+						.getBaseCandleSeries().isEmpty());
 				candleHome.persistCandleSeries(tradestrategy
 						.getDatasetContainer().getBaseCandleSeries());
 
 				_log.info("testAddCandle IdTradeStrategy: "
 						+ tradestrategy.getIdTradeStrategy());
+				TestCase.assertNotNull(((CandleItem) tradestrategy
+						.getDatasetContainer().getBaseCandleSeries()
+						.getDataItem(0)).getCandle().getIdCandle());
 
 			}
 

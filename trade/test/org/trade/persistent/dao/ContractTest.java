@@ -101,7 +101,6 @@ public class ContractTest extends TestCase {
 				aspectHome.remove(contract);
 				_log.info("Contract deleted Id:"
 						+ transientInstance.getIdContract());
-
 			}
 
 		} catch (Exception e) {

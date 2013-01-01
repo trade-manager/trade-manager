@@ -87,6 +87,7 @@ public class ValueTypeDAOTest extends TestCase {
 			DAOStrategy strategies = new DAOStrategy();
 			Vector<Decode> decodes = strategies.getCodesDecodes();
 			Enumeration<Decode> eDecodes = decodes.elements();
+			TestCase.assertFalse(decodes.isEmpty());
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
 				_log.info("TYPE:"
@@ -103,6 +104,7 @@ public class ValueTypeDAOTest extends TestCase {
 
 			DAOStrategyManager strategyManagers = new DAOStrategyManager();
 			decodes = strategyManagers.getCodesDecodes();
+			TestCase.assertFalse(decodes.isEmpty());
 			eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
@@ -117,7 +119,6 @@ public class ValueTypeDAOTest extends TestCase {
 								+ DAODecode._DISPLAY_NAME));
 
 			}
-
 		} catch (Exception ex) {
 			TestCase.fail("Error finding row " + ex.getMessage());
 		}
@@ -128,6 +129,7 @@ public class ValueTypeDAOTest extends TestCase {
 		try {
 			DAOEntryLimit entryLimits = new DAOEntryLimit();
 			Vector<Decode> decodes = entryLimits.getCodesDecodes();
+			TestCase.assertFalse(decodes.isEmpty());
 			Enumeration<Decode> eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
@@ -158,6 +160,7 @@ public class ValueTypeDAOTest extends TestCase {
 		try {
 			ChartDays DAOValues = new ChartDays();
 			Vector<Decode> decodes = DAOValues.getCodesDecodes();
+			TestCase.assertFalse(decodes.isEmpty());
 			Enumeration<Decode> eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
@@ -171,7 +174,6 @@ public class ValueTypeDAOTest extends TestCase {
 						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
 								+ DAODecode._DISPLAY_NAME));
 			}
-
 		} catch (Exception ex) {
 			TestCase.fail("Error finding row " + ex.getMessage());
 		}

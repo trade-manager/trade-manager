@@ -86,6 +86,7 @@ public class TradeOrderTest extends TestCase {
 		this.tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+		TestCase.assertNotNull(this.tradestrategy);
 	}
 
 	/**

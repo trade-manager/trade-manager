@@ -73,7 +73,6 @@ public class TradingdayTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-
 	}
 
 	@Test
@@ -96,7 +95,7 @@ public class TradingdayTest extends TestCase {
 			tradingdayHome.persist(transientInstance);
 			_log.info("Tradingday added Id = "
 					+ transientInstance.getIdTradingDay());
-
+			TestCase.assertNotNull(transientInstance.getIdTradingDay());
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}
@@ -112,10 +111,10 @@ public class TradingdayTest extends TestCase {
 			_log.debug("Updating Tradingday");
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
-			Date open = TradingCalendar.getMostRecentTradingDay(new Date());
+			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
+					.getMostRecentTradingDay(new Date()));
 			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
-					TradingCalendar.getBusinessDayStart(open),
-					TradingCalendar.getBusinessDayStart(open));
+					open, TradingCalendar.getBusinessDayEnd(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}
@@ -124,7 +123,7 @@ public class TradingdayTest extends TestCase {
 			tradingdayHome.persist(transientInstance);
 			_log.info("Tradingday Update Id = "
 					+ transientInstance.getIdTradingDay());
-
+			TestCase.assertNotNull(transientInstance.getIdTradingDay());
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}

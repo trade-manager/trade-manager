@@ -71,7 +71,6 @@ public class TradelogReportTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-
 	}
 
 	@Test
@@ -84,6 +83,7 @@ public class TradelogReportTest extends TestCase {
 			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(
 					tradeAccount, TradingCalendar.getYearStart(),
 					TradingCalendar.getTodayBusinessDayEnd(), false);
+			TestCase.assertFalse(!tradelogReport.getTradelogDetail().isEmpty());
 			for (TradelogDetail tradelogDetail : tradelogReport
 					.getTradelogDetail()) {
 				_log.info("testTradelogDetails tradelogDetail: " + " getOpen:"
@@ -114,6 +114,7 @@ public class TradelogReportTest extends TestCase {
 			TradelogReport tradelogReport = tradelogHome.findByTradelogSummary(
 					tradeAccount, TradingCalendar.getYearStart(),
 					TradingCalendar.getTodayBusinessDayEnd());
+			TestCase.assertFalse(!tradelogReport.getTradelogSummary().isEmpty());
 			for (TradelogSummary tradelogSummary : tradelogReport
 					.getTradelogSummary()) {
 				_log.info("testTradelogSummary tradelogDetail: " + "getPeriod:"

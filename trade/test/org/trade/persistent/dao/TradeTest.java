@@ -64,6 +64,7 @@ public class TradeTest extends TestCase {
 		tradeHome = new TradeHome();
 		aspectHome = new AspectHome();
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+		TestCase.assertNotNull(this.tradestrategy);
 	}
 
 	/**
@@ -85,12 +86,12 @@ public class TradeTest extends TestCase {
 			Trade instance = new Trade(this.tradestrategy, Side.BOT);
 			this.tradestrategy.addTrade(instance);
 			for (Trade trade : this.tradestrategy.getTrades()) {
-				aspectHome.persist(trade);
+				trade = (Trade) aspectHome.persist(trade);
+				TestCase.assertNotNull(trade.getIdTrade());
 				_log.info("testAddTrade IdTradeStrategy: "
 						+ this.tradestrategy.getIdTradeStrategy() + "IdTrade: "
 						+ trade.getIdTrade());
 			}
-
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}
@@ -108,7 +109,6 @@ public class TradeTest extends TestCase {
 				_log.info("testDeleteTrade IdTradeStrategy: "
 						+ tradestrategy.getIdTradeStrategy());
 			}
-
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}
