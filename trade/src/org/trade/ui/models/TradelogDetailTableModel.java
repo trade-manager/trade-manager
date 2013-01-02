@@ -144,7 +144,6 @@ public class TradelogDetailTableModel extends TableModel {
 		this.m_data = data;
 		this.clearAll();
 		if (!getData().getTradelogDetail().isEmpty()) {
-
 			for (final TradelogDetail element : getData().getTradelogDetail()) {
 				final Vector<Object> newRow = new Vector<Object>();
 				getNewRow(newRow, element);

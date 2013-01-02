@@ -72,7 +72,7 @@ public class TradelogSummaryTableModel extends TableModel {
 	private static final String[] columnHeaderToolTip = { null,
 			"% wins vs loss",
 			"Simple sharpe ratio (sum $wins/#wins)/(sum $loss/#loss)", null,
-			null, null, null, null, null, null, null, null, };
+			null, null, null, null, null, null, null, null, null };
 
 	private TradelogReport m_data = null;
 
@@ -138,7 +138,6 @@ public class TradelogSummaryTableModel extends TableModel {
 		this.m_data = data;
 		this.clearAll();
 		if (!getData().getTradelogSummary().isEmpty()) {
-
 			for (final TradelogSummary element : getData().getTradelogSummary()) {
 				final Vector<Object> newRow = new Vector<Object>();
 				getNewRow(newRow, element);

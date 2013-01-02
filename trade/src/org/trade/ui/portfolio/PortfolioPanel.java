@@ -185,28 +185,28 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			m_tableTradelogSummary.setEnabled(false);
 			m_tableTradelogSummary.setFont(new Font("Monospaced", Font.PLAIN,
 					12));
-			JScrollPane jScrollPane1 = new JScrollPane();
-			jScrollPane1.getViewport().add(m_tableTradelogSummary,
+			JScrollPane jScrollPane = new JScrollPane();
+			jScrollPane.getViewport().add(m_tableTradelogSummary,
 					BorderLayout.CENTER);
-			jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
-			jScrollPane1.addMouseListener(m_tableTradelogSummary);
-			JPanel jPanel6 = new JPanel(new BorderLayout());
-			jPanel6.add(jScrollPane1, BorderLayout.NORTH);
+			jScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			jScrollPane.addMouseListener(m_tableTradelogSummary);
+			JPanel jPanel3 = new JPanel(new BorderLayout());
+			jPanel3.add(jScrollPane, BorderLayout.CENTER);
 
 			m_tableTradelogDetail
 					.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			m_tableTradelogDetail
 					.setFont(new Font("Monospaced", Font.PLAIN, 12));
-			JScrollPane jScrollPane2 = new JScrollPane();
-			jScrollPane2.getViewport().add(m_tableTradelogDetail,
+			JScrollPane jScrollPane1 = new JScrollPane();
+			jScrollPane1.getViewport().add(m_tableTradelogDetail,
 					BorderLayout.CENTER);
-			jScrollPane2.setBorder(new BevelBorder(BevelBorder.LOWERED));
-			jScrollPane2.addMouseListener(m_tableTradelogDetail);
-			JPanel jPanel7 = new JPanel(new BorderLayout());
-			jPanel7.add(jScrollPane2, BorderLayout.CENTER);
+			jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			jScrollPane1.addMouseListener(m_tableTradelogDetail);
+			JPanel jPanel4 = new JPanel(new BorderLayout());
+			jPanel4.add(jScrollPane1, BorderLayout.CENTER);
 
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-					true, jPanel6, jPanel7);
+					true, jPanel3, jPanel4);
 			jSplitPane1.setOneTouchExpandable(true);
 			jSplitPane1.setResizeWeight(0.2d);
 			this.add(jToolBar, BorderLayout.NORTH);
