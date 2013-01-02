@@ -560,10 +560,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see org.trade.broker.BrokerModel#isAccountUpdatesRunning(String)
 	 */
 	public boolean isAccountUpdatesRunning(String accountNumber) {
-		synchronized (m_accountRequests) {
-			if (m_accountRequests.containsKey(accountNumber)) {
-				return true;
-			}
+		if (m_accountRequests.containsKey(accountNumber)) {
+			return true;
 		}
 		return false;
 	}
@@ -577,10 +575,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see org.trade.broker.BrokerModel#isHistoricalDataRunning(Contract)
 	 */
 	public boolean isHistoricalDataRunning(Contract contract) {
-		synchronized (m_historyDataRequests) {
-			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
-				return true;
-			}
+		if (m_historyDataRequests.containsKey(contract.getIdContract())) {
+			return true;
 		}
 		return false;
 	}
@@ -593,15 +589,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @return boolean
 	 */
 	public boolean isHistoricalDataRunning(Tradestrategy tradestrategy) {
-		synchronized (m_historyDataRequests) {
-			if (m_historyDataRequests.containsKey(tradestrategy.getContract()
-					.getIdContract())) {
-				Contract contract = m_historyDataRequests.get(tradestrategy
-						.getContract().getIdContract());
-				for (Tradestrategy item : contract.getTradestrategies()) {
-					if (item.equals(tradestrategy)) {
-						return true;
-					}
+		if (m_historyDataRequests.containsKey(tradestrategy.getContract()
+				.getIdContract())) {
+			Contract contract = m_historyDataRequests.get(tradestrategy
+					.getContract().getIdContract());
+			for (Tradestrategy item : contract.getTradestrategies()) {
+				if (item.equals(tradestrategy)) {
+					return true;
 				}
 			}
 		}
@@ -633,15 +627,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @return boolean
 	 */
 	public boolean isRealtimeBarsRunning(Tradestrategy tradestrategy) {
-		synchronized (m_realTimeBarsRequests) {
-			if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
-					.getIdContract())) {
-				Contract contract = m_realTimeBarsRequests.get(tradestrategy
-						.getContract().getIdContract());
-				for (Tradestrategy item : contract.getTradestrategies()) {
-					if (item.equals(tradestrategy)) {
-						return true;
-					}
+		if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
+				.getIdContract())) {
+			Contract contract = m_realTimeBarsRequests.get(tradestrategy
+					.getContract().getIdContract());
+			for (Tradestrategy item : contract.getTradestrategies()) {
+				if (item.equals(tradestrategy)) {
+					return true;
 				}
 			}
 		}
@@ -656,7 +648,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void onCancelAllRealtimeData() {
 
 		if (m_client.isConnected()) {
-			for (Contract contract : m_historyDataRequests.values())  {
+			for (Contract contract : m_historyDataRequests.values()) {
 				this.onCancelBrokerData(contract);
 			}
 			for (Contract contract : m_realTimeBarsRequests.values()) {
@@ -737,6 +729,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		}
 	}
+
 	/**
 	 * Method onCancelBrokerData.
 	 * 
@@ -755,7 +748,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		}
 	}
-	
 
 	/**
 	 * Method onCancelRealtimeBars.

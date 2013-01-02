@@ -395,11 +395,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#isHistoricalDataRunning(Contract)
 	 */
 	public boolean isHistoricalDataRunning(Contract contract) {
-		synchronized (m_historyDataRequests) {
 			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
 				return true;
 			}
-		}
 		return false;
 	}
 
@@ -411,7 +409,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @return boolean
 	 */
 	public boolean isHistoricalDataRunning(Tradestrategy tradestrategy) {
-		synchronized (m_historyDataRequests) {
 			if (m_historyDataRequests.containsKey(tradestrategy.getContract()
 					.getIdContract())) {
 				Contract contract = m_historyDataRequests.get(tradestrategy
@@ -422,7 +419,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					}
 				}
 			}
-		}
 		return false;
 	}
 
@@ -435,7 +431,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Contract)
 	 */
 	public boolean isRealtimeBarsRunning(Contract contract) {
-
 		if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
 			return true;
 		}
@@ -450,15 +445,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @return boolean
 	 */
 	public boolean isRealtimeBarsRunning(Tradestrategy tradestrategy) {
-		synchronized (m_realTimeBarsRequests) {
-			if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
-					.getIdContract())) {
-				Contract contract = m_realTimeBarsRequests.get(tradestrategy
-						.getContract().getIdContract());
-				for (Tradestrategy item : contract.getTradestrategies()) {
-					if (item.equals(tradestrategy)) {
-						return true;
-					}
+		if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
+				.getIdContract())) {
+			Contract contract = m_realTimeBarsRequests.get(tradestrategy
+					.getContract().getIdContract());
+			for (Tradestrategy item : contract.getTradestrategies()) {
+				if (item.equals(tradestrategy)) {
+					return true;
 				}
 			}
 		}
