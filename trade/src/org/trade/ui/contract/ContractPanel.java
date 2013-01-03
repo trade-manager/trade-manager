@@ -197,7 +197,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			jPanel2.add(jScrollPane1Tree, BorderLayout.CENTER);
 			jPanel2.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createTitledBorder("Trading day"),
+					BorderFactory.createTitledBorder("Tradingday"),
 					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 			jPanel1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
