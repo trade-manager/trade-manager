@@ -280,6 +280,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					"Please save before running strategy ...\n",
 					BasePanel.WARNING);
 		} else {
+			contractPanel.doCloseAll();
 			runStrategy(m_tradingdays, true);
 		}
 	}

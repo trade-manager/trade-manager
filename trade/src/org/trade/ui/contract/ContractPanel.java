@@ -790,16 +790,20 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 */
 	private void setStrategyLabel(Tradestrategy tradestrategy) {
 		try {
+			m_strategyLabel.setText(null);
 			String primaryExchange = "";
 			String industry = "";
-			String strategy = "";
+			String strategyDesc = "";
 			if (null != tradestrategy) {
-				primaryExchange = tradestrategy.getContract()
-						.getPrimaryExchange();
-				industry = tradestrategy.getContract().getIndustry();
-				strategy = tradestrategy.getStrategy().getDescription();
+				primaryExchange = (tradestrategy.getContract()
+						.getPrimaryExchange() == null ? "No Data Available"
+						: tradestrategy.getContract().getPrimaryExchange());
+				industry = (tradestrategy.getContract().getIndustry() == null ? "No Data Available"
+						: tradestrategy.getContract().getIndustry());
+				strategyDesc = (tradestrategy.getStrategy().getDescription() == null ? "No Data Available"
+						: tradestrategy.getStrategy().getDescription());
 			}
-			m_strategyLabel.setText(null);
+
 			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
 					"Primary Exch: ", false, bold);
 			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
@@ -811,7 +815,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
 					" Strategy:", false, bold);
 			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					CoreUtils.padRight(strategy, 30), false, null);
+					CoreUtils.padRight(strategyDesc, 30), false, null);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error setting Tradestrategy Label.",
@@ -970,7 +974,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		m_tradeOrderTable.enablePopupMenu(false);
 		periodEditorComboBox.setEnabled(false);
 		refreshButton.setEnabled(false);
-		if (null != transferObject) {
+		setStrategyLabel(transferObject);
+		brokerDataButton.setTransferObject(transferObject);
+		cancelStrategiesButton.setTransferObject(transferObject);
+		refreshButton.setTransferObject(transferObject);
+
+		if (null == transferObject) {
+			m_tradeOrderModel.setData(new Tradestrategy());
+			setTradeLabel(null, null);
+		} else {
 			cancelStrategiesButton.setEnabled(true);
 			brokerDataButton.setEnabled(true);
 			periodEditorComboBox.setEnabled(true);
@@ -980,32 +992,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				cancelButton.setEnabled(true);
 				m_tradeOrderTable.enablePopupMenu(true);
 			}
-			brokerDataButton.setTransferObject(transferObject);
-			cancelStrategiesButton.setTransferObject(transferObject);
-			refreshButton.setTransferObject(transferObject);
 			m_tradeOrderModel.setData(transferObject);
-			StringBuilder result = new StringBuilder("<html>");
-			result.append("<b>Primary Exch: </b> ")
-					.append((transferObject.getContract().getPrimaryExchange() == null ? "No data"
-							: transferObject.getContract().getPrimaryExchange()));
-			result.append("<b> Industry: </b> ")
-					.append((transferObject.getContract().getIndustry() == null ? "No data"
-							: transferObject.getContract().getIndustry()));
-			result.append("<b> Strategy: </b> ")
-					.append((transferObject.getStrategy().getDescription() == null ? transferObject
-							.getStrategy().getName() : transferObject
-							.getStrategy().getDescription()));
-
-			setStrategyLabel(transferObject);
 			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 					.getSelectedComponent();
 			setTradeLabel(transferObject, currentTab.getCandlestickChart());
 			periodEditorComboBox.setItem(BarSize.newInstance(transferObject
 					.getBarSize()));
-		} else {
-			m_tradeOrderModel.setData(new Tradestrategy());
-			setStrategyLabel(null);
-			setTradeLabel(null, null);
 		}
 	}
 
