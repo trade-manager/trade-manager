@@ -173,6 +173,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public TradingdayPanel(Tradingdays tradingdays, BasePanel controller,
 			PersistentModel tradePersistentModel) {
 		try {
+			this.setLayout(new BorderLayout());
+			
 			m_tradingdays = tradingdays;
 			m_tradePersistentModel = tradePersistentModel;
 			m_defaultDir = ConfigProperties
@@ -204,8 +206,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					BaseUIPropertyCodes.DATA);
 			brokerDataButton.setToolTipText("Get Chart Data");
 			reAssignButton = new BaseButton(this,
-					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));
-			this.setLayout(new BorderLayout());
+					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));			
 			m_tradestrategyModel = new TradestrategyTableModel();
 			Tradingday tradingday = null;
 			for (Tradingday instance : m_tradingdays.getTradingdays().values()) {
@@ -232,7 +233,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_tradingdayTable.getSelectionModel().addListSelectionListener(
 					new TradingdayTableRowListener());
 
-			JPanel jPanel1 = new JPanel(new BorderLayout());
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			JPanel jPanel3 = new JPanel(new BorderLayout());
 			JPanel jPanel4 = new JPanel(new BorderLayout());
@@ -274,6 +274,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					DATEFORMAT);
 			spinnerEnd.setEditor(de1);
 			spinnerEnd.setValue(tradingday.getOpen());
+			tradeAccountLabel = new JEditorPane("text/rtf", "");
+			tradeAccountLabel.setAutoscrolls(false);
+			tradeAccountLabel.setEditable(false);
+			
 			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -303,6 +307,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel7.add(ordersButton, null);
 			jPanel7.setBorder(new BevelBorder(BevelBorder.RAISED));
 
+			jPanel3.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel3.add(jPanel6, BorderLayout.WEST);
 			jPanel3.add(jPanel7, BorderLayout.EAST);
 
@@ -319,11 +324,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_tradingdayTable
 					.setPreferredScrollableViewportSize(tradingdayTableDimension);
 
-			tradeAccountLabel = new JEditorPane("text/rtf", "");
-			tradeAccountLabel.setAutoscrolls(false);
-			tradeAccountLabel.setEditable(false);
-			JPanel jPanel8 = new JPanel(new BorderLayout());
-			jPanel3.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			JPanel jPanel8 = new JPanel(new BorderLayout());			
 			jPanel8.add(tradeAccountLabel, BorderLayout.NORTH);
 			jPanel8.add(jPanel3, BorderLayout.SOUTH);
 			jPanel2.add(jPanel8, BorderLayout.NORTH);
@@ -332,8 +333,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					true, jPanel2, jPanel4);
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
-			jPanel1.add(jSplitPane1);
-			this.add(jPanel1, null);
+			this.add(jSplitPane1);
 			DAOTradeAccount account = DAOTradeAccount.newInstance();
 			this.setTradeAccountLabel((TradeAccount) account.getObject());
 			enableTradestrategyButtons(null);

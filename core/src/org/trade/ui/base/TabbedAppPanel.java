@@ -72,7 +72,7 @@ public abstract class TabbedAppPanel extends BasePanel implements
 	private final JTabbedPane m_tabbedPane = new JTabbedPane();
 
 	public String m_title = null;
-	JPanel m_menuPanel = new JPanel();
+	private JPanel m_menuPanel = new JPanel();
 	private PrintController m_printJob = new PrintController();
 	private int currentTab = 0;
 	private BasePanel currBasePanel = null;
@@ -85,9 +85,7 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 		this.setLayout(new BorderLayout());
 
-		JPanel jPanel1 = new JPanel();
-		jPanel1.setLayout(new BorderLayout());
-
+		JPanel jPanel1 = new JPanel(new BorderLayout());
 		JPanel jPanelProgressBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JProgressBar progressBar = new JProgressBar(0, 0);
 		jPanelProgressBar.add(progressBar);
@@ -96,8 +94,7 @@ public abstract class TabbedAppPanel extends BasePanel implements
 		Clock clock = new Clock();
 		jPanelClock.add(clock);
 
-		JPanel jPanelStatus = new JPanel();
-		jPanelStatus.setLayout(new GridLayout());
+		JPanel jPanelStatus = new JPanel(new GridLayout());
 		JTextField jTextFieldStatus = new JTextField();
 		jTextFieldStatus.setRequestFocusEnabled(false);
 		jTextFieldStatus.setMargin(new Insets(5, 5, 5, 5));
@@ -105,14 +102,12 @@ public abstract class TabbedAppPanel extends BasePanel implements
 		jTextFieldStatus.setBorder(BorderFactory.createLoweredBevelBorder());
 		jPanelStatus.add(jTextFieldStatus);
 
-		JPanel jPanel3 = new JPanel();
-		jPanel3.setLayout(new BorderLayout());
+		JPanel jPanel3 = new JPanel(new BorderLayout());
 		jPanel3.add(jPanelClock, BorderLayout.WEST);
 		jPanel3.add(jPanelProgressBar, BorderLayout.EAST);
 		jPanel3.add(jPanelStatus, BorderLayout.CENTER);
 
-		JPanel jPanel2 = new JPanel();
-		jPanel2.setLayout(new BorderLayout());
+		JPanel jPanel2 = new JPanel(new BorderLayout());
 		jPanel2.add(m_tabbedPane, BorderLayout.CENTER);
 		jPanel1.add(jPanel2, BorderLayout.CENTER);
 		jPanel1.add(jPanel3, BorderLayout.SOUTH);

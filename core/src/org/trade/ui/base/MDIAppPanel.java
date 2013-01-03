@@ -82,7 +82,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 	private final ExtendedDesktopPane m_desktopPane = new ExtendedDesktopPane();
 
 	protected JInternalFrame m_internalFrame = null;
-	JPanel m_menuPanel = new JPanel();
+	private JPanel m_menuPanel = new JPanel();
 
 	public String m_title = null;
 	private static final int layer = 1;
@@ -92,7 +92,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Constructor for MDIAppPanel.
-	 * @param frame Frame
+	 * 
+	 * @param frame
+	 *            Frame
 	 */
 	public MDIAppPanel(Frame frame) {
 
@@ -104,10 +106,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 			m_desktopPane.setDesktopManager(new ExtendedDesktopManager(
 					m_desktopPane));
 
-			JPanel jPanel1 = new JPanel();
-			jPanel1.setLayout(new BorderLayout());
-
-			JPanel jPanelProgressBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			JPanel jPanel1 = new JPanel(new BorderLayout());
+			JPanel jPanelProgressBar = new JPanel(new FlowLayout(
+					FlowLayout.RIGHT));
 			JProgressBar progressBar = new JProgressBar(0, 0);
 			jPanelProgressBar.add(progressBar);
 
@@ -115,8 +116,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 			Clock clock = new Clock();
 			jPanelClock.add(clock);
 
-			JPanel jPanelStatus = new JPanel();
-			jPanelStatus.setLayout(new GridLayout());
+			JPanel jPanelStatus = new JPanel(new GridLayout());
 			JTextField jTextFieldStatus = new JTextField();
 			jTextFieldStatus.setRequestFocusEnabled(false);
 			jTextFieldStatus.setMargin(new Insets(5, 5, 5, 5));
@@ -125,14 +125,12 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 					.setBorder(BorderFactory.createLoweredBevelBorder());
 			jPanelStatus.add(jTextFieldStatus);
 
-			JPanel jPanel3 = new JPanel();
-			jPanel3.setLayout(new BorderLayout());
+			JPanel jPanel3 = new JPanel(new BorderLayout());
 			jPanel3.add(jPanelClock, BorderLayout.WEST);
 			jPanel3.add(jPanelProgressBar, BorderLayout.EAST);
 			jPanel3.add(jPanelStatus, BorderLayout.CENTER);
 
-			JPanel jPanel4 = new JPanel();
-			jPanel4.setLayout(new BorderLayout());
+			JPanel jPanel4 = new JPanel(new BorderLayout());
 			jPanel4.add(m_desktopPane, BorderLayout.CENTER);
 			jPanel1.add(jPanel4, BorderLayout.CENTER);
 			jPanel1.add(jPanel3, BorderLayout.SOUTH);
@@ -148,7 +146,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method setMenu.
-	 * @param menu BasePanelMenu
+	 * 
+	 * @param menu
+	 *            BasePanelMenu
 	 */
 	public void setMenu(BasePanelMenu menu) {
 		m_menuPanel.removeAll();
@@ -158,8 +158,11 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method addInternalFrame.
-	 * @param title String
-	 * @param innerPanel BasePanel
+	 * 
+	 * @param title
+	 *            String
+	 * @param innerPanel
+	 *            BasePanel
 	 */
 	public void addInternalFrame(String title, final BasePanel innerPanel) {
 
@@ -258,7 +261,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method printComponent.
-	 * @param comp Component
+	 * 
+	 * @param comp
+	 *            Component
 	 */
 	protected void printComponent(Component comp) {
 		m_printJob.printComponent(getFrame(), comp, null);
@@ -299,7 +304,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method actionPerformed.
-	 * @param evt ActionEvent
+	 * 
+	 * @param evt
+	 *            ActionEvent
 	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent evt) {
@@ -320,6 +327,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method getSelectPanel.
+	 * 
 	 * @return BasePanel
 	 */
 	public BasePanel getSelectPanel() {
@@ -328,7 +336,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method propertyChange.
-	 * @param epc PropertyChangeEvent
+	 * 
+	 * @param epc
+	 *            PropertyChangeEvent
 	 * @see java.beans.PropertyChangeListener#propertyChange(PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent epc) {
@@ -363,7 +373,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method vetoableChange.
-	 * @param evc PropertyChangeEvent
+	 * 
+	 * @param evc
+	 *            PropertyChangeEvent
 	 * @throws PropertyVetoException
 	 * @see java.beans.VetoableChangeListener#vetoableChange(PropertyChangeEvent)
 	 */
@@ -383,7 +395,9 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	/**
 	 * Method setComponentSize.
-	 * @param component Component
+	 * 
+	 * @param component
+	 *            Component
 	 */
 	private void setComponentSize(Component component) {
 		if ((20 + component.getHeight()) > this.getVisibleRect().height) {
@@ -415,8 +429,11 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 		/**
 		 * Constructor for MyPanel.
-		 * @param layer int
-		 * @param count int
+		 * 
+		 * @param layer
+		 *            int
+		 * @param count
+		 *            int
 		 */
 		public MyPanel(int layer, int count) {
 			super();
@@ -430,9 +447,13 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 		/**
 		 * Constructor for MyPanel.
-		 * @param layer int
-		 * @param count int
-		 * @param innerPanel BasePanel
+		 * 
+		 * @param layer
+		 *            int
+		 * @param count
+		 *            int
+		 * @param innerPanel
+		 *            BasePanel
 		 */
 		public MyPanel(int layer, int count, BasePanel innerPanel) {
 			super();
@@ -447,6 +468,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 		/**
 		 * Method getInnerPanel.
+		 * 
 		 * @return BasePanel
 		 */
 		public BasePanel getInnerPanel() {
@@ -462,6 +484,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 		/**
 		 * Method doWindowDeActivated.
+		 * 
 		 * @return boolean
 		 */
 		public boolean doWindowDeActivated() {

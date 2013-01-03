@@ -124,14 +124,13 @@ public class ConfigurationPanel extends BasePanel {
 			 * Initialize the ValueType decode tables. This caused the tables to
 			 * be cached.
 			 */
+			this.setLayout(new BorderLayout());
 			DAOEntryLimit.newInstance();
 			m_tradePersistentModel = tradePersistentModel;
 			m_jScrollPane = new JScrollPane();
 			propertiesButton = new BaseButton(this,
 					BaseUIPropertyCodes.PROPERTIES, 0);
 			propertiesButton.setEnabled(false);
-			this.setLayout(new BorderLayout());
-
 			JLabel refTable = new JLabel("Configuration:");
 			refTableEditorComboBox = new DecodeComboBoxEditor(ReferenceTable
 					.newInstance().getCodesDecodes());
@@ -149,7 +148,6 @@ public class ConfigurationPanel extends BasePanel {
 				}
 			});
 
-			JPanel jPanel1 = new JPanel(new BorderLayout());
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			JPanel jPanel3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel jPanel4 = new JPanel(new BorderLayout());
@@ -171,9 +169,8 @@ public class ConfigurationPanel extends BasePanel {
 					true, jPanel4, jPanel2);
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
-			jPanel1.add(jToolBar, BorderLayout.NORTH);
-			jPanel1.add(jSplitPane1, BorderLayout.CENTER);
-			this.add(jPanel1, null);
+			this.add(jToolBar, BorderLayout.NORTH);
+			this.add(jSplitPane1, BorderLayout.CENTER);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",

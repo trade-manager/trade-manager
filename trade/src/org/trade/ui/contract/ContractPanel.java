@@ -156,6 +156,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			PersistentModel tradePersistentModel) {
 
 		try {
+			this.setLayout(new BorderLayout());
 			m_tradePersistentModel = tradePersistentModel;
 			m_tradingdays = tradingdays;
 
@@ -166,9 +167,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			backfillOffsetDays = ConfigProperties
 					.getPropAsInt("trade.backfill.offsetDays");
-			this.setLayout(new BorderLayout());
-
-			// This allows the controller to listen to these events
 			executeButton = new BaseButton(controller,
 					BaseUIPropertyCodes.EXECUTE);
 			brokerDataButton = new BaseButton(controller,
@@ -186,7 +184,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
 					new RowListener());
-
 			m_treeModel = new TradingdayTreeModel(m_tradingdays);
 			m_tree = new Tree(m_treeModel);
 			// Listen for when the selection changes.
@@ -228,6 +225,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			setStrategyLabel(null);
 			m_strategyLabel.setAutoscrolls(false);
 			m_strategyLabel.setEditable(false);
+			m_tradeLabel = new JEditorPane("text/rtf", "");
+			m_tradeLabel.setAutoscrolls(false);
+			m_tradeLabel.setEditable(false);
+			this.setTradeLabel(null, null);
+
 			JPanel jPanel12 = new JPanel(new BorderLayout());
 			jPanel12.add(m_strategyLabel, null);
 			JPanel jPanel18 = new JPanel(new BorderLayout());
@@ -263,11 +265,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			// Make changes to [i]d[/i] if you like...
 			m_tradeOrderTable.setPreferredScrollableViewportSize(d);
 			jScrollPane2.addMouseListener(m_tradeOrderTable);
-
-			m_tradeLabel = new JEditorPane("text/rtf", "");
-			m_tradeLabel.setAutoscrolls(false);
-			m_tradeLabel.setEditable(false);
-			this.setTradeLabel(null, null);
 			JPanel jPanel17 = new JPanel(new BorderLayout());
 			jPanel17.add(jPanel19, BorderLayout.WEST);
 			jPanel17.add(m_tradeLabel, BorderLayout.CENTER);
