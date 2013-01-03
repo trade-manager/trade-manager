@@ -95,7 +95,7 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String EXPIRY = "Expiry";
 
 	private static final String[] columnHeaderToolTip = {
-			"<html>Trading day<br>"
+			"<html>Tradingday<br>"
 					+ "Tradestrategies are unique based on Tradingday/Contract/Tradeaccount/Strategy/BarSize</html>",
 			"If checked the Tradestrategy will trade",
 			"<html>Contract symbol<br>"
