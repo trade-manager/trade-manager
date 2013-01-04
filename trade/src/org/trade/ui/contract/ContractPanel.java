@@ -480,13 +480,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			if (nodeInfo instanceof Tradestrategy) {
 				Tradestrategy tradestrategy = (Tradestrategy) nodeInfo;
-				/*
-				 * Refresh the tradestrategy this will get any orders that are
-				 * there. Then add the chart panel.
-				 */
-				Tradestrategy currTradestrategy = m_tradePersistentModel
-						.findTradestrategyById(tradestrategy);
-
+	
 				int currentTabIndex = -1;
 				for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
 					ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract
@@ -500,7 +494,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					}
 				}
 				if (currentTabIndex == -1) {
-					ChartPanel chartPanel = createChartPanel(currTradestrategy);
+					ChartPanel chartPanel = createChartPanel(tradestrategy);
 					m_jTabbedPaneContract.add(chartPanel.getCandlestickChart()
 							.getName(), chartPanel);
 					currentTabIndex = m_jTabbedPaneContract.getTabCount() - 1;
@@ -508,7 +502,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							new TabbedCloseButton(m_jTabbedPaneContract, this));
 				}
 				m_jTabbedPaneContract.setSelectedIndex(currentTabIndex);
-				enableChartButtons(currTradestrategy);
+				enableChartButtons(tradestrategy);
 			} else {
 				enableChartButtons(null);
 			}
