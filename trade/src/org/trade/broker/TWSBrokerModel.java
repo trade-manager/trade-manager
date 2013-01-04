@@ -93,6 +93,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	// and main controller for updates.
 	private static final ConcurrentHashMap<Integer, Contract> m_historyDataRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_realTimeBarsRequests = new ConcurrentHashMap<Integer, Contract>();
+	private static final ConcurrentHashMap<Integer, Contract> m_marketDataRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_contractRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<String, TradeAccount> m_accountRequests = new ConcurrentHashMap<String, TradeAccount>();
 
@@ -405,6 +406,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							backfillWhatToShow, (backfillUseRTH > 0));
 
 					if (mktData) {
+						m_marketDataRequests.put(contract.getIdContract(),
+								contract);
 						m_client.reqMktData(contract.getIdContract(),
 								TWSBrokerModel.getIBContract(contract),
 								ALL_GENERIC_TICK_TAGS, false);
@@ -641,6 +644,44 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
+	 * Method isMarketDataRunning.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @return boolean
+	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Contract)
+	 */
+	public boolean isMarketDataRunning(Contract contract) {
+		if (m_client.isConnected()) {
+			if (m_marketDataRequests.containsKey(contract.getIdContract())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Method isMarketDataRunning.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @return boolean
+	 */
+	public boolean isMarketDataRunning(Tradestrategy tradestrategy) {
+		if (m_marketDataRequests.containsKey(tradestrategy.getContract()
+				.getIdContract())) {
+			Contract contract = m_marketDataRequests.get(tradestrategy
+					.getContract().getIdContract());
+			for (Tradestrategy item : contract.getTradestrategies()) {
+				if (item.equals(tradestrategy)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Method onCancelAllRealtimeData.
 	 * 
 	 * @see org.trade.broker.BrokerModel#onCancelAllRealtimeData()
@@ -654,6 +695,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			for (Contract contract : m_realTimeBarsRequests.values()) {
 				this.onCancelRealtimeBars(contract);
 			}
+			for (Contract contract : m_marketDataRequests.values()) {
+				this.onCancelMarketData(contract);
+			}
 			for (Contract contract : m_contractRequests.values()) {
 				this.onCancelContractDetails(contract);
 			}
@@ -661,6 +705,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		m_contractRequests.clear();
 		m_historyDataRequests.clear();
 		m_realTimeBarsRequests.clear();
+		m_marketDataRequests.clear();
 
 	}
 
@@ -759,17 +804,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void onCancelRealtimeBars(Contract contract) {
 		synchronized (m_realTimeBarsRequests) {
 			if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
-				boolean mktData = false;
-				for (Tradestrategy item : contract.getTradestrategies()) {
-					if (item.getStrategy().getMarketData()) {
-						mktData = true;
-						break;
-					}
-				}
 				if (m_client.isConnected()) {
 					m_client.cancelRealTimeBars(contract.getIdContract());
-					if (mktData)
-						m_client.cancelMktData(contract.getIdContract());
 				}
 				m_realTimeBarsRequests.remove(contract.getIdContract());
 				m_realTimeBarsRequests.notifyAll();
@@ -797,6 +833,49 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				}
 				if (contract.getTradestrategies().isEmpty()) {
 					onCancelRealtimeBars(contract);
+					onCancelMarketData(contract);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Method onCancelMarketData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
+	 */
+	public void onCancelMarketData(Contract contract) {
+		synchronized (m_marketDataRequests) {
+			if (m_marketDataRequests.containsKey(contract.getIdContract())) {
+				m_client.cancelMktData(contract.getIdContract());
+				m_marketDataRequests.remove(contract.getIdContract());
+				m_marketDataRequests.notifyAll();
+			}
+		}
+	}
+
+	/**
+	 * Method onCancelMarketData.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void onCancelMarketData(Tradestrategy tradestrategy) {
+		synchronized (m_marketDataRequests) {
+			if (m_marketDataRequests.containsKey(tradestrategy.getContract()
+					.getIdContract())) {
+				Contract contract = m_marketDataRequests.get(tradestrategy
+						.getContract().getIdContract());
+				for (Tradestrategy item : contract.getTradestrategies()) {
+					if (item.equals(tradestrategy)) {
+						contract.removeTradestrategy(tradestrategy);
+						break;
+					}
+				}
+				if (contract.getTradestrategies().isEmpty()) {
+					onCancelMarketData(contract);
 				}
 			}
 		}
@@ -1216,6 +1295,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				m_realTimeBarsRequests.notifyAll();
 			}
 		}
+		if (m_marketDataRequests.containsKey(id)) {
+			symbol = m_marketDataRequests.get(id).getSymbol();
+			synchronized (m_marketDataRequests) {
+				m_marketDataRequests.remove(id);
+				m_marketDataRequests.notifyAll();
+			}
+		}
 		if (m_contractRequests.containsKey(id)) {
 			symbol = m_contractRequests.get(id).getSymbol();
 			synchronized (m_contractRequests) {
@@ -1275,8 +1361,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public synchronized void tickPrice(int reqId, int field, double value,
 			int canAutoExecute) {
 		try {
-			if (m_realTimeBarsRequests.containsKey(new Integer(reqId))) {
-				Contract contract = m_realTimeBarsRequests.get(reqId);
+			if (m_marketDataRequests.containsKey(new Integer(reqId))) {
+				Contract contract = m_marketDataRequests.get(reqId);
 				synchronized (contract) {
 
 					/*
@@ -1419,7 +1505,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			synchronized (value) {
 				switch (field) {
 				case TickType.RT_VOLUME: {
-					if (m_realTimeBarsRequests.containsKey(new Integer(reqId))) {
+					if (m_marketDataRequests.containsKey(new Integer(reqId))) {
 						StringTokenizer st = new StringTokenizer(value, ";");
 						int tokenNumber = 0;
 						double price = 0;
@@ -1459,7 +1545,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							}
 							}
 						}
-						Contract contract = m_realTimeBarsRequests.get(reqId);
+						Contract contract = m_marketDataRequests.get(reqId);
 						synchronized (contract) {
 							for (Tradestrategy tradestrategy : contract
 									.getTradestrategies()) {
