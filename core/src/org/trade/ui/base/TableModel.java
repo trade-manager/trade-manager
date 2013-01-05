@@ -128,10 +128,11 @@ public abstract class TableModel extends AbstractTableModel {
 	 * @see javax.swing.table.TableModel#getColumnClass(int)
 	 */
 	public Class<?> getColumnClass(int column) {
-		if (null == getValueAt(0, column)) {
+		Object value = getValueAt(0, column);
+		if (null == value) {
 			return String.class;
 		} else {
-			return getValueAt(0, column).getClass();
+			return value.getClass();
 		}
 
 	}
@@ -180,10 +181,10 @@ public abstract class TableModel extends AbstractTableModel {
 	 * @return Object
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
-	public Object getValueAt(int aRow, int aColumn) {
+	public Object getValueAt(int row, int column) {
 		if (!rows.isEmpty()) {
-			Vector<Object> row = rows.get(aRow);
-			return row.elementAt(aColumn);
+			Vector<Object> value = rows.get(row);
+			return value.elementAt(column);
 		}
 		return null;
 	}
@@ -200,8 +201,9 @@ public abstract class TableModel extends AbstractTableModel {
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int column) {
-		if (null != value && !value.equals(getValueAt(row, column))) {
-			Object newValue = getColumnDataValue(getValueAt(row, column), value);
+		Object currValue = getValueAt(row, column);
+		if (null != value && !value.equals(currValue)) {
+			Object newValue = getColumnDataValue(currValue, value);
 			this.populateDAO(newValue, row, column);
 			Vector<Object> dataRow = rows.get(row);
 			dataRow.setElementAt(newValue, column);

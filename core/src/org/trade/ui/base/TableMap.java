@@ -54,6 +54,7 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method getModel.
+	 * 
 	 * @return TableModel
 	 */
 	public TableModel getModel() {
@@ -62,7 +63,9 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method setModel.
-	 * @param model TableModel
+	 * 
+	 * @param model
+	 *            TableModel
 	 */
 	public void setModel(TableModel model) {
 		this.model = model;
@@ -74,8 +77,11 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 	// to the model.
 	/**
 	 * Method getValueAt.
-	 * @param aRow int
-	 * @param aColumn int
+	 * 
+	 * @param aRow
+	 *            int
+	 * @param aColumn
+	 *            int
 	 * @return Object
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
@@ -85,9 +91,13 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method setValueAt.
-	 * @param aValue Object
-	 * @param aRow int
-	 * @param aColumn int
+	 * 
+	 * @param aValue
+	 *            Object
+	 * @param aRow
+	 *            int
+	 * @param aColumn
+	 *            int
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object aValue, int aRow, int aColumn) {
@@ -96,6 +106,7 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method getRowCount.
+	 * 
 	 * @return int
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
@@ -105,6 +116,7 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method getColumnCount.
+	 * 
 	 * @return int
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 */
@@ -114,7 +126,9 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method getColumnName.
-	 * @param aColumn int
+	 * 
+	 * @param aColumn
+	 *            int
 	 * @return String
 	 * @see javax.swing.table.TableModel#getColumnName(int)
 	 */
@@ -124,7 +138,9 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method getColumnClass.
-	 * @param aColumn int
+	 * 
+	 * @param aColumn
+	 *            int
 	 * @return Class<?>
 	 * @see javax.swing.table.TableModel#getColumnClass(int)
 	 */
@@ -134,8 +150,11 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/**
 	 * Method isCellEditable.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
@@ -149,7 +168,9 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 	// By default forward all events to all the listeners.
 	/**
 	 * Method tableChanged.
-	 * @param e TableModelEvent
+	 * 
+	 * @param e
+	 *            TableModelEvent
 	 * @see javax.swing.event.TableModelListener#tableChanged(TableModelEvent)
 	 */
 	public void tableChanged(TableModelEvent e) {

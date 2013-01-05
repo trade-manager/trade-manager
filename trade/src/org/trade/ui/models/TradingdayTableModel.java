@@ -163,23 +163,23 @@ public class TradingdayTableModel extends TableModel {
 
 	public Object getValueAt(int row, int column) {
 		if (columnNames[column] == CLOSE) {
-			if (null != super.getValueAt(row, column)
-					&& null != super.getValueAt(row, 0)) {
-				Date closeDate = ((Date) super.getValueAt(row, column));
-				Date openDate = ((Date) super.getValueAt(row, 0));
+			Date closeDate = ((Date) super.getValueAt(row, column));
+			Date openDate = ((Date) super.getValueAt(row, 0));
+			if (null != closeDate && null != openDate) {
 				if (closeDate.getDate().before(openDate.getDate())) {
-					Date date = new Date(TradingCalendar.getSpecificTime(
-							closeDate.getDate(), TradingCalendar
-									.addBusinessDays(closeDate.getDate(), 1)));
+					Date date = new Date(TradingCalendar.addBusinessDays(
+							closeDate.getDate(), 1));
+					if (TradingCalendar.daysDiff(openDate.getDate(),
+							date.getDate()) > 1)
+						date = openDate;
 					this.setValueAt(date, row, column);
 					return date;
 				}
 
-				if (TradingCalendar.daysDiff(openDate.getDate(),
-						closeDate.getDate()) > 1) {
+				if (((closeDate.getDate().getTime() - openDate.getDate()
+						.getTime()) / 1000) > (60 * 60 * 24)) {
 					Date date = new Date(TradingCalendar.getSpecificTime(
-							closeDate.getDate(), TradingCalendar
-									.addBusinessDays(openDate.getDate(), 1)));
+							closeDate.getDate(), openDate.getDate()));
 					this.setValueAt(date, row, column);
 					return date;
 				}
