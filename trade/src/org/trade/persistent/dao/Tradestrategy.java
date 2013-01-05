@@ -131,7 +131,6 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		this.tier = tier;
 		this.trade = trade;
 		super.setDirty(true);
-		this.getTradingday().setDirty(this.isDirty());
 	}
 
 	/**

@@ -480,7 +480,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			if (nodeInfo instanceof Tradestrategy) {
 				Tradestrategy tradestrategy = (Tradestrategy) nodeInfo;
-	
 				int currentTabIndex = -1;
 				for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
 					ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract
@@ -986,10 +985,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				cancelButton.setEnabled(true);
 				m_tradeOrderTable.enablePopupMenu(true);
 			}
-			m_tradeOrderModel.setData(transferObject);
+			Tradestrategy refreshTradestrategy = m_tradePersistentModel
+					.findTradestrategyById(transferObject);
+			m_tradeOrderModel.setData(refreshTradestrategy);
 			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 					.getSelectedComponent();
-			setTradeLabel(transferObject, currentTab.getCandlestickChart());
+			setTradeLabel(refreshTradestrategy,
+					currentTab.getCandlestickChart());
 			periodEditorComboBox.setItem(BarSize.newInstance(transferObject
 					.getBarSize()));
 		}

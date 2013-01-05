@@ -59,7 +59,6 @@ public class TradestrategyHome {
 	private EntityManager entityManager = null;
 
 	public TradestrategyHome() {
-
 	}
 
 	/**
