@@ -395,9 +395,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#isHistoricalDataRunning(Contract)
 	 */
 	public boolean isHistoricalDataRunning(Contract contract) {
-			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
-				return true;
-			}
+		if (m_historyDataRequests.containsKey(contract.getIdContract())) {
+			return true;
+		}
 		return false;
 	}
 
@@ -409,16 +409,16 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @return boolean
 	 */
 	public boolean isHistoricalDataRunning(Tradestrategy tradestrategy) {
-			if (m_historyDataRequests.containsKey(tradestrategy.getContract()
-					.getIdContract())) {
-				Contract contract = m_historyDataRequests.get(tradestrategy
-						.getContract().getIdContract());
-				for (Tradestrategy item : contract.getTradestrategies()) {
-					if (item.equals(tradestrategy)) {
-						return true;
-					}
+		if (m_historyDataRequests.containsKey(tradestrategy.getContract()
+				.getIdContract())) {
+			Contract contract = m_historyDataRequests.get(tradestrategy
+					.getContract().getIdContract());
+			for (Tradestrategy item : contract.getTradestrategies()) {
+				if (item.equals(tradestrategy)) {
+					return true;
 				}
 			}
+		}
 		return false;
 	}
 
@@ -455,6 +455,29 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				}
 			}
 		}
+		return false;
+	}
+
+	/**
+	 * Method isMarketDataRunning.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @return boolean
+	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Contract)
+	 */
+	public boolean isMarketDataRunning(Contract contract) {
+		return false;
+	}
+
+	/**
+	 * Method isMarketDataRunning.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @return boolean
+	 */
+	public boolean isMarketDataRunning(Tradestrategy tradestrategy) {
 		return false;
 	}
 
@@ -579,6 +602,25 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				}
 			}
 		}
+	}
+
+	/**
+	 * Method onCancelMarketData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
+	 */
+	public void onCancelMarketData(Contract contract) {
+	}
+
+	/**
+	 * Method onCancelMarketData.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void onCancelMarketData(Tradestrategy tradestrategy) {
 	}
 
 	/**
