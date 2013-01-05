@@ -224,7 +224,8 @@ public class ConfigurationPanel extends BasePanel {
 
 	public void doSave() {
 		try {
-
+			this.setStatusBarMessage("Save in progress ...\n",
+					BasePanel.INFORMATION);
 			int selectedRow = m_table.getSelectedRow();
 			String className = "org.trade.persistent.dao."
 					+ ((ReferenceTable) refTableEditorComboBox
@@ -284,6 +285,8 @@ public class ConfigurationPanel extends BasePanel {
 					.getSelectedItem()).getCode());
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding item.", ex.getMessage(), ex);
+		} finally {
+			clearStatusBarMessage();
 		}
 	}
 

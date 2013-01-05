@@ -177,9 +177,15 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @return boolean
 	 */
 	public boolean isDirty() {
-		for (Tradingday currTradingday : getTradingdays().values()) {
-			if (currTradingday.isDirty()) {
+		for (Tradingday tradingday : getTradingdays().values()) {
+			if (tradingday.isDirty()) {
 				return true;
+			} else {
+				for (Tradestrategy tradestrategy : tradingday
+						.getTradestrategies()) {
+					if (tradestrategy.isDirty())
+						return true;
+				}
 			}
 		}
 		return false;

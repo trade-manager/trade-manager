@@ -174,6 +174,15 @@ public class TradingdayTableModel extends TableModel {
 					this.setValueAt(date, row, column);
 					return date;
 				}
+
+				if (TradingCalendar.daysDiff(openDate.getDate(),
+						closeDate.getDate()) > 1) {
+					Date date = new Date(TradingCalendar.getSpecificTime(
+							closeDate.getDate(), TradingCalendar
+									.addBusinessDays(openDate.getDate(), 1)));
+					this.setValueAt(date, row, column);
+					return date;
+				}
 			}
 		}
 		return super.getValueAt(row, column);
@@ -191,7 +200,7 @@ public class TradingdayTableModel extends TableModel {
 	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int column) {
-		if (null != value && !value.equals(getValueAt(row, column))) {
+		if (null != value && !value.equals(super.getValueAt(row, column))) {
 			this.populateDAO(value, row, column);
 			Vector<Object> dataRow = rows.get(row);
 			dataRow.setElementAt(value, column);
@@ -211,8 +220,8 @@ public class TradingdayTableModel extends TableModel {
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
-		Date openDate = (Date) this.getValueAt(row, 0);
-		Date closeDate = (Date) this.getValueAt(row, 1);
+		Date openDate = (Date) super.getValueAt(row, 0);
+		Date closeDate = (Date) super.getValueAt(row, 1);
 		Tradingday element = getData().getTradingday(openDate.getDate(),
 				closeDate.getDate());
 
