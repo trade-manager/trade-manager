@@ -300,22 +300,17 @@ public class StrategyData extends Worker {
 			 * Fire the change to the base series now the chart candle series
 			 * has been updated and all the indicators are up to date. Note the
 			 * strategies listen to the base candle series.
-			 */this.getBaseCandleSeries().fireSeriesChanged();
+			 */
+			this.getBaseCandleSeries().fireSeriesChanged();
 		}
 		return this.currentBaseCandleCount;
 	}
 
-	/*
-	 * Update the chart data set with the new candle from the base data set.
-	 * Note there will only ever be one Series in the candle data set. Then
-	 * update all the indicators before notifying any strategy workers of this
-	 * even.
-	 * 
-	 * @param candle the new or updated candle.
-	 */
-
 	/**
-	 * Method updateDatasetSeries.
+	 * Method updateDatasetSeries. Update the chart data set with the new candle
+	 * from the base data set. Note there will only ever be one Series in the
+	 * candle data set. Then update all the indicators before notifying any
+	 * strategy workers of this even.
 	 * 
 	 * @param candle
 	 *            CandleItem
