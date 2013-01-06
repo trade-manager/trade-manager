@@ -343,7 +343,6 @@ public class CandleSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	 * 
 	 * @return The time period.
 	 */
 	public RegularTimePeriod getPeriod(int index) {
@@ -354,9 +353,6 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Returns the time period for the specified item.
 	 * 
-	 * 
-	 * 
-	 * 
 	 * @return The time period.
 	 */
 	@Transient
@@ -366,9 +362,6 @@ public class CandleSeries extends IndicatorSeries {
 
 	/**
 	 * Returns the time period for the specified item.
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param barSize
 	 *            Integer
@@ -382,8 +375,6 @@ public class CandleSeries extends IndicatorSeries {
 	 * 
 	 * @param index
 	 *            the item index.
-	 * 
-	 * 
 	 * @return The data item.
 	 */
 	public ComparableObjectItem getDataItem(int index) {
@@ -432,11 +423,6 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Adds a data item to the series.
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param candleItem
 	 *            CandleItem
 	 * @param notify
@@ -459,8 +445,6 @@ public class CandleSeries extends IndicatorSeries {
 	 * 
 	 * @param date
 	 *            the date for which we want a period.
-	 * 
-	 * 
 	 * @return exists
 	 */
 	public int indexOf(Date date) {
@@ -468,13 +452,12 @@ public class CandleSeries extends IndicatorSeries {
 		for (int i = this.data.size(); i > 0; i--) {
 			CandleItem item = (CandleItem) this.data.get(i - 1);
 			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
-				break;
+				return -1;
 			}
 			if ((date.getTime() >= item.getPeriod().getFirstMillisecond())
 					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
 				return i - 1;
 			}
-
 		}
 		return -1;
 	}
@@ -518,7 +501,7 @@ public class CandleSeries extends IndicatorSeries {
 
 		this.setCalcVwap(rollupInterval, volume, vwap);
 		CandleItem candle = null;
-		if (index >= 0) {
+		if (index > -1) {
 
 			candle = (CandleItem) this.getDataItem(index);
 
@@ -544,20 +527,22 @@ public class CandleSeries extends IndicatorSeries {
 			 * If the Vwap is zero use the close price. This should not happen
 			 * but some data from brokers does not always have a value.
 			 * 
-			 * 
 			 * For 60min time period start the clock at 9:00am. This matches
 			 * most charting platforms.
 			 */
 			Date startBusDate = TradingCalendar.getSpecificTime(
 					this.getStartTime(), time);
 			if (3600 == this.getBarSize()) {
-				startBusDate = TradingCalendar.addMinutes(startBusDate, -30);
-				if (TradingCalendar.getMinute(time) == 30
-						&& startBusDate.equals(time)) {
-					time = TradingCalendar.addMinutes(time, -30);
+				if (TradingCalendar.getMinute(startBusDate) == 30) {
+					startBusDate = TradingCalendar
+							.addMinutes(startBusDate, -30);
+					if (TradingCalendar.getMinute(time) == 30
+							&& startBusDate.equals(time)) {
+						time = TradingCalendar.addMinutes(time, -30);
+					}
 				}
 			}
-			long periods = (time.getTime() / 1000 - startBusDate.getTime() / 1000)
+			long periods = (time.getTime() - startBusDate.getTime()) / 1000
 					/ this.getBarSize();
 			long startPeriod = startBusDate.getTime()
 					+ (periods * this.getBarSize() * 1000);
@@ -583,7 +568,6 @@ public class CandleSeries extends IndicatorSeries {
 	public void clear() {
 		super.clear();
 		clearVwap();
-
 	}
 
 	/**
@@ -703,11 +687,6 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Checks to see if the previous number or bars make a V shape using the x,y
 	 * vwap values.
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * 
 	 * @param source
