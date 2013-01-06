@@ -48,6 +48,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.trade.core.dao.Aspect;
 
@@ -68,8 +69,11 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for CodeType.
-	 * @param name String
-	 * @param description String
+	 * 
+	 * @param name
+	 *            String
+	 * @param description
+	 *            String
 	 */
 	public CodeType(String name, String description) {
 
@@ -79,6 +83,7 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getIdCodeType.
+	 * 
 	 * @return Integer
 	 */
 	@Id
@@ -90,7 +95,9 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdCodeType.
-	 * @param idCodeType Integer
+	 * 
+	 * @param idCodeType
+	 *            Integer
 	 */
 	public void setIdCodeType(Integer idCodeType) {
 		this.id = idCodeType;
@@ -98,6 +105,7 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getName.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "name", nullable = false, length = 45)
@@ -107,7 +115,9 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -115,6 +125,7 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getDescription.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "description", nullable = false, length = 100)
@@ -124,7 +135,9 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setDescription.
-	 * @param description String
+	 * 
+	 * @param description
+	 *            String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -132,6 +145,7 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getCodeAttribute.
+	 * 
 	 * @return List<CodeAttribute>
 	 */
 	@OneToMany(mappedBy = "codeType", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
@@ -141,9 +155,25 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setCodeAttribute.
-	 * @param codeAttributes List<CodeAttribute>
+	 * 
+	 * @param codeAttributes
+	 *            List<CodeAttribute>
 	 */
 	public void setCodeAttribute(List<CodeAttribute> codeAttributes) {
 		this.codeAttributes = codeAttributes;
+	}
+
+	/**
+	 * Method isDirty.
+	 * 
+	 * @return boolean
+	 */
+	@Transient
+	public boolean isDirty() {
+		for (CodeAttribute item : this.getCodeAttribute()) {
+			if (item.isDirty())
+				return true;
+		}
+		return super.isDirty();
 	}
 }

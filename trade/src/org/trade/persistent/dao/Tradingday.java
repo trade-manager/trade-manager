@@ -57,6 +57,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
@@ -460,6 +461,20 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Method isDirty.
+	 * 
+	 * @return boolean
+	 */
+	@Transient
+	public boolean isDirty() {
+		for (Tradestrategy item : this.getTradestrategies()) {
+			if (item.isDirty())
+				return true;
+		}
+		return super.isDirty();
 	}
 
 	/**

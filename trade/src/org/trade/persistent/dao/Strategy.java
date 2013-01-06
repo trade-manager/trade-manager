@@ -374,8 +374,8 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	 */
 	@Transient
 	public boolean isDirty() {
-		for (IndicatorSeries indicator : this.getIndicatorSeries()) {
-			if (indicator.isDirty())
+		for (IndicatorSeries item : this.getIndicatorSeries()) {
+			if (item.isDirty())
 				return true;
 		}
 		return super.isDirty();

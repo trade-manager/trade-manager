@@ -368,7 +368,11 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 */
 	@Transient
 	public boolean isDirty() {
-		return dirty;
+		for (CodeValue item : this.getCodeValues()) {
+			if (item.isDirty())
+				return true;
+		}
+		return this.dirty;
 	}
 
 	/**
@@ -381,6 +385,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
 	}
+
 	/**
 	 * Method getStrategy.
 	 * 
