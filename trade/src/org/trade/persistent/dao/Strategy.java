@@ -53,6 +53,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
@@ -364,6 +365,20 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setStrategyManager(Strategy strategy) {
 		this.strategy = strategy;
+	}
+
+	/**
+	 * Method isDirty.
+	 * 
+	 * @return boolean
+	 */
+	@Transient
+	public boolean isDirty() {
+		for (IndicatorSeries indicator : this.getIndicatorSeries()) {
+			if (indicator.isDirty())
+				return true;
+		}
+		return super.isDirty();
 	}
 
 	/**

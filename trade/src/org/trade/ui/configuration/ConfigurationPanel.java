@@ -348,7 +348,7 @@ public class ConfigurationPanel extends BasePanel {
 						 * Populate the code values from the fields.
 						 */
 						for (CodeValue codeValue : series.getCodeValues()) {
-
+							series.setDirty(true);
 							if (((FormattedTextFieldVerifier) codeAttributePanel
 									.getFields()
 									.get(codeValue.getCodeAttribute().getName())
