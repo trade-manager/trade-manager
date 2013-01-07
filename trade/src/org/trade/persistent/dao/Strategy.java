@@ -301,12 +301,11 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 		this.rules.add(rule);
 	}
 
-	/*
-	 * TODO would like this to be EAGER but EAGER fails to let the entity
-	 * manager be created.
-	 */
 	/**
 	 * Method getIndicatorSeries.
+	 * 
+	 * TODO would like this to be EAGER but EAGER fails to let the entity
+	 * manager be created.
 	 * 
 	 * @return List<IndicatorSeries>
 	 */
