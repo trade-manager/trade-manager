@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -39,8 +39,6 @@ package org.trade.core.exception;
  * Describes the context in which an exception occurred. Contains the
  * information for constructing the message about a specific exception.
  * 
- * @version $Id: ExceptionContext.java 1.2 2001/01/23 23:05:48Z Garrick.Olson
- *          dev $
  * @author Simon Allen
  */
 public class ExceptionContext implements java.io.Serializable {

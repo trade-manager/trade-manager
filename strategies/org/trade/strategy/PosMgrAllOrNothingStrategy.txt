@@ -1,11 +1,7 @@
 1/ If the open position is filled create a STP (transmit=false see 2/ )and 1 Target (LMT) OCA order at 3R with 100% of the filled quantity. 
 Use the open position fill quantity, price and stop price to determine the target price. The STP order take an initial risk of 1R.
-
 2/ The STP order should not be transmitted unless the current bars Vwap  crosses the stop price. Note this will result in more than a 1R stop.
 This help with quick tails below the 5min low.
- 
 3/ Target/Stop prices should be round over/under whole/half numbers when ever they are calculated..
- 
 4/ At 10:30 move the STP order to the average fill price of the filled open order.
-
 5/ Close any open positions at 15:55.

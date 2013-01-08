@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -41,9 +41,6 @@ import org.trade.core.exception.NestingException;
  * This class is just a wrapper (via inheritance) around a BSFException in order
  * to provide a clean interface around the Exception handling in this package.
  * 
- * @see com.cbsinc.esc.devtools.exception.NestingException
- * @version $Id: JavaTypeTranslatorException.java,v 1.1 2001/09/19 20:31:03 clay
- *          Exp $
  * @author Simon Allen
  */
 public class JavaTypeTranslatorException extends NestingException {

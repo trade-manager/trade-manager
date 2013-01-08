@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -41,7 +41,7 @@ import java.util.Vector;
 /**
  * Exception thrown by PropertyUtils class.
  * 
- * @author : Vadim.Pesochinskiy
+ * @author : Simon Allen
  * @version $Id: MissingPropertiesException.java,v 1.1 2001/09/19 20:31:54 clay
  *          Exp $
  */

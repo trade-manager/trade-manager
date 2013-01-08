@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -38,22 +38,6 @@ package org.trade.core.conversion;
 /**
  * This is an abstract class which is inherited by all java.lang.String to
  * java.lang.Object subclass converter classes.
- * 
- * @see com.cbsinc.esc.devtools.conversion.StringToBooleanConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToByteConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToCharacterConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToDateConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToDoubleConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToFloatConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToIntegerConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToLongConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToShortConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToSQLDateConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToSQLTimeConverter
- * @see com.cbsinc.esc.devtools.conversion.StringToSQLTimestampConverter
- * @see com.cbsinc.esc.devtools.conversion.JavaTypeConverter
- * @version $Id: StringToObjectConverter.java,v 1.1 2001/09/19 20:31:02 clay Exp
- *          $
  * @author Simon Allen
  */
 public abstract class StringToObjectConverter implements JavaTypeConverter {

@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -39,8 +39,6 @@ package org.trade.core.conversion;
  * This interface must be implemented by any converter class which is to be used
  * with the JavaTypeTranslator.
  * 
- * @see com.cbsinc.esc.devtools.conversion.JavaTypeTranslator
- * @version $Id: JavaTypeConverter.java,v 1.1 2001/09/19 20:31:04 clay Exp $
  * @author Simon Allen
  */
 public interface JavaTypeConverter {

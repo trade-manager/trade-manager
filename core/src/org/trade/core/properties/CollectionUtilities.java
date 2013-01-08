@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -50,7 +50,7 @@ import java.util.Properties;
  * Property utilites library. Contains methods that allow to read, write, check
  * existance, merge and extract subsets of properties.
  * 
- * @author :
+ * @author : Simon Allen
  * @version $Id: CollectionUtilities.java,v 1.1 2001/09/21 20:45:26 Exp $
  */
 public class CollectionUtilities {

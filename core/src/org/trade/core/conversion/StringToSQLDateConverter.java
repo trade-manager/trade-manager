@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -46,9 +46,6 @@ import java.sql.Date;
  * JavaTypeTranslator class.
  * 
  * @see java.sql.Date
- * @see com.cbsinc.esc.devtools.conversion.JavaTypeConverter
- * @version $Id: StringToSQLDateConverter.java,v 1.1 2001/09/19 20:31:02 clay
- *          Exp $
  * @author Simon Allen
  */
 public class StringToSQLDateConverter extends StringToObjectConverter {

@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -43,8 +43,6 @@ import java.util.PropertyResourceBundle;
 /**
  * ExceptionResourceBundle handles storing messages for each Exception.
  * 
- * @version $Id: ExceptionResourceBundle.java 1.2 2001/01/23 23:06:20Z
- *          Garrick.Olson dev $
  * @author Simon Allen
  */
 public class ExceptionResourceBundle extends PropertyResourceBundle implements

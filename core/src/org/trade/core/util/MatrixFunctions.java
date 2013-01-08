@@ -37,7 +37,7 @@ package org.trade.core.util;
 
 /**
  * 
- * @author lutusp
+ * @author Simon Allen
  * @version $Revision: 1.0 $
  */
 public final class MatrixFunctions {

@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -65,8 +65,6 @@ import org.trade.core.properties.PropertyNotFoundException;
  * MY_KEY_FIELD_REFERENCE=customer_demographic_name <br>
  * MY_KEY_CODE=NAME0802
  * 
- * @version $Id: MessageTranslator.java 1.4 2001/01/31 02:53:10Z Garrick.Olson
- *          dev $
  * @author Simon Allen
  */
 public class MessageTranslator {

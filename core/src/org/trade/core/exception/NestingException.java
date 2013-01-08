@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -55,8 +55,6 @@ import java.util.Vector;
  * would force all clients of your API to have the third party library available
  * on their machine, which might not be desirable in a distributed environment.
  * 
- * @version $Id: NestingException.java 1.3 2001/01/23 23:07:11Z Garrick.Olson
- *          dev $
  * @author Simon Allen
  */
 public class NestingException extends Exception {

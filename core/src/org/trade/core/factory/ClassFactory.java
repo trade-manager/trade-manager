@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -49,7 +49,6 @@ import org.trade.core.properties.PropertyNotFoundException;
  * Provides a simple class factory. Provide a string name for an interface, and
  * this class will provide the implementation.
  * 
- * @version $Id: ClassFactory.java,v 1.1 2001/09/19 20:31:43 clay Exp $
  * @author Simon Allen
  */
 public class ClassFactory {

@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -39,8 +39,7 @@ import java.io.IOException;
 
 /**
 
- * @version $Id: PropertyNotFoundException.java,v 1.1 2001/09/19 20:31:53 clay
- *          Exp $
+ * @version $Id: PropertyNotFoundException.java,v 1.1 2001/09/19 20:31:53
  * @author Simon Allen
  */
 public class PropertyNotFoundException extends IOException {

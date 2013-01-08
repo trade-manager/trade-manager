@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -35,26 +35,6 @@
  */
 package org.trade.core.exception;
 
-/**
- * ClassName parses a class name extracting the following information: <BR>
- * <UL>
- * <LI>Entire Package Name</LI>
- * <LI>Package Name</LI>
- * <LI>Entire Class Name</LI>
- * <LI>Class Name</LI>
- * </UL>
- * <BR>
- * For Example: for a class called <B>com.clrmnt.bsf.exception.BSFException</B> <BR>
- * <UL>
- * <LI>Entire Package Name = com.clrmnt.bsf.exception</LI>
- * <LI>Package Name = exception</LI>
- * <LI>Entire Class Name = com.clrmnt.bsf.exception.BSFException</LI>
- * <LI>Class Name = BSFException</LI>
- * </UL>
- * 
- * @version $Id: ClassName.java 1.1 2000/02/20 23:05:31Z Ciaran.Oreilly dev $
- * @author Simon Allen
- */
 public class ClassName {
 
 	/**

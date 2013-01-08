@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -38,8 +38,7 @@ package org.trade.core.properties;
 /**
  * This class provides a simple container for storing object arrays.
  * 
- * @author Vadim.Pesochinskiy
- * @version $Id: ArrayOfValues.java,v 1.1 2001/09/21 20:45:26 clay Exp $
+ * @author Simon Allen
  */
 public class ArrayOfValues {
 	private Object[] array = null;

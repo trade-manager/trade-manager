@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -39,15 +39,6 @@ package org.trade.core.conversion;
  * This is an abstract class which is inherited by all java.lang.Number to
  * java.lang.Number subclass converter classes.
  * 
- * @see com.cbsinc.esc.devtools.conversion.NumberToByteConverter
- * @see com.cbsinc.esc.devtools.conversion.NumberToDoubleConverter
- * @see com.cbsinc.esc.devtools.conversion.NumberToFloatConverter
- * @see com.cbsinc.esc.devtools.conversion.NumberToIntegerConverter
- * @see com.cbsinc.esc.devtools.conversion.NumberToLongConverter
- * @see com.cbsinc.esc.devtools.conversion.NumberToShortConverter
- * @see com.cbsinc.esc.devtools.conversion.JavaTypeConverter
- * @version $Id: NumberToNumberConverter.java,v 1.1 2001/09/19 20:31:03 clay Exp
- *          $
  * @author Simon Allen
  */
 public abstract class NumberToNumberConverter implements JavaTypeConverter {

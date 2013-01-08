@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -44,9 +44,6 @@ package org.trade.core.conversion;
  * JavaTypeTranslator class.
  * 
  * @see java.lang.Number
- * @see com.cbsinc.esc.devtools.conversion.JavaTypeConverter
- * @version $Id: NumberToShortConverter.java,v 1.1 2001/09/19 20:31:03 clay Exp
- *          $
  * @author Simon Allen
  */
 public class NumberToShortConverter extends NumberToNumberConverter {

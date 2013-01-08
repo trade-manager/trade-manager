@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -50,7 +50,7 @@ import java.util.Vector;
  * "application_form_errors_color", "#0fffff" } Output: <font face="arial"
  * size="2" color="#0fffff">
  * 
- * @author Vadim Pesochinskiy
+ * @author Simon Allen
  * @version $Id: TemplateParser.java,v 1.1 2001/09/21 20:45:26 clay Exp $
  */
 public class TemplateParser {

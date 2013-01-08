@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -40,7 +40,6 @@ package org.trade.core.exception;
  * 
  * Objects of this type are immutable (cannot be altered).
  * 
- * @version $Id: ExceptionCode.java 1.5 2000/10/28 01:05:37Z Garrick.Olson dev $
  * @author Simon Allen
  */
 public class ExceptionCode implements java.io.Serializable {
