@@ -770,9 +770,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						break;
 					}
 				}
-				if (contract.getTradestrategies().isEmpty()) {
+				if (contract.getTradestrategies().isEmpty())
 					onCancelBrokerData(contract);
-				}
 			}
 		}
 	}

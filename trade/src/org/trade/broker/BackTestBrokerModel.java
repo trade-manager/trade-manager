@@ -556,10 +556,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				Contract contract = m_historyDataRequests.get(tradestrategy
 						.getContract().getIdContract());
 				contract.removeTradestrategy(tradestrategy);
-				if (contract.getTradestrategies().isEmpty()) {
-					m_historyDataRequests.remove(contract.getIdContract());
-					m_historyDataRequests.notifyAll();
-				}
+				if (contract.getTradestrategies().isEmpty())
+					onCancelBrokerData(contract);
 			}
 		}
 		m_client.removeBackTestBroker(tradestrategy.getIdTradeStrategy());
@@ -599,9 +597,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						break;
 					}
 				}
-				if (contract.getTradestrategies().isEmpty()) {
+				if (contract.getTradestrategies().isEmpty())
 					onCancelRealtimeBars(contract);
-				}
 			}
 		}
 	}
