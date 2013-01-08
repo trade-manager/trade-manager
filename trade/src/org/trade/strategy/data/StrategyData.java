@@ -337,6 +337,8 @@ public class StrategyData extends Worker {
 	}
 
 	public void clearBaseCandleSeries() {
+		if (this.isRunning())
+			this.cancel();
 		this.currentBaseCandleCount = -1;
 		this.lastBaseCandleProcessed = this.currentBaseCandleCount;
 		getBaseCandleSeries().clear();
