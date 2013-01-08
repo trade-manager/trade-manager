@@ -57,7 +57,9 @@ public class StrategyHome {
 
 	/**
 	 * Method findById.
-	 * @param idStrategy Integer
+	 * 
+	 * @param idStrategy
+	 *            Integer
 	 * @return Strategy
 	 */
 	public Strategy findById(Integer idStrategy) {
@@ -83,7 +85,9 @@ public class StrategyHome {
 
 	/**
 	 * Method findByName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 * @return Strategy
 	 */
 	public Strategy findByName(String name) {
@@ -118,6 +122,7 @@ public class StrategyHome {
 
 	/**
 	 * Method findAll.
+	 * 
 	 * @return List<Strategy>
 	 */
 	public List<Strategy> findAll() {

@@ -55,10 +55,12 @@ public class JavaFormatForObject {
 	/**
 	 * Constructor
 	 * 
-	
-	
-	 * @param format String
-	 * @param forObject Object
+	 * 
+	 * 
+	 * @param format
+	 *            String
+	 * @param forObject
+	 *            Object
 	 */
 	public JavaFormatForObject(String format, Object forObject) {
 		m_format = format;
@@ -66,21 +68,24 @@ public class JavaFormatForObject {
 	}
 
 	/**
-	
-	 * @return The format mask for the object. */
+	 * 
+	 * @return The format mask for the object.
+	 */
 	public String getFormat() {
 		return (m_format);
 	}
 
 	/**
-	
-	 * @return The object that the format object is for. */
+	 * 
+	 * @return The object that the format object is for.
+	 */
 	public Object getForObject() {
 		return (m_forObject);
 	}
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

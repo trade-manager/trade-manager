@@ -134,7 +134,9 @@ public class NestingException extends Exception {
 
 	/**
 	 * Constructor for NestingException.
-	 * @param exceptionMessage ExceptionMessage
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
 	 */
 	public NestingException(ExceptionMessage exceptionMessage) {
 		this();
@@ -143,8 +145,11 @@ public class NestingException extends Exception {
 
 	/**
 	 * Constructor for NestingException.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param exceptionContext ExceptionContext
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param exceptionContext
+	 *            ExceptionContext
 	 */
 	public NestingException(ExceptionMessage exceptionMessage,
 			ExceptionContext exceptionContext) {
@@ -168,9 +173,13 @@ public class NestingException extends Exception {
 
 	/**
 	 * Constructor for NestingException.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param exceptionContext ExceptionContext
-	 * @param message String
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param exceptionContext
+	 *            ExceptionContext
+	 * @param message
+	 *            String
 	 */
 	public NestingException(ExceptionMessage exceptionMessage,
 			ExceptionContext exceptionContext, String message) {
@@ -181,8 +190,11 @@ public class NestingException extends Exception {
 
 	/**
 	 * Constructor for NestingException.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param t Throwable
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param t
+	 *            Throwable
 	 */
 	public NestingException(ExceptionMessage exceptionMessage, Throwable t) {
 		this(t);
@@ -191,9 +203,13 @@ public class NestingException extends Exception {
 
 	/**
 	 * Constructor for NestingException.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param gruesomeDetails String
-	 * @param t Throwable
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param gruesomeDetails
+	 *            String
+	 * @param t
+	 *            Throwable
 	 */
 	public NestingException(ExceptionMessage exceptionMessage,
 			String gruesomeDetails, Throwable t) {
@@ -204,7 +220,9 @@ public class NestingException extends Exception {
 	/**
 	 * Any outstanding context from the exception provided will be added to this
 	 * exception. The context in the exception provided will be cleared.
-	 * @param nestingException NestingException
+	 * 
+	 * @param nestingException
+	 *            NestingException
 	 */
 	private void assimilateContext(NestingException nestingException) {
 		// Get the contexts to be added if any.
@@ -224,6 +242,7 @@ public class NestingException extends Exception {
 
 	/**
 	 * Method getExceptionContexts.
+	 * 
 	 * @return Enumeration<ExceptionContext>
 	 */
 	private Enumeration<ExceptionContext> getExceptionContexts() {
@@ -239,8 +258,9 @@ public class NestingException extends Exception {
 	 * 
 	 * @param exceptionMessage
 	 *            The user-friendly exception message.
-	
-	 * @see ExceptionMessage */
+	 * 
+	 * @see ExceptionMessage
+	 */
 	public void addExceptionMessage(ExceptionMessage exceptionMessage) {
 		m_exceptionMessages.addElement(exceptionMessage);
 
@@ -255,8 +275,11 @@ public class NestingException extends Exception {
 
 	/**
 	 * Method addExceptionMessage.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param exceptionContext ExceptionContext
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param exceptionContext
+	 *            ExceptionContext
 	 */
 	public void addExceptionMessage(ExceptionMessage exceptionMessage,
 			ExceptionContext exceptionContext) {
@@ -289,7 +312,9 @@ public class NestingException extends Exception {
 	 * one is ever added. 3. Regardless of the outcome of (1) and (2) above, the
 	 * context will be applied to ALL messages contained within any child
 	 * exceptions (exceptions nested within this exception).
-	 * @param exceptionContext ExceptionContext
+	 * 
+	 * @param exceptionContext
+	 *            ExceptionContext
 	 */
 	public void addExceptionContext(ExceptionContext exceptionContext) {
 		ExceptionMessage mostRecent;
@@ -325,7 +350,8 @@ public class NestingException extends Exception {
 	 * 
 	 * @param message
 	 *            The user-friendly exception message.
-	 * @param code ExceptionCode
+	 * @param code
+	 *            ExceptionCode
 	 */
 	public void addExceptionMessage(ExceptionCode code, String message) {
 		addExceptionMessage(new ExceptionMessage(code, message));
@@ -337,8 +363,10 @@ public class NestingException extends Exception {
 	 * 
 	 * @param message
 	 *            The user-friendly exception message.
-	 * @param code ExceptionCode
-	 * @param nestingException NestingException
+	 * @param code
+	 *            ExceptionCode
+	 * @param nestingException
+	 *            NestingException
 	 */
 	public void addExceptionMessage(ExceptionCode code, String message,
 			NestingException nestingException) {
@@ -348,8 +376,11 @@ public class NestingException extends Exception {
 
 	/**
 	 * Method addExceptionMessage.
-	 * @param userFriendlyMessage ExceptionMessage
-	 * @param nestingException NestingException
+	 * 
+	 * @param userFriendlyMessage
+	 *            ExceptionMessage
+	 * @param nestingException
+	 *            NestingException
 	 */
 	public void addExceptionMessage(ExceptionMessage userFriendlyMessage,
 			NestingException nestingException) {
@@ -360,8 +391,9 @@ public class NestingException extends Exception {
 	/**
 	 * Remove the specified exception message from the exception.
 	 * 
-	
-	 * @param message ExceptionMessage
+	 * 
+	 * @param message
+	 *            ExceptionMessage
 	 */
 	public void removeExceptionMessage(ExceptionMessage message) {
 		m_exceptionMessages.removeElement(message);
@@ -370,8 +402,9 @@ public class NestingException extends Exception {
 	/**
 	 * Remove any exception messages that match the code passed.
 	 * 
-	
-	 * @param code ExceptionCode
+	 * 
+	 * @param code
+	 *            ExceptionCode
 	 */
 	public void removeExceptionMessages(ExceptionCode code) {
 		Vector<ExceptionMessage> remove = new Vector<ExceptionMessage>();
@@ -391,8 +424,9 @@ public class NestingException extends Exception {
 	}
 
 	/**
-	
-	 * @return true if the object has user friendly error messages. */
+	 * 
+	 * @return true if the object has user friendly error messages.
+	 */
 	public boolean hasExceptionMessages() {
 		boolean returnValue = false;
 
@@ -414,9 +448,10 @@ public class NestingException extends Exception {
 	 * Obtain an <code>Enumeration</code> of user-friendly messages for this
 	 * exception. This does not includes messages from nested exceptions.
 	 * 
-	
+	 * 
 	 * @return <code>Enumeration</code> of <code>ExceptionMessage</code> objects
-	 *         containing user-friendly text. */
+	 *         containing user-friendly text.
+	 */
 	protected Enumeration<ExceptionMessage> getExceptionMessages() {
 		return m_exceptionMessages.elements();
 	}
@@ -425,10 +460,12 @@ public class NestingException extends Exception {
 	 * Obtain an <code>Enumeration</code> of messages for this exception. This
 	 * includes messages from nested exceptions if any exist.
 	 * 
-	
-	
+	 * 
+	 * 
 	 * @return <code>Enumeration</code> of <code>ExceptionMessage</code> objects
-	 *         containing exception message text. * @see #getAllUserFriendlyMessages() */
+	 *         containing exception message text. * @see
+	 *         #getAllUserFriendlyMessages()
+	 */
 	public Enumeration<?> getAllExceptionMessages() {
 		Enumerator enumMsg;
 
@@ -445,8 +482,9 @@ public class NestingException extends Exception {
 	/**
 	 * Returns the time stamp of when the exception occurred
 	 * 
-	
-	 * @return time stamp */
+	 * 
+	 * @return time stamp
+	 */
 	public Date getTimeStamp() {
 		return m_timeStamp;
 	}
@@ -482,6 +520,7 @@ public class NestingException extends Exception {
 
 	/**
 	 * Method getNoExceptionMessage.
+	 * 
 	 * @return String
 	 */
 	static String getNoExceptionMessage() {
@@ -490,6 +529,7 @@ public class NestingException extends Exception {
 
 	/**
 	 * This just places the stack trace in a string.
+	 * 
 	 * @return String
 	 */
 	private String captureStackTrace() {

@@ -101,7 +101,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Default Constructor. Create an object and initialize it to empty.
-	 * @param PercentString String
+	 * 
+	 * @param PercentString
+	 *            String
 	 */
 	public Percent(String PercentString) {
 		if ((null != PercentString) && (PercentString.length() != 0)) {
@@ -122,8 +124,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param d Integer
+	 * 
+	 * @param d
+	 *            Integer
 	 */
 	public Percent(Integer d) {
 		setBigDecimal(d);
@@ -132,8 +135,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param d double
+	 * 
+	 * @param d
+	 *            double
 	 */
 	public Percent(double d) {
 		setBigDecimal(new BigDecimal(d));
@@ -142,8 +146,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param d Double
+	 * 
+	 * @param d
+	 *            Double
 	 */
 	public Percent(Double d) {
 		setBigDecimal(new BigDecimal(d.doubleValue()));
@@ -152,8 +157,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param bd BigDecimal
+	 * 
+	 * @param bd
+	 *            BigDecimal
 	 */
 	public Percent(BigDecimal bd) {
 		setBigDecimal(bd);
@@ -161,7 +167,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Constructor for Percent.
-	 * @param Percent Percent
+	 * 
+	 * @param Percent
+	 *            Percent
 	 */
 	public Percent(Percent Percent) {
 		m_value = Percent.m_value;
@@ -172,10 +180,12 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * Constructor
 	 * 
-	
-	
-	 * @param nonDecimalAmount long
-	 * @param decimalAmount int
+	 * 
+	 * 
+	 * @param nonDecimalAmount
+	 *            long
+	 * @param decimalAmount
+	 *            int
 	 */
 	public Percent(long nonDecimalAmount, int decimalAmount) {
 		// Set up the default constraints for basic Percent values
@@ -188,7 +198,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * Provides the format used for determining if this object is valid. The
 	 * format should be one of the format constants on this class. The default
 	 * format is NORMAL_11_2.
-	 * @param format String
+	 * 
+	 * @param format
+	 *            String
 	 */
 	public void setFormat(String format) {
 		m_format = format;
@@ -196,6 +208,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method getFormat.
+	 * 
 	 * @return String
 	 */
 	public String getFormat() {
@@ -204,6 +217,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * This maximum length includes the decimal point and digits to both sides.
+	 * 
 	 * @return int
 	 */
 	public int getMaxLength() {
@@ -223,6 +237,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * This indicates whether zero is an acceptable value for this instance.
 	 * Currently this is determined by the format returned by getFormat().
+	 * 
 	 * @return boolean
 	 */
 	public boolean canBeZero() {
@@ -240,6 +255,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * This indicates whether zero is an acceptable value for this instance.
 	 * Currently this is determined by the format returned by getFormat().
+	 * 
 	 * @return boolean
 	 */
 	public boolean canBeNegative() {
@@ -252,6 +268,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method isNegative.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isNegative() {
@@ -268,6 +285,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method isEmpty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isEmpty() {
@@ -281,8 +299,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	}
 
 	/**
-	
-	 * @return The value before the decimal point in the Percent value. */
+	 * 
+	 * @return The value before the decimal point in the Percent value.
+	 */
 	public long getNonDecimalAmount() {
 		assertDefined();
 
@@ -298,6 +317,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	/**
 	 * See description of superclass method. Overrode functionality to return
 	 * the BigDecimal this object is using intrnally.
+	 * 
 	 * @return Object
 	 */
 	public Object getSQLObject() {
@@ -305,8 +325,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	}
 
 	/**
-	
-	 * @return The value after the decimal point in the Percent value. */
+	 * 
+	 * @return The value after the decimal point in the Percent value.
+	 */
 	public int getDecimalAmount() {
 		assertDefined();
 
@@ -329,8 +350,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * Will throw a <code>NullPointerException</code> if this valuetype is
 	 * empty.
 	 * 
-	
-	 * @return A BigDecimal representing the monetary value. */
+	 * 
+	 * @return A BigDecimal representing the monetary value.
+	 */
 	public BigDecimal getBigDecimalValue() {
 		assertDefined();
 
@@ -339,6 +361,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
@@ -353,7 +376,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 * @throws ValueTypeException
 	 */
 	public void setValue(Object value) throws ValueTypeException {
@@ -375,8 +400,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @param Percent
 	 *            the Percent object to be added
 	 * 
-	
-	 * @return Percent the result */
+	 * 
+	 * @return Percent the result
+	 */
 	public Percent add(Percent Percent) {
 		assertDefined();
 
@@ -398,8 +424,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @param Percent
 	 *            the Percent object to be subtracted
 	 * 
-	
-	 * @return Percent the result */
+	 * 
+	 * @return Percent the result
+	 */
 	public Percent subtract(Percent Percent) {
 		assertDefined();
 
@@ -417,8 +444,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @param Percent
 	 *            the Percent object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isLessThen(Percent Percent) {
 		assertDefined();
 
@@ -434,8 +462,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @param Percent
 	 *            the Percent object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isLessThenOrEqualTo(Percent Percent) {
 		assertDefined();
 
@@ -451,8 +480,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @param Percent
 	 *            the Percent object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isGreaterThen(Percent Percent) {
 		assertDefined();
 
@@ -468,8 +498,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @param Percent
 	 *            the Percent object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isGreaterThenOrEqualTo(Percent Percent) {
 		assertDefined();
 
@@ -481,8 +512,11 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method isValid.
-	 * @param validator Validator
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param validator
+	 *            Validator
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
 	public boolean isValid(Validator validator,
@@ -492,8 +526,11 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method getDefaultValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param isMandatory
+	 *            boolean
 	 * @return Validator
 	 */
 	public Validator getDefaultValidator(IMessageFactory messageFactory,
@@ -561,8 +598,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * Will throw a <code>NullPointerException</code> if this valuetype is
 	 * empty.
 	 * 
-	
-	 * @return A double representing the monetary value. */
+	 * 
+	 * @return A double representing the monetary value.
+	 */
 
 	public double doubleValue() {
 		assertDefined();
@@ -573,12 +611,13 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * Overrides Cloneable
 	 * 
 	 * 
-	
 	 * 
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return Object
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	public Object clone() {
 		try {
@@ -592,23 +631,28 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method compareTo.
-	 * @param other Percent
+	 * 
+	 * @param other
+	 *            Percent
 	 * @return int
 	 */
 	public int compareTo(final Percent other) {
-		return CoreUtils.nullSafeComparator(
-				this.getBigDecimalValue(), other.getBigDecimalValue());
+		return CoreUtils.nullSafeComparator(this.getBigDecimalValue(),
+				other.getBigDecimalValue());
 	}
 
 	/**
 	 * Method compare.
-	 * @param o1 Percent
-	 * @param o2 Percent
+	 * 
+	 * @param o1
+	 *            Percent
+	 * @param o2
+	 *            Percent
 	 * @return int
 	 */
 	public int compare(Percent o1, Percent o2) {
-		int returnVal = CoreUtils.nullSafeComparator(
-				o1.getBigDecimalValue(), o2.getBigDecimalValue());
+		int returnVal = CoreUtils.nullSafeComparator(o1.getBigDecimalValue(),
+				o2.getBigDecimalValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
 		}
@@ -635,12 +679,15 @@ public class Percent extends ValueType implements Comparator<Percent>,
 		}
 		return false;
 	}
+
 	//
 	// Private Methods
 	//
 	/**
 	 * Method setBigDecimal.
-	 * @param value Integer
+	 * 
+	 * @param value
+	 *            Integer
 	 */
 	private void setBigDecimal(Integer value) {
 		if (null == value) {
@@ -657,7 +704,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method setBigDecimal.
-	 * @param value BigDecimal
+	 * 
+	 * @param value
+	 *            BigDecimal
 	 */
 	private void setBigDecimal(BigDecimal value) {
 		if (null == value) {
@@ -673,7 +722,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 	/**
 	 * Method notNull.
-	 * @param value Percent
+	 * 
+	 * @param value
+	 *            Percent
 	 * @return BigDecimal
 	 */
 	private BigDecimal notNull(Percent value) {

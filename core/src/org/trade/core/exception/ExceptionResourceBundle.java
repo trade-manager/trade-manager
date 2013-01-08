@@ -59,10 +59,11 @@ public class ExceptionResourceBundle extends PropertyResourceBundle implements
 	 * 
 	 * @param resourceStream
 	 *            the input stream to the resource
-	
+	 * 
 	 * @throws IOException
 	 * @exception java.io.IOException
-	 *                : thrown when the input stream doesn't find the resource */
+	 *                : thrown when the input stream doesn't find the resource
+	 */
 	public ExceptionResourceBundle(InputStream resourceStream)
 			throws IOException {
 		super(resourceStream);
@@ -73,8 +74,9 @@ public class ExceptionResourceBundle extends PropertyResourceBundle implements
 	 * 
 	 * @param code
 	 *            exception code
-	
-	 * @return the exception message */
+	 * 
+	 * @return the exception message
+	 */
 	public String getMessage(ExceptionCode code) {
 		String message = getString(code.getCode());
 
@@ -89,8 +91,9 @@ public class ExceptionResourceBundle extends PropertyResourceBundle implements
 	/**
 	 * Returns the default exception message for the package
 	 * 
-	
-	 * @return the exception message */
+	 * 
+	 * @return the exception message
+	 */
 	public String getMessage() {
 		return getString(DEFAULT);
 	}

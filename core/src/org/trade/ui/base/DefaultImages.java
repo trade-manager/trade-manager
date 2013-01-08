@@ -36,13 +36,14 @@
 package org.trade.ui.base;
 
 /**
-
+ * 
  * @version $Id: DefaultImages.java,v 1.1 2002/01/03 18:20:46 simon Exp $
  * @author Simon Allen
  */
 public class DefaultImages {
 	/**
 	 * Method createOpenFolderImage.
+	 * 
 	 * @return java.awt.Image
 	 */
 	public static java.awt.Image createOpenFolderImage() {
@@ -233,6 +234,7 @@ public class DefaultImages {
 
 	/**
 	 * Method createClosedFolderImage.
+	 * 
 	 * @return java.awt.Image
 	 */
 	public static java.awt.Image createClosedFolderImage() {
@@ -420,6 +422,7 @@ public class DefaultImages {
 
 	/**
 	 * Method createLeafImage.
+	 * 
 	 * @return java.awt.Image
 	 */
 	public static java.awt.Image createLeafImage() {

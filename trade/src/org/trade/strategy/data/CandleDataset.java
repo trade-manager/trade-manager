@@ -593,8 +593,8 @@ public class CandleDataset extends AbstractXYDataset implements
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
-		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex)
-				, bars, startTime, endTime);
+		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex),
+				bars, startTime, endTime);
 
 		series.updateSeries(source.getSeries(seriesIndex), 0);
 

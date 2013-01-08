@@ -43,17 +43,17 @@ import org.trade.core.exception.ExceptionMessage;
  * Exception messages represent the user friendly messages returned by the
  * system. This class should include every message that can possibly be returned
  * by the system.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
 public class MessageFactory implements IMessageFactory {
-	
+
 	// This is a special case and represents an internal error. It will
 	// be used when other messages cannot be located.
-	
+
 	public final static IMessageFactory SYSTEM_ERROR = new MessageFactory(
 			createDefaultMessage());
-
 
 	// Start modifications here, please follow the formatting.
 
@@ -85,10 +85,12 @@ public class MessageFactory implements IMessageFactory {
 
 	// TODO: This should be private, but it is needed for IntRequest to support
 	// old valuetype mechanism
-	
+
 	/**
 	 * Constructor for MessageFactory.
-	 * @param exceptionMessage ExceptionMessage
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
 	 */
 	public MessageFactory(ExceptionMessage exceptionMessage) {
 		m_exceptionMessage = exceptionMessage;
@@ -96,7 +98,9 @@ public class MessageFactory implements IMessageFactory {
 
 	/**
 	 * Constructor for MessageFactory.
-	 * @param indexIntoMessageFile String
+	 * 
+	 * @param indexIntoMessageFile
+	 *            String
 	 */
 	private MessageFactory(String indexIntoMessageFile) {
 		try {
@@ -111,6 +115,7 @@ public class MessageFactory implements IMessageFactory {
 
 	/**
 	 * Method create.
+	 * 
 	 * @return ExceptionMessage
 	 * @see org.trade.core.message.IMessageFactory#create()
 	 */
@@ -133,7 +138,9 @@ public class MessageFactory implements IMessageFactory {
 
 	/**
 	 * Convenience method to add context to the exception message.
-	 * @param exceptionContext ExceptionContext
+	 * 
+	 * @param exceptionContext
+	 *            ExceptionContext
 	 * @return ExceptionMessage
 	 * @see org.trade.core.message.IMessageFactory#create(ExceptionContext)
 	 */
@@ -148,10 +155,14 @@ public class MessageFactory implements IMessageFactory {
 
 	/**
 	 * Convenience method to add context to the exception message.
-	 * @param exceptionContext1 ExceptionContext
-	 * @param exceptionContext2 ExceptionContext
+	 * 
+	 * @param exceptionContext1
+	 *            ExceptionContext
+	 * @param exceptionContext2
+	 *            ExceptionContext
 	 * @return ExceptionMessage
-	 * @see org.trade.core.message.IMessageFactory#create(ExceptionContext, ExceptionContext)
+	 * @see org.trade.core.message.IMessageFactory#create(ExceptionContext,
+	 *      ExceptionContext)
 	 */
 	public ExceptionMessage create(ExceptionContext exceptionContext1,
 			ExceptionContext exceptionContext2) {
@@ -166,6 +177,7 @@ public class MessageFactory implements IMessageFactory {
 
 	/**
 	 * Method createDefaultMessage.
+	 * 
 	 * @return ExceptionMessage
 	 */
 	private static final ExceptionMessage createDefaultMessage() {

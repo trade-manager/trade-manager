@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class ChartDays extends Decode {
@@ -53,7 +52,9 @@ public class ChartDays extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value Integer
+	 * 
+	 * @param value
+	 *            Integer
 	 * @return ChartDays
 	 */
 	public static ChartDays newInstance(Integer value) {
@@ -64,6 +65,7 @@ public class ChartDays extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return ChartDays
 	 */
 	public static ChartDays newInstance() {

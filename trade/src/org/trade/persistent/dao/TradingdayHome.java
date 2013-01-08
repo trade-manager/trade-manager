@@ -89,7 +89,7 @@ public class TradingdayHome {
 								detachedInstance.getOpen(),
 								detachedInstance.getClose());
 				if (null == tradingday) {
-					entityManager.persist(detachedInstance);					
+					entityManager.persist(detachedInstance);
 				}
 				entityManager.getTransaction().commit();
 			} else {

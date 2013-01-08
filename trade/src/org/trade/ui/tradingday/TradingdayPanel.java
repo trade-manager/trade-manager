@@ -47,7 +47,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -174,7 +173,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			PersistentModel tradePersistentModel) {
 		try {
 			this.setLayout(new BorderLayout());
-			
+
 			m_tradingdays = tradingdays;
 			m_tradePersistentModel = tradePersistentModel;
 			m_defaultDir = ConfigProperties
@@ -206,7 +205,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					BaseUIPropertyCodes.DATA);
 			brokerDataButton.setToolTipText("Get Chart Data");
 			reAssignButton = new BaseButton(this,
-					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));			
+					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));
 			m_tradestrategyModel = new TradestrategyTableModel();
 			Tradingday tradingday = null;
 			for (Tradingday instance : m_tradingdays.getTradingdays().values()) {
@@ -277,7 +276,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			tradeAccountLabel = new JEditorPane("text/rtf", "");
 			tradeAccountLabel.setAutoscrolls(false);
 			tradeAccountLabel.setEditable(false);
-			
+
 			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -324,7 +323,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_tradingdayTable
 					.setPreferredScrollableViewportSize(tradingdayTableDimension);
 
-			JPanel jPanel8 = new JPanel(new BorderLayout());			
+			JPanel jPanel8 = new JPanel(new BorderLayout());
 			jPanel8.add(tradeAccountLabel, BorderLayout.NORTH);
 			jPanel8.add(jPanel3, BorderLayout.SOUTH);
 			jPanel2.add(jPanel8, BorderLayout.NORTH);

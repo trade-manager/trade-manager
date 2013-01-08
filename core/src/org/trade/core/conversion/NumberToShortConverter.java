@@ -60,8 +60,9 @@ public class NumberToShortConverter extends NumberToNumberConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.lang.Short .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.lang.Short.class;
@@ -76,8 +77,9 @@ public class NumberToShortConverter extends NumberToNumberConverter {
 	 * 
 	 * @param aNumber
 	 *            the number to be converted
-	
-	 * @return Short the Number converted to a Short */
+	 * 
+	 * @return Short the Number converted to a Short
+	 */
 	protected Number getConvertedNumber(Number aNumber) {
 		return new Short(aNumber.shortValue());
 	}

@@ -60,8 +60,9 @@ public class StringToCharacterConverter extends StringToObjectConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.lang.Character .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.lang.Character.class;
@@ -77,10 +78,11 @@ public class StringToCharacterConverter extends StringToObjectConverter {
 	 * 
 	 * @param aString
 	 *            the String to be converted
-	
-	
-	 * @return Object the String converted to a Character * @exception IllegalArgumentException
-	 *                should never be thrown */
+	 * 
+	 * 
+	 * @return Object the String converted to a Character * @exception
+	 *         IllegalArgumentException should never be thrown
+	 */
 	protected Object getConvertedString(String aString)
 			throws IllegalArgumentException {
 		try {

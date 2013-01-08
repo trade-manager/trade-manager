@@ -39,6 +39,7 @@ import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
@@ -59,7 +60,9 @@ public class StrategyTreeModel extends DefaultTreeModel implements Serializable 
 
 	/**
 	 * Constructor for StrategyTreeModel.
-	 * @param items List<Strategy>
+	 * 
+	 * @param items
+	 *            List<Strategy>
 	 * @throws ValueTypeException
 	 */
 	public StrategyTreeModel(List<Strategy> items) throws ValueTypeException {
@@ -70,7 +73,9 @@ public class StrategyTreeModel extends DefaultTreeModel implements Serializable 
 
 	/**
 	 * Method setData.
-	 * @param strategies List<Strategy>
+	 * 
+	 * @param strategies
+	 *            List<Strategy>
 	 * @throws ValueTypeException
 	 */
 	public void setData(List<Strategy> strategies) throws ValueTypeException {
@@ -83,7 +88,9 @@ public class StrategyTreeModel extends DefaultTreeModel implements Serializable 
 
 	/**
 	 * Method buildTree.
-	 * @param items List<Strategy>
+	 * 
+	 * @param items
+	 *            List<Strategy>
 	 * @throws ValueTypeException
 	 */
 	private void buildTree(List<Strategy> items) throws ValueTypeException {
@@ -97,7 +104,9 @@ public class StrategyTreeModel extends DefaultTreeModel implements Serializable 
 
 	/**
 	 * Method addItem.
-	 * @param item Strategy
+	 * 
+	 * @param item
+	 *            Strategy
 	 * @throws ValueTypeException
 	 */
 	private void addItem(Strategy item) throws ValueTypeException {
@@ -114,7 +123,9 @@ public class StrategyTreeModel extends DefaultTreeModel implements Serializable 
 
 	/**
 	 * Method getNode.
-	 * @param treeNode Object
+	 * 
+	 * @param treeNode
+	 *            Object
 	 * @return Object
 	 */
 	public Object getNode(Object treeNode) {

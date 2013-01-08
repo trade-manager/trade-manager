@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.DAODecode;
 
-
 /**
  */
 public class DAOIndicatorSeries extends DAODecode {
@@ -54,7 +53,9 @@ public class DAOIndicatorSeries extends DAODecode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return DAOIndicatorSeries
 	 */
 	public static DAOIndicatorSeries newInstance(String displayName) {
@@ -65,6 +66,7 @@ public class DAOIndicatorSeries extends DAODecode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return DAOIndicatorSeries
 	 */
 	public static DAOIndicatorSeries newInstance() {

@@ -41,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+
 import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Tradestrategy;
@@ -56,7 +57,9 @@ public class DAOStrategyManagerRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Constructor for DAOStrategyManagerRenderer.
-	 * @param strategyWorkers ConcurrentHashMap<String,StrategyRule>
+	 * 
+	 * @param strategyWorkers
+	 *            ConcurrentHashMap<String,StrategyRule>
 	 */
 	public DAOStrategyManagerRenderer(
 			ConcurrentHashMap<String, StrategyRule> strategyWorkers) {
@@ -65,14 +68,22 @@ public class DAOStrategyManagerRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * Method getTableCellRendererComponent.
-	 * @param table JTable
-	 * @param dAOStrategyManager Object
-	 * @param isSelected boolean
-	 * @param hasFocus boolean
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param table
+	 *            JTable
+	 * @param dAOStrategyManager
+	 *            Object
+	 * @param isSelected
+	 *            boolean
+	 * @param hasFocus
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return Component
-	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
+	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
+	 *      Object, boolean, boolean, int, int)
 	 */
 	public Component getTableCellRendererComponent(JTable table,
 			Object dAOStrategyManager, boolean isSelected, boolean hasFocus,

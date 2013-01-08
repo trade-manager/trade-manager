@@ -41,7 +41,6 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
 /**
  * 
  * @version $Id: BaseList.java,v 1.4 2001/11/06 22:37:27 simon Exp $
@@ -61,14 +60,18 @@ public class BaseList extends JList {
 	/**
 	 * CustomButton() - constructor
 	 * 
-	
-	
-	
-	
-	 * @param p BasePanel
-	 * @param UICode String
-	 * @param items Vector<Object>
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param UICode
+	 *            String
+	 * @param items
+	 *            Vector<Object>
+	 * @exception * @see
+	 */
 	@SuppressWarnings("unchecked")
 	public BaseList(BasePanel p, String UICode, Vector<Object> items) {
 		super(items);
@@ -79,21 +82,27 @@ public class BaseList extends JList {
 	/**
 	 * CustomButton() - constructor
 	 * 
-	
-	
-	
-	
-	 * @param p BasePanel
-	 * @param UICode String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param UICode
+	 *            String
+	 * @exception * @see
+	 */
 	public BaseList(BasePanel p, String UICode) {
 		jbInit(p, UICode);
 	}
 
 	/**
 	 * Method jbInit.
-	 * @param p BasePanel
-	 * @param UICode String
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param UICode
+	 *            String
 	 */
 	private void jbInit(BasePanel p, String UICode) {
 		if (p != null) {
@@ -117,13 +126,15 @@ public class BaseList extends JList {
 	/**
 	 * addMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
 	}
@@ -131,13 +142,15 @@ public class BaseList extends JList {
 	/**
 	 * removeMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
 	}
@@ -145,12 +158,14 @@ public class BaseList extends JList {
 	/**
 	 * messageEvent() -
 	 * 
-	
-	
-	
-	
-	 * @param selection String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param selection
+	 *            String
+	 * @exception * @see
+	 */
 	protected void messageEvent(String selection) {
 		m_notifier.notifyEvent(new MessageEvent(selection),
 				new Vector<Object>());
@@ -159,11 +174,12 @@ public class BaseList extends JList {
 	/**
 	 * actionPerformed() - combo box action performed
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	private void doValueChanged() {
 		if (getMethod() != null) {
 			this.messageEvent(getMethod());
@@ -173,12 +189,14 @@ public class BaseList extends JList {
 	/**
 	 * setMethod() - button action performed
 	 * 
-	
-	
-	
-	
-	 * @param method String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param method
+	 *            String
+	 * @exception * @see
+	 */
 	private void setMethod(String method) {
 		m_method = method;
 	}
@@ -186,12 +204,13 @@ public class BaseList extends JList {
 	/**
 	 * getMethod() - button action performed
 	 * 
-	
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @return String
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	private String getMethod() {
 		return m_method;
 	}

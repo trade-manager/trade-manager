@@ -79,7 +79,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Constructor for TabbedAppPanel.
-	 * @param frame Frame
+	 * 
+	 * @param frame
+	 *            Frame
 	 */
 	public TabbedAppPanel(Frame frame) {
 
@@ -121,7 +123,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method setMenu.
-	 * @param menu BasePanelMenu
+	 * 
+	 * @param menu
+	 *            BasePanelMenu
 	 */
 	public void setMenu(BasePanelMenu menu) {
 		m_menuPanel.removeAll();
@@ -141,6 +145,7 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method doWindowDeActivated.
+	 * 
 	 * @return boolean
 	 */
 	public boolean doWindowDeActivated() {
@@ -149,10 +154,13 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * This method is fired when a different tab is selected.
-	 * @param currBasePanel BasePanel
-	 * @param newBasePanel BasePanel
+	 * 
+	 * @param currBasePanel
+	 *            BasePanel
+	 * @param newBasePanel
+	 *            BasePanel
 	 */
-	
+
 	public abstract void tabChanged(BasePanel currBasePanel,
 			BasePanel newBasePanel);
 
@@ -205,7 +213,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method printComponent.
-	 * @param comp Component
+	 * 
+	 * @param comp
+	 *            Component
 	 */
 	protected void printComponent(Component comp) {
 		m_printJob.printComponent(getFrame(), comp, null);
@@ -213,8 +223,11 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method addTab.
-	 * @param title String
-	 * @param panel BasePanel
+	 * 
+	 * @param title
+	 *            String
+	 * @param panel
+	 *            BasePanel
 	 */
 	protected void addTab(String title, final BasePanel panel) {
 		m_tabbedPane.add(title, panel);
@@ -228,6 +241,7 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method getSelectPanel.
+	 * 
 	 * @return BasePanel
 	 */
 	public BasePanel getSelectPanel() {
@@ -236,9 +250,13 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method setSelectPanel.
-	 * @param tabIndex int
-	 * @param event MessageEvent
-	 * @param parm Vector<Object>
+	 * 
+	 * @param tabIndex
+	 *            int
+	 * @param event
+	 *            MessageEvent
+	 * @param parm
+	 *            Vector<Object>
 	 */
 	public void setSelectPanel(int tabIndex, MessageEvent event,
 			Vector<Object> parm) {
@@ -248,7 +266,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method setSelectPanel.
-	 * @param tabIndex int
+	 * 
+	 * @param tabIndex
+	 *            int
 	 */
 	public void setSelectPanel(int tabIndex) {
 		m_tabbedPane.setSelectedIndex(tabIndex);
@@ -256,7 +276,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method setSelectPanel.
-	 * @param tabPanel BasePanel
+	 * 
+	 * @param tabPanel
+	 *            BasePanel
 	 */
 	public void setSelectPanel(BasePanel tabPanel) {
 		for (int i = 0; i < m_tabbedPane.getTabCount(); i++) {
@@ -269,7 +291,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	/**
 	 * Method stateChanged.
-	 * @param evt ChangeEvent
+	 * 
+	 * @param evt
+	 *            ChangeEvent
 	 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
 	 */
 	public void stateChanged(ChangeEvent evt) {

@@ -47,11 +47,17 @@ public class NumericRangeValidator extends StringValidator {
 
 	/**
 	 * Constructor for NumericRangeValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param maxLength int
-	 * @param minValue long
-	 * @param maxValue long
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param maxLength
+	 *            int
+	 * @param minValue
+	 *            long
+	 * @param maxValue
+	 *            long
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public NumericRangeValidator(IMessageFactory messageFactory, int maxLength,
 			long minValue, long maxValue, boolean isMandatory) {
@@ -63,12 +69,18 @@ public class NumericRangeValidator extends StringValidator {
 
 	/**
 	 * Method isValid.
-	 * @param value Object
-	 * @param invalidValue String
-	 * @param expectedFormat String
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param value
+	 *            Object
+	 * @param invalidValue
+	 *            String
+	 * @param expectedFormat
+	 *            String
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
-	 * @see org.trade.core.validator.Validator#isValid(Object, String, String, ExceptionMessageListener)
+	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
+	 *      ExceptionMessageListener)
 	 */
 	public boolean isValid(Object value, String invalidValue,
 			String expectedFormat, ExceptionMessageListener receiver) {

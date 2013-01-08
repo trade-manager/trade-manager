@@ -35,7 +35,6 @@
  */
 package org.trade.core.exception;
 
-
 /**
  */
 public class ModelException extends NestingException {
@@ -68,8 +67,10 @@ public class ModelException extends NestingException {
 	 * 
 	 * @param message
 	 *            The desired message text.
-	 * @param id Integer
-	 * @param code Integer
+	 * @param id
+	 *            Integer
+	 * @param code
+	 *            Integer
 	 */
 	public ModelException(Integer id, Integer code, String message) {
 		super(message);
@@ -89,8 +90,11 @@ public class ModelException extends NestingException {
 
 	/**
 	 * Constructor for ModelException.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param gruesomeDetails String
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param gruesomeDetails
+	 *            String
 	 */
 	public ModelException(ExceptionMessage exceptionMessage,
 			String gruesomeDetails) {
@@ -99,9 +103,13 @@ public class ModelException extends NestingException {
 
 	/**
 	 * Constructor for ModelException.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param gruesomeDetails String
-	 * @param t Throwable
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param gruesomeDetails
+	 *            String
+	 * @param t
+	 *            Throwable
 	 */
 	public ModelException(ExceptionMessage exceptionMessage,
 			String gruesomeDetails, Throwable t) {
@@ -110,7 +118,9 @@ public class ModelException extends NestingException {
 
 	/**
 	 * Constructor for ModelException.
-	 * @param exceptionMessage ExceptionMessage
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
 	 */
 	public ModelException(ExceptionMessage exceptionMessage) {
 		super(exceptionMessage);
@@ -118,8 +128,11 @@ public class ModelException extends NestingException {
 
 	/**
 	 * Constructor for ModelException.
-	 * @param exceptionMessage ExceptionMessage
-	 * @param t Throwable
+	 * 
+	 * @param exceptionMessage
+	 *            ExceptionMessage
+	 * @param t
+	 *            Throwable
 	 */
 	public ModelException(ExceptionMessage exceptionMessage, Throwable t) {
 		super(exceptionMessage, t);
@@ -127,6 +140,7 @@ public class ModelException extends NestingException {
 
 	/**
 	 * Method getErrorCode.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getErrorCode() {
@@ -135,6 +149,7 @@ public class ModelException extends NestingException {
 
 	/**
 	 * Method getErrorId.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getErrorId() {

@@ -87,24 +87,43 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for TradelogDetail.
-	 * @param idTradestrategy Integer
-	 * @param open String
-	 * @param marketBias String
-	 * @param marketBar String
-	 * @param name String
-	 * @param symbol String
-	 * @param longShort String
-	 * @param tier String
-	 * @param status String
-	 * @param side String
-	 * @param action String
-	 * @param stopPrice BigDecimal
-	 * @param orderStatus String
-	 * @param filledDate Date
-	 * @param quantity Integer
-	 * @param averageFilledPrice BigDecimal
-	 * @param commission BigDecimal
-	 * @param profitLoss BigDecimal
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
+	 * @param open
+	 *            String
+	 * @param marketBias
+	 *            String
+	 * @param marketBar
+	 *            String
+	 * @param name
+	 *            String
+	 * @param symbol
+	 *            String
+	 * @param longShort
+	 *            String
+	 * @param tier
+	 *            String
+	 * @param status
+	 *            String
+	 * @param side
+	 *            String
+	 * @param action
+	 *            String
+	 * @param stopPrice
+	 *            BigDecimal
+	 * @param orderStatus
+	 *            String
+	 * @param filledDate
+	 *            Date
+	 * @param quantity
+	 *            Integer
+	 * @param averageFilledPrice
+	 *            BigDecimal
+	 * @param commission
+	 *            BigDecimal
+	 * @param profitLoss
+	 *            BigDecimal
 	 */
 	public TradelogDetail(Integer idTradestrategy, String open,
 			String marketBias, String marketBar, String name, String symbol,
@@ -135,6 +154,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getIdTradelogDetail.
+	 * 
 	 * @return Integer
 	 */
 	@Id
@@ -145,7 +165,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdTradelogDetail.
-	 * @param idTradelogDetail Integer
+	 * 
+	 * @param idTradelogDetail
+	 *            Integer
 	 */
 	public void setIdTradelogDetail(Integer idTradelogDetail) {
 		this.id = idTradelogDetail;
@@ -153,6 +175,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getIdTradestrategy.
+	 * 
 	 * @return Integer
 	 */
 	@Column(name = "idTradestrategy")
@@ -162,7 +185,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdTradestrategy.
-	 * @param idTradestrategy Integer
+	 * 
+	 * @param idTradestrategy
+	 *            Integer
 	 */
 	public void setIdTradestrategy(Integer idTradestrategy) {
 		this.idTradestrategy = idTradestrategy;
@@ -170,6 +195,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getOpen.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "open", length = 19)
@@ -179,7 +205,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setOpen.
-	 * @param open String
+	 * 
+	 * @param open
+	 *            String
 	 */
 	public void setOpen(String open) {
 		this.open = open;
@@ -187,6 +215,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getMarketBias.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "marketBias", length = 10)
@@ -196,7 +225,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setMarketBias.
-	 * @param marketBias String
+	 * 
+	 * @param marketBias
+	 *            String
 	 */
 	public void setMarketBias(String marketBias) {
 		this.marketBias = marketBias;
@@ -204,6 +235,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getMarketBar.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "marketBar", length = 10)
@@ -213,7 +245,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setMarketBar.
-	 * @param marketBar String
+	 * 
+	 * @param marketBar
+	 *            String
 	 */
 	public void setMarketBar(String marketBar) {
 		this.marketBar = marketBar;
@@ -221,6 +255,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getName.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "name", length = 20)
@@ -230,7 +265,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -238,6 +275,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getSymbol.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "symbol", length = 10)
@@ -247,7 +285,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setSymbol.
-	 * @param symbol String
+	 * 
+	 * @param symbol
+	 *            String
 	 */
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
@@ -255,6 +295,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getLongShort.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "longShort", length = 6)
@@ -264,7 +305,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setLongShort.
-	 * @param longShort String
+	 * 
+	 * @param longShort
+	 *            String
 	 */
 	public void setLongShort(String longShort) {
 		this.longShort = longShort;
@@ -272,6 +315,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getTier.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "tier", length = 1)
@@ -281,7 +325,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setTier.
-	 * @param tier String
+	 * 
+	 * @param tier
+	 *            String
 	 */
 	public void setTier(String tier) {
 		this.tier = tier;
@@ -289,6 +335,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getStatus.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "status", length = 10)
@@ -298,7 +345,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setStatus.
-	 * @param status String
+	 * 
+	 * @param status
+	 *            String
 	 */
 	public void setStatus(String status) {
 		this.status = status;
@@ -306,6 +355,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getSide.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "side", nullable = false, length = 3)
@@ -315,7 +365,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setSide.
-	 * @param side String
+	 * 
+	 * @param side
+	 *            String
 	 */
 	public void setSide(String side) {
 		this.side = side;
@@ -323,6 +375,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getAction.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "action", length = 6)
@@ -332,7 +385,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setAction.
-	 * @param action String
+	 * 
+	 * @param action
+	 *            String
 	 */
 	public void setAction(String action) {
 		this.action = action;
@@ -340,6 +395,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getStopPrice.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "stopPrice", precision = 10)
@@ -349,7 +405,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setStopPrice.
-	 * @param stopPrice BigDecimal
+	 * 
+	 * @param stopPrice
+	 *            BigDecimal
 	 */
 	public void setStopPrice(BigDecimal stopPrice) {
 		this.stopPrice = stopPrice;
@@ -357,6 +415,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getOrderStatus.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "orderStatus", length = 45)
@@ -366,7 +425,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setOrderStatus.
-	 * @param orderStatus String
+	 * 
+	 * @param orderStatus
+	 *            String
 	 */
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
@@ -374,6 +435,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getFilledDate.
+	 * 
 	 * @return Date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
@@ -384,7 +446,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setFilledDate.
-	 * @param filledDate Date
+	 * 
+	 * @param filledDate
+	 *            Date
 	 */
 	public void setFilledDate(Date filledDate) {
 		this.filledDate = filledDate;
@@ -392,6 +456,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getQuantity.
+	 * 
 	 * @return Integer
 	 */
 	@Column(name = "quantity")
@@ -401,7 +466,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setQuantity.
-	 * @param quantity Integer
+	 * 
+	 * @param quantity
+	 *            Integer
 	 */
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
@@ -409,6 +476,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getAverageFilledPrice.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "averageFilledPrice", precision = 10)
@@ -418,7 +486,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setAverageFilledPrice.
-	 * @param averageFilledPrice BigDecimal
+	 * 
+	 * @param averageFilledPrice
+	 *            BigDecimal
 	 */
 	public void setAverageFilledPrice(BigDecimal averageFilledPrice) {
 		this.averageFilledPrice = averageFilledPrice;
@@ -426,6 +496,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getCommission.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "commission", precision = 10)
@@ -435,7 +506,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setCommission.
-	 * @param commission BigDecimal
+	 * 
+	 * @param commission
+	 *            BigDecimal
 	 */
 	public void setCommission(BigDecimal commission) {
 		this.commission = commission;
@@ -443,6 +516,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getProfitLoss.
+	 * 
 	 * @return BigDecimal
 	 */
 	@Column(name = "profitLoss", precision = 10)
@@ -452,7 +526,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setProfitLoss.
-	 * @param profitLoss BigDecimal
+	 * 
+	 * @param profitLoss
+	 *            BigDecimal
 	 */
 	public void setProfitLoss(BigDecimal profitLoss) {
 		this.profitLoss = profitLoss;
@@ -460,6 +536,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getSQLString.
+	 * 
 	 * @return String
 	 */
 	public static String getSQLString() {

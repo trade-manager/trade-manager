@@ -64,10 +64,12 @@ public class PropertiesLookup implements Lookup, Cloneable,
 	/**
 	 * Constructor
 	 * 
-	
-	
-	 * @param columnNames Vector<?>
-	 * @param data Vector<?>
+	 * 
+	 * 
+	 * @param columnNames
+	 *            Vector<?>
+	 * @param data
+	 *            Vector<?>
 	 */
 	public PropertiesLookup(Vector<?> columnNames, Vector<?> data) {
 		m_columnNames = columnNames;
@@ -86,6 +88,7 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method getColumnCount.
+	 * 
 	 * @return int
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#getColumnCount()
@@ -96,6 +99,7 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method getRowCount.
+	 * 
 	 * @return int
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#getRowCount()
@@ -106,7 +110,9 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method getValueAt.
-	 * @param col int
+	 * 
+	 * @param col
+	 *            int
 	 * @return Object
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#getValueAt(int)
@@ -117,7 +123,9 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method getValueAt.
-	 * @param colName String
+	 * 
+	 * @param colName
+	 *            String
 	 * @return Object
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#getValueAt(String)
@@ -128,8 +136,11 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method getValueAt.
-	 * @param row int
-	 * @param col int
+	 * 
+	 * @param row
+	 *            int
+	 * @param col
+	 *            int
 	 * @return Object
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#getValueAt(int, int)
@@ -140,7 +151,9 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method getColumnName.
-	 * @param colPos int
+	 * 
+	 * @param colPos
+	 *            int
 	 * @return String
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#getColumnName(int)
@@ -159,7 +172,9 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method setDefaultPos.
-	 * @param colName String
+	 * 
+	 * @param colName
+	 *            String
 	 * @return boolean
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#setDefaultPos(String)
@@ -171,8 +186,11 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method setPos.
-	 * @param colValue Object
-	 * @param colName String
+	 * 
+	 * @param colValue
+	 *            Object
+	 * @param colName
+	 *            String
 	 * @return boolean
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#setPos(Object, String)
@@ -184,8 +202,11 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method setPos.
-	 * @param colValue Object
-	 * @param col int
+	 * 
+	 * @param colValue
+	 *            Object
+	 * @param col
+	 *            int
 	 * @return boolean
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#setPos(Object, int)
@@ -196,6 +217,7 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @see org.trade.core.lookup.Lookup#clone()
 	 */
@@ -208,7 +230,9 @@ public class PropertiesLookup implements Lookup, Cloneable,
 	//
 	/**
 	 * Method doGetColPos.
-	 * @param colName String
+	 * 
+	 * @param colName
+	 *            String
 	 * @return int
 	 * @throws LookupException
 	 */
@@ -233,8 +257,11 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method doGetValue.
-	 * @param rowPos int
-	 * @param colPos int
+	 * 
+	 * @param rowPos
+	 *            int
+	 * @param colPos
+	 *            int
 	 * @return Object
 	 * @throws LookupException
 	 */
@@ -255,8 +282,11 @@ public class PropertiesLookup implements Lookup, Cloneable,
 
 	/**
 	 * Method doSetPos.
-	 * @param colValue Object
-	 * @param col int
+	 * 
+	 * @param colValue
+	 *            Object
+	 * @param col
+	 *            int
 	 * @return boolean
 	 */
 	private boolean doSetPos(Object colValue, int col) {

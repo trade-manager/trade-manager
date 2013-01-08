@@ -81,7 +81,9 @@ public class CandleRenderer extends CandlestickRenderer {
 
 	/**
 	 * Constructor for CandleRenderer.
-	 * @param nightMode boolean
+	 * 
+	 * @param nightMode
+	 *            boolean
 	 */
 	public CandleRenderer(boolean nightMode) {
 		this.nightMode = nightMode;
@@ -138,19 +140,34 @@ public class CandleRenderer extends CandlestickRenderer {
 
 	/**
 	 * Method drawItem.
-	 * @param g2 Graphics2D
-	 * @param state XYItemRendererState
-	 * @param dataArea Rectangle2D
-	 * @param info PlotRenderingInfo
-	 * @param plot XYPlot
-	 * @param domainAxis ValueAxis
-	 * @param rangeAxis ValueAxis
-	 * @param dataset XYDataset
-	 * @param series int
-	 * @param item int
-	 * @param crosshairState CrosshairState
-	 * @param pass int
-	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D, XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot, ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
+	 * 
+	 * @param g2
+	 *            Graphics2D
+	 * @param state
+	 *            XYItemRendererState
+	 * @param dataArea
+	 *            Rectangle2D
+	 * @param info
+	 *            PlotRenderingInfo
+	 * @param plot
+	 *            XYPlot
+	 * @param domainAxis
+	 *            ValueAxis
+	 * @param rangeAxis
+	 *            ValueAxis
+	 * @param dataset
+	 *            XYDataset
+	 * @param series
+	 *            int
+	 * @param item
+	 *            int
+	 * @param crosshairState
+	 *            CrosshairState
+	 * @param pass
+	 *            int
+	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D,
+	 *      XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot,
+	 *      ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
 	 */
 	public void drawItem(Graphics2D g2, XYItemRendererState state,
 			Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
@@ -328,7 +345,7 @@ public class CandleRenderer extends CandlestickRenderer {
 
 				entities.add(entity);
 			}
-			
+
 			// update the cross hair point
 			double x1 = dataset.getXValue(series, item);
 			double y1 = dataset.getYValue(series, item);
@@ -344,8 +361,11 @@ public class CandleRenderer extends CandlestickRenderer {
 
 	/**
 	 * Method highlight.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 */
 	public boolean highlight(int row, int column) {
@@ -361,6 +381,7 @@ public class CandleRenderer extends CandlestickRenderer {
 
 	/**
 	 * Method getMargin.
+	 * 
 	 * @return double
 	 */
 	public double getMargin() {
@@ -369,7 +390,9 @@ public class CandleRenderer extends CandlestickRenderer {
 
 	/**
 	 * Method setMargin.
-	 * @param margin double
+	 * 
+	 * @param margin
+	 *            double
 	 */
 	public void setMargin(double margin) {
 		this.margin = margin;

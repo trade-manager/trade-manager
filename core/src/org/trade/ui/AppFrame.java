@@ -42,7 +42,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-
 /**
  */
 public class AppFrame extends JFrame {
@@ -74,7 +73,9 @@ public class AppFrame extends JFrame {
 
 	/**
 	 * Method processWindowEvent.
-	 * @param e WindowEvent
+	 * 
+	 * @param e
+	 *            WindowEvent
 	 */
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {

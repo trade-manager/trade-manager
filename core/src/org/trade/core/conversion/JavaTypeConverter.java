@@ -48,9 +48,10 @@ public interface JavaTypeConverter {
 	 * 
 	 * @param valueToConvert
 	 *            the object value to convert
-	
-	
-	 * @return Object the converted object * @exception IllegalArgumentException */
+	 * 
+	 * 
+	 * @return Object the converted object * @exception IllegalArgumentException
+	 */
 	Object convert(Object valueToConvert) throws IllegalArgumentException;
 
 	/**
@@ -58,8 +59,9 @@ public interface JavaTypeConverter {
 	 * to. It is used by the JavaTypeTranslator to determine, upon registration
 	 * of a particular converter, what target type the converter creates.
 	 * 
-	
-	 * @return Class the class the source value will be converted to */
+	 * 
+	 * @return Class the class the source value will be converted to
+	 */
 	Class<?> getTargetType();
 
 	/**
@@ -68,7 +70,8 @@ public interface JavaTypeConverter {
 	 * registration of a particular converter, what source type the converter
 	 * accepts.
 	 * 
-	
-	 * @return Class the class of the source value which will be converted */
+	 * 
+	 * @return Class the class of the source value which will be converted
+	 */
 	Class<?> getSourceType();
 }

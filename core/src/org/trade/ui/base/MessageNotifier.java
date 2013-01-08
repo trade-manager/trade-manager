@@ -50,12 +50,13 @@ public class MessageNotifier {
 	/**
 	 * MessageNotifier() - constructor
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public MessageNotifier() {
 		this.listeners = new EventListenerList();
 	}
@@ -63,13 +64,15 @@ public class MessageNotifier {
 	/**
 	 * addMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void add(MessageListener listener) {
 		this.listeners.add(MessageListener.class, listener);
 	}
@@ -77,13 +80,15 @@ public class MessageNotifier {
 	/**
 	 * removeMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void remove(MessageListener listener) {
 		this.listeners.remove(MessageListener.class, listener);
 
@@ -92,12 +97,13 @@ public class MessageNotifier {
 	/**
 	 * removeMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void removeAll() {
 		Object[] listenerList = this.listeners.getListenerList();
 		for (int i = listenerList.length - 2; i >= 0; i -= 2) {
@@ -110,14 +116,17 @@ public class MessageNotifier {
 	/**
 	 * notifyEvent() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param e MessageEvent
-	 * @param parm Vector<Object>
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param e
+	 *            MessageEvent
+	 * @param parm
+	 *            Vector<Object>
+	 * @exception * @see
+	 */
 	public void notifyEvent(MessageEvent e, Vector<Object> parm) {
 		Object[] listenerList = this.listeners.getListenerList();
 		for (int i = listenerList.length - 2; i >= 0; i -= 2) {

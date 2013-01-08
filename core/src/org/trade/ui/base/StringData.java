@@ -47,7 +47,7 @@ import java.io.StringReader;
 import javax.swing.tree.TreePath;
 
 /**
-
+ * 
  * @version $Id: Aceva-Style.jin 1.3 2001/03/04 21:04:39Z Simon.Allen dev $
  * @author Simon Allen
  */
@@ -74,7 +74,9 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 
 	/**
 	 * Creates a Transferable capable of transferring the specified String.
-	 * @param data String
+	 * 
+	 * @param data
+	 *            String
 	 */
 	public StringData(String data) {
 		m_data = data;
@@ -82,7 +84,9 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 
 	/**
 	 * Method setPath.
-	 * @param path TreePath
+	 * 
+	 * @param path
+	 *            TreePath
 	 */
 	public void setPath(TreePath path) {
 		m_path = path;
@@ -93,9 +97,11 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 	 * data. <code>DataFlavor.stringFlavor</code> is properly supported. Support
 	 * for <code>DataFlavor.plainTextFlavor</code> is <b>deprecated</b>.
 	 * 
-	
+	 * 
 	 * @return an array of length two, whose elements are <code>DataFlavor.
-	 *         stringFlavor</code> and <code>DataFlavor.plainTextFlavor</code>. * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
+	 *         stringFlavor</code> and <code>DataFlavor.plainTextFlavor</code>.
+	 *         * @see
+	 *         java.awt.datatransfer.Transferable#getTransferDataFlavors()
 	 */
 	public DataFlavor[] getTransferDataFlavors() {
 
@@ -109,9 +115,11 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 	 * 
 	 * @param flavor
 	 *            the requested flavor for the data
-	
+	 * 
 	 * @return true if flavor is equal to <code>DataFlavor.stringFlavor</code>
-	 *         or <code>DataFlavor.plainTextFlavor</code>, false otherwise. * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(DataFlavor)
+	 *         or <code>DataFlavor.plainTextFlavor</code>, false otherwise. * @see
+	 *         java
+	 *         .awt.datatransfer.Transferable#isDataFlavorSupported(DataFlavor)
 	 */
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
 		for (DataFlavor flavor2 : flavors) {
@@ -135,14 +143,15 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 	 * 
 	 * @param flavor
 	 *            the requested flavor for the data
-	
-	
-	
-	 * @return the data in the requested flavor, as outlined above. * @throws UnsupportedFlavorException
-	 *             if the requested data flavor is not equivalent to either
-	 *             <code>DataFlavor.stringFlavor</code> or
-	 *             <code>DataFlavor.plainTextFlavor</code>. * @throws IOException
-	 * @see java.io.Reader */
+	 * 
+	 * 
+	 * 
+	 * @return the data in the requested flavor, as outlined above. * @throws
+	 *         UnsupportedFlavorException if the requested data flavor is not
+	 *         equivalent to either <code>DataFlavor.stringFlavor</code> or
+	 *         <code>DataFlavor.plainTextFlavor</code>. * @throws IOException
+	 * @see java.io.Reader
+	 */
 	public Object getTransferData(DataFlavor flavor)
 			throws UnsupportedFlavorException, IOException {
 		if (flavor.equals(flavors[STRING])) {
@@ -159,15 +168,20 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 
 	/**
 	 * Method lostOwnership.
-	 * @param clipboard Clipboard
-	 * @param contents Transferable
-	 * @see java.awt.datatransfer.ClipboardOwner#lostOwnership(Clipboard, Transferable)
+	 * 
+	 * @param clipboard
+	 *            Clipboard
+	 * @param contents
+	 *            Transferable
+	 * @see java.awt.datatransfer.ClipboardOwner#lostOwnership(Clipboard,
+	 *      Transferable)
 	 */
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
 	}
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

@@ -38,6 +38,7 @@ package org.trade.core.util;
 import java.math.BigDecimal;
 
 import junit.framework.TestCase;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

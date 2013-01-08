@@ -61,7 +61,9 @@ public class CodeTypeHome {
 
 	/**
 	 * Method findById.
-	 * @param idCodeType Integer
+	 * 
+	 * @param idCodeType
+	 *            Integer
 	 * @return CodeType
 	 */
 	public CodeType findById(Integer idCodeType) {
@@ -83,7 +85,9 @@ public class CodeTypeHome {
 
 	/**
 	 * Method findByName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 * @return CodeType
 	 */
 	public CodeType findByName(String name) {
@@ -114,15 +118,18 @@ public class CodeTypeHome {
 
 	/**
 	 * Method findByAttributeName.
-	 * @param codeTypeName String
-	 * @param codeAttributeName String
+	 * 
+	 * @param codeTypeName
+	 *            String
+	 * @param codeAttributeName
+	 *            String
 	 * @return CodeValue
 	 */
 	public CodeValue findByAttributeName(String codeTypeName,
 			String codeAttributeName) {
 
 		try {
-		
+
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -137,7 +144,8 @@ public class CodeTypeHome {
 				Predicate predicate = builder.equal(codeAttribute.get("name"),
 						codeAttributeName);
 				predicates.add(predicate);
-				Join<CodeAttribute, CodeType> codeType =  codeAttribute.join("codeType");
+				Join<CodeAttribute, CodeType> codeType = codeAttribute
+						.join("codeType");
 				Predicate predicate1 = builder.equal(codeType.get("name"),
 						codeTypeName);
 				predicates.add(predicate1);
@@ -162,6 +170,7 @@ public class CodeTypeHome {
 
 	/**
 	 * Method findAll.
+	 * 
 	 * @return List<CodeType>
 	 */
 	public List<CodeType> findAll() {

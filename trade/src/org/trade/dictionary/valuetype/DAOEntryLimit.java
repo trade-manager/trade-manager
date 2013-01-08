@@ -60,6 +60,7 @@ public class DAOEntryLimit extends DAODecode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return DAOEntryLimit
 	 */
 	public static DAOEntryLimit newInstance() {
@@ -70,7 +71,9 @@ public class DAOEntryLimit extends DAODecode {
 
 	/**
 	 * Method getValue.
-	 * @param price Money
+	 * 
+	 * @param price
+	 *            Money
 	 * @return Entrylimit
 	 */
 	public Entrylimit getValue(Money price) {

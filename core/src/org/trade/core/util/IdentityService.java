@@ -52,6 +52,7 @@ public class IdentityService {
 
 	/**
 	 * Method create.
+	 * 
 	 * @return String
 	 * @throws IdentityServiceException
 	 */

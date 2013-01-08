@@ -49,7 +49,9 @@ import javax.swing.SwingUtilities;
 public class WaitCursorEventQueue extends EventQueue {
 	/**
 	 * Constructor for WaitCursorEventQueue.
-	 * @param delay int
+	 * 
+	 * @param delay
+	 *            int
 	 */
 	public WaitCursorEventQueue(int delay) {
 		this.delay = delay;
@@ -60,7 +62,9 @@ public class WaitCursorEventQueue extends EventQueue {
 
 	/**
 	 * Method dispatchEvent.
-	 * @param event AWTEvent
+	 * 
+	 * @param event
+	 *            AWTEvent
 	 */
 	protected void dispatchEvent(AWTEvent event) {
 		waitTimer.startTimer(event.getSource());
@@ -81,7 +85,9 @@ public class WaitCursorEventQueue extends EventQueue {
 	private class WaitCursorTimer extends Thread {
 		/**
 		 * Method startTimer.
-		 * @param source Object
+		 * 
+		 * @param source
+		 *            Object
 		 */
 		synchronized void startTimer(Object source) {
 			this.source = source;
@@ -101,6 +107,7 @@ public class WaitCursorEventQueue extends EventQueue {
 
 		/**
 		 * Method run.
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		public synchronized void run() {

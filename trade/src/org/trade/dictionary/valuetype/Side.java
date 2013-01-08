@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class Side extends Decode {
@@ -56,7 +55,9 @@ public class Side extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return Side
 	 */
 	public static Side newInstance(String value) {
@@ -67,6 +68,7 @@ public class Side extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return Side
 	 */
 	public static Side newInstance() {

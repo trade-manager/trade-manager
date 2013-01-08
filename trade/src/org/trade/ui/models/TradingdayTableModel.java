@@ -36,6 +36,7 @@
 package org.trade.ui.models;
 
 import java.util.Vector;
+
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Date;
 import org.trade.dictionary.valuetype.MarketBar;

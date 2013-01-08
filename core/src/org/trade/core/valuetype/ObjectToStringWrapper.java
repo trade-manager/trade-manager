@@ -49,11 +49,15 @@ public class ObjectToStringWrapper implements JavaDynamicTypeConverter {
 
 	/**
 	 * Method convert.
-	 * @param targetType Class<?>
-	 * @param valueToConvert Object
+	 * 
+	 * @param targetType
+	 *            Class<?>
+	 * @param valueToConvert
+	 *            Object
 	 * @return Object
 	 * @throws JavaTypeTranslatorException
-	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
+	 *      Object)
 	 */
 	public Object convert(Class<?> targetType, Object valueToConvert)
 			throws JavaTypeTranslatorException {
@@ -86,10 +90,15 @@ public class ObjectToStringWrapper implements JavaDynamicTypeConverter {
 
 	/**
 	 * Method supportsConversion.
-	 * @param targetType Class<?>
-	 * @param valueToConvert Object
+	 * 
+	 * @param targetType
+	 *            Class<?>
+	 * @param valueToConvert
+	 *            Object
 	 * @return boolean
-	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion(Class<?>, Object)
+	 * @see 
+	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
+	 *      (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

@@ -60,8 +60,9 @@ public class NumberToByteConverter extends NumberToNumberConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.lang.Byte .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.lang.Byte.class;
@@ -76,8 +77,9 @@ public class NumberToByteConverter extends NumberToNumberConverter {
 	 * 
 	 * @param aNumber
 	 *            the number to be converted
-	
-	 * @return Byte the Number converted to a Byte */
+	 * 
+	 * @return Byte the Number converted to a Byte
+	 */
 	protected Number getConvertedNumber(Number aNumber) {
 		return new Byte(aNumber.byteValue());
 	}

@@ -117,10 +117,11 @@ public class JavaTypeTranslator {
 	 *            the type to be converted to
 	 * @param sourceValue
 	 *            the object value to convert
-	
-	
-	 * @return Object the converted object * @exception JavaTypeTranslatorException
-	 *                thrown if any exception occurs */
+	 * 
+	 * 
+	 * @return Object the converted object * @exception
+	 *         JavaTypeTranslatorException thrown if any exception occurs
+	 */
 	public static Object convert(Class<?> targetType, Object sourceValue)
 			throws JavaTypeTranslatorException {
 		// before: simply return the value if it is already of the correct type
@@ -296,10 +297,11 @@ public class JavaTypeTranslator {
 	 * source type. For example, it indicates whether a Number to String
 	 * converter will be used if no Double to String converter is available.
 	 * 
-	
+	 * 
 	 * @return boolean Flag indicating whether supertype conversions are
 	 *         supported. True indicates supertype conversions are supported,
-	 *         false indicates they are not. True is the default. */
+	 *         false indicates they are not. True is the default.
+	 */
 	public static boolean isAllowSupertypeConversions() {
 		return m_allowSupertypeConversions;
 	}

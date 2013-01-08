@@ -53,7 +53,9 @@ public class BarSize extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value Integer
+	 * 
+	 * @param value
+	 *            Integer
 	 * @return BarSize
 	 */
 	public static BarSize newInstance(Integer value) {
@@ -66,6 +68,7 @@ public class BarSize extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return BarSize
 	 */
 	public static BarSize newInstance() {
@@ -76,6 +79,7 @@ public class BarSize extends Decode {
 
 	/**
 	 * Method convertToUppercase.
+	 * 
 	 * @return boolean
 	 */
 	protected boolean convertToUppercase() {

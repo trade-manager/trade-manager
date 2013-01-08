@@ -51,9 +51,13 @@ public class CodeValidator implements Validator {
 
 	/**
 	 * Constructor for CodeValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param acceptableValues Collection<?>
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param acceptableValues
+	 *            Collection<?>
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public CodeValidator(IMessageFactory messageFactory,
 			Collection<?> acceptableValues, boolean isMandatory) {
@@ -64,6 +68,7 @@ public class CodeValidator implements Validator {
 
 	/**
 	 * Method getMessageFactory.
+	 * 
 	 * @return IMessageFactory
 	 */
 	protected final IMessageFactory getMessageFactory() {
@@ -72,12 +77,18 @@ public class CodeValidator implements Validator {
 
 	/**
 	 * Method isValid.
-	 * @param value Object
-	 * @param invalidValue String
-	 * @param expectedFormat String
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param value
+	 *            Object
+	 * @param invalidValue
+	 *            String
+	 * @param expectedFormat
+	 *            String
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
-	 * @see org.trade.core.validator.Validator#isValid(Object, String, String, ExceptionMessageListener)
+	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
+	 *      ExceptionMessageListener)
 	 */
 	public boolean isValid(Object value, String invalidValue,
 			String expectedFormat, ExceptionMessageListener receiver) {

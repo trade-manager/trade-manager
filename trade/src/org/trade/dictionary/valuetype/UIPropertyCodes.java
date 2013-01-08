@@ -70,6 +70,7 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 
 	/**
 	 * Method isEnabled.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isEnabled() {
@@ -84,6 +85,7 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 
 	/**
 	 * Method getToolTip.
+	 * 
 	 * @return String
 	 */
 	public String getToolTip() {
@@ -92,6 +94,7 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 
 	/**
 	 * Method getImage.
+	 * 
 	 * @return String
 	 */
 	public String getImage() {
@@ -100,6 +103,7 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 
 	/**
 	 * Method getMethod.
+	 * 
 	 * @return String
 	 */
 	public String getMethod() {
@@ -108,6 +112,7 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 
 	/**
 	 * Method getMnemonic.
+	 * 
 	 * @return int
 	 */
 	public int getMnemonic() {
@@ -125,13 +130,15 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 	 * Create a new instance of this object
 	 * 
 	 * 
-	
 	 * 
-	
-	
-	 * @param code String
+	 * 
+	 * 
+	 * 
+	 * @param code
+	 *            String
 	 * @return UIPropertyCodes
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static UIPropertyCodes newInstance(String code) {
 		UIPropertyCodes returnInstance = null;
 		returnInstance = new UIPropertyCodes();

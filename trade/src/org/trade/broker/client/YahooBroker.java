@@ -38,7 +38,6 @@ package org.trade.broker.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -55,10 +54,8 @@ import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
-
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
-
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 

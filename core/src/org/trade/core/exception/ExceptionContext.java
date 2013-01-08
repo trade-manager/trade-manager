@@ -57,8 +57,11 @@ public class ExceptionContext implements java.io.Serializable {
 
 	/**
 	 * Constructor.
-	 * @param parameterName String
-	 * @param value Object
+	 * 
+	 * @param parameterName
+	 *            String
+	 * @param value
+	 *            Object
 	 */
 	public ExceptionContext(String parameterName, Object value) {
 		m_parameterName = parameterName;
@@ -67,7 +70,9 @@ public class ExceptionContext implements java.io.Serializable {
 
 	/**
 	 * Copy constructor.
-	 * @param other ExceptionContext
+	 * 
+	 * @param other
+	 *            ExceptionContext
 	 */
 	public ExceptionContext(ExceptionContext other) {
 		m_parameterName = other.m_parameterName;
@@ -91,6 +96,7 @@ public class ExceptionContext implements java.io.Serializable {
 	/**
 	 * Represents the name used within exception messages to refer to this
 	 * context.
+	 * 
 	 * @return String
 	 */
 	public String getParameterName() {
@@ -100,6 +106,7 @@ public class ExceptionContext implements java.io.Serializable {
 	/**
 	 * Represents the context of the exception. This value should be directly
 	 * substituted into a named parameter in an exception message.
+	 * 
 	 * @return String
 	 */
 	public String getValue() {
@@ -108,7 +115,9 @@ public class ExceptionContext implements java.io.Serializable {
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 */
 	private void setValue(Object value) {
 		if (null == value) {

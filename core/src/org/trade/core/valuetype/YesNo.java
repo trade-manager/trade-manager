@@ -55,12 +55,13 @@ public class YesNo extends BaseDecode {
 	 * is the YES
 	 * 
 	 * 
-	
 	 * 
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return boolean
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	public boolean isYes() {
 
@@ -71,12 +72,13 @@ public class YesNo extends BaseDecode {
 	 * is the NO
 	 * 
 	 * 
-	
 	 * 
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return boolean
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	public boolean isNo() {
 
@@ -87,13 +89,15 @@ public class YesNo extends BaseDecode {
 	 * Create a new instance of this object
 	 * 
 	 * 
-	
 	 * 
-	
-	
-	 * @param code String
+	 * 
+	 * 
+	 * 
+	 * @param code
+	 *            String
 	 * @return YesNo
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	public static YesNo newInstance(String code) {
 		final YesNo returnInstance = new YesNo();
@@ -103,7 +107,9 @@ public class YesNo extends BaseDecode {
 
 	/**
 	 * Method newInstance.
-	 * @param code Boolean
+	 * 
+	 * @param code
+	 *            Boolean
 	 * @return YesNo
 	 */
 	public static YesNo newInstance(Boolean code) {
@@ -111,9 +117,10 @@ public class YesNo extends BaseDecode {
 		returnInstance.setValue(code.toString());
 		return returnInstance;
 	}
-	
+
 	/**
 	 * Method convertToUppercase.
+	 * 
 	 * @return boolean
 	 */
 	protected boolean convertToUppercase() {

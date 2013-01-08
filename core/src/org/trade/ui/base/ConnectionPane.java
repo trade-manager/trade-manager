@@ -121,6 +121,7 @@ public class ConnectionPane extends JPanel {
 
 	/**
 	 * Method getHost.
+	 * 
 	 * @return String
 	 */
 	public String getHost() {
@@ -129,6 +130,7 @@ public class ConnectionPane extends JPanel {
 
 	/**
 	 * Method getPort.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getPort() {
@@ -137,6 +139,7 @@ public class ConnectionPane extends JPanel {
 
 	/**
 	 * Method getClientId.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getClientId() {
@@ -145,7 +148,9 @@ public class ConnectionPane extends JPanel {
 
 	/**
 	 * Method createFormatter.
-	 * @param s String
+	 * 
+	 * @param s
+	 *            String
 	 * @return MaskFormatter
 	 */
 	private MaskFormatter createFormatter(String s) {

@@ -40,7 +40,6 @@ import java.util.Vector;
 
 import javax.swing.JComboBox;
 
-
 /**
  * 
  * @version $Id: BaseComboBox.java,v 1.3 2001/11/06 22:37:27 simon Exp $
@@ -60,14 +59,18 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * CustomButton() - constructor
 	 * 
-	
-	
-	
-	
-	 * @param p BasePanel
-	 * @param UICode String
-	 * @param items Vector<Object>
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param UICode
+	 *            String
+	 * @param items
+	 *            Vector<Object>
+	 * @exception * @see
+	 */
 	@SuppressWarnings("unchecked")
 	public BaseComboBox(BasePanel p, String UICode, Vector<Object> items) {
 		super(items);
@@ -78,21 +81,27 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * CustomButton() - constructor
 	 * 
-	
-	
-	
-	
-	 * @param p BasePanel
-	 * @param UICode String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param UICode
+	 *            String
+	 * @exception * @see
+	 */
 	public BaseComboBox(BasePanel p, String UICode) {
 		jbInit(p, UICode);
 	}
 
 	/**
 	 * Method jbInit.
-	 * @param p BasePanel
-	 * @param UICode String
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param UICode
+	 *            String
 	 */
 	private void jbInit(BasePanel p, String UICode) {
 		if (p != null) {
@@ -116,13 +125,15 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * addMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
 	}
@@ -130,13 +141,15 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * removeMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
 	}
@@ -144,12 +157,14 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * messageEvent() -
 	 * 
-	
-	
-	
-	
-	 * @param selection String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param selection
+	 *            String
+	 * @exception * @see
+	 */
 	protected void messageEvent(String selection) {
 		m_notifier.notifyEvent(new MessageEvent(selection),
 				new Vector<Object>());
@@ -158,11 +173,12 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * actionPerformed() - combo box action performed
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	private void itemChanged() {
 		if (getMethod() != null) {
 			this.messageEvent(getMethod());
@@ -172,12 +188,14 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * setMethod() - button action performed
 	 * 
-	
-	
-	
-	
-	 * @param method String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param method
+	 *            String
+	 * @exception * @see
+	 */
 	private void setMethod(String method) {
 		m_method = method;
 	}
@@ -185,12 +203,13 @@ public class BaseComboBox extends JComboBox {
 	/**
 	 * getMethod() - button action performed
 	 * 
-	
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @return String
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	private String getMethod() {
 		return m_method;
 	}

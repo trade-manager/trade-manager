@@ -37,7 +37,6 @@ package org.trade.ui.base;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  * Example implementation of how to subclass the CodeDecodeValueType Object this
  * object represents the State codes and Descriptions in the US.
@@ -118,11 +117,14 @@ public class BaseUIPropertyCodes extends Decode {
 	public BaseUIPropertyCodes() {
 		super(BASE_UI_WIDGET_PROP, BASE_UI_WIDGET);
 	}
-	
+
 	/**
 	 * Constructor for BaseUIPropertyCodes.
-	 * @param propertyType String
-	 * @param propertyCode String
+	 * 
+	 * @param propertyType
+	 *            String
+	 * @param propertyCode
+	 *            String
 	 */
 	public BaseUIPropertyCodes(String propertyType, String propertyCode) {
 		super(propertyType, propertyCode);
@@ -130,6 +132,7 @@ public class BaseUIPropertyCodes extends Decode {
 
 	/**
 	 * Method isEnabled.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isEnabled() {
@@ -144,6 +147,7 @@ public class BaseUIPropertyCodes extends Decode {
 
 	/**
 	 * Method getToolTip.
+	 * 
 	 * @return String
 	 */
 	public String getToolTip() {
@@ -152,6 +156,7 @@ public class BaseUIPropertyCodes extends Decode {
 
 	/**
 	 * Method getImage.
+	 * 
 	 * @return String
 	 */
 	public String getImage() {
@@ -160,6 +165,7 @@ public class BaseUIPropertyCodes extends Decode {
 
 	/**
 	 * Method getMethod.
+	 * 
 	 * @return String
 	 */
 	public String getMethod() {
@@ -168,6 +174,7 @@ public class BaseUIPropertyCodes extends Decode {
 
 	/**
 	 * Method getMnemonic.
+	 * 
 	 * @return int
 	 */
 	public int getMnemonic() {
@@ -185,13 +192,15 @@ public class BaseUIPropertyCodes extends Decode {
 	 * Create a new instance of this object
 	 * 
 	 * 
-	
 	 * 
-	
-	
-	 * @param code String
+	 * 
+	 * 
+	 * 
+	 * @param code
+	 *            String
 	 * @return BaseUIPropertyCodes
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public static BaseUIPropertyCodes newInstance(String code) {
 		BaseUIPropertyCodes returnInstance = null;
 		returnInstance = new BaseUIPropertyCodes();

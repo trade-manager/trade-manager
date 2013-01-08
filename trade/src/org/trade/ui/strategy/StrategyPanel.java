@@ -76,6 +76,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import jsyntaxpane.DefaultSyntaxKit;
+
 import org.trade.broker.BrokerModel;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
@@ -88,9 +89,9 @@ import org.trade.dictionary.valuetype.SECType;
 import org.trade.dictionary.valuetype.UIPropertyCodes;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
+import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.Contract;
 import org.trade.strategy.StrategyRule;
 import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
@@ -150,7 +151,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					UIPropertyCodes.newInstance(UIPropertyCodes.COMPILE));
 			newButton = new BaseButton(this, BaseUIPropertyCodes.NEW);
 			newButton.setToolTipText("Load Template");
-			
+
 			JPanel jPanel1 = new JPanel(new FlowLayout());
 			jPanel1.add(newButton);
 			jPanel1.add(compileButton);
@@ -536,7 +537,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 						BasePanel.INFORMATION);
 				return;
 			}
-			
+
 			int result = JOptionPane.showConfirmDialog(this.getFrame(),
 					"Do you want to delete selected rule?", "Information",
 					JOptionPane.YES_NO_OPTION);

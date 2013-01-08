@@ -95,7 +95,9 @@ public class MessageTranslator {
 
 	/**
 	 * Returns a string for a key.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return String
 	 * @throws IOException
 	 */
@@ -110,7 +112,9 @@ public class MessageTranslator {
 	// read configuration properties
 	/**
 	 * Method _getProperty.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return String
 	 * @throws IOException
 	 */
@@ -175,9 +179,10 @@ public class MessageTranslator {
 	 *            an object that implements the dictionart interface, and
 	 *            provides the text to fill in the parameters in the message
 	 *            stored in the file
-	
+	 * 
 	 * @return ExceptionMessage an exception message contatining the proper
-	 *         code, field reference, and message * @throws MessageTranslatorException
+	 *         code, field reference, and message * @throws
+	 *         MessageTranslatorException
 	 */
 	public static ExceptionMessage translateExceptionMessage(
 			ExceptionCode code, Dictionary<?, ?> params)
@@ -196,9 +201,10 @@ public class MessageTranslator {
 	 *            an object that implements the dictionart interface, and
 	 *            provides the text to fill in the parameters in the message
 	 *            stored in the file
-	
+	 * 
 	 * @return ExceptionMessage an exception message contatining the proper
-	 *         code, field reference, and message * @throws MessageTranslatorException
+	 *         code, field reference, and message * @throws
+	 *         MessageTranslatorException
 	 */
 	public static ExceptionMessage translateExceptionMessage(String code,
 			Dictionary<?, ?> params) throws MessageTranslatorException {
@@ -241,7 +247,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method retrieveExceptionMessage.
-	 * @param index String
+	 * 
+	 * @param index
+	 *            String
 	 * @return ExceptionMessage
 	 * @throws MessageTranslatorException
 	 */
@@ -293,15 +301,17 @@ public class MessageTranslator {
 	 * parameter, is is able to return the exception message unmodified rather
 	 * than throwing an exception
 	 * 
-	
+	 * 
 	 * @param params
 	 *            an object that implements the dictionart interface, and
 	 *            provides the text to fill in the parameters in the message
 	 *            stored in the file
-	
-	 * @param oldMessage ExceptionMessage
+	 * 
+	 * @param oldMessage
+	 *            ExceptionMessage
 	 * @return ExceptionMessage an exception message contatining the proper
-	 *         code, field reference, and message */
+	 *         code, field reference, and message
+	 */
 
 	public static ExceptionMessage translateExceptionMessage(
 			ExceptionMessage oldMessage, Dictionary<?, ?> params) {
@@ -315,7 +325,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method translateExceptionMessage.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @return ExceptionMessage
 	 * @throws MessageTranslatorException
 	 */
@@ -326,7 +338,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method translateExceptionMessage.
-	 * @param code ExceptionCode
+	 * 
+	 * @param code
+	 *            ExceptionCode
 	 * @return ExceptionMessage
 	 * @throws MessageTranslatorException
 	 */
@@ -337,8 +351,11 @@ public class MessageTranslator {
 
 	/**
 	 * Method translateMessage.
-	 * @param code String
-	 * @param params Dictionary<?,?>
+	 * 
+	 * @param code
+	 *            String
+	 * @param params
+	 *            Dictionary<?,?>
 	 * @return String
 	 * @throws MessageTranslatorException
 	 */
@@ -370,7 +387,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method translateMessage.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @return String
 	 * @throws MessageTranslatorException
 	 */
@@ -386,7 +405,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method lookupMessageFormat.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @return MessageFormat
 	 * @throws MessageTranslatorException
 	 */
@@ -405,7 +426,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method loadMessageFormat.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @throws MessageTranslatorException
 	 */
 	private static void loadMessageFormat(String code)
@@ -433,7 +456,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method loadFieldReference.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 */
 	public static void loadFieldReference(String code) {
 
@@ -453,7 +478,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method loadExceptionCode.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @throws MessageTranslatorException
 	 */
 	public static void loadExceptionCode(String code)
@@ -482,7 +509,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method lookupFieldReference.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @return String
 	 */
 	private static String lookupFieldReference(String code) {
@@ -500,7 +529,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method lookupArrayIndexNames.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @return String[]
 	 */
 	private static String[] lookupArrayIndexNames(String code) {
@@ -521,7 +552,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method lookupCodeName.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @return String
 	 * @throws MessageTranslatorException
 	 */
@@ -544,7 +577,9 @@ public class MessageTranslator {
 
 	/**
 	 * Method removeNamesAndCreateIndex.
-	 * @param mf MessageFormat
+	 * 
+	 * @param mf
+	 *            MessageFormat
 	 * @return String[]
 	 */
 	private static String[] removeNamesAndCreateIndex(MessageFormat mf) {

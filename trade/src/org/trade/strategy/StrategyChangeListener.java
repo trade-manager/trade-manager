@@ -42,6 +42,7 @@ import org.trade.persistent.dao.Tradestrategy;
 /**
  * The interface that must be supported by classes that wish to receive
  * notification of changes to a dataset.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -50,33 +51,42 @@ public interface StrategyChangeListener extends EventListener {
 	/**
 	 * Receives notification of an strategRule change event.
 	 * 
-	
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 
 	public void strategyComplete(String key, Tradestrategy tradestrategy);
 
 	/**
 	 * Method strategyStarted.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	public void strategyStarted(Tradestrategy tradestrategy);
 
 	/**
 	 * Method ruleComplete.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	public void ruleComplete(Tradestrategy tradestrategy);
 
 	/**
 	 * Method positionCovered.
-	 * @param tradestrategy Tradestrategy
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
 	public void positionCovered(Tradestrategy tradestrategy);
 
 	/**
 	 * Method strategyError.
-	 * @param strategyError StrategyRuleException
+	 * 
+	 * @param strategyError
+	 *            StrategyRuleException
 	 */
 	public void strategyError(StrategyRuleException strategyError);
 

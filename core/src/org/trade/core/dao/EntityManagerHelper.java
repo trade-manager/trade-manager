@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
  * This static class is designed so that it can be used with any JPA
  * application.
  * </p>
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -89,8 +90,9 @@ public class EntityManagerHelper {
 	 * return the same EntityManager instance, until the manager is closed.
 	 * </p>
 	 * 
-	
-	 * @return EntityManager singleton for this thread */
+	 * 
+	 * @return EntityManager singleton for this thread
+	 */
 	public static EntityManager getEntityManager() {
 		EntityManager manager = threadLocal.get();
 		if ((manager == null) || !manager.isOpen()) {
@@ -109,9 +111,10 @@ public class EntityManagerHelper {
 	 * return the same EntityManager instance, until the manager is closed.
 	 * </p>
 	 * 
-	
+	 * 
 	 * @return EntityManager local entity manager instance. This instance should
-	 *         be method managed. i.e. begin, commit, close transaction. */
+	 *         be method managed. i.e. begin, commit, close transaction.
+	 */
 	public static EntityManager getLocalEntityManager() {
 		EntityManager manager = factory.createEntityManager();
 		return manager;
@@ -159,7 +162,9 @@ public class EntityManagerHelper {
 	 * <p>
 	 * Create a query for the EntityManager on this thread.
 	 * </p>
-	 * @param query String
+	 * 
+	 * @param query
+	 *            String
 	 * @return Query
 	 */
 	public static Query createQuery(String query) {
@@ -190,8 +195,11 @@ public class EntityManagerHelper {
 	 * <p>
 	 * Write an error message to the logging system.
 	 * </p>
-	 * @param info String
-	 * @param ex Throwable
+	 * 
+	 * @param info
+	 *            String
+	 * @param ex
+	 *            Throwable
 	 */
 	public static void logError(String info, Throwable ex) {
 		_log.error(info, ex);

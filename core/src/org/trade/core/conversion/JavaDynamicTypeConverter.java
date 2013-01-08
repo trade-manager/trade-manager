@@ -50,9 +50,11 @@ public interface JavaDynamicTypeConverter {
 	 *            the target type or class to convert to
 	 * @param valueToConvert
 	 *            the object value to convert
-	
-	
-	 * @return Object the converted object * @exception JavaTypeTranslatorException */
+	 * 
+	 * 
+	 * @return Object the converted object * @exception
+	 *         JavaTypeTranslatorException
+	 */
 	Object convert(Class<?> targetType, Object valueToConvert)
 			throws JavaTypeTranslatorException;
 
@@ -64,7 +66,8 @@ public interface JavaDynamicTypeConverter {
 	 *            the target type or class to convert to
 	 * @param valueToConvert
 	 *            the object value to convert
-	
-	 * @return boolean is the object supports the conversion. */
+	 * 
+	 * @return boolean is the object supports the conversion.
+	 */
 	boolean supportsConversion(Class<?> targetType, Object valueToConvert);
 }

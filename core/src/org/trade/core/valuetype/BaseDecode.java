@@ -60,7 +60,6 @@ public class BaseDecode extends Decode {
 	/**
 	 * Default Constructor
 	 * 
-	
 	 */
 	public BaseDecode() {
 	}
@@ -68,10 +67,13 @@ public class BaseDecode extends Decode {
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
-	 * @param columnNames Vector<String>
-	 * @param values Vector<Object>
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param columnNames
+	 *            Vector<String>
+	 * @param values
+	 *            Vector<Object>
 	 */
 	public BaseDecode(String codeDecodeType, Vector<String> columnNames,
 			Vector<Object> values) {
@@ -81,8 +83,9 @@ public class BaseDecode extends Decode {
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
+	 * 
+	 * @param codeDecodeType
+	 *            String
 	 */
 	public BaseDecode(String codeDecodeType) {
 		super(codeDecodeType, BASE_DECODE_IDENTIFIER);
@@ -91,9 +94,11 @@ public class BaseDecode extends Decode {
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
-	 * @param identifier String
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param identifier
+	 *            String
 	 */
 	public BaseDecode(String codeDecodeType, String identifier) {
 		super(codeDecodeType, BASE_DECODE_IDENTIFIER);

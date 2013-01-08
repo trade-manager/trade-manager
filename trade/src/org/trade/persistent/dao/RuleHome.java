@@ -62,7 +62,9 @@ public class RuleHome {
 
 	/**
 	 * Method findById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Rule
 	 */
 	public Rule findById(Integer id) {
@@ -80,10 +82,12 @@ public class RuleHome {
 			EntityManagerHelper.close();
 		}
 	}
-	
+
 	/**
 	 * Method findByMaxVersion.
-	 * @param strategy Strategy
+	 * 
+	 * @param strategy
+	 *            Strategy
 	 * @return Integer
 	 */
 	public Integer findByMaxVersion(Strategy strategy) {
@@ -98,13 +102,12 @@ public class RuleHome {
 			Expression<Integer> id = from.get("version");
 			Expression<Integer> minExpression = builder.max(id);
 			CriteriaQuery<Object> select = query.select(minExpression);
-			
+
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			if (null != strategy) {
-				Join<Rule, Strategy> strategies = from
-						.join("strategy");
-				Predicate predicate = builder.equal(strategies.get("idStrategy"),
-						strategy.getIdStrategy());
+				Join<Rule, Strategy> strategies = from.join("strategy");
+				Predicate predicate = builder.equal(
+						strategies.get("idStrategy"), strategy.getIdStrategy());
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));

@@ -38,129 +38,10 @@ package org.trade.core.exception;
 public class ClassName {
 
 	/**
-	 * Constructor for ClassName.
-	 * @param aClass Class<?>
-	 */
-	public ClassName(Class<?> aClass) {
-		super();
-
-		_parseClassName(aClass.getName());
-	}
-
-	/**
-	 * Returns the entire class name
-	 * 
-	 * @return String
-	 */
-
-	public String getEntireClassName() {
-		return m_entireClassName;
-	}
-
-	/**
-	 * Returns the short class name
-	 * 
-	 * @return String
-	 */
-	public String getClassName() {
-		return m_className;
-	}
-
-	/**
-	 * Returns the entire package name
-	 * 
-	 * @return String
-	 */
-	public String getEntirePackageName() {
-		return m_entirePackageName;
-	}
-
-	/**
-	 * Returns the short package name
-	 * 
-	 * @return String
-	 */
-	public String getPackageName() {
-		return m_packageName;
-	}
-
-	/**
-	 * Method _parseClassName.
-	 * @param className String
-	 */
-	private void _parseClassName(String className) {
-		m_entirePackageName = _extractEntirePackageName(className);
-		m_packageName = _extractPackageName(className);
-		m_entireClassName = _extractEntireClassName(className);
-		m_className = _extractClassName(className);
-	}
-
-	/**
-	 * Method _extractClassName.
-	 * @param className String
-	 * @return String
-	 */
-	private String _extractClassName(String className) {
-		String name = null;
-
-		int index = className.lastIndexOf('.');
-
-		if (index != -1) {
-			name = className.substring(index + 1, className.length());
-		} else {
-			name = className;
-		}
-
-		return name;
-	}
-
-	/**
-	 * Method _extractEntireClassName.
-	 * @param className String
-	 * @return String
-	 */
-	private String _extractEntireClassName(String className) {
-		return className;
-	}
-
-	/**
-	 * Method _extractPackageName.
-	 * @param className String
-	 * @return String
-	 */
-	private String _extractPackageName(String className) {
-		String packageName = null;
-		int index = className.lastIndexOf('.');
-
-		if (index != -1) {
-			packageName = className.substring(0, index);
-			index = packageName.lastIndexOf('.');
-
-			packageName = packageName.substring(++index);
-		}
-
-		return packageName;
-	}
-
-	/**
-	 * Method _extractEntirePackageName.
-	 * @param className String
-	 * @return String
-	 */
-	private String _extractEntirePackageName(String className) {
-		String packageName = null;
-		int index = className.lastIndexOf('.');
-
-		if (index != -1) {
-			packageName = className.substring(0, index);
-		}
-		return packageName;
-	}
-
-	/**
 	 * This method exists strictly to test this class
 	 * 
-	 * @param args String[]
+	 * @param args
+	 *            String[]
 	 */
 	public static void main(String[] args) {
 		if (args.length != 1) {
@@ -191,5 +72,137 @@ public class ClassName {
 	private String m_packageName = null;
 
 	private String m_entirePackageName = null;
+
+	/**
+	 * Constructor for ClassName.
+	 * 
+	 * @param aClass
+	 *            Class<?>
+	 */
+	public ClassName(Class<?> aClass) {
+		super();
+
+		_parseClassName(aClass.getName());
+	}
+
+	/**
+	 * Method _extractClassName.
+	 * 
+	 * @param className
+	 *            String
+	 * @return String
+	 */
+	private String _extractClassName(String className) {
+		String name = null;
+
+		int index = className.lastIndexOf('.');
+
+		if (index != -1) {
+			name = className.substring(index + 1, className.length());
+		} else {
+			name = className;
+		}
+
+		return name;
+	}
+
+	/**
+	 * Method _extractEntireClassName.
+	 * 
+	 * @param className
+	 *            String
+	 * @return String
+	 */
+	private String _extractEntireClassName(String className) {
+		return className;
+	}
+
+	/**
+	 * Method _extractEntirePackageName.
+	 * 
+	 * @param className
+	 *            String
+	 * @return String
+	 */
+	private String _extractEntirePackageName(String className) {
+		String packageName = null;
+		int index = className.lastIndexOf('.');
+
+		if (index != -1) {
+			packageName = className.substring(0, index);
+		}
+		return packageName;
+	}
+
+	/**
+	 * Method _extractPackageName.
+	 * 
+	 * @param className
+	 *            String
+	 * @return String
+	 */
+	private String _extractPackageName(String className) {
+		String packageName = null;
+		int index = className.lastIndexOf('.');
+
+		if (index != -1) {
+			packageName = className.substring(0, index);
+			index = packageName.lastIndexOf('.');
+
+			packageName = packageName.substring(++index);
+		}
+
+		return packageName;
+	}
+
+	/**
+	 * Method _parseClassName.
+	 * 
+	 * @param className
+	 *            String
+	 */
+	private void _parseClassName(String className) {
+		m_entirePackageName = _extractEntirePackageName(className);
+		m_packageName = _extractPackageName(className);
+		m_entireClassName = _extractEntireClassName(className);
+		m_className = _extractClassName(className);
+	}
+
+	/**
+	 * Returns the short class name
+	 * 
+	 * @return String
+	 */
+	public String getClassName() {
+		return m_className;
+	}
+
+	/**
+	 * Returns the entire class name
+	 * 
+	 * @return String
+	 */
+
+	public String getEntireClassName() {
+		return m_entireClassName;
+	}
+
+	/**
+	 * Returns the entire package name
+	 * 
+	 * @return String
+	 */
+	public String getEntirePackageName() {
+		return m_entirePackageName;
+	}
+
+	/**
+	 * Returns the short package name
+	 * 
+	 * @return String
+	 */
+	public String getPackageName() {
+		return m_packageName;
+	}
 
 }

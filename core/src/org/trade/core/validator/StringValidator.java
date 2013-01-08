@@ -74,11 +74,17 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Constructor for StringValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param maxLength int
-	 * @param permittedCharacterSet int
-	 * @param additionalPermittedCharacters String
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param maxLength
+	 *            int
+	 * @param permittedCharacterSet
+	 *            int
+	 * @param additionalPermittedCharacters
+	 *            String
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public StringValidator(IMessageFactory messageFactory, int maxLength,
 			int permittedCharacterSet, String additionalPermittedCharacters,
@@ -92,12 +98,19 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Constructor for StringValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param minLength int
-	 * @param maxLength int
-	 * @param permittedCharacterSet int
-	 * @param additionalPermittedCharacters String
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param minLength
+	 *            int
+	 * @param maxLength
+	 *            int
+	 * @param permittedCharacterSet
+	 *            int
+	 * @param additionalPermittedCharacters
+	 *            String
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public StringValidator(IMessageFactory messageFactory, int minLength,
 			int maxLength, int permittedCharacterSet,
@@ -109,11 +122,17 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Constructor for StringValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param minLength int
-	 * @param maxLength int
-	 * @param permittedCharacterSet int
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param minLength
+	 *            int
+	 * @param maxLength
+	 *            int
+	 * @param permittedCharacterSet
+	 *            int
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public StringValidator(IMessageFactory messageFactory, int minLength,
 			int maxLength, int permittedCharacterSet, boolean isMandatory) {
@@ -124,10 +143,15 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Constructor for StringValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param maxLength int
-	 * @param permittedCharacterSet int
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param maxLength
+	 *            int
+	 * @param permittedCharacterSet
+	 *            int
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public StringValidator(IMessageFactory messageFactory, int maxLength,
 			int permittedCharacterSet, boolean isMandatory) {
@@ -137,6 +161,7 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Method getMessageFactory.
+	 * 
 	 * @return IMessageFactory
 	 */
 	protected IMessageFactory getMessageFactory() {
@@ -149,6 +174,7 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Method isMandatory.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isMandatory() {
@@ -157,12 +183,18 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Method isValid.
-	 * @param value Object
-	 * @param invalidValue String
-	 * @param expectedFormat String
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param value
+	 *            Object
+	 * @param invalidValue
+	 *            String
+	 * @param expectedFormat
+	 *            String
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
-	 * @see org.trade.core.validator.Validator#isValid(Object, String, String, ExceptionMessageListener)
+	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
+	 *      ExceptionMessageListener)
 	 */
 	public boolean isValid(Object value, String invalidValue,
 			String expectedFormat, ExceptionMessageListener receiver) {
@@ -224,12 +256,16 @@ public class StringValidator implements Validator {
 	 * Checks a string for invalid characters. Any invalid characters will be
 	 * returned.
 	 * 
-	
-	 * @param toStrip String
-	 * @param whatToKeep int
-	 * @param whatElseToKeep String
+	 * 
+	 * @param toStrip
+	 *            String
+	 * @param whatToKeep
+	 *            int
+	 * @param whatElseToKeep
+	 *            String
 	 * @return String A list of each invalid character; null if all characters
-	 *         are permitted. */
+	 *         are permitted.
+	 */
 	public static String checkForInvalidCharacters(String toStrip,
 			int whatToKeep, String whatElseToKeep) {
 		if ((null == toStrip) || (toStrip.length() == 0)) {
@@ -257,8 +293,11 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Method isValidChar.
-	 * @param toCheck char
-	 * @param whatToKeep int
+	 * 
+	 * @param toCheck
+	 *            char
+	 * @param whatToKeep
+	 *            int
 	 * @return boolean
 	 */
 	protected static boolean isValidChar(char toCheck, int whatToKeep) {
@@ -292,8 +331,11 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Method isValidChar.
-	 * @param toCheck char
-	 * @param whatToKeep String
+	 * 
+	 * @param toCheck
+	 *            char
+	 * @param whatToKeep
+	 *            String
 	 * @return boolean
 	 */
 	protected static boolean isValidChar(char toCheck, String whatToKeep) {
@@ -311,8 +353,11 @@ public class StringValidator implements Validator {
 
 	/**
 	 * Method stripSpecificChars.
-	 * @param toStrip String
-	 * @param whatToStrip String
+	 * 
+	 * @param toStrip
+	 *            String
+	 * @param whatToStrip
+	 *            String
 	 * @return String
 	 */
 	public static String stripSpecificChars(String toStrip, String whatToStrip) {

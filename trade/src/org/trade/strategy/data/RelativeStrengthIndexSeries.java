@@ -37,6 +37,7 @@ package org.trade.strategy.data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;

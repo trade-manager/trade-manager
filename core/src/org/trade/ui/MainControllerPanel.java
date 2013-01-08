@@ -36,6 +36,7 @@
 package org.trade.ui;
 
 import java.awt.Frame;
+
 import javax.swing.JOptionPane;
 
 import org.trade.core.properties.ConfigProperties;
@@ -154,8 +155,11 @@ public class MainControllerPanel extends TabbedAppPanel {
 
 	/**
 	 * This method is fired when a different tab is selected.
-	 * @param currBasePanel BasePanel
-	 * @param newBasePanel BasePanel
+	 * 
+	 * @param currBasePanel
+	 *            BasePanel
+	 * @param newBasePanel
+	 *            BasePanel
 	 */
 	public void tabChanged(BasePanel currBasePanel, BasePanel newBasePanel) {
 	}

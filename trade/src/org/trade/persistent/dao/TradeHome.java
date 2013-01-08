@@ -62,7 +62,9 @@ public class TradeHome {
 
 	/**
 	 * Method remove.
-	 * @param transientInstance Trade
+	 * 
+	 * @param transientInstance
+	 *            Trade
 	 */
 	public void remove(Trade transientInstance) {
 
@@ -86,7 +88,9 @@ public class TradeHome {
 
 	/**
 	 * Method findById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Trade
 	 */
 	public Trade findById(Integer id) {
@@ -109,7 +113,9 @@ public class TradeHome {
 
 	/**
 	 * Method findOpenTradeByTradestrategyId.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return Trade
 	 */
 	public Trade findOpenTradeByTradestrategyId(Integer id) {
@@ -162,7 +168,9 @@ public class TradeHome {
 
 	/**
 	 * Method findByTradestrategyId.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return List<Trade>
 	 */
 	public List<Trade> findByTradestrategyId(Integer id) {

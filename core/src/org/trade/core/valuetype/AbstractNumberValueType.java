@@ -52,7 +52,9 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Constructor for AbstractNumberValueType.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 */
 	public AbstractNumberValueType(String value) {
 		super(value);
@@ -60,7 +62,9 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Constructor for AbstractNumberValueType.
-	 * @param value long
+	 * 
+	 * @param value
+	 *            long
 	 */
 	public AbstractNumberValueType(long value) {
 		super(notNull(value));
@@ -68,7 +72,9 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Constructor for AbstractNumberValueType.
-	 * @param value Long
+	 * 
+	 * @param value
+	 *            Long
 	 */
 	public AbstractNumberValueType(Long value) {
 		super(notNull(value));
@@ -76,6 +82,7 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Method getNumber.
+	 * 
 	 * @return long
 	 */
 	public long getNumber() {
@@ -94,6 +101,7 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Method getLong.
+	 * 
 	 * @return Long
 	 */
 	public Long getLong() {
@@ -102,6 +110,7 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
@@ -115,10 +124,12 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 	/**
 	 * Returns validator of this value type.
 	 * 
-	
-	
-	 * @param messageFactory IMessageFactory
-	 * @return validator * @see <code>IStringValidator</code> */
+	 * 
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @return validator * @see <code>IStringValidator</code>
+	 */
 	public Validator getDefaultMandatoryValidator(IMessageFactory messageFactory) {
 		return getDefaultValidator(messageFactory, true);
 	}
@@ -126,10 +137,12 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 	/**
 	 * Returns validator of this value type.
 	 * 
-	
-	
-	 * @param messageFactory IMessageFactory
-	 * @return validator * @see <code>IStringValidator</code> */
+	 * 
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @return validator * @see <code>IStringValidator</code>
+	 */
 	public Validator getDefaultOptionalValidator(IMessageFactory messageFactory) {
 		return getDefaultValidator(messageFactory, false);
 	}
@@ -138,18 +151,21 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 	 * Returns the maximum length. This method should be overwritten by
 	 * subclasses.
 	 * 
-	
-	 * @return int */
+	 * 
+	 * @return int
+	 */
 	protected abstract int getMaximumLength();
 
 	/**
 	 * Method getMaximumValue.
+	 * 
 	 * @return Long
 	 */
 	protected abstract Long getMaximumValue();
 
 	/**
 	 * Method getMinimumValue.
+	 * 
 	 * @return Long
 	 */
 	protected abstract Long getMinimumValue();
@@ -157,11 +173,14 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 	/**
 	 * Returns validator of this value type.
 	 * 
-	
-	
-	 * @param messageFactory IMessageFactory
-	 * @param isMandatory boolean
-	 * @return validator * @see <code>Validator</code> */
+	 * 
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param isMandatory
+	 *            boolean
+	 * @return validator * @see <code>Validator</code>
+	 */
 	protected Validator getDefaultValidator(IMessageFactory messageFactory,
 			boolean isMandatory) {
 		return new StringValidator(messageFactory, getMaximumLength(),
@@ -214,7 +233,9 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Method notNull.
-	 * @param value Long
+	 * 
+	 * @param value
+	 *            Long
 	 * @return String
 	 */
 	private static String notNull(Long value) {
@@ -227,7 +248,9 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 
 	/**
 	 * Method notNull.
-	 * @param value long
+	 * 
+	 * @param value
+	 *            long
 	 * @return String
 	 */
 	private static String notNull(long value) {

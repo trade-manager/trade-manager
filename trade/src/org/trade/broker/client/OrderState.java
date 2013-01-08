@@ -35,7 +35,6 @@
  */
 package org.trade.broker.client;
 
-
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
 
@@ -81,8 +80,7 @@ public class OrderState {
 	 */
 	public OrderState(String status, String initMargin, String maintMargin,
 			String equityWithLoan, double commission, double minCommission,
-			double maxCommission, String commissionCurrency,
-			String warningText) {
+			double maxCommission, String commissionCurrency, String warningText) {
 
 		m_initMargin = initMargin;
 		m_maintMargin = maintMargin;
@@ -115,14 +113,12 @@ public class OrderState {
 		}
 		OrderState state = (OrderState) objectToCompare;
 
-		if (CoreUtils.nullSafeComparator(new Money(m_commission),
-				new Money(state.m_commission)) != 0
-				|| (CoreUtils.nullSafeComparator(
-						new Money(m_minCommission), new Money(
-								state.m_minCommission)) != 0)
-				|| (CoreUtils.nullSafeComparator(
-						new Money(m_maxCommission), new Money(
-								state.m_maxCommission)) != 0)) {
+		if (CoreUtils.nullSafeComparator(new Money(m_commission), new Money(
+				state.m_commission)) != 0
+				|| (CoreUtils.nullSafeComparator(new Money(m_minCommission),
+						new Money(state.m_minCommission)) != 0)
+				|| (CoreUtils.nullSafeComparator(new Money(m_maxCommission),
+						new Money(state.m_maxCommission)) != 0)) {
 			return false;
 		}
 

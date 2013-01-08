@@ -73,25 +73,33 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for CodeAttribute.
-	 * @param codeType CodeType
-	 * @param name String
-	 * @param description String
-	 * @param defaultValue String
-	 * @param className String
-	 * @param classEditorName String
+	 * 
+	 * @param codeType
+	 *            CodeType
+	 * @param name
+	 *            String
+	 * @param description
+	 *            String
+	 * @param defaultValue
+	 *            String
+	 * @param className
+	 *            String
+	 * @param classEditorName
+	 *            String
 	 */
-	public CodeAttribute(CodeType codeType, String name, String description,String defaultValue,
-			String className,String classEditorName) {
+	public CodeAttribute(CodeType codeType, String name, String description,
+			String defaultValue, String className, String classEditorName) {
 		this.name = name;
 		this.description = description;
 		this.defaultValue = defaultValue;
 		this.className = className;
-		this.classEditorName =classEditorName;
-		this.codeType = codeType;		
+		this.classEditorName = classEditorName;
+		this.codeType = codeType;
 	}
 
 	/**
 	 * Method getIdCodeAttribute.
+	 * 
 	 * @return Integer
 	 */
 	@Id
@@ -103,7 +111,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdCodeAttribute.
-	 * @param idCodeAttribute Integer
+	 * 
+	 * @param idCodeAttribute
+	 *            Integer
 	 */
 	public void setIdCodeAttribute(Integer idCodeAttribute) {
 		this.id = idCodeAttribute;
@@ -111,6 +121,7 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getName.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "name", nullable = false, length = 45)
@@ -120,7 +131,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setName.
-	 * @param name String
+	 * 
+	 * @param name
+	 *            String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -128,6 +141,7 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getDescription.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "description", nullable = true, length = 100)
@@ -137,14 +151,17 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setDescription.
-	 * @param description String
+	 * 
+	 * @param description
+	 *            String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	/**
 	 * Method getDefaultValue.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "defaultValue", nullable = true, length = 45)
@@ -154,7 +171,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setDefaultValue.
-	 * @param defaultValue String
+	 * 
+	 * @param defaultValue
+	 *            String
 	 */
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
@@ -162,6 +181,7 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getClassName.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "className", nullable = false, length = 100)
@@ -171,7 +191,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setClassName.
-	 * @param className String
+	 * 
+	 * @param className
+	 *            String
 	 */
 	public void setClassName(String className) {
 		this.className = className;
@@ -179,6 +201,7 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getEditorClassName.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "classEditorName", nullable = true, length = 100)
@@ -188,7 +211,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setEditorClassName.
-	 * @param classEditorName String
+	 * 
+	 * @param classEditorName
+	 *            String
 	 */
 	public void setEditorClassName(String classEditorName) {
 		this.classEditorName = classEditorName;
@@ -196,6 +221,7 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getCodeType.
+	 * 
 	 * @return CodeType
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -206,7 +232,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setCodeType.
-	 * @param codeType CodeType
+	 * 
+	 * @param codeType
+	 *            CodeType
 	 */
 	public void setCodeType(CodeType codeType) {
 		this.codeType = codeType;
@@ -214,6 +242,7 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getCodeValue.
+	 * 
 	 * @return List<CodeValue>
 	 */
 	@OneToMany(mappedBy = "codeAttribute", fetch = FetchType.LAZY)
@@ -223,7 +252,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setCodeValue.
-	 * @param codeValues List<CodeValue>
+	 * 
+	 * @param codeValues
+	 *            List<CodeValue>
 	 */
 	public void setCodeValue(List<CodeValue> codeValues) {
 		this.codeValues = codeValues;

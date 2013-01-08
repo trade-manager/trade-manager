@@ -59,7 +59,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for TradelogReport.
-	 * @param idTradelogDetail Integer
+	 * 
+	 * @param idTradelogDetail
+	 *            Integer
 	 */
 	public TradelogReport(Integer idTradelogDetail) {
 		this.id = idTradelogDetail;
@@ -67,8 +69,11 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for TradelogReport.
-	 * @param idTradelogDetail Integer
-	 * @param tradelogDetail List<TradelogDetail>
+	 * 
+	 * @param idTradelogDetail
+	 *            Integer
+	 * @param tradelogDetail
+	 *            List<TradelogDetail>
 	 */
 	public TradelogReport(Integer idTradelogDetail,
 			List<TradelogDetail> tradelogDetail) {
@@ -79,6 +84,7 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getIdTradingdays.
+	 * 
 	 * @return Integer
 	 */
 	public Integer getIdTradingdays() {
@@ -87,7 +93,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdTradingdays.
-	 * @param idTradelogDetail Integer
+	 * 
+	 * @param idTradelogDetail
+	 *            Integer
 	 */
 	public void setIdTradingdays(Integer idTradelogDetail) {
 		this.id = idTradelogDetail;
@@ -95,7 +103,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method add.
-	 * @param tradelogSummary TradelogSummary
+	 * 
+	 * @param tradelogSummary
+	 *            TradelogSummary
 	 */
 	public void add(TradelogSummary tradelogSummary) {
 		this.tradelogSummary.add(tradelogSummary);
@@ -103,7 +113,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method remove.
-	 * @param tradelogSummary TradelogSummary
+	 * 
+	 * @param tradelogSummary
+	 *            TradelogSummary
 	 */
 	public void remove(TradelogSummary tradelogSummary) {
 		this.tradelogSummary.remove(tradelogSummary);
@@ -111,6 +123,7 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getTradelogSummary.
+	 * 
 	 * @return List<TradelogSummary>
 	 */
 	public List<TradelogSummary> getTradelogSummary() {
@@ -119,7 +132,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setTradelogSummary.
-	 * @param tradelogSummary List<TradelogSummary>
+	 * 
+	 * @param tradelogSummary
+	 *            List<TradelogSummary>
 	 */
 	public void setTradelogSummary(List<TradelogSummary> tradelogSummary) {
 		this.tradelogSummary = tradelogSummary;
@@ -127,7 +142,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method add.
-	 * @param tradelogDetail TradelogDetail
+	 * 
+	 * @param tradelogDetail
+	 *            TradelogDetail
 	 */
 	public void add(TradelogDetail tradelogDetail) {
 		this.tradelogDetail.add(tradelogDetail);
@@ -135,7 +152,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method remove.
-	 * @param tradelogDetail TradelogDetail
+	 * 
+	 * @param tradelogDetail
+	 *            TradelogDetail
 	 */
 	public void remove(TradelogDetail tradelogDetail) {
 		this.tradelogDetail.remove(tradelogDetail);
@@ -143,6 +162,7 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getTradelogDetail.
+	 * 
 	 * @return List<TradelogDetail>
 	 */
 	public List<TradelogDetail> getTradelogDetail() {
@@ -151,7 +171,9 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setTradelogDetail.
-	 * @param tradelogDetail List<TradelogDetail>
+	 * 
+	 * @param tradelogDetail
+	 *            List<TradelogDetail>
 	 */
 	public void setTradelogDetail(List<TradelogDetail> tradelogDetail) {
 		this.tradelogDetail = tradelogDetail;

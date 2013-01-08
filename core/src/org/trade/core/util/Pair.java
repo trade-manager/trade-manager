@@ -32,7 +32,7 @@
  * Changes
  * -------
  *
- */ 
+ */
 package org.trade.core.util;
 
 /**
@@ -46,8 +46,11 @@ public final class Pair {
 
 	/**
 	 * Constructor for Pair.
-	 * @param x double
-	 * @param y double
+	 * 
+	 * @param x
+	 *            double
+	 * @param y
+	 *            double
 	 */
 	public Pair(double x, double y) {
 		this.x = x;
@@ -59,6 +62,7 @@ public final class Pair {
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	@Override

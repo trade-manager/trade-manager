@@ -66,7 +66,9 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 	/**
 	 * Constructor for TradingdayTreeModel.
-	 * @param tradingdays Tradingdays
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
 	 * @throws ValueTypeException
 	 */
 	public TradingdayTreeModel(Tradingdays tradingdays)
@@ -78,7 +80,9 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 	/**
 	 * Method setData.
-	 * @param tradingdays Tradingdays
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
 	 * @throws ValueTypeException
 	 */
 	public void setData(Tradingdays tradingdays) throws ValueTypeException {
@@ -91,7 +95,9 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 	/**
 	 * Method buildTree.
-	 * @param tradingdays Tradingdays
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
 	 * @throws ValueTypeException
 	 */
 	private void buildTree(Tradingdays tradingdays) throws ValueTypeException {
@@ -110,7 +116,9 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 	/**
 	 * Method addTradingday.
-	 * @param tradingday Tradingday
+	 * 
+	 * @param tradingday
+	 *            Tradingday
 	 * @throws ValueTypeException
 	 */
 	private void addTradingday(Tradingday tradingday) throws ValueTypeException {
@@ -144,7 +152,9 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 	/**
 	 * Method getNode.
-	 * @param treeNode Object
+	 * 
+	 * @param treeNode
+	 *            Object
 	 * @return Object
 	 */
 	public Object getNode(Object treeNode) {

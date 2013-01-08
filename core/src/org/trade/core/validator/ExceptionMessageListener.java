@@ -42,7 +42,9 @@ import org.trade.core.exception.ExceptionMessage;
 public interface ExceptionMessageListener {
 	/**
 	 * Method addExceptionMessage.
-	 * @param message ExceptionMessage
+	 * 
+	 * @param message
+	 *            ExceptionMessage
 	 */
 	void addExceptionMessage(ExceptionMessage message);
 }

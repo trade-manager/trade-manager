@@ -99,7 +99,9 @@ public class BasePanelMenu extends JPanel {
 
 	/**
 	 * Constructor for BasePanelMenu.
-	 * @param p BasePanel
+	 * 
+	 * @param p
+	 *            BasePanel
 	 */
 	public BasePanelMenu(BasePanel p) {
 		this();
@@ -341,11 +343,12 @@ public class BasePanelMenu extends JPanel {
 	/**
 	 * getFrame ()
 	 * 
-	
-	
-	
-	
-	 * @return JFrame * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return JFrame * @exception * @see
+	 */
 	private JFrame getFrame() {
 		if (frame == null) {
 			Component parent = this;
@@ -363,13 +366,15 @@ public class BasePanelMenu extends JPanel {
 	/**
 	 * addMessageListener (MessageListener listener)
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
 	}
@@ -377,13 +382,15 @@ public class BasePanelMenu extends JPanel {
 	/**
 	 * removeMessageListener (MessageListener listener)
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
 	}
@@ -391,17 +398,19 @@ public class BasePanelMenu extends JPanel {
 	/**
 	 * getWindowsOpenMenu (MessageListener listener)
 	 * 
-	
-	
-	
-	
-	 * @return JMenuItem * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return JMenuItem * @exception * @see
+	 */
 	public JMenu getWindowsOpenMenu() {
 		return windowMenu;
 	}
 
 	/**
 	 * Method getButtonPanel.
+	 * 
 	 * @return JPanel
 	 */
 	public JPanel getButtonPanel() {
@@ -411,11 +420,12 @@ public class BasePanelMenu extends JPanel {
 	/**
 	 * jPanelToolPanel_componentChanged(ContainerEvent e)
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	private void jPanelToolPanel_componentChanged() {
 		if (getFrame() != null) {
 			getFrame().validate();
@@ -425,13 +435,15 @@ public class BasePanelMenu extends JPanel {
 	/**
 	 * messageEvent(String selection)
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param selection String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param selection
+	 *            String
+	 * @exception * @see
+	 */
 	public void messageEvent(String selection) {
 		m_notifier.notifyEvent(new MessageEvent(selection),
 				new Vector<Object>());
@@ -440,13 +452,15 @@ public class BasePanelMenu extends JPanel {
 	/**
 	 * messageEvent(String selection)
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param enable boolean
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param enable
+	 *            boolean
+	 * @exception * @see
+	 */
 	public void enableSave(boolean enable) {
 		menuItemSave.setEnabled(enable);
 		menuItemSaveAs.setEnabled(enable);

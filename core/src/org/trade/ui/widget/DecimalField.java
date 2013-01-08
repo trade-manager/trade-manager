@@ -36,6 +36,7 @@
 package org.trade.ui.widget;
 
 import java.text.NumberFormat;
+
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultFormatterFactory;

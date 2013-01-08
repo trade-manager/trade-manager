@@ -42,6 +42,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+
 import org.trade.core.dao.EntityManagerHelper;
 
 /**
@@ -56,7 +57,9 @@ public class TradeAccountHome {
 
 	/**
 	 * Method findById.
-	 * @param id Integer
+	 * 
+	 * @param id
+	 *            Integer
 	 * @return TradeAccount
 	 */
 	public TradeAccount findById(Integer id) {
@@ -77,7 +80,9 @@ public class TradeAccountHome {
 
 	/**
 	 * Method findByAccountNumber.
-	 * @param accountNumber String
+	 * 
+	 * @param accountNumber
+	 *            String
 	 * @return TradeAccount
 	 */
 	public TradeAccount findByAccountNumber(String accountNumber) {
@@ -109,7 +114,9 @@ public class TradeAccountHome {
 
 	/**
 	 * Method resetDefaultTradeAccount.
-	 * @param defaultTradeAccount TradeAccount
+	 * 
+	 * @param defaultTradeAccount
+	 *            TradeAccount
 	 */
 	public void resetDefaultTradeAccount(TradeAccount defaultTradeAccount) {
 
@@ -128,7 +135,7 @@ public class TradeAccountHome {
 						&& !defaultTradeAccount.getIdTradeAccount().equals(
 								tradeAccount.getIdTradeAccount())) {
 					tradeAccount.setIsDefault(false);
-					entityManager.persist(tradeAccount);					
+					entityManager.persist(tradeAccount);
 				}
 			}
 			entityManager.getTransaction().commit();

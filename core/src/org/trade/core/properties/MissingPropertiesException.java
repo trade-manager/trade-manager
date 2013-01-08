@@ -58,7 +58,9 @@ public class MissingPropertiesException extends java.lang.Exception {
 
 	/**
 	 * Method addProperty.
-	 * @param p String
+	 * 
+	 * @param p
+	 *            String
 	 */
 	public void addProperty(String p) {
 		if (m_missingProperties == null) {
@@ -70,6 +72,7 @@ public class MissingPropertiesException extends java.lang.Exception {
 
 	/**
 	 * Method getMessage.
+	 * 
 	 * @return String
 	 */
 	public String getMessage() {
@@ -98,6 +101,7 @@ public class MissingPropertiesException extends java.lang.Exception {
 
 	/**
 	 * Method getMissingProperties.
+	 * 
 	 * @return Enumeration<String>
 	 */
 	public Enumeration<String> getMissingProperties() {
@@ -110,6 +114,7 @@ public class MissingPropertiesException extends java.lang.Exception {
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

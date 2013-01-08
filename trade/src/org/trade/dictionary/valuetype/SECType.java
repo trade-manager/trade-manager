@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class SECType extends Decode {
@@ -49,14 +48,16 @@ public class SECType extends Decode {
 	public static final String DECODE = "SEC_TYPE";
 	public static final String STOCK = "STK";
 	public static final String FUTURE = "FUT";
-	
+
 	public SECType() {
 		super(DECODE);
 	}
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return SECType
 	 */
 	public static SECType newInstance(String value) {
@@ -67,6 +68,7 @@ public class SECType extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return SECType
 	 */
 	public static SECType newInstance() {

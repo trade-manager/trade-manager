@@ -38,7 +38,7 @@ package org.trade.core.properties;
 import java.io.IOException;
 
 /**
-
+ * 
  * @version $Id: PropertyNotFoundException.java,v 1.1 2001/09/19 20:31:53
  * @author Simon Allen
  */
@@ -50,7 +50,9 @@ public class PropertyNotFoundException extends IOException {
 
 	/**
 	 * Constructor for PropertyNotFoundException.
-	 * @param message String
+	 * 
+	 * @param message
+	 *            String
 	 */
 	public PropertyNotFoundException(String message) {
 		super(message);

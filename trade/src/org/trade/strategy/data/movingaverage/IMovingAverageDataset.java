@@ -40,6 +40,7 @@ import org.jfree.data.xy.XYDataset;
 /**
  * An interface that defines data in the form of (x, high, low, open, close)
  * tuples.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -53,8 +54,9 @@ public interface IMovingAverageDataset extends XYDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Moving Average. */
+	 * 
+	 * @return The Moving Average.
+	 */
 	public double getMovingAverageValue(int series, int item);
 
 	/**
@@ -65,8 +67,9 @@ public interface IMovingAverageDataset extends XYDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Moving Average. */
+	 * 
+	 * @return The Moving Average.
+	 */
 	public Number getMovingAverage(int series, int item);
 
 }

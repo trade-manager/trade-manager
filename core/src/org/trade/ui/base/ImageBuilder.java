@@ -52,12 +52,14 @@ public class ImageBuilder extends Object {
 	/**
 	 * getIcon( String name)
 	 * 
-	
-	
-	
-	
-	 * @param name String
-	 * @return ImageIcon * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param name
+	 *            String
+	 * @return ImageIcon * @exception * @see
+	 */
 	public static ImageIcon getImageIcon(String name) {
 		try {
 			URL url = ImageBuilder.class.getResource("images/" + name);
@@ -73,12 +75,14 @@ public class ImageBuilder extends Object {
 	/**
 	 * getIcon( String name)
 	 * 
-	
-	
-	
-	
-	 * @param name String
-	 * @return ImageIcon * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param name
+	 *            String
+	 * @return ImageIcon * @exception * @see
+	 */
 	public static Image getImage(String name) {
 		try {
 			URL url = ImageBuilder.class.getResource("images/" + name);

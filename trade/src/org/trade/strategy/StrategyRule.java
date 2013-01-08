@@ -35,7 +35,6 @@
  */
 package org.trade.strategy;
 
-
 import org.trade.strategy.data.CandleSeries;
 
 /**
@@ -46,8 +45,11 @@ public interface StrategyRule {
 
 	/**
 	 * Method runStrategy.
-	 * @param candleSeries CandleSeries
-	 * @param newBar boolean
+	 * 
+	 * @param candleSeries
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 * @throws StrategyRuleException
 	 */
 	void runStrategy(CandleSeries candleSeries, boolean newBar)
@@ -55,9 +57,13 @@ public interface StrategyRule {
 
 	/**
 	 * Method error.
-	 * @param id int
-	 * @param errorCode int
-	 * @param errorMsg String
+	 * 
+	 * @param id
+	 *            int
+	 * @param errorCode
+	 *            int
+	 * @param errorMsg
+	 *            String
 	 */
 	void error(int id, int errorCode, String errorMsg);
 
@@ -67,37 +73,45 @@ public interface StrategyRule {
 
 	/**
 	 * Method isCancelled.
+	 * 
 	 * @return boolean
 	 */
 	boolean isCancelled();
 
 	/**
 	 * Method isDone.
+	 * 
 	 * @return boolean
 	 */
 	boolean isDone();
 
 	/**
 	 * Method isRunning.
+	 * 
 	 * @return boolean
 	 */
 	boolean isRunning();
 
 	/**
 	 * Method isWaiting.
+	 * 
 	 * @return boolean
 	 */
 	boolean isWaiting();
 
 	/**
 	 * Method addMessageListener.
-	 * @param listener StrategyChangeListener
+	 * 
+	 * @param listener
+	 *            StrategyChangeListener
 	 */
 	void addMessageListener(StrategyChangeListener listener);
 
 	/**
 	 * Method removeMessageListener.
-	 * @param listener StrategyChangeListener
+	 * 
+	 * @param listener
+	 *            StrategyChangeListener
 	 */
 	void removeMessageListener(StrategyChangeListener listener);
 

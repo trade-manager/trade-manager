@@ -61,13 +61,15 @@ public class ExtendedDesktopManager extends DefaultDesktopManager {
 	/**
 	 * ExtendedDesktopManager() - constructor
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param targetPane JDesktopPane
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param targetPane
+	 *            JDesktopPane
+	 * @exception * @see
+	 */
 	public ExtendedDesktopManager(JDesktopPane targetPane) {
 		ghostPanel = new JPanel();
 
@@ -81,13 +83,15 @@ public class ExtendedDesktopManager extends DefaultDesktopManager {
 	/**
 	 * beginDraggingFrame() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param f JComponent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param f
+	 *            JComponent
+	 * @exception * @see
+	 */
 	public void beginDraggingFrame(JComponent f) {
 		Rectangle r = f.getBounds();
 
@@ -101,15 +105,19 @@ public class ExtendedDesktopManager extends DefaultDesktopManager {
 	/**
 	 * dragFrame() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param f JComponent
-	 * @param newX int
-	 * @param newY int
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param f
+	 *            JComponent
+	 * @param newX
+	 *            int
+	 * @param newY
+	 *            int
+	 * @exception * @see
+	 */
 	public void dragFrame(JComponent f, int newX, int newY) {
 		setBoundsForFrame(ghostPanel, newX, newY, ghostPanel.getWidth(),
 				ghostPanel.getHeight());
@@ -118,13 +126,15 @@ public class ExtendedDesktopManager extends DefaultDesktopManager {
 	/**
 	 * endDraggingFrame() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param f JComponent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param f
+	 *            JComponent
+	 * @exception * @see
+	 */
 	public void endDraggingFrame(JComponent f) {
 		Rectangle r = ghostPanel.getBounds();
 
@@ -136,14 +146,17 @@ public class ExtendedDesktopManager extends DefaultDesktopManager {
 	/**
 	 * beginResizingFrame() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param f JComponent
-	 * @param direction int
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param f
+	 *            JComponent
+	 * @param direction
+	 *            int
+	 * @exception * @see
+	 */
 	public void beginResizingFrame(JComponent f, int direction) {
 		oldCursor = f.getCursor();
 
@@ -163,17 +176,23 @@ public class ExtendedDesktopManager extends DefaultDesktopManager {
 	/**
 	 * resizeFrame() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param f JComponent
-	 * @param newX int
-	 * @param newY int
-	 * @param newWidth int
-	 * @param newHeight int
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param f
+	 *            JComponent
+	 * @param newX
+	 *            int
+	 * @param newY
+	 *            int
+	 * @param newWidth
+	 *            int
+	 * @param newHeight
+	 *            int
+	 * @exception * @see
+	 */
 	public void resizeFrame(JComponent f, int newX, int newY, int newWidth,
 			int newHeight) {
 		setBoundsForFrame(ghostPanel, newX, newY, newWidth, newHeight);
@@ -182,13 +201,15 @@ public class ExtendedDesktopManager extends DefaultDesktopManager {
 	/**
 	 * endResizingFrame() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param f JComponent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param f
+	 *            JComponent
+	 * @exception * @see
+	 */
 	public void endResizingFrame(JComponent f) {
 		Rectangle r = ghostPanel.getBounds();
 

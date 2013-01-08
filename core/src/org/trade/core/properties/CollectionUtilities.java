@@ -59,7 +59,9 @@ public class CollectionUtilities {
 
 	/**
 	 * Method read.
-	 * @param filepath String
+	 * 
+	 * @param filepath
+	 *            String
 	 * @return Properties
 	 * @throws FileNotFoundException
 	 */
@@ -117,8 +119,11 @@ public class CollectionUtilities {
 
 	/**
 	 * Method write.
-	 * @param filepath String
-	 * @param theProperties Properties
+	 * 
+	 * @param filepath
+	 *            String
+	 * @param theProperties
+	 *            Properties
 	 * @throws IOException
 	 */
 	public static void write(String filepath, Properties theProperties)
@@ -128,9 +133,13 @@ public class CollectionUtilities {
 
 	/**
 	 * Method write.
-	 * @param filepath String
-	 * @param theProperties Properties
-	 * @param propComments String
+	 * 
+	 * @param filepath
+	 *            String
+	 * @param theProperties
+	 *            Properties
+	 * @param propComments
+	 *            String
 	 * @throws IOException
 	 */
 	public static void write(String filepath, Properties theProperties,
@@ -154,8 +163,11 @@ public class CollectionUtilities {
 
 	/**
 	 * Method checkProperties.
-	 * @param myKeys String[]
-	 * @param p Properties
+	 * 
+	 * @param myKeys
+	 *            String[]
+	 * @param p
+	 *            Properties
 	 * @throws MissingPropertiesException
 	 */
 	public static void checkProperties(String[] myKeys, Properties p)
@@ -191,10 +203,12 @@ public class CollectionUtilities {
 	 * 
 	 * @param superset
 	 *            .
-	
 	 * 
-	 * @param tag String
-	 * @param result Dictionary<String,Object>
+	 * 
+	 * @param tag
+	 *            String
+	 * @param result
+	 *            Dictionary<String,Object>
 	 */
 	public static void getSubset(Dictionary<String, Object> superset,
 			String tag, Dictionary<String, Object> result) {
@@ -225,9 +239,11 @@ public class CollectionUtilities {
 	 * 
 	 * Hastables and Properties can be used as they are Dictionaries.
 	 * 
-	
-	 * @param source Dictionary<Object,Object>
-	 * @param destination Dictionary<Object,Object>
+	 * 
+	 * @param source
+	 *            Dictionary<Object,Object>
+	 * @param destination
+	 *            Dictionary<Object,Object>
 	 */
 	public static void copyOverwrite(Dictionary<Object, Object> source,
 			Dictionary<Object, Object> destination) {
@@ -252,10 +268,12 @@ public class CollectionUtilities {
 	 * 
 	 * Here is an example of returned String "key1 = value1; key2 = value2;"
 	 * 
-	
-	
-	 * @param dict Dictionary<Object,Object>
-	 * @return : String. */
+	 * 
+	 * 
+	 * @param dict
+	 *            Dictionary<Object,Object>
+	 * @return : String.
+	 */
 	public static String dictionaryToString(Dictionary<Object, Object> dict) {
 		Enumeration<Object> keys = dict.keys();
 		Object key, value;
@@ -276,7 +294,9 @@ public class CollectionUtilities {
 
 	/**
 	 * Method main.
-	 * @param args String[]
+	 * 
+	 * @param args
+	 *            String[]
 	 */
 	public static void main(String[] args) {
 		try {
@@ -289,8 +309,11 @@ public class CollectionUtilities {
 
 	/**
 	 * Method n2sort.
-	 * @param index String[]
-	 * @param asc boolean
+	 * 
+	 * @param index
+	 *            String[]
+	 * @param asc
+	 *            boolean
 	 */
 	public static void n2sort(String[] index, boolean asc) {
 		for (int i = 0; i < index.length; i++) {
@@ -304,9 +327,13 @@ public class CollectionUtilities {
 
 	/**
 	 * Method swap.
-	 * @param i int
-	 * @param j int
-	 * @param index String[]
+	 * 
+	 * @param i
+	 *            int
+	 * @param j
+	 *            int
+	 * @param index
+	 *            String[]
 	 */
 	private static void swap(int i, int j, String[] index) {
 		String tmp = index[i];
@@ -317,9 +344,13 @@ public class CollectionUtilities {
 
 	/**
 	 * Method compare.
-	 * @param row1 String
-	 * @param row2 String
-	 * @param asc boolean
+	 * 
+	 * @param row1
+	 *            String
+	 * @param row2
+	 *            String
+	 * @param asc
+	 *            boolean
 	 * @return int
 	 */
 	private static int compare(String row1, String row2, boolean asc) {

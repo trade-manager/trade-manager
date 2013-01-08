@@ -82,11 +82,15 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 
 	/**
 	 * Method getLookup.
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
 	 * @return Lookup
 	 * @throws LookupException
-	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String, LookupQualifier)
+	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String,
+	 *      LookupQualifier)
 	 */
 	public synchronized Lookup getLookup(String lookupName,
 			LookupQualifier qualifier) throws LookupException {
@@ -223,8 +227,11 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 
 	/**
 	 * Returns null if the lookup is not in the cache.
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
 	 * @return Lookup
 	 */
 	private Lookup getCachedLookup(String lookupName, LookupQualifier qualifier) {
@@ -246,9 +253,13 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 
 	/**
 	 * Method addLookupToCache.
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
-	 * @param lookup Lookup
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
+	 * @param lookup
+	 *            Lookup
 	 */
 	private synchronized void addLookupToCache(String lookupName,
 			LookupQualifier qualifier, Lookup lookup) {
@@ -264,7 +275,9 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 
 	/**
 	 * Method getCodes.
-	 * @param className String
+	 * 
+	 * @param className
+	 *            String
 	 * @return List<?>
 	 * @throws ClassNotFoundException
 	 */

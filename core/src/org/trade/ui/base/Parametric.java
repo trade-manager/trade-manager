@@ -50,7 +50,9 @@ import java.lang.reflect.Modifier;
 public class Parametric {
 	/**
 	 * Constructor for Parametric.
-	 * @param aClassToReflect Class<?>
+	 * 
+	 * @param aClassToReflect
+	 *            Class<?>
 	 */
 	public Parametric(Class<?> aClassToReflect) {
 		super();
@@ -60,6 +62,7 @@ public class Parametric {
 
 	/**
 	 * Method getClassToReflect.
+	 * 
 	 * @return Class<?>
 	 */
 	public Class<?> getClassToReflect() {
@@ -68,8 +71,11 @@ public class Parametric {
 
 	/**
 	 * Method findMethod.
-	 * @param methodName String
-	 * @param parameters Class<?>[]
+	 * 
+	 * @param methodName
+	 *            String
+	 * @param parameters
+	 *            Class<?>[]
 	 * @return Method
 	 */
 	public Method findMethod(String methodName, Class<?>[] parameters) {
@@ -109,7 +115,9 @@ public class Parametric {
 
 	/**
 	 * Method findField.
-	 * @param fieldName String
+	 * 
+	 * @param fieldName
+	 *            String
 	 * @return Field
 	 */
 	public Field findField(String fieldName) {
@@ -147,8 +155,11 @@ public class Parametric {
 
 	/**
 	 * Method isTargetSignature.
-	 * @param aMethod Method
-	 * @param parameters Class<?>[]
+	 * 
+	 * @param aMethod
+	 *            Method
+	 * @param parameters
+	 *            Class<?>[]
 	 * @return boolean
 	 */
 	private boolean isTargetSignature(Method aMethod, Class<?>[] parameters) {

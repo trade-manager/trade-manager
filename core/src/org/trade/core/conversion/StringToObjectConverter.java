@@ -38,6 +38,7 @@ package org.trade.core.conversion;
 /**
  * This is an abstract class which is inherited by all java.lang.String to
  * java.lang.Object subclass converter classes.
+ * 
  * @author Simon Allen
  */
 public abstract class StringToObjectConverter implements JavaTypeConverter {
@@ -60,12 +61,13 @@ public abstract class StringToObjectConverter implements JavaTypeConverter {
 	 * 
 	 * @param valueToConvert
 	 *            the java.lang.String value to convert
-	
-	
+	 * 
+	 * 
 	 * @return Object the converted value * @exception IllegalArgumentException
-	 *                thrown if the valueToConvert is not of type
-	 *                java.lang.String or if the valueToConvert is not in the
-	 *                correct format to do the conversion * @see org.trade.core.conversion.JavaTypeConverter#convert(Object)
+	 *         thrown if the valueToConvert is not of type java.lang.String or
+	 *         if the valueToConvert is not in the correct format to do the
+	 *         conversion * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#convert(Object)
 	 */
 	public Object convert(Object valueToConvert)
 			throws IllegalArgumentException {
@@ -82,8 +84,9 @@ public abstract class StringToObjectConverter implements JavaTypeConverter {
 	 * This method returns the source type or class that the converter conerts
 	 * from. In this case java.lang.String .
 	 * 
-	
-	 * @return Class the class of the source value which will be converted * @see org.trade.core.conversion.JavaTypeConverter#getSourceType()
+	 * 
+	 * @return Class the class of the source value which will be converted * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getSourceType()
 	 */
 	public Class<?> getSourceType() {
 		return java.lang.String.class;
@@ -98,11 +101,12 @@ public abstract class StringToObjectConverter implements JavaTypeConverter {
 	 * 
 	 * @param aString
 	 *            the String to be converted
-	
-	
+	 * 
+	 * 
 	 * @return Object the converted String * @exception IllegalArgumentException
-	 *                thrown if the String to convert is not in the correct
-	 *                format to do the conversion */
+	 *         thrown if the String to convert is not in the correct format to
+	 *         do the conversion
+	 */
 	protected abstract Object getConvertedString(String aString)
 			throws IllegalArgumentException;
 }

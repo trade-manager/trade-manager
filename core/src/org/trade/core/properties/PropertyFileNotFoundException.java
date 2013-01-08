@@ -38,7 +38,7 @@ package org.trade.core.properties;
 import java.io.FileNotFoundException;
 
 /**
-
+ * 
  * @version $Id: PropertyFileNotFoundException.java,v 1.1 2001/09/19 20:31:53
  *          clay Exp $
  * @author Simon Allen
@@ -51,7 +51,9 @@ public class PropertyFileNotFoundException extends FileNotFoundException {
 
 	/**
 	 * Constructor for PropertyFileNotFoundException.
-	 * @param message String
+	 * 
+	 * @param message
+	 *            String
 	 */
 	public PropertyFileNotFoundException(String message) {
 		super(message);

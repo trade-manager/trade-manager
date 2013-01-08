@@ -37,6 +37,7 @@ package org.trade.ui.tables.renderer;
 
 import java.awt.Color;
 import java.awt.Component;
+
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
@@ -50,24 +51,33 @@ import org.trade.ui.models.TradingdayTreeModel;
 public class TradingdayTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private static final long serialVersionUID = 7664391812385841364L;
-	private  Color backgroundSelectionColor = null;
+	private Color backgroundSelectionColor = null;
 
-	public TradingdayTreeCellRenderer(){
+	public TradingdayTreeCellRenderer() {
 		super();
 		backgroundSelectionColor = this.getBackgroundSelectionColor();
 	}
-	
+
 	/**
 	 * Method getTreeCellRendererComponent.
-	 * @param tree JTree
-	 * @param value Object
-	 * @param selected boolean
-	 * @param expanded boolean
-	 * @param leaf boolean
-	 * @param row int
-	 * @param hasFocus boolean
+	 * 
+	 * @param tree
+	 *            JTree
+	 * @param value
+	 *            Object
+	 * @param selected
+	 *            boolean
+	 * @param expanded
+	 *            boolean
+	 * @param leaf
+	 *            boolean
+	 * @param row
+	 *            int
+	 * @param hasFocus
+	 *            boolean
 	 * @return Component
-	 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree, Object, boolean, boolean, boolean, int, boolean)
+	 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree,
+	 *      Object, boolean, boolean, boolean, int, boolean)
 	 */
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row,
@@ -96,9 +106,9 @@ public class TradingdayTreeCellRenderer extends DefaultTreeCellRenderer {
 				}
 				this.setToolTipText("Select to open chart.");
 			} else if (expanded) {
-				
+
 			} else {
-				
+
 			}
 		}
 		return comp;

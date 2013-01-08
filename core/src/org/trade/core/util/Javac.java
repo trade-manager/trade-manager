@@ -58,8 +58,11 @@ public final class Javac {
 
 	/**
 	 * Constructor for Javac.
-	 * @param classpath String
-	 * @param outputdir String
+	 * 
+	 * @param classpath
+	 *            String
+	 * @param outputdir
+	 *            String
 	 */
 	public Javac(String classpath, String outputdir) {
 		this.classpath = classpath;
@@ -70,8 +73,9 @@ public final class Javac {
 	 * Compile the given source files.
 	 * 
 	 * @param srcFiles
-	
-	 * @return null if success; or compilation errors */
+	 * 
+	 * @return null if success; or compilation errors
+	 */
 	public String compile(String srcFiles[]) {
 		StringWriter err = new StringWriter();
 		PrintWriter errPrinter = new PrintWriter(err);
@@ -84,7 +88,9 @@ public final class Javac {
 
 	/**
 	 * Method compile.
-	 * @param srcFiles File[]
+	 * 
+	 * @param srcFiles
+	 *            File[]
 	 * @return String
 	 */
 	public String compile(File srcFiles[]) {
@@ -97,7 +103,9 @@ public final class Javac {
 
 	/**
 	 * Method buildJavacArgs.
-	 * @param srcFiles String[]
+	 * 
+	 * @param srcFiles
+	 *            String[]
 	 * @return String[]
 	 */
 	private String[] buildJavacArgs(String srcFiles[]) {
@@ -141,6 +149,7 @@ public final class Javac {
 
 	/**
 	 * Method getBootclasspath.
+	 * 
 	 * @return String
 	 */
 	public String getBootclasspath() {
@@ -149,7 +158,9 @@ public final class Javac {
 
 	/**
 	 * Method setBootclasspath.
-	 * @param bootclasspath String
+	 * 
+	 * @param bootclasspath
+	 *            String
 	 */
 	public void setBootclasspath(String bootclasspath) {
 		this.bootclasspath = bootclasspath;
@@ -157,6 +168,7 @@ public final class Javac {
 
 	/**
 	 * Method getClasspath.
+	 * 
 	 * @return String
 	 */
 	public String getClasspath() {
@@ -165,7 +177,9 @@ public final class Javac {
 
 	/**
 	 * Method setClasspath.
-	 * @param classpath String
+	 * 
+	 * @param classpath
+	 *            String
 	 */
 	public void setClasspath(String classpath) {
 		this.classpath = classpath;
@@ -173,6 +187,7 @@ public final class Javac {
 
 	/**
 	 * Method getEncoding.
+	 * 
 	 * @return String
 	 */
 	public String getEncoding() {
@@ -181,7 +196,9 @@ public final class Javac {
 
 	/**
 	 * Method setEncoding.
-	 * @param encoding String
+	 * 
+	 * @param encoding
+	 *            String
 	 */
 	public void setEncoding(String encoding) {
 		this.encoding = encoding;
@@ -189,6 +206,7 @@ public final class Javac {
 
 	/**
 	 * Method getExtdirs.
+	 * 
 	 * @return String
 	 */
 	public String getExtdirs() {
@@ -197,7 +215,9 @@ public final class Javac {
 
 	/**
 	 * Method setExtdirs.
-	 * @param extdirs String
+	 * 
+	 * @param extdirs
+	 *            String
 	 */
 	public void setExtdirs(String extdirs) {
 		this.extdirs = extdirs;
@@ -205,6 +225,7 @@ public final class Javac {
 
 	/**
 	 * Method getOutputdir.
+	 * 
 	 * @return String
 	 */
 	public String getOutputdir() {
@@ -213,7 +234,9 @@ public final class Javac {
 
 	/**
 	 * Method setOutputdir.
-	 * @param outputdir String
+	 * 
+	 * @param outputdir
+	 *            String
 	 */
 	public void setOutputdir(String outputdir) {
 		this.outputdir = outputdir;
@@ -221,6 +244,7 @@ public final class Javac {
 
 	/**
 	 * Method getSourcepath.
+	 * 
 	 * @return String
 	 */
 	public String getSourcepath() {
@@ -229,7 +253,9 @@ public final class Javac {
 
 	/**
 	 * Method setSourcepath.
-	 * @param sourcepath String
+	 * 
+	 * @param sourcepath
+	 *            String
 	 */
 	public void setSourcepath(String sourcepath) {
 		this.sourcepath = sourcepath;
@@ -237,6 +263,7 @@ public final class Javac {
 
 	/**
 	 * Method getTarget.
+	 * 
 	 * @return String
 	 */
 	public String getTarget() {
@@ -245,7 +272,9 @@ public final class Javac {
 
 	/**
 	 * Method setTarget.
-	 * @param target String
+	 * 
+	 * @param target
+	 *            String
 	 */
 	public void setTarget(String target) {
 		this.target = target;

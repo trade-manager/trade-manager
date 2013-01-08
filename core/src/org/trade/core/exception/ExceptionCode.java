@@ -66,7 +66,9 @@ public class ExceptionCode implements java.io.Serializable {
 
 	/**
 	 * Constructor for ExceptionCode.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 */
 	public ExceptionCode(String code) {
 		m_code = code;
@@ -74,8 +76,11 @@ public class ExceptionCode implements java.io.Serializable {
 
 	/**
 	 * Constructor for ExceptionCode.
-	 * @param code String
-	 * @param fieldRef String
+	 * 
+	 * @param code
+	 *            String
+	 * @param fieldRef
+	 *            String
 	 */
 	public ExceptionCode(String code, String fieldRef) {
 		m_code = code;
@@ -86,7 +91,9 @@ public class ExceptionCode implements java.io.Serializable {
 	 * This can be used to generate a new ExceptionCode object where the field
 	 * reference has the specified sequence number appended to it. It may be
 	 * used when repeating groups of data are being validated.
-	 * @param sequence int
+	 * 
+	 * @param sequence
+	 *            int
 	 * @return ExceptionCode
 	 */
 	public ExceptionCode createSequencedCode(int sequence) {
@@ -104,6 +111,7 @@ public class ExceptionCode implements java.io.Serializable {
 
 	/**
 	 * Method getCode.
+	 * 
 	 * @return String
 	 */
 	public String getCode() {
@@ -112,6 +120,7 @@ public class ExceptionCode implements java.io.Serializable {
 
 	/**
 	 * Method getFieldReference.
+	 * 
 	 * @return String
 	 */
 	public String getFieldReference() {
@@ -120,7 +129,9 @@ public class ExceptionCode implements java.io.Serializable {
 
 	/**
 	 * Method equals.
-	 * @param objectToCompare Object
+	 * 
+	 * @param objectToCompare
+	 *            Object
 	 * @return boolean
 	 */
 	public boolean equals(Object objectToCompare) {
@@ -159,22 +170,22 @@ public class ExceptionCode implements java.io.Serializable {
 
 		return equal;
 	}
-	
+
 	/**
 	 * Method hashCode.
+	 * 
 	 * @return int
 	 */
 	public int hashCode() {
 		int hash = 1;
 		hash = hash * 31 + m_code.hashCode();
-		hash = hash
-				* 31
-				+ (m_fieldRef == null ? 0 : m_fieldRef.hashCode());
+		hash = hash * 31 + (m_fieldRef == null ? 0 : m_fieldRef.hashCode());
 		return hash;
 	}
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

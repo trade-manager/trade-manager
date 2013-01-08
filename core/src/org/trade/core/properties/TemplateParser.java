@@ -86,9 +86,10 @@ public class TemplateParser {
 	 *            - the template.
 	 * @param tags
 	 *            - the tags and values.
-	
+	 * 
 	 * @throws <code>InvalidParameterException</code> when tag in the template
-	 *         is not found in the tags Hashtable. */
+	 *         is not found in the tags Hashtable.
+	 */
 	public TemplateParser(String template, Dictionary<?, ?> tags) {
 		if ((template == null) || (tags == null)) {
 			throw new IllegalArgumentException(
@@ -109,8 +110,9 @@ public class TemplateParser {
 	 * Otherwise #(key_name)# pattern is ignored and nothing will appear in it's
 	 * place in the output.
 	 * 
-	
-	 * @param option boolean
+	 * 
+	 * @param option
+	 *            boolean
 	 */
 	public void setInsertMissingTags(boolean option) {
 		m_insertMissingTags = option;
@@ -122,10 +124,12 @@ public class TemplateParser {
 	 * 
 	 * E.g. #(key_name)#.
 	 * 
-	
-	
-	 * @param left char
-	 * @param right char
+	 * 
+	 * 
+	 * @param left
+	 *            char
+	 * @param right
+	 *            char
 	 */
 	public void setBrackets(char left, char right) {
 		m_leftBracket = left;
@@ -138,8 +142,9 @@ public class TemplateParser {
 	 * 
 	 * E.g. #(key_name)#.
 	 * 
-	
-	 * @param delimiter char
+	 * 
+	 * @param delimiter
+	 *            char
 	 */
 	public void setDelimiter(char delimiter) {
 		m_delimiter = delimiter;
@@ -148,6 +153,7 @@ public class TemplateParser {
 	/**
 	 * This method parses the template substituting keys with values supplied in
 	 * tags Dictionary.
+	 * 
 	 * @return String
 	 */
 	public String parseTemplate() {
@@ -233,6 +239,7 @@ public class TemplateParser {
 	/**
 	 * This method parses the template substituting keys with values supplied in
 	 * tags Dictionary.
+	 * 
 	 * @return Properties
 	 */
 	public Properties findTemplateTags() {
@@ -262,12 +269,13 @@ public class TemplateParser {
 	 * This method parses the template substituting keys with values supplied in
 	 * tags Hashtable.
 	 * 
-	
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return NextToken
 	 * @throws <code>InvalidParameterException</code> when tag in the template
-	 *         is not found in the tags Hashtable. */
+	 *         is not found in the tags Hashtable.
+	 */
 	public NextToken getNextToken() {
 		int delimiterPosition = -1;
 		int nextDelimiterPosition = -1;
@@ -347,7 +355,9 @@ public class TemplateParser {
 
 	/**
 	 * Method processForEachSubtemplate.
-	 * @param beginToken NextToken
+	 * 
+	 * @param beginToken
+	 *            NextToken
 	 * @return String
 	 */
 	private String processForEachSubtemplate(NextToken beginToken) {
@@ -423,6 +433,7 @@ public class TemplateParser {
 
 	/**
 	 * This class holds intermediate results of parsing the template.
+	 * 
 	 * @author Simon Allen
 	 * @version $Revision: 1.0 $
 	 */
@@ -449,7 +460,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setFoundToken.
-		 * @param foundToken boolean
+		 * 
+		 * @param foundToken
+		 *            boolean
 		 */
 		public void setFoundToken(boolean foundToken) {
 			m_foundToken = foundToken;
@@ -457,6 +470,7 @@ public class TemplateParser {
 
 		/**
 		 * Method foundToken.
+		 * 
 		 * @return boolean
 		 */
 		public boolean foundToken() {
@@ -465,7 +479,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setFinishedParsing.
-		 * @param finishedParsing boolean
+		 * 
+		 * @param finishedParsing
+		 *            boolean
 		 */
 		public void setFinishedParsing(boolean finishedParsing) {
 			m_finishedParsing = finishedParsing;
@@ -473,6 +489,7 @@ public class TemplateParser {
 
 		/**
 		 * Method finishedParsing.
+		 * 
 		 * @return boolean
 		 */
 		public boolean finishedParsing() {
@@ -481,6 +498,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getParsedPosition.
+		 * 
 		 * @return int
 		 */
 		public int getParsedPosition() {
@@ -489,7 +507,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setParsedPosition.
-		 * @param position int
+		 * 
+		 * @param position
+		 *            int
 		 */
 		public void setParsedPosition(int position) {
 			m_parsedPosition = position;
@@ -497,6 +517,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getLastParsedPosition.
+		 * 
 		 * @return int
 		 */
 		public int getLastParsedPosition() {
@@ -505,7 +526,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setLastParsedPosition.
-		 * @param position int
+		 * 
+		 * @param position
+		 *            int
 		 */
 		public void setLastParsedPosition(int position) {
 			m_lastParsedPosition = position;
@@ -513,6 +536,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getPositionBeforeKey.
+		 * 
 		 * @return int
 		 */
 		public int getPositionBeforeKey() {
@@ -521,7 +545,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setPositionBeforeKey.
-		 * @param position int
+		 * 
+		 * @param position
+		 *            int
 		 */
 		public void setPositionBeforeKey(int position) {
 			m_positionBeforeKey = position;
@@ -529,6 +555,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getPositionAfterKey.
+		 * 
 		 * @return int
 		 */
 		public int getPositionAfterKey() {
@@ -537,7 +564,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setPositionAfterKey.
-		 * @param position int
+		 * 
+		 * @param position
+		 *            int
 		 */
 		public void setPositionAfterKey(int position) {
 			m_positionAfterKey = position;
@@ -545,6 +574,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getKey.
+		 * 
 		 * @return String
 		 */
 		public String getKey() {
@@ -553,7 +583,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setKey.
-		 * @param key String
+		 * 
+		 * @param key
+		 *            String
 		 */
 		public void setKey(String key) {
 			m_key = key;
@@ -561,6 +593,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getMissingTag.
+		 * 
 		 * @return String
 		 */
 		public String getMissingTag() {
@@ -569,7 +602,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setMissingTag.
-		 * @param tag String
+		 * 
+		 * @param tag
+		 *            String
 		 */
 		public void setMissingTag(String tag) {
 			m_missingTag = tag;
@@ -577,6 +612,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getValue.
+		 * 
 		 * @return Object
 		 */
 		public Object getValue() {
@@ -585,7 +621,9 @@ public class TemplateParser {
 
 		/**
 		 * Method setValue.
-		 * @param value Object
+		 * 
+		 * @param value
+		 *            Object
 		 */
 		public void setValue(Object value) {
 			if (value instanceof Vector) {
@@ -601,6 +639,7 @@ public class TemplateParser {
 
 		/**
 		 * Method getArrayOfValues.
+		 * 
 		 * @return Object[]
 		 */
 		public Object[] getArrayOfValues() {
@@ -610,7 +649,9 @@ public class TemplateParser {
 
 	/**
 	 * Method setIterationNumber.
-	 * @param iterationNumber int
+	 * 
+	 * @param iterationNumber
+	 *            int
 	 */
 	private void setIterationNumber(int iterationNumber) {
 		m_iterationNumber = iterationNumber;
@@ -619,8 +660,9 @@ public class TemplateParser {
 	/**
 	 * Return list of error messages found while parsing last template.
 	 * 
-	
-	 * @return String with error messages */
+	 * 
+	 * @return String with error messages
+	 */
 	public String getErrorMessages() {
 		return m_errorMessages.toString();
 	}
@@ -628,8 +670,9 @@ public class TemplateParser {
 	/**
 	 * Return list of error messages found while parsing last template.
 	 * 
-	
-	 * @param message String
+	 * 
+	 * @param message
+	 *            String
 	 */
 	private void addErrorMessage(String message) {
 		if (message != null) {
@@ -644,8 +687,9 @@ public class TemplateParser {
 	 * not found in the tags Hashtable and were not substituted while parsing
 	 * the template during last invokation of the parseTemplate method.
 	 * 
-	
-	 * @return Enumeration of missing parameter's names. */
+	 * 
+	 * @return Enumeration of missing parameter's names.
+	 */
 	public Enumeration<String> getMissingParameters() {
 		return m_missingKeys.elements();
 	}

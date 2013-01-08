@@ -72,8 +72,9 @@ public class PivotItem extends ComparableObjectItem {
 	/**
 	 * Returns the period.
 	 * 
-	
-	 * @return The period (never <code>null</code>). */
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
 	public RegularTimePeriod getPeriod() {
 		return (RegularTimePeriod) getComparable();
 	}
@@ -81,8 +82,9 @@ public class PivotItem extends ComparableObjectItem {
 	/**
 	 * Returns the y-value.
 	 * 
-	
-	 * @return The y-value. */
+	 * 
+	 * @return The y-value.
+	 */
 	public double getY() {
 		return getPivotPrice();
 	}
@@ -90,8 +92,9 @@ public class PivotItem extends ComparableObjectItem {
 	/**
 	 * Set the privotPrice value.
 	 * 
-	
-	 * @param pivotPrice double
+	 * 
+	 * @param pivotPrice
+	 *            double
 	 */
 	public void setPivotPrice(double pivotPrice) {
 		Pivot dataItem = (Pivot) getObject();
@@ -104,8 +107,9 @@ public class PivotItem extends ComparableObjectItem {
 	/**
 	 * Returns the pivotPrice value.
 	 * 
-	
-	 * @return The pivotPrice value. */
+	 * 
+	 * @return The pivotPrice value.
+	 */
 	public double getPivotPrice() {
 		Pivot dataItem = (Pivot) getObject();
 		if (dataItem != null) {
@@ -121,8 +125,9 @@ public class PivotItem extends ComparableObjectItem {
 	/**
 	 * Set the pivotSide value.
 	 * 
-	
-	 * @param pivotSide String
+	 * 
+	 * @param pivotSide
+	 *            String
 	 */
 	public void setPivotSide(String pivotSide) {
 		Pivot dataItem = (Pivot) getObject();
@@ -135,8 +140,9 @@ public class PivotItem extends ComparableObjectItem {
 	/**
 	 * Returns the pivotSide value.
 	 * 
-	
-	 * @return The pivotSide value. */
+	 * 
+	 * @return The pivotSide value.
+	 */
 	public String getPivotSide() {
 		Pivot dataItem = (Pivot) getObject();
 		if (dataItem != null) {

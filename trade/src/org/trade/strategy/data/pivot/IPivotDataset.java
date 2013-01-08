@@ -40,6 +40,7 @@ import org.jfree.data.xy.XYDataset;
 /**
  * An interface that defines data in the form of (x, high, low, open, close)
  * tuples.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -53,8 +54,9 @@ public interface IPivotDataset extends XYDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Vwap. */
+	 * 
+	 * @return The Vwap.
+	 */
 	public double getPivotValue(int series, int item);
 
 	/**
@@ -65,8 +67,9 @@ public interface IPivotDataset extends XYDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Pivot. */
+	 * 
+	 * @return The Pivot.
+	 */
 	public Number getPivot(int series, int item);
 
 	/**
@@ -77,8 +80,9 @@ public interface IPivotDataset extends XYDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Pivot. */
+	 * 
+	 * @return The Pivot.
+	 */
 	public String getPivotSide(int series, int item);
 
 }

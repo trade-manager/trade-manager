@@ -62,8 +62,9 @@ public class StringToSQLDateConverter extends StringToObjectConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.sql.Date .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.sql.Date.class;
@@ -78,11 +79,12 @@ public class StringToSQLDateConverter extends StringToObjectConverter {
 	 * 
 	 * @param aString
 	 *            the String to be converted
-	
-	
-	 * @return Object the String converted to a java.sql.Date * @exception IllegalArgumentException
-	 *                thrown if the String to convert is not in the correct
-	 *                format */
+	 * 
+	 * 
+	 * @return Object the String converted to a java.sql.Date * @exception
+	 *         IllegalArgumentException thrown if the String to convert is not
+	 *         in the correct format
+	 */
 	protected Object getConvertedString(String aString)
 			throws IllegalArgumentException {
 		return Date.valueOf(aString);

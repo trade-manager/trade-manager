@@ -76,7 +76,6 @@ public class VolumeBarRenderer extends XYBarRenderer {
 	/**
 	 * Creates a new renderer.
 	 * 
-	
 	 */
 	public VolumeBarRenderer() {
 		configureToolTips();
@@ -112,8 +111,9 @@ public class VolumeBarRenderer extends XYBarRenderer {
 	 * @param column
 	 *            the category.
 	 * 
-	
-	 * @return The item color. * @see org.jfree.chart.renderer.xy.XYItemRenderer#getItemPaint(int, int)
+	 * 
+	 * @return The item color. * @see
+	 *         org.jfree.chart.renderer.xy.XYItemRenderer#getItemPaint(int, int)
 	 */
 	public Paint getItemPaint(final int row, final int column) {
 		return this.color;
@@ -148,7 +148,9 @@ public class VolumeBarRenderer extends XYBarRenderer {
 	 *            permitted).
 	 * @param pass
 	 *            the pass index.
-	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D, XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot, ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
+	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D,
+	 *      XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot,
+	 *      ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
 	 */
 	public void drawItem(Graphics2D g2, XYItemRendererState state,
 			Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,

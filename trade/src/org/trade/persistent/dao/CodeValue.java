@@ -66,8 +66,11 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for CodeValue.
-	 * @param codeAttribute CodeAttribute
-	 * @param codeValue String
+	 * 
+	 * @param codeAttribute
+	 *            CodeAttribute
+	 * @param codeValue
+	 *            String
 	 */
 	public CodeValue(CodeAttribute codeAttribute, String codeValue) {
 		this.codeValue = codeValue;
@@ -76,9 +79,13 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Constructor for CodeValue.
-	 * @param codeAttribute CodeAttribute
-	 * @param codeValue String
-	 * @param indicatorSeries IndicatorSeries
+	 * 
+	 * @param codeAttribute
+	 *            CodeAttribute
+	 * @param codeValue
+	 *            String
+	 * @param indicatorSeries
+	 *            IndicatorSeries
 	 */
 	public CodeValue(CodeAttribute codeAttribute, String codeValue,
 			IndicatorSeries indicatorSeries) {
@@ -89,6 +96,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getIdCodeValue.
+	 * 
 	 * @return Integer
 	 */
 	@Id
@@ -100,7 +108,9 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIdCodeValue.
-	 * @param idCodeValue Integer
+	 * 
+	 * @param idCodeValue
+	 *            Integer
 	 */
 	public void setIdCodeValue(Integer idCodeValue) {
 		this.id = idCodeValue;
@@ -108,6 +118,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getCodeValue.
+	 * 
 	 * @return String
 	 */
 	@Column(name = "codeValue", nullable = false, length = 45)
@@ -117,7 +128,9 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setCodeValue.
-	 * @param codeValue String
+	 * 
+	 * @param codeValue
+	 *            String
 	 */
 	public void setCodeValue(String codeValue) {
 		this.codeValue = codeValue;
@@ -125,6 +138,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getCodeAttribute.
+	 * 
 	 * @return CodeAttribute
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -135,7 +149,9 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setCodeAttribute.
-	 * @param codeAttribute CodeAttribute
+	 * 
+	 * @param codeAttribute
+	 *            CodeAttribute
 	 */
 	public void setCodeAttribute(CodeAttribute codeAttribute) {
 		this.codeAttribute = codeAttribute;
@@ -143,6 +159,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method getIndicatorSeries.
+	 * 
 	 * @return IndicatorSeries
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -153,7 +170,9 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 
 	/**
 	 * Method setIndicatorSeries.
-	 * @param indicatorSeries IndicatorSeries
+	 * 
+	 * @param indicatorSeries
+	 *            IndicatorSeries
 	 */
 	public void setIndicatorSeries(IndicatorSeries indicatorSeries) {
 		this.indicatorSeries = indicatorSeries;

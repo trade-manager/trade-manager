@@ -61,7 +61,9 @@ public class PivotCalculator {
 
 	/**
 	 * Method calculatePivot.
-	 * @param userDataVector Hashtable<Long,Pair>
+	 * 
+	 * @param userDataVector
+	 *            Hashtable<Long,Pair>
 	 * @return boolean
 	 */
 	public boolean calculatePivot(Hashtable<Long, Pair> userDataVector) {
@@ -99,6 +101,7 @@ public class PivotCalculator {
 
 	/**
 	 * Method getPrint.
+	 * 
 	 * @return String
 	 */
 	public String getPrint() {
@@ -107,11 +110,17 @@ public class PivotCalculator {
 
 	/**
 	 * Method toPrint.
-	 * @param polyOrder int
-	 * @param result_cc double
-	 * @param result_se double
-	 * @param terms double[]
-	 * @param dataPoints int
+	 * 
+	 * @param polyOrder
+	 *            int
+	 * @param result_cc
+	 *            double
+	 * @param result_se
+	 *            double
+	 * @param terms
+	 *            double[]
+	 * @param dataPoints
+	 *            int
 	 * @return String
 	 */
 	private String toPrint(int polyOrder, double result_cc, double result_se,
@@ -159,8 +168,11 @@ public class PivotCalculator {
 
 	/**
 	 * Method formatNum.
-	 * @param n double
-	 * @param wide boolean
+	 * 
+	 * @param n
+	 *            double
+	 * @param wide
+	 *            boolean
 	 * @return String
 	 */
 	private String formatNum(double n, boolean wide) {
@@ -175,8 +187,11 @@ public class PivotCalculator {
 
 	/**
 	 * Method fx.
-	 * @param x double
-	 * @param terms double[]
+	 * 
+	 * @param x
+	 *            double
+	 * @param terms
+	 *            double[]
 	 * @return double
 	 */
 	private double fx(double x, double[] terms) {

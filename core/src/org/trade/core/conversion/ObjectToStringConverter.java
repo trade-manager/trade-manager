@@ -65,10 +65,11 @@ public class ObjectToStringConverter implements JavaTypeConverter {
 	 * 
 	 * @param valueToConvert
 	 *            the value to convert
-	
-	
-	 * @return Object the String representation of the valueToConvert * @exception IllegalArgumentException
-	 *                which should never be thrown * @see org.trade.core.conversion.JavaTypeConverter#convert(Object)
+	 * 
+	 * 
+	 * @return Object the String representation of the valueToConvert * @exception
+	 *         IllegalArgumentException which should never be thrown * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#convert(Object)
 	 */
 	public Object convert(Object valueToConvert)
 			throws IllegalArgumentException {
@@ -83,8 +84,9 @@ public class ObjectToStringConverter implements JavaTypeConverter {
 	 * This method returns the source type or class that the converter converts
 	 * from. In this case java.lang.Object .
 	 * 
-	
-	 * @return Class the class of the source value which will be converted * @see org.trade.core.conversion.JavaTypeConverter#getSourceType()
+	 * 
+	 * @return Class the class of the source value which will be converted * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getSourceType()
 	 */
 	public Class<?> getSourceType() {
 		return java.lang.Object.class;
@@ -94,8 +96,9 @@ public class ObjectToStringConverter implements JavaTypeConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.lang.String .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.lang.String.class;

@@ -224,7 +224,6 @@ public interface BrokerModel {
 	void onReqExecutions(Tradestrategy tradestrategy)
 			throws BrokerModelException;
 
-
 	/**
 	 * Method isHistoricalDataRunning.
 	 * 
@@ -242,7 +241,6 @@ public interface BrokerModel {
 	 * @return boolean
 	 */
 	boolean isRealtimeBarsRunning(Tradestrategy tradestrategy);
-	
 
 	/**
 	 * Method isRealtimeBarsRunning.
@@ -252,7 +250,7 @@ public interface BrokerModel {
 	 * @return boolean
 	 */
 	boolean isRealtimeBarsRunning(Contract contract);
-	
+
 	/**
 	 * Method isMarketDataRunning.
 	 * 
@@ -261,7 +259,6 @@ public interface BrokerModel {
 	 * @return boolean
 	 */
 	boolean isMarketDataRunning(Tradestrategy tradestrategy);
-	
 
 	/**
 	 * Method isMarketDataRunning.
@@ -307,7 +304,7 @@ public interface BrokerModel {
 	 *            Tradestrategy
 	 */
 	void onCancelRealtimeBars(Tradestrategy tradestrategy);
-	
+
 	/**
 	 * Method onCancelMarketData.
 	 * 

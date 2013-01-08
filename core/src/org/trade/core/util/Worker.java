@@ -61,6 +61,7 @@ import javax.swing.SwingUtilities;
  * 
  * Note that the API changed slightly in the 3rd version: You must now invoke
  * start() on the StrategyWorker after creating it.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -74,6 +75,7 @@ public abstract class Worker {
 	/**
 	 * Class to maintain reference to current worker thread under separate
 	 * synchronization control.
+	 * 
 	 * @author Simon Allen
 	 * @version $Revision: 1.0 $
 	 */
@@ -82,7 +84,9 @@ public abstract class Worker {
 
 		/**
 		 * Constructor for ThreadVar.
-		 * @param t Thread
+		 * 
+		 * @param t
+		 *            Thread
 		 */
 		ThreadVar(Thread t) {
 			thread = t;
@@ -90,6 +94,7 @@ public abstract class Worker {
 
 		/**
 		 * Method get.
+		 * 
 		 * @return Thread
 		 */
 		synchronized Thread get() {
@@ -106,6 +111,7 @@ public abstract class Worker {
 	/**
 	 * Get the value produced by the worker thread, or null if it hasn't been
 	 * constructed yet.
+	 * 
 	 * @return Object
 	 */
 	protected synchronized Object getValue() {
@@ -114,7 +120,9 @@ public abstract class Worker {
 
 	/**
 	 * Set the value produced by worker thread
-	 * @param x Object
+	 * 
+	 * @param x
+	 *            Object
 	 */
 	private synchronized void setValue(Object x) {
 		value = x;
@@ -122,6 +130,7 @@ public abstract class Worker {
 
 	/**
 	 * Compute the value to be returned by the <code>get</code> method.
+	 * 
 	 * @return Object
 	 */
 	protected abstract Object doInBackground();
@@ -134,6 +143,7 @@ public abstract class Worker {
 
 	/**
 	 * Method isDone.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isDone() {
@@ -162,8 +172,9 @@ public abstract class Worker {
 	 * These states are virtual machine states which do not reflect any
 	 * operating system thread states.
 	 * 
-	
-	 * @return the boolean running/dead. */
+	 * 
+	 * @return the boolean running/dead.
+	 */
 
 	public boolean isRunning() {
 		Thread t = threadVar.get();
@@ -196,8 +207,9 @@ public abstract class Worker {
 	 * These states are virtual machine states which do not reflect any
 	 * operating system thread states.
 	 * 
-	
-	 * @return the boolean running/dead. */
+	 * 
+	 * @return the boolean running/dead.
+	 */
 
 	public boolean isWaiting() {
 		Thread t = threadVar.get();
@@ -223,6 +235,7 @@ public abstract class Worker {
 
 	/**
 	 * Method isCancelled.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isCancelled() {
@@ -231,7 +244,9 @@ public abstract class Worker {
 
 	/**
 	 * Method setIsCancelled.
-	 * @param isCancelled boolean
+	 * 
+	 * @param isCancelled
+	 *            boolean
 	 */
 	public void setIsCancelled(boolean isCancelled) {
 		this.isCancelled = isCancelled;
@@ -242,8 +257,9 @@ public abstract class Worker {
 	 * null if either the constructing thread or the current thread was
 	 * interrupted before a value was produced.
 	 * 
-	
-	 * @return the value created by the <code>construct</code> method */
+	 * 
+	 * @return the value created by the <code>construct</code> method
+	 */
 	public Object get() {
 		while (true) {
 			Thread t = threadVar.get();

@@ -70,8 +70,9 @@ public class RelativeStrengthIndexItem extends ComparableObjectItem {
 	/**
 	 * Returns the period.
 	 * 
-	
-	 * @return The period (never <code>null</code>). */
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
 	public RegularTimePeriod getPeriod() {
 		return (RegularTimePeriod) getComparable();
 	}
@@ -79,8 +80,9 @@ public class RelativeStrengthIndexItem extends ComparableObjectItem {
 	/**
 	 * Returns the y-value.
 	 * 
-	
-	 * @return The y-value. */
+	 * 
+	 * @return The y-value.
+	 */
 	public double getY() {
 		return getRelativeStrengthIndex();
 	}
@@ -88,8 +90,9 @@ public class RelativeStrengthIndexItem extends ComparableObjectItem {
 	/**
 	 * Set the relativeStrengthIndex value.
 	 * 
-	
-	 * @param relativeStrengthIndex double
+	 * 
+	 * @param relativeStrengthIndex
+	 *            double
 	 */
 	public void setRelativeStrengthIndex(double relativeStrengthIndex) {
 		RelativeStrengthIndex dataItem = (RelativeStrengthIndex) getObject();
@@ -103,8 +106,9 @@ public class RelativeStrengthIndexItem extends ComparableObjectItem {
 	/**
 	 * Returns the relativeStrengthIndex value.
 	 * 
-	
-	 * @return The relativeStrengthIndex value. */
+	 * 
+	 * @return The relativeStrengthIndex value.
+	 */
 	public double getRelativeStrengthIndex() {
 		RelativeStrengthIndex dataItem = (RelativeStrengthIndex) getObject();
 		if (dataItem != null) {

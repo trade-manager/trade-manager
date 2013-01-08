@@ -59,8 +59,10 @@ public class PersistentModelException extends ModelException {
 	 * 
 	 * @param message
 	 *            The desired message text.
-	 * @param id Integer
-	 * @param code Integer
+	 * @param id
+	 *            Integer
+	 * @param code
+	 *            Integer
 	 */
 	public PersistentModelException(Integer id, Integer code, String message) {
 		super(id, code, message);

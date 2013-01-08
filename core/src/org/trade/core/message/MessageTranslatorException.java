@@ -52,7 +52,9 @@ public class MessageTranslatorException extends NestingException {
 
 	/**
 	 * Constructor for MessageTranslatorException.
-	 * @param t Throwable
+	 * 
+	 * @param t
+	 *            Throwable
 	 */
 	public MessageTranslatorException(Throwable t) {
 		super(t);
@@ -60,8 +62,11 @@ public class MessageTranslatorException extends NestingException {
 
 	/**
 	 * Constructor for MessageTranslatorException.
-	 * @param t Throwable
-	 * @param message String
+	 * 
+	 * @param t
+	 *            Throwable
+	 * @param message
+	 *            String
 	 */
 	public MessageTranslatorException(Throwable t, String message) {
 		super(t, message);
@@ -69,7 +74,9 @@ public class MessageTranslatorException extends NestingException {
 
 	/**
 	 * Constructor for MessageTranslatorException.
-	 * @param message String
+	 * 
+	 * @param message
+	 *            String
 	 */
 	public MessageTranslatorException(String message) {
 		super(message);

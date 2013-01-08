@@ -65,7 +65,9 @@ public class TradeOrderHome {
 
 	/**
 	 * Method persist.
-	 * @param transientInstance TradeOrder
+	 * 
+	 * @param transientInstance
+	 *            TradeOrder
 	 * @return TradeOrder
 	 */
 	public synchronized TradeOrder persist(TradeOrder transientInstance) {
@@ -109,7 +111,9 @@ public class TradeOrderHome {
 
 	/**
 	 * Method findTradeOrderByKey.
-	 * @param orderKey Integer
+	 * 
+	 * @param orderKey
+	 *            Integer
 	 * @return TradeOrder
 	 */
 	public synchronized TradeOrder findTradeOrderByKey(Integer orderKey) {
@@ -144,6 +148,7 @@ public class TradeOrderHome {
 
 	/**
 	 * Method findTradeOrderByMaxKey.
+	 * 
 	 * @return Integer
 	 */
 	public Integer findTradeOrderByMaxKey() {

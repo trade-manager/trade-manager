@@ -1,5 +1,38 @@
 package org.trade.ui.chart;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterJob;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
@@ -20,44 +53,10 @@ import org.trade.ui.MainPanelMenu;
 import org.trade.ui.TradeAppLoadConfig;
 import org.trade.ui.base.BasePanel;
 import org.trade.ui.base.BasePanelMenu;
-import org.trade.ui.base.ImageBuilder;
 import org.trade.ui.base.ComponentPrintService;
+import org.trade.ui.base.ImageBuilder;
 import org.trade.ui.base.WaitCursorEventQueue;
 import org.trade.ui.widget.Clock;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterJob;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 /**
  */

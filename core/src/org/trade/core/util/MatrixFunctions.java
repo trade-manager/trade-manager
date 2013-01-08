@@ -48,8 +48,11 @@ public final class MatrixFunctions {
 
 	/**
 	 * Method getCorrelationCoefficient.
-	 * @param data Pair[]
-	 * @param terms double[]
+	 * 
+	 * @param data
+	 *            Pair[]
+	 * @param terms
+	 *            double[]
 	 * @return double
 	 */
 	public double getCorrelationCoefficient(Pair[] data, double[] terms) {
@@ -76,8 +79,11 @@ public final class MatrixFunctions {
 
 	/**
 	 * Method getStandardError.
-	 * @param data Pair[]
-	 * @param terms double[]
+	 * 
+	 * @param data
+	 *            Pair[]
+	 * @param terms
+	 *            double[]
 	 * @return double
 	 */
 	public double getStandardError(Pair[] data, double[] terms) {
@@ -95,8 +101,11 @@ public final class MatrixFunctions {
 
 	/**
 	 * Method getCalculatedCoeffients.
-	 * @param data Pair[]
-	 * @param p int
+	 * 
+	 * @param data
+	 *            Pair[]
+	 * @param p
+	 *            int
 	 * @return double[]
 	 */
 	public double[] getCalculatedCoeffients(Pair[] data, int p) {
@@ -145,8 +154,11 @@ public final class MatrixFunctions {
 
 	/**
 	 * Method fx.
-	 * @param x double
-	 * @param terms double[]
+	 * 
+	 * @param x
+	 *            double
+	 * @param terms
+	 *            double[]
 	 * @return double
 	 */
 	private double fx(double x, double[] terms) {
@@ -161,10 +173,15 @@ public final class MatrixFunctions {
 
 	/**
 	 * Method gj_divide.
-	 * @param A double[][]
-	 * @param i int
-	 * @param j int
-	 * @param m int
+	 * 
+	 * @param A
+	 *            double[][]
+	 * @param i
+	 *            int
+	 * @param j
+	 *            int
+	 * @param m
+	 *            int
 	 */
 	private void gj_divide(double[][] A, int i, int j, int m) {
 		for (int q = j + 1; q < m; q++) {
@@ -175,11 +192,17 @@ public final class MatrixFunctions {
 
 	/**
 	 * Method gj_eliminate.
-	 * @param A double[][]
-	 * @param i int
-	 * @param j int
-	 * @param n int
-	 * @param m int
+	 * 
+	 * @param A
+	 *            double[][]
+	 * @param i
+	 *            int
+	 * @param j
+	 *            int
+	 * @param n
+	 *            int
+	 * @param m
+	 *            int
 	 */
 	private void gj_eliminate(double[][] A, int i, int j, int n, int m) {
 		for (int k = 0; k < n; k++) {
@@ -194,7 +217,9 @@ public final class MatrixFunctions {
 
 	/**
 	 * Method gj_echelonize.
-	 * @param A double[][]
+	 * 
+	 * @param A
+	 *            double[][]
 	 */
 	private void gj_echelonize(double[][] A) {
 		int n = A.length;

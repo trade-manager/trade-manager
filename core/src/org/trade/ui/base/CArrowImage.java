@@ -50,6 +50,7 @@ import java.util.Map;
 /**
  * A BufferedImage of one of four types of arrow (up, down, left or right) drawn
  * to the size specified on the constructor.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -70,7 +71,9 @@ public class CArrowImage extends BufferedImage {
 	// Constructor...
 	/**
 	 * Constructor for CArrowImage.
-	 * @param nArrowDirection int
+	 * 
+	 * @param nArrowDirection
+	 *            int
 	 */
 	public CArrowImage(int nArrowDirection) {
 		this(15, 9, nArrowDirection);
@@ -78,9 +81,13 @@ public class CArrowImage extends BufferedImage {
 
 	/**
 	 * Constructor for CArrowImage.
-	 * @param nWidth int
-	 * @param nHeight int
-	 * @param nArrowDirection int
+	 * 
+	 * @param nWidth
+	 *            int
+	 * @param nHeight
+	 *            int
+	 * @param nArrowDirection
+	 *            int
 	 */
 	public CArrowImage(int nWidth, int nHeight, int nArrowDirection) {
 		super(nWidth, nHeight, TYPE_INT_ARGB_PRE); // Set the width, height and

@@ -65,13 +65,16 @@ public class BaseMenuItem extends JMenuItem {
 	/**
 	 * BaseMenuItem() - constructor
 	 * 
-	
-	
-	
-	
-	 * @param p BasePanel
-	 * @param basePropertyCodes BaseUIPropertyCodes
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param basePropertyCodes
+	 *            BaseUIPropertyCodes
+	 * @exception * @see
+	 */
 	public BaseMenuItem(BasePanel p, BaseUIPropertyCodes basePropertyCodes) {
 		try {
 			if (p != null) {
@@ -99,17 +102,20 @@ public class BaseMenuItem extends JMenuItem {
 			_log.error(" Error instanciating Base Menu Item ", ex);
 		}
 	}
-	
+
 	/**
 	 * BaseMenuItem() - constructor
 	 * 
-	
-	
-	
-	
-	 * @param p BasePanel
-	 * @param UICode String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param p
+	 *            BasePanel
+	 * @param UICode
+	 *            String
+	 * @exception * @see
+	 */
 	public BaseMenuItem(BasePanel p, String UICode) {
 		try {
 			if (p != null) {
@@ -144,11 +150,12 @@ public class BaseMenuItem extends JMenuItem {
 	/**
 	 * actionPerformed() - button action performed
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	private void buttonPressed() {
 		if (getMethod() != null) {
 			this.messageEvent(getMethod());
@@ -158,13 +165,15 @@ public class BaseMenuItem extends JMenuItem {
 	/**
 	 * addMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
 	}
@@ -172,13 +181,15 @@ public class BaseMenuItem extends JMenuItem {
 	/**
 	 * removeMessageListener() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @param listener MessageListener
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param listener
+	 *            MessageListener
+	 * @exception * @see
+	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
 	}
@@ -186,12 +197,14 @@ public class BaseMenuItem extends JMenuItem {
 	/**
 	 * messageEvent() -
 	 * 
-	
-	
-	
-	
-	 * @param selection String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param selection
+	 *            String
+	 * @exception * @see
+	 */
 	protected void messageEvent(String selection) {
 		m_notifier.notifyEvent(new MessageEvent(selection),
 				new Vector<Object>());
@@ -200,12 +213,14 @@ public class BaseMenuItem extends JMenuItem {
 	/**
 	 * setMethod() - button action performed
 	 * 
-	
-	
-	
-	
-	 * @param method String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param method
+	 *            String
+	 * @exception * @see
+	 */
 	private void setMethod(String method) {
 		m_method = method;
 	}
@@ -213,12 +228,13 @@ public class BaseMenuItem extends JMenuItem {
 	/**
 	 * getMethod() - button action performed
 	 * 
-	
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @return String
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public String getMethod() {
 		return m_method;
 	}

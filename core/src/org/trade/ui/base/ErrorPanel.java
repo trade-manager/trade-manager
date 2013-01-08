@@ -187,6 +187,7 @@ public class ErrorPanel extends BasePanel {
 
 	/**
 	 * Method jbInit.
+	 * 
 	 * @throws Exception
 	 */
 	void jbInit() throws Exception {
@@ -253,12 +254,13 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doNew() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doNew() {
 		// Handle the File|New menu item.
 		if (okToAbandon()) {
@@ -276,12 +278,13 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doOpen() -
 	 * 
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doOpen() {
 		if (!okToAbandon()) {
 			return;
@@ -323,14 +326,15 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * openFile() -
 	 * 
-	
+	 * 
 	 * @param fileName
 	 *            the name of the text file on disk
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void openFile(String fileName) {
 		Cursor oldCursor = getFrame().getCursor();
 
@@ -368,13 +372,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doSave() -
 	 * 
-	
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doSave() {
 		doSaveFile();
 	}
@@ -382,13 +387,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doSave() -
 	 * 
-	
-	
 	 * 
-	
-	
-	
-	 * @return false if save did not occur. * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return false if save did not occur. * @exception * @see
+	 */
 	protected boolean doSaveFile() {
 		// Handle the case where we don't have a file name yet.
 		if (currFileName == null) {
@@ -409,13 +415,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doSaveAs() -
 	 * 
-	
-	
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doSaveAs() {
 		saveAs();
 	}
@@ -423,12 +430,13 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * saveAs() -
 	 * 
-	
-	
 	 * 
-	
-	
-	 * @return false means user cancelled the SaveAs * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return false means user cancelled the SaveAs * @exception * @see
+	 */
 	public boolean saveAs() {
 		if (filer1 == null) {
 			filer1 = new JFileChooser();
@@ -454,12 +462,13 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * okToAbandon() -
 	 * 
-	
-	
-	
-	
-	
-	 * @return true if user saved here (Yes), or didn't care (No) * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return true if user saved here (Yes), or didn't care (No) * @exception * @see
+	 */
 	private boolean okToAbandon() {
 		if (!dirty) {
 			return true;
@@ -485,11 +494,12 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * updateCaption() -
 	 * 
-	
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	private void updateCaption() {
 		String caption;
 
@@ -511,13 +521,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doColor() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doColor() {
 		// Handle the "Foreground Color" menu item
 		// Pick up the existing text (foreground) color from the TextArea
@@ -552,17 +563,18 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doDataChanged() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @exception * @see
 	 * 
-	 *      private void doDataChanged() { if (!dirty) { dirty = true;
+	 *            private void doDataChanged() { if (!dirty) { dirty = true;
 	 * 
-	 *      updateCaption(); } } */
+	 *            updateCaption(); } }
+	 */
 
 	/**
 	 * doPrint()() -
@@ -584,14 +596,15 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * saveFileWriter() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @return boolean
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public boolean saveFileWriter() {
 		boolean result = false;
 
@@ -616,14 +629,15 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * saveFileWriter() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @return boolean
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 	public boolean saveFileStream() {
 		boolean result = false;
 
@@ -649,26 +663,28 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doWindowActivated() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doWindowActivated() {
 	}
 
 	/**
 	 * doWindowDeActivated() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @return boolean * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return boolean * @exception * @see
+	 */
 	public boolean doWindowDeActivated() {
 		return true;
 	}
@@ -676,13 +692,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doWindowClose() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doWindowClose() {
 		okToAbandon();
 	}
@@ -693,14 +710,16 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doWindowOpen() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @param parm Object
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param parm
+	 *            Object
+	 * @exception * @see
+	 */
 	public void doWindowOpen(Object parm) {
 		if (parm instanceof String) {
 			jTextArea1.setText((String) parm);
@@ -710,13 +729,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doCopy() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doCopy() {
 		jTextArea1.copy();
 	}
@@ -724,13 +744,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doCut() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doCut() {
 		jTextArea1.cut();
 	}
@@ -738,13 +759,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doPaste() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doPaste() {
 		jTextArea1.paste();
 	}
@@ -752,13 +774,14 @@ public class ErrorPanel extends BasePanel {
 	/**
 	 * doDelete() -
 	 * 
-	
 	 * 
 	 * 
-	
-	
-	
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @exception * @see
+	 */
 	public void doDelete() {
 		jTextArea1.setText("");
 	}

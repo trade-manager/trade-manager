@@ -37,6 +37,7 @@ package org.trade.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JMenu;
 
 import org.trade.ui.base.BaseButton;
@@ -92,7 +93,9 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 
 	/**
 	 * Constructor for TradeMainPanelMenu.
-	 * @param basePanel BasePanel
+	 * 
+	 * @param basePanel
+	 *            BasePanel
 	 */
 	public TradeMainPanelMenu(BasePanel basePanel) {
 		super(basePanel);
@@ -122,11 +125,12 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 			}
 		});
 		testStrategyButton.setToolTipText("Test Strategy");
-		testStrategyButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				messageEvent(testStrategyButton.getMethod());
-			}
-		});
+		testStrategyButton
+				.addActionListener(new java.awt.event.ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						messageEvent(testStrategyButton.getMethod());
+					}
+				});
 		testStrategyMenu.setText("Test Strategy");
 		testStrategyMenu.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -155,7 +159,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 				messageEvent(searchButton.getMethod());
 			}
 		});
-		
+
 		refreshMenu.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(refreshMenu.getMethod());
@@ -262,7 +266,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 		actionMenu.add(refreshMenu, 5);
 		actionMenu.add(deleteMenu, 6);
 		actionMenu.add(propertiesMenu, 7);
-		
+
 		helpMenu.add(disclaimer, 1);
 
 		// windowMenu.add(close, 0);
@@ -276,7 +280,9 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 
 	/**
 	 * Method setEnabledBrokerData.
-	 * @param enabled boolean
+	 * 
+	 * @param enabled
+	 *            boolean
 	 */
 	public void setEnabledBrokerData(boolean enabled) {
 		brokerDataMenu.setEnabled(enabled);
@@ -285,7 +291,9 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 
 	/**
 	 * Method setEnabledRunStrategy.
-	 * @param enabled boolean
+	 * 
+	 * @param enabled
+	 *            boolean
 	 */
 	public void setEnabledRunStrategy(boolean enabled) {
 		runStrategyMenu.setEnabled(enabled);
@@ -294,7 +302,9 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 
 	/**
 	 * Method setEnabledTestStrategy.
-	 * @param enabled boolean
+	 * 
+	 * @param enabled
+	 *            boolean
 	 */
 	public void setEnabledTestStrategy(boolean enabled) {
 		testStrategyMenu.setEnabled(enabled);
@@ -303,7 +313,9 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 
 	/**
 	 * Method setEnabledSearchDeleteRefreshSave.
-	 * @param enabled boolean
+	 * 
+	 * @param enabled
+	 *            boolean
 	 */
 	public void setEnabledSearchDeleteRefreshSave(boolean enabled) {
 		refreshMenu.setEnabled(enabled);
@@ -313,9 +325,12 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 		deleteButton.setEnabled(enabled);
 		deleteMenu.setEnabled(enabled);
 	}
+
 	/**
 	 * Method setEnabledDeleteSave.
-	 * @param enabled boolean
+	 * 
+	 * @param enabled
+	 *            boolean
 	 */
 	public void setEnabledDelete(boolean enabled, String text) {
 		deleteMenu.setText(text);

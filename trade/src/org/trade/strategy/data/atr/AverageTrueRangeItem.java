@@ -70,8 +70,9 @@ public class AverageTrueRangeItem extends ComparableObjectItem {
 	/**
 	 * Returns the period.
 	 * 
-	
-	 * @return The period (never <code>null</code>). */
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
 	public RegularTimePeriod getPeriod() {
 		return (RegularTimePeriod) getComparable();
 	}
@@ -79,8 +80,9 @@ public class AverageTrueRangeItem extends ComparableObjectItem {
 	/**
 	 * Returns the y-value.
 	 * 
-	
-	 * @return The y-value. */
+	 * 
+	 * @return The y-value.
+	 */
 	public double getY() {
 		return getAverageTrueRange();
 	}
@@ -88,8 +90,9 @@ public class AverageTrueRangeItem extends ComparableObjectItem {
 	/**
 	 * Set the averageTrueRange value.
 	 * 
-	
-	 * @param averageTrueRange double
+	 * 
+	 * @param averageTrueRange
+	 *            double
 	 */
 	public void setAverageTrueRange(double averageTrueRange) {
 		AverageTrueRange dataItem = (AverageTrueRange) getObject();
@@ -102,8 +105,9 @@ public class AverageTrueRangeItem extends ComparableObjectItem {
 	/**
 	 * Returns the averageTrueRange value.
 	 * 
-	
-	 * @return The averageTrueRange value. */
+	 * 
+	 * @return The averageTrueRange value.
+	 */
 	public double getAverageTrueRange() {
 		AverageTrueRange dataItem = (AverageTrueRange) getObject();
 		if (dataItem != null) {

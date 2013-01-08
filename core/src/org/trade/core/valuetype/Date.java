@@ -94,8 +94,9 @@ public class Date extends ValueType implements Comparator<Date>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param date java.util.Date
+	 * 
+	 * @param date
+	 *            java.util.Date
 	 */
 	public Date(java.util.Date date) {
 		m_date = date;
@@ -104,8 +105,9 @@ public class Date extends ValueType implements Comparator<Date>,
 	/**
 	 * Parse the stringified date using the DATE_TIME_FORMAT
 	 * 
-	
-	 * @param date String
+	 * 
+	 * @param date
+	 *            String
 	 */
 	public Date(String date) {
 		this(date, null);
@@ -114,9 +116,11 @@ public class Date extends ValueType implements Comparator<Date>,
 	/**
 	 * Parse the stringified date using the incoming date form
 	 * 
-	
-	 * @param date String
-	 * @param dateFormat String
+	 * 
+	 * @param date
+	 *            String
+	 * @param dateFormat
+	 *            String
 	 */
 	public Date(String date, String dateFormat) {
 		if ((date == null) || (date.length() == 0)) {
@@ -152,14 +156,16 @@ public class Date extends ValueType implements Comparator<Date>,
 	}
 
 	/**
-	
-	 * @return The Date this Date is representing */
+	 * 
+	 * @return The Date this Date is representing
+	 */
 	public java.util.Date getDate() {
 		return (m_date);
 	}
 
 	/**
 	 * Method getCurrentDate.
+	 * 
 	 * @return org.trade.core.valuetype.Date
 	 */
 	public static org.trade.core.valuetype.Date getCurrentDate() {
@@ -168,12 +174,14 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method equals.
-	 * @param objectToCompare Object
+	 * 
+	 * @param objectToCompare
+	 *            Object
 	 * @return boolean
 	 * @see java.util.Comparator#equals(Object)
 	 */
 	public boolean equals(Object objectToCompare) {
-		
+
 		if (this == objectToCompare) {
 			return true;
 		}
@@ -209,7 +217,9 @@ public class Date extends ValueType implements Comparator<Date>,
 	// }
 	/**
 	 * Method compareTo.
-	 * @param other Date
+	 * 
+	 * @param other
+	 *            Date
 	 * @return int
 	 */
 	public int compareTo(final Date other) {
@@ -219,19 +229,21 @@ public class Date extends ValueType implements Comparator<Date>,
 			return result;
 		}
 
-		return CoreUtils
-				.nullSafeComparator(this.getDate(), other.getDate());
+		return CoreUtils.nullSafeComparator(this.getDate(), other.getDate());
 	}
 
 	/**
 	 * Method compare.
-	 * @param o1 Date
-	 * @param o2 Date
+	 * 
+	 * @param o1
+	 *            Date
+	 * @param o2
+	 *            Date
 	 * @return int
 	 */
 	public int compare(Date o1, Date o2) {
-		int returnVal = CoreUtils.nullSafeComparator(o1.getDate(),
-				o2.getDate());
+		int returnVal = CoreUtils
+				.nullSafeComparator(o1.getDate(), o2.getDate());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
 		}
@@ -241,6 +253,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	/**
 	 * See description of superclass method. Overrode functionality to return
 	 * the Date this object is using internally.
+	 * 
 	 * @return Object
 	 */
 	public Object getSQLObject() {
@@ -250,6 +263,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	/**
 	 * See description of superclass method. Overrode functionality to return
 	 * the Date this object is using internally.
+	 * 
 	 * @return Class<?>
 	 */
 	public Class<?> getSQLObjectType() {
@@ -257,9 +271,10 @@ public class Date extends ValueType implements Comparator<Date>,
 	}
 
 	/**
-	
+	 * 
 	 * @return String
-	 * @see com.cbsinc.esc.devtools.valuetype.ValueType */
+	 * @see com.cbsinc.esc.devtools.valuetype.ValueType
+	 */
 	public String toString() {
 		// the default is to return in date in the DATE_TIME_FORMAT and GMT
 		// TimeZone
@@ -268,8 +283,11 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Formats the Date to String in the given format for the specified TimeZone
-	 * @param formatString String
-	 * @param timeZone TimeZone
+	 * 
+	 * @param formatString
+	 *            String
+	 * @param timeZone
+	 *            TimeZone
 	 * @return String
 	 */
 	public String toString(String formatString, TimeZone timeZone) {
@@ -301,7 +319,9 @@ public class Date extends ValueType implements Comparator<Date>,
 	// the time
 	/**
 	 * Method rightLengthForDateTime.
-	 * @param dateAndTime String
+	 * 
+	 * @param dateAndTime
+	 *            String
 	 * @return boolean
 	 */
 	public static boolean rightLengthForDateTime(String dateAndTime) {
@@ -320,6 +340,7 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method isEmpty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isEmpty() {
@@ -334,8 +355,11 @@ public class Date extends ValueType implements Comparator<Date>,
 	// biggerDate
 	/**
 	 * Method getDaysBetweenYears.
-	 * @param smallDate Calendar
-	 * @param biggerDate Calendar
+	 * 
+	 * @param smallDate
+	 *            Calendar
+	 * @param biggerDate
+	 *            Calendar
 	 * @return int
 	 */
 	private int getDaysBetweenYears(Calendar smallDate, Calendar biggerDate) {
@@ -361,7 +385,9 @@ public class Date extends ValueType implements Comparator<Date>,
 	// the same year
 	/**
 	 * Method getDaysFromYearStart.
-	 * @param date Calendar
+	 * 
+	 * @param date
+	 *            Calendar
 	 * @return int
 	 */
 	private int getDaysFromYearStart(Calendar date) {
@@ -387,7 +413,9 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method getDaysInBetween.
-	 * @param otherDate Date
+	 * 
+	 * @param otherDate
+	 *            Date
 	 * @return int
 	 */
 	public int getDaysInBetween(Date otherDate) {
@@ -421,12 +449,14 @@ public class Date extends ValueType implements Comparator<Date>,
 	/**
 	 * Compares dates ingnoring time.
 	 * 
-	
-	
-	 * @param otherDate org.trade.core.valuetype.Date
+	 * 
+	 * 
+	 * @param otherDate
+	 *            org.trade.core.valuetype.Date
 	 * @return the value 0 if the argument is a Date equal to this Date; a value
 	 *         less than 0 if the argument is a Date after this Date; and a
-	 *         value greater than 0 if the argument is a Date before this Date. */
+	 *         value greater than 0 if the argument is a Date before this Date.
+	 */
 	public int compareDates(org.trade.core.valuetype.Date otherDate) {
 		return compareDates(otherDate.getDate());
 	}
@@ -434,12 +464,14 @@ public class Date extends ValueType implements Comparator<Date>,
 	/**
 	 * Compares dates ingnoring time.
 	 * 
-	
-	
-	 * @param otherDate java.util.Date
+	 * 
+	 * 
+	 * @param otherDate
+	 *            java.util.Date
 	 * @return the value 0 if the argument is a Date equal to this Date; a value
 	 *         less than 0 if the argument is a Date after this Date; and a
-	 *         value greater than 0 if the argument is a Date before this Date. */
+	 *         value greater than 0 if the argument is a Date before this Date.
+	 */
 	public int compareDates(java.util.Date otherDate) {
 		Calendar compDate = new GregorianCalendar();
 		Calendar thisDate = new GregorianCalendar();
@@ -472,10 +504,12 @@ public class Date extends ValueType implements Comparator<Date>,
 	}
 
 	/**
-	
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 * @throws ValueTypeException
-	 * @see com.cbsinc.esc.devtools.valuetype.ValueType */
+	 * @see com.cbsinc.esc.devtools.valuetype.ValueType
+	 */
 	public void setValue(Object value) throws ValueTypeException {
 		if (value instanceof org.trade.core.valuetype.Date) {
 			setDate(((org.trade.core.valuetype.Date) value).m_date);
@@ -491,6 +525,7 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method isValid.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isValid() {
@@ -500,8 +535,11 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method isValid.
-	 * @param validator Validator
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param validator
+	 *            Validator
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
 	public boolean isValid(Validator validator,
@@ -511,7 +549,9 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method getDefaultOptionalValidator.
-	 * @param messageFactory IMessageFactory
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
 	 * @return Validator
 	 */
 	public Validator getDefaultOptionalValidator(IMessageFactory messageFactory) {
@@ -520,7 +560,9 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method getDefaultMandatoryValidator.
-	 * @param messageFactory IMessageFactory
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
 	 * @return Validator
 	 */
 	public Validator getDefaultMandatoryValidator(IMessageFactory messageFactory) {
@@ -529,8 +571,11 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method getDefaultValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param isMandatory
+	 *            boolean
 	 * @return Validator
 	 */
 	public Validator getDefaultValidator(IMessageFactory messageFactory,
@@ -543,6 +588,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	// already be created
 	/**
 	 * Method getError.
+	 * 
 	 * @return String
 	 */
 	public String getError() {
@@ -557,6 +603,7 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws java.lang.CloneNotSupportedException
 	 */
@@ -566,7 +613,9 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method after.
-	 * @param date org.trade.core.valuetype.Date
+	 * 
+	 * @param date
+	 *            org.trade.core.valuetype.Date
 	 * @return boolean
 	 */
 	public boolean after(org.trade.core.valuetype.Date date) {
@@ -575,7 +624,9 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	/**
 	 * Method before.
-	 * @param date org.trade.core.valuetype.Date
+	 * 
+	 * @param date
+	 *            org.trade.core.valuetype.Date
 	 * @return boolean
 	 */
 	public boolean before(org.trade.core.valuetype.Date date) {
@@ -587,7 +638,9 @@ public class Date extends ValueType implements Comparator<Date>,
 	//
 	/**
 	 * Method setDate.
-	 * @param date java.util.Date
+	 * 
+	 * @param date
+	 *            java.util.Date
 	 */
 	private void setDate(java.util.Date date) {
 		m_date = date;

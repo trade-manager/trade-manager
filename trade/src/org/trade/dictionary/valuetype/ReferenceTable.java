@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class ReferenceTable extends Decode {
@@ -52,7 +51,9 @@ public class ReferenceTable extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return ReferenceTable
 	 */
 	public static ReferenceTable newInstance(String value) {
@@ -63,6 +64,7 @@ public class ReferenceTable extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return ReferenceTable
 	 */
 	public static ReferenceTable newInstance() {
@@ -73,6 +75,7 @@ public class ReferenceTable extends Decode {
 
 	/**
 	 * Method convertToUppercase.
+	 * 
 	 * @return boolean
 	 */
 	@Override

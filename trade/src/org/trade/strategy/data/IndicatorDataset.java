@@ -42,17 +42,21 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 /**
  * An interface that defines data in the form of (x, high, low, open, close)
  * tuples. This interface also defines how the data-set should be plotted.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
 public interface IndicatorDataset {
-	
+
 	public static final String PACKAGE = "org.trade.strategy.data.";
 
 	/**
 	 * Method updateDataset.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	void updateDataset(CandleDataset source, int seriesIndex);
 
@@ -60,61 +64,79 @@ public interface IndicatorDataset {
 
 	/**
 	 * Method getRenderer.
+	 * 
 	 * @return XYItemRenderer
 	 */
 	XYItemRenderer getRenderer();
 
 	/**
 	 * Method getSeriesColor.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return Color
 	 */
 	Color getSeriesColor(int seriesIndex);
 
 	/**
 	 * Method getDisplaySeries.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return boolean
 	 */
 	boolean getDisplaySeries(int seriesIndex);
-	
+
 	/**
 	 * Method getSubChart.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return boolean
 	 */
 	boolean getSubChart(int seriesIndex);
 
 	/**
 	 * Method getType.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return String
 	 */
 	String getType(int seriesIndex);
 
 	/**
 	 * Method getSeries.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return IndicatorSeries
 	 */
 	IndicatorSeries getSeries(int seriesIndex);
 
 	/**
 	 * Method addSeries.
-	 * @param series IndicatorSeries
+	 * 
+	 * @param series
+	 *            IndicatorSeries
 	 */
 	void addSeries(IndicatorSeries series);
-	
+
 	/**
 	 * Method removeSeries.
-	 * @param series IndicatorSeries
+	 * 
+	 * @param series
+	 *            IndicatorSeries
 	 */
 	void removeSeries(IndicatorSeries series);
-	
+
 	/**
 	 * Method setSeries.
-	 * @param index int
-	 * @param series IndicatorSeries
+	 * 
+	 * @param index
+	 *            int
+	 * @param series
+	 *            IndicatorSeries
 	 */
 	void setSeries(int index, IndicatorSeries series);
 

@@ -57,10 +57,12 @@ public class VolumeItem extends ComparableObjectItem {
 	 * 
 	 * @param period
 	 *            the time period.
-	
-	
-	 * @param volume Long
-	 * @param side boolean
+	 * 
+	 * 
+	 * @param volume
+	 *            Long
+	 * @param side
+	 *            boolean
 	 */
 	public VolumeItem(RegularTimePeriod period, Long volume, boolean side) {
 		super(period, new Volume(volume, side));
@@ -69,8 +71,9 @@ public class VolumeItem extends ComparableObjectItem {
 	/**
 	 * Returns the period.
 	 * 
-	
-	 * @return The period (never <code>null</code>). */
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
 	public RegularTimePeriod getPeriod() {
 		return (RegularTimePeriod) getComparable();
 	}
@@ -78,8 +81,9 @@ public class VolumeItem extends ComparableObjectItem {
 	/**
 	 * Returns the y-value.
 	 * 
-	
-	 * @return The y-value. */
+	 * 
+	 * @return The y-value.
+	 */
 	public double getY() {
 		return getVolume();
 	}
@@ -87,8 +91,9 @@ public class VolumeItem extends ComparableObjectItem {
 	/**
 	 * Set the moving Average value.
 	 * 
-	
-	 * @param volume long
+	 * 
+	 * @param volume
+	 *            long
 	 */
 	public void setVolume(long volume) {
 		Volume dataItem = (Volume) getObject();
@@ -101,8 +106,9 @@ public class VolumeItem extends ComparableObjectItem {
 	/**
 	 * Returns the moving Average value.
 	 * 
-	
-	 * @return The moving Average value. */
+	 * 
+	 * @return The moving Average value.
+	 */
 	public long getVolume() {
 		Volume dataItem = (Volume) getObject();
 		if (dataItem != null) {
@@ -117,6 +123,7 @@ public class VolumeItem extends ComparableObjectItem {
 
 	/**
 	 * Method isSide.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isSide() {
@@ -126,7 +133,9 @@ public class VolumeItem extends ComparableObjectItem {
 
 	/**
 	 * Method setSide.
-	 * @param side boolean
+	 * 
+	 * @param side
+	 *            boolean
 	 */
 	public void setSide(boolean side) {
 		Volume dataItem = (Volume) getObject();

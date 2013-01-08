@@ -37,7 +37,6 @@ package org.trade.core.valuetype;
 
 import java.util.Vector;
 
-
 /**
  * This class is suppose to represent a base class for a specialized CodeDecode
  * type object e.g. US State Codes and Descriptions.
@@ -56,13 +55,11 @@ public class DAODecode extends Decode {
 	 */
 	private static final long serialVersionUID = -5356057478795774210L;
 
-
-	private static final String	DAO_DECODE_IDENTIFIER = "DAO_DECODE";
+	private static final String DAO_DECODE_IDENTIFIER = "DAO_DECODE";
 
 	/**
 	 * Default Constructor
 	 * 
-	
 	 */
 	public DAODecode() {
 	}
@@ -70,10 +67,13 @@ public class DAODecode extends Decode {
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
-	 * @param columnNames Vector<String>
-	 * @param values Vector<Object>
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param columnNames
+	 *            Vector<String>
+	 * @param values
+	 *            Vector<Object>
 	 */
 	public DAODecode(String codeDecodeType, Vector<String> columnNames,
 			Vector<Object> values) {
@@ -83,8 +83,9 @@ public class DAODecode extends Decode {
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
+	 * 
+	 * @param codeDecodeType
+	 *            String
 	 */
 	public DAODecode(String codeDecodeType) {
 		super(codeDecodeType, DAO_DECODE_IDENTIFIER);
@@ -93,9 +94,11 @@ public class DAODecode extends Decode {
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
-	 * @param identifier String
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param identifier
+	 *            String
 	 */
 	public DAODecode(String codeDecodeType, String identifier) {
 		super(codeDecodeType, DAO_DECODE_IDENTIFIER);
@@ -105,6 +108,7 @@ public class DAODecode extends Decode {
 	// from lowercase
 	/**
 	 * Method convertToUppercase.
+	 * 
 	 * @return boolean
 	 */
 	protected boolean convertToUppercase() {

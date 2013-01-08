@@ -67,7 +67,9 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Constructor for StringWrapper.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 */
 	public StringWrapper(String value) {
 		setInternalValue(value);
@@ -76,6 +78,7 @@ public abstract class StringWrapper extends ValueType {
 	/**
 	 * Convenience method. Validate using default validator and discard
 	 * messages. Assumes the value is optional.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isValid() {
@@ -85,8 +88,11 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method isValid.
-	 * @param validator Validator
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param validator
+	 *            Validator
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
 	public boolean isValid(Validator validator,
@@ -96,7 +102,9 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method getDefaultOptionalValidator.
-	 * @param messageFactory IMessageFactory
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
 	 * @return Validator
 	 */
 	public Validator getDefaultOptionalValidator(IMessageFactory messageFactory) {
@@ -105,7 +113,9 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method getDefaultMandatoryValidator.
-	 * @param messageFactory IMessageFactory
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
 	 * @return Validator
 	 */
 	public Validator getDefaultMandatoryValidator(IMessageFactory messageFactory) {
@@ -114,8 +124,11 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method getDefaultValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param isMandatory
+	 *            boolean
 	 * @return Validator
 	 */
 	protected abstract Validator getDefaultValidator(
@@ -123,6 +136,7 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method isEmpty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isEmpty() {
@@ -131,7 +145,9 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method equals.
-	 * @param objectToCompare Object
+	 * 
+	 * @param objectToCompare
+	 *            Object
 	 * @return boolean
 	 */
 	public boolean equals(Object objectToCompare) {
@@ -152,6 +168,7 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method hashCode.
+	 * 
 	 * @return int
 	 */
 	public int hashCode() {
@@ -160,6 +177,7 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
@@ -168,7 +186,9 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method setValue.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 */
 	public void setValue(String value) {
 		setInternalValue(value);
@@ -176,7 +196,9 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method setValue.
-	 * @param value StringWrapper
+	 * 
+	 * @param value
+	 *            StringWrapper
 	 */
 	public void setValue(StringWrapper value) {
 		if (null != value) {
@@ -191,6 +213,7 @@ public abstract class StringWrapper extends ValueType {
 	//
 	/**
 	 * Method getInternalValue.
+	 * 
 	 * @return String
 	 */
 	protected String getInternalValue() {
@@ -199,7 +222,9 @@ public abstract class StringWrapper extends ValueType {
 
 	/**
 	 * Method setInternalValue.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 */
 	protected void setInternalValue(String value) {
 		if (null == value) {

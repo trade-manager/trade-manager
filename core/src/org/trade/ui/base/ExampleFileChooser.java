@@ -60,10 +60,13 @@ public class ExampleFileChooser extends FileView {
 	/**
 	 * The name of the file.
 	 * 
-	
-	 * @param f File
-	 * @param fileName String
-	 * @see #getName */
+	 * 
+	 * @param f
+	 *            File
+	 * @param fileName
+	 *            String
+	 * @see #getName
+	 */
 	public void setName(File f, String fileName) {
 		fileNames.put(f, fileName);
 	}
@@ -71,19 +74,24 @@ public class ExampleFileChooser extends FileView {
 	/**
 	 * The name of the file.
 	 * 
-	
-	
-	 * @param f File
+	 * 
+	 * 
+	 * @param f
+	 *            File
 	 * @return String
-	 * @see #setName * @see FileView#getName */
+	 * @see #setName * @see FileView#getName
+	 */
 	public String getName(File f) {
 		return fileNames.get(f);
 	}
 
 	/**
 	 * Adds a human readable description of the file.
-	 * @param f File
-	 * @param fileDescription String
+	 * 
+	 * @param f
+	 *            File
+	 * @param fileDescription
+	 *            String
 	 */
 	public void putDescription(File f, String fileDescription) {
 		fileDescriptions.put(f, fileDescription);
@@ -92,10 +100,12 @@ public class ExampleFileChooser extends FileView {
 	/**
 	 * A human readable description of the file.
 	 * 
-	
-	 * @param f File
+	 * 
+	 * @param f
+	 *            File
 	 * @return String
-	 * @see FileView#getDescription */
+	 * @see FileView#getDescription
+	 */
 	public String getDescription(File f) {
 		return fileDescriptions.get(f);
 	};
@@ -103,8 +113,11 @@ public class ExampleFileChooser extends FileView {
 	/**
 	 * Adds a human readable type description for files. Based on "dot"
 	 * extension strings, e.g: ".gif". Case is ignored.
-	 * @param extension String
-	 * @param typeDescription String
+	 * 
+	 * @param extension
+	 *            String
+	 * @param typeDescription
+	 *            String
 	 */
 	public void putTypeDescription(String extension, String typeDescription) {
 		typeDescriptions.put(typeDescription, extension);
@@ -114,8 +127,11 @@ public class ExampleFileChooser extends FileView {
 	 * Adds a human readable type description for files of the type of the
 	 * passed in file. Based on "dot" extension strings, e.g: ".gif". Case is
 	 * ignored.
-	 * @param f File
-	 * @param typeDescription String
+	 * 
+	 * @param f
+	 *            File
+	 * @param typeDescription
+	 *            String
 	 */
 	public void putTypeDescription(File f, String typeDescription) {
 		putTypeDescription(getExtension(f), typeDescription);
@@ -124,17 +140,21 @@ public class ExampleFileChooser extends FileView {
 	/**
 	 * A human readable description of the type of the file.
 	 * 
-	
-	 * @param f File
+	 * 
+	 * @param f
+	 *            File
 	 * @return String
-	 * @see FileView#getTypeDescription */
+	 * @see FileView#getTypeDescription
+	 */
 	public String getTypeDescription(File f) {
 		return typeDescriptions.get(getExtension(f));
 	}
 
 	/**
 	 * Conveinience method that returnsa the "dot" extension for the given file.
-	 * @param f File
+	 * 
+	 * @param f
+	 *            File
 	 * @return String
 	 */
 	public String getExtension(File f) {
@@ -156,8 +176,11 @@ public class ExampleFileChooser extends FileView {
 	/**
 	 * Adds an icon based on the file type "dot" extension string, e.g: ".gif".
 	 * Case is ignored.
-	 * @param extension String
-	 * @param icon Icon
+	 * 
+	 * @param extension
+	 *            String
+	 * @param icon
+	 *            Icon
 	 */
 	public void putIcon(String extension, Icon icon) {
 		icons.put(extension, icon);
@@ -167,10 +190,12 @@ public class ExampleFileChooser extends FileView {
 	 * Icon that reperesents this file. Default implementation returns null. You
 	 * might want to override this to return something more interesting.
 	 * 
-	
-	 * @param f File
+	 * 
+	 * @param f
+	 *            File
 	 * @return Icon
-	 * @see FileView#getIcon */
+	 * @see FileView#getIcon
+	 */
 	public Icon getIcon(File f) {
 		Icon icon = null;
 		String extension = getExtension(f);
@@ -186,10 +211,12 @@ public class ExampleFileChooser extends FileView {
 	 * Whether the file is hidden or not. This implementation returns true if
 	 * the filename starts with a "."
 	 * 
-	
-	 * @param f File
+	 * 
+	 * @param f
+	 *            File
 	 * @return Boolean
-	 * @see FileView#isHidden */
+	 * @see FileView#isHidden
+	 */
 	public Boolean isHidden(File f) {
 		String name = f.getName();
 
@@ -210,10 +237,12 @@ public class ExampleFileChooser extends FileView {
 	 * like a regular document, and return false for isTraversable to not allow
 	 * users to descend into the directory.
 	 * 
-	
-	 * @param f File
+	 * 
+	 * @param f
+	 *            File
 	 * @return Boolean
-	 * @see FileView#isTraversable */
+	 * @see FileView#isTraversable
+	 */
 	public Boolean isTraversable(File f) {
 		if (f.isDirectory()) {
 			return Boolean.TRUE;

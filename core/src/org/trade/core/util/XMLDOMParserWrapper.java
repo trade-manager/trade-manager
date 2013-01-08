@@ -111,8 +111,11 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Constructor for XMLDOMParserWrapper.
-	 * @param validation boolean
-	 * @param elementContentWhitespace boolean
+	 * 
+	 * @param validation
+	 *            boolean
+	 * @param elementContentWhitespace
+	 *            boolean
 	 */
 	public XMLDOMParserWrapper(boolean validation,
 			boolean elementContentWhitespace) {
@@ -146,8 +149,9 @@ public class XMLDOMParserWrapper {
 	/**
 	 * Get Document Builder
 	 * 
-	
-	 * @param db DocumentBuilder
+	 * 
+	 * @param db
+	 *            DocumentBuilder
 	 */
 	private void setDocumentBuilder(DocumentBuilder db) {
 		m_db = db;
@@ -156,8 +160,9 @@ public class XMLDOMParserWrapper {
 	/**
 	 * Get Document Builder
 	 * 
-	
-	 * @return DocumentBuilder */
+	 * 
+	 * @return DocumentBuilder
+	 */
 	public DocumentBuilder getDocumentBuilder() {
 		return m_db;
 	}
@@ -165,8 +170,9 @@ public class XMLDOMParserWrapper {
 	/**
 	 * Set ErrorHandler
 	 * 
-	
-	 * @param errorHandler XMLDOMParserErrorHandler
+	 * 
+	 * @param errorHandler
+	 *            XMLDOMParserErrorHandler
 	 */
 	private void setErrorHandler(XMLDOMParserErrorHandler errorHandler) {
 		m_errorHandler = errorHandler;
@@ -175,8 +181,9 @@ public class XMLDOMParserWrapper {
 	/**
 	 * Get Document Builder
 	 * 
-	
-	 * @return DocumentBuilder */
+	 * 
+	 * @return DocumentBuilder
+	 */
 	public XMLDOMParserErrorHandler getErrorHandler() {
 		return m_errorHandler;
 	}
@@ -185,13 +192,15 @@ public class XMLDOMParserWrapper {
 	 * Parses an xml string, turning it into a dom tree using the specified
 	 * DOMParser object.
 	 * 
-	
-	
-	
-	
-	 * @param file File
-	 * @return Document the root of the DOM tree as a document * @exception SAXException
-	 *                if the xml is not properly formed. * @throws IOException
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param file
+	 *            File
+	 * @return Document the root of the DOM tree as a document * @exception
+	 *         SAXException if the xml is not properly formed. * @throws
+	 *         IOException
 	 */
 	public Document parse(File file) throws SAXException, IOException {
 		if (null == file) {
@@ -211,13 +220,15 @@ public class XMLDOMParserWrapper {
 	 * Parses an xml string, turning it into a dom tree using the specified
 	 * DOMParser object.
 	 * 
-	
-	
-	
-	
-	 * @param xml String
-	 * @return Document the root of the DOM tree as a document * @exception SAXException
-	 *                if the xml is not properly formed. * @throws IOException
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param xml
+	 *            String
+	 * @return Document the root of the DOM tree as a document * @exception
+	 *         SAXException if the xml is not properly formed. * @throws
+	 *         IOException
 	 */
 	public Document parse(String xml) throws SAXException, IOException {
 		if (null == xml) {
@@ -236,7 +247,9 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Method documentToXml.
-	 * @param doc Document
+	 * 
+	 * @param doc
+	 *            Document
 	 * @return String
 	 */
 	public static String documentToXml(Document doc) {
@@ -245,8 +258,11 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Method documentToXml.
-	 * @param doc Document
-	 * @param function int
+	 * 
+	 * @param doc
+	 *            Document
+	 * @param function
+	 *            int
 	 * @return String
 	 */
 	public static String documentToXml(Document doc, int function) {
@@ -255,8 +271,11 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Method print.
-	 * @param node Node
-	 * @param function int
+	 * 
+	 * @param node
+	 *            Node
+	 * @param function
+	 *            int
 	 * @return String
 	 */
 	private static String print(Node node, int function) {
@@ -485,7 +504,9 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Method sortAttributes.
-	 * @param attrs NamedNodeMap
+	 * 
+	 * @param attrs
+	 *            NamedNodeMap
 	 * @return Attr[]
 	 */
 	private static Attr[] sortAttributes(NamedNodeMap attrs) {
@@ -522,7 +543,9 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Method normalize.
-	 * @param s String
+	 * 
+	 * @param s
+	 *            String
 	 * @return String
 	 */
 	private static String normalize(String s) {
@@ -605,7 +628,9 @@ public class XMLDOMParserWrapper {
 	/**
 	 * Echo common attributes of a DOM2 Node and terminate output with an EOL
 	 * character.
-	 * @param n Node
+	 * 
+	 * @param n
+	 *            Node
 	 */
 	private void printlnCommon(Node n) {
 		m_out.print(" nodeName=\"" + n.getNodeName() + "\"");
@@ -649,7 +674,9 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Recursive routine to print out DOM tree nodes
-	 * @param n Node
+	 * 
+	 * @param n
+	 *            Node
 	 */
 	@SuppressWarnings("unused")
 	private void echo(Node n) {
@@ -769,7 +796,9 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Method formatDisplayName.
-	 * @param nodeName String
+	 * 
+	 * @param nodeName
+	 *            String
 	 * @return String
 	 */
 	private static String formatDisplayName(String nodeName) {
@@ -800,7 +829,9 @@ public class XMLDOMParserWrapper {
 
 	/**
 	 * Method formatElementName.
-	 * @param nodeName String
+	 * 
+	 * @param nodeName
+	 *            String
 	 * @return String
 	 */
 	private static String formatElementName(String nodeName) {
@@ -839,7 +870,9 @@ public class XMLDOMParserWrapper {
 
 		/**
 		 * Constructor for XMLDOMParserErrorHandler.
-		 * @param out PrintWriter
+		 * 
+		 * @param out
+		 *            PrintWriter
 		 */
 		XMLDOMParserErrorHandler(PrintWriter out) {
 			this.out = out;
@@ -847,7 +880,9 @@ public class XMLDOMParserWrapper {
 
 		/**
 		 * Returns a string describing parse exception details
-		 * @param spe SAXParseException
+		 * 
+		 * @param spe
+		 *            SAXParseException
 		 * @return String
 		 */
 		private String getParseExceptionInfo(SAXParseException spe) {
@@ -867,7 +902,9 @@ public class XMLDOMParserWrapper {
 		// See SAX documentation for more info.
 		/**
 		 * Method warning.
-		 * @param spe SAXParseException
+		 * 
+		 * @param spe
+		 *            SAXParseException
 		 * @throws SAXException
 		 * @see org.xml.sax.ErrorHandler#warning(SAXParseException)
 		 */
@@ -877,7 +914,9 @@ public class XMLDOMParserWrapper {
 
 		/**
 		 * Method error.
-		 * @param spe SAXParseException
+		 * 
+		 * @param spe
+		 *            SAXParseException
 		 * @throws SAXException
 		 * @see org.xml.sax.ErrorHandler#error(SAXParseException)
 		 */
@@ -889,7 +928,9 @@ public class XMLDOMParserWrapper {
 
 		/**
 		 * Method fatalError.
-		 * @param spe SAXParseException
+		 * 
+		 * @param spe
+		 *            SAXParseException
 		 * @throws SAXException
 		 * @see org.xml.sax.ErrorHandler#fatalError(SAXParseException)
 		 */

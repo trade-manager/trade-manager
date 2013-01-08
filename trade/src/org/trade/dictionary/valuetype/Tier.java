@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class Tier extends Decode {
@@ -55,7 +54,9 @@ public class Tier extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return Tier
 	 */
 	public static Tier newInstance(String value) {
@@ -66,6 +67,7 @@ public class Tier extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return Tier
 	 */
 	public static Tier newInstance() {

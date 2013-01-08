@@ -60,8 +60,9 @@ public class StringToIntegerConverter extends StringToObjectConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.lang.Integer .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.lang.Integer.class;
@@ -76,11 +77,12 @@ public class StringToIntegerConverter extends StringToObjectConverter {
 	 * 
 	 * @param aString
 	 *            the String to be converted
-	
-	
-	 * @return Object the String converted to an Integer * @exception IllegalArgumentException
-	 *                thrown if the String to convert is not in the correct
-	 *                format */
+	 * 
+	 * 
+	 * @return Object the String converted to an Integer * @exception
+	 *         IllegalArgumentException thrown if the String to convert is not
+	 *         in the correct format
+	 */
 	protected Object getConvertedString(String aString)
 			throws IllegalArgumentException {
 		if ((aString == null) || ((aString.trim().length()) == 0)) {

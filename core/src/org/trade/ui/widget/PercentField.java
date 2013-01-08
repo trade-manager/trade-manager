@@ -41,6 +41,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
+
 import org.trade.core.valuetype.Percent;
 
 /**

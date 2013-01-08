@@ -41,6 +41,7 @@ import java.util.Enumeration;
 /**
  * This class is used internally to help with handling nesting of exceptions and
  * handling the associated messages.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -54,7 +55,9 @@ class Enumerator implements Enumeration<Object> {
 
 	/**
 	 * Constructor for Enumerator.
-	 * @param enumeration Enumeration<?>
+	 * 
+	 * @param enumeration
+	 *            Enumeration<?>
 	 */
 	Enumerator(Enumeration<?> enumeration) {
 		m_mine = enumeration;
@@ -62,7 +65,9 @@ class Enumerator implements Enumeration<Object> {
 
 	/**
 	 * Method appendEnumeration.
-	 * @param enumeration Enumeration<?>
+	 * 
+	 * @param enumeration
+	 *            Enumeration<?>
 	 */
 	void appendEnumeration(Enumeration<?> enumeration) {
 		if (m_next == null) {
@@ -74,7 +79,9 @@ class Enumerator implements Enumeration<Object> {
 
 	/**
 	 * Method prependEnumeration.
-	 * @param enumeration Enumeration<?>
+	 * 
+	 * @param enumeration
+	 *            Enumeration<?>
 	 */
 	void prependEnumeration(Enumeration<?> enumeration) {
 		Enumerator e = new Enumerator();
@@ -86,6 +93,7 @@ class Enumerator implements Enumeration<Object> {
 
 	/**
 	 * Method nextElement.
+	 * 
 	 * @return Object
 	 * @see java.util.Enumeration#nextElement()
 	 */
@@ -106,6 +114,7 @@ class Enumerator implements Enumeration<Object> {
 
 	/**
 	 * Method hasMoreElements.
+	 * 
 	 * @return boolean
 	 * @see java.util.Enumeration#hasMoreElements()
 	 */

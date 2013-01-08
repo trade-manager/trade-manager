@@ -60,8 +60,9 @@ public class NumberToLongConverter extends NumberToNumberConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.lang.Long .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.lang.Long.class;
@@ -76,8 +77,9 @@ public class NumberToLongConverter extends NumberToNumberConverter {
 	 * 
 	 * @param aNumber
 	 *            the number to be converted
-	
-	 * @return Long the Number converted to a Long */
+	 * 
+	 * @return Long the Number converted to a Long
+	 */
 	protected Number getConvertedNumber(Number aNumber) {
 		return new Long(aNumber.longValue());
 	}

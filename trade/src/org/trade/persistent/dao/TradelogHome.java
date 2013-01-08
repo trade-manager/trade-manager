@@ -57,10 +57,15 @@ public class TradelogHome {
 
 	/**
 	 * Method findByTradelogReport.
-	 * @param tradeAccount TradeAccount
-	 * @param start Date
-	 * @param end Date
-	 * @param filter boolean
+	 * 
+	 * @param tradeAccount
+	 *            TradeAccount
+	 * @param start
+	 *            Date
+	 * @param end
+	 *            Date
+	 * @param filter
+	 *            boolean
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogReport(TradeAccount tradeAccount,
@@ -110,10 +115,15 @@ public class TradelogHome {
 
 	/**
 	 * Method findByTradelogDetail.
-	 * @param tradeAccount TradeAccount
-	 * @param start Date
-	 * @param end Date
-	 * @param filter boolean
+	 * 
+	 * @param tradeAccount
+	 *            TradeAccount
+	 * @param start
+	 *            Date
+	 * @param end
+	 *            Date
+	 * @param filter
+	 *            boolean
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogDetail(TradeAccount tradeAccount,
@@ -151,9 +161,13 @@ public class TradelogHome {
 
 	/**
 	 * Method findByTradelogSummary.
-	 * @param tradeAccount TradeAccount
-	 * @param start Date
-	 * @param end Date
+	 * 
+	 * @param tradeAccount
+	 *            TradeAccount
+	 * @param start
+	 *            Date
+	 * @param end
+	 *            Date
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogSummary(TradeAccount tradeAccount,

@@ -54,11 +54,11 @@ import javax.print.PrintServiceLookup;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 import javax.swing.JTable.PrintMode;
+import javax.swing.SwingUtilities;
 
 /**
-
+ * 
  * @version $Id: JComponentVista.java,v 1.2 2001/10/22 18:55:37 simon Exp $
  * @author Simon Allen
  */
@@ -102,7 +102,9 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method setComponent.
-	 * @param c Component
+	 * 
+	 * @param c
+	 *            Component
 	 */
 	protected void setComponent(Component c) {
 		m_component = c;
@@ -110,8 +112,11 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method setScale.
-	 * @param scaleX double
-	 * @param scaleY double
+	 * 
+	 * @param scaleX
+	 *            double
+	 * @param scaleY
+	 *            double
 	 */
 	protected void setScale(double scaleX, double scaleY) {
 		m_ScaleX = scaleX;
@@ -146,7 +151,9 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method scaleToFit.
-	 * @param useSymmetricScaling boolean
+	 * 
+	 * @param useSymmetricScaling
+	 *            boolean
 	 */
 	public void scaleToFit(boolean useSymmetricScaling) {
 		PageFormat format = getPageFormat();
@@ -171,9 +178,13 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method print.
-	 * @param graphics Graphics
-	 * @param pageFormat PageFormat
-	 * @param pageIndex int
+	 * 
+	 * @param graphics
+	 *            Graphics
+	 * @param pageFormat
+	 *            PageFormat
+	 * @param pageIndex
+	 *            int
 	 * @return int
 	 * @throws PrinterException
 	 * @see java.awt.print.Printable#print(Graphics, PageFormat, int)
@@ -201,6 +212,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method print.
+	 * 
 	 * @return boolean
 	 * @throws PrinterException
 	 * @throws HeadlessException
@@ -214,13 +226,21 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method print.
-	 * @param printMode PrintMode
-	 * @param headerFormat MessageFormat
-	 * @param footerFormat MessageFormat
-	 * @param showPrintDialog boolean
-	 * @param attr PrintRequestAttributeSet
-	 * @param interactive boolean
-	 * @param service PrintService
+	 * 
+	 * @param printMode
+	 *            PrintMode
+	 * @param headerFormat
+	 *            MessageFormat
+	 * @param footerFormat
+	 *            MessageFormat
+	 * @param showPrintDialog
+	 *            boolean
+	 * @param attr
+	 *            PrintRequestAttributeSet
+	 * @param interactive
+	 *            boolean
+	 * @param service
+	 *            PrintService
 	 * @return boolean
 	 * @throws PrinterException
 	 * @throws HeadlessException
@@ -349,7 +369,9 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method disableDoubleBuffering.
-	 * @param c Component
+	 * 
+	 * @param c
+	 *            Component
 	 * @return boolean
 	 */
 	private boolean disableDoubleBuffering(Component c) {
@@ -363,8 +385,11 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 	/**
 	 * Method restoreDoubleBuffering.
-	 * @param c Component
-	 * @param wasBuffered boolean
+	 * 
+	 * @param c
+	 *            Component
+	 * @param wasBuffered
+	 *            boolean
 	 */
 	private void restoreDoubleBuffering(Component c, boolean wasBuffered) {
 		if (c instanceof JComponent)
@@ -412,11 +437,12 @@ public class ComponentPrintService extends PrintPage implements Printable {
 		 *            the size and orientation of the page being drawn
 		 * @param pageIndex
 		 *            the zero based index of the page to be drawn
-		
-		
+		 * 
+		 * 
 		 * @return PAGE_EXISTS if the page is rendered successfully, or
-		 *         NO_SUCH_PAGE if a non-existent page index is specified * @throws PrinterException
-		 *             if an error causes printing to be aborted * @see java.awt.print.Printable#print(Graphics, PageFormat, int)
+		 *         NO_SUCH_PAGE if a non-existent page index is specified * @throws
+		 *         PrinterException if an error causes printing to be aborted * @see
+		 *         java.awt.print.Printable#print(Graphics, PageFormat, int)
 		 */
 		public int print(final Graphics graphics, final PageFormat pageFormat,
 				final int pageIndex) throws PrinterException {

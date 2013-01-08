@@ -77,7 +77,9 @@ public class HeikinAshiRenderer extends CandlestickRenderer {
 
 	/**
 	 * Constructor for HeikinAshiRenderer.
-	 * @param nightMode boolean
+	 * 
+	 * @param nightMode
+	 *            boolean
 	 */
 	public HeikinAshiRenderer(boolean nightMode) {
 		this.nightMode = nightMode;
@@ -133,19 +135,34 @@ public class HeikinAshiRenderer extends CandlestickRenderer {
 
 	/**
 	 * Method drawItem.
-	 * @param g2 Graphics2D
-	 * @param state XYItemRendererState
-	 * @param dataArea Rectangle2D
-	 * @param info PlotRenderingInfo
-	 * @param plot XYPlot
-	 * @param domainAxis ValueAxis
-	 * @param rangeAxis ValueAxis
-	 * @param dataset XYDataset
-	 * @param series int
-	 * @param item int
-	 * @param crosshairState CrosshairState
-	 * @param pass int
-	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D, XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot, ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
+	 * 
+	 * @param g2
+	 *            Graphics2D
+	 * @param state
+	 *            XYItemRendererState
+	 * @param dataArea
+	 *            Rectangle2D
+	 * @param info
+	 *            PlotRenderingInfo
+	 * @param plot
+	 *            XYPlot
+	 * @param domainAxis
+	 *            ValueAxis
+	 * @param rangeAxis
+	 *            ValueAxis
+	 * @param dataset
+	 *            XYDataset
+	 * @param series
+	 *            int
+	 * @param item
+	 *            int
+	 * @param crosshairState
+	 *            CrosshairState
+	 * @param pass
+	 *            int
+	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D,
+	 *      XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot,
+	 *      ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
 	 */
 	public void drawItem(Graphics2D g2, XYItemRendererState state,
 			Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
@@ -301,13 +318,20 @@ public class HeikinAshiRenderer extends CandlestickRenderer {
 
 	/**
 	 * Method initialise.
-	 * @param g2 Graphics2D
-	 * @param dataArea Rectangle2D
-	 * @param plot XYPlot
-	 * @param dataset XYDataset
-	 * @param info PlotRenderingInfo
+	 * 
+	 * @param g2
+	 *            Graphics2D
+	 * @param dataArea
+	 *            Rectangle2D
+	 * @param plot
+	 *            XYPlot
+	 * @param dataset
+	 *            XYDataset
+	 * @param info
+	 *            PlotRenderingInfo
 	 * @return XYItemRendererState
-	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#initialise(Graphics2D, Rectangle2D, XYPlot, XYDataset, PlotRenderingInfo)
+	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#initialise(Graphics2D,
+	 *      Rectangle2D, XYPlot, XYDataset, PlotRenderingInfo)
 	 */
 	public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
 			XYPlot plot, XYDataset dataset, PlotRenderingInfo info) {
@@ -324,8 +348,11 @@ public class HeikinAshiRenderer extends CandlestickRenderer {
 
 	/**
 	 * Method highlight.
-	 * @param row int
-	 * @param column int
+	 * 
+	 * @param row
+	 *            int
+	 * @param column
+	 *            int
 	 * @return boolean
 	 */
 	public boolean highlight(int row, int column) {

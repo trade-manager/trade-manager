@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class TriggerMethod extends Decode {
@@ -55,7 +54,9 @@ public class TriggerMethod extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return TriggerMethod
 	 */
 	public static TriggerMethod newInstance(String value) {
@@ -66,6 +67,7 @@ public class TriggerMethod extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return TriggerMethod
 	 */
 	public static TriggerMethod newInstance() {

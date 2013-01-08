@@ -63,7 +63,9 @@ public class FilePreviewer extends JComponent implements PropertyChangeListener 
 
 	/**
 	 * Constructor for FilePreviewer.
-	 * @param fc JFileChooser
+	 * 
+	 * @param fc
+	 *            JFileChooser
 	 */
 	public FilePreviewer(JFileChooser fc) {
 		setPreferredSize(new Dimension(100, 50));
@@ -85,7 +87,9 @@ public class FilePreviewer extends JComponent implements PropertyChangeListener 
 
 	/**
 	 * Method propertyChange.
-	 * @param e PropertyChangeEvent
+	 * 
+	 * @param e
+	 *            PropertyChangeEvent
 	 * @see java.beans.PropertyChangeListener#propertyChange(PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent e) {
@@ -103,7 +107,9 @@ public class FilePreviewer extends JComponent implements PropertyChangeListener 
 
 	/**
 	 * Method paint.
-	 * @param g Graphics
+	 * 
+	 * @param g
+	 *            Graphics
 	 */
 	public void paint(Graphics g) {
 		if (thumbnail == null) {

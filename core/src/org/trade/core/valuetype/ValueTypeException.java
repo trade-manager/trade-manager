@@ -58,8 +58,10 @@ public class ValueTypeException extends ModelException {
 	 * 
 	 * @param message
 	 *            The desired message text.
-	 * @param id Integer
-	 * @param code Integer
+	 * @param id
+	 *            Integer
+	 * @param code
+	 *            Integer
 	 */
 	public ValueTypeException(Integer id, Integer code, String message) {
 		super(id, code, message);

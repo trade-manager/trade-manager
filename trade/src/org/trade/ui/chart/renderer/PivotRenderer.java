@@ -79,6 +79,7 @@ import org.trade.strategy.data.PivotDataset;
  * <br>
  * <img src="../../../../../images/XYDotRendererSample.png"
  * alt="XYDotRendererSample.png" />
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -147,11 +148,12 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	/**
 	 * Returns the dot width (the default value is 1).
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.2
-	
-	 * @return The dot width. * @see #setDotWidth(int) */
+	 * 
+	 * @return The dot width. * @see #setDotWidth(int)
+	 */
 	public int getDotWidth() {
 		return this.dotWidth;
 	}
@@ -163,12 +165,13 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 * @param w
 	 *            the new width (must be greater than zero).
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.2
-	
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if <code>w</code> is less than one. * @see #getDotWidth() */
+	 *             if <code>w</code> is less than one. * @see #getDotWidth()
+	 */
 	public void setDotWidth(int w) {
 		if (w < 1) {
 			throw new IllegalArgumentException("Requires w > 0.");
@@ -180,11 +183,12 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	/**
 	 * Returns the dot height (the default value is 1).
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.2
-	
-	 * @return The dot height. * @see #setDotHeight(int) */
+	 * 
+	 * @return The dot height. * @see #setDotHeight(int)
+	 */
 	public int getDotHeight() {
 		return this.dotHeight;
 	}
@@ -196,12 +200,13 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 * @param h
 	 *            the new height (must be greater than zero).
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.2
-	
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if <code>h</code> is less than one. * @see #getDotHeight() */
+	 *             if <code>h</code> is less than one. * @see #getDotHeight()
+	 */
 	public void setDotHeight(int h) {
 		if (h < 1) {
 			throw new IllegalArgumentException("Requires h > 0.");
@@ -213,12 +218,14 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	/**
 	 * Returns the shape used to represent an item in the legend.
 	 * 
-	
 	 * 
-	
+	 * 
+	 * 
 	 * 
 	 * @since 1.0.7
-	 * @return The legend shape (never <code>null</code>). * @see #setLegendShape(Shape) */
+	 * @return The legend shape (never <code>null</code>). * @see
+	 *         #setLegendShape(Shape)
+	 */
 	public Shape getLegendShape() {
 		return this.legendShape;
 	}
@@ -230,10 +237,11 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 * @param shape
 	 *            the shape (<code>null</code> not permitted).
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.7
-	 * @see #getLegendShape() */
+	 * @see #getLegendShape()
+	 */
 	public void setLegendShape(Shape shape) {
 		if (shape == null) {
 			throw new IllegalArgumentException("Null 'shape' argument.");
@@ -271,7 +279,9 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 *            permitted).
 	 * @param pass
 	 *            the pass index.
-	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D, XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot, ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
+	 * @see org.jfree.chart.renderer.xy.XYItemRenderer#drawItem(Graphics2D,
+	 *      XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot,
+	 *      ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
 	 */
 	public void drawItem(Graphics2D g2, XYItemRendererState state,
 			Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
@@ -345,10 +355,14 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 *            the renderer index.
 	 * @param info
 	 *            the plot rendering info.
-	 * @param angle double
-	 * @param x double
-	 * @param y double
-	 * @param ledgend String
+	 * @param angle
+	 *            double
+	 * @param x
+	 *            double
+	 * @param y
+	 *            double
+	 * @param ledgend
+	 *            String
 	 */
 	public void drawPivotArrow(Graphics2D g2, XYPlot plot,
 			Rectangle2D dataArea, ValueAxis domainAxis, ValueAxis rangeAxis,
@@ -448,8 +462,10 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 * @param series
 	 *            the series index (zero-based).
 	 * 
-	
-	 * @return A legend item for the series (possibly <code>null</code>). * @see org.jfree.chart.renderer.xy.XYItemRenderer#getLegendItem(int, int)
+	 * 
+	 * @return A legend item for the series (possibly <code>null</code>). * @see
+	 *         org.jfree.chart.renderer.xy.XYItemRenderer#getLegendItem(int,
+	 *         int)
 	 */
 	public LegendItem getLegendItem(int datasetIndex, int series) {
 
@@ -511,8 +527,9 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 * @param obj
 	 *            the object (<code>null</code> permitted).
 	 * 
-	
-	 * @return A boolean. */
+	 * 
+	 * @return A boolean.
+	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -536,11 +553,11 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	/**
 	 * Returns a clone of the renderer.
 	 * 
-	
 	 * 
-	
-	 * @return A clone. * @throws CloneNotSupportedException
-	 *             if the renderer cannot be cloned. * @see org.jfree.util.PublicCloneable#clone()
+	 * 
+	 * 
+	 * @return A clone. * @throws CloneNotSupportedException if the renderer
+	 *         cannot be cloned. * @see org.jfree.util.PublicCloneable#clone()
 	 */
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
@@ -552,11 +569,12 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 * @param stream
 	 *            the input stream.
 	 * 
-	
-	
+	 * 
+	 * 
 	 * @throws IOException
-	 *             if there is an I/O error. * @throws ClassNotFoundException
-	 *             if there is a classpath problem. */
+	 *             if there is an I/O error. * @throws ClassNotFoundException if
+	 *             there is a classpath problem.
+	 */
 	private void readObject(ObjectInputStream stream) throws IOException,
 			ClassNotFoundException {
 		stream.defaultReadObject();
@@ -569,9 +587,10 @@ public class PivotRenderer extends AbstractXYItemRenderer implements
 	 * @param stream
 	 *            the output stream.
 	 * 
-	
+	 * 
 	 * @throws IOException
-	 *             if there is an I/O error. */
+	 *             if there is an I/O error.
+	 */
 	private void writeObject(ObjectOutputStream stream) throws IOException {
 		stream.defaultWriteObject();
 		SerialUtilities.writeShape(this.legendShape, stream);

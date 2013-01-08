@@ -59,9 +59,10 @@ public class VwapItem extends ComparableObjectItem {
 	 * 
 	 * @param period
 	 *            the time period.
-	
-	
-	 * @param vwapPrice BigDecimal
+	 * 
+	 * 
+	 * @param vwapPrice
+	 *            BigDecimal
 	 */
 	public VwapItem(RegularTimePeriod period, BigDecimal vwapPrice) {
 		super(period, new Vwap(vwapPrice));
@@ -70,8 +71,9 @@ public class VwapItem extends ComparableObjectItem {
 	/**
 	 * Returns the period.
 	 * 
-	
-	 * @return The period (never <code>null</code>). */
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
 	public RegularTimePeriod getPeriod() {
 		return (RegularTimePeriod) getComparable();
 	}
@@ -79,8 +81,9 @@ public class VwapItem extends ComparableObjectItem {
 	/**
 	 * Returns the y-value.
 	 * 
-	
-	 * @return The y-value. */
+	 * 
+	 * @return The y-value.
+	 */
 	public double getY() {
 		return getVwapPrice();
 	}
@@ -88,8 +91,9 @@ public class VwapItem extends ComparableObjectItem {
 	/**
 	 * Set the privotPrice value.
 	 * 
-	
-	 * @param vwapPrice double
+	 * 
+	 * @param vwapPrice
+	 *            double
 	 */
 	public void setVwapPrice(double vwapPrice) {
 		Vwap dataItem = (Vwap) getObject();
@@ -102,8 +106,9 @@ public class VwapItem extends ComparableObjectItem {
 	/**
 	 * Returns the pivotPrice value.
 	 * 
-	
-	 * @return The pivotPrice value. */
+	 * 
+	 * @return The pivotPrice value.
+	 */
 	public double getVwapPrice() {
 		Vwap dataItem = (Vwap) getObject();
 		if (dataItem != null) {

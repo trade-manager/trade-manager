@@ -59,8 +59,11 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Constructor for BaseButton.
-	 * @param basePanel BasePanel
-	 * @param basePropertyCodes BaseUIPropertyCodes
+	 * 
+	 * @param basePanel
+	 *            BasePanel
+	 * @param basePropertyCodes
+	 *            BaseUIPropertyCodes
 	 */
 	public BaseButton(BasePanel basePanel, BaseUIPropertyCodes basePropertyCodes) {
 		this(basePanel, basePropertyCodes, 2);
@@ -68,9 +71,13 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Constructor for BaseButton.
-	 * @param basePanel BasePanel
-	 * @param basePropertyCodes BaseUIPropertyCodes
-	 * @param margin int
+	 * 
+	 * @param basePanel
+	 *            BasePanel
+	 * @param basePropertyCodes
+	 *            BaseUIPropertyCodes
+	 * @param margin
+	 *            int
 	 */
 	public BaseButton(BasePanel basePanel,
 			BaseUIPropertyCodes basePropertyCodes, int margin) {
@@ -103,9 +110,13 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Constructor for BaseButton.
-	 * @param basePanel BasePanel
-	 * @param UICode String
-	 * @param margin int
+	 * 
+	 * @param basePanel
+	 *            BasePanel
+	 * @param UICode
+	 *            String
+	 * @param margin
+	 *            int
 	 */
 	public BaseButton(BasePanel basePanel, String UICode, int margin) {
 		try {
@@ -140,8 +151,11 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Constructor for BaseButton.
-	 * @param basePanel BasePanel
-	 * @param UICode String
+	 * 
+	 * @param basePanel
+	 *            BasePanel
+	 * @param UICode
+	 *            String
 	 */
 	public BaseButton(BasePanel basePanel, String UICode) {
 		this(basePanel, UICode, 2);
@@ -155,7 +169,9 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Method addMessageListener.
-	 * @param listener MessageListener
+	 * 
+	 * @param listener
+	 *            MessageListener
 	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
@@ -163,7 +179,9 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Method remove.
-	 * @param listener MessageListener
+	 * 
+	 * @param listener
+	 *            MessageListener
 	 */
 	public void remove(MessageListener listener) {
 		m_notifier.remove(listener);
@@ -171,7 +189,9 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Method setTransferObject.
-	 * @param transferObject Object
+	 * 
+	 * @param transferObject
+	 *            Object
 	 */
 	public void setTransferObject(Object transferObject) {
 		this.transferObject = transferObject;
@@ -179,6 +199,7 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Method getTransferObject.
+	 * 
 	 * @return Object
 	 */
 	public Object getTransferObject() {
@@ -187,7 +208,9 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Method messageEvent.
-	 * @param selection String
+	 * 
+	 * @param selection
+	 *            String
 	 */
 	protected void messageEvent(String selection) {
 		Vector<Object> transferObjects = new Vector<Object>();
@@ -199,7 +222,9 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Method setMethod.
-	 * @param method String
+	 * 
+	 * @param method
+	 *            String
 	 */
 	private void setMethod(String method) {
 		m_method = method;
@@ -207,6 +232,7 @@ public class BaseButton extends JButton {
 
 	/**
 	 * Method getMethod.
+	 * 
 	 * @return String
 	 */
 	public String getMethod() {

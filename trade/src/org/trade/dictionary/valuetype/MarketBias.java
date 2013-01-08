@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class MarketBias extends Decode {
@@ -51,7 +50,9 @@ public class MarketBias extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return MarketBias
 	 */
 	public static MarketBias newInstance(String value) {
@@ -62,6 +63,7 @@ public class MarketBias extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return MarketBias
 	 */
 	public static MarketBias newInstance() {

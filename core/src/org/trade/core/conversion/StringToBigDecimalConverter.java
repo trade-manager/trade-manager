@@ -62,8 +62,9 @@ public class StringToBigDecimalConverter extends StringToObjectConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.util.Date .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.math.BigDecimal.class;
@@ -78,11 +79,12 @@ public class StringToBigDecimalConverter extends StringToObjectConverter {
 	 * 
 	 * @param aString
 	 *            the String to be converted
-	
-	
-	 * @return Object the String converted to a BigDecimal * @exception NumberFormatException
-	 *                thrown if the String to convert is not in the correct
-	 *                format */
+	 * 
+	 * 
+	 * @return Object the String converted to a BigDecimal * @exception
+	 *         NumberFormatException thrown if the String to convert is not in
+	 *         the correct format
+	 */
 	protected Object getConvertedString(String aString)
 			throws NumberFormatException {
 		try {

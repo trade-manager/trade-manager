@@ -52,8 +52,11 @@ public class Volume implements java.io.Serializable {
 
 	/**
 	 * Constructor for Volume.
-	 * @param volume Long
-	 * @param side boolean
+	 * 
+	 * @param volume
+	 *            Long
+	 * @param side
+	 *            boolean
 	 */
 	public Volume(Long volume, boolean side) {
 		this.volume = volume;
@@ -62,6 +65,7 @@ public class Volume implements java.io.Serializable {
 
 	/**
 	 * Method getVolume.
+	 * 
 	 * @return Long
 	 */
 	public Long getVolume() {
@@ -70,7 +74,9 @@ public class Volume implements java.io.Serializable {
 
 	/**
 	 * Method setVolume.
-	 * @param volume Long
+	 * 
+	 * @param volume
+	 *            Long
 	 */
 	public void setVolume(Long volume) {
 		this.volume = volume;
@@ -78,6 +84,7 @@ public class Volume implements java.io.Serializable {
 
 	/**
 	 * Method isSide.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isSide() {
@@ -86,7 +93,9 @@ public class Volume implements java.io.Serializable {
 
 	/**
 	 * Method setSide.
-	 * @param side boolean
+	 * 
+	 * @param side
+	 *            boolean
 	 */
 	public void setSide(boolean side) {
 		this.side = side;

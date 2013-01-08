@@ -49,7 +49,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
-
+ * 
  * @version $Id: TextDialog.java,v 1.3 2001/12/20 17:11:29 simon Exp $
  * @author Simon Allen
  */
@@ -75,10 +75,15 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Constructor for TextDialog.
-	 * @param frame Frame
-	 * @param title String
-	 * @param modal boolean
-	 * @param component JComponent
+	 * 
+	 * @param frame
+	 *            Frame
+	 * @param title
+	 *            String
+	 * @param modal
+	 *            boolean
+	 * @param component
+	 *            JComponent
 	 */
 	public TextDialog(Frame frame, String title, boolean modal,
 			JComponent component) {
@@ -107,28 +112,32 @@ public class TextDialog extends JDialog {
 		pack();
 
 	}
-	
+
 	/**
 	 * Method getOKButton.
+	 * 
 	 * @return JButton
 	 */
-	public JButton getOKButton(){
+	public JButton getOKButton() {
 		return buttonOk;
 	}
 
 	/**
 	 * Method getCancelButton.
+	 * 
 	 * @return JButton
 	 */
-	public JButton getCancelButton(){
+	public JButton getCancelButton() {
 		return buttonCancel;
 	}
-	
-	
+
 	/**
 	 * Constructor for TextDialog.
-	 * @param frame Frame
-	 * @param title String
+	 * 
+	 * @param frame
+	 *            Frame
+	 * @param title
+	 *            String
 	 */
 	public TextDialog(Frame frame, String title) {
 		this(frame, title, false, null);
@@ -136,7 +145,9 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Constructor for TextDialog.
-	 * @param frame Frame
+	 * 
+	 * @param frame
+	 *            Frame
 	 */
 	public TextDialog(Frame frame) {
 		this(frame, "", false, null);
@@ -144,7 +155,9 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Method doOK.
-	 * @param e ActionEvent
+	 * 
+	 * @param e
+	 *            ActionEvent
 	 */
 	void doOK(ActionEvent e) {
 		if (m_component instanceof JTextArea) {
@@ -156,7 +169,9 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Method doCancel.
-	 * @param e ActionEvent
+	 * 
+	 * @param e
+	 *            ActionEvent
 	 */
 	void doCancel(ActionEvent e) {
 		setCancel(true);
@@ -165,7 +180,9 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Method this_windowClosing.
-	 * @param e WindowEvent
+	 * 
+	 * @param e
+	 *            WindowEvent
 	 */
 	void this_windowClosing(WindowEvent e) {
 		setCancel(true);
@@ -174,6 +191,7 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Method getText.
+	 * 
 	 * @return String
 	 */
 	public String getText() {
@@ -182,7 +200,9 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Method setText.
-	 * @param text String
+	 * 
+	 * @param text
+	 *            String
 	 */
 	public void setText(String text) {
 		m_text = text;
@@ -190,6 +210,7 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Method getCancel.
+	 * 
 	 * @return boolean
 	 */
 	public boolean getCancel() {
@@ -198,7 +219,9 @@ public class TextDialog extends JDialog {
 
 	/**
 	 * Method setCancel.
-	 * @param cancel boolean
+	 * 
+	 * @param cancel
+	 *            boolean
 	 */
 	public void setCancel(boolean cancel) {
 		m_cancel = cancel;
@@ -212,7 +235,9 @@ class CancelButtonAdapter implements java.awt.event.ActionListener {
 
 	/**
 	 * Constructor for CancelButtonAdapter.
-	 * @param adaptee TextDialog
+	 * 
+	 * @param adaptee
+	 *            TextDialog
 	 */
 	CancelButtonAdapter(TextDialog adaptee) {
 		this.adaptee = adaptee;
@@ -220,7 +245,9 @@ class CancelButtonAdapter implements java.awt.event.ActionListener {
 
 	/**
 	 * Method actionPerformed.
-	 * @param e ActionEvent
+	 * 
+	 * @param e
+	 *            ActionEvent
 	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
@@ -235,7 +262,9 @@ class OKButtonAdapter implements java.awt.event.ActionListener {
 
 	/**
 	 * Constructor for OKButtonAdapter.
-	 * @param adaptee TextDialog
+	 * 
+	 * @param adaptee
+	 *            TextDialog
 	 */
 	OKButtonAdapter(TextDialog adaptee) {
 		this.adaptee = adaptee;
@@ -243,7 +272,9 @@ class OKButtonAdapter implements java.awt.event.ActionListener {
 
 	/**
 	 * Method actionPerformed.
-	 * @param e ActionEvent
+	 * 
+	 * @param e
+	 *            ActionEvent
 	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {

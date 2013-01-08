@@ -74,7 +74,9 @@ public final class DynamicCode {
 
 	/**
 	 * Constructor for DynamicCode.
-	 * @param parentClassLoader ClassLoader
+	 * 
+	 * @param parentClassLoader
+	 *            ClassLoader
 	 */
 	public DynamicCode(ClassLoader parentClassLoader) {
 		this(extractClasspath(parentClassLoader), parentClassLoader);
@@ -97,8 +99,9 @@ public final class DynamicCode {
 	 * Add a directory that contains the source of dynamic java code.
 	 * 
 	 * @param srcDir
-	
-	 * @return true if the add is successful */
+	 * 
+	 * @return true if the add is successful
+	 */
 	public boolean addSourceDir(File srcDir) {
 
 		try {
@@ -129,11 +132,12 @@ public final class DynamicCode {
 	 * Returns the up-to-date dynamic class by name.
 	 * 
 	 * @param className
-	
-	
+	 * 
+	 * 
 	 * @return Class<?>
 	 * @throws ClassNotFoundException
-	 *             if source file not found or compilation error */
+	 *             if source file not found or compilation error
+	 */
 	public Class<?> loadClass(String className) throws ClassNotFoundException {
 
 		LoadedClass loadedClass = null;
@@ -176,7 +180,9 @@ public final class DynamicCode {
 
 	/**
 	 * Method locateResource.
-	 * @param resource String
+	 * 
+	 * @param resource
+	 *            String
 	 * @return SourceDir
 	 */
 	private SourceDir locateResource(String resource) {
@@ -191,7 +197,9 @@ public final class DynamicCode {
 
 	/**
 	 * Method unload.
-	 * @param src SourceDir
+	 * 
+	 * @param src
+	 *            SourceDir
 	 */
 	private void unload(SourceDir src) {
 		// clear loaded classes
@@ -213,8 +221,9 @@ public final class DynamicCode {
 	 * Get a resource from added source directories.
 	 * 
 	 * @param resource
-	
-	 * @return the resource URL, or null if resource not found */
+	 * 
+	 * @return the resource URL, or null if resource not found
+	 */
 	public URL getResource(String resource) {
 		try {
 
@@ -228,7 +237,6 @@ public final class DynamicCode {
 		}
 	}
 
-
 	/**
 	 * Create a proxy instance that implements the specified access interface
 	 * and delegates incoming invocations to the specified dynamic
@@ -239,12 +247,13 @@ public final class DynamicCode {
 	 *            the access interface
 	 * @param implClassName
 	 *            the backend dynamic implementation
-	
-	
+	 * 
+	 * 
 	 * @return Object
 	 * @throws RuntimeException
 	 *             if an instance cannot be created, because of class not found
-	 *             for example */
+	 *             for example
+	 */
 	public Object newProxyInstance(Class<?> interfaceClass, String implClassName)
 			throws RuntimeException {
 		MyInvocationHandler handler = new MyInvocationHandler(implClassName);
@@ -254,9 +263,13 @@ public final class DynamicCode {
 
 	/**
 	 * Method newProxyInstance.
-	 * @param interfaceClass Class<?>
-	 * @param implClassName String
-	 * @param parm Vector<Object>
+	 * 
+	 * @param interfaceClass
+	 *            Class<?>
+	 * @param implClassName
+	 *            String
+	 * @param parm
+	 *            Vector<Object>
 	 * @return Object
 	 * @throws RuntimeException
 	 */
@@ -281,7 +294,9 @@ public final class DynamicCode {
 
 		/**
 		 * Constructor for SourceDir.
-		 * @param srcDir File
+		 * 
+		 * @param srcDir
+		 *            File
 		 */
 		SourceDir(File srcDir) {
 			this.srcDir = srcDir;
@@ -323,8 +338,11 @@ public final class DynamicCode {
 
 		/**
 		 * Constructor for LoadedClass.
-		 * @param className String
-		 * @param src SourceDir
+		 * 
+		 * @param className
+		 *            String
+		 * @param src
+		 *            SourceDir
 		 */
 		LoadedClass(String className, SourceDir src) {
 			this.className = className;
@@ -339,6 +357,7 @@ public final class DynamicCode {
 
 		/**
 		 * Method isChanged.
+		 * 
 		 * @return boolean
 		 */
 		boolean isChanged() {
@@ -387,8 +406,11 @@ public final class DynamicCode {
 
 		/**
 		 * Constructor for MyInvocationHandler.
-		 * @param className String
-		 * @param parm Vector<Object>
+		 * 
+		 * @param className
+		 *            String
+		 * @param parm
+		 *            Vector<Object>
 		 */
 		MyInvocationHandler(String className, Vector<Object> parm) {
 			backendClassName = className;
@@ -404,7 +426,9 @@ public final class DynamicCode {
 
 		/**
 		 * Constructor for MyInvocationHandler.
-		 * @param className String
+		 * 
+		 * @param className
+		 *            String
 		 */
 		MyInvocationHandler(String className) {
 			backendClassName = className;
@@ -420,12 +444,17 @@ public final class DynamicCode {
 
 		/**
 		 * Method invoke.
-		 * @param proxy Object
-		 * @param method Method
-		 * @param args Object[]
+		 * 
+		 * @param proxy
+		 *            Object
+		 * @param method
+		 *            Method
+		 * @param args
+		 *            Object[]
 		 * @return Object
 		 * @throws Throwable
-		 * @see java.lang.reflect.InvocationHandler#invoke(Object, Method, Object[])
+		 * @see java.lang.reflect.InvocationHandler#invoke(Object, Method,
+		 *      Object[])
 		 */
 		public Object invoke(Object proxy, Method method, Object[] args)
 				throws Throwable {
@@ -447,7 +476,9 @@ public final class DynamicCode {
 
 		/**
 		 * Method newDynaCodeInstance.
-		 * @param clz Class<?>
+		 * 
+		 * @param clz
+		 *            Class<?>
 		 * @return Object
 		 */
 		private Object newDynaCodeInstance(Class<?> clz) {
@@ -465,8 +496,11 @@ public final class DynamicCode {
 
 	/**
 	 * Method getCreateClass.
-	 * @param clz Class<?>
-	 * @param parm Vector<Object>
+	 * 
+	 * @param clz
+	 *            Class<?>
+	 * @param parm
+	 *            Vector<Object>
 	 * @return Object
 	 * @throws IOException
 	 * @throws ClassNotFoundException
@@ -478,62 +512,64 @@ public final class DynamicCode {
 	private static Object getCreateClass(Class<?> clz, Vector<Object> parm)
 			throws IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, NoSuchMethodException,
-			InvocationTargetException {	
-				int vectorSize = 0;
-				vectorSize = parm.size();
-				Object instance = null;
+			InvocationTargetException {
+		int vectorSize = 0;
+		vectorSize = parm.size();
+		Object instance = null;
 
-				Class<?>[] parms = new Class[vectorSize];
-				Object[] object = new Object[vectorSize];
-				StringBuffer classes = new StringBuffer();
-				int i = 0;
-				for (Object obj : parm) {
-					if (classes.length() == 0) {
-						classes.append(obj.getClass().getName());
-					} else {
-						classes.append("," + obj.getClass().getName());
-					}
-					parms[i] = obj.getClass();
-					object[i] = obj;
-					i++;
-				}
-
-				Constructor<?> constructor = null;
-
-				try {
-					constructor = clz.getDeclaredConstructor(parms);
-					instance = constructor.newInstance(object);
-				} catch (Exception e) {
-
-					_log.info("Could not find constructor for default parms[" + classes
-							+ "] will test all constructors.");
-					Constructor<?>[] constructors = clz.getConstructors();
-					for (Constructor<?> constructor2 : constructors) {
-						try {
-							instance = constructor2.newInstance(object);
-							if (null != instance) {
-								_log.info("Found constructor: "
-										+ constructor2.toGenericString()
-										+ " for parms[" + classes + "]");
-								break;
-							}
-						} catch (Exception ex) {
-							_log.info("Constructor: " + constructor2.toGenericString()
-									+ " failed!!");
-						}
-					}
-				}
-				if (null == instance) {
-					instance = clz.newInstance();
-				}
-
-				return instance;
+		Class<?>[] parms = new Class[vectorSize];
+		Object[] object = new Object[vectorSize];
+		StringBuffer classes = new StringBuffer();
+		int i = 0;
+		for (Object obj : parm) {
+			if (classes.length() == 0) {
+				classes.append(obj.getClass().getName());
+			} else {
+				classes.append("," + obj.getClass().getName());
 			}
+			parms[i] = obj.getClass();
+			object[i] = obj;
+			i++;
+		}
+
+		Constructor<?> constructor = null;
+
+		try {
+			constructor = clz.getDeclaredConstructor(parms);
+			instance = constructor.newInstance(object);
+		} catch (Exception e) {
+
+			_log.info("Could not find constructor for default parms[" + classes
+					+ "] will test all constructors.");
+			Constructor<?>[] constructors = clz.getConstructors();
+			for (Constructor<?> constructor2 : constructors) {
+				try {
+					instance = constructor2.newInstance(object);
+					if (null != instance) {
+						_log.info("Found constructor: "
+								+ constructor2.toGenericString()
+								+ " for parms[" + classes + "]");
+						break;
+					}
+				} catch (Exception ex) {
+					_log.info("Constructor: " + constructor2.toGenericString()
+							+ " failed!!");
+				}
+			}
+		}
+		if (null == instance) {
+			instance = clz.newInstance();
+		}
+
+		return instance;
+	}
 
 	/**
 	 * Extracts a classpath string from a given class loader. Recognizes only
 	 * URLClassLoader.
-	 * @param cl ClassLoader
+	 * 
+	 * @param cl
+	 *            ClassLoader
 	 * @return String
 	 */
 	private static String extractClasspath(ClassLoader cl) {

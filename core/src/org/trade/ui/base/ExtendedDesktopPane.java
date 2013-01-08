@@ -57,8 +57,11 @@ public class ExtendedDesktopPane extends JDesktopPane {
 
 	/**
 	 * Method addCascaded.
-	 * @param comp Component
-	 * @param layer Integer
+	 * 
+	 * @param comp
+	 *            Component
+	 * @param layer
+	 *            Integer
 	 */
 	public void addCascaded(Component comp, Integer layer) {
 		// First add the component in the correct layer
@@ -161,8 +164,11 @@ public class ExtendedDesktopPane extends JDesktopPane {
 
 	/**
 	 * Method setCascadeOffsets.
-	 * @param offsetX int
-	 * @param offsetY int
+	 * 
+	 * @param offsetX
+	 *            int
+	 * @param offsetY
+	 *            int
 	 */
 	public void setCascadeOffsets(int offsetX, int offsetY) {
 		this.offsetX = offsetX;
@@ -171,7 +177,9 @@ public class ExtendedDesktopPane extends JDesktopPane {
 
 	/**
 	 * Method setCascadeOffsets.
-	 * @param pt Point
+	 * 
+	 * @param pt
+	 *            Point
 	 */
 	public void setCascadeOffsets(Point pt) {
 		this.offsetX = pt.x;
@@ -180,6 +188,7 @@ public class ExtendedDesktopPane extends JDesktopPane {
 
 	/**
 	 * Method getCascadeOffsets.
+	 * 
 	 * @return Point
 	 */
 	public Point getCascadeOffsets() {
@@ -188,7 +197,9 @@ public class ExtendedDesktopPane extends JDesktopPane {
 
 	/**
 	 * Method cascade.
-	 * @param comp Component
+	 * 
+	 * @param comp
+	 *            Component
 	 */
 	protected void cascade(Component comp) {
 		Dimension paneSize = getSize();

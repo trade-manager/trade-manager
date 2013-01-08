@@ -58,16 +58,19 @@ public class LookupService {
 	/**
 	 * Get the appropriate Lookup.
 	 * 
-	
-	
 	 * 
-	
 	 * 
-	
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
 	 * @return Lookup
-	 * @exception LookupException */
+	 * @exception LookupException
+	 */
 	public static Lookup getLookup(String lookupName, LookupQualifier qualifier)
 			throws LookupException {
 		Lookup lookup = null;
@@ -89,7 +92,9 @@ public class LookupService {
 
 	/**
 	 * Method addLookupServiceProvider.
-	 * @param provider LookupServiceProvider
+	 * 
+	 * @param provider
+	 *            LookupServiceProvider
 	 */
 	public static void addLookupServiceProvider(LookupServiceProvider provider) {
 		if (!_providers.contains(provider)) {
@@ -99,7 +104,9 @@ public class LookupService {
 
 	/**
 	 * Method removeLookupServiceProvider.
-	 * @param provider LookupServiceProvider
+	 * 
+	 * @param provider
+	 *            LookupServiceProvider
 	 */
 	public static void removeLookupServiceProvider(
 			LookupServiceProvider provider) {

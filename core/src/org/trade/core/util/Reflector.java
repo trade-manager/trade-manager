@@ -49,15 +49,19 @@ public class Reflector extends Object {
 	/**
 	 * Find the specified method by walking the classes class hierarchy.
 	 * 
-	
-	
-	
 	 * 
-	
-	 * @param cl Class<?>
-	 * @param name String
-	 * @param params Class<?>[]
-	 * @return The specified method if found, null otherwise. */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param cl
+	 *            Class<?>
+	 * @param name
+	 *            String
+	 * @param params
+	 *            Class<?>[]
+	 * @return The specified method if found, null otherwise.
+	 */
 	public static Method findMethod(Class<?> cl, String name, Class<?>[] params) {
 		Method m = null;
 		boolean notFound = true;
@@ -94,14 +98,17 @@ public class Reflector extends Object {
 	/**
 	 * Find the specified method by walking the classes class hierarchy.
 	 * 
-	
-	
-	
 	 * 
-	
-	 * @param cl Class<?>
-	 * @param name String
-	 * @return The specified method if found, null otherwise. */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param cl
+	 *            Class<?>
+	 * @param name
+	 *            String
+	 * @return The specified method if found, null otherwise.
+	 */
 	public static Field findField(Class<?> cl, String name) {
 		Field m = null;
 		boolean notFound = true;

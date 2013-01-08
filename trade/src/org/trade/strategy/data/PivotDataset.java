@@ -77,10 +77,11 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * Returns the position within each time period that is used for the X value
 	 * when the collection is used as an {@link XYDataset}.
 	 * 
-	
+	 * 
 	 * 
 	 * @since 1.0.11
-	 * @return The anchor position (never <code>null</code>). */
+	 * @return The anchor position (never <code>null</code>).
+	 */
 	public TimePeriodAnchor getXPosition() {
 		return this.xPosition;
 	}
@@ -119,10 +120,10 @@ public class PivotDataset extends AbstractXYDataset implements
 		series.addChangeListener(this);
 		fireDatasetChanged();
 	}
-	
+
 	/**
-	 * Removes a series to the collection and sends a {@link DatasetChangeEvent} to
-	 * all registered listeners.
+	 * Removes a series to the collection and sends a {@link DatasetChangeEvent}
+	 * to all registered listeners.
 	 * 
 	 * @param series
 	 *            the series (<code>null</code> not permitted).
@@ -136,15 +137,17 @@ public class PivotDataset extends AbstractXYDataset implements
 		series.removeChangeListener(this);
 		fireDatasetChanged();
 	}
-	
+
 	/**
 	 * Replace a series to the collection and sends a {@link DatasetChangeEvent}
 	 * to all registered listeners.
 	 * 
 	 * @param series
 	 *            the series (<code>null</code> not permitted).
-	 * @param index int
-	 * @see org.trade.strategy.data.IndicatorDataset#setSeries(int, IndicatorSeries)
+	 * @param index
+	 *            int
+	 * @see org.trade.strategy.data.IndicatorDataset#setSeries(int,
+	 *      IndicatorSeries)
 	 */
 	public void setSeries(int index, IndicatorSeries series) {
 		if (series == null) {
@@ -160,7 +163,6 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * Adds a series to the collection and sends a {@link DatasetChangeEvent} to
 	 * all registered listeners.
 	 * 
-	
 	 */
 	public void seriesUpdated() {
 		fireDatasetChanged();
@@ -169,8 +171,9 @@ public class PivotDataset extends AbstractXYDataset implements
 	/**
 	 * Returns the number of series in the collection.
 	 * 
-	
-	 * @return The series count. * @see org.jfree.data.general.SeriesDataset#getSeriesCount()
+	 * 
+	 * @return The series count. * @see
+	 *         org.jfree.data.general.SeriesDataset#getSeriesCount()
 	 */
 	public int getSeriesCount() {
 		return this.data.size();
@@ -182,12 +185,13 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param series
 	 *            the series index (zero-based).
 	 * 
-	
 	 * 
-	
-	 * @return The series. * @throws IllegalArgumentException
-	 *             if <code>series</code> is not in the range <code>0</code> to
-	 *             <code>getSeriesCount() - 1</code>. * @see org.trade.strategy.data.IndicatorDataset#getSeries(int)
+	 * 
+	 * 
+	 * @return The series. * @throws IllegalArgumentException if
+	 *         <code>series</code> is not in the range <code>0</code> to
+	 *         <code>getSeriesCount() - 1</code>. * @see
+	 *         org.trade.strategy.data.IndicatorDataset#getSeries(int)
 	 */
 	public PivotSeries getSeries(int series) {
 		if ((series < 0) || (series >= getSeriesCount())) {
@@ -203,11 +207,12 @@ public class PivotDataset extends AbstractXYDataset implements
 	 *            the series index (in the range <code>0</code> to
 	 *            <code>getSeriesCount() - 1</code>).
 	 * 
-	
 	 * 
-	
-	 * @return The key for a series. * @throws IllegalArgumentException
-	 *             if <code>series</code> is not in the specified range. * @see org.jfree.data.general.SeriesDataset#getSeriesKey(int)
+	 * 
+	 * 
+	 * @return The key for a series. * @throws IllegalArgumentException if
+	 *         <code>series</code> is not in the specified range. * @see
+	 *         org.jfree.data.general.SeriesDataset#getSeriesKey(int)
 	 */
 	public Comparable<?> getSeriesKey(int series) {
 		// defer argument checking
@@ -220,12 +225,13 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param series
 	 *            the series (zero-based index).
 	 * 
-	
 	 * 
-	
-	 * @return The item count. * @throws IllegalArgumentException
-	 *             if <code>series</code> is not in the range <code>0</code> to
-	 *             <code>getSeriesCount() - 1</code>. * @see org.jfree.data.xy.XYDataset#getItemCount(int)
+	 * 
+	 * 
+	 * @return The item count. * @throws IllegalArgumentException if
+	 *         <code>series</code> is not in the range <code>0</code> to
+	 *         <code>getSeriesCount() - 1</code>. * @see
+	 *         org.jfree.data.xy.XYDataset#getItemCount(int)
 	 */
 	public int getItemCount(int series) {
 		// defer argument checking
@@ -238,8 +244,9 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param period
 	 *            the time period (<code>null</code> not permitted).
 	 * 
-	
-	 * @return The x-value. */
+	 * 
+	 * @return The x-value.
+	 */
 	protected synchronized long getX(RegularTimePeriod period) {
 		long result = 0L;
 		if (this.xPosition == TimePeriodAnchor.START) {
@@ -260,8 +267,9 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The x-value. * @see org.jfree.data.xy.XYDataset#getXValue(int, int)
+	 * 
+	 * @return The x-value. * @see org.jfree.data.xy.XYDataset#getXValue(int,
+	 *         int)
 	 */
 	public double getXValue(int series, int item) {
 		PivotSeries s = (PivotSeries) this.data.get(series);
@@ -278,7 +286,7 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
+	 * 
 	 * @return The x-value. * @see org.jfree.data.xy.XYDataset#getX(int, int)
 	 */
 	public Number getX(int series, int item) {
@@ -293,7 +301,7 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
+	 * 
 	 * @return The y-value. * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
@@ -310,8 +318,10 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Pivot. * @see org.trade.strategy.data.pivot.IPivotDataset#getPivotValue(int, int)
+	 * 
+	 * @return The Pivot. * @see
+	 *         org.trade.strategy.data.pivot.IPivotDataset#getPivotValue(int,
+	 *         int)
 	 */
 	public double getPivotValue(int series, int item) {
 		PivotSeries s = (PivotSeries) this.data.get(series);
@@ -327,8 +337,9 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Pivot. * @see org.trade.strategy.data.pivot.IPivotDataset#getPivot(int, int)
+	 * 
+	 * @return The Pivot. * @see
+	 *         org.trade.strategy.data.pivot.IPivotDataset#getPivot(int, int)
 	 */
 	public Number getPivot(int series, int item) {
 		return new Double(getPivotValue(series, item));
@@ -342,8 +353,10 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Pivot. * @see org.trade.strategy.data.pivot.IPivotDataset#getPivotSide(int, int)
+	 * 
+	 * @return The Pivot. * @see
+	 *         org.trade.strategy.data.pivot.IPivotDataset#getPivotSide(int,
+	 *         int)
 	 */
 	public String getPivotSide(int series, int item) {
 		PivotSeries s = (PivotSeries) this.data.get(series);
@@ -357,8 +370,9 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @param obj
 	 *            the object (<code>null</code> permitted).
 	 * 
-	
-	 * @return A boolean. */
+	 * 
+	 * @return A boolean.
+	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -376,11 +390,12 @@ public class PivotDataset extends AbstractXYDataset implements
 	/**
 	 * Returns a clone of this instance.
 	 * 
-	
 	 * 
-	
-	 * @return A clone. * @throws CloneNotSupportedException
-	 *             if there is a problem. */
+	 * 
+	 * 
+	 * @return A clone. * @throws CloneNotSupportedException if there is a
+	 *         problem.
+	 */
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		PivotDataset clone = (PivotDataset) super.clone();
@@ -391,9 +406,13 @@ public class PivotDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method updateDataset.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
-	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset, int)
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
+	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
+	 *      int)
 	 */
 	public void updateDataset(CandleDataset source, int seriesIndex) {
 		if (source == null) {
@@ -410,6 +429,7 @@ public class PivotDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method clear.
+	 * 
 	 * @see org.trade.strategy.data.IndicatorDataset#clear()
 	 */
 	public void clear() {
@@ -421,6 +441,7 @@ public class PivotDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method getRenderer.
+	 * 
 	 * @return XYItemRenderer
 	 * @see org.trade.strategy.data.IndicatorDataset#getRenderer()
 	 */
@@ -430,7 +451,9 @@ public class PivotDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method getSeriesColor.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return Color
 	 * @see org.trade.strategy.data.IndicatorDataset#getSeriesColor(int)
 	 */
@@ -440,27 +463,33 @@ public class PivotDataset extends AbstractXYDataset implements
 
 	/**
 	 * Method getDisplaySeries.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#getDisplaySeries(int)
 	 */
 	public boolean getDisplaySeries(int seriesIndex) {
 		return this.getSeries(seriesIndex).getDisplaySeries();
 	}
-	
+
 	/**
 	 * Method getSubChart.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#getSubChart(int)
 	 */
 	public boolean getSubChart(int seriesIndex) {
 		return this.getSeries(seriesIndex).getSubChart();
 	}
-	
+
 	/**
 	 * Method getType.
-	 * @param seriesIndex int
+	 * 
+	 * @param seriesIndex
+	 *            int
 	 * @return String
 	 * @see org.trade.strategy.data.IndicatorDataset#getType(int)
 	 */

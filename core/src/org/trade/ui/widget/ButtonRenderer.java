@@ -1,6 +1,7 @@
 package org.trade.ui.widget;
 
 import java.awt.Component;
+
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 

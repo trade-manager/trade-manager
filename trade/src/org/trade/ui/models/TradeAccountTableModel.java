@@ -36,6 +36,7 @@
 package org.trade.ui.models;
 
 import java.util.Vector;
+
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;

@@ -73,7 +73,7 @@ public class ContractHome {
 	 *            String
 	 * @param currency
 	 *            String
-	 	 * @param expiryDate
+	 * @param expiryDate
 	 *            Date
 	 * @return Contract
 	 */

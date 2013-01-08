@@ -45,7 +45,9 @@ public class ArrayOfValues {
 
 	/**
 	 * Constructor for ArrayOfValues.
-	 * @param values Object[]
+	 * 
+	 * @param values
+	 *            Object[]
 	 */
 	public ArrayOfValues(Object[] values) {
 		array = values;
@@ -53,6 +55,7 @@ public class ArrayOfValues {
 
 	/**
 	 * Method getValues.
+	 * 
 	 * @return Object[]
 	 */
 	public Object[] getValues() {

@@ -44,16 +44,19 @@ public interface LookupServiceProvider {
 	/**
 	 * Get the appropriate Lookup.
 	 * 
-	
-	
 	 * 
-	
 	 * 
-	
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
 	 * @return Lookup
-	 * @exception LookupException */
+	 * @exception LookupException
+	 */
 	Lookup getLookup(String lookupName, LookupQualifier qualifier)
 			throws LookupException;
 }

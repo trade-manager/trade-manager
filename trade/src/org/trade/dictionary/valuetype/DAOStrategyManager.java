@@ -58,6 +58,7 @@ public class DAOStrategyManager extends DAODecode {
 
 	/**
 	 * Method getCodesDecodes.
+	 * 
 	 * @return Vector<Decode>
 	 * @throws ValueTypeException
 	 */
@@ -76,7 +77,9 @@ public class DAOStrategyManager extends DAODecode {
 
 	/**
 	 * Method newInstance.
-	 * @param displayName String
+	 * 
+	 * @param displayName
+	 *            String
 	 * @return DAOStrategyManager
 	 */
 	public static DAOStrategyManager newInstance(String displayName) {
@@ -87,6 +90,7 @@ public class DAOStrategyManager extends DAODecode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return DAOStrategyManager
 	 */
 	public static DAOStrategyManager newInstance() {

@@ -101,7 +101,9 @@ public class ProgressDialog extends JDialog {
 
 	/**
 	 * Method main.
-	 * @param args String[]
+	 * 
+	 * @param args
+	 *            String[]
 	 */
 	public static void main(String[] args) {
 		try {
@@ -115,7 +117,9 @@ public class ProgressDialog extends JDialog {
 
 	/**
 	 * Method setStatus.
-	 * @param message String
+	 * 
+	 * @param message
+	 *            String
 	 */
 	public void setStatus(String message) {
 		jTextFieldStatus.setText(message);
@@ -123,8 +127,11 @@ public class ProgressDialog extends JDialog {
 
 	/**
 	 * Method setValueRange.
-	 * @param min int
-	 * @param max int
+	 * 
+	 * @param min
+	 *            int
+	 * @param max
+	 *            int
 	 */
 	public void setValueRange(int min, int max) {
 		jProgressBar1.setMaximum(max);
@@ -133,7 +140,9 @@ public class ProgressDialog extends JDialog {
 
 	/**
 	 * Method setValue.
-	 * @param value int
+	 * 
+	 * @param value
+	 *            int
 	 */
 	public void setValue(int value) {
 		jProgressBar1.setValue(value);
@@ -141,6 +150,7 @@ public class ProgressDialog extends JDialog {
 
 	/**
 	 * Method getValue.
+	 * 
 	 * @return int
 	 */
 	public int getValue() {

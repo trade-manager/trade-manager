@@ -67,6 +67,8 @@ import org.trade.persistent.dao.Tradestrategy;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.candle.CandleItem;
 
+import com.ib.client.ContractDetails;
+
 /**
  */
 public class BackTestBrokerModel extends AbstractBrokerModel implements

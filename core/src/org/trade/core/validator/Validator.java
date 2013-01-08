@@ -40,10 +40,15 @@ package org.trade.core.validator;
 public interface Validator {
 	/**
 	 * Method isValid.
-	 * @param value Object
-	 * @param invalidValue String
-	 * @param expectedFormat String
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param value
+	 *            Object
+	 * @param invalidValue
+	 *            String
+	 * @param expectedFormat
+	 *            String
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
 	boolean isValid(Object value, String invalidValue, String expectedFormat,

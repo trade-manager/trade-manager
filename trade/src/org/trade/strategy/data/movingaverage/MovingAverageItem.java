@@ -59,9 +59,10 @@ public class MovingAverageItem extends ComparableObjectItem {
 	 * 
 	 * @param period
 	 *            the time period.
-	
-	
-	 * @param movingAverage BigDecimal
+	 * 
+	 * 
+	 * @param movingAverage
+	 *            BigDecimal
 	 */
 	public MovingAverageItem(RegularTimePeriod period, BigDecimal movingAverage) {
 		super(period, new MovingAverage(movingAverage));
@@ -70,8 +71,9 @@ public class MovingAverageItem extends ComparableObjectItem {
 	/**
 	 * Returns the period.
 	 * 
-	
-	 * @return The period (never <code>null</code>). */
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
 	public RegularTimePeriod getPeriod() {
 		return (RegularTimePeriod) getComparable();
 	}
@@ -79,8 +81,9 @@ public class MovingAverageItem extends ComparableObjectItem {
 	/**
 	 * Returns the y-value.
 	 * 
-	
-	 * @return The y-value. */
+	 * 
+	 * @return The y-value.
+	 */
 	public double getY() {
 		return getMovingAverage();
 	}
@@ -88,8 +91,9 @@ public class MovingAverageItem extends ComparableObjectItem {
 	/**
 	 * Set the moving Average value.
 	 * 
-	
-	 * @param movingAverage double
+	 * 
+	 * @param movingAverage
+	 *            double
 	 */
 	public void setMovingAverage(double movingAverage) {
 		MovingAverage dataItem = (MovingAverage) getObject();
@@ -102,8 +106,9 @@ public class MovingAverageItem extends ComparableObjectItem {
 	/**
 	 * Returns the moving Average value.
 	 * 
-	
-	 * @return The moving Average value. */
+	 * 
+	 * @return The moving Average value.
+	 */
 	public double getMovingAverage() {
 		MovingAverage dataItem = (MovingAverage) getObject();
 		if (dataItem != null) {

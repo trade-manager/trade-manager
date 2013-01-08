@@ -128,15 +128,20 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Constructor for DOMTree.
-	 * @param basePanel BasePanel
+	 * 
+	 * @param basePanel
+	 *            BasePanel
 	 */
 	public DOMTree(BasePanel basePanel) {
 		this(null, basePanel);
 		this.addMouseListener(this);
 	}
 
-	/** Constructs a tree with the specified document. * @param document Document
-	 * @param basePanel BasePanel
+	/**
+	 * Constructs a tree with the specified document. * @param document Document
+	 * 
+	 * @param basePanel
+	 *            BasePanel
 	 */
 	public DOMTree(Document document, BasePanel basePanel) {
 		super();
@@ -188,27 +193,32 @@ public class DOMTree extends JTree implements DragSourceListener,
 	//
 	// Public methods
 	//
-	/** Sets the document. * @param document Document
+	/**
+	 * Sets the document. * @param document Document
 	 */
 	public void setDocument(Document document) {
 		((DOMTreeModel) getModel()).setDocument(document);
 		expandRow(0);
 	}
 
-	/** Returns the document. * @return Document
+	/**
+	 * Returns the document. * @return Document
 	 */
 	public Document getDocument() {
 		return ((DOMTreeModel) getModel()).getDocument();
 	}
 
-	/** get the org.w3c.Node for a MutableTreeNode. * @param treeNode Object
+	/**
+	 * get the org.w3c.Node for a MutableTreeNode. * @param treeNode Object
+	 * 
 	 * @return Node
 	 */
 	public Node getNode(Object treeNode) {
 		return ((DOMTreeModel) getModel()).getNode(treeNode);
 	}
 
-	/** Returns The selected node * @return DefaultMutableTreeNode
+	/**
+	 * Returns The selected node * @return DefaultMutableTreeNode
 	 */
 	public DefaultMutableTreeNode getSelectedNode() {
 		return m_selectedNode;
@@ -216,6 +226,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method isDirty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isDirty() {
@@ -226,7 +237,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 	// scroll zone.
 	/**
 	 * Method autoscroll.
-	 * @param pt Point
+	 * 
+	 * @param pt
+	 *            Point
 	 * @see java.awt.dnd.Autoscroll#autoscroll(Point)
 	 */
 	public void autoscroll(Point pt) {
@@ -257,6 +270,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 	// the tree is in. This makes it a bit messy.
 	/**
 	 * Method getAutoscrollInsets.
+	 * 
 	 * @return Insets
 	 * @see java.awt.dnd.Autoscroll#getAutoscrollInsets()
 	 */
@@ -277,7 +291,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method paintComponent.
-	 * @param g Graphics
+	 * 
+	 * @param g
+	 *            Graphics
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -293,7 +309,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 	// TreeModelListener interface...
 	/**
 	 * Method treeNodesChanged.
-	 * @param e TreeModelEvent
+	 * 
+	 * @param e
+	 *            TreeModelEvent
 	 * @see javax.swing.event.TreeModelListener#treeNodesChanged(TreeModelEvent)
 	 */
 	public void treeNodesChanged(TreeModelEvent e) {
@@ -301,7 +319,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method treeNodesInserted.
-	 * @param e TreeModelEvent
+	 * 
+	 * @param e
+	 *            TreeModelEvent
 	 * @see javax.swing.event.TreeModelListener#treeNodesInserted(TreeModelEvent)
 	 */
 	public void treeNodesInserted(TreeModelEvent e) {
@@ -314,7 +334,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method treeNodesRemoved.
-	 * @param e TreeModelEvent
+	 * 
+	 * @param e
+	 *            TreeModelEvent
 	 * @see javax.swing.event.TreeModelListener#treeNodesRemoved(TreeModelEvent)
 	 */
 	public void treeNodesRemoved(TreeModelEvent e) {
@@ -322,7 +344,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method treeStructureChanged.
-	 * @param e TreeModelEvent
+	 * 
+	 * @param e
+	 *            TreeModelEvent
 	 * @see javax.swing.event.TreeModelListener#treeStructureChanged(TreeModelEvent)
 	 */
 	public void treeStructureChanged(TreeModelEvent e) {
@@ -331,8 +355,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 	// More helpers...
 	/**
 	 * Method getChildPath.
-	 * @param pathParent TreePath
-	 * @param nChildIndex int
+	 * 
+	 * @param pathParent
+	 *            TreePath
+	 * @param nChildIndex
+	 *            int
 	 * @return TreePath
 	 */
 	private TreePath getChildPath(TreePath pathParent, int nChildIndex) {
@@ -344,7 +371,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method isRootPath.
-	 * @param path TreePath
+	 * 
+	 * @param path
+	 *            TreePath
 	 * @return boolean
 	 */
 	private boolean isRootPath(TreePath path) {
@@ -353,7 +382,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method mousePressed.
-	 * @param evt MouseEvent
+	 * 
+	 * @param evt
+	 *            MouseEvent
 	 * @see java.awt.event.MouseListener#mousePressed(MouseEvent)
 	 */
 	public void mousePressed(MouseEvent evt) {
@@ -364,7 +395,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method mouseReleased.
-	 * @param evt MouseEvent
+	 * 
+	 * @param evt
+	 *            MouseEvent
 	 * @see java.awt.event.MouseListener#mouseReleased(MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent evt) {
@@ -375,7 +408,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method mouseClicked.
-	 * @param evt MouseEvent
+	 * 
+	 * @param evt
+	 *            MouseEvent
 	 * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
 	 */
 	public void mouseClicked(MouseEvent evt) {
@@ -388,7 +423,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method mouseEntered.
-	 * @param evt MouseEvent
+	 * 
+	 * @param evt
+	 *            MouseEvent
 	 * @see java.awt.event.MouseListener#mouseEntered(MouseEvent)
 	 */
 	public void mouseEntered(MouseEvent evt) {
@@ -396,7 +433,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method mouseExited.
-	 * @param evt MouseEvent
+	 * 
+	 * @param evt
+	 *            MouseEvent
 	 * @see java.awt.event.MouseListener#mouseExited(MouseEvent)
 	 */
 	public void mouseExited(MouseEvent evt) {
@@ -404,7 +443,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method createPopup.
-	 * @param point Point
+	 * 
+	 * @param point
+	 *            Point
 	 */
 	protected void createPopup(Point point) {
 
@@ -415,7 +456,8 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		popup.add(copy);
 
-		BaseMenuItem cut = new BaseMenuItem(m_basePanel, BaseUIPropertyCodes.CUT);
+		BaseMenuItem cut = new BaseMenuItem(m_basePanel,
+				BaseUIPropertyCodes.CUT);
 
 		popup.add(cut);
 
@@ -431,7 +473,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method getComponentContainer.
-	 * @param c Component
+	 * 
+	 * @param c
+	 *            Component
 	 * @return Component
 	 */
 	private Component getComponentContainer(Component c) {
@@ -447,9 +491,13 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method getSuitableLocation.
-	 * @param point Point
-	 * @param d Dimension
-	 * @param c Component
+	 * 
+	 * @param point
+	 *            Point
+	 * @param d
+	 *            Dimension
+	 * @param c
+	 *            Component
 	 * @return Point
 	 */
 	protected Point getSuitableLocation(Point point, Dimension d, Component c) {
@@ -494,7 +542,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 		return point;
 	}
 
-	/** DragGestureListener interface method * @param e DragGestureEvent
+	/**
+	 * DragGestureListener interface method * @param e DragGestureEvent
+	 * 
 	 * @see java.awt.dnd.DragGestureListener#dragGestureRecognized(DragGestureEvent)
 	 */
 	public void dragGestureRecognized(DragGestureEvent e) {
@@ -579,37 +629,50 @@ public class DOMTree extends JTree implements DragSourceListener,
 		}
 	}
 
-	/** DragSourceListener interface method * @param dsde DragSourceDropEvent
+	/**
+	 * DragSourceListener interface method * @param dsde DragSourceDropEvent
+	 * 
 	 * @see java.awt.dnd.DragSourceListener#dragDropEnd(DragSourceDropEvent)
 	 */
 	public void dragDropEnd(DragSourceDropEvent dsde) {
 	}
 
-	/** DragSourceListener interface method * @param dsde DragSourceDragEvent
+	/**
+	 * DragSourceListener interface method * @param dsde DragSourceDragEvent
+	 * 
 	 * @see java.awt.dnd.DragSourceListener#dragEnter(DragSourceDragEvent)
 	 */
 	public void dragEnter(DragSourceDragEvent dsde) {
 	}
 
-	/** DragSourceListener interface method * @param dsde DragSourceDragEvent
+	/**
+	 * DragSourceListener interface method * @param dsde DragSourceDragEvent
+	 * 
 	 * @see java.awt.dnd.DragSourceListener#dragOver(DragSourceDragEvent)
 	 */
 	public void dragOver(DragSourceDragEvent dsde) {
 	}
 
-	/** DragSourceListener interface method * @param dsde DragSourceDragEvent
+	/**
+	 * DragSourceListener interface method * @param dsde DragSourceDragEvent
+	 * 
 	 * @see java.awt.dnd.DragSourceListener#dropActionChanged(DragSourceDragEvent)
 	 */
 	public void dropActionChanged(DragSourceDragEvent dsde) {
 	}
 
-	/** DragSourceListener interface method * @param dsde DragSourceEvent
+	/**
+	 * DragSourceListener interface method * @param dsde DragSourceEvent
+	 * 
 	 * @see java.awt.dnd.DragSourceListener#dragExit(DragSourceEvent)
 	 */
 	public void dragExit(DragSourceEvent dsde) {
 	}
 
-	/** TreeSelectionListener - sets selected node * @param evt TreeSelectionEvent
+	/**
+	 * TreeSelectionListener - sets selected node * @param evt
+	 * TreeSelectionEvent
+	 * 
 	 * @see javax.swing.event.TreeSelectionListener#valueChanged(TreeSelectionEvent)
 	 */
 	public void valueChanged(TreeSelectionEvent evt) {
@@ -625,8 +688,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 	/**
 	 * Method testDropTarget.
-	 * @param destination TreePath
-	 * @param dropper TreePath
+	 * 
+	 * @param destination
+	 *            TreePath
+	 * @param dropper
+	 *            TreePath
 	 * @return String
 	 */
 	private String testDropTarget(TreePath destination, TreePath dropper) {
@@ -675,7 +741,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Constructor for DOMTreeModel.
-		 * @param document Document
+		 * 
+		 * @param document
+		 *            Document
 		 */
 		public DOMTreeModel(Document document) {
 			super(new DefaultMutableTreeNode());
@@ -685,7 +753,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Method setDocument.
-		 * @param document Document
+		 * 
+		 * @param document
+		 *            Document
 		 */
 		public synchronized void setDocument(Document document) {
 			// save document
@@ -699,13 +769,16 @@ public class DOMTree extends JTree implements DragSourceListener,
 					new int[0], new Object[0]);
 		} // setDocument(Document)
 
-		/** Returns the document. * @return Document
+		/**
+		 * Returns the document. * @return Document
 		 */
 		public Document getDocument() {
 			return document;
 		}
 
-		/** get the org.w3c.Node for a MutableTreeNode. * @param treeNode Object
+		/**
+		 * get the org.w3c.Node for a MutableTreeNode. * @param treeNode Object
+		 * 
 		 * @return Node
 		 */
 		public Node getNode(Object treeNode) {
@@ -743,8 +816,12 @@ public class DOMTree extends JTree implements DragSourceListener,
 			}
 		}
 
-		/** Inserts a node and returns a reference to the new node. * @param what String
-		 * @param where MutableTreeNode
+		/**
+		 * Inserts a node and returns a reference to the new node. * @param what
+		 * String
+		 * 
+		 * @param where
+		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
 		private MutableTreeNode insertNode(String what, MutableTreeNode where) {
@@ -756,8 +833,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 			return node;
 		} // insertNode(Node,MutableTreeNode):MutableTreeNode
 
-		/** Inserts the document node. * @param what Node
-		 * @param where MutableTreeNode
+		/**
+		 * Inserts the document node. * @param what Node
+		 * 
+		 * @param where
+		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
 		private MutableTreeNode insertDocumentNode(Node what,
@@ -770,8 +850,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 			return treeNode;
 		}
 
-		/** Inserts an element node. * @param what Node
-		 * @param where MutableTreeNode
+		/**
+		 * Inserts an element node. * @param what Node
+		 * 
+		 * @param where
+		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
 		private MutableTreeNode insertElementNode(Node what,
@@ -828,8 +911,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 			return element;
 		}
 
-		/** Inserts a text node. * @param what Node
-		 * @param where MutableTreeNode
+		/**
+		 * Inserts a text node. * @param what Node
+		 * 
+		 * @param where
+		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
 		private MutableTreeNode insertTextNode(Node what, MutableTreeNode where) {
@@ -846,8 +932,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 			return null;
 		}
 
-		/** Inserts a CData Section Node. * @param what Node
-		 * @param where MutableTreeNode
+		/**
+		 * Inserts a CData Section Node. * @param what Node
+		 * 
+		 * @param where
+		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
 		private MutableTreeNode insertCDataSectionNode(Node what,
@@ -917,7 +1006,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 		// DropTargetListener interface
 		/**
 		 * Method dragEnter.
-		 * @param e DropTargetDragEvent
+		 * 
+		 * @param e
+		 *            DropTargetDragEvent
 		 * @see java.awt.dnd.DropTargetListener#dragEnter(DropTargetDragEvent)
 		 */
 		public void dragEnter(DropTargetDragEvent e) {
@@ -930,7 +1021,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Method dragExit.
-		 * @param e DropTargetEvent
+		 * 
+		 * @param e
+		 *            DropTargetEvent
 		 * @see java.awt.dnd.DropTargetListener#dragExit(DropTargetEvent)
 		 */
 		public void dragExit(DropTargetEvent e) {
@@ -941,7 +1034,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * This is where the ghost image is drawn
-		 * @param e DropTargetDragEvent
+		 * 
+		 * @param e
+		 *            DropTargetDragEvent
 		 * @see java.awt.dnd.DropTargetListener#dragOver(DropTargetDragEvent)
 		 */
 		public void dragOver(DropTargetDragEvent e) {
@@ -1035,7 +1130,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Method dropActionChanged.
-		 * @param e DropTargetDragEvent
+		 * 
+		 * @param e
+		 *            DropTargetDragEvent
 		 * @see java.awt.dnd.DropTargetListener#dropActionChanged(DropTargetDragEvent)
 		 */
 		public void dropActionChanged(DropTargetDragEvent e) {
@@ -1050,7 +1147,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 		// released
 		/**
 		 * Method drop.
-		 * @param e DropTargetDropEvent
+		 * 
+		 * @param e
+		 *            DropTargetDropEvent
 		 * @see java.awt.dnd.DropTargetListener#drop(DropTargetDropEvent)
 		 */
 		public void drop(DropTargetDropEvent e) {
@@ -1141,7 +1240,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 		// Helpers...
 		/**
 		 * Method isDragAcceptable.
-		 * @param e DropTargetDragEvent
+		 * 
+		 * @param e
+		 *            DropTargetDragEvent
 		 * @return boolean
 		 */
 		public boolean isDragAcceptable(DropTargetDragEvent e) {
@@ -1177,7 +1278,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Method isDropAcceptable.
-		 * @param e DropTargetDropEvent
+		 * 
+		 * @param e
+		 *            DropTargetDropEvent
 		 * @return boolean
 		 */
 		public boolean isDropAcceptable(DropTargetDropEvent e) {
@@ -1226,8 +1329,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Constructor for XMLTreeCellEditor.
-		 * @param tree JTree
-		 * @param renderer DefaultTreeCellRenderer
+		 * 
+		 * @param tree
+		 *            JTree
+		 * @param renderer
+		 *            DefaultTreeCellRenderer
 		 */
 		public XMLTreeCellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
 			super(tree, renderer);
@@ -1235,14 +1341,22 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Method getTreeCellEditorComponent.
-		 * @param tree JTree
-		 * @param value Object
-		 * @param selected boolean
-		 * @param expanded boolean
-		 * @param leaf boolean
-		 * @param row int
+		 * 
+		 * @param tree
+		 *            JTree
+		 * @param value
+		 *            Object
+		 * @param selected
+		 *            boolean
+		 * @param expanded
+		 *            boolean
+		 * @param leaf
+		 *            boolean
+		 * @param row
+		 *            int
 		 * @return Component
-		 * @see javax.swing.tree.TreeCellEditor#getTreeCellEditorComponent(JTree, Object, boolean, boolean, boolean, int)
+		 * @see javax.swing.tree.TreeCellEditor#getTreeCellEditorComponent(JTree,
+		 *      Object, boolean, boolean, boolean, int)
 		 */
 		public Component getTreeCellEditorComponent(JTree tree, Object value,
 				boolean selected, boolean expanded, boolean leaf, int row) {
@@ -1272,15 +1386,24 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		/**
 		 * Method getTreeCellRendererComponent.
-		 * @param tree JTree
-		 * @param value Object
-		 * @param selected boolean
-		 * @param expanded boolean
-		 * @param leaf boolean
-		 * @param row int
-		 * @param hasFocus boolean
+		 * 
+		 * @param tree
+		 *            JTree
+		 * @param value
+		 *            Object
+		 * @param selected
+		 *            boolean
+		 * @param expanded
+		 *            boolean
+		 * @param leaf
+		 *            boolean
+		 * @param row
+		 *            int
+		 * @param hasFocus
+		 *            boolean
 		 * @return Component
-		 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree, Object, boolean, boolean, boolean, int, boolean)
+		 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree,
+		 *      Object, boolean, boolean, boolean, int, boolean)
 		 */
 		public Component getTreeCellRendererComponent(JTree tree, Object value,
 				boolean selected, boolean expanded, boolean leaf, int row,

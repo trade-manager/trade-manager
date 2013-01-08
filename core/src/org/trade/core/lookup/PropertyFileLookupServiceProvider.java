@@ -48,8 +48,7 @@ import org.trade.core.properties.ConfigProperties;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class PropertyFileLookupServiceProvider implements
-		LookupServiceProvider {
+public class PropertyFileLookupServiceProvider implements LookupServiceProvider {
 	// This will be a hashtable of hashtables of Lookup objects. The first
 	// key is the lookup name and the second key is the LookupQualifier.
 	private static Hashtable<String, Hashtable<String, Lookup>> _lookups = new Hashtable<String, Hashtable<String, Lookup>>();
@@ -62,11 +61,15 @@ public class PropertyFileLookupServiceProvider implements
 
 	/**
 	 * Method getLookup.
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
 	 * @return Lookup
 	 * @throws LookupException
-	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String, LookupQualifier)
+	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String,
+	 *      LookupQualifier)
 	 */
 	public Lookup getLookup(String lookupName, LookupQualifier qualifier)
 			throws LookupException {
@@ -161,8 +164,11 @@ public class PropertyFileLookupServiceProvider implements
 
 	/**
 	 * Returns null if the lookup is not in the cache.
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
 	 * @return Lookup
 	 */
 	private Lookup getCachedLookup(String lookupName, LookupQualifier qualifier) {
@@ -184,9 +190,13 @@ public class PropertyFileLookupServiceProvider implements
 
 	/**
 	 * Method addLookupToCache.
-	 * @param lookupName String
-	 * @param qualifier LookupQualifier
-	 * @param lookup Lookup
+	 * 
+	 * @param lookupName
+	 *            String
+	 * @param qualifier
+	 *            LookupQualifier
+	 * @param lookup
+	 *            Lookup
 	 */
 	private synchronized void addLookupToCache(String lookupName,
 			LookupQualifier qualifier, Lookup lookup) {

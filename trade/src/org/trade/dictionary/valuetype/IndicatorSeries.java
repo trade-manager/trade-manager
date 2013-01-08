@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class IndicatorSeries extends Decode {
@@ -51,7 +50,9 @@ public class IndicatorSeries extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return IndicatorSeries
 	 */
 	public static IndicatorSeries newInstance(String value) {
@@ -62,6 +63,7 @@ public class IndicatorSeries extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return IndicatorSeries
 	 */
 	public static IndicatorSeries newInstance() {
@@ -72,6 +74,7 @@ public class IndicatorSeries extends Decode {
 
 	/**
 	 * Method convertToUppercase.
+	 * 
 	 * @return boolean
 	 */
 	protected boolean convertToUppercase() {

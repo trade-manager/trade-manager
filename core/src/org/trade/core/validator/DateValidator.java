@@ -55,8 +55,11 @@ public class DateValidator implements Validator {
 
 	/**
 	 * Constructor for DateValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public DateValidator(IMessageFactory messageFactory, boolean isMandatory) {
 		m_messageFactory = messageFactory;
@@ -65,6 +68,7 @@ public class DateValidator implements Validator {
 
 	/**
 	 * Method getMessageFactory.
+	 * 
 	 * @return IMessageFactory
 	 */
 	protected IMessageFactory getMessageFactory() {
@@ -77,12 +81,18 @@ public class DateValidator implements Validator {
 
 	/**
 	 * Method isValid.
-	 * @param value Object
-	 * @param invalidValue String
-	 * @param expectedFormat String
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param value
+	 *            Object
+	 * @param invalidValue
+	 *            String
+	 * @param expectedFormat
+	 *            String
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
-	 * @see org.trade.core.validator.Validator#isValid(Object, String, String, ExceptionMessageListener)
+	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
+	 *      ExceptionMessageListener)
 	 */
 	public boolean isValid(Object value, String invalidValue,
 			String expectedFormat, ExceptionMessageListener receiver) {
@@ -127,7 +137,9 @@ public class DateValidator implements Validator {
 
 	/**
 	 * Method validateDateValue.
-	 * @param date java.util.Date
+	 * 
+	 * @param date
+	 *            java.util.Date
 	 * @return String
 	 */
 	private String validateDateValue(java.util.Date date) {

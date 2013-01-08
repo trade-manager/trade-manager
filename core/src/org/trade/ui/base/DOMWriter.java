@@ -120,10 +120,15 @@ public class DOMWriter {
 
 	/**
 	 * Method printDocument.
-	 * @param encoding String
-	 * @param canonical boolean
-	 * @param fileName String
-	 * @param doc Node
+	 * 
+	 * @param encoding
+	 *            String
+	 * @param canonical
+	 *            boolean
+	 * @param fileName
+	 *            String
+	 * @param doc
+	 *            Node
 	 * @throws UnsupportedEncodingException
 	 * @throws IOException
 	 */
@@ -143,6 +148,7 @@ public class DOMWriter {
 
 	/**
 	 * Method getWriterEncoding.
+	 * 
 	 * @return String
 	 */
 	private static String getWriterEncoding() {
@@ -151,7 +157,9 @@ public class DOMWriter {
 
 	/**
 	 * Method setWriterEncoding.
-	 * @param encoding String
+	 * 
+	 * @param encoding
+	 *            String
 	 */
 	private static void setWriterEncoding(String encoding) {
 		if (encoding.equalsIgnoreCase("DEFAULT")) {
@@ -160,6 +168,7 @@ public class DOMWriter {
 			PRINTWRITER_ENCODING = "Unicode";
 		}
 	} // setWriterEncoding
+
 	/*
 	 * private static boolean isValidJavaEncoding(String encoding) { for (int i
 	 * = 0; i < MIME2JAVA_ENCODINGS.length; i++) { if
@@ -168,7 +177,9 @@ public class DOMWriter {
 	 * return (false); } // isValidJavaEncoding
 	 */
 
-	/** Prints the specified node, recursively. * @param node Node
+	/**
+	 * Prints the specified node, recursively. * @param node Node
+	 * 
 	 * @throws IOException
 	 */
 	private void print(Node node) throws IOException {
@@ -295,7 +306,9 @@ public class DOMWriter {
 		m_out.flush();
 	} // print(Node)
 
-	/** Returns a sorted list of attributes. * @param attrs NamedNodeMap
+	/**
+	 * Returns a sorted list of attributes. * @param attrs NamedNodeMap
+	 * 
 	 * @return Attr[]
 	 */
 	protected Attr[] sortAttributes(NamedNodeMap attrs) {
@@ -333,7 +346,9 @@ public class DOMWriter {
 	//
 	// Main
 	//
-	/** Main program entry point. * @param s String
+	/**
+	 * Main program entry point. * @param s String
+	 * 
 	 * @return String
 	 */
 	/*

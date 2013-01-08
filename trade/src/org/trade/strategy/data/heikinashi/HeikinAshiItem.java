@@ -61,7 +61,7 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Creates a new instance of <code>CandleItem</code>.
 	 * 
-	
+	 * 
 	 * @param period
 	 *            the time period.
 	 * @param open
@@ -72,22 +72,27 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	 *            the low-value.
 	 * @param close
 	 *            the close-value.
-	
-	
-	
-	 * @param contract Contract
-	 * @param lastUpdateDate Date
+	 * 
+	 * 
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param lastUpdateDate
+	 *            Date
 	 */
-	public HeikinAshiItem(Contract contract, RegularTimePeriod period, double open, double high,
-			double low, double close, Date lastUpdateDate) {
-		super(period, new Candle(contract, open, high, low, close, lastUpdateDate));
+	public HeikinAshiItem(Contract contract, RegularTimePeriod period,
+			double open, double high, double low, double close,
+			Date lastUpdateDate) {
+		super(period, new Candle(contract, open, high, low, close,
+				lastUpdateDate));
 	}
 
 	/**
 	 * Returns the period.
 	 * 
-	
-	 * @return The period (never <code>null</code>). */
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
 	public RegularTimePeriod getPeriod() {
 		return (RegularTimePeriod) getComparable();
 	}
@@ -95,8 +100,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Returns the y-value.
 	 * 
-	
-	 * @return The y-value. */
+	 * 
+	 * @return The y-value.
+	 */
 	public double getY() {
 		return getClose();
 	}
@@ -104,8 +110,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Returns the open value.
 	 * 
-	
-	 * @return The open value. */
+	 * 
+	 * @return The open value.
+	 */
 	public double getOpen() {
 		Candle dataItem = (Candle) getObject();
 		if (dataItem != null) {
@@ -118,8 +125,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Returns the high value.
 	 * 
-	
-	 * @return The high value. */
+	 * 
+	 * @return The high value.
+	 */
 	public double getHigh() {
 		Candle dataItem = (Candle) getObject();
 		if (dataItem != null) {
@@ -132,8 +140,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Returns the low value.
 	 * 
-	
-	 * @return The low value. */
+	 * 
+	 * @return The low value.
+	 */
 	public double getLow() {
 		Candle dataItem = (Candle) getObject();
 		if (dataItem != null) {
@@ -146,8 +155,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Returns the close value.
 	 * 
-	
-	 * @return The close value. */
+	 * 
+	 * @return The close value.
+	 */
 	public double getClose() {
 		Candle dataItem = (Candle) getObject();
 		if (dataItem != null) {
@@ -160,8 +170,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Set the open value.
 	 * 
-	
-	 * @param open double
+	 * 
+	 * @param open
+	 *            double
 	 */
 	public void setOpen(double open) {
 		Candle dataItem = (Candle) getObject();
@@ -174,8 +185,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Set the close value.
 	 * 
-	
-	 * @param close double
+	 * 
+	 * @param close
+	 *            double
 	 */
 	public void setClose(double close) {
 		Candle dataItem = (Candle) getObject();
@@ -188,8 +200,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Set the high value.
 	 * 
-	
-	 * @param high double
+	 * 
+	 * @param high
+	 *            double
 	 */
 	public void setHigh(double high) {
 		Candle dataItem = (Candle) getObject();
@@ -202,8 +215,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Set the low value.
 	 * 
-	
-	 * @param low double
+	 * 
+	 * @param low
+	 *            double
 	 */
 	public void setLow(double low) {
 		Candle dataItem = (Candle) getObject();
@@ -216,8 +230,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Set the bars side true is green false is red.
 	 * 
-	
-	 * @return boolean The side of the bar true is green false is red. */
+	 * 
+	 * @return boolean The side of the bar true is green false is red.
+	 */
 	public boolean getSide() {
 
 		return this.getClose() >= this.getOpen();
@@ -225,7 +240,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 
 	/**
 	 * Method isSide.
-	 * @param side String
+	 * 
+	 * @param side
+	 *            String
 	 * @return boolean
 	 */
 	public boolean isSide(String side) {
@@ -241,8 +258,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Set the lastUpdateDate value.
 	 * 
-	
-	 * @param lastUpdateDate Date
+	 * 
+	 * @param lastUpdateDate
+	 *            Date
 	 */
 	public void setLastUpdateDate(Date lastUpdateDate) {
 		Candle dataItem = (Candle) getObject();
@@ -255,8 +273,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	/**
 	 * Returns the lastUpdateDate value.
 	 * 
-	
-	 * @return The lastUpdateDate value. */
+	 * 
+	 * @return The lastUpdateDate value.
+	 */
 	public Date getLastUpdateDate() {
 		Candle dataItem = (Candle) getObject();
 		if (dataItem != null) {

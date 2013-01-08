@@ -50,6 +50,7 @@ import java.awt.print.PrinterGraphics;
  * 
  * The pages in a canvas are laid out on pages going left to right and then top
  * to bottom.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -97,7 +98,9 @@ public class PrintPage implements Pageable {
 
 	/**
 	 * Set the object responsible for drawing the canvas.
-	 * @param painter Printable
+	 * 
+	 * @param painter
+	 *            Printable
 	 */
 	protected void setPrintable(Printable painter) {
 		m_Painter = painter;
@@ -105,7 +108,9 @@ public class PrintPage implements Pageable {
 
 	/**
 	 * Set the page format for the pages over which the canvas will be drawn.
-	 * @param pageFormat PageFormat
+	 * 
+	 * @param pageFormat
+	 *            PageFormat
 	 */
 	protected void setPageFormat(PageFormat pageFormat) {
 		m_Format = pageFormat;
@@ -130,6 +135,7 @@ public class PrintPage implements Pageable {
 
 	/**
 	 * Returns the number of pages over which the canvas will be drawn.
+	 * 
 	 * @return int
 	 * @see java.awt.print.Pageable#getNumberOfPages()
 	 */
@@ -139,6 +145,7 @@ public class PrintPage implements Pageable {
 
 	/**
 	 * Method getPageFormat.
+	 * 
 	 * @return PageFormat
 	 */
 	protected PageFormat getPageFormat() {
@@ -152,10 +159,11 @@ public class PrintPage implements Pageable {
 	 * @param pageIndex
 	 *            the zero based index of the page whose PageFormat is being
 	 *            requested
-	
-	
-	 * @return the PageFormat describing the size and orientation. * @exception IndexOutOfBoundsException
-	 *                the Pageable does not contain the requested page. * @see java.awt.print.Pageable#getPageFormat(int)
+	 * 
+	 * 
+	 * @return the PageFormat describing the size and orientation. * @exception
+	 *         IndexOutOfBoundsException the Pageable does not contain the
+	 *         requested page. * @see java.awt.print.Pageable#getPageFormat(int)
 	 */
 	public PageFormat getPageFormat(int pageIndex)
 			throws IndexOutOfBoundsException {
@@ -180,10 +188,11 @@ public class PrintPage implements Pageable {
 	 * @param pageIndex
 	 *            the zero based index of the page whose Printable is being
 	 *            requested
-	
-	
-	 * @return the Printable that renders the page. * @exception IndexOutOfBoundsException
-	 *                the Pageable does not contain the requested page. * @see java.awt.print.Pageable#getPrintable(int)
+	 * 
+	 * 
+	 * @return the Printable that renders the page. * @exception
+	 *         IndexOutOfBoundsException the Pageable does not contain the
+	 *         requested page. * @see java.awt.print.Pageable#getPrintable(int)
 	 */
 	public Printable getPrintable(int pageIndex)
 			throws IndexOutOfBoundsException {
@@ -205,6 +214,7 @@ public class PrintPage implements Pageable {
 	 * system before invoking a canvas's painter. The coordinate system is
 	 * translated in order to get the desired portion of a canvas to line up
 	 * with the top of a page.
+	 * 
 	 * @author Simon Allen
 	 * @version $Revision: 1.0 $
 	 */
@@ -255,12 +265,15 @@ public class PrintPage implements Pageable {
 		 *            the size and orientation of the page being drawn
 		 * @param pageIndex
 		 *            the zero based index of the page to be drawn
-		
-		
+		 * 
+		 * 
 		 * @return PAGE_EXISTS if the page is rendered successfully or
-		 *         NO_SUCH_PAGE if pageIndex specifies a non-existent page. * @throws PrinterException
+		 *         NO_SUCH_PAGE if pageIndex specifies a non-existent page. * @throws
+		 *         PrinterException
 		 * @exception java.awt.print.PrinterException
-		 *                thrown when the print job is terminated. * @see java.awt.print.Printable#print(Graphics, PageFormat, int)
+		 *                thrown when the print job is terminated. * @see
+		 *                java.awt.print.Printable#print(Graphics, PageFormat,
+		 *                int)
 		 */
 		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
 				throws PrinterException {

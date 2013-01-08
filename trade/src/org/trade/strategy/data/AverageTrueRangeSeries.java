@@ -81,15 +81,22 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
 	 * 
-	
 	 * 
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
 	 */
 	public AverageTrueRangeSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -100,14 +107,23 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 	/**
 	 * Constructor for AverageTrueRangeSeries.
-	 * @param strategy Strategy
-	 * @param name String
-	 * @param type String
-	 * @param description String
-	 * @param displayOnChart Boolean
-	 * @param chartRGBColor Integer
-	 * @param subChart Boolean
-	 * @param length Integer
+	 * 
+	 * @param strategy
+	 *            Strategy
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
+	 * @param displayOnChart
+	 *            Boolean
+	 * @param chartRGBColor
+	 *            Integer
+	 * @param subChart
+	 *            Boolean
+	 * @param length
+	 *            Integer
 	 */
 	public AverageTrueRangeSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
@@ -123,6 +139,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws CloneNotSupportedException
 	 */
@@ -137,8 +154,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
-	
-	 * @return The time period. */
+	 * 
+	 * @return The time period.
+	 */
 	public RegularTimePeriod getPeriod(int index) {
 		final AverageTrueRangeItem item = (AverageTrueRangeItem) getDataItem(index);
 		return item.getPeriod();
@@ -151,8 +169,6 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 *            the period.
 	 * @param averageTrueRange
 	 *            the AverageTrueRange.
-	
-	
 	 */
 	public void add(RegularTimePeriod period, BigDecimal averageTrueRange) {
 		if (getItemCount() > 0) {
@@ -193,8 +209,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
-	
-	 * @return exists */
+	 * 
+	 * @return exists
+	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
@@ -214,6 +231,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 	/**
 	 * Method getLength.
+	 * 
 	 * @return Integer
 	 */
 	@Transient
@@ -229,7 +247,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 	/**
 	 * Method setLength.
-	 * @param length Integer
+	 * 
+	 * @param length
+	 *            Integer
 	 */
 	public void setLength(Integer length) {
 		this.length = length;
@@ -237,8 +257,11 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 	/**
 	 * Method createSeries.
-	 * @param source CandleDataset
-	 * @param seriesIndex int
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * @param seriesIndex
+	 *            int
 	 */
 	public void createSeries(CandleDataset source, int seriesIndex) {
 
@@ -254,8 +277,11 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 	/**
 	 * Method updateSeries.
-	 * @param source CandleSeries
-	 * @param skip int
+	 * 
+	 * @param source
+	 *            CandleSeries
+	 * @param skip
+	 *            int
 	 */
 	public void updateSeries(CandleSeries source, int skip) {
 

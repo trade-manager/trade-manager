@@ -37,11 +37,12 @@ package org.trade.core.lookup;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+
 /**
  * Used to describe the access of dynamic key value pairs that can be used by a
  * LookupServiceProvider to constrain the lookup returned.
  * 
-
+ * 
  * 
  * @version $Id: LookupQualifier.java,v 1.1 2001/11/06 16:52:41 simon Exp $
  * @author Simon Allen
@@ -62,15 +63,17 @@ public class LookupQualifier {
 	}
 
 	/**
-	
-	 * @return An Enumeration of all of the qualifying keys. */
+	 * 
+	 * @return An Enumeration of all of the qualifying keys.
+	 */
 	public Enumeration<String> getKeys() {
 		return (m_values.keys());
 	}
 
 	/**
-	
-	 * @return An Enumeration of all of the qualifying values. */
+	 * 
+	 * @return An Enumeration of all of the qualifying values.
+	 */
 	public Enumeration<Object> getValues() {
 		return (m_values.elements());
 	}
@@ -78,10 +81,12 @@ public class LookupQualifier {
 	/**
 	 * Get the specified value.
 	 * 
-	
-	
-	 * @param key String
-	 * @return The value if it exists, null otherwise. */
+	 * 
+	 * 
+	 * @param key
+	 *            String
+	 * @return The value if it exists, null otherwise.
+	 */
 	public Object getValue(String key) {
 		return (m_values.get(key));
 	}
@@ -89,10 +94,12 @@ public class LookupQualifier {
 	/**
 	 * Set the specified value.
 	 * 
-	
-	
-	 * @param key String
-	 * @param value Object
+	 * 
+	 * 
+	 * @param key
+	 *            String
+	 * @param value
+	 *            Object
 	 */
 	public void setValue(String key, Object value) {
 		m_values.put(key, value);
@@ -101,8 +108,9 @@ public class LookupQualifier {
 	/**
 	 * Remove the specified value from the qualifier.
 	 * 
-	
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 */
 	public void removeValue(String key) {
 		m_values.remove(key);
@@ -110,6 +118,7 @@ public class LookupQualifier {
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
@@ -118,7 +127,9 @@ public class LookupQualifier {
 
 	/**
 	 * Method equals.
-	 * @param objectToCompare Object
+	 * 
+	 * @param objectToCompare
+	 *            Object
 	 * @return boolean
 	 */
 	public boolean equals(Object objectToCompare) {
@@ -143,6 +154,7 @@ public class LookupQualifier {
 
 	/**
 	 * Method hashcode.
+	 * 
 	 * @return int
 	 */
 	public int hashcode() {

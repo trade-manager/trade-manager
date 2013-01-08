@@ -70,7 +70,7 @@ public class TradeAppMain {
 		frame.setLocation((int) ((screenSize.getWidth() - frame.getSize()
 				.getWidth()) / 2), (int) ((screenSize.getHeight() - frame
 				.getSize().getHeight()) / 2));
-		
+
 		frame.setIconImage(ImageBuilder.getImage("trade.gif"));
 		frame.validate();
 		frame.repaint();

@@ -21,7 +21,9 @@ public class Tree extends JTree {
 
 	/**
 	 * Constructor for Tree.
-	 * @param model DefaultTreeModel
+	 * 
+	 * @param model
+	 *            DefaultTreeModel
 	 */
 	public Tree(DefaultTreeModel model) {
 		super(model);
@@ -34,7 +36,9 @@ public class Tree extends JTree {
 
 	/**
 	 * Method findTreePathByObject.
-	 * @param tofind Object
+	 * 
+	 * @param tofind
+	 *            Object
 	 * @return TreePath
 	 */
 	public TreePath findTreePathByObject(Object tofind) {
@@ -44,10 +48,15 @@ public class Tree extends JTree {
 
 	/**
 	 * Method findTreePathByObject.
-	 * @param model TreeModel
-	 * @param base TreeNode
-	 * @param parent TreePath
-	 * @param tofind Object
+	 * 
+	 * @param model
+	 *            TreeModel
+	 * @param base
+	 *            TreeNode
+	 * @param parent
+	 *            TreePath
+	 * @param tofind
+	 *            Object
 	 * @return TreePath
 	 */
 	private TreePath findTreePathByObject(TreeModel model, TreeNode base,

@@ -59,14 +59,18 @@ public class PrintController {
 	/**
 	 * printComponent() - constructor
 	 * 
-	
-	
-	
-	
-	 * @param frame Frame
-	 * @param comp Component
-	 * @param printJobName String
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param frame
+	 *            Frame
+	 * @param comp
+	 *            Component
+	 * @param printJobName
+	 *            String
+	 * @exception * @see
+	 */
 	public void printComponent(Frame frame, Component comp, String printJobName) {
 		if (printJobName == null) {
 			printJobName = comp.getClass().getName();

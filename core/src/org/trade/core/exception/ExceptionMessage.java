@@ -60,7 +60,9 @@ public class ExceptionMessage implements java.io.Serializable {
 
 	/**
 	 * Copy constructor.
-	 * @param other ExceptionMessage
+	 * 
+	 * @param other
+	 *            ExceptionMessage
 	 */
 	public ExceptionMessage(ExceptionMessage other) {
 		m_code = other.m_code;
@@ -97,8 +99,9 @@ public class ExceptionMessage implements java.io.Serializable {
 	}
 
 	/**
-	
-	 * @return The Exception Code associated with the message */
+	 * 
+	 * @return The Exception Code associated with the message
+	 */
 	public ExceptionCode getExceptionCode() {
 		return m_code;
 	}
@@ -110,7 +113,9 @@ public class ExceptionMessage implements java.io.Serializable {
 	 * <p>
 	 * 1. If two contexts are added with the same parameter name, the first
 	 * context has precedence.<br>
-	 * @param exceptionContext ExceptionContext
+	 * 
+	 * @param exceptionContext
+	 *            ExceptionContext
 	 */
 	public void addExceptionContext(ExceptionContext exceptionContext) {
 		if (null != m_message) {
@@ -146,8 +151,9 @@ public class ExceptionMessage implements java.io.Serializable {
 	}
 
 	/**
-	
-	 * @return The message that describes the exception. */
+	 * 
+	 * @return The message that describes the exception.
+	 */
 	public String getMessage() {
 		StringBuffer buf = new StringBuffer();
 
@@ -184,10 +190,11 @@ public class ExceptionMessage implements java.io.Serializable {
 	 * 
 	 * @param lookup
 	 *            the string to use for the look up
-	
+	 * 
 	 * 
 	 * @return Object the result of the look up, or null if nothing is found
-	 *         (most likely a string) */
+	 *         (most likely a string)
+	 */
 	// TODO: get rid of this
 	public Object get(String lookup) {
 		if ("description".equals(lookup)) {
@@ -211,6 +218,7 @@ public class ExceptionMessage implements java.io.Serializable {
 	// TODO: get rid of this
 	/**
 	 * Method getEmpty.
+	 * 
 	 * @return String
 	 */
 	private String getEmpty() {
@@ -230,6 +238,7 @@ public class ExceptionMessage implements java.io.Serializable {
 	// TODO: get rid of this
 	/**
 	 * Method getInvalidChars.
+	 * 
 	 * @return String
 	 */
 	private String getInvalidChars() {
@@ -252,6 +261,7 @@ public class ExceptionMessage implements java.io.Serializable {
 	// TODO: get rid of this
 	/**
 	 * Method getInvalidLength.
+	 * 
 	 * @return String
 	 */
 	private String getInvalidLength() {
@@ -267,6 +277,7 @@ public class ExceptionMessage implements java.io.Serializable {
 	// TODO: get rid of this
 	/**
 	 * Method getDescription.
+	 * 
 	 * @return String
 	 */
 	private String getDescription() {
@@ -277,7 +288,9 @@ public class ExceptionMessage implements java.io.Serializable {
 
 	/**
 	 * Method equals.
-	 * @param objectToCompare Object
+	 * 
+	 * @param objectToCompare
+	 *            Object
 	 * @return boolean
 	 */
 	public boolean equals(Object objectToCompare) {
@@ -316,22 +329,22 @@ public class ExceptionMessage implements java.io.Serializable {
 
 		return equal;
 	}
-	
+
 	/**
 	 * Method hashCode.
+	 * 
 	 * @return int
 	 */
 	public int hashCode() {
 		int hash = 1;
 		hash = hash * 31 + m_code.hashCode();
-		hash = hash
-				* 31
-				+ (m_message == null ? 0 : m_message.hashCode());
+		hash = hash * 31 + (m_message == null ? 0 : m_message.hashCode());
 		return hash;
 	}
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

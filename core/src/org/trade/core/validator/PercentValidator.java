@@ -59,12 +59,19 @@ public class PercentValidator implements Validator {
 
 	/**
 	 * Constructor for PercentValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param allowNegative boolean
-	 * @param allowZero boolean
-	 * @param maxNonDecimalLength int
-	 * @param maxDecimalLength int
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param allowNegative
+	 *            boolean
+	 * @param allowZero
+	 *            boolean
+	 * @param maxNonDecimalLength
+	 *            int
+	 * @param maxDecimalLength
+	 *            int
+	 * @param isMandatory
+	 *            boolean
 	 */
 	public PercentValidator(IMessageFactory messageFactory,
 			boolean allowNegative, boolean allowZero, int maxNonDecimalLength,
@@ -79,6 +86,7 @@ public class PercentValidator implements Validator {
 
 	/**
 	 * Method getMessageFactory.
+	 * 
 	 * @return IMessageFactory
 	 */
 	protected IMessageFactory getMessageFactory() {
@@ -92,12 +100,18 @@ public class PercentValidator implements Validator {
 	// from IPercentValidator
 	/**
 	 * Method isValid.
-	 * @param value Object
-	 * @param invalidValue String
-	 * @param expectedFormat String
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param value
+	 *            Object
+	 * @param invalidValue
+	 *            String
+	 * @param expectedFormat
+	 *            String
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
-	 * @see org.trade.core.validator.Validator#isValid(Object, String, String, ExceptionMessageListener)
+	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
+	 *      ExceptionMessageListener)
 	 */
 	public boolean isValid(Object value, String invalidValue,
 			String expectedFormat, ExceptionMessageListener receiver) {
@@ -132,7 +146,8 @@ public class PercentValidator implements Validator {
 				nonDecimalString = stringValue.substring(0, indexOfDot);
 			}
 
-			if (nonDecimalString.length() > 0 && nonDecimalString.charAt(0) == '-') {
+			if (nonDecimalString.length() > 0
+					&& nonDecimalString.charAt(0) == '-') {
 				nonDecimalString = nonDecimalString.substring(1,
 						nonDecimalString.length());
 			}

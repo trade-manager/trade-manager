@@ -38,7 +38,6 @@ package org.trade.ui.tables;
 import javax.swing.JTable;
 
 import org.trade.core.valuetype.ValueTypeException;
-
 import org.trade.ui.base.Table;
 import org.trade.ui.base.TableModel;
 

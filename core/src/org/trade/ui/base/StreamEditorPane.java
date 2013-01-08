@@ -117,8 +117,10 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Constructor for StreamEditorPane.
-	 * @param type String
-	 * @throws IOException 
+	 * 
+	 * @param type
+	 *            String
+	 * @throws IOException
 	 */
 	public StreamEditorPane(String type) {
 		super();
@@ -141,7 +143,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method append.
-	 * @param text String
+	 * 
+	 * @param text
+	 *            String
 	 */
 	public void append(String text) {
 		append(text, null);
@@ -149,8 +153,11 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method append.
-	 * @param text String
-	 * @param attrSet AttributeSet
+	 * 
+	 * @param text
+	 *            String
+	 * @param attrSet
+	 *            AttributeSet
 	 */
 	public void append(String text, AttributeSet attrSet) {
 		try {
@@ -163,7 +170,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method setInputStream.
-	 * @param is InputStream
+	 * 
+	 * @param is
+	 *            InputStream
 	 * @throws IOException
 	 * @throws BadLocationException
 	 */
@@ -193,7 +202,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method setDocument.
-	 * @param doc Document
+	 * 
+	 * @param doc
+	 *            Document
 	 */
 	public void setDocument(Document doc) {
 		if (null != getDocument()) {
@@ -206,6 +217,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method getText.
+	 * 
 	 * @return String
 	 */
 	public String getText() {
@@ -225,8 +237,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * Save current file, asking user for new destination name. Report to
 	 * statuBar.
 	 * 
-	
-	 * @return false means user cancelled the SaveAs */
+	 * 
+	 * @return false means user cancelled the SaveAs
+	 */
 	public boolean saveAs() {
 		boolean retSaveAs = false;
 		// Make the dialog visible as a modal (default) dialog box.
@@ -290,8 +303,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * Save current file, asking user for new destination name. Report to
 	 * statuBar.
 	 * 
-	
-	 * @return false means user cancelled the SaveAs */
+	 * 
+	 * @return false means user cancelled the SaveAs
+	 */
 	public boolean openFile() {
 		boolean retOpenFile = false;
 		// Make the dialog visible as a modal (default) dialog box.
@@ -332,6 +346,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method getDirName.
+	 * 
 	 * @return String
 	 */
 	private String getDirName() {
@@ -340,7 +355,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method setCurrentDirectory.
-	 * @param dir String
+	 * 
+	 * @param dir
+	 *            String
 	 */
 	private void setCurrentDirectory(String dir) {
 		m_currDir = dir;
@@ -348,6 +365,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method getFileName.
+	 * 
 	 * @return String
 	 */
 	public String getFileName() {
@@ -356,7 +374,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method setFileName.
-	 * @param currFileName String
+	 * 
+	 * @param currFileName
+	 *            String
 	 */
 	public void setFileName(String currFileName) {
 		m_currFileName = currFileName;
@@ -364,7 +384,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method openFileReader.
-	 * @param fileName String
+	 * 
+	 * @param fileName
+	 *            String
 	 * @return boolean
 	 */
 	public boolean openFileReader(String fileName) {
@@ -388,7 +410,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method saveFileWriter.
-	 * @param fileName String
+	 * 
+	 * @param fileName
+	 *            String
 	 * @return boolean
 	 */
 	public boolean saveFileWriter(String fileName) {
@@ -413,7 +437,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method setText.
-	 * @param text String
+	 * 
+	 * @param text
+	 *            String
 	 */
 	public void setText(String text) {
 		super.setText(text);
@@ -422,6 +448,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method isDirty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isDirty() {
@@ -430,8 +457,11 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	/**
 	 * Method find.
-	 * @param findText String
-	 * @param startPosition int
+	 * 
+	 * @param findText
+	 *            String
+	 * @param startPosition
+	 *            int
 	 */
 	public void find(String findText, int startPosition) {
 		String findTextUpper = findText.toUpperCase();
@@ -459,7 +489,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	// Guess the content type
 	/**
 	 * Method guessContentType.
-	 * @param is InputStream
+	 * 
+	 * @param is
+	 *            InputStream
 	 * @return String
 	 * @throws IOException
 	 */
@@ -490,12 +522,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * mousePressed() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mousePressed(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			createPopup(evt.getPoint());
@@ -505,12 +539,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * mouseReleased() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			createPopup(evt.getPoint());
@@ -520,12 +556,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * mouseClicked() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseClicked(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			if (this.isEnabled()) {
@@ -537,36 +575,42 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * mouseEntered() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseEntered(MouseEvent evt) {
 	}
 
 	/**
 	 * mouseExited() -
 	 * 
-	
-	
-	
-	
-	 * @param evt MouseEvent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param evt
+	 *            MouseEvent
+	 * @exception * @see
+	 */
 	public void mouseExited(MouseEvent evt) {
 	}
 
 	/**
 	 * createPopup() -
 	 * 
-	
-	
-	
-	
-	 * @param point Point
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param point
+	 *            Point
+	 * @exception * @see
+	 */
 	protected void createPopup(Point point) {
 
 		popup = new JPopupMenu();
@@ -597,7 +641,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 		mi = popup.add(paste);
 		mi.addActionListener(this);
 		popup.addSeparator();
-		
+
 		JMenuItem open = new JMenuItem("Open");
 		open.setMnemonic('O');
 		mi = popup.add(open);
@@ -634,12 +678,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * actionPerformed() -
 	 * 
-	
-	
-	
-	
-	 * @param evt ActionEvent
-	 * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param evt
+	 *            ActionEvent
+	 * @exception * @see
+	 */
 	public void actionPerformed(ActionEvent evt) {
 		JMenuItem mi = (JMenuItem) evt.getSource();
 
@@ -675,14 +721,18 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * getSuitableLocation() -
 	 * 
-	
-	
-	
-	
-	 * @param point Point
-	 * @param d Dimension
-	 * @param c Component
-	 * @return Point * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param point
+	 *            Point
+	 * @param d
+	 *            Dimension
+	 * @param c
+	 *            Component
+	 * @return Point * @exception * @see
+	 */
 	protected Point getSuitableLocation(Point point, Dimension d, Component c) {
 		// First locate the parent JFrame or JDialog
 		Component topLevel = getComponentContainer(c);
@@ -803,12 +853,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	/**
 	 * getComponentContainer() -
 	 * 
-	
-	
-	
-	
-	 * @param c Component
-	 * @return Component * @exception * @see */
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param c
+	 *            Component
+	 * @return Component * @exception * @see
+	 */
 	private Component getComponentContainer(Component c) {
 		Component topLevel = c;
 
@@ -821,7 +873,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	}
 
 	/**
-	
+	 * 
 	 * @version $Id: StreamEditorPane.java,v 1.10 2002/01/11 20:06:02 simon Exp
 	 *          $
 	 * @author Simon Allen
@@ -830,7 +882,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 		/**
 		 * Messaged when the Document has created an edit, the edit is added to
 		 * <code>undo</code>, an instance of UndoManager.
-		 * @param e UndoableEditEvent
+		 * 
+		 * @param e
+		 *            UndoableEditEvent
 		 * @see javax.swing.event.UndoableEditListener#undoableEditHappened(UndoableEditEvent)
 		 */
 		public void undoableEditHappened(UndoableEditEvent e) {
@@ -841,7 +895,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	}
 
 	/**
-	
+	 * 
 	 * @version $Id: StreamEditorPane.java,v 1.10 2002/01/11 20:06:02 simon Exp
 	 *          $
 	 * @author Simon Allen
@@ -860,7 +914,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 		/**
 		 * Method actionPerformed.
-		 * @param e ActionEvent
+		 * 
+		 * @param e
+		 *            ActionEvent
 		 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 		 */
 		public void actionPerformed(ActionEvent e) {
@@ -886,7 +942,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	}
 
 	/**
-	
+	 * 
 	 * @version $Id: StreamEditorPane.java,v 1.10 2002/01/11 20:06:02 simon Exp
 	 *          $
 	 * @author Simon Allen
@@ -905,7 +961,9 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 		/**
 		 * Method actionPerformed.
-		 * @param e ActionEvent
+		 * 
+		 * @param e
+		 *            ActionEvent
 		 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 		 */
 		public void actionPerformed(ActionEvent e) {

@@ -56,7 +56,9 @@ public class IdentityServiceException extends NestingException {
 
 	/**
 	 * Constructor for IdentityServiceException.
-	 * @param t Throwable
+	 * 
+	 * @param t
+	 *            Throwable
 	 */
 	public IdentityServiceException(Throwable t) {
 		super(t);
@@ -64,7 +66,9 @@ public class IdentityServiceException extends NestingException {
 
 	/**
 	 * Constructor for IdentityServiceException.
-	 * @param message String
+	 * 
+	 * @param message
+	 *            String
 	 */
 	public IdentityServiceException(String message) {
 		super(message);

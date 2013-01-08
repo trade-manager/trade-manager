@@ -60,8 +60,9 @@ public class NumberToIntegerConverter extends NumberToNumberConverter {
 	 * This method returns the target type or class that the converter converts
 	 * to. In this case java.lang.Integer .
 	 * 
-	
-	 * @return Class the class the source value will be converted to * @see org.trade.core.conversion.JavaTypeConverter#getTargetType()
+	 * 
+	 * @return Class the class the source value will be converted to * @see
+	 *         org.trade.core.conversion.JavaTypeConverter#getTargetType()
 	 */
 	public Class<?> getTargetType() {
 		return java.lang.Integer.class;
@@ -76,8 +77,9 @@ public class NumberToIntegerConverter extends NumberToNumberConverter {
 	 * 
 	 * @param aNumber
 	 *            the number to be converted
-	
-	 * @return Integer the Number converted to an Integer */
+	 * 
+	 * @return Integer the Number converted to an Integer
+	 */
 	protected Number getConvertedNumber(Number aNumber) {
 		return new Integer(aNumber.intValue());
 	}

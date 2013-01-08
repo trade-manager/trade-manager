@@ -40,6 +40,7 @@ import org.jfree.data.xy.OHLCDataset;
 /**
  * An interface that defines data in the form of (x, high, low, open, close)
  * tuples.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -53,8 +54,9 @@ public interface OHLCVwapDataset extends OHLCDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Vwap. */
+	 * 
+	 * @return The Vwap.
+	 */
 	public double getVwapValue(int series, int item);
 
 	/**
@@ -65,8 +67,9 @@ public interface OHLCVwapDataset extends OHLCDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	
-	 * @return The Vwap. */
+	 * 
+	 * @return The Vwap.
+	 */
 	public Number getVwap(int series, int item);
 
 }

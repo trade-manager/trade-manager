@@ -42,8 +42,8 @@ import java.util.Comparator;
 import org.trade.core.conversion.JavaTypeTranslator;
 import org.trade.core.message.IMessageFactory;
 import org.trade.core.util.CoreUtils;
-import org.trade.core.validator.ExceptionMessageListener;
 import org.trade.core.validator.DecimalValidator;
+import org.trade.core.validator.ExceptionMessageListener;
 import org.trade.core.validator.Validator;
 
 /**
@@ -91,7 +91,9 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Default Constructor. Create an object and initialize it to empty.
-	 * @param moneyString String
+	 * 
+	 * @param moneyString
+	 *            String
 	 */
 	public Money(String moneyString) {
 		if ((null != moneyString) && (moneyString.length() != 0)) {
@@ -112,8 +114,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param d double
+	 * 
+	 * @param d
+	 *            double
 	 */
 	public Money(double d) {
 		setBigDecimal(new BigDecimal(d));
@@ -122,8 +125,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param d Double
+	 * 
+	 * @param d
+	 *            Double
 	 */
 	public Money(Double d) {
 		setBigDecimal(new BigDecimal(d.doubleValue()));
@@ -132,8 +136,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	/**
 	 * Constructor
 	 * 
-	
-	 * @param bd BigDecimal
+	 * 
+	 * @param bd
+	 *            BigDecimal
 	 */
 	public Money(BigDecimal bd) {
 		setBigDecimal(bd);
@@ -141,7 +146,9 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Constructor for Money.
-	 * @param money Money
+	 * 
+	 * @param money
+	 *            Money
 	 */
 	public Money(Money money) {
 		m_value = money.m_value;
@@ -152,10 +159,12 @@ public class Money extends ValueType implements Comparator<Money>,
 	/**
 	 * Constructor
 	 * 
-	
-	
-	 * @param nonDecimalAmount long
-	 * @param decimalAmount int
+	 * 
+	 * 
+	 * @param nonDecimalAmount
+	 *            long
+	 * @param decimalAmount
+	 *            int
 	 */
 	public Money(long nonDecimalAmount, int decimalAmount) {
 		// Set up the default constraints for IP's basic Money values
@@ -168,7 +177,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * Provides the format used for determining if this object is valid. The
 	 * format should be one of the format constants on this class. The default
 	 * format is NORMAL_11_2.
-	 * @param format String
+	 * 
+	 * @param format
+	 *            String
 	 */
 	public void setFormat(String format) {
 		m_format = format;
@@ -176,6 +187,7 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method getFormat.
+	 * 
 	 * @return String
 	 */
 	public String getFormat() {
@@ -184,6 +196,7 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * This maximum length includes the decimal point and digits to both sides.
+	 * 
 	 * @return int
 	 */
 	public int getMaxLength() {
@@ -203,6 +216,7 @@ public class Money extends ValueType implements Comparator<Money>,
 	/**
 	 * This indicates whether zero is an acceptable value for this instance.
 	 * Currently this is determined by the format returned by getFormat().
+	 * 
 	 * @return boolean
 	 */
 	public boolean canBeZero() {
@@ -220,6 +234,7 @@ public class Money extends ValueType implements Comparator<Money>,
 	/**
 	 * This indicates whether zero is an acceptable value for this instance.
 	 * Currently this is determined by the format returned by getFormat().
+	 * 
 	 * @return boolean
 	 */
 	public boolean canBeNegative() {
@@ -232,6 +247,7 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method isNegative.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isNegative() {
@@ -248,6 +264,7 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method isEmpty.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isEmpty() {
@@ -261,8 +278,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	}
 
 	/**
-	
-	 * @return The value before the decimal point in the money value. */
+	 * 
+	 * @return The value before the decimal point in the money value.
+	 */
 	public long getNonDecimalAmount() {
 		assertDefined();
 
@@ -278,6 +296,7 @@ public class Money extends ValueType implements Comparator<Money>,
 	/**
 	 * See description of superclass method. Overrode functionality to return
 	 * the BigDecimal this object is using intrnally.
+	 * 
 	 * @return Object
 	 */
 	public Object getSQLObject() {
@@ -285,8 +304,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	}
 
 	/**
-	
-	 * @return The value after the decimal point in the money value. */
+	 * 
+	 * @return The value after the decimal point in the money value.
+	 */
 	public int getDecimalAmount() {
 		assertDefined();
 
@@ -309,8 +329,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * Will throw a <code>NullPointerException</code> if this valuetype is
 	 * empty.
 	 * 
-	
-	 * @return A BigDecimal representing the monetary value. */
+	 * 
+	 * @return A BigDecimal representing the monetary value.
+	 */
 	public BigDecimal getBigDecimalValue() {
 		assertDefined();
 
@@ -319,6 +340,7 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
@@ -333,7 +355,9 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 * @throws ValueTypeException
 	 */
 	public void setValue(Object value) throws ValueTypeException {
@@ -355,8 +379,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * @param money
 	 *            the Money object to be added
 	 * 
-	
-	 * @return Money the result */
+	 * 
+	 * @return Money the result
+	 */
 	public Money add(Money money) {
 		assertDefined();
 
@@ -378,8 +403,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * @param money
 	 *            the Money object to be subtracted
 	 * 
-	
-	 * @return Money the result */
+	 * 
+	 * @return Money the result
+	 */
 	public Money subtract(Money money) {
 		assertDefined();
 
@@ -397,8 +423,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * @param money
 	 *            the Money object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isLessThan(Money money) {
 		assertDefined();
 
@@ -414,8 +441,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * @param money
 	 *            the Money object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isLessThanOrEqualTo(Money money) {
 		assertDefined();
 
@@ -431,8 +459,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * @param money
 	 *            the Money object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isGreaterThan(Money money) {
 		assertDefined();
 
@@ -448,8 +477,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * @param money
 	 *            the Money object to compare with.
 	 * 
-	
-	 * @return boolean result. */
+	 * 
+	 * @return boolean result.
+	 */
 	public boolean isGreaterThanOrEqualTo(Money money) {
 		assertDefined();
 
@@ -461,8 +491,11 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method isValid.
-	 * @param validator Validator
-	 * @param receiver ExceptionMessageListener
+	 * 
+	 * @param validator
+	 *            Validator
+	 * @param receiver
+	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
 	public boolean isValid(Validator validator,
@@ -472,8 +505,11 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method getDefaultValidator.
-	 * @param messageFactory IMessageFactory
-	 * @param isMandatory boolean
+	 * 
+	 * @param messageFactory
+	 *            IMessageFactory
+	 * @param isMandatory
+	 *            boolean
 	 * @return Validator
 	 */
 	public Validator getDefaultValidator(IMessageFactory messageFactory,
@@ -487,8 +523,9 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * Will throw a <code>NullPointerException</code> if this valuetype is
 	 * empty.
 	 * 
-	
-	 * @return A double representing the monetary value. */
+	 * 
+	 * @return A double representing the monetary value.
+	 */
 
 	public double doubleValue() {
 		assertDefined();
@@ -499,12 +536,13 @@ public class Money extends ValueType implements Comparator<Money>,
 	 * Overrides Cloneable
 	 * 
 	 * 
-	
 	 * 
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return Object
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	public Object clone() {
 		try {
@@ -518,30 +556,35 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method compareTo.
-	 * @param other Money
+	 * 
+	 * @param other
+	 *            Money
 	 * @return int
 	 */
 	public int compareTo(final Money other) {
-		return CoreUtils.nullSafeComparator(
-				this.getBigDecimalValue(), other.getBigDecimalValue());
+		return CoreUtils.nullSafeComparator(this.getBigDecimalValue(),
+				other.getBigDecimalValue());
 	}
 
 	/**
 	 * Method compare.
-	 * @param o1 Money
-	 * @param o2 Money
+	 * 
+	 * @param o1
+	 *            Money
+	 * @param o2
+	 *            Money
 	 * @return int
 	 */
 	public int compare(Money o1, Money o2) {
 
-		int returnVal = CoreUtils.nullSafeComparator(
-				o1.getBigDecimalValue(), o2.getBigDecimalValue());
+		int returnVal = CoreUtils.nullSafeComparator(o1.getBigDecimalValue(),
+				o2.getBigDecimalValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
 		}
 		return returnVal;
 	}
-	
+
 	/**
 	 * Method equals.
 	 * 
@@ -569,7 +612,9 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method setBigDecimal.
-	 * @param value BigDecimal
+	 * 
+	 * @param value
+	 *            BigDecimal
 	 */
 	private void setBigDecimal(BigDecimal value) {
 		if (value == null) {
@@ -585,7 +630,9 @@ public class Money extends ValueType implements Comparator<Money>,
 
 	/**
 	 * Method notNull.
-	 * @param value Money
+	 * 
+	 * @param value
+	 *            Money
 	 * @return BigDecimal
 	 */
 	private BigDecimal notNull(Money value) {

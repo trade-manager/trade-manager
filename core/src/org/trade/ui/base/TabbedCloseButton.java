@@ -77,8 +77,11 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Constructor
-	 * @param pane JTabbedPane
-	 * @param basePanel BasePanel
+	 * 
+	 * @param pane
+	 *            JTabbedPane
+	 * @param basePanel
+	 *            BasePanel
 	 */
 	public TabbedCloseButton(final JTabbedPane pane, BasePanel basePanel) {
 
@@ -131,8 +134,11 @@ public class TabbedCloseButton extends JPanel {
 
 		/**
 		 * Constructor for TabButton.
-		 * @param basePanel BasePanel
-		 * @param UICode String
+		 * 
+		 * @param basePanel
+		 *            BasePanel
+		 * @param UICode
+		 *            String
 		 */
 		public TabButton(BasePanel basePanel, String UICode) {
 
@@ -187,7 +193,9 @@ public class TabbedCloseButton extends JPanel {
 		// paint the cross
 		/**
 		 * Method paintComponent.
-		 * @param g Graphics
+		 * 
+		 * @param g
+		 *            Graphics
 		 */
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -240,7 +248,9 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Method addMessageListener.
-	 * @param listener MessageListener
+	 * 
+	 * @param listener
+	 *            MessageListener
 	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
@@ -248,7 +258,9 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Method removeMessageListener.
-	 * @param listener MessageListener
+	 * 
+	 * @param listener
+	 *            MessageListener
 	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
@@ -256,7 +268,9 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Method setTransferObject.
-	 * @param transferObject Object
+	 * 
+	 * @param transferObject
+	 *            Object
 	 */
 	public void setTransferObject(Object transferObject) {
 		this.transferObject = transferObject;
@@ -264,6 +278,7 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Method getTransferObject.
+	 * 
 	 * @return Object
 	 */
 	public Object getTransferObject() {
@@ -272,7 +287,9 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Method messageEvent.
-	 * @param selection String
+	 * 
+	 * @param selection
+	 *            String
 	 */
 	protected void messageEvent(String selection) {
 		Vector<Object> transferObjects = new Vector<Object>();
@@ -284,7 +301,9 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Method setMethod.
-	 * @param method String
+	 * 
+	 * @param method
+	 *            String
 	 */
 	private void setMethod(String method) {
 		m_method = method;
@@ -292,6 +311,7 @@ public class TabbedCloseButton extends JPanel {
 
 	/**
 	 * Method getMethod.
+	 * 
 	 * @return String
 	 */
 	public String getMethod() {

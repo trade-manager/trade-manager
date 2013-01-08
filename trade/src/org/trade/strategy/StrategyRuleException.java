@@ -55,8 +55,10 @@ public class StrategyRuleException extends ModelException {
 	 * 
 	 * @param message
 	 *            The desired message text.
-	 * @param id Integer
-	 * @param code Integer
+	 * @param id
+	 *            Integer
+	 * @param code
+	 *            Integer
 	 */
 	public StrategyRuleException(Integer id, Integer code, String message) {
 		super(id, code, message);

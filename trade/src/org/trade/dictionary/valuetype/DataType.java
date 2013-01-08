@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class DataType extends Decode {
@@ -51,7 +50,9 @@ public class DataType extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return DataType
 	 */
 	public static DataType newInstance(String value) {
@@ -62,6 +63,7 @@ public class DataType extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return DataType
 	 */
 	public static DataType newInstance() {
@@ -69,9 +71,10 @@ public class DataType extends Decode {
 		returnInstance.setDefaultCode();
 		return returnInstance;
 	}
-	
+
 	/**
 	 * Method convertToUppercase.
+	 * 
 	 * @return boolean
 	 */
 	@Override

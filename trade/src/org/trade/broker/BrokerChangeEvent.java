@@ -37,6 +37,7 @@ package org.trade.broker;
 
 /**
  * A change event that encapsulates information about a change to a dataset.
+ * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
@@ -58,22 +59,24 @@ public class BrokerChangeEvent extends java.util.EventObject {
 	 * 
 	 * @param source
 	 *            the source of the event.
-	
-	 * @param brokerManagerModel BrokerModel
+	 * 
+	 * @param brokerManagerModel
+	 *            BrokerModel
 	 */
-	public BrokerChangeEvent(Object source,
-			BrokerModel brokerManagerModel) {
+	public BrokerChangeEvent(Object source, BrokerModel brokerManagerModel) {
 		super(source);
 		this.brokerManagerModel = brokerManagerModel;
 	}
 
 	/**
-	 * Returns the brokerManagerModel that generated the event. Note that the brokerManagerModel may
-	 * be <code>null</code> since adding a <code>null</code> brokerManagerModel to a plot
-	 * will generated a change event.
+	 * Returns the brokerManagerModel that generated the event. Note that the
+	 * brokerManagerModel may be <code>null</code> since adding a
+	 * <code>null</code> brokerManagerModel to a plot will generated a change
+	 * event.
 	 * 
-	
-	 * @return The brokerManagerModel (possibly <code>null</code>). */
+	 * 
+	 * @return The brokerManagerModel (possibly <code>null</code>).
+	 */
 	public BrokerModel getBrokerManagerModel() {
 		return this.brokerManagerModel;
 	}

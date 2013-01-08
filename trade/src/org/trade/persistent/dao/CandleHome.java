@@ -211,7 +211,8 @@ public class CandleHome {
 	 * @return List<Candle>
 	 */
 	public List<Candle> findCandlesByContractDateRangeBarSize(
-			Integer idContract, Date startOpenDate, Date endOpenDate, Integer barSize) {
+			Integer idContract, Date startOpenDate, Date endOpenDate,
+			Integer barSize) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -240,7 +241,8 @@ public class CandleHome {
 				Join<Candle, Tradingday> tradingdayEndDate = from
 						.join("tradingday");
 				Predicate predicateEndDate = builder.lessThanOrEqualTo(
-						tradingdayEndDate.get("open").as(Date.class), endOpenDate);
+						tradingdayEndDate.get("open").as(Date.class),
+						endOpenDate);
 				predicates.add(predicateEndDate);
 			}
 			if (null != barSize) {

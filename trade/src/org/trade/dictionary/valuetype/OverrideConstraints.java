@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class OverrideConstraints extends Decode {
@@ -57,12 +56,13 @@ public class OverrideConstraints extends Decode {
 	 * Create a new instance of this object
 	 * 
 	 * 
-	
 	 * 
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return OverrideConstraints
-	 * @exception * @see */
+	 * @exception * @see
+	 */
 
 	public static OverrideConstraints newInstance() {
 		final OverrideConstraints returnInstance = new OverrideConstraints();

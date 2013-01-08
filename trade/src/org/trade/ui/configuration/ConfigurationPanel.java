@@ -65,6 +65,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;

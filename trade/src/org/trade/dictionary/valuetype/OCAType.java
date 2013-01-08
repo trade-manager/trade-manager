@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class OCAType extends Decode {
@@ -54,7 +53,9 @@ public class OCAType extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return OCAType
 	 */
 	public static OCAType newInstance(String value) {
@@ -65,6 +66,7 @@ public class OCAType extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return OCAType
 	 */
 	public static OCAType newInstance() {

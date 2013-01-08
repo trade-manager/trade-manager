@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.Decode;
 
-
 /**
  */
 public class CalculationType extends Decode {
@@ -55,7 +54,9 @@ public class CalculationType extends Decode {
 
 	/**
 	 * Method newInstance.
-	 * @param value String
+	 * 
+	 * @param value
+	 *            String
 	 * @return CalculationType
 	 */
 	public static CalculationType newInstance(String value) {
@@ -66,6 +67,7 @@ public class CalculationType extends Decode {
 
 	/**
 	 * Method newInstance.
+	 * 
 	 * @return CalculationType
 	 */
 	public static CalculationType newInstance() {

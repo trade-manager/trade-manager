@@ -60,8 +60,9 @@ public class ExampleFileFilter extends FileFilter {
 	 * Creates a file filter. If no filters are added, then all files are
 	 * accepted.
 	 * 
-	
-	 * @see #addExtension */
+	 * 
+	 * @see #addExtension
+	 */
 	public ExampleFileFilter() {
 		this((String) null, (String) null);
 	}
@@ -70,9 +71,11 @@ public class ExampleFileFilter extends FileFilter {
 	 * Creates a file filter that accepts files with the given extension.
 	 * Example: new ExampleFileFilter("jpg");
 	 * 
-	
-	 * @param extension String
-	 * @see #addExtension */
+	 * 
+	 * @param extension
+	 *            String
+	 * @see #addExtension
+	 */
 	public ExampleFileFilter(String extension) {
 		this(extension, null);
 	}
@@ -84,10 +87,13 @@ public class ExampleFileFilter extends FileFilter {
 	 * Note that the "." before the extension is not needed. If provided, it
 	 * will be ignored.
 	 * 
-	
-	 * @param extension String
-	 * @param description String
-	 * @see #addExtension */
+	 * 
+	 * @param extension
+	 *            String
+	 * @param description
+	 *            String
+	 * @see #addExtension
+	 */
 	public ExampleFileFilter(String extension, String description) {
 		this(new String[] { extension }, description);
 	}
@@ -98,9 +104,11 @@ public class ExampleFileFilter extends FileFilter {
 	 * 
 	 * Note that the "." before the extension is not needed adn will be ignored.
 	 * 
-	
-	 * @param filters String[]
-	 * @see #addExtension */
+	 * 
+	 * @param filters
+	 *            String[]
+	 * @see #addExtension
+	 */
 	public ExampleFileFilter(String[] filters) {
 		this(filters, null);
 	}
@@ -112,10 +120,13 @@ public class ExampleFileFilter extends FileFilter {
 	 * 
 	 * Note that the "." before the extension is not needed and will be ignored.
 	 * 
-	
-	 * @param filters String[]
-	 * @param description String
-	 * @see #addExtension */
+	 * 
+	 * @param filters
+	 *            String[]
+	 * @param description
+	 *            String
+	 * @see #addExtension
+	 */
 	public ExampleFileFilter(String[] filters, String description) {
 		this.filters = new Hashtable<String, ExampleFileFilter>(filters.length);
 
@@ -133,11 +144,13 @@ public class ExampleFileFilter extends FileFilter {
 	 * 
 	 * Files that begin with "." are ignored.
 	 * 
-	
-	
-	 * @param f File
+	 * 
+	 * 
+	 * @param f
+	 *            File
 	 * @return boolean
-	 * @see #getExtension * @see FileFilter#accepts */
+	 * @see #getExtension * @see FileFilter#accepts
+	 */
 	public boolean accept(File f) {
 		if (f != null) {
 			if (f.isDirectory()) {
@@ -157,11 +170,13 @@ public class ExampleFileFilter extends FileFilter {
 	/**
 	 * Return the extension portion of the file's name .
 	 * 
-	
-	
-	 * @param f File
+	 * 
+	 * 
+	 * @param f
+	 *            File
 	 * @return String
-	 * @see #getExtension * @see FileFilter#accept */
+	 * @see #getExtension * @see FileFilter#accept
+	 */
 	public String getExtension(File f) {
 		if (f != null) {
 			String filename = f.getName();
@@ -185,7 +200,9 @@ public class ExampleFileFilter extends FileFilter {
 	 * filter.addExtension("jpg"); filter.addExtension("tif");
 	 * 
 	 * Note that the before the extension is not needed and will be ignored.
-	 * @param extension String
+	 * 
+	 * @param extension
+	 *            String
 	 */
 	public void addExtension(String extension) {
 		if (filters == null) {
@@ -203,12 +220,14 @@ public class ExampleFileFilter extends FileFilter {
 	 * Returns the human readable description of this filter. For example: "JPEG
 	 * and GIF Image Files (*.jpg, *.gif)"
 	 * 
-	
-	
-	
-	
+	 * 
+	 * 
+	 * 
+	 * 
 	 * @return String
-	 * @see setDescription * @see setExtensionListInDescription * @see isExtensionListInDescription * @see FileFilter#getDescription */
+	 * @see setDescription * @see setExtensionListInDescription * @see
+	 *      isExtensionListInDescription * @see FileFilter#getDescription
+	 */
 	public String getDescription() {
 		if (fullDescription == null) {
 			if ((description == null) || isExtensionListInDescription()) {
@@ -242,11 +261,14 @@ public class ExampleFileFilter extends FileFilter {
 	 * Sets the human readable description of this filter. For example:
 	 * filter.setDescription("Gif and JPG Images");
 	 * 
-	
-	
-	
-	 * @param description String
-	 * @see setDescription * @see setExtensionListInDescription * @see isExtensionListInDescription */
+	 * 
+	 * 
+	 * 
+	 * @param description
+	 *            String
+	 * @see setDescription * @see setExtensionListInDescription * @see
+	 *      isExtensionListInDescription
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 		fullDescription = null;
@@ -259,11 +281,14 @@ public class ExampleFileFilter extends FileFilter {
 	 * Only relevent if a description was provided in the constructor or using
 	 * setDescription();
 	 * 
-	
-	
-	
-	 * @param b boolean
-	 * @see getDescription * @see setDescription * @see isExtensionListInDescription */
+	 * 
+	 * 
+	 * 
+	 * @param b
+	 *            boolean
+	 * @see getDescription * @see setDescription * @see
+	 *      isExtensionListInDescription
+	 */
 	public void setExtensionListInDescription(boolean b) {
 		useExtensionsInDescription = b;
 		fullDescription = null;
@@ -276,11 +301,13 @@ public class ExampleFileFilter extends FileFilter {
 	 * Only relevent if a description was provided in the constructor or using
 	 * setDescription();
 	 * 
-	
-	
-	
+	 * 
+	 * 
+	 * 
 	 * @return boolean
-	 * @see getDescription * @see setDescription * @see setExtensionListInDescription */
+	 * @see getDescription * @see setDescription * @see
+	 *      setExtensionListInDescription
+	 */
 	public boolean isExtensionListInDescription() {
 		return useExtensionsInDescription;
 	}

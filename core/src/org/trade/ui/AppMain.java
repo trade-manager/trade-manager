@@ -68,7 +68,7 @@ public class AppMain {
 		frame.setLocation((int) ((screenSize.getWidth() - frame.getSize()
 				.getWidth()) / 2), (int) ((screenSize.getHeight() - frame
 				.getSize().getHeight()) / 2));
-		
+
 		frame.setIconImage(ImageBuilder.getImage("trade.gif"));
 		frame.validate();
 		frame.repaint();
@@ -81,7 +81,9 @@ public class AppMain {
 	// Main method
 	/**
 	 * Method main.
-	 * @param args String[]
+	 * 
+	 * @param args
+	 *            String[]
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {

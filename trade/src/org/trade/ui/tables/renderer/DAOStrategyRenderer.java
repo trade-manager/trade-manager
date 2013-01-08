@@ -41,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Tradestrategy;

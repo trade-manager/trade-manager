@@ -97,7 +97,6 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	/**
 	 * Default Constructor
 	 * 
-	
 	 */
 	public Decode() {
 
@@ -106,11 +105,15 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
-	 * @param columnNames Vector<String>
-	 * @param values Vector<Object>
-	 * @param identifier String
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param columnNames
+	 *            Vector<String>
+	 * @param values
+	 *            Vector<Object>
+	 * @param identifier
+	 *            String
 	 */
 	public Decode(String codeDecodeType, Vector<String> columnNames,
 			Vector<Object> values, String identifier) {
@@ -123,10 +126,13 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
-	 * @param columnNames Vector<String>
-	 * @param values Vector<Object>
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param columnNames
+	 *            Vector<String>
+	 * @param values
+	 *            Vector<Object>
 	 */
 	public Decode(String codeDecodeType, Vector<String> columnNames,
 			Vector<Object> values) {
@@ -139,8 +145,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
+	 * 
+	 * @param codeDecodeType
+	 *            String
 	 */
 	public Decode(String codeDecodeType) {
 		m_codeDecodeType = codeDecodeType;
@@ -161,9 +168,11 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	/**
 	 * Default Constructor
 	 * 
-	
-	 * @param codeDecodeType String
-	 * @param identifier String
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param identifier
+	 *            String
 	 */
 	public Decode(String codeDecodeType, String identifier) {
 		m_codeDecodeType = codeDecodeType;
@@ -182,10 +191,11 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	}
 
 	/**
-	
+	 * 
 	 * @return true, if the code within this object is empty. false if the code
 	 *         is empty because it was given an invalid string (but getError
-	 *         will give the error message and isValid will be false */
+	 *         will give the error message and isValid will be false
+	 */
 	public boolean isEmpty() {
 		if ((getCode().equals(""))
 				&& ((null == m_badValue) || (m_badValue.equals("")))) {
@@ -196,8 +206,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	}
 
 	/**
-	
-	 * @return true, if this object represents a valid code, false otherwise */
+	 * 
+	 * @return true, if this object represents a valid code, false otherwise
+	 */
 	public boolean isValid() {
 		if (isEmpty()) {
 			return true;
@@ -212,6 +223,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method getError.
+	 * 
 	 * @return String
 	 */
 	public String getError() {
@@ -228,8 +240,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	}
 
 	/**
-	
-	 * @return The current code for the object, "" if not set. */
+	 * 
+	 * @return The current code for the object, "" if not set.
+	 */
 	public Object getObject() {
 		Object val = null;
 
@@ -244,8 +257,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	}
 
 	/**
-	
-	 * @return The current code for the object, "" if not set. */
+	 * 
+	 * @return The current code for the object, "" if not set.
+	 */
 	public String getCode() {
 		String rVal = "";
 
@@ -264,9 +278,11 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	}
 
 	/**
-	
-	 * @param key String
-	 * @return The current code for the object, "" if not set. */
+	 * 
+	 * @param key
+	 *            String
+	 * @return The current code for the object, "" if not set.
+	 */
 	public String getValue(String key) {
 		String rVal = "";
 
@@ -285,6 +301,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method getLookup.
+	 * 
 	 * @return Lookup
 	 */
 	protected Lookup getLookup() {
@@ -293,6 +310,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method getDisplayName.
+	 * 
 	 * @return String
 	 */
 	public String getDisplayName() {
@@ -314,7 +332,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method equalsCode.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 * @return boolean
 	 */
 	public boolean equalsCode(String code) {
@@ -332,7 +352,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	//
 	/**
 	 * Method equals.
-	 * @param objectToCompare Object
+	 * 
+	 * @param objectToCompare
+	 *            Object
 	 * @return boolean
 	 * @see java.util.Comparator#equals(Object)
 	 */
@@ -357,6 +379,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method hashCode.
+	 * 
 	 * @return int
 	 */
 	public int hashCode() {
@@ -369,6 +392,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method clone.
+	 * 
 	 * @return Object
 	 * @throws java.lang.CloneNotSupportedException
 	 */
@@ -378,6 +402,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method toString.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
@@ -397,6 +422,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method getCodesDecodes.
+	 * 
 	 * @return Vector<Decode>
 	 * @throws ValueTypeException
 	 */
@@ -437,7 +463,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method setValue.
-	 * @param value Object
+	 * 
+	 * @param value
+	 *            Object
 	 */
 	public void setValue(Object value) {
 		if (value instanceof Decode) {
@@ -460,6 +488,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	// from lowercase
 	/**
 	 * Method convertToUppercase.
+	 * 
 	 * @return boolean
 	 */
 	protected boolean convertToUppercase() {
@@ -468,7 +497,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method setCode.
-	 * @param code String
+	 * 
+	 * @param code
+	 *            String
 	 */
 	private void setCode(String code) {
 		try {
@@ -500,7 +531,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method setCode.
-	 * @param code Object
+	 * 
+	 * @param code
+	 *            Object
 	 */
 	private void setCode(Object code) {
 		try {
@@ -546,7 +579,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method setDisplayName.
-	 * @param displayName String
+	 * 
+	 * @param displayName
+	 *            String
 	 */
 	public void setDisplayName(String displayName) {
 		try {
@@ -578,7 +613,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	// primarily by name, secondarily by value; null-safe; case-insensitive
 	/**
 	 * Method compareTo.
-	 * @param other Decode
+	 * 
+	 * @param other
+	 *            Decode
 	 * @return int
 	 */
 	public int compareTo(final Decode other) {
@@ -588,8 +625,11 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 	/**
 	 * Method compare.
-	 * @param o1 Decode
-	 * @param o2 Decode
+	 * 
+	 * @param o1
+	 *            Decode
+	 * @param o2
+	 *            Decode
 	 * @return int
 	 */
 	public int compare(Decode o1, Decode o2) {

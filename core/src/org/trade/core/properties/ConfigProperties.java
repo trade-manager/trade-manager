@@ -52,6 +52,7 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * Represents the applications configuration. This class is intended to be a bit
  * of a hack. I.e it wraps the apps property file, and provides a place to map
@@ -79,7 +80,9 @@ public class ConfigProperties {
 
 	/**
 	 * Returns a string for a key.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return String
 	 * @throws IOException
 	 */
@@ -93,6 +96,7 @@ public class ConfigProperties {
 
 	/**
 	 * Method getDeploymentPropertyFileName.
+	 * 
 	 * @return String
 	 */
 	public static String getDeploymentPropertyFileName() {
@@ -112,8 +116,11 @@ public class ConfigProperties {
 
 	/**
 	 * Method getDeploymentProperties.
-	 * @param context Object
-	 * @param fileName String
+	 * 
+	 * @param context
+	 *            Object
+	 * @param fileName
+	 *            String
 	 * @return Properties
 	 * @throws IOException
 	 */
@@ -128,8 +135,11 @@ public class ConfigProperties {
 
 	/**
 	 * Method loadDeploymentProperties.
-	 * @param context Object
-	 * @param fileName String
+	 * 
+	 * @param context
+	 *            Object
+	 * @param fileName
+	 *            String
 	 * @throws IOException
 	 */
 	public static void loadDeploymentProperties(Object context, String fileName)
@@ -139,6 +149,7 @@ public class ConfigProperties {
 
 	/**
 	 * Method getSystemPropertyFileName.
+	 * 
 	 * @return String
 	 */
 	public static String getSystemPropertyFileName() {
@@ -147,7 +158,9 @@ public class ConfigProperties {
 
 	/**
 	 * Returns an int for a key. If the number is malformed, then it return 0.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return int
 	 * @throws IOException
 	 */
@@ -162,7 +175,9 @@ public class ConfigProperties {
 	/**
 	 * Returns an boolean for a key. If the number is malformed, then it return
 	 * false.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return boolean
 	 * @throws IOException
 	 */
@@ -172,7 +187,9 @@ public class ConfigProperties {
 
 	/**
 	 * Method getPropAsEnumeration.
-	 * @param keyRoot String
+	 * 
+	 * @param keyRoot
+	 *            String
 	 * @return Enumeration<String>
 	 * @throws IOException
 	 */
@@ -200,8 +217,11 @@ public class ConfigProperties {
 
 	/**
 	 * Method getPropertiesAsArrayOfProperties.
-	 * @param keyRoot String
-	 * @param keyNames Dictionary<?,?>
+	 * 
+	 * @param keyRoot
+	 *            String
+	 * @param keyNames
+	 *            Dictionary<?,?>
 	 * @return Properties[]
 	 * @throws IOException
 	 */
@@ -221,8 +241,11 @@ public class ConfigProperties {
 	// read configuration properties
 	/**
 	 * Method getProperties.
-	 * @param context Object
-	 * @param fileName String
+	 * 
+	 * @param context
+	 *            Object
+	 * @param fileName
+	 *            String
 	 * @return Properties
 	 * @throws IOException
 	 */
@@ -247,8 +270,11 @@ public class ConfigProperties {
 
 	/**
 	 * Method getSetOfProperties.
-	 * @param keyRoot String
-	 * @param keyNames Dictionary<?,?>
+	 * 
+	 * @param keyRoot
+	 *            String
+	 * @param keyNames
+	 *            Dictionary<?,?>
 	 * @return Properties
 	 * @throws IOException
 	 */
@@ -285,7 +311,9 @@ public class ConfigProperties {
 
 	/**
 	 * Method getCommaSeparatedStrings.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return Enumeration<?>
 	 * @throws IOException
 	 */
@@ -300,7 +328,9 @@ public class ConfigProperties {
 	// read configuration properties
 	/**
 	 * Method retrieveProperty.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return String
 	 * @throws IOException
 	 */
@@ -335,7 +365,9 @@ public class ConfigProperties {
 
 	/**
 	 * Method getPropertyAfterEnvSubstitution.
-	 * @param key String
+	 * 
+	 * @param key
+	 *            String
 	 * @return String
 	 * @throws IOException
 	 */
@@ -355,8 +387,11 @@ public class ConfigProperties {
 
 	/**
 	 * Method readFileAsString.
-	 * @param filePath String
-	 * @param loader ClassLoader
+	 * 
+	 * @param filePath
+	 *            String
+	 * @param loader
+	 *            ClassLoader
 	 * @return String
 	 * @throws java.io.IOException
 	 */
@@ -381,9 +416,13 @@ public class ConfigProperties {
 
 	/**
 	 * Method loadPropertiesAsResource.
-	 * @param context Object
-	 * @param filename String
-	 * @param properties Properties
+	 * 
+	 * @param context
+	 *            Object
+	 * @param filename
+	 *            String
+	 * @param properties
+	 *            Properties
 	 * @throws IOException
 	 */
 	private void loadPropertiesAsResource(Object context, String filename,
@@ -414,8 +453,11 @@ public class ConfigProperties {
 
 	/**
 	 * Method loadPropertiesAsFile.
-	 * @param filename String
-	 * @param properties Properties
+	 * 
+	 * @param filename
+	 *            String
+	 * @param properties
+	 *            Properties
 	 * @throws IOException
 	 */
 	private void loadPropertiesAsFile(String filename, Properties properties)
@@ -440,7 +482,9 @@ public class ConfigProperties {
 
 	/**
 	 * Method reNumberDecodesInPropertiesFile.
-	 * @param propertyFileLocation String
+	 * 
+	 * @param propertyFileLocation
+	 *            String
 	 */
 	public static void reNumberDecodesInPropertiesFile(
 			String propertyFileLocation) {
@@ -453,9 +497,9 @@ public class ConfigProperties {
 			 */
 			File file = new File(propertyFileLocation);
 			/*
-			 * The name of the Decodes to be renumbered. Copy the output BELOW into
-			 * the properties file and remember to set the _NumOfItems to the
-			 * last value.
+			 * The name of the Decodes to be renumbered. Copy the output BELOW
+			 * into the properties file and remember to set the _NumOfItems to
+			 * the last value.
 			 */
 			final String codeName = "CODE_DECODE";
 
@@ -482,8 +526,8 @@ public class ConfigProperties {
 				if (null != token && token.contains(codeName)) {
 
 					if (null != delimiter) {
-						 _log.info("token: " + token);
-						 _log.info("delimiter: " + delimiter);
+						_log.info("token: " + token);
+						_log.info("delimiter: " + delimiter);
 						if (null != token
 								&& !token.endsWith(lookupServiceProvideName)) {
 							if (!delimiter.equals(oldDelimiter)) {
@@ -516,7 +560,9 @@ public class ConfigProperties {
 
 	/**
 	 * Method main.
-	 * @param args String[]
+	 * 
+	 * @param args
+	 *            String[]
 	 */
 	public static void main(String[] args) {
 		String propertyFileLocation = "C:\\Temp\\trade.properties";

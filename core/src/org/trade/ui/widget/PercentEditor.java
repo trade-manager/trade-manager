@@ -36,6 +36,7 @@
 package org.trade.ui.widget;
 
 import javax.swing.DefaultCellEditor;
+
 import org.trade.core.valuetype.Percent;
 
 /**
