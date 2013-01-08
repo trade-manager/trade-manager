@@ -42,9 +42,6 @@ import java.util.Hashtable;
  * Used to describe the access of dynamic key value pairs that can be used by a
  * LookupServiceProvider to constrain the lookup returned.
  * 
- * 
- * 
- * @version $Id: LookupQualifier.java,v 1.1 2001/11/06 16:52:41 simon Exp $
  * @author Simon Allen
  */
 public class LookupQualifier {

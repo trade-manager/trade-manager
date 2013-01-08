@@ -58,7 +58,6 @@ import org.trade.core.util.Reflector;
  * devtool.properties.ConfigProperties object for obtaining Lookup information.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public class DBTableLookupServiceProvider implements LookupServiceProvider {
 	/*

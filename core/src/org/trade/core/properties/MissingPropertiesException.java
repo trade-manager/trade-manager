@@ -42,8 +42,6 @@ import java.util.Vector;
  * Exception thrown by PropertyUtils class.
  * 
  * @author : Simon Allen
- * @version $Id: MissingPropertiesException.java,v 1.1 2001/09/19 20:31:54 clay
- *          Exp $
  */
 public class MissingPropertiesException extends java.lang.Exception {
 	/**

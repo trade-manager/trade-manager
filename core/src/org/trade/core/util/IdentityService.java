@@ -45,7 +45,6 @@ import java.util.Date;
  * identities for the application.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public class IdentityService {
 	private static InetAddress m_localHost = null;

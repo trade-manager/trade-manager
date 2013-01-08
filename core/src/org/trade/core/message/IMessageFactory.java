@@ -44,7 +44,6 @@ import org.trade.core.exception.ExceptionMessage;
  * elements.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public interface IMessageFactory {
 	/**

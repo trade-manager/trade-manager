@@ -41,8 +41,6 @@ import java.util.Vector;
  * Implementation of the Lookup interface that uses data from the
  * ConfigProperties object for providing its Lookup information.
  * 
- * @version $Id: ConfigPropertiesLookup.java,v 1.1 2001/11/06 16:52:41 simon Exp
- *          $
  * @author Simon Allen
  */
 public class PropertiesLookup implements Lookup, Cloneable,

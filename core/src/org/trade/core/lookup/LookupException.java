@@ -38,7 +38,6 @@ package org.trade.core.lookup;
 import org.trade.core.exception.NestingException;
 
 /**
- * @version $Id: LookupException.java,v 1.1 2001/11/06 16:52:41 simon Exp $
  * @author Simon Allen
  */
 public class LookupException extends NestingException {

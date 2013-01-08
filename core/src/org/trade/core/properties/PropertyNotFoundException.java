@@ -39,7 +39,6 @@ import java.io.IOException;
 
 /**
  * 
- * @version $Id: PropertyNotFoundException.java,v 1.1 2001/09/19 20:31:53
  * @author Simon Allen
  */
 public class PropertyNotFoundException extends IOException {

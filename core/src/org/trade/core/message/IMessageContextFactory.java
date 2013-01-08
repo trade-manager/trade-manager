@@ -43,7 +43,6 @@ import org.trade.core.exception.ExceptionContext;
  * dynamic value filled at runtime by converting an object to a string.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public interface IMessageContextFactory {
 	/**

@@ -58,7 +58,6 @@ import org.slf4j.LoggerFactory;
  * of a hack. I.e it wraps the apps property file, and provides a place to map
  * the keys in the file to constants.
  * 
- * @version $Id: ConfigProperties.java,v 1.6 2001/12/11 22:28:15 simon Exp $
  * @author Simon Allen
  */
 public class ConfigProperties {

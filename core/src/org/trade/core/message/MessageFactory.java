@@ -45,7 +45,6 @@ import org.trade.core.exception.ExceptionMessage;
  * by the system.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public class MessageFactory implements IMessageFactory {
 

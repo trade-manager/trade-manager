@@ -46,7 +46,6 @@ import java.util.Vector;
  * This object will use a LookupService in order to obtain a Lookup containing
  * all of the Systems CODE_DECODE values for a specific Type.
  * 
- * @version $Id: Decode.java,v 1.1 2001/11/06 16:51:54 simon Exp $
  * @author Simon Allen
  */
 public class DAODecode extends Decode {

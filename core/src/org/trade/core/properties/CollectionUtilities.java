@@ -47,11 +47,10 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 /**
- * Property utilites library. Contains methods that allow to read, write, check
- * existance, merge and extract subsets of properties.
+ * Property utilities library. Contains methods that allow to read, write, check
+ * existence, merge and extract subsets of properties.
  * 
  * @author : Simon Allen
- * @version $Id: CollectionUtilities.java,v 1.1 2001/09/21 20:45:26 Exp $
  */
 public class CollectionUtilities {
 	private CollectionUtilities() {

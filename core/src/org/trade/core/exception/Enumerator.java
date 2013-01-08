@@ -43,7 +43,6 @@ import java.util.Enumeration;
  * handling the associated messages.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 class Enumerator implements Enumeration<Object> {
 	private Enumeration<?> m_mine;

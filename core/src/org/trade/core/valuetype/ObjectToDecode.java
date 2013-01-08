@@ -43,7 +43,6 @@ import org.trade.core.conversion.JavaTypeTranslatorException;
  * com.cbsinc.esc.devtools.valuetype.base.CodeDecodeValueType. The conversion
  * will set the value passed as the code that this valuetype represents.
  * 
- * @version $Id: ObjectToDecode.java,v 1.1 2001/11/06 16:51:55 simon Exp $
  * @author Simon Allen
  */
 public class ObjectToDecode implements JavaDynamicTypeConverter {

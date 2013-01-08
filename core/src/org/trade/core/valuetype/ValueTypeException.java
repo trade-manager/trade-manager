@@ -39,7 +39,6 @@ package org.trade.core.valuetype;
 import org.trade.core.exception.ModelException;
 
 /**
- * @version $Id: ValueTypeException.java,v 1.1 2001/09/19 20:32:15 clay Exp $
  * @author Simon Allen
  */
 public class ValueTypeException extends ModelException {

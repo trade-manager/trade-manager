@@ -53,7 +53,6 @@ import org.trade.core.properties.ConfigProperties;
 
 /**
  * 
- * @version $Id: TradingCalendar.java,v 1.1 2001/10/18 01:35:48 simon Exp $
  * @author Simon Allen
  */
 public class TradingCalendar {

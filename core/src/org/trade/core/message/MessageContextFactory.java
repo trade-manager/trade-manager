@@ -45,7 +45,6 @@ import org.trade.core.exception.ExceptionMessage;
  * dynamic value filled at runtime by converting an object to a string.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public class MessageContextFactory implements IMessageContextFactory {
 	// This is a special case and represents an internal error. It will

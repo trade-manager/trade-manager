@@ -42,7 +42,6 @@ import org.trade.ui.base.Parametric;
 
 /**
  * 
- * @version $Id: Reflector.java,v 1.1 2001/10/18 01:32:15 simon Exp $
  * @author Simon Allen
  */
 public class Reflector extends Object {

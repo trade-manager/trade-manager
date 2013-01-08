@@ -1,5 +1,5 @@
 /* ===========================================================
- * TradeManager : a application to trade strategies for the Java(tm) platform
+ * TradeManager : An application to trade strategies for the Java(tm) platform
  * ===========================================================
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
@@ -388,31 +388,36 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				if (this.isRealtimeBarsRunning(contract)) {
 					throw new BrokerModelException(contract.getIdContract(),
-							3030, "Data request is already in progress for: "
+							3030,
+							"RealtimeBars request is already in progress for: "
 									+ contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
-				if (!m_realTimeBarsRequests.containsKey(contract
-						.getIdContract())) {
-					m_realTimeBarsRequests.put(contract.getIdContract(),
-							contract);
-
-					/*
-					 * Bar interval is set to 5= 5sec this is the only thing
-					 * supported by TWS for live data.
-					 */
-					m_client.reqRealTimeBars(contract.getIdContract(),
-							TWSBrokerModel.getIBContract(contract), 5,
-							backfillWhatToShow, (backfillUseRTH > 0));
-
-					if (mktData) {
-						m_marketDataRequests.put(contract.getIdContract(),
-								contract);
-						m_client.reqMktData(contract.getIdContract(),
-								TWSBrokerModel.getIBContract(contract),
-								ALL_GENERIC_TICK_TAGS, false);
-					}
+				if (this.isMarketDataRunning(contract)) {
+					throw new BrokerModelException(contract.getIdContract(),
+							3030,
+							"MarketData request is already in progress for: "
+									+ contract.getSymbol()
+									+ " Please wait or cancel.");
 				}
+				m_realTimeBarsRequests.put(contract.getIdContract(), contract);
+
+				/*
+				 * Bar interval is set to 5= 5sec this is the only thing
+				 * supported by TWS for live data.
+				 */
+				m_client.reqRealTimeBars(contract.getIdContract(),
+						TWSBrokerModel.getIBContract(contract), 5,
+						backfillWhatToShow, (backfillUseRTH > 0));
+
+				if (mktData) {
+					m_marketDataRequests
+							.put(contract.getIdContract(), contract);
+					m_client.reqMktData(contract.getIdContract(),
+							TWSBrokerModel.getIBContract(contract),
+							ALL_GENERIC_TICK_TAGS, false);
+				}
+
 			} else {
 				throw new BrokerModelException(contract.getIdContract(), 3040,
 						"Not conected to TWS historical data cannot be retrieved");
@@ -490,7 +495,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				if (this.isHistoricalDataRunning(contract)) {
 					throw new BrokerModelException(contract.getIdContract(),
-							3010, "Data request is already in progress for: "
+							3010,
+							"HistoricalData request is already in progress for: "
 									+ contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
@@ -765,11 +771,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 				}
 				if (contract.getTradestrategies().isEmpty()) {
-					if (m_client.isConnected()) {
-						m_client.cancelHistoricalData(contract.getIdContract());
-					}
-					m_historyDataRequests.remove(contract.getIdContract());
-					m_historyDataRequests.notifyAll();
+					onCancelBrokerData(contract);
 				}
 			}
 		}
@@ -785,30 +787,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void onCancelBrokerData(Contract contract) {
 		synchronized (m_historyDataRequests) {
 			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
-				if (m_client.isConnected()) {
+				if (m_client.isConnected())
 					m_client.cancelHistoricalData(contract.getIdContract());
-				}
 				m_historyDataRequests.remove(contract.getIdContract());
 				m_historyDataRequests.notifyAll();
-			}
-		}
-	}
-
-	/**
-	 * Method onCancelRealtimeBars.
-	 * 
-	 * @param contract
-	 *            Contract
-	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
-	 */
-	public void onCancelRealtimeBars(Contract contract) {
-		synchronized (m_realTimeBarsRequests) {
-			if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
-				if (m_client.isConnected()) {
-					m_client.cancelRealTimeBars(contract.getIdContract());
-				}
-				m_realTimeBarsRequests.remove(contract.getIdContract());
-				m_realTimeBarsRequests.notifyAll();
 			}
 		}
 	}
@@ -840,18 +822,19 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
-	 * Method onCancelMarketData.
+	 * Method onCancelRealtimeBars.
 	 * 
 	 * @param contract
 	 *            Contract
 	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
 	 */
-	public void onCancelMarketData(Contract contract) {
-		synchronized (m_marketDataRequests) {
-			if (m_marketDataRequests.containsKey(contract.getIdContract())) {
-				m_client.cancelMktData(contract.getIdContract());
-				m_marketDataRequests.remove(contract.getIdContract());
-				m_marketDataRequests.notifyAll();
+	public void onCancelRealtimeBars(Contract contract) {
+		synchronized (m_realTimeBarsRequests) {
+			if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
+				if (m_client.isConnected())
+					m_client.cancelRealTimeBars(contract.getIdContract());
+				m_realTimeBarsRequests.remove(contract.getIdContract());
+				m_realTimeBarsRequests.notifyAll();
 			}
 		}
 	}
@@ -877,6 +860,24 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				if (contract.getTradestrategies().isEmpty()) {
 					onCancelMarketData(contract);
 				}
+			}
+		}
+	}
+
+	/**
+	 * Method onCancelMarketData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
+	 */
+	public void onCancelMarketData(Contract contract) {
+		synchronized (m_marketDataRequests) {
+			if (m_marketDataRequests.containsKey(contract.getIdContract())) {
+				if (m_client.isConnected())
+					m_client.cancelMktData(contract.getIdContract());
+				m_marketDataRequests.remove(contract.getIdContract());
+				m_marketDataRequests.notifyAll();
 			}
 		}
 	}

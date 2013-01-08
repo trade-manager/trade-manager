@@ -42,7 +42,6 @@ package org.trade.core.lookup;
  * Note : This API has borrowed heavily from the javax.swing.table.TableModel
  * interface so that it is easier to hook it up to a GUI.
  * 
- * @version $Id: Lookup.java,v 1.1 2001/11/06 16:52:41 simon Exp $
  * @author Simon Allen
  */
 public interface Lookup {

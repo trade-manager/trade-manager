@@ -39,8 +39,6 @@ import java.io.FileNotFoundException;
 
 /**
  * 
- * @version $Id: PropertyFileNotFoundException.java,v 1.1 2001/09/19 20:31:53
- *          clay Exp $
  * @author Simon Allen
  */
 public class PropertyFileNotFoundException extends FileNotFoundException {

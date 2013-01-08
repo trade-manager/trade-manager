@@ -63,7 +63,6 @@ import javax.swing.SwingUtilities;
  * start() on the StrategyWorker after creating it.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public abstract class Worker {
 	private Object value; // see getValue(), setValue()

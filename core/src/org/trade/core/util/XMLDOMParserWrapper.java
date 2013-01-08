@@ -70,7 +70,6 @@ import org.xml.sax.SAXParseException;
  * The parser is updated to ignore DTDs and external references. It will return
  * the same dom tree regardless of external references and DTDs
  * 
- * @version $Id: XMLDOMParserWrapper.java,v 1.1 2002/03/06 22:27:55 simon Exp $
  * @author Simon Allen
  */
 public class XMLDOMParserWrapper {

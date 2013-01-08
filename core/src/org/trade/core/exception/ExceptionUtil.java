@@ -44,7 +44,6 @@ import java.util.Enumeration;
  * This class is used to hold generic routines for manipulating exceptions.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public class ExceptionUtil implements Serializable {
 	/**

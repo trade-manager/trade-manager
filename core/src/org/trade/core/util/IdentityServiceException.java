@@ -42,7 +42,6 @@ import org.trade.core.exception.NestingException;
  * component.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public class IdentityServiceException extends NestingException {
 	/**

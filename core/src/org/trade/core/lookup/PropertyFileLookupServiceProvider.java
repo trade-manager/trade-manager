@@ -46,7 +46,6 @@ import org.trade.core.properties.ConfigProperties;
  * devtool.properties.ConfigProperties object for obtaining Lookup information.
  * 
  * @author Simon Allen
- * @version $Revision: 1.0 $
  */
 public class PropertyFileLookupServiceProvider implements LookupServiceProvider {
 	// This will be a hashtable of hashtables of Lookup objects. The first

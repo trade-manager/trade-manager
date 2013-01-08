@@ -36,8 +36,6 @@
 package org.trade.core.lookup;
 
 /**
- * @version $Id: LookupServiceProvider.java,v 1.1 2001/11/06 16:52:41 simon Exp
- *          $
  * @author Simon Allen
  */
 public interface LookupServiceProvider {

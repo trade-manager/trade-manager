@@ -51,7 +51,6 @@ import java.util.Vector;
  * size="2" color="#0fffff">
  * 
  * @author Simon Allen
- * @version $Id: TemplateParser.java,v 1.1 2001/09/21 20:45:26 clay Exp $
  */
 public class TemplateParser {
 	private char m_leftBracket = '(';
