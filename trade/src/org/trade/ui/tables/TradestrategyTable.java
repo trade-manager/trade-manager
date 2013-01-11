@@ -215,5 +215,4 @@ public class TradestrategyTable extends Table {
 		}
 		return null;
 	}
-
-};
+}

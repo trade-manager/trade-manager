@@ -371,7 +371,6 @@ public class TradestrategyTableModel extends TableModel {
 				this.setValueAt(DAOStrategyManager.newInstance(strategy
 						.getStrategyManager().getName()), row, column + 1);
 			}
-
 			break;
 		}
 		case 6: {
@@ -398,13 +397,9 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 11: {
-			// element.setPercentChangeFromClose((((Percent) value)
-			// .getBigDecimalValue()));
 			break;
 		}
 		case 12: {
-			// element.setPercentChangeFromOpen((((Percent) value)
-			// .getBigDecimalValue()));
 			break;
 		}
 		case 13: {
