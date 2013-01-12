@@ -238,7 +238,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			}
 		});
 		this.add(chartPanel, BorderLayout.CENTER);
-		datasetContainer.getCandleDataset().getSeries(0)
+		this.datasetContainer.getCandleDataset().getSeries(0)
 				.addChangeListener(this);
 	}
 

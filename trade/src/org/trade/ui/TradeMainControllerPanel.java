@@ -303,7 +303,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					"Please save or refresh before running strategy ...\n",
 					BasePanel.WARNING);
 		} else {
-			contractPanel.doClose(tradestrategy);
 			Tradingdays tradingdays = new Tradingdays();
 			Tradingday tradingday = Tradingday.newInstance(tradestrategy
 					.getTradingday().getOpen());
@@ -317,8 +316,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	/**
 	 * This is fired from the Contract Tab when the Execute Order button is
 	 * pressed. This should be used to execute orders to the broker platform.
-	 * 
-	 * 
 	 * 
 	 * @param instance
 	 *            TradeOrder
@@ -1270,7 +1267,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doCancel() {
 
 		// Cancel the candleWorker if running
-		contractPanel.doCloseAll();
 		m_brokerModel.onCancelAllRealtimeData();
 		if ((null != brokerDataRequestProgressMonitor)
 				&& !brokerDataRequestProgressMonitor.isDone()) {
