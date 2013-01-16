@@ -492,7 +492,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 
 			if (m_client.isConnected()) {
-
 				if (this.isHistoricalDataRunning(contract)) {
 					throw new BrokerModelException(contract.getIdContract(),
 							3010,

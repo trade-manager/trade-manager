@@ -1024,9 +1024,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			this.candlestickChart = new CandlestickChart(ledgend,
 					tradestrategy.getDatasetContainer(),
 					tradestrategy.getTradingday());
-			candlestickChart.setName(tradestrategy.getContract().getSymbol());
+			this.candlestickChart.setName(tradestrategy.getContract()
+					.getSymbol());
 			this.setLayout(new BorderLayout());
-			this.add(candlestickChart, null);
+			this.add(this.candlestickChart, null);
 		}
 
 		/**
