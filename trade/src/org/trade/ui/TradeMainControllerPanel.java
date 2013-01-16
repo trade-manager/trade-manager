@@ -303,7 +303,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					"Please save or refresh before running strategy ...\n",
 					BasePanel.WARNING);
 		} else {
-			contractPanel.doClose(tradestrategy);
 			Tradingdays tradingdays = new Tradingdays();
 			Tradingday tradingday = Tradingday.newInstance(tradestrategy
 					.getTradingday().getOpen());
@@ -1066,7 +1065,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				m_brokerModel.disconnect();
 				m_indicatorTradestrategy.clear();
-				enableMenuToolBar();
+				refreshTradingdays(m_tradingdays);
 			} else {
 				tradingdayPanel.setConnected(false);
 				contractPanel.setConnected(false);
@@ -1275,7 +1274,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 		tradingdayPanel.killAllStrategyWorker();
 		m_indicatorTradestrategy.clear();
-		enableMenuToolBar();
+		refreshTradingdays(m_tradingdays);
 		this.setStatusBarMessage(
 				"Strategies and live data have been cancelled.",
 				BasePanel.INFORMATION);
@@ -1680,10 +1679,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	}
 
 	/**
-	 * Method enableMenuToolBar.
+	 * Method refreshTradingdays.
+	 * 
+	 * @param tradingdays
+	 *            Tradingdays
 	 */
-	private void enableMenuToolBar() {
+	private void refreshTradingdays(Tradingdays tradingdays) {
 
+		for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+			tradingdayPanel.doRefresh(tradingday);
+		}
 		if (m_brokerModel.isConnected()) {
 			m_menuBar.setEnabledBrokerData(true);
 			m_menuBar.setEnabledRunStrategy(true);
@@ -1942,17 +1947,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 
 		public void done() {
-			/*
-			 * If back testing only refresh the trading days.
-			 */
-			if (!m_brokerModel.isBrokerDataOnly()
-					&& !m_brokerModel.isConnected()) {
-				for (Tradingday tradingday : this.tradingdays.getTradingdays()
-						.values()) {
-					tradingdayPanel.doRefresh(tradingday);
-				}
-			}
-			enableMenuToolBar();
+			refreshTradingdays(this.tradingdays);
 			String message = "Completed Historical data total contracts processed: "
 					+ grandTotal
 					+ " in : "
