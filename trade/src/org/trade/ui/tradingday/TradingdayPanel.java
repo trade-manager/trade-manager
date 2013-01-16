@@ -763,7 +763,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				if (null == tradingday) {
 					this.setStatusBarMessage(
 							"Please select or add a Tradingday.",
-							BasePanel.INFORMATION);
+							BasePanel.WARNING);
 					return;
 				}
 
