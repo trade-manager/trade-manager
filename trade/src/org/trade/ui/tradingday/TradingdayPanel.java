@@ -742,6 +742,12 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				int selectedRow = 0;
 				Tradingday tradingday = null;
 				if (m_tradingdayTable.getSelectionModel()
+						.getLeadSelectionIndex() == -1) {
+					if (m_tradingdays.getTradingdays().size() > 0) {
+						m_tradingdayTable.setRowSelectionInterval(0, 0);
+					}
+				}
+				if (m_tradingdayTable.getSelectionModel()
 						.getLeadSelectionIndex() > -1) {
 					selectedRow = m_tradingdayTable.getSelectionModel()
 							.getLeadSelectionIndex();
@@ -754,7 +760,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					tradingday = m_tradingdayModel.getData().getTradingday(
 							openDate.getDate(), closeDate.getDate());
 				}
-
 				if (null == tradingday) {
 					this.setStatusBarMessage(
 							"Please select or add a Tradingday.",
