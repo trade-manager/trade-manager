@@ -52,10 +52,10 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 		Comparable<Decimal> {
 	private static final long serialVersionUID = 4937298768811778585L;
 
-	public final static String DECIMAL_POSITIVE_7_2 = "#######.##";
-	public final static String DECIMAL_NONNEGATIVE_8_2 = "########.##";
-	public final static String DECIMAL_POSITIVE_10_2 = "##########.##";
-	public final static String DECIMAL_NONNEGATIVE_11_2 = "###########.##";
+	public final static String DECIMAL_POSITIVE_7_3 = "#######.###";
+	public final static String DECIMAL_NONNEGATIVE_8_3 = "########.###";
+	public final static String DECIMAL_POSITIVE_10_3 = "##########.###";
+	public final static String DECIMAL_NONNEGATIVE_11_3 = "###########.###";
 
 	public final static Decimal ZERO = new Decimal(0L, 0);
 
@@ -69,15 +69,15 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 
 	private BigDecimal m_value = null;
 
-	private String m_format = DECIMAL_NONNEGATIVE_11_2;
+	private String m_format = DECIMAL_NONNEGATIVE_11_3;
 
 	private String m_invalidValue = null; // This will be null if there were
 
 	// no conversion errors
 
-	private final static int SCALE = 2;
+	private final static int SCALE = 3;
 
-	private final static String MULTIPLIER = "100";
+	private final static String MULTIPLIER = "1000";
 
 	//
 	// Public Methods
@@ -202,11 +202,11 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	public int getMaxLength() {
 		int maxLength = 14;
 
-		if (getFormat().equals(DECIMAL_NONNEGATIVE_8_2)) {
+		if (getFormat().equals(DECIMAL_NONNEGATIVE_8_3)) {
 			maxLength = 11;
-		} else if (getFormat().equals(DECIMAL_POSITIVE_10_2)) {
+		} else if (getFormat().equals(DECIMAL_POSITIVE_10_3)) {
 			maxLength = 13;
-		} else if (getFormat().equals(DECIMAL_POSITIVE_7_2)) {
+		} else if (getFormat().equals(DECIMAL_POSITIVE_7_3)) {
 			maxLength = 10;
 		}
 
@@ -222,9 +222,9 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	public boolean canBeZero() {
 		boolean zero = true;
 
-		if (getFormat().equals(DECIMAL_POSITIVE_7_2)) {
+		if (getFormat().equals(DECIMAL_POSITIVE_7_3)) {
 			zero = false;
-		} else if (getFormat().equals(DECIMAL_POSITIVE_10_2)) {
+		} else if (getFormat().equals(DECIMAL_POSITIVE_10_3)) {
 			zero = false;
 		}
 

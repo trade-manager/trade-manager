@@ -10,6 +10,7 @@ IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.marketBias
 IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.marketBar ,IF(data.isOpenPosition = 1, data.marketBar, null))) as marketBar,
 IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.name ,IF(data.isOpenPosition = 1, data.name, null)))  as name,
 IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.status ,IF(data.isOpenPosition = 1, data.status, null)))  as status,
+IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.idTrade ,IF(data.isOpenPosition = 1, data.idTrade, null)))  as idTrade,
 IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.side ,IF(data.isOpenPosition = 1, data.side, null)))  as side,
 IF(data.sortCol = 'Total' , null, data.action) as action,
 IF(data.sortCol = 'Total' , null, data.stopPrice) as stopPrice,
@@ -30,6 +31,7 @@ tradingday.marketBias as marketBias,
 tradingday.marketBar as marketBar,
 strategy.name as name,
 tradestrategy.status as status,
+trade.idTrade as idTrade,
 trade.side as side,
 tradeorder.isOpenPosition  as isOpenPosition,
 tradeorder.action as action,
@@ -47,7 +49,7 @@ inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join tradeaccount on tradestrategy.idTradeAccount = tradeaccount.idTradeAccount
 left outer join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
 left outer join tradeorder on trade.idTrade = tradeorder.idTrade
- where (1 = :filter or tradeorder.isFilled = 1)
+where (1 = :filter or tradeorder.isFilled = 1)
 and tradingday.open between :start and :end
 and tradeaccount.idTradeAccount = :idTradeAccount
 and tradestrategy.trade = 1
@@ -63,6 +65,7 @@ tradingday.marketBias as marketBias,
 tradingday.marketBar as marketBar,
 strategy.name as name,
 tradestrategy.status as status,
+trade.idTrade as idTrade,
 "" as side,
 "" as isOpenPosition,
 "" as action,
@@ -81,7 +84,7 @@ inner join tradeaccount on tradestrategy.idTradeAccount = tradeaccount.idTradeAc
 inner join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
 inner join tradeorder on trade.idTrade = tradeorder.idTrade
 where tradeorder.isFilled =1
-and (1 = :filter or tradeorder.isFilled =1)
+and (1 = :filter or tradeorder.isFilled = 1)
 and tradingday.open between :start and :end
 and tradeaccount.idTradeAccount = :idTradeAccount
 and tradestrategy.trade = 1
@@ -93,10 +96,12 @@ tradestrategy.tier,
 tradingday.marketBias,
 tradingday.marketBar,
 strategy.name,
-tradestrategy.status) AS data
+tradestrategy.status,
+trade.idTrade) AS data
 Order by
 data.open DESC,
 data.symbol ASC,
-data.isOpenPosition DESC,
+data.idTrade ASC,
 data.sortCol ASC,
+data.isOpenPosition DESC,
 data.filledDate ASC

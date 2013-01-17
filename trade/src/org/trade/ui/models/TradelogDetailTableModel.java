@@ -40,6 +40,7 @@ import java.util.Vector;
 import javax.swing.event.TableModelEvent;
 
 import org.trade.core.valuetype.Date;
+import org.trade.core.valuetype.Decimal;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Quantity;
 import org.trade.dictionary.valuetype.Action;
@@ -226,7 +227,7 @@ public class TradelogDetailTableModel extends TableModel {
 			break;
 		}
 		case 15: {
-			element.setAverageFilledPrice(((Money) value).getBigDecimalValue());
+			element.setAverageFilledPrice(((Decimal) value).getBigDecimalValue());
 			break;
 		}
 		case 16: {
@@ -371,9 +372,9 @@ public class TradelogDetailTableModel extends TableModel {
 		newRow.addElement(new Quantity(element.getQuantity()));
 
 		if (null == element.getAverageFilledPrice()) {
-			newRow.addElement(new Money());
+			newRow.addElement(new Decimal());
 		} else {
-			newRow.addElement(new Money(element.getAverageFilledPrice()));
+			newRow.addElement(new Decimal(element.getAverageFilledPrice()));
 		}
 		if (null == element.getCommission()) {
 			newRow.addElement(new Money());

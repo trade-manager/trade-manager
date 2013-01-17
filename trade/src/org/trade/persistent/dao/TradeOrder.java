@@ -419,7 +419,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * 
 	 * @return BigDecimal
 	 */
-	@Column(name = "averageFilledPrice", precision = 10)
+	@Column(name = "averageFilledPrice", precision = 11)
 	public BigDecimal getAverageFilledPrice() {
 		return this.averageFilledPrice;
 	}

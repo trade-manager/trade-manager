@@ -196,7 +196,7 @@ DROP TABLE IF EXISTS trade ;
 SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS trade (
   idTrade INT NOT NULL AUTO_INCREMENT ,
-  averagePrice DECIMAL(10,2) NULL ,
+  averagePrice DECIMAL(11,3) NULL ,
   isOpen TINYINT(1)  NOT NULL ,
   openQuantity INT NULL ,
   profitLoss DECIMAL(10,2) NULL ,
@@ -229,7 +229,7 @@ CREATE  TABLE IF NOT EXISTS tradeorder (
   action VARCHAR(6) NOT NULL ,
   allOrNothing TINYINT(1)  NULL ,
   auxPrice DECIMAL(10,2) NULL ,
-  averageFilledPrice DECIMAL(10,2) NULL ,
+  averageFilledPrice DECIMAL(11,3) NULL ,
   clientId INT NULL ,
   commission DECIMAL(10,2) NULL ,
   createDate DATETIME NOT NULL ,
@@ -282,7 +282,7 @@ SHOW WARNINGS;
 
 CREATE  TABLE IF NOT EXISTS tradeorderfill (
   idTradeOrderFill INT NOT NULL AUTO_INCREMENT ,
-  averagePrice DECIMAL(10,2) NULL ,
+  averagePrice DECIMAL(11,3) NULL ,
   cumulativeQuantity INT NULL ,
   exchange VARCHAR(10) NULL ,
   execId VARCHAR(45) NULL ,

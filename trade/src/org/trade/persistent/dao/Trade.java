@@ -207,7 +207,7 @@ public class Trade extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return BigDecimal
 	 */
-	@Column(name = "averagePrice", precision = 10)
+	@Column(name = "averagePrice", precision = 11)
 	public BigDecimal getAveragePrice() {
 		return this.averagePrice;
 	}
