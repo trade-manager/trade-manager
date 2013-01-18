@@ -370,7 +370,6 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 				}
 			}
 			if (skip >= getLength()) {
-
 				if (currentRSI == Double.MAX_VALUE) {
 					avgGainRSI = posSumCloseDiff / getLength();
 					avgLossRSI = negSumCloseDiff / getLength();
@@ -388,16 +387,13 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + Math
 								.abs(preDiffCloseValue))) / getLength();
 					}
-
 					currentRSI = 100 - (100 / (1 + (avgGainRSI / avgLossRSI)));
 				}
 
 				if (index < 0) {
-
 					RelativeStrengthIndexItem dataItem = new RelativeStrengthIndexItem(
 							candleItem.getPeriod(), new BigDecimal(currentRSI));
 					this.add(dataItem, false);
-
 				} else {
 					RelativeStrengthIndexItem currDataItem = (RelativeStrengthIndexItem) this
 							.getDataItem(this.indexOf(candleItem.getPeriod()));

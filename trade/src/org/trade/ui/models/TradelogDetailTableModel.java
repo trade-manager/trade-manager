@@ -227,7 +227,8 @@ public class TradelogDetailTableModel extends TableModel {
 			break;
 		}
 		case 15: {
-			element.setAverageFilledPrice(((Decimal) value).getBigDecimalValue());
+			element.setAverageFilledPrice(((Decimal) value)
+					.getBigDecimalValue());
 			break;
 		}
 		case 16: {
@@ -372,9 +373,9 @@ public class TradelogDetailTableModel extends TableModel {
 		newRow.addElement(new Quantity(element.getQuantity()));
 
 		if (null == element.getAverageFilledPrice()) {
-			newRow.addElement(new Decimal());
+			newRow.addElement(new Decimal(3));
 		} else {
-			newRow.addElement(new Decimal(element.getAverageFilledPrice()));
+			newRow.addElement(new Decimal(element.getAverageFilledPrice(), 3));
 		}
 		if (null == element.getCommission()) {
 			newRow.addElement(new Money());

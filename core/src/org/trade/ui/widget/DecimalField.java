@@ -54,12 +54,14 @@ public class DecimalField extends JFormattedTextField {
 * 
 */
 	private static final long serialVersionUID = -4264304378113205235L;
+	private static int _SCALE = 2;
 
-	public DecimalField() {
+	public DecimalField(int scale) {
+		_SCALE = scale;
 		NumberFormat displayFormat = NumberFormat.getNumberInstance();
-		displayFormat.setMinimumFractionDigits(2);
+		displayFormat.setMinimumFractionDigits(_SCALE);
 		NumberFormat editFormat = NumberFormat.getNumberInstance();
-		editFormat.setMinimumFractionDigits(2);
+		editFormat.setMinimumFractionDigits(_SCALE);
 		this.setFormatterFactory(new DefaultFormatterFactory(
 				new NumberFormatter(displayFormat), new NumberFormatter(
 						displayFormat), new NumberFormatter(editFormat)));
@@ -79,7 +81,7 @@ public class DecimalField extends JFormattedTextField {
 		} catch (Exception ex) {
 			// Do nothing will return the current value.
 		}
-		return new Decimal(((Number) this.getValue()).doubleValue());
+		return new Decimal(((Number) this.getValue()).doubleValue(), _SCALE);
 	}
 
 	/**

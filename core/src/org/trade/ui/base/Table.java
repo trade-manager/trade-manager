@@ -134,7 +134,7 @@ public class Table extends JTable implements MouseListener, ActionListener {
 		MoneyRenderer rMoney = new MoneyRenderer();
 		MoneyEditor eMoney = new MoneyEditor(new MoneyField());
 		DecimalRenderer rDecimal = new DecimalRenderer();
-		DecimalEditor eDecimal = new DecimalEditor(new DecimalField());
+		DecimalEditor eDecimal = new DecimalEditor(new DecimalField(2));
 		PercentRenderer rPercent = new PercentRenderer();
 		PercentEditor ePercent = new PercentEditor(new PercentField());
 		StringEditor eString = new StringEditor(new StringField());

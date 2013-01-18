@@ -72,7 +72,7 @@ public class ObjectToDecimal implements JavaDynamicTypeConverter {
 		// MONEY_NONNEGATIVE_11_2.
 		if (valueToConvert instanceof String) {
 			String stringValue = (String) valueToConvert;
-			rVal = new Decimal(stringValue);
+			rVal = new Decimal(stringValue, 2);
 		} else {
 			throw new JavaTypeTranslatorException(
 					"internal error parsing value");
