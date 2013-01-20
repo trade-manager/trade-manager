@@ -68,8 +68,7 @@ public class TradeAppFrame extends JFrame {
 			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 			this.pack();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 
@@ -81,6 +80,7 @@ public class TradeAppFrame extends JFrame {
 			TradeAppLoadConfig.loadAppProperties();
 
 		} catch (Exception e) {
+			System.exit(0);
 		}
 	}
 

@@ -35,7 +35,6 @@
  */
 package org.trade.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
@@ -50,12 +49,10 @@ import org.trade.ui.base.WaitCursorEventQueue;
  * @version $Revision: 1.0 $
  */
 public class TradeAppMain {
-	BorderLayout borderLayout1 = new BorderLayout();
-	TradeAppFrame frame = null;
 
 	// Construct the application
 	public TradeAppMain() {
-		frame = new TradeAppFrame();
+		TradeAppFrame frame = new TradeAppFrame();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double appWidth = screenSize.getWidth() * 0.9;
 		double appHieght = screenSize.getHeight() * 0.9;
