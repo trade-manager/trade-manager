@@ -342,10 +342,10 @@ public class StrategyData extends Worker {
 		this.currentBaseCandleCount = -1;
 		this.lastBaseCandleProcessed = this.currentBaseCandleCount;
 		clearChartDatasets();
-		getBaseCandleSeries().clear();		
+		getBaseCandleSeries().clear();
 	}
 
-	public void clearChartDatasets() {		
+	public void clearChartDatasets() {
 		for (IndicatorDataset indicator : indicators) {
 			if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
 				indicator.clear();

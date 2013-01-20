@@ -99,7 +99,11 @@ import org.trade.ui.strategy.StrategyPanel;
 import org.trade.ui.tradingday.TradingdayPanel;
 
 /**
- * Apps main controller.
+ * Apps main controller. This controller controls the main application. i.e.
+ * Main menu and main tool bar buttons. All menu/tool bar function are handled
+ * here if they are common to the whole application e.g. Get Data/Run Strategy.
+ * Otherwise they are handled in the controller of the individual Tab e.g.
+ * Save/Search.
  */
 public class TradeMainControllerPanel extends TabbedAppPanel implements
 		BrokerChangeListener, StrategyChangeListener {
@@ -108,11 +112,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradeMainControllerPanel.class);
-	private TradeMainPanelMenu m_menuBar = null;
-	protected static TradeMainControllerPanel m_instance = null;
 
 	private static Tradingdays m_tradingdays = null;
-
 	private BrokerModel m_brokerModel = null;
 	private PersistentModel m_tradePersistentModel = null;
 	private BrokerDataRequestProgressMonitor brokerDataRequestProgressMonitor = null;
@@ -139,9 +140,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public TradeMainControllerPanel(Frame frame) {
 		super(frame);
 		try {
-			m_menuBar = new TradeMainPanelMenu(this);
-			setMenu(m_menuBar);
-			/* This is always true as main panel needs to receive all events */
+
+			/*
+			 * Create the customized application Menu/Tool Bar.
+			 */
+			setMenu(new TradeMainPanelMenu(this));
+			/*
+			 * This allows the main controller to receive all events as it is
+			 * allways considered selected.
+			 */
 			setSelected(true);
 			m_tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
@@ -159,7 +166,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getPropAsString("trade.strategy.default.dir");
 			dynacode = new DynamicCode();
 			dynacode.addSourceDir(new File(strategyDir));
-			
+
 			/**
 			 * Constructs a new Trading tab that contains all information
 			 * related to the tradeingday i.e. which strategy to trade, contract
@@ -214,7 +221,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.addTab("Portfolio", portfolioPanel);
 			this.addTab("Configuration", configurationPanel);
 			this.addTab("Strategies", strategyPanel);
-
+			this.setSelectPanel(tradingdayPanel);
 			simulatedMode(true);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
@@ -1387,23 +1394,23 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            BasePanel
 	 */
 	public void tabChanged(BasePanel currBasePanel, BasePanel newBasePanel) {
-		this.m_menuBar.setEnabledDelete(false, "Delete all Order");
-		this.m_menuBar.setEnabledRunStrategy(false);
-		this.m_menuBar.setEnabledBrokerData(false);
-		this.m_menuBar.setEnabledTestStrategy(false);
+		getMenu().setEnabledDelete(false, "Delete all Order");
+		getMenu().setEnabledRunStrategy(false);
+		getMenu().setEnabledBrokerData(false);
+		getMenu().setEnabledTestStrategy(false);
 		if (tradingdayPanel == newBasePanel) {
 			if (null == brokerDataRequestProgressMonitor
 					|| brokerDataRequestProgressMonitor.isDone()) {
-				this.m_menuBar.setEnabledDelete(true, "Delete all Order");
+				getMenu().setEnabledDelete(true, "Delete all Order");
 				if (m_brokerModel.isConnected()) {
-					this.m_menuBar.setEnabledRunStrategy(true);
+					getMenu().setEnabledRunStrategy(true);
 				} else {
-					this.m_menuBar.setEnabledTestStrategy(true);
+					getMenu().setEnabledTestStrategy(true);
 				}
-				this.m_menuBar.setEnabledBrokerData(true);
+				getMenu().setEnabledBrokerData(true);
 			}
 		} else if (strategyPanel == newBasePanel) {
-			this.m_menuBar.setEnabledDelete(true, "Delete rule");
+			getMenu().setEnabledDelete(true, "Delete rule");
 		}
 	}
 
@@ -1543,12 +1550,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.setStatusBarMessage("Runing strategy please wait ...\n",
 					BasePanel.INFORMATION);
 			if (m_brokerModel.isConnected()) {
-				m_menuBar.setEnabledBrokerData(false);
-				m_menuBar.setEnabledRunStrategy(false);
+				getMenu().setEnabledBrokerData(false);
+				getMenu().setEnabledRunStrategy(false);
 			} else {
-				m_menuBar.setEnabledTestStrategy(false);
+				getMenu().setEnabledTestStrategy(false);
 			}
-			m_menuBar.setEnabledSearchDeleteRefreshSave(false);
+			getMenu().setEnabledSearchDeleteRefreshSave(false);
 			tradingdayPanel.cleanStrategyWorker();
 			/*
 			 * Now run a thread that gets and saves historical data from IB TWS.
@@ -1650,15 +1657,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 * doError()
 				 */
 				m_brokerModel.addMessageListener(this);
-				m_menuBar.setEnabledBrokerData(true);
-				m_menuBar.setEnabledRunStrategy(false);
-				m_menuBar.setEnabledTestStrategy(true);
+				getMenu().setEnabledBrokerData(true);
+				getMenu().setEnabledRunStrategy(false);
+				getMenu().setEnabledTestStrategy(true);
 				this.setStatusBarMessage("Running in simulated mode",
 						BasePanel.INFORMATION);
 			} else {
-				m_menuBar.setEnabledBrokerData(true);
-				m_menuBar.setEnabledRunStrategy(true);
-				m_menuBar.setEnabledTestStrategy(false);
+				getMenu().setEnabledBrokerData(true);
+				getMenu().setEnabledRunStrategy(true);
+				getMenu().setEnabledTestStrategy(false);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error running Simulated Mode.",
@@ -1678,13 +1685,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			tradingdayPanel.doRefresh(tradingday);
 		}
 		if (m_brokerModel.isConnected()) {
-			m_menuBar.setEnabledBrokerData(true);
-			m_menuBar.setEnabledRunStrategy(true);
+			getMenu().setEnabledBrokerData(true);
+			getMenu().setEnabledRunStrategy(true);
 		} else {
-			m_menuBar.setEnabledTestStrategy(true);
+			getMenu().setEnabledTestStrategy(true);
 			tradingdayPanel.cleanStrategyWorker();
 		}
-		m_menuBar.setEnabledSearchDeleteRefreshSave(true);
+		getMenu().setEnabledSearchDeleteRefreshSave(true);
+	}
+
+	public static TradeMainPanelMenu getMenu() {
+		return (TradeMainPanelMenu) TabbedAppPanel.getMenu();
 	}
 
 	/**

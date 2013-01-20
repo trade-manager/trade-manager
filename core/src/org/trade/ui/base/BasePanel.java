@@ -65,13 +65,13 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 	private final static Logger _log = LoggerFactory.getLogger(BasePanel.class);
 
-	private static final int CLEAR = 0;
 	public static final int INFORMATION = 1;
 	public static final int WARNING = 2;
 	public static final int ERROR = 3;
 
+	private static final int CLEAR = 0;
 	private static BasePanelMenu menuBar = null;
-	private Frame m_frame = null;
+	private static Frame m_frame = null;
 	private static JTextField m_statusBar = null;
 	private static JProgressBar m_progressBar = null;
 	private boolean m_isSelected = false;
@@ -131,7 +131,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	 * 
 	 * @return JProgressBar
 	 */
-	public JProgressBar getProgressBar() {
+	public static JProgressBar getProgressBar() {
 		return m_progressBar;
 	}
 
@@ -288,7 +288,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	 * @param menu
 	 *            BasePanelMenu
 	 */
-	public void setMenu(BasePanelMenu menu) {
+	public void setMenu(final BasePanelMenu menu) {
 		menuBar = menu;
 	}
 

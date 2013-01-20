@@ -38,12 +38,9 @@ package org.trade.ui;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-
-import org.trade.core.properties.ConfigProperties;
 
 /**
  */
@@ -54,22 +51,13 @@ public class TradeAppFrame extends JFrame {
 
 	public TradeAppFrame() {
 		super();
-		try {
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			mainPanel = new TradeMainControllerPanel(this);
-			this.setTitle(ConfigProperties
-					.getPropAsString("component.name.base")
-					+ " "
-					+ ConfigProperties
-							.getPropAsString("component.name.version"));
-
-			enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-			this.setLocationRelativeTo(null);
-			this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-			this.pack();
-		} catch (IOException e) {
-			System.exit(0);
-		}
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainPanel = new TradeMainControllerPanel(this);
+		this.setTitle("Trade Manager");
+		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+		this.setLocationRelativeTo(null);
+		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+		this.pack();
 	}
 
 	static {

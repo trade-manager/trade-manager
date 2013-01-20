@@ -284,7 +284,7 @@ public class TradelogSummaryTableModel extends TableModel {
 
 		newRow.addElement(element.getPeriod());
 		newRow.addElement(new Percent(element.getBattingAverage()));
-		newRow.addElement(new Decimal(element.getSimpleSharpeRatio(),2));
+		newRow.addElement(new Decimal(element.getSimpleSharpeRatio(), 2));
 		newRow.addElement(new Money(element.getGrossProfitLoss()));
 		newRow.addElement(new Quantity(element.getQuantity()));
 		newRow.addElement(new Money(element.getCommission()));
