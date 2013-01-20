@@ -159,6 +159,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getPropAsString("trade.strategy.default.dir");
 			dynacode = new DynamicCode();
 			dynacode.addSourceDir(new File(strategyDir));
+			
 			/**
 			 * Constructs a new Trading tab that contains all information
 			 * related to the tradeingday i.e. which strategy to trade, contract
@@ -228,7 +229,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 
 	public void doOpen() {
-
 	}
 
 	/**

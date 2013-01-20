@@ -50,7 +50,7 @@ import org.trade.core.properties.ConfigProperties;
 public class TradeAppFrame extends JFrame {
 	private static final long serialVersionUID = -206248291070367944L;
 
-	TradeMainControllerPanel mainPanel = null;
+	private TradeMainControllerPanel mainPanel = null;
 
 	public TradeAppFrame() {
 		super();
