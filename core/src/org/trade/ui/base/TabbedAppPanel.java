@@ -301,14 +301,16 @@ public abstract class TabbedAppPanel extends BasePanel implements
 		if (evt.getSource() instanceof JTabbedPane) {
 			JTabbedPane selectedTab = (JTabbedPane) evt.getSource();
 			BasePanel prevBasePanel = null;
+			if (null == currBasePanel) {
+				currBasePanel = (BasePanel) selectedTab.getSelectedComponent();
+				currBasePanel.setSelected(true);
+			}
 			if (selectedTab.isShowing()) {
 				// switch current frame
-				if (null != currBasePanel) {
-					prevBasePanel = currBasePanel;
-					if (!currBasePanel.doWindowDeActivated()) {
-						setSelectPanel(currentTab);
-						return;
-					}
+				prevBasePanel = currBasePanel;
+				if (!currBasePanel.doWindowDeActivated()) {
+					setSelectPanel(currentTab);
+					return;
 				}
 
 				((BasePanel) selectedTab.getComponent(currentTab))
