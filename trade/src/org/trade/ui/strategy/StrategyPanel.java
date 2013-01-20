@@ -132,6 +132,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 */
 	public StrategyPanel(PersistentModel tradePersistentModel) {
 		try {
+			getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
 			this.tradePersistentModel = tradePersistentModel;
 			colorRedAttr = new SimpleAttributeSet();

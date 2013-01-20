@@ -172,6 +172,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public TradingdayPanel(Tradingdays tradingdays, BasePanel controller,
 			PersistentModel tradePersistentModel) {
 		try {
+			getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
 
 			m_tradingdays = tradingdays;
@@ -386,23 +387,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	}
 
 	public void doWindowOpen() {
-		try {
-			doSearch();
-			if (m_tradingdays.getTradingdays().isEmpty()) {
-				m_tradingdays.add(Tradingday.newInstance(TradingCalendar
-						.getMostRecentTradingDay(new Date())));
-				m_tradingdayModel.setData(m_tradingdays);
-				if (m_tradingdays.getTradingdays().size() > 0) {
-					m_tradingdayTable.setRowSelectionInterval(0, 0);
-				}
-			}
-		} catch (Exception ex) {
-			this.setErrorMessage("Error opening window.", ex.getMessage(), ex);
-		}
 	}
 
 	public void doWindowClose() {
-
 	}
 
 	/**

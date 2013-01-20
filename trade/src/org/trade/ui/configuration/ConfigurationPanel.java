@@ -120,12 +120,13 @@ public class ConfigurationPanel extends BasePanel {
 	@SuppressWarnings("unchecked")
 	public ConfigurationPanel(PersistentModel tradePersistentModel) {
 		try {
-
+			getMenu().addMessageListener(this);
+			this.setLayout(new BorderLayout());
 			/*
 			 * Initialize the ValueType decode tables. This caused the tables to
 			 * be cached.
 			 */
-			this.setLayout(new BorderLayout());
+
 			DAOEntryLimit.newInstance();
 			m_tradePersistentModel = tradePersistentModel;
 			m_jScrollPane = new JScrollPane();

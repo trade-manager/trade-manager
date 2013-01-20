@@ -108,9 +108,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradeMainControllerPanel.class);
-	public static String title = null;
-	public static String version = null;
-	public static String date = null;
 	private TradeMainPanelMenu m_menuBar = null;
 	protected static TradeMainControllerPanel m_instance = null;
 
@@ -146,95 +143,83 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			setMenu(m_menuBar);
 			/* This is always true as main panel needs to receive all events */
 			setSelected(true);
-			title = ConfigProperties.getPropAsString("component.name.base");
-			version = ConfigProperties
-					.getPropAsString("component.name.version");
-			date = ConfigProperties.getPropAsString("component.name.date");
 			m_tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
+			Tradingday tradingday = Tradingday.newInstance(TradingCalendar
+					.getMostRecentTradingDay(new Date()));
+			Tradingday todayTradingday = m_tradePersistentModel
+					.findTradingdayByOpenCloseDate(tradingday.getOpen(),
+							tradingday.getClose());
+			if (null != todayTradingday)
+				tradingday = todayTradingday;
 			m_tradingdays = new Tradingdays();
-			m_tradingdays.add(Tradingday.newInstance(TradingCalendar
-					.getMostRecentTradingDay(new Date())));
+			m_tradingdays.add(tradingday);
 			String strategyDir = ConfigProperties
 					.getPropAsString("trade.strategy.default.dir");
 			dynacode = new DynamicCode();
 			dynacode.addSourceDir(new File(strategyDir));
+			/**
+			 * Constructs a new Trading tab that contains all information
+			 * related to the tradeingday i.e. which strategy to trade, contract
+			 * information whether to trade. This is the tab used to load
+			 * contracts and decide how to trade them.
+			 * 
+			 */
+
+			tradingdayPanel = new TradingdayPanel(m_tradingdays, this,
+					m_tradePersistentModel);
+			/**
+			 * Constructs a new Contract tab that contains all information
+			 * related to the Tradestrategy i.e. charts, Orders for a particular
+			 * trading day.
+			 * 
+			 */
+
+			contractPanel = new ContractPanel(m_tradingdays, this,
+					m_tradePersistentModel);
+
+			/**
+			 * Constructs a new Portfolio tab that contains all information
+			 * related to a portfolio. This tab allows you to see the results of
+			 * trading activity. It records the summary information for each
+			 * month i.e. Batting avg, Simple Sharpe ratio and P/L information.
+			 * 
+			 */
+
+			portfolioPanel = new PortfolioPanel(this, m_tradePersistentModel);
+
+			/**
+			 * Constructs a new Configuration tab that contains all information
+			 * related to configuration of Default entry parms, strategies,
+			 * indicators, accounts.
+			 * 
+			 */
+
+			configurationPanel = new ConfigurationPanel(m_tradePersistentModel);
+
+			/**
+			 * Constructs a new Strategy tab that contains all information
+			 * related to a Strategy. This tab allows you to see the java code
+			 * of a strategy. It will be replaced in the future with Drools and
+			 * this will be where you can edit the strategies and deploy them.
+			 * 
+			 */
+
+			strategyPanel = new StrategyPanel(m_tradePersistentModel);
+
+			this.addTab("Tradingday", tradingdayPanel);
+			this.addTab("Contract Details", contractPanel);
+			this.addTab("Portfolio", portfolioPanel);
+			this.addTab("Configuration", configurationPanel);
+			this.addTab("Strategies", strategyPanel);
+
 			simulatedMode(true);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
 					ex.getMessage(), ex);
 			System.exit(0);
 		}
-	}
-
-	/**
-	 * Constructs a new Trading tab that contains all information related to the
-	 * tradeingday i.e. which strategy to trade, contract information whether to
-	 * trade. This is the tab used to load contracts and decide how to trade
-	 * them.
-	 * 
-	 */
-
-	public void openTradingdayView() {
-		tradingdayPanel = new TradingdayPanel(m_tradingdays, this,
-				m_tradePersistentModel);
-		getMenu().addMessageListener(tradingdayPanel);
-		this.addTab("Tradingday", tradingdayPanel);
-	}
-
-	/**
-	 * Constructs a new Contract tab that contains all information related to
-	 * the Tradestrategy i.e. charts, Orders for a particular trading day.
-	 * 
-	 */
-
-	public void openContractView() {
-		contractPanel = new ContractPanel(m_tradingdays, this,
-				m_tradePersistentModel);
-		getMenu().addMessageListener(contractPanel);
-		this.addTab("Contract Details", contractPanel);
-	}
-
-	/**
-	 * Constructs a new Portfolio tab that contains all information related to a
-	 * portfolio. This tab allows you to see the results of trading activity. It
-	 * records the summary information for each month i.e. Batting avg, Simple
-	 * Sharpe ratio and P/L information.
-	 * 
-	 */
-
-	public void openPortfolioView() {
-		portfolioPanel = new PortfolioPanel(this, m_tradePersistentModel);
-		getMenu().addMessageListener(portfolioPanel);
-		this.addTab("Portfolio", portfolioPanel);
-	}
-
-	/**
-	 * Constructs a new Configuration tab that contains all information related
-	 * to configuration of Default entry parms, strategies, indicators,
-	 * accounts.
-	 * 
-	 */
-
-	public void openConfigurationView() {
-		configurationPanel = new ConfigurationPanel(m_tradePersistentModel);
-		getMenu().addMessageListener(configurationPanel);
-		this.addTab("Configuration", configurationPanel);
-	}
-
-	/**
-	 * Constructs a new Strategy tab that contains all information related to a
-	 * Strategy. This tab allows you to see the java code of a strategy. It will
-	 * be replaced in the future with Drools and this will be where you can edit
-	 * the strategies and deploy them.
-	 * 
-	 */
-
-	public void openStrategyView() {
-		strategyPanel = new StrategyPanel(m_tradePersistentModel);
-		getMenu().addMessageListener(strategyPanel);
-		this.addTab("Strategies", strategyPanel);
 	}
 
 	/**
@@ -850,11 +835,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		try {
 			StringBuffer message = new StringBuffer();
 			message.append("Product version: ");
-			message.append(TradeMainControllerPanel.version);
+			message.append(ConfigProperties
+					.getPropAsString("component.name.version"));
 			message.append("\nBuild Label:     ");
-			message.append(TradeMainControllerPanel.title);
+			message.append(ConfigProperties
+					.getPropAsString("component.name.base"));
 			message.append("\nBuild Time:      ");
-			message.append(TradeMainControllerPanel.date);
+			message.append(ConfigProperties
+					.getPropAsString("component.name.date"));
 			JOptionPane.showMessageDialog(this, message, "About Help",
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ex) {

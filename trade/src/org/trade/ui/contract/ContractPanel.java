@@ -156,6 +156,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			PersistentModel tradePersistentModel) {
 
 		try {
+			getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
 			m_tradePersistentModel = tradePersistentModel;
 			m_tradingdays = tradingdays;

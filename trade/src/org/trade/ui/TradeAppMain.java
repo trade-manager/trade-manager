@@ -56,7 +56,6 @@ public class TradeAppMain {
 	// Construct the application
 	public TradeAppMain() {
 		frame = new TradeAppFrame();
-
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double appWidth = screenSize.getWidth() * 0.9;
 		double appHieght = screenSize.getHeight() * 0.9;
@@ -75,11 +74,6 @@ public class TradeAppMain {
 		frame.validate();
 		frame.repaint();
 		frame.setVisible(true);
-		frame.mainPanel.openTradingdayView();
-		frame.mainPanel.openContractView();
-		frame.mainPanel.openPortfolioView();
-		frame.mainPanel.openConfigurationView();
-		frame.mainPanel.openStrategyView();
 
 		EventQueue waitQue = new WaitCursorEventQueue(500);
 		Toolkit.getDefaultToolkit().getSystemEventQueue().push(waitQue);

@@ -126,8 +126,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	public PortfolioPanel(BasePanel controller,
 			PersistentModel tradePersistentModel) {
 		try {
+			getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
-
 			m_tradePersistentModel = tradePersistentModel;
 			m_csvDefaultDir = ConfigProperties
 					.getPropAsString("trade.csv.default.dir");

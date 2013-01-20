@@ -70,7 +70,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	public static final int WARNING = 2;
 	public static final int ERROR = 3;
 
-	private BasePanelMenu menuBar = null;
+	private static BasePanelMenu menuBar = null;
 	private Frame m_frame = null;
 	private static JTextField m_statusBar = null;
 	private static JProgressBar m_progressBar = null;
@@ -278,7 +278,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	 * 
 	 * @return BasePanelMenu
 	 */
-	public BasePanelMenu getMenu() {
+	public static BasePanelMenu getMenu() {
 		return menuBar;
 	}
 
