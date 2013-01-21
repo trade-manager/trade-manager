@@ -56,8 +56,7 @@ public class TradeAppFrame extends JFrame {
 		this.setTitle("Trade Manager");
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		this.setLocationRelativeTo(null);
-		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-		this.pack();
+		this.getContentPane().add(mainPanel, BorderLayout.CENTER);		
 	}
 
 	static {

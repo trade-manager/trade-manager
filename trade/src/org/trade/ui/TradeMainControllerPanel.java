@@ -43,6 +43,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -223,9 +224,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.addTab("Strategies", strategyPanel);
 			this.setSelectPanel(tradingdayPanel);
 			simulatedMode(true);
-		} catch (Exception ex) {
-			this.setErrorMessage("Error During Initialization.",
+		} catch (IOException ex) {
+			this.setErrorMessage(
+					"Error During Initialization. Please make sure config.properties file is in the root dir.",
 					ex.getMessage(), ex);
+			System.exit(0);
+		} catch (Exception ex1) {
+			this.setErrorMessage("Error During Initialization.",
+					ex1.getMessage(), ex1);
 			System.exit(0);
 		}
 	}

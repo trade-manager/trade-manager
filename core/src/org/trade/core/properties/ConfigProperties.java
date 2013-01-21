@@ -106,6 +106,9 @@ public class ConfigProperties {
 					System.getProperty(ENVIRONMENT_VARIABLE_CONTAINING_INSTALLATION_HOME),
 					ENVIRONMENT_VARIABLE_PROPERTY_FILE);
 			filename = file.toString();
+			if (!file.exists()) {
+				filename = filename + " does not exits.";
+			}
 		} catch (Throwable e) {
 			// do nothing as we are an applet !!!
 
@@ -356,7 +359,8 @@ public class ConfigProperties {
 			throw new PropertyNotFoundException("The property \"" + key
 					+ "\" was not found in the property file \""
 					+ getDeploymentPropertyFileName() + "\" or \""
-					+ getSystemPropertyFileName() + "\".  Check the file.");
+					+ getSystemPropertyFileName()
+					+ "\". \n Check the file is in the applications root dir.");
 		}
 
 		return ret;
