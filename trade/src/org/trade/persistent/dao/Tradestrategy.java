@@ -496,8 +496,6 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 			if (this.datasetContainer.isRunning())
 				this.datasetContainer.cancel();
 		}
-		if (null == datasetContainer)
-			this.getDatasetContainer().clearBaseCandleSeries();
 		this.datasetContainer = datasetContainer;
 	}
 
