@@ -166,15 +166,18 @@ public class StrategyData extends Worker {
 						CandleItem candle = (CandleItem) this
 								.getBaseCandleSeries().getDataItem(
 										this.lastBaseCandleProcessed);
-						this.getBaseCandleSeries().updatePercentChanged(candle);
-						updateDatasetSeries(candle);
-						/*
-						 * Fire the change to the base series now the chart
-						 * candle series has been updated and all the indicators
-						 * are up to date. Note the strategies listen to the
-						 * base candle series.
-						 */
-						this.getBaseCandleSeries().fireSeriesChanged();
+						synchronized (this.getBaseCandleSeries()) {
+							this.getBaseCandleSeries().updatePercentChanged(
+									candle);
+							updateDatasetSeries(candle);
+							/*
+							 * Fire the change to the base series now the chart
+							 * candle series has been updated and all the
+							 * indicators are up to date. Note the strategies
+							 * listen to the base candle series.
+							 */
+							this.getBaseCandleSeries().fireSeriesChanged();
+						}
 					}
 				}
 
@@ -261,8 +264,8 @@ public class StrategyData extends Worker {
 	 *            int
 	 * @return int
 	 */
-	public synchronized int buildCandle(Date time, double open, double high,
-			double low, double close, long volume, double vwap, int tradeCount,
+	public int buildCandle(Date time, double open, double high, double low,
+			double close, long volume, double vwap, int tradeCount,
 			int rollupInterval) {
 
 		this.currentBaseCandleCount = this.getBaseCandleSeries().buildCandle(
@@ -294,14 +297,16 @@ public class StrategyData extends Worker {
 			 */
 			CandleItem candle = (CandleItem) this.getBaseCandleSeries()
 					.getDataItem(this.currentBaseCandleCount);
-			this.getBaseCandleSeries().updatePercentChanged(candle);
-			updateDatasetSeries(candle);
-			/*
-			 * Fire the change to the base series now the chart candle series
-			 * has been updated and all the indicators are up to date. Note the
-			 * strategies listen to the base candle series.
-			 */
-			this.getBaseCandleSeries().fireSeriesChanged();
+			synchronized (this.getBaseCandleSeries()) {
+				this.getBaseCandleSeries().updatePercentChanged(candle);
+				updateDatasetSeries(candle);
+				/*
+				 * Fire the change to the base series now the chart candle
+				 * series has been updated and all the indicators are up to
+				 * date. Note the strategies listen to the base candle series.
+				 */
+				this.getBaseCandleSeries().fireSeriesChanged();
+			}
 		}
 		return this.currentBaseCandleCount;
 	}
@@ -315,24 +320,30 @@ public class StrategyData extends Worker {
 	 * @param candle
 	 *            CandleItem
 	 */
-	private synchronized void updateDatasetSeries(CandleItem candle) {
+	private void updateDatasetSeries(CandleItem candle) {
 
 		for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
 			CandleSeries series = getCandleDataset().getSeries(i);
-			series.buildCandle(candle.getLastUpdateDate(), candle.getOpen(),
-					candle.getHigh(), candle.getLow(), candle.getClose(),
-					candle.getVolume(), candle.getVwap(), candle.getCount(),
-					series.getBarSize() / getBaseCandleSeries().getBarSize());
-			for (IndicatorDataset indicator : indicators) {
-				/*
-				 * CandleSeries are only updated via the API i.e. these are not
-				 * true indicators and are shared across Data-sets.
-				 */
-				if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
-					indicator.updateDataset(getCandleDataset(), i);
+			synchronized (series) {
+
+				series.buildCandle(candle.getLastUpdateDate(),
+						candle.getOpen(), candle.getHigh(), candle.getLow(),
+						candle.getClose(), candle.getVolume(),
+						candle.getVwap(), candle.getCount(),
+						series.getBarSize()
+								/ getBaseCandleSeries().getBarSize());
+				for (IndicatorDataset indicator : indicators) {
+					/*
+					 * CandleSeries are only updated via the API i.e. these are
+					 * not true indicators and are shared across Data-sets.
+					 */
+					if (!IndicatorSeries.CandleSeries.equals(indicator
+							.getType(0))) {
+						indicator.updateDataset(getCandleDataset(), i);
+					}
 				}
+				series.fireSeriesChanged();
 			}
-			series.fireSeriesChanged();
 		}
 	}
 
