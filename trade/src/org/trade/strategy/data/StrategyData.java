@@ -261,8 +261,8 @@ public class StrategyData extends Worker {
 	 *            int
 	 * @return int
 	 */
-	public int buildCandle(Date time, double open, double high, double low,
-			double close, long volume, double vwap, int tradeCount,
+	public synchronized int buildCandle(Date time, double open, double high,
+			double low, double close, long volume, double vwap, int tradeCount,
 			int rollupInterval) {
 
 		this.currentBaseCandleCount = this.getBaseCandleSeries().buildCandle(
@@ -336,7 +336,7 @@ public class StrategyData extends Worker {
 		}
 	}
 
-	public void clearBaseCandleSeries() {
+	public synchronized void clearBaseCandleSeries() {
 		if (this.isRunning())
 			this.cancel();
 		this.currentBaseCandleCount = -1;

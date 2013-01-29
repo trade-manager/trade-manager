@@ -1380,39 +1380,46 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 					case TickType.LAST: {
 
-						// for (Tradestrategy tradestrategy : contract
-						// .getTradestrategies()) {
-						// StrategyData datasetContainer = tradestrategy
-						// .getDatasetContainer();
-						// if (datasetContainer.getBaseCandleSeries()
-						// .getItemCount() > 0) {
-						// CandleItem candle = (CandleItem) datasetContainer
-						// .getBaseCandleSeries().getDataItem(
-						// datasetContainer
-						// .getBaseCandleSeries()
-						// .getItemCount() - 1);
-						// if (contract.getLastAskPrice().doubleValue() > 0
-						// && contract.getLastBidPrice()
-						// .doubleValue() > 0
-						// && (value <= contract.getLastAskPrice()
-						// .doubleValue() && value >= contract
-						// .getLastBidPrice()
-						// .doubleValue())) {
-						// if ((value > candle.getHigh() || value < candle
-						// .getLow())) {
-						// candle.setClose(value);
-						// datasetContainer.getBaseCandleSeries()
-						// .fireSeriesChanged();
-						// _log.info("TickPrice Symbol: "
-						// + tradestrategy.getContract()
-						// .getSymbol() + " "
-						// + TickType.getField(field)
-						// + " : " + value);
-						// }
-						//
-						// }
-						// }
-						// }
+//						for (Tradestrategy tradestrategy : contract
+//								.getTradestrategies()) {
+//							StrategyData datasetContainer = tradestrategy
+//									.getDatasetContainer();
+//							synchronized (datasetContainer) {
+//								if (datasetContainer.getBaseCandleSeries()
+//										.getItemCount() > 0) {
+//									CandleItem candle = (CandleItem) datasetContainer
+//											.getBaseCandleSeries()
+//											.getDataItem(
+//													datasetContainer
+//															.getBaseCandleSeries()
+//															.getItemCount() - 1);
+//									if (contract.getLastAskPrice()
+//											.doubleValue() > 0
+//											&& contract.getLastBidPrice()
+//													.doubleValue() > 0
+//											&& (value <= contract
+//													.getLastAskPrice()
+//													.doubleValue() && value >= contract
+//													.getLastBidPrice()
+//													.doubleValue())) {
+//										if ((value > candle.getHigh() || value < candle
+//												.getLow())) {
+//											candle.setClose(value);
+//											datasetContainer
+//													.getBaseCandleSeries()
+//													.fireSeriesChanged();
+//											_log.info("TickPrice Symbol: "
+//													+ tradestrategy
+//															.getContract()
+//															.getSymbol() + " "
+//													+ TickType.getField(field)
+//													+ " : " + value);
+//										}
+//
+//									}
+//								}
+//							}
+//						}
 
 						break;
 					}
@@ -1446,11 +1453,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				// if (m_realTimeBarsRequests.containsKey(new Integer(reqId))) {
 				// Contract contract = m_realTimeBarsRequests.get(reqId);
-				// synchronized (contract) {
+				//
 				// for (Tradestrategy tradestrategy : contract
 				// .getTradestrategies()) {
 				// StrategyData datasetContainer = tradestrategy
 				// .getDatasetContainer();
+				// synchronized (datasetContainer) {
 				// if (datasetContainer.getBaseCandleSeries()
 				// .getItemCount() > 0) {
 				// CandleItem candle = (CandleItem) datasetContainer
@@ -1552,33 +1560,37 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								StrategyData datasetContainer = tradestrategy
 										.getDatasetContainer();
 
-								int index = datasetContainer
-										.getBaseCandleSeries().indexOf(time);
-								if (index > 0) {
-									CandleItem candle = (CandleItem) datasetContainer
-											.getBaseCandleSeries().getDataItem(
-													index);
-									if (contract.getLastAskPrice()
-											.doubleValue() > 0
-											&& contract.getLastBidPrice()
-													.doubleValue() > 0
-											&& (price <= contract
-													.getLastAskPrice()
-													.doubleValue() && price >= contract
-													.getLastBidPrice()
-													.doubleValue())) {
+								synchronized (datasetContainer) {
+									int index = datasetContainer
+											.getBaseCandleSeries()
+											.indexOf(time);
+									if (index > 0) {
+										CandleItem candle = (CandleItem) datasetContainer
+												.getBaseCandleSeries()
+												.getDataItem(index);
+										if (contract.getLastAskPrice()
+												.doubleValue() > 0
+												&& contract.getLastBidPrice()
+														.doubleValue() > 0
+												&& (price <= contract
+														.getLastAskPrice()
+														.doubleValue() && price >= contract
+														.getLastBidPrice()
+														.doubleValue())) {
 
-										if (price > 0
-												&& (price > candle.getHigh() || price < candle
-														.getLow())) {
-											candle.setClose(price);
-											datasetContainer
-													.getBaseCandleSeries()
-													.fireSeriesChanged();
-											// _log.info("TickString Symbol: "
-											// + contract.getSymbol()
-											// + " Trade Time: " + time
-											// + " Price: " + price);
+											if (price > 0
+													&& (price > candle
+															.getHigh() || price < candle
+															.getLow())) {
+												candle.setClose(price);
+												datasetContainer
+														.getBaseCandleSeries()
+														.fireSeriesChanged();
+												// _log.info("TickString Symbol: "
+												// + contract.getSymbol()
+												// + " Trade Time: " + time
+												// + " Price: " + price);
+											}
 										}
 									}
 								}
@@ -2228,6 +2240,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						if (TradingCalendar.isMarketHours(tradestrategy
 								.getTradingday().getOpen(), tradestrategy
 								.getTradingday().getClose(), date)) {
+
 							int dataItemIndex = datasetContainer.buildCandle(
 									date, open, high, low, close, volume, vwap,
 									tradeCount,
