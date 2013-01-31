@@ -68,6 +68,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	public static final int INFORMATION = 1;
 	public static final int WARNING = 2;
 	public static final int ERROR = 3;
+	public static final int PROGRESS = 4;
 
 	private static final int CLEAR = 0;
 	private static BasePanelMenu menuBar = null;
@@ -152,22 +153,25 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 		case 0: {
 			m_statusBar.setBackground(Color.white);
 			m_statusBar.setText("");
-
 			break;
 		}
 		case 1: {
+			_log.info(message);
 			m_statusBar.setBackground(Color.green);
-
 			break;
 		}
 		case 2: {
+			_log.warn(message);
 			m_statusBar.setBackground(Color.yellow);
-
 			break;
 		}
 		case 3: {
+			_log.error(message);
 			m_statusBar.setBackground(Color.red);
-
+			break;
+		}
+		case 4: {
+			m_statusBar.setBackground(Color.yellow);
 			break;
 		}
 		default: {
@@ -303,7 +307,6 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	 *            Exception
 	 */
 	public void setErrorMessage(String title, String message, Exception ex) {
-		_log.error(message, ex);
 		this.setStatusBarMessage(message, ERROR);
 		JOptionPane.showMessageDialog(getFrame(), message
 				+ " See log for details.", title, JOptionPane.ERROR_MESSAGE);

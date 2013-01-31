@@ -1121,7 +1121,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		getProgressBar().setValue(progress);
 		if (getProgressBar().getMaximum() > 0) {
 			String message = String.format("Completed %d%%.\n", progress);
-			setStatusBarMessage(message, BasePanel.WARNING);
+			setStatusBarMessage(message, BasePanel.PROGRESS);
 		}
 
 		if (worker.isDone() || (progress == 100)) {

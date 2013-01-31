@@ -1380,46 +1380,46 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 					case TickType.LAST: {
 
-//						for (Tradestrategy tradestrategy : contract
-//								.getTradestrategies()) {
-//							StrategyData datasetContainer = tradestrategy
-//									.getDatasetContainer();
-//							synchronized (datasetContainer) {
-//								if (datasetContainer.getBaseCandleSeries()
-//										.getItemCount() > 0) {
-//									CandleItem candle = (CandleItem) datasetContainer
-//											.getBaseCandleSeries()
-//											.getDataItem(
-//													datasetContainer
-//															.getBaseCandleSeries()
-//															.getItemCount() - 1);
-//									if (contract.getLastAskPrice()
-//											.doubleValue() > 0
-//											&& contract.getLastBidPrice()
-//													.doubleValue() > 0
-//											&& (value <= contract
-//													.getLastAskPrice()
-//													.doubleValue() && value >= contract
-//													.getLastBidPrice()
-//													.doubleValue())) {
-//										if ((value > candle.getHigh() || value < candle
-//												.getLow())) {
-//											candle.setClose(value);
-//											datasetContainer
-//													.getBaseCandleSeries()
-//													.fireSeriesChanged();
-//											_log.info("TickPrice Symbol: "
-//													+ tradestrategy
-//															.getContract()
-//															.getSymbol() + " "
-//													+ TickType.getField(field)
-//													+ " : " + value);
-//										}
-//
-//									}
-//								}
-//							}
-//						}
+						// for (Tradestrategy tradestrategy : contract
+						// .getTradestrategies()) {
+						// StrategyData datasetContainer = tradestrategy
+						// .getDatasetContainer();
+						// synchronized (datasetContainer) {
+						// if (datasetContainer.getBaseCandleSeries()
+						// .getItemCount() > 0) {
+						// CandleItem candle = (CandleItem) datasetContainer
+						// .getBaseCandleSeries()
+						// .getDataItem(
+						// datasetContainer
+						// .getBaseCandleSeries()
+						// .getItemCount() - 1);
+						// if (contract.getLastAskPrice()
+						// .doubleValue() > 0
+						// && contract.getLastBidPrice()
+						// .doubleValue() > 0
+						// && (value <= contract
+						// .getLastAskPrice()
+						// .doubleValue() && value >= contract
+						// .getLastBidPrice()
+						// .doubleValue())) {
+						// if ((value > candle.getHigh() || value < candle
+						// .getLow())) {
+						// candle.setClose(value);
+						// datasetContainer
+						// .getBaseCandleSeries()
+						// .fireSeriesChanged();
+						// _log.info("TickPrice Symbol: "
+						// + tradestrategy
+						// .getContract()
+						// .getSymbol() + " "
+						// + TickType.getField(field)
+						// + " : " + value);
+						// }
+						//
+						// }
+						// }
+						// }
+						// }
 
 						break;
 					}
