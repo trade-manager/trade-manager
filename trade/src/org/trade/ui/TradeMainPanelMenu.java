@@ -307,6 +307,14 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 	 *            boolean
 	 */
 	public void setEnabledTestStrategy(boolean enabled) {
+		
+		if(enabled){
+			connect.setEnabled(enabled); 
+			disconnect.setEnabled(false);
+		}else{
+			connect.setEnabled(enabled); 
+			disconnect.setEnabled(true);
+		}
 		testStrategyMenu.setEnabled(enabled);
 		testStrategyButton.setEnabled(enabled);
 	}
