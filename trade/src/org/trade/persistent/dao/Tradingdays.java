@@ -514,6 +514,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				break;
 			}
 			case 9: {
+				// TODO
+				break;
+			}
+			case 10: {
 				Scanner custScan = new Scanner(token);
 				custScan.useDelimiter("\\|");
 				int custTokenNumber = 0;
