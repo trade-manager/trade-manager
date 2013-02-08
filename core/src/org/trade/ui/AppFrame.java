@@ -45,20 +45,21 @@ import javax.swing.UIManager;
 /**
  */
 public class AppFrame extends JFrame {
-	private static final long serialVersionUID = -206248291070367944L;
 
-	MainControllerPanel mainPanel = null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6191549867093963518L;
+	private MainControllerPanel mainPanel = null;
 
 	public AppFrame() {
 		super();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel = new MainControllerPanel(this);
-		this.setTitle(MainControllerPanel.title + " "
-				+ MainControllerPanel.version);
+		this.setTitle("Application");
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		this.setLocationRelativeTo(null);
-		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-		this.pack();
+		this.getContentPane().add(mainPanel, BorderLayout.CENTER);		
 	}
 
 	static {
@@ -66,8 +67,10 @@ public class AppFrame extends JFrame {
 			UIManager.setLookAndFeel(UIManager
 					.getCrossPlatformLookAndFeelClassName());
 			UIManager.put("swing.boldMetal", Boolean.FALSE);
+			AppLoadConfig.loadAppProperties();
 
 		} catch (Exception e) {
+			System.exit(0);
 		}
 	}
 

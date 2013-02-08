@@ -54,7 +54,6 @@ public class MainControllerPanel extends TabbedAppPanel {
 	public static String title = null;
 	public static String version = null;
 	public static String date = null;
-	private MainPanelMenu m_menuBar = null;
 	protected static MainControllerPanel m_instance = null;
 
 	/**
@@ -71,10 +70,7 @@ public class MainControllerPanel extends TabbedAppPanel {
 	public MainControllerPanel(Frame frame) {
 		super(frame);
 		try {
-			ConfigProperties.loadDeploymentProperties(frame,
-					PROPERTIES_PROPERTY_FILE);
-			m_menuBar = new MainPanelMenu(this);
-			setMenu(m_menuBar);
+			setMenu(new MainPanelMenu(this));
 			/* This is always true as main panel needs to receive all events */
 			setSelected(true);
 			title = ConfigProperties.getPropAsString("component.name.base");

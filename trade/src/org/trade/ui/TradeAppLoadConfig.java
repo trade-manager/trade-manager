@@ -46,7 +46,6 @@ public class TradeAppLoadConfig {
 	private final static TradeAppLoadConfig m_AppConfigLoad = new TradeAppLoadConfig();
 
 	TradeAppLoadConfig() {
-
 	}
 
 	/**
