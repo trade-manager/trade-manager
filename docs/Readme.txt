@@ -1,4 +1,4 @@
-Installation Prerequisites trade-manager 2.8
+Installation Prerequisites trade-manager 2.9
 
 1.	Download and install MySQL from the following http://dev.mysql.com/downloads/.
 
@@ -16,11 +16,15 @@ Installation Windows (XP/7 tested)
 
 4.	Edit Built.bat in the C:\trade-manager directory. Change the JAVA_HOME property to point to the Java J2SE dir. Current setting is C:\Program Files\Java\jdk1.7.0_07. Check which dir was created when you installed J2SE.
 
-5. In build.bat un-comment the target createDB as first time you want to create the DB and the Trader user.
+5. In build.bat un-comment the target createDB as first time you want to create the DB and the Trader user i.e. remove the rem
+
+rem Create the database user and default data
+
+rem java -classpath "%CLASSPATH%" org.apache.tools.ant.Main -buildfile ant/build.xml createDB
 
 6.	Now run build.bat this should compile the code and create the database. If it fails during code compile it is due to the JAVA_HOME path see above step. If it fails to create the database it is due to an incorrect root password being set in the build.properties.
 
-8.	Copy the config/config.properties to C:\trade-manager
+8.	Copy the C:\trade-manager\config\config.properties to C:\trade-manager
 
 9.	Edit the config.properties and change the following property. trade.tws.host=localhost change this to the server where you intend to run IB TWS.
 
@@ -38,11 +42,15 @@ Installation Linux (ubuntu tested) 1.	Unzip the trade-manager.zip to $home/app/t
 
 4. Convert the trade-manager/build.sh & trademanager.sh files $dos2unix .sh .sh, change the permissions $chmod +xwr .sh
 
-5. In build.sh un-comment the target createDB as first time you want to create the DB and the Trader user.
+5. In build.sh un-comment the target createDB as first time you want to create the DB and the Trader user i.e. remove the #
+
+rem Create the database user and default data
+
+# java -classpath "%CLASSPATH%" org.apache.tools.ant.Main -buildfile ant/build.xml createDB
 
 6.	Now run ./build.sh this should compile the code and create the database. If it fails during code compile it is due to the JAVA_HOME path see above step. If it fails to create the database it is due to an incorrect root password being set in the build.properties.
 
-7.	Copy the config/config.properties to /trade-manager. $cp config/config.properties ./
+7.	Copy the /trade-manager/config/config.properties to /trade-manager. $cp config/config.properties ./
 
 8.	Edit the config.properties and change the following property. trade.tws.host=localhost change this to the server where you intend to run IB TWS.
 
@@ -92,6 +100,4 @@ Java JDK SE installation uBuntu
 
 6/ Verify that the updated environment variables are in place and the path to the JDK is valid $ echo $JAVA_HOME /usr/lib/jvm/java-7-oracle $ echo $PATH /usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/lib/jvm/java-7-oracle/bin $ javac -version javac 1.7.0_04
 
-7/ Update Java alternative list. You want to set a higher priority for the new JDK. On my system this is the result when I query the alternatives: 
-$ update-alternatives --verbose --query java Link: java Status: auto Best: /usr/lib/jvm/java-7-openjdk/jre/bin/java Value: /usr/lib/jvm/java-7-openjdk/jre/bin/java 
-Alternative: /usr/lib/jvm/java-7-openjdk/jre/bin/java Priority: 1061 Slaves: java.1.gz /usr/lib/jvm/java-7-openjdk/jre/man/man1/java.1.gz
+7/ Update Java alternative list. You want to set a higher priority for the new JDK. On my system this is the result when I query the alternatives: $ update-alternatives --verbose --query java Link: java Status: auto Best: /usr/lib/jvm/java-7-openjdk/jre/bin/java Value: /usr/lib/jvm/java-7-openjdk/jre/bin/java Alternative: /usr/lib/jvm/java-7-openjdk/jre/bin/java Priority: 1061 Slaves: java.1.gz /usr/lib/jvm/java-7-openjdk/jre/man/man1/java.1.gz
