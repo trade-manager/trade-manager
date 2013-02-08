@@ -37,7 +37,6 @@ package org.trade.persistent.dao;
 
 import junit.framework.TestCase;
 
-import org.jfree.data.DataUtilities;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
