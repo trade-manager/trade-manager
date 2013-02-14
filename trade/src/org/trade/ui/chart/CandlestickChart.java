@@ -219,20 +219,17 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 							yRightLocation = y;
 						}
 
-						if (y > 0) {
-							String text = " Time: "
-									+ dateFormatShort.format(new Date(
-											(long) (x))) + rightAxisName
-									+ new Money(y);
-							if (x == xItem && y == yItem) {
-								titleLegend1.setText(text);
-							}
-							xyplot.clearAnnotations();
-							XYTextAnnotation annotation = new XYTextAnnotation(
-									text, x, yRightLocation);
-							annotation.setTextAnchor(TextAnchor.BOTTOM_LEFT);
-							xyplot.addAnnotation(annotation);
+						String text = " Time: "
+								+ dateFormatShort.format(new Date((long) (x)))
+								+ rightAxisName + new Money(y);
+						if (x == xItem && y == yItem) {
+							titleLegend1.setText(text);
 						}
+						xyplot.clearAnnotations();
+						XYTextAnnotation annotation = new XYTextAnnotation(
+								text, x, yRightLocation);
+						annotation.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+						xyplot.addAnnotation(annotation);
 					}
 				}
 			}

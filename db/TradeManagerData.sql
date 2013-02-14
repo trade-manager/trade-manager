@@ -30,11 +30,12 @@ INSERT INTO strategy (idStrategy, name, description, marketData, className, idSt
 
 COMMIT;
 
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(1,'MovingAverage','Moving Average',0) ;
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(2,'Pivot','Pivot points',0) ;
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(3,'Candle','Contract to be followed',0) ;
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(4,'AverageTrueRange','Average True Range',0) ;
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(5,'RelativeStrengthIndex','Relative Strength Index',0) ;
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(1,'MovingAverage','Moving Average',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(2,'Pivot','Pivot points',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(3,'Candle','Contract to be followed',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(4,'AverageTrueRange','Average True Range',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(5,'RelativeStrengthIndex','Relative Strength Index',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(6,'CommodityChannelIndex','Commodity Channel Index',0);
 
 COMMIT;
 
@@ -49,6 +50,7 @@ INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, cla
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(9,'SECType','The contract SECType','STK','java.lang.String', 'org.trade.dictionary.valuetype.SECType',3,0);
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(10,'Length','The length of the Average True Range','14','java.lang.Integer',null, 4,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(11,'Length','The length of the Relative Strength Index','14','java.lang.Integer',null, 5,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(12,'Length','The length of the Commodity Channel Index','20','java.lang.Integer',null, 6,0) ;
 
 COMMIT;
 
@@ -70,6 +72,7 @@ INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, display
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(16,'Vwap','VwapSeries','Volume Weighted Moving Average',1,0,0,3,0) ;
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(17,'Pivot','PivotSeries','5 Bar Pivots',1,0,0,3,0) ;
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(18,'Volume','VolumeSeries','Volume',1,1,1,3,0) ;
+
 COMMIT;
 
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(1,'20',1,1,0) ;
@@ -97,6 +100,7 @@ INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSerie
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(23,'USD',7,6,0);
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(24,'SMART',8,6,0);
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(25,'STK',9,6,0);
+
 COMMIT;
 
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (1,'0','8','0.02','0.04','0','100','0.05', '0.05',0);

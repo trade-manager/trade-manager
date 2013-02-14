@@ -33,55 +33,43 @@
  * -------
  *
  */
-package org.trade.ui;
+package org.trade.strategy.data.cci;
 
-import java.awt.AWTEvent;
-import java.awt.BorderLayout;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JFrame;
-import javax.swing.UIManager;
+import org.jfree.data.xy.XYDataset;
 
 /**
+ * An interface that defines data in the form of (x, high, low, open, close)
+ * tuples.
+ * 
+ * @author Simon Allen
+ * @version $Revision: 1.0 $
  */
-public class TradeAppFrame extends JFrame {
-	private static final long serialVersionUID = -206248291070367944L;
-
-	private TradeMainControllerPanel mainPanel = null;
-
-	public TradeAppFrame() {
-		super();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainPanel = new TradeMainControllerPanel(this);
-		this.setTitle("Trade Manager");
-		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-		this.setLocationRelativeTo(null);
-		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-	}
-
-	static {
-		try {
-			UIManager.setLookAndFeel(UIManager
-					.getCrossPlatformLookAndFeelClassName());
-			UIManager.put("swing.boldMetal", Boolean.FALSE);
-			TradeAppLoadConfig.loadAppProperties();
-
-		} catch (Exception e) {
-			System.exit(0);
-		}
-	}
+public interface ICommodityChannelIndexDataset extends XYDataset {
 
 	/**
-	 * Method processWindowEvent.
+	 * Returns the Moving Average for an item within a series.
 	 * 
-	 * @param e
-	 *            WindowEvent
+	 * @param series
+	 *            the series index.
+	 * @param item
+	 *            the item index.
+	 * 
+	 * 
+	 * @return The Moving Average.
 	 */
-	protected void processWindowEvent(WindowEvent e) {
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			mainPanel.doWindowClose();
-		} else if (e.getID() == WindowEvent.WINDOW_OPENED) {
-			mainPanel.doWindowOpen();
-		}
-	}
+	public double getCommodityChannelIndexValue(int series, int item);
+
+	/**
+	 * Returns the Moving Average for an item within a series.
+	 * 
+	 * @param series
+	 *            the series index.
+	 * @param item
+	 *            the item index.
+	 * 
+	 * 
+	 * @return The Moving Average.
+	 */
+	public Number getCommodityChannelIndex(int series, int item);
+
 }

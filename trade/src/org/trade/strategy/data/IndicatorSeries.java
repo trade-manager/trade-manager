@@ -85,7 +85,8 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	public static final String VolumeSeries = "VolumeSeries";
 	public static final String CandleSeries = "CandleSeries";
 	public static final String AverageTrueRangeSeries = "ATRSeries";
-	public static final String RelativeStrengthIndex = "RSISeries";
+	public static final String RelativeStrengthIndexSeries = "RSISeries";
+	public static final String CommodityChannelIndexSeries = "CCISeries";
 
 	private Integer idIndicatorSeries;
 	private String name;

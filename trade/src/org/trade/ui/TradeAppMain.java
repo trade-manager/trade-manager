@@ -52,7 +52,7 @@ public class TradeAppMain {
 
 	// Construct the application
 	public TradeAppMain() {
-		
+
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double appWidth = screenSize.getWidth() * 0.9;
 		double appHieght = screenSize.getHeight() * 0.9;
@@ -62,16 +62,16 @@ public class TradeAppMain {
 		if (appWidth > 1200)
 			appWidth = 1200;
 		TradeAppFrame frame = new TradeAppFrame();
-		frame.setIconImage(ImageBuilder.getImage("trade.gif"));		
+		frame.setIconImage(ImageBuilder.getImage("trade.gif"));
 		frame.setSize((int) appWidth, (int) appHieght);
 		frame.setLocation((int) ((screenSize.getWidth() - frame.getSize()
 				.getWidth()) / 2), (int) ((screenSize.getHeight() - frame
-				.getSize().getHeight()) / 2));		
+				.getSize().getHeight()) / 2));
 		frame.validate();
 		frame.repaint();
 		frame.setVisible(true);
 		EventQueue waitQue = new WaitCursorEventQueue(500);
-		Toolkit.getDefaultToolkit().getSystemEventQueue().push(waitQue);		
+		Toolkit.getDefaultToolkit().getSystemEventQueue().push(waitQue);
 	}
 
 	/**

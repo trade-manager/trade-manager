@@ -37,6 +37,7 @@ package org.trade.strategy.data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.LinkedList;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -46,7 +47,7 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
-import org.trade.strategy.data.rsi.RelativeStrengthIndexItem;
+import org.trade.strategy.data.cci.CommodityChannelIndexItem;
 
 /**
  * A list of (RegularTimePeriod, open, high, low, close) data items.
@@ -59,8 +60,8 @@ import org.trade.strategy.data.rsi.RelativeStrengthIndexItem;
  */
 
 @Entity
-@DiscriminatorValue("RelativeStrengthIndexSeries")
-public class RelativeStrengthIndexSeries extends IndicatorSeries {
+@DiscriminatorValue("CommodityChannelIndexSeries")
+public class CommodityChannelIndexSeries extends IndicatorSeries {
 
 	private static final long serialVersionUID = 20183087035446657L;
 
@@ -68,24 +69,16 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 
 	private Integer length;
 	/*
-	 * Vales used to calculate RelativeStrengthIndex. These need to be reset
+	 * Vales used to calculate CommodityChannelIndex's. These need to be reset
 	 * when the series is cleared.
 	 */
-	private double posSumCloseDiff = 0;
-	private double negSumCloseDiff = 0;
-	private double preDiffCloseValue = 0;
-	private double avgLossRSI = 0;
-	private double avgGainRSI = 0;
-	private double prevAvgLossRSI = 0;
-	private double prevAvgGainRSI = 0;
-	private double currentRSI = Double.MAX_VALUE;
+	private double sumTypicalPrice = 0;
+	private LinkedList<Double> typicalPriceValues = new LinkedList<Double>();
 
 	/**
 	 * Creates a new empty series. By default, items added to the series will be
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
-	 * 
-	 * 
 	 * 
 	 * @param strategy
 	 *            Strategy
@@ -102,7 +95,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public RelativeStrengthIndexSeries(Strategy strategy, String name,
+	public CommodityChannelIndexSeries(Strategy strategy, String name,
 			String type, String description, Boolean displayOnChart,
 			Integer chartRGBColor, Boolean subChart) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
@@ -110,7 +103,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Constructor for RelativeStrengthIndexSeries.
+	 * Constructor for CommodityChannelIndexSeries.
 	 * 
 	 * @param strategy
 	 *            Strategy
@@ -129,7 +122,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public RelativeStrengthIndexSeries(Strategy strategy, String name,
+	public CommodityChannelIndexSeries(Strategy strategy, String name,
 			String type, String description, Boolean displayOnChart,
 			Integer chartRGBColor, Boolean subChart, Integer length) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
@@ -137,8 +130,8 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 		this.length = length;
 	}
 
-	public RelativeStrengthIndexSeries() {
-		super(IndicatorSeries.RelativeStrengthIndexSeries);
+	public CommodityChannelIndexSeries() {
+		super(IndicatorSeries.CommodityChannelIndexSeries);
 	}
 
 	/**
@@ -148,8 +141,9 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * @throws CloneNotSupportedException
 	 */
 	public Object clone() throws CloneNotSupportedException {
-		RelativeStrengthIndexSeries clone = (RelativeStrengthIndexSeries) super
+		CommodityChannelIndexSeries clone = (CommodityChannelIndexSeries) super
 				.clone();
+		clone.typicalPriceValues = new LinkedList<Double>();
 		return clone;
 	}
 
@@ -163,7 +157,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * @return The time period.
 	 */
 	public RegularTimePeriod getPeriod(int index) {
-		final RelativeStrengthIndexItem item = (RelativeStrengthIndexItem) getDataItem(index);
+		final CommodityChannelIndexItem item = (CommodityChannelIndexItem) getDataItem(index);
 		return item.getPeriod();
 	}
 
@@ -172,36 +166,33 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * 
 	 * @param period
 	 *            the period.
-	 * 
-	 * 
-	 * 
-	 * @param relativeStrengthIndex
-	 *            BigDecimal
+	 * @param movingAverage
+	 *            the movingAverage.
 	 */
-	public void add(RegularTimePeriod period, BigDecimal relativeStrengthIndex) {
+	public void add(RegularTimePeriod period, BigDecimal cciAverage) {
 		if (getItemCount() > 0) {
-			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this
+			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this
 					.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
 						"Can't mix RegularTimePeriod class types.");
 			}
 		}
-		super.add(new RelativeStrengthIndexItem(period, relativeStrengthIndex),
-				true);
+		super.add(new CommodityChannelIndexItem(period, cciAverage), true);
 	}
 
 	/**
 	 * Adds a data item to the series.
 	 * 
-	 * @param dataItem
-	 *            the RelativeStrengthIndex.
+	 * 
 	 * @param notify
 	 *            the notify listeners.
+	 * @param dataItem
+	 *            MovingAverageItem
 	 */
-	public void add(RelativeStrengthIndexItem dataItem, boolean notify) {
+	public void add(CommodityChannelIndexItem dataItem, boolean notify) {
 		if (getItemCount() > 0) {
-			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this
+			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this
 					.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -224,7 +215,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
-			RelativeStrengthIndexItem item = (RelativeStrengthIndexItem) this.data
+			CommodityChannelIndexItem item = (CommodityChannelIndexItem) this.data
 					.get(i - 1);
 			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
 				break;
@@ -301,105 +292,86 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 		}
 
 		if (skip == 0) {
-			posSumCloseDiff = 0;
-			negSumCloseDiff = 0;
-			avgGainRSI = 0;
-			avgLossRSI = 0;
-			prevAvgLossRSI = 0;
-			prevAvgGainRSI = 0;
-			currentRSI = Double.MAX_VALUE;
+			sumTypicalPrice = 0;
+			typicalPriceValues.clear();
 		}
 		if (source.getItemCount() > skip) {
 
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 			int index = this.indexOf(candleItem.getPeriod());
-			double diffCloseValue = 0;
-			if (source.getItemCount() > 1) {
-				CandleItem prevCandleItem = (CandleItem) source
-						.getDataItem(skip - 1);
-				diffCloseValue = candleItem.getClose()
-						- prevCandleItem.getClose();
-
-				/*
-				 * If the item does not exist in the series then this is a new
-				 * time period and so we need to remove the last in the set and
-				 * add the new periods values. Otherwise we just update the last
-				 * value in the set.
-				 */
-
-				if (index < 0) {
+			// work out the average for the earlier values...
+			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
+					.getLow()) / 3;
+			if (0 != typicalPrice) {
+				if (typicalPriceValues.size() == getLength()) {
 					/*
-					 * sum is just used for performance save having to sum the
-					 * last set of values each time.
+					 * If the item does not exist in the series then this is a
+					 * new time period and so we need to remove the last in the
+					 * set and add the new periods values. Otherwise we just
+					 * update the last value in the set.
 					 */
-					if (diffCloseValue > 0) {
-						posSumCloseDiff = posSumCloseDiff
-								+ Math.abs(diffCloseValue);
-
+					if (index < 0) {
+						/*
+						 * sum is just used for performance save having to sum
+						 * the last set of values each time.
+						 */
+						sumTypicalPrice = sumTypicalPrice
+								- typicalPriceValues.getLast() + typicalPrice;
+						typicalPriceValues.removeLast();
+						typicalPriceValues.addFirst(typicalPrice);
 					} else {
-						negSumCloseDiff = negSumCloseDiff
-								+ Math.abs(diffCloseValue);
+						sumTypicalPrice = sumTypicalPrice
+								- typicalPriceValues.getFirst() + typicalPrice;
+						typicalPriceValues.removeFirst();
+						typicalPriceValues.addFirst(typicalPrice);
 					}
-					prevAvgLossRSI = avgLossRSI;
-					prevAvgGainRSI = avgGainRSI;
-					preDiffCloseValue = diffCloseValue;
-
 				} else {
-					if (diffCloseValue > 0 && preDiffCloseValue > 0) {
-						posSumCloseDiff = posSumCloseDiff
-								+ Math.abs(diffCloseValue)
-								- Math.abs(preDiffCloseValue);
-
-					} else if (diffCloseValue > 0 && preDiffCloseValue < 0) {
-						posSumCloseDiff = posSumCloseDiff
-								+ Math.abs(diffCloseValue);
-						negSumCloseDiff = negSumCloseDiff
-								- Math.abs(preDiffCloseValue);
-					} else if (diffCloseValue < 0 && preDiffCloseValue < 0) {
-						negSumCloseDiff = negSumCloseDiff
-								+ Math.abs(diffCloseValue)
-								- Math.abs(preDiffCloseValue);
-
-					} else if (diffCloseValue < 0 && preDiffCloseValue > 0) {
-						negSumCloseDiff = negSumCloseDiff
-								+ Math.abs(diffCloseValue);
-						posSumCloseDiff = posSumCloseDiff
-								- Math.abs(preDiffCloseValue);
-					}
-				}
-			}
-			if (skip >= getLength()) {
-				if (currentRSI == Double.MAX_VALUE) {
-					avgGainRSI = posSumCloseDiff / getLength();
-					avgLossRSI = negSumCloseDiff / getLength();
-					currentRSI = 100 - (100 / (1 + (avgGainRSI / avgLossRSI)));
-				} else {
-					if (preDiffCloseValue > 0) {
-						avgGainRSI = (((prevAvgGainRSI * (getLength() - 1)) + Math
-								.abs(preDiffCloseValue))) / getLength();
-						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + 0))
-								/ getLength();
-
-					} else {
-						avgGainRSI = (((prevAvgGainRSI * (getLength() - 1)) + 0))
-								/ getLength();
-						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + Math
-								.abs(preDiffCloseValue))) / getLength();
-					}
-					currentRSI = 100 - (100 / (1 + (avgGainRSI / avgLossRSI)));
+					sumTypicalPrice = sumTypicalPrice + typicalPrice;
+					typicalPriceValues.addFirst(typicalPrice);
 				}
 
-				if (index < 0) {
-					RelativeStrengthIndexItem dataItem = new RelativeStrengthIndexItem(
-							candleItem.getPeriod(), new BigDecimal(currentRSI));
-					this.add(dataItem, false);
-				} else {
-					RelativeStrengthIndexItem currDataItem = (RelativeStrengthIndexItem) this
-							.getDataItem(this.indexOf(candleItem.getPeriod()));
-					currDataItem.setRelativeStrengthIndex(currentRSI);
+				if (this.typicalPriceValues.size() == getLength()) {
+					double cci = calculateCCI(sumTypicalPrice,
+							typicalPriceValues);
+					if (index < 0) {
+						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
+								candleItem.getPeriod(), new BigDecimal(cci));
+						this.add(dataItem, false);
+
+					} else {
+						CommodityChannelIndexItem currDataItem = (CommodityChannelIndexItem) this
+								.getDataItem(this.indexOf(candleItem
+										.getPeriod()));
+						currDataItem.setCommodityChannelIndex(cci);
+					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Method calculateMA.
+	 * 
+	 * @param calcType
+	 *            String
+	 * @param yyValues
+	 *            LinkedList<Double>
+	 * @param volValues
+	 *            LinkedList<Long>
+	 * @param sum
+	 *            Double
+	 * @return double
+	 */
+	private double calculateCCI(Double sumTypicalPrice,
+			LinkedList<Double> typicalPriceValues) {
+		double typicalPriceSMA = sumTypicalPrice / getLength();
+		double sumMeanDeviation = 0;
+		for (double typicalPrice : typicalPriceValues) {
+			sumMeanDeviation = sumMeanDeviation
+					+ Math.abs(typicalPriceSMA - typicalPrice);
+		}
+		return (typicalPriceValues.getFirst() - typicalPriceSMA)
+				/ (0.015 * (sumMeanDeviation / getLength()));
 	}
 }
