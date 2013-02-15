@@ -69,6 +69,5 @@ public class Clock extends JPanel {
 			}
 		});
 		t.start();
-
 	}
 }
