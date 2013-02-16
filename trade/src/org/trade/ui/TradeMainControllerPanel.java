@@ -100,11 +100,36 @@ import org.trade.ui.strategy.StrategyPanel;
 import org.trade.ui.tradingday.TradingdayPanel;
 
 /**
- * Apps main controller. This controller controls the main application. i.e.
- * Main menu and main tool bar buttons. All menu/tool bar function are handled
- * here if they are common to the whole application e.g. Get Data/Run Strategy.
- * Otherwise they are handled in the controller of the individual Tab e.g.
- * Save/Search.
+ * 
+ * Main application classes are ..
+ * 
+ * org.trade.ui.TradeMainControllerPanel
+ * 
+ * The applications main controller this listens to TWSBrokerModel and handles
+ * all UI events that are common across all tabs. Each tab has its own
+ * controller to handle specific Tab related UI events e.g. Get Data/Run
+ * Strategy. Otherwise they are handled in the controller of the individual Tab
+ * e.g. Save/Search.
+ * 
+ * org.trade.broker.TWSBrokerModel
+ * 
+ * This handles all the requests/responses from IB TWS. This class is listened
+ * to by the following TradeMainControllerPanel AbstractStrategyRule
+ * 
+ * org.trade.strategy.AbstractStrategyRule
+ * 
+ * Base strategy class. All strategies inherit from this class. Implemented
+ * AbstractStrategyRule listen to the BaseCandleSeries which is the series that
+ * is updated as new candle data is received via the TWSBrokerModel.
+ * 
+ * org.trade.strategy.data.StrategyData
+ * 
+ * This class contains datasets for a specific strategy. The datasets are a
+ * BaseCandleSeries this is the dataset that received data from the TWS API and
+ * is listened to by any running strategies. The second Candle series is used to
+ * display charts. Other series are used for indicators that have been setup for
+ * the strategy.
+ * 
  */
 public class TradeMainControllerPanel extends TabbedAppPanel implements
 		BrokerChangeListener, StrategyChangeListener {

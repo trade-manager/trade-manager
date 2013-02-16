@@ -103,23 +103,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	private boolean listeningCandles = false;
 	private int currentCandleCount = -1;
 
-	/*
-	 * An abstract class that implements the base functionality for a trading
-	 * strategies this class monitors the candle data set for changes. This
-	 * class runs in its own thread. there will be one Strategy running per
-	 * tradestrategy.
-	 * 
-	 * @param brokerManagerModel IBrokerManagerModel the class that interfaces
-	 * the broker.
-	 * 
-	 * @param datasetContainer DatasetContainer this contains the basecandle
-	 * dataset that is listened to for changes.
-	 * 
-	 * @param idTradestrategy the id of the tradestrategy to be processed.
-	 */
-
 	/**
-	 * Constructor for AbstractStrategyRule.
+	 * Constructor for AbstractStrategyRule. An abstract class that implements
+	 * the base functionality for a trading strategies this class monitors the
+	 * candle data set for changes. This class runs in its own thread. there
+	 * will be one Strategy running per tradestrategy.
 	 * 
 	 * @param brokerManagerModel
 	 *            BrokerModel
