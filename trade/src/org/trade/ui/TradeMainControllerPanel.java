@@ -1197,7 +1197,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							JOptionPane.YES_NO_OPTION);
 					if (result == JOptionPane.YES_OPTION) {
 						masterTradeAccount.setIsDefault(true);
-						m_tradePersistentModel
+						masterTradeAccount = m_tradePersistentModel
 								.resetDefaultTradeAccount(masterTradeAccount);
 					}
 				}

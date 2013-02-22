@@ -579,11 +579,12 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#resetDefaultTradeAccount(TradeAccount)
 	 */
-	public void resetDefaultTradeAccount(TradeAccount transientInstance)
+	public TradeAccount resetDefaultTradeAccount(TradeAccount transientInstance)
 			throws PersistentModelException {
 
 		try {
 			m_tradeAccountHome.resetDefaultTradeAccount(transientInstance);
+			return (TradeAccount) m_aspectHome.persist(transientInstance);
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(

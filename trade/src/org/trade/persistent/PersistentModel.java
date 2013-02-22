@@ -100,7 +100,7 @@ public interface PersistentModel {
 	 *            TradeAccount
 	 * @throws PersistentModelException
 	 */
-	void resetDefaultTradeAccount(TradeAccount transientInstance)
+	TradeAccount resetDefaultTradeAccount(TradeAccount transientInstance)
 			throws PersistentModelException;
 
 	/**

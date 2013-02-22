@@ -1690,6 +1690,38 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
+	 * Method updatePortfolio.
+	 * 
+	 * @param contract
+	 *            com.ib.client.Contract
+	 * @param position
+	 *            int
+	 * @param marketPrice
+	 *            double
+	 * @param marketValue
+	 *            double
+	 * @param averageCost
+	 *            double
+	 * @param unrealizedPNL
+	 *            double
+	 * @param realizedPNL
+	 *            double
+	 * @param accountNumber
+	 *            String
+	 * @see com.ib.client.EWrapper#updatePortfolio(com.ib.client.Contract, int,
+	 *      double, double, double, double, double, String)
+	 */
+	public void updatePortfolio(com.ib.client.Contract contract, int position,
+			double marketPrice, double marketValue, double averageCost,
+			double unrealizedPNL, double realizedPNL, String accountNumber) {
+		// _log.info("updatePortfolio Account#: " + accountNumber + " contract:"
+		// + contract.m_symbol + " position:" + position + " marketPrice:"
+		// + marketPrice + " marketValue:" + marketValue + " averageCost:"
+		// + averageCost + " unrealizedPNL:" + unrealizedPNL
+		// + " realizedPNL:" + realizedPNL);
+	}
+
+	/**
 	 * Method updateAccountValue.
 	 * 
 	 * @param key
@@ -1741,38 +1773,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Method updatePortfolio.
-	 * 
-	 * @param contract
-	 *            com.ib.client.Contract
-	 * @param position
-	 *            int
-	 * @param marketPrice
-	 *            double
-	 * @param marketValue
-	 *            double
-	 * @param averageCost
-	 *            double
-	 * @param unrealizedPNL
-	 *            double
-	 * @param realizedPNL
-	 *            double
-	 * @param accountNumber
-	 *            String
-	 * @see com.ib.client.EWrapper#updatePortfolio(com.ib.client.Contract, int,
-	 *      double, double, double, double, double, String)
-	 */
-	public void updatePortfolio(com.ib.client.Contract contract, int position,
-			double marketPrice, double marketValue, double averageCost,
-			double unrealizedPNL, double realizedPNL, String accountNumber) {
-		// _log.info("updatePortfolio Account#: " + accountNumber + " contract:"
-		// + contract.m_symbol + " position:" + position + " marketPrice:"
-		// + marketPrice + " marketValue:" + marketValue + " averageCost:"
-		// + averageCost + " unrealizedPNL:" + unrealizedPNL
-		// + " realizedPNL:" + realizedPNL);
 	}
 
 	/**
