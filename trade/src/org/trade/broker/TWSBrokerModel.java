@@ -54,6 +54,7 @@ import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
+import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -2479,6 +2480,27 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		}
 		if (null != order.getAllOrNothing()) {
 			ibOrder.m_allOrNone = order.getAllOrNothing();
+		}
+		if (null != order.getTrade().getTradestrategy()) {
+			ibOrder.m_account = order.getTrade().getTradestrategy()
+					.getTradeAccount().getAccountNumber();
+		}
+		if (null != order.getTrade().getTradestrategy()) {
+			ibOrder.m_faGroup = order.getTrade().getTradestrategy()
+					.getTradeAccount().getFAGroup();
+		}
+		if (null != order.getTrade().getTradestrategy()) {
+			ibOrder.m_faProfile = order.getTrade().getTradestrategy()
+					.getTradeAccount().getFAProfile();
+		}
+		if (null != order.getTrade().getTradestrategy()) {
+			ibOrder.m_faMethod = order.getTrade().getTradestrategy()
+					.getTradeAccount().getFAMethod();
+		}
+		if (null != order.getTrade().getTradestrategy()) {
+			Percent faPercent = new Percent(order.getTrade().getTradestrategy()
+					.getTradeAccount().getFAPercent());
+			ibOrder.m_faPercentage = faPercent.getBigDecimalValue().toString();
 		}
 		return ibOrder;
 	}
