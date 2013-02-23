@@ -1714,11 +1714,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void updatePortfolio(com.ib.client.Contract contract, int position,
 			double marketPrice, double marketValue, double averageCost,
 			double unrealizedPNL, double realizedPNL, String accountNumber) {
-		// _log.info("updatePortfolio Account#: " + accountNumber + " contract:"
-		// + contract.m_symbol + " position:" + position + " marketPrice:"
-		// + marketPrice + " marketValue:" + marketValue + " averageCost:"
-		// + averageCost + " unrealizedPNL:" + unrealizedPNL
-		// + " realizedPNL:" + realizedPNL);
+		_log.info("updatePortfolio Account#: " + accountNumber + " contract:"
+				+ contract.m_symbol + " position:" + position + " marketPrice:"
+				+ marketPrice + " marketValue:" + marketValue + " averageCost:"
+				+ averageCost + " unrealizedPNL:" + unrealizedPNL
+				+ " realizedPNL:" + realizedPNL);
 	}
 
 	/**
@@ -1740,9 +1740,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 		synchronized (key) {
 
-			// _log.info("updateAccountValue Account#: " + accountNumber +
-			// " Key:"
-			// + key + " Value:" + value + " Currency:" + currency);
+			_log.info("updateAccountValue Account#: " + accountNumber + " Key:"
+					+ key + " Value:" + value + " Currency:" + currency);
 			if (m_accountRequests.containsKey(accountNumber)) {
 				TradeAccount tradeAccount = m_accountRequests
 						.get(accountNumber);
@@ -1785,7 +1784,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void updateAccountTime(String timeStamp) {
 
 		try {
-			// _log.info("updateAccountTime:" + updateDate);
+			_log.info("updateAccountTime:" + timeStamp);
 			for (String accountNumber : m_accountRequests.keySet()) {
 				TradeAccount tradeAccount = m_accountRequests
 						.get(accountNumber);
@@ -1812,7 +1811,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#accountDownloadEnd(String)
 	 */
 	public void accountDownloadEnd(String accountNumber) {
-		// _log.info("accountDownloadEnd:" + accountNumber);
+		_log.info("accountDownloadEnd:" + accountNumber);
 	}
 
 	/**
