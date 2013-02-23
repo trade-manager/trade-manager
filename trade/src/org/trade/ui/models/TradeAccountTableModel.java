@@ -43,7 +43,9 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.YesNo;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
+import org.trade.dictionary.valuetype.FAMethod;
 import org.trade.persistent.dao.TradeAccount;
 
 /**
@@ -151,7 +153,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 			break;
 		}
 		case 2: {
-			element.setAccountType((String) value);
+			element.setAccountType(((AccountType) value).getCode());
 			break;
 		}
 		case 3: {
@@ -195,7 +197,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 			break;
 		}
 		case 13: {
-			element.setFAMethod((String) value);
+			element.setFAMethod(((FAMethod) value).getCode());
 			break;
 		}
 		case 14: {
@@ -257,9 +259,9 @@ public class TradeAccountTableModel extends AspectTableModel {
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getAccountNumber());
 		if (null == element.getAccountType()) {
-			newRow.addElement("");
+			newRow.addElement(new AccountType());
 		} else {
-			newRow.addElement(element.getAccountType());
+			newRow.addElement(AccountType.newInstance(element.getAccountType()));
 		}
 		newRow.addElement(YesNo.newInstance(element.getIsDefault()));
 		newRow.addElement(Currency.newInstance(element.getCurrency()));
@@ -304,9 +306,9 @@ public class TradeAccountTableModel extends AspectTableModel {
 			newRow.addElement(element.getFAProfile());
 		}
 		if (null == element.getFAMethod()) {
-			newRow.addElement("");
+			newRow.addElement(new FAMethod());
 		} else {
-			newRow.addElement(element.getFAMethod());
+			newRow.addElement(AccountType.newInstance(element.getFAMethod()));
 		}
 		if (null == element.getFAPercent()) {
 			newRow.addElement(new Money(0));

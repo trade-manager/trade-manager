@@ -68,6 +68,7 @@ import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOTradeAccount;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -1173,7 +1174,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							.findTradeAccountByNumber(accountNumber);
 					if (null == tradeAccount) {
 						tradeAccount = new TradeAccount(accountNumber,
-								accountNumber,TradeAccount.INDIVIDUAL, Currency.USD, false);
+								accountNumber, AccountType.INDIVIDUAL,
+								Currency.USD, false);
 						tradeAccount = (TradeAccount) m_tradePersistentModel
 								.persistAspect(tradeAccount);
 					}

@@ -71,7 +71,6 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	/**
 	 * 
 	 */
-	public static final String INDIVIDUAL = "INDIVIDUAL";
 
 	private static final long serialVersionUID = 5891080561163346464L;
 	private String accountNumber;
