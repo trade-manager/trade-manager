@@ -120,6 +120,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	// private final static String ALL_GENERIC_TICK_TAGS = "221,233";
 	private final static String ALL_GENERIC_TICK_TAGS = "233";
 	private static final String AVAILABLE_FUNDS = "AvailableFunds";
+	private static final String ACCOUNTCODE = "AccountCode";
+	private static final String ACCOUNTTYPE = "AccountType";
 	private static final String BUYING_POWER = "BuyingPower";
 	private static final String CASH_BALANCE = "CashBalance";
 	private static final String CURRENCY = "Currency";
@@ -1746,6 +1748,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				TradeAccount tradeAccount = m_accountRequests
 						.get(accountNumber);
 				if (tradeAccount.getCurrency().equals(currency)) {
+					if (key.equals(TWSBrokerModel.ACCOUNTCODE)) {
+						tradeAccount.setAvailableFunds(new BigDecimal(value));
+					}
+					if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
+						tradeAccount.setAvailableFunds(new BigDecimal(value));
+					}
 					if (key.equals(TWSBrokerModel.AVAILABLE_FUNDS)) {
 						tradeAccount.setAvailableFunds(new BigDecimal(value));
 					}
@@ -2880,7 +2888,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				+ order.m_goodAfterTime + " GoodTillDate: "
 				+ order.m_goodTillDate + " OverridePercentageConstraints: "
 				+ order.m_overridePercentageConstraints + " AllOrNone: "
-				+ order.m_allOrNone);
+				+ order.m_allOrNone + " Account: " + order.m_account
+				+ " FAGroup: " + order.m_faGroup + " FAMethod: "
+				+ order.m_faMethod + " FAPercent: " + order.m_faPercentage
+				+ " FAProfile: " + order.m_faProfile);
 	}
 
 	/**

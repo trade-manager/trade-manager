@@ -1173,7 +1173,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							.findTradeAccountByNumber(accountNumber);
 					if (null == tradeAccount) {
 						tradeAccount = new TradeAccount(accountNumber,
-								accountNumber, Currency.USD, false);
+								accountNumber,TradeAccount.INDIVIDUAL, Currency.USD, false);
 						tradeAccount = (TradeAccount) m_tradePersistentModel
 								.persistAspect(tradeAccount);
 					}
