@@ -70,8 +70,8 @@ DROP TABLE IF EXISTS tradeaccount ;
 SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS tradeaccount (
   idTradeAccount INT NOT NULL AUTO_INCREMENT ,
-  accountNumber VARCHAR(45) NOT NULL ,
-  accountType VARCHAR(45) NOT NULL ,
+  accountNumber VARCHAR(20) NOT NULL ,
+  accountType VARCHAR(20) NOT NULL ,
   name VARCHAR(45) NOT NULL ,
   alias VARCHAR(45) NULL ,
   isDefault TINYINT(1)  NOT NULL ,
@@ -474,6 +474,29 @@ CREATE  TABLE IF NOT EXISTS codevalue (
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table financialaccount
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS financialaccount;
+
+SHOW WARNINGS;
+
+CREATE  TABLE IF NOT EXISTS financialaccount (
+  idFinancialAccount INT NOT NULL AUTO_INCREMENT ,
+  groupName VARCHAR(45) NOT NULL ,
+  profileName VARCHAR(45) NOT NULL ,
+  description VARCHAR(100) NULL ,
+  method VARCHAR(20) NULL ,
+  percent DECIMAL(10,6) NULL ,
+  version INT NULL,
+  PRIMARY KEY (idFinancialAccount) ,
+  UNIQUE INDEX financialaccount_groupName_uq (groupName ASC),
+  UNIQUE INDEX financialaccount_groupProfile_uq (profileName ASC))
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

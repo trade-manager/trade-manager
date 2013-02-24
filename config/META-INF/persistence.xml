@@ -23,7 +23,8 @@
 		<class>org.trade.persistent.dao.CodeType</class>
 		<class>org.trade.strategy.data.IndicatorSeries</class>
 		<class>org.trade.persistent.dao.CodeAttribute</class>
-		<class>org.trade.persistent.dao.CodeValue</class>		
+		<class>org.trade.persistent.dao.CodeValue</class>	
+	      <class>org.trade.persistent.dao.FinancialAccount</class>	
 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 		<validation-mode>CALLBACK</validation-mode>
 		<properties>

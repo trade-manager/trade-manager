@@ -71,7 +71,7 @@ public class FAMethod extends Decode {
 		returnInstance.setDefaultCode();
 		return returnInstance;
 	}
-	
+
 	/**
 	 * Method convertToUppercase.
 	 * 

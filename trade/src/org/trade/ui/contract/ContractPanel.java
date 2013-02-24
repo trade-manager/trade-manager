@@ -73,7 +73,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import org.trade.core.dao.Aspects;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
@@ -86,6 +85,7 @@ import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
@@ -107,6 +107,7 @@ import org.trade.ui.models.TradingdayTreeModel;
 import org.trade.ui.tables.TradeOrderTable;
 import org.trade.ui.tables.renderer.TradingdayTreeCellRenderer;
 import org.trade.ui.widget.ButtonEditor;
+import org.trade.ui.widget.ButtonRenderer;
 import org.trade.ui.widget.DecodeComboBoxEditor;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
 
@@ -191,8 +192,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
 					new TradeOrderTableRowListener());
-			m_tradeOrderTable.setDefaultEditor(Aspects.class, new ButtonEditor(
-					propertiesButton));
+			m_tradeOrderTable.setDefaultEditor(FinancialAccount.class,
+					new ButtonEditor(propertiesButton));
+			m_tradeOrderTable.setDefaultRenderer(FinancialAccount.class,
+					new ButtonRenderer(BaseUIPropertyCodes.PROPERTIES));
 			m_treeModel = new TradingdayTreeModel(m_tradingdays);
 			m_tree = new Tree(m_treeModel);
 			// Listen for when the selection changes.
@@ -308,6 +311,17 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		} catch (Exception ex) {
 			this.setErrorMessage("Error opening all tabs.", ex.getMessage(), ex);
 		}
+	}
+
+	/**
+	 * Method doProperties.
+	 * 
+	 * @param series
+	 *            IndicatorSeries
+	 */
+
+	public void doProperties(TradeOrder item) {
+
 	}
 
 	public void doCloseAll() {

@@ -207,7 +207,7 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "accountNumber", unique = true, nullable = false, length = 45)
+	@Column(name = "accountNumber", unique = true, nullable = false, length = 20)
 	public String getAccountNumber() {
 		return this.accountNumber;
 	}
@@ -361,7 +361,6 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	public void setCashBalance(BigDecimal cashBalance) {
 		this.cashBalance = cashBalance;
 	}
-
 
 	/**
 	 * Method getGrossPositionValue.

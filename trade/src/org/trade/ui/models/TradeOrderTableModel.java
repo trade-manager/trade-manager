@@ -39,7 +39,6 @@ import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
 
-import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Decimal;
@@ -52,6 +51,7 @@ import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Entrylimit;
+import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
@@ -318,7 +318,18 @@ public class TradeOrderTableModel extends TableModel {
 			break;
 		}
 		case 14: {
-			element.setFAProfile(null);
+			if (value instanceof FinancialAccount) {
+				element.setFAProfile(((FinancialAccount) value)
+						.getProfileName());
+				element.setFAGroup(((FinancialAccount) value).getGroupName());
+				element.setFAMethod(((FinancialAccount) value).getMethod());
+				element.setFAPercent(((FinancialAccount) value).getPercent());
+			} else {
+				element.setFAProfile(null);
+				element.setFAGroup(null);
+				element.setFAMethod(null);
+				element.setFAPercent(null);
+			}
 			break;
 		}
 		default: {
@@ -480,8 +491,16 @@ public class TradeOrderTableModel extends TableModel {
 		}
 		newRow.addElement(new Quantity(element.getFilledQuantity()));
 		newRow.addElement(new Money(element.getStopPrice()));
+		FinancialAccount financialAccount = new FinancialAccount();
+		financialAccount.setIdFinancialAccount(1);
 		if (null == element.getFAProfile()) {
-			newRow.addElement(new Aspects());
+			newRow.addElement(financialAccount);
+		} else {
+			financialAccount.setProfileName(element.getFAProfile());
+			financialAccount.setGroupName(element.getFAGroup());
+			financialAccount.setMethod(element.getFAMethod());
+			financialAccount.setPercent(element.getFAPercent());
+			newRow.addElement(financialAccount);
 		}
 	}
 }
