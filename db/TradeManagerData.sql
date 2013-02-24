@@ -115,6 +115,6 @@ INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfP
 
 COMMIT;
 
-INSERT INTO tradeaccount (idTradeAccount, name, accountNumber,  accountType, currency, isDefault, availableFunds, cashBalance, buyingPower, version) VALUES (1, 'Test','DU12345','INDIVIDUAL','USD',1,'25000.00','25000.00','100000.00', 0);
+INSERT INTO tradeaccount (idTradeAccount, name, accountNumber,  accountType, alias, currency, isDefault, availableFunds, cashBalance, buyingPower, version) VALUES (1, 'Test','DU12345','INDIVIDUAL','Paper Account','USD',1,'25000.00','25000.00','100000.00', 0);
 
 COMMIT;

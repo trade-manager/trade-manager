@@ -40,13 +40,11 @@ import java.util.Date;
 
 import javax.swing.JComboBox;
 
-import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.dictionary.valuetype.DataType;
-import org.trade.dictionary.valuetype.FAMethod;
 import org.trade.dictionary.valuetype.IndicatorSeries;
 import org.trade.persistent.dao.Strategy;
 import org.trade.ui.base.Table;
@@ -78,11 +76,6 @@ public class ConfigurationTable extends Table {
 				(new Currency()).getCodesDecodes()));
 		DecodeTableEditor accountTypeEditor = new DecodeTableEditor(
 				new JComboBox((new AccountType()).getCodesDecodes()));
-		JComboBox FAMethodComboBox = new JComboBox(
-				(new FAMethod()).getCodesDecodes());
-		FAMethodComboBox.insertItemAt(new Decode("None"), 0);
-		DecodeTableEditor FAMethodEditor = new DecodeTableEditor(
-				FAMethodComboBox);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
 				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
@@ -100,7 +93,6 @@ public class ConfigurationTable extends Table {
 				strategyManagerComboBox);
 		this.setDefaultEditor(Currency.class, currencyEditor);
 		this.setDefaultEditor(AccountType.class, accountTypeEditor);
-		this.setDefaultEditor(FAMethod.class, FAMethodEditor);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setDefaultEditor(DataType.class, dataTypeEditor);

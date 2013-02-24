@@ -75,14 +75,11 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	private static final long serialVersionUID = 5891080561163346464L;
 	private String accountNumber;
 	private String accountType;
+	private String alias;
 	private BigDecimal availableFunds;
 	private BigDecimal buyingPower;
 	private BigDecimal cashBalance;
 	private String currency;
-	private String FAGroup;
-	private String FAProfile;
-	private String FAMethod;
-	private BigDecimal FAPercent;
 	private BigDecimal grossPositionValue;
 	private String name;
 	private BigDecimal realizedPnL;
@@ -143,13 +140,14 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	 * @param tradestrategies
 	 *            List<Tradestrategy>
 	 */
-	public TradeAccount(String accountNumber, String name,
+	public TradeAccount(String accountNumber, String name, String accountType,
 			BigDecimal availableFunds, BigDecimal buyingPower,
 			BigDecimal cashBalance, String currency,
 			BigDecimal grossPositionValue, BigDecimal realizedPnL,
 			BigDecimal unrealizedPnL, Boolean isDefault,
 			List<Tradestrategy> tradestrategies) {
 		this.accountNumber = accountNumber;
+		this.accountType = accountType;
 		this.name = name;
 		this.availableFunds = availableFunds;
 		this.buyingPower = buyingPower;
@@ -229,7 +227,7 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "accountType", unique = true, nullable = false, length = 45)
+	@Column(name = "accountType", nullable = false, length = 20)
 	public String getAccountType() {
 		return this.accountType;
 	}
@@ -242,6 +240,26 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
+	}
+
+	/**
+	 * Method getAlias.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "alias", unique = true, nullable = true, length = 45)
+	public String getAlias() {
+		return this.alias;
+	}
+
+	/**
+	 * Method setAlias.
+	 * 
+	 * @param alias
+	 *            String
+	 */
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
 	/**
@@ -344,85 +362,6 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 		this.cashBalance = cashBalance;
 	}
 
-	/**
-	 * Method getFAGroup.
-	 * 
-	 * @return String
-	 */
-	@Column(name = "FAGroup", unique = true, nullable = false, length = 45)
-	public String getFAGroup() {
-		return this.FAGroup;
-	}
-
-	/**
-	 * Method setAccountNumber.
-	 * 
-	 * @param FAGroup
-	 *            String
-	 */
-	public void setFAGroup(String FAGroup) {
-		this.FAGroup = FAGroup;
-	}
-
-	/**
-	 * Method getFAProfile.
-	 * 
-	 * @return String
-	 */
-	@Column(name = "FAProfile", unique = true, nullable = false, length = 45)
-	public String getFAProfile() {
-		return this.FAProfile;
-	}
-
-	/**
-	 * Method setFAProfile.
-	 * 
-	 * @param FAProfile
-	 *            String
-	 */
-	public void setFAProfile(String FAProfile) {
-		this.FAProfile = FAProfile;
-	}
-
-	/**
-	 * Method getFAMethod.
-	 * 
-	 * @return String
-	 */
-	@Column(name = "FAMethod", unique = true, nullable = false, length = 45)
-	public String getFAMethod() {
-		return this.FAMethod;
-	}
-
-	/**
-	 * Method setFAMethod.
-	 * 
-	 * @param FAMethod
-	 *            String
-	 */
-	public void setFAMethod(String FAMethod) {
-		this.FAMethod = FAMethod;
-	}
-
-	/**
-	 * Method getFAPercent.
-	 * 
-	 * @return BigDecimal
-	 */
-	@Column(name = "FAPercent", precision = 10)
-	public BigDecimal getFAPercent() {
-		return this.FAPercent;
-	}
-
-	/**
-	 * Method setFAPercent.
-	 * 
-	 * @param FAPercent
-	 *            BigDecimal
-	 */
-	public void setFAPercent(BigDecimal FAPercent) {
-		this.FAPercent = FAPercent;
-	}
 
 	/**
 	 * Method getGrossPositionValue.

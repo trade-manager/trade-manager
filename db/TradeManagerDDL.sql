@@ -70,18 +70,15 @@ DROP TABLE IF EXISTS tradeaccount ;
 SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS tradeaccount (
   idTradeAccount INT NOT NULL AUTO_INCREMENT ,
-  name VARCHAR(45) NOT NULL ,
-  isDefault TINYINT(1)  NOT NULL ,
   accountNumber VARCHAR(45) NOT NULL ,
   accountType VARCHAR(45) NOT NULL ,
+  name VARCHAR(45) NOT NULL ,
+  alias VARCHAR(45) NULL ,
+  isDefault TINYINT(1)  NOT NULL ,
   availableFunds DECIMAL(10,2) NULL ,
   buyingPower DECIMAL(10,2) NULL ,
   cashBalance DECIMAL(10,2) NULL ,
   currency VARCHAR(3) NOT NULL ,
-  FAGroup  VARCHAR(45) NULL ,
-  FAProfile  VARCHAR(45) NULL ,
-  FAMethod  VARCHAR(45) NULL ,
-  FAPercent  DECIMAL(10,6) NULL ,
   grossPositionValue DECIMAL(10,2) NULL ,
   realizedPnL DECIMAL(10,2) NULL ,
   unrealizedPnL DECIMAL(10,2) NULL ,
@@ -139,9 +136,6 @@ CREATE  TABLE IF NOT EXISTS strategy (
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
-
-
-
 
 -- -----------------------------------------------------
 -- Table TradeStrategy
@@ -239,6 +233,10 @@ CREATE  TABLE IF NOT EXISTS tradeorder (
   commission DECIMAL(10,2) NULL ,
   createDate DATETIME NOT NULL ,
   displayQuantity INT NULL ,
+  FAGroup  VARCHAR(45) NULL ,
+  FAMethod  VARCHAR(45) NULL ,
+  FAPercent  DECIMAL(10,6) NULL ,
+  FAProfile  VARCHAR(45) NULL ,
   filledDate DATETIME NULL ,
   filledQuantity INT NULL ,
   goodAfterTime DATETIME NULL ,

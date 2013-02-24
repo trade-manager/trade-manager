@@ -73,6 +73,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.trade.core.dao.Aspects;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
@@ -105,6 +106,7 @@ import org.trade.ui.models.TradeOrderTableModel;
 import org.trade.ui.models.TradingdayTreeModel;
 import org.trade.ui.tables.TradeOrderTable;
 import org.trade.ui.tables.renderer.TradingdayTreeCellRenderer;
+import org.trade.ui.widget.ButtonEditor;
 import org.trade.ui.widget.DecodeComboBoxEditor;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
 
@@ -132,6 +134,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private BaseButton cancelStrategiesButton = null;
 	private BaseButton refreshButton = null;
 	private BaseButton closeAllButton = null;
+	private BaseButton propertiesButton = null;
 	private DecodeComboBoxEditor periodEditorComboBox = null;
 	private Integer backfillOffsetDays = 0;
 	private Boolean connected = new Boolean(false);
@@ -168,6 +171,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			backfillOffsetDays = ConfigProperties
 					.getPropAsInt("trade.backfill.offsetDays");
+			propertiesButton = new BaseButton(this,
+					BaseUIPropertyCodes.PROPERTIES, 0);
+			propertiesButton.setEnabled(false);
 			executeButton = new BaseButton(controller,
 					BaseUIPropertyCodes.EXECUTE);
 			brokerDataButton = new BaseButton(controller,
@@ -184,7 +190,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderModel = new TradeOrderTableModel();
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
-					new RowListener());
+					new TradeOrderTableRowListener());
+			m_tradeOrderTable.setDefaultEditor(Aspects.class, new ButtonEditor(
+					propertiesButton));
 			m_treeModel = new TradingdayTreeModel(m_tradingdays);
 			m_tree = new Tree(m_treeModel);
 			// Listen for when the selection changes.
@@ -741,7 +749,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 */
-	private class RowListener implements ListSelectionListener {
+	private class TradeOrderTableRowListener implements ListSelectionListener {
 		/**
 		 * Method valueChanged.
 		 * 
@@ -763,6 +771,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							if (i == row) {
 								cancelButton.setTransferObject(tradeOrder);
 								executeButton.setTransferObject(tradeOrder);
+								propertiesButton.setTransferObject(tradeOrder);
+								propertiesButton.setEnabled(true);
 								break;
 							}
 							i++;

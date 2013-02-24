@@ -39,6 +39,7 @@ import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
 
+import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Decimal;
@@ -76,19 +77,20 @@ public class TradeOrderTableModel extends TableModel {
 	private static final String FILLED_DATE = "Trade Time";
 	private static final String FILLED_QTY = "Filled Qty";
 	private static final String STOP_PRICE = "Stop Price";
+	private static final String PROPERTIES = "FA Props";
 
 	private static final String[] columnHeaderToolTip = { null,
 			"System generated key", "Buy/Sell/Short", null, null, null,
 			"Stop/Mkt price", "Transmit to mkt in TWS", null,
 			"One Cancels Another(OCA) id must be unique for day", null, null,
-			null, null };
+			null, null, "FA account assignment" };
 	private Tradestrategy m_data = null;
 
 	public TradeOrderTableModel() {
 		super(columnHeaderToolTip);
 		// Get the column names and cache them.
 		// Then we can close the connection.
-		columnNames = new String[14];
+		columnNames = new String[15];
 		columnNames[0] = SYMBOL;
 		columnNames[1] = ORDER_KEY;
 		columnNames[2] = ACTION;
@@ -103,6 +105,7 @@ public class TradeOrderTableModel extends TableModel {
 		columnNames[11] = FILLED_DATE;
 		columnNames[12] = FILLED_QTY;
 		columnNames[13] = STOP_PRICE;
+		columnNames[14] = PROPERTIES;
 
 	}
 
@@ -314,6 +317,10 @@ public class TradeOrderTableModel extends TableModel {
 			element.setStopPrice(((Money) value).getBigDecimalValue());
 			break;
 		}
+		case 14: {
+			element.setFAProfile(null);
+			break;
+		}
 		default: {
 		}
 		}
@@ -473,5 +480,8 @@ public class TradeOrderTableModel extends TableModel {
 		}
 		newRow.addElement(new Quantity(element.getFilledQuantity()));
 		newRow.addElement(new Money(element.getStopPrice()));
+		if (null == element.getFAProfile()) {
+			newRow.addElement(new Aspects());
+		}
 	}
 }

@@ -45,7 +45,6 @@ import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
-import org.trade.dictionary.valuetype.FAMethod;
 import org.trade.persistent.dao.TradeAccount;
 
 /**
@@ -59,6 +58,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 	private static final String NAME = "Name*";
 	private static final String ACCT_NUMBER = "Acct #";
 	private static final String ACCT_TYPE = "Type";
+	private static final String ACCT_ALIAS = "Alias";
 	private static final String IS_DEFAULT = "Default";
 	private static final String CURRENCY = "Currency";
 	private static final String AVAILABLE_FUNDS = "Availble Funds";
@@ -67,10 +67,6 @@ public class TradeAccountTableModel extends AspectTableModel {
 	private static final String GROSS_POSITION_VALUE = "Gross Pos Val";
 	private static final String REALIZED_PL = "Realized P/L";
 	private static final String UNREALIZED_PL = "Unrealized P/L";
-	private static final String FA_GROUP = "FA Group";
-	private static final String FA_PROFILE = "FA Profile";
-	private static final String FA_METHOD = "FA Method";
-	private static final String FA_PERCENT = "FA %";
 	private static final String LAST_UPDATED = "  Last Update  ";
 
 	private Aspects m_data = null;
@@ -79,23 +75,20 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 		// Get the column names and cache them.
 		// Then we can close the connection.
-		columnNames = new String[16];
+		columnNames = new String[13];
 		columnNames[0] = NAME;
 		columnNames[1] = ACCT_NUMBER;
 		columnNames[2] = ACCT_TYPE;
-		columnNames[3] = IS_DEFAULT;
-		columnNames[4] = CURRENCY;
-		columnNames[5] = AVAILABLE_FUNDS;
-		columnNames[6] = BUYING_POWER;
-		columnNames[7] = CASH_BALANCE;
-		columnNames[8] = GROSS_POSITION_VALUE;
-		columnNames[9] = REALIZED_PL;
-		columnNames[10] = UNREALIZED_PL;
-		columnNames[11] = FA_GROUP;
-		columnNames[12] = FA_PROFILE;
-		columnNames[13] = FA_METHOD;
-		columnNames[14] = FA_PERCENT;
-		columnNames[15] = LAST_UPDATED;
+		columnNames[3] = ACCT_ALIAS;
+		columnNames[4] = IS_DEFAULT;
+		columnNames[5] = CURRENCY;
+		columnNames[6] = AVAILABLE_FUNDS;
+		columnNames[7] = BUYING_POWER;
+		columnNames[8] = CASH_BALANCE;
+		columnNames[9] = GROSS_POSITION_VALUE;
+		columnNames[10] = REALIZED_PL;
+		columnNames[11] = UNREALIZED_PL;
+		columnNames[12] = LAST_UPDATED;
 	}
 
 	/**
@@ -157,58 +150,42 @@ public class TradeAccountTableModel extends AspectTableModel {
 			break;
 		}
 		case 3: {
-			element.setIsDefault(new Boolean(((YesNo) value).getCode()));
+			element.setAlias((String) value);
 			break;
 		}
 		case 4: {
-			element.setCurrency(((Currency) value).getCode());
+			element.setIsDefault(new Boolean(((YesNo) value).getCode()));
 			break;
 		}
 		case 5: {
-			element.setAvailableFunds(((Money) value).getBigDecimalValue());
+			element.setCurrency(((Currency) value).getCode());
 			break;
 		}
 		case 6: {
-			element.setBuyingPower(((Money) value).getBigDecimalValue());
+			element.setAvailableFunds(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 7: {
-			element.setCashBalance(((Money) value).getBigDecimalValue());
+			element.setBuyingPower(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 8: {
-			element.setGrossPositionValue(((Money) value).getBigDecimalValue());
+			element.setCashBalance(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 9: {
-			element.setRealizedPnL(((Money) value).getBigDecimalValue());
+			element.setGrossPositionValue(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 10: {
-			element.setUnrealizedPnL(((Money) value).getBigDecimalValue());
+			element.setRealizedPnL(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 11: {
-			element.setFAGroup((String) value);
+			element.setUnrealizedPnL(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 12: {
-			element.setFAProfile((String) value);
-			break;
-		}
-		case 13: {
-			if (value instanceof FAMethod) {
-				element.setFAMethod(((FAMethod) value).getCode());
-			} else {
-				element.setFAMethod(null);
-			}
-			break;
-		}
-		case 14: {
-			element.setFAPercent(((Money) value).getBigDecimalValue());
-			break;
-		}
-		case 15: {
 			element.setUpdateDate(((Date) value).getDate());
 			break;
 		}
@@ -267,6 +244,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 		} else {
 			newRow.addElement(AccountType.newInstance(element.getAccountType()));
 		}
+		newRow.addElement(element.getAlias());
 		newRow.addElement(YesNo.newInstance(element.getIsDefault()));
 		newRow.addElement(Currency.newInstance(element.getCurrency()));
 		if (null == element.getAvailableFunds()) {
@@ -298,26 +276,6 @@ public class TradeAccountTableModel extends AspectTableModel {
 			newRow.addElement(new Money(0));
 		} else {
 			newRow.addElement(new Money(element.getUnrealizedPnL()));
-		}
-		if (null == element.getFAGroup()) {
-			newRow.addElement("");
-		} else {
-			newRow.addElement(element.getFAGroup());
-		}
-		if (null == element.getFAProfile()) {
-			newRow.addElement("");
-		} else {
-			newRow.addElement(element.getFAProfile());
-		}
-		if (null == element.getFAMethod()) {
-			newRow.addElement(FAMethod.newInstance("None"));
-		} else {
-			newRow.addElement(FAMethod.newInstance(element.getFAMethod()));
-		}
-		if (null == element.getFAPercent()) {
-			newRow.addElement(new Money(0));
-		} else {
-			newRow.addElement(new Money(element.getFAPercent()));
 		}
 		if (null == element.getUpdateDate()) {
 			newRow.addElement(new Date());

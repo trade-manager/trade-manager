@@ -2484,24 +2484,25 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != order.getTrade().getTradestrategy()) {
 			ibOrder.m_account = order.getTrade().getTradestrategy()
 					.getTradeAccount().getAccountNumber();
+		} else {
+			if (null != order.getTrade().getTradestrategy()) {
+				ibOrder.m_faProfile = order.getFAProfile();
+			} else {
+				if (null != order.getTrade().getTradestrategy()) {
+					ibOrder.m_faGroup = order.getFAGroup();
+				}
+
+				if (null != order.getTrade().getTradestrategy()) {
+					ibOrder.m_faMethod = order.getFAMethod();
+				}
+				if (null != order.getTrade().getTradestrategy()) {
+					Percent faPercent = new Percent(order.getFAPercent());
+					ibOrder.m_faPercentage = faPercent.getBigDecimalValue()
+							.toString();
+				}
+			}
 		}
-		if (null != order.getTrade().getTradestrategy()) {
-			ibOrder.m_faGroup = order.getTrade().getTradestrategy()
-					.getTradeAccount().getFAGroup();
-		}
-		if (null != order.getTrade().getTradestrategy()) {
-			ibOrder.m_faProfile = order.getTrade().getTradestrategy()
-					.getTradeAccount().getFAProfile();
-		}
-		if (null != order.getTrade().getTradestrategy()) {
-			ibOrder.m_faMethod = order.getTrade().getTradestrategy()
-					.getTradeAccount().getFAMethod();
-		}
-		if (null != order.getTrade().getTradestrategy()) {
-			Percent faPercent = new Percent(order.getTrade().getTradestrategy()
-					.getTradeAccount().getFAPercent());
-			ibOrder.m_faPercentage = faPercent.getBigDecimalValue().toString();
-		}
+
 		return ibOrder;
 	}
 

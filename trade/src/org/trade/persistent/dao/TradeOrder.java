@@ -89,6 +89,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private BigDecimal commission;
 	private Date createDate;
 	private Integer displayQuantity;
+	private String FAGroup;
+	private String FAProfile;
+	private String FAMethod;
+	private BigDecimal FAPercent;
 	private Integer filledQuantity;
 	private Date filledDate;
 	private Date goodAfterTime;
@@ -513,6 +517,86 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 */
 	public void setDisplayQuantity(Integer displayQuantity) {
 		this.displayQuantity = displayQuantity;
+	}
+
+	/**
+	 * Method getFAGroup.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "FAGroup", length = 45)
+	public String getFAGroup() {
+		return this.FAGroup;
+	}
+
+	/**
+	 * Method setAccountNumber.
+	 * 
+	 * @param FAGroup
+	 *            String
+	 */
+	public void setFAGroup(String FAGroup) {
+		this.FAGroup = FAGroup;
+	}
+
+	/**
+	 * Method getFAProfile.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "FAProfile", length = 45)
+	public String getFAProfile() {
+		return this.FAProfile;
+	}
+
+	/**
+	 * Method setFAProfile.
+	 * 
+	 * @param FAProfile
+	 *            String
+	 */
+	public void setFAProfile(String FAProfile) {
+		this.FAProfile = FAProfile;
+	}
+
+	/**
+	 * Method getFAMethod.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "FAMethod", length = 20)
+	public String getFAMethod() {
+		return this.FAMethod;
+	}
+
+	/**
+	 * Method setFAMethod.
+	 * 
+	 * @param FAMethod
+	 *            String
+	 */
+	public void setFAMethod(String FAMethod) {
+		this.FAMethod = FAMethod;
+	}
+
+	/**
+	 * Method getFAPercent.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "FAPercent", precision = 10)
+	public BigDecimal getFAPercent() {
+		return this.FAPercent;
+	}
+
+	/**
+	 * Method setFAPercent.
+	 * 
+	 * @param FAPercent
+	 *            BigDecimal
+	 */
+	public void setFAPercent(BigDecimal FAPercent) {
+		this.FAPercent = FAPercent;
 	}
 
 	/**
