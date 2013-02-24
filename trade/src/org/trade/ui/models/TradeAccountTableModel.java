@@ -197,7 +197,11 @@ public class TradeAccountTableModel extends AspectTableModel {
 			break;
 		}
 		case 13: {
-			element.setFAMethod(((FAMethod) value).getCode());
+			if (value instanceof FAMethod) {
+				element.setFAMethod(((FAMethod) value).getCode());
+			} else {
+				element.setFAMethod(null);
+			}
 			break;
 		}
 		case 14: {
@@ -306,9 +310,9 @@ public class TradeAccountTableModel extends AspectTableModel {
 			newRow.addElement(element.getFAProfile());
 		}
 		if (null == element.getFAMethod()) {
-			newRow.addElement(new FAMethod());
+			newRow.addElement(FAMethod.newInstance("None"));
 		} else {
-			newRow.addElement(AccountType.newInstance(element.getFAMethod()));
+			newRow.addElement(FAMethod.newInstance(element.getFAMethod()));
 		}
 		if (null == element.getFAPercent()) {
 			newRow.addElement(new Money(0));
