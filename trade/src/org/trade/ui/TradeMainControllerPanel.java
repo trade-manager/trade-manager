@@ -362,6 +362,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Tradestrategy tradestrategy = m_tradePersistentModel
 					.findTradestrategyById(instance.getTrade()
 							.getTradestrategy());
+			if (AccountType.INDIVIDUAL.equals(tradestrategy.getTradeAccount()
+					.getAccountType())) {
+				instance.setAccountNumber(tradestrategy.getTradeAccount()
+						.getAccountNumber());
+			} else {
+				if (null == instance.getFAProfile()
+						&& null == instance.getFAGroup()) {
+					instance.setAccountNumber(tradestrategy.getTradeAccount()
+							.getAccountNumber());
+				}
+			}
 			instance = m_brokerModel.onPlaceOrder(tradestrategy.getContract(),
 					instance);
 			setStatusBarMessage("Order sent to broker.\n",

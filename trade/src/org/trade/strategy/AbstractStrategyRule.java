@@ -52,6 +52,7 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -124,18 +125,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 		this.idTradestrategy = idTradestrategy;
 	}
 
-	/*
-	 * All errors are sent via this method to any class that is listening to
-	 * this strategy. Usually this is the main controller.
-	 * 
-	 * @param id error id 8 is used for strategy errors.
-	 * 
-	 * @param errorCode The code for the error.
-	 * 
-	 * @param errorMsg The error message.
-	 */
 	/**
-	 * Method error.
+	 * Method error. All errors are sent via this method to any class that is
+	 * listening to this strategy. Usually this is the main controller.
 	 * 
 	 * @param id
 	 *            int
@@ -461,14 +453,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method is called every time the candledataset is either updated or a
-	 * candle is added.
-	 * 
-	 * @param candleSeries The candleseries that is listened to for changes.
-	 */
 	/**
-	 * Method runStrategy.
+	 * Method runStrategy. This method is called every time the candledataset is
+	 * either updated or a candle is added.
 	 * 
 	 * @param candleSeries
 	 *            CandleSeries
@@ -488,15 +475,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 				+ this.tradestrategy.getIdTradeStrategy());
 	}
 
-	/*
-	 * The series change event for the candle series this receives all changes
-	 * to the candle data set. these changes happen in the Broker interface when
-	 * new data is received by the market.
-	 * 
-	 * @param event The candle event that contains the series.
-	 */
 	/**
-	 * Method seriesChanged.
+	 * Method seriesChanged. The series change event for the candle series this
+	 * receives all changes to the candle data set. these changes happen in the
+	 * Broker interface when new data is received by the market.
 	 * 
 	 * @param event
 	 *            SeriesChangeEvent
@@ -510,16 +492,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method creates a market order to close the Trade. The order is
-	 * persisted and transmitted via the broker interface to the market.
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 */
-
 	/**
-	 * Method closePosition.
+	 * Method closePosition. This method creates a market order to close the
+	 * Trade. The order is persisted and transmitted via the broker interface to
+	 * the market.
 	 * 
 	 * @param transmit
 	 *            boolean
@@ -553,35 +529,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method creates an open position order for the Trade. The order is
-	 * persisted and transmitted via the broker interface to the market.
-	 * 
-	 * 
-	 * @param action Whether to BUY/SELL the open position.
-	 * 
-	 * @param orderType STP STPLMT LMT MKT see OrderType.
-	 * 
-	 * @param limitPrice The limit price at which you would like to purchase.
-	 * 
-	 * @param auxPrice The aux price for a STP/LMT/MMT order.
-	 * 
-	 * @param quantity The quantity of the order.
-	 * 
-	 * @param openPosition Is this order opening a position
-	 * 
-	 * @param ocaGroupName Is this ocaGroupName id this should be unique if this
-	 * is an OCA order
-	 * 
-	 * @param roundPrice Do you want to round the price in case or whole or half
-	 * numbers.
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 */
-
 	/**
 	 * Method createOrder.
+	 * 
+	 * This method creates an open position order for the Trade. The order is
+	 * persisted and transmitted via the broker interface to the market.
 	 * 
 	 * @param action
 	 *            String
@@ -614,42 +566,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 				TimeInForce.DAY, roundPrice, transmit, null, null, null, null);
 	}
 
-	/*
+	/**
+	 * Method createOrder.
+	 * 
 	 * This method creates an open position order for the Trade. The order is
 	 * persisted and transmitted via the broker interface to the market.
 	 * 
-	 * 
-	 * @param action Whether to BUY/SELL the open position.
-	 * 
-	 * @param orderType STP STPLMT LMT MKT see OrderType.
-	 * 
-	 * @param limitPrice The limit price at which you would like to purchase.
-	 * 
-	 * @param auxPrice The aux price for a STP/LMT/MMT order.
-	 * 
-	 * @param quantity The quantity of the order.
-	 * 
-	 * @param openPosition Is this order opening a position
-	 * 
-	 * @param ocaGroupName Is this ocaGroupName id this should be unique if this
-	 * is an OCA order
-	 * 
-	 * @param triggerMethod The trigger method for the order see TriggerMethod
-	 * 
-	 * @param overrideConstrains Do you want to override order constraints see
-	 * OverrideConstrains
-	 * 
-	 * @param timeInForce The Order time in force usually one day.
-	 * 
-	 * @param roundPrice Do you want to round the price in case or whole or half
-	 * numbers.
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 */
-
-	/**
-	 * Method createOrder.
 	 * 
 	 * @param action
 	 *            String
@@ -721,16 +643,22 @@ public abstract class AbstractStrategyRule extends Worker implements
 				timeInForce, triggerMethod);
 		tradeOrder.setOcaGroupName(ocaGroupName);
 		tradeOrder.setTransmit(transmit);
-		if (FAProfile != null) {
-			tradeOrder.setFAProfile(FAProfile);
+		if (AccountType.INDIVIDUAL.equals(getTradestrategy().getTradeAccount()
+				.getAccountType())) {
+			tradeOrder.setAccountNumber(getTradestrategy().getTradeAccount()
+					.getAccountNumber());
 		} else {
-			if (FAGroup != null) {
-				tradeOrder.setFAGroup(FAGroup);
-				tradeOrder.setFAMethod(FAMethod);
-				tradeOrder.setFAPercent(FAPercent);
+			if (FAProfile != null) {
+				tradeOrder.setFAProfile(FAProfile);
 			} else {
-				tradeOrder.setAccountNumber(getTradestrategy()
-						.getTradeAccount().getAccountNumber());
+				if (FAGroup != null) {
+					tradeOrder.setFAGroup(FAGroup);
+					tradeOrder.setFAMethod(FAMethod);
+					tradeOrder.setFAPercent(FAPercent);
+				} else {
+					tradeOrder.setAccountNumber(getTradestrategy()
+							.getTradeAccount().getAccountNumber());
+				}
 			}
 		}
 		tradeOrder = getBrokerManager().onPlaceOrder(
@@ -739,30 +667,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return tradeOrder;
 	}
 
-	/*
-	 * This method creates an open position order for the Trade. The order is
-	 * persisted and transmitted via the broker interface to the market.
-	 * 
-	 * 
-	 * @param action Whether to BUY/SELL the open position.
-	 * 
-	 * @param orderType STP STPLMT LMT MKT see OrderType.
-	 * 
-	 * @param limitPrice The limit price at which you would like to purchase.
-	 * 
-	 * @param auxPrice The aux price for a STP/LMT/MMT order.
-	 * 
-	 * @param quantity The quantity of the order.
-	 * 
-	 * @param roundPrice Do you want to round the price in case or whole or half
-	 * numbers.
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 */
-
 	/**
 	 * Method updateOrder.
+	 * 
+	 * This method creates an open position order for the Trade. The order is
+	 * persisted and transmitted via the broker interface to the market.
 	 * 
 	 * @param orderKey
 	 *            Integer
@@ -818,23 +727,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return tradeOrder;
 	}
 
-	/*
-	 * This method creates an open position order for the Trade. The order is
-	 * persisted and transmitted via the broker interface to the market.
-	 * 
-	 * 
-	 * @param action Whether to BUY/SELL the open position.
-	 * 
-	 * @param entryPrice The price at which you would like to purchase/sell.
-	 * 
-	 * @param stopPrice The price to stop this order at i.e. lose risk amount.
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 */
-
 	/**
-	 * Method createRiskOpenPosition.
+	 * Method createRiskOpenPosition. This method creates an open position order
+	 * for the Trade. The order is persisted and transmitted via the broker
+	 * interface to the market.
 	 * 
 	 * @param action
 	 *            String
@@ -939,14 +835,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return tradeOrder;
 	}
 
-	/*
-	 * This method cancels the open order position for the Trade. The order is
-	 * persisted and transmitted via the broker interface to the market.
-	 * 
-	 * @param order The order to be closed.
-	 */
 	/**
-	 * Method cancelOrder.
+	 * Method cancelOrder. This method cancels the open order position for the
+	 * Trade. The order is persisted and transmitted via the broker interface to
+	 * the market.
 	 * 
 	 * @param order
 	 *            TradeOrder
@@ -962,16 +854,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method checks to see if the open order position for the Trade has a
-	 * order to cover the position i.e. a target/stop that covers the total open
-	 * quantity.
-	 * 
-	 * 
-	 * @return covered If covered true else false.
-	 */
 	/**
-	 * Method isPositionConvered.
+	 * Method isPositionConvered. This method checks to see if the open order
+	 * position for the Trade has a order to cover the position i.e. a
+	 * target/stop that covers the total open quantity.
 	 * 
 	 * @return boolean
 	 * @throws StrategyRuleException
@@ -1006,11 +892,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method creates orders to cover an open position order for the Trade.
-	 * The order is persisted and transmitted via the broker interface to the
-	 * market. This will create two order OCA one as a LMT target order and one
-	 * as a STP stop order.
+	/**
+	 * Method createStopAndTargetOrder. This method creates orders to cover an
+	 * open position order for the Trade. The order is persisted and transmitted
+	 * via the broker interface to the market. This will create two order OCA
+	 * one as a LMT target order and one as a STP stop order.
 	 * 
 	 * i.e. If we are in a position IBM 1000 shares at $120 then the following
 	 * will create two orders. stopPrice = $118 quantity = 1000 numberRiskUnits
@@ -1020,23 +906,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 * Note all orders are rounded up/down (around whole/half numbers.) based on
 	 * the EntryLimit table.
-	 * 
-	 * @param openPosition The open position that we want to cover.
-	 * 
-	 * @param stopPrice The stop price for the STP order.
-	 * 
-	 * @param targetPrice The target price for the LMT order
-	 * 
-	 * @param quantity The quantity to be bought or sold
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 * 
-	 * @return targetPrice The target Price.
-	 */
-
-	/**
-	 * Method createStopAndTargetOrder.
 	 * 
 	 * @param stopPrice
 	 *            Money
@@ -1097,11 +966,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return targetPrice;
 	}
 
-	/*
-	 * This method creates orders to cover an open position order for the Trade.
-	 * The order is persisted and transmitted via the broker interface to the
-	 * market. This will create two order OCA one as a LMT target order and one
-	 * as a STP stop order.
+	/**
+	 * Method createStopAndTargetOrder. This method creates orders to cover an
+	 * open position order for the Trade. The order is persisted and transmitted
+	 * via the broker interface to the market. This will create two order OCA
+	 * one as a LMT target order and one as a STP stop order.
 	 * 
 	 * i.e. If we are in a position IBM 1000 shares at $120 then the following
 	 * will create two orders. stopPrice = $118 quantity = 1000 numberRiskUnits
@@ -1112,24 +981,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * Note all orders are rounded up/down (around whole/half numbers.) based on
 	 * the EntryLimit table.
 	 * 
-	 * 
-	 * @param openPosition The open position that we want to cover.
-	 * 
-	 * @param stopRiskUnits The number of risk unit to a stop.
-	 * 
-	 * @param stopRiskUnits The number of risk unit to a target.
-	 * 
-	 * @param percentQty The percent of the open quantity to be taken at this
-	 * target/stop.
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 * 
-	 * @return targetPrice The target Price.
-	 */
-
-	/**
-	 * Method createStopAndTargetOrder.
 	 * 
 	 * @param openPosition
 	 *            TradeOrder
@@ -1222,20 +1073,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return targetPrice;
 	}
 
-	/*
-	 * This method will calculate the Stop price based on the number of risk
-	 * units and the risk amount.
-	 * 
-	 * 
-	 * @param openPosition The open position.
-	 * 
-	 * @param numberRiskUnits The number of risk unit to a stop usually 1.
-	 * 
-	 * @return stopPrice The stop Price.
-	 */
-
 	/**
-	 * Method getStopPriceForPositionRisk.
+	 * Method getStopPriceForPositionRisk. This method will calculate the Stop
+	 * price based on the number of risk units and the risk amount.
 	 * 
 	 * @param openPosition
 	 *            TradeOrder
@@ -1263,12 +1103,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	}
 
-	/*
-	 * This method will close all open order positions for the Trade.
-	 */
-
 	/**
-	 * Method closeAllOpenPositions.
+	 * Method closeAllOpenPositions. This method will close all open order
+	 * positions for the Trade.
 	 * 
 	 * @throws StrategyRuleException
 	 */
@@ -1286,17 +1123,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method will the stop order for a trade to the new values..
-	 * 
-	 * @param stopPrice The new stop price for the stop order.
-	 * 
-	 * @param transmit An indicator that tells the broker interface to transmit
-	 * the created order to the exchange.
-	 */
-
 	/**
-	 * Method moveStopOCAPrice.
+	 * Method moveStopOCAPrice. This method will the stop order for a trade to
+	 * the new values..
 	 * 
 	 * @param stopPrice
 	 *            Money
@@ -1345,12 +1174,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method will all orders for a trade position.
-	 */
-
 	/**
-	 * Method cancelAllOrders.
+	 * Method cancelAllOrders. This method will all orders for a trade position.
 	 * 
 	 * @throws StrategyRuleException
 	 */
@@ -1369,22 +1194,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/*
-	 * This method takes a price and adds/subtracts pennies to that prices and
-	 * rounds the results based on whole/half number.
-	 * 
-	 * @param price The price to have pennies added/sunbtracted.
-	 * 
-	 * @param side The side of the Trade i.e. BOT/SLD.
-	 * 
-	 * @param action The type of order i.e. BUY/SELL.
-	 * 
-	 * @param dollars The number of dollars to be added/subtracted. i.e 0.03 for
-	 * a 3 pennies or 1.23 for $1.23.
-	 */
-
 	/**
-	 * Method addPennyAndRoundStop.
+	 * Method addPennyAndRoundStop. This method takes a price and adds/subtracts
+	 * pennies to that prices and rounds the results based on whole/half number.
 	 * 
 	 * @param price
 	 *            double

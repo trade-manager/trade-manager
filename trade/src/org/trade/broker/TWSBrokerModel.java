@@ -49,6 +49,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.client.BackTestBroker;
+import org.trade.broker.request.TWSAccountAliasRequest;
+import org.trade.broker.request.TWSAllocationRequest;
+import org.trade.broker.request.TWSGroupRequest;
+import org.trade.core.dao.Aspect;
+import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
@@ -58,10 +63,13 @@ import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
+import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.persistent.PersistentModel;
+import org.trade.persistent.dao.AccountAllocation;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.TradeAccount;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -1822,11 +1830,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void accountDownloadEnd(String accountNumber) {
 		_log.info("accountDownloadEnd:" + accountNumber);
-		TradeAccount tradeAccount = m_accountRequests.get(accountNumber);
-		if (AccountType.CORPORATION.equals(tradeAccount.getAccountType())) {
-			m_client.requestFA(EClientSocket.GROUPS);
-			m_client.requestFA(EClientSocket.PROFILES);
-			m_client.requestFA(EClientSocket.ALIASES);
+		try {
+			TradeAccount tradeAccount = m_accountRequests.get(accountNumber);
+			if (AccountType.CORPORATION.equals(tradeAccount.getAccountType())) {
+				Aspects items = m_tradePersistentModel
+						.findAspectsByClassName(FinancialAccount.class
+								.getName());
+				for (Aspect aspect : items.getAspect()) {
+					m_tradePersistentModel.removeAspect(aspect);
+				}
+				m_client.requestFA(EClientSocket.GROUPS);
+				m_client.requestFA(EClientSocket.PROFILES);
+				m_client.requestFA(EClientSocket.ALIASES);
+			}
+		} catch (Exception ex) {
+			error(0, 3315, "Errors removing FA Accounts: " + ex.getMessage());
 		}
 	}
 
@@ -2014,23 +2032,97 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#receiveFA(int, String)
 	 */
 	public void receiveFA(int faDataType, String xml) {
+		try {
+			switch (faDataType) {
+			case EClientSocket.ALIASES: {
+				_log.info("Aliases: /n" + xml);
+				final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
+				final Aspects aspects = (Aspects) request.fromXML(xml);
 
-		switch (faDataType) {
-		case EClientSocket.ALIASES: {
-			_log.info("Aliases: /n" + xml);
-			break;
-		}
-		case EClientSocket.PROFILES: {
-			_log.info("Profiles: /n" + xml);
-			break;
-		}
-		case EClientSocket.GROUPS: {
-			_log.info("Groups: /n" + xml);
-			break;
-		}
-		default: {
+				for (Aspect aspect : aspects.getAspect()) {
+					TradeAccount account = (TradeAccount) aspect;
+					TradeAccount ta = m_tradePersistentModel
+							.findTradeAccountByNumber(account
+									.getAccountNumber());
+					if (null != ta) {
+						account.setAlias(account.getAlias());
+						m_tradePersistentModel.persistAspect(ta);
+					} else {
+						account.setAccountType(AccountType.INDIVIDUAL);
+						account.setCurrency(Currency.USD);
+						account.setName(account.getAccountNumber());
+						m_tradePersistentModel.persistAspect(account);
+					}
+				}
+				break;
+			}
+			case EClientSocket.PROFILES: {
+				_log.info("Profiles: /n" + xml);
+				final TWSAllocationRequest request = new TWSAllocationRequest();
+				final Aspects aspects = (Aspects) request.fromXML(xml);
 
-		}
+				for (Aspect aspect : aspects.getAspect()) {
+					FinancialAccount account = (FinancialAccount) aspect;
+					for (AccountAllocation item : account
+							.getAccountAllocation()) {
+						FinancialAccount parent = m_tradePersistentModel
+								.findFinancialAccountByProfileName(item
+										.getFinancialAccount().getProfileName());
+						if (null == parent) {
+							parent = (FinancialAccount) m_tradePersistentModel
+									.persistAspect(item.getFinancialAccount());
+						} else {
+							if (!parent.getType().equals(
+									item.getFinancialAccount().getType())) {
+								parent.setType(item.getFinancialAccount()
+										.getType());
+								parent = (FinancialAccount) m_tradePersistentModel
+										.persistAspect(parent);
+							}
+						}
+						item.setFinancialAccount(parent);
+						m_tradePersistentModel.persistAspect(item);
+					}
+				}
+				break;
+			}
+			case EClientSocket.GROUPS: {
+				_log.info("Groups: /n" + xml);
+				final TWSGroupRequest request = new TWSGroupRequest();
+				final Aspects aspects = (Aspects) request.fromXML(xml);
+
+				for (Aspect aspect : aspects.getAspect()) {
+					FinancialAccount account = (FinancialAccount) aspect;
+					for (AccountAllocation item : account
+							.getAccountAllocation()) {
+						FinancialAccount parent = m_tradePersistentModel
+								.findFinancialAccountByGroupName(item
+										.getFinancialAccount().getGroupName());
+						if (null == parent) {
+							parent = (FinancialAccount) m_tradePersistentModel
+									.persistAspect(item.getFinancialAccount());
+						} else {
+							if (!parent.getMethod().equals(
+									item.getFinancialAccount().getMethod())) {
+								parent.setMethod(item.getFinancialAccount()
+										.getMethod());
+								parent = (FinancialAccount) m_tradePersistentModel
+										.persistAspect(parent);
+							}
+
+						}
+						item.setFinancialAccount(parent);
+						m_tradePersistentModel.persistAspect(item);
+					}
+				}
+				break;
+			}
+			default: {
+
+			}
+			}
+		} catch (Exception ex) {
+			error(faDataType, 3235, ex.getMessage());
 		}
 	}
 
