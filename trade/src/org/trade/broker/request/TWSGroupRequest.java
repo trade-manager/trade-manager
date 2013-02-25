@@ -14,15 +14,15 @@ import org.trade.persistent.dao.FinancialAccount;
 
 import org.xml.sax.Attributes;
 
-public class AllocationRequest extends SaxMapper {
+public class TWSGroupRequest extends SaxMapper {
 
 	private final static Logger _log = LoggerFactory
-			.getLogger(AllocationRequest.class);
+			.getLogger(TWSGroupRequest.class);
 
 	private Aspects m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
 
-	public AllocationRequest() throws XMLModelException {
+	public TWSGroupRequest() throws XMLModelException {
 		super();
 	}
 
@@ -37,23 +37,22 @@ public class AllocationRequest extends SaxMapper {
 		final TagTracker rootTagTracker = new TagTracker() {
 
 			public void onDeactivate() {
-				// The root will be deactivated when
-				// parsing a new document begins.
-				// clear the stack
+				/*
+				 * The root will be deactivated when parsing a new document
+				 * begins. clear the stack
+				 */
 				m_stack.removeAllElements();
 
 				// create the root "dir" object.
 				m_target = new Aspects();
-
 				_log.trace("rootTagTracker onDeactivate");
-				// push the root dir on the stack...
 			}
 		};
 
-		final TagTracker allocationProfileTracker = new TagTracker() {
+		final TagTracker groupsTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				_log.trace("allocationProfileTracker onStart()");
+				_log.trace("groupsTracker onStart()");
 				FinancialAccount aspect = new FinancialAccount();
 				m_target.add(aspect);
 				m_stack.push(aspect);
@@ -63,15 +62,12 @@ public class AllocationRequest extends SaxMapper {
 					String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
-				_log.trace("allocationProfileTracker onEnd() "
-						+ contents.toString());
+				_log.trace("groupsTracker onEnd() " + contents.toString());
 			}
 		};
 
-		rootTagTracker.track("ListOfAllocationProfiles/AllocationProfile",
-				allocationProfileTracker);
-		allocationProfileTracker.track("AllocationProfile",
-				allocationProfileTracker);
+		rootTagTracker.track("ListOfGroups/Groups", groupsTracker);
+		groupsTracker.track("Groups", groupsTracker);
 
 		final TagTracker nameTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
@@ -82,30 +78,13 @@ public class AllocationRequest extends SaxMapper {
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
 				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
-				temp.setProfileName(value);
+				temp.setGroupName(value);
 				_log.trace("nameTracker: " + value);
 			}
 		};
 
-		allocationProfileTracker.track("AllocationProfile/name", nameTracker);
+		groupsTracker.track("Groups/name", nameTracker);
 		nameTracker.track("name", nameTracker);
-
-		final TagTracker typeTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
-			}
-
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
-				final String value = new String(contents.toString());
-				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
-				temp.setType(new Integer(value));
-				_log.trace("typeTracker: " + value);
-			}
-		};
-
-		allocationProfileTracker.track("AllocationProfile/type", typeTracker);
-		typeTracker.track("type", typeTracker);
 		return rootTagTracker;
 	}
 }

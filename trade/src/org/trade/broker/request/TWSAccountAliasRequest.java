@@ -10,19 +10,19 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.xml.SaxMapper;
 import org.trade.core.xml.TagTracker;
 import org.trade.core.xml.XMLModelException;
-import org.trade.persistent.dao.FinancialAccount;
+import org.trade.persistent.dao.TradeAccount;
 
 import org.xml.sax.Attributes;
 
-public class GroupRequest extends SaxMapper {
+public class TWSAccountAliasRequest extends SaxMapper {
 
 	private final static Logger _log = LoggerFactory
-			.getLogger(GroupRequest.class);
+			.getLogger(TWSAccountAliasRequest.class);
 
 	private Aspects m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
 
-	public GroupRequest() throws XMLModelException {
+	public TWSAccountAliasRequest() throws XMLModelException {
 		super();
 	}
 
@@ -37,23 +37,24 @@ public class GroupRequest extends SaxMapper {
 		final TagTracker rootTagTracker = new TagTracker() {
 
 			public void onDeactivate() {
-				/*
-				 * The root will be deactivated when parsing a new document
-				 * begins. clear the stack
-				 */
+				// The root will be deactivated when
+				// parsing a new document begins.
+				// clear the stack
 				m_stack.removeAllElements();
 
 				// create the root "dir" object.
 				m_target = new Aspects();
+
 				_log.trace("rootTagTracker onDeactivate");
+				// push the root dir on the stack...
 			}
 		};
 
-		final TagTracker groupsTracker = new TagTracker() {
+		final TagTracker accountAliasTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				_log.trace("groupsTracker onStart()");
-				FinancialAccount aspect = new FinancialAccount();
+				_log.trace("accountAliasTracker onStart()");
+				TradeAccount aspect = new TradeAccount();
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}
@@ -62,14 +63,15 @@ public class GroupRequest extends SaxMapper {
 					String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
-				_log.trace("groupsTracker onEnd() " + contents.toString());
+				_log.trace("accountAliasTracker onEnd() " + contents.toString());
 			}
 		};
 
-		rootTagTracker.track("ListOfGroups/Groups", groupsTracker);
-		groupsTracker.track("Groups", groupsTracker);
+		rootTagTracker.track("ListOfAccountAliases/AccountAlias",
+				accountAliasTracker);
+		accountAliasTracker.track("AccountAlias", accountAliasTracker);
 
-		final TagTracker nameTracker = new TagTracker() {
+		final TagTracker accountTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
 			}
@@ -77,14 +79,31 @@ public class GroupRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
-				temp.setGroupName(value);
-				_log.trace("nameTracker: " + value);
+				final TradeAccount temp = (TradeAccount) m_stack.peek();
+				temp.setAccountNumber(value);
+				_log.trace("accountTracker: " + value);
 			}
 		};
 
-		groupsTracker.track("Groups/name", nameTracker);
-		nameTracker.track("name", nameTracker);
+		accountAliasTracker.track("AccountAlias/account", accountTracker);
+		accountTracker.track("account", accountTracker);
+
+		final TagTracker aliasTracker = new TagTracker() {
+			public void onStart(String namespaceURI, String localName,
+					String qName, Attributes attr) {
+			}
+
+			public void onEnd(String namespaceURI, String localName,
+					String qName, CharArrayWriter contents) {
+				final String value = new String(contents.toString());
+				final TradeAccount temp = (TradeAccount) m_stack.peek();
+				temp.setAlias(value);
+				_log.trace("aliasTracker: " + value);
+			}
+		};
+
+		accountAliasTracker.track("AccountAlias/alias", aliasTracker);
+		aliasTracker.track("alias", aliasTracker);
 		return rootTagTracker;
 	}
 }

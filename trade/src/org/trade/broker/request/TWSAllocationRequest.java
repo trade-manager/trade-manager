@@ -10,19 +10,19 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.xml.SaxMapper;
 import org.trade.core.xml.TagTracker;
 import org.trade.core.xml.XMLModelException;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.FinancialAccount;
 
 import org.xml.sax.Attributes;
 
-public class AccountAliasRequest extends SaxMapper {
+public class TWSAllocationRequest extends SaxMapper {
 
 	private final static Logger _log = LoggerFactory
-			.getLogger(AccountAliasRequest.class);
+			.getLogger(TWSAllocationRequest.class);
 
 	private Aspects m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
 
-	public AccountAliasRequest() throws XMLModelException {
+	public TWSAllocationRequest() throws XMLModelException {
 		super();
 	}
 
@@ -50,11 +50,11 @@ public class AccountAliasRequest extends SaxMapper {
 			}
 		};
 
-		final TagTracker accountAliasTracker = new TagTracker() {
+		final TagTracker allocationProfileTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				_log.trace("accountAliasTracker onStart()");
-				TradeAccount aspect = new TradeAccount();
+				_log.trace("allocationProfileTracker onStart()");
+				FinancialAccount aspect = new FinancialAccount();
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}
@@ -63,15 +63,17 @@ public class AccountAliasRequest extends SaxMapper {
 					String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
-				_log.trace("accountAliasTracker onEnd() " + contents.toString());
+				_log.trace("allocationProfileTracker onEnd() "
+						+ contents.toString());
 			}
 		};
 
-		rootTagTracker.track("ListOfAccountAliases/AccountAlias",
-				accountAliasTracker);
-		accountAliasTracker.track("AccountAlias", accountAliasTracker);
+		rootTagTracker.track("ListOfAllocationProfiles/AllocationProfile",
+				allocationProfileTracker);
+		allocationProfileTracker.track("AllocationProfile",
+				allocationProfileTracker);
 
-		final TagTracker accountTracker = new TagTracker() {
+		final TagTracker nameTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
 			}
@@ -79,16 +81,16 @@ public class AccountAliasRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final TradeAccount temp = (TradeAccount) m_stack.peek();
-				temp.setAccountNumber(value);
-				_log.trace("accountTracker: " + value);
+				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
+				temp.setProfileName(value);
+				_log.trace("nameTracker: " + value);
 			}
 		};
 
-		accountAliasTracker.track("AccountAlias/account", accountTracker);
-		accountTracker.track("account", accountTracker);
+		allocationProfileTracker.track("AllocationProfile/name", nameTracker);
+		nameTracker.track("name", nameTracker);
 
-		final TagTracker aliasTracker = new TagTracker() {
+		final TagTracker typeTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
 			}
@@ -96,14 +98,14 @@ public class AccountAliasRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final TradeAccount temp = (TradeAccount) m_stack.peek();
-				temp.setAlias(value);
-				_log.trace("aliasTracker: " + value);
+				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
+				temp.setType(new Integer(value));
+				_log.trace("typeTracker: " + value);
 			}
 		};
 
-		accountAliasTracker.track("AccountAlias/alias", aliasTracker);
-		aliasTracker.track("alias", aliasTracker);
+		allocationProfileTracker.track("AllocationProfile/type", typeTracker);
+		typeTracker.track("type", typeTracker);
 		return rootTagTracker;
 	}
 }
