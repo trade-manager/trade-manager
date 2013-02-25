@@ -2,7 +2,6 @@ package org.trade.broker.request;
 
 import java.io.CharArrayWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Stack;
 
 import org.slf4j.Logger;
@@ -10,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.trade.core.xml.SaxMapper;
 import org.trade.core.xml.TagTracker;
 import org.trade.core.xml.XMLModelException;
-import org.trade.persistent.dao.FinancialAccount;
+import org.trade.persistent.dao.TradeAccount;
 
 import org.xml.sax.Attributes;
 
@@ -19,11 +18,7 @@ public class AccountAliasRequest extends SaxMapper {
 	private final static Logger _log = LoggerFactory
 			.getLogger(AccountAliasRequest.class);
 
-	private FinancialAccount m_target = null;
-
-	private static final String DATEFORMAT = new String(
-			"yyyy-MM-dd'T'hhmmss'Z'");
-	private static SimpleDateFormat m_sdf = new SimpleDateFormat(DATEFORMAT);
+	private TradeAccount m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
 
 	public AccountAliasRequest() throws XMLModelException {
@@ -47,33 +42,32 @@ public class AccountAliasRequest extends SaxMapper {
 				m_stack.removeAllElements();
 
 				// create the root "dir" object.
-				m_target = new FinancialAccount();
+				m_target = new TradeAccount();
 
 				_log.trace("rootTagTracker onDeactivate");
 				// push the root dir on the stack...
 			}
 		};
 
-		final TagTracker financialAccountTracker = new TagTracker() {
+		final TagTracker tradeAccountTracker = new TagTracker() {
 			@Override
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
 				// Capture the directory name...
-				_log.trace("financialAccountTracker onStart()");
+				_log.trace("tradeAccountTracker onStart()");
 
 			}
 
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
-				_log.trace("financialAccountTrackerTracker onEnd() "
-						+ contents.toString());
+				_log.trace("tradeAccountTracker onEnd() " + contents.toString());
 			}
 		};
 
 		rootTagTracker.track("ListOfAccountAliases/AccountAlias",
-				financialAccountTracker);
-		financialAccountTracker.track("AccountAlias", financialAccountTracker);
+				tradeAccountTracker);
+		tradeAccountTracker.track("AccountAlias", tradeAccountTracker);
 		// -- create action /listing/directory and directory
 		final TagTracker accountAlias = new TagTracker() {
 
@@ -93,9 +87,6 @@ public class AccountAliasRequest extends SaxMapper {
 			}
 		};
 
-		financialAccountTracker.track("AccountAlias/account", accountAlias);
-		accountAlias.track("account", accountAlias);
-
 		final TagTracker aliasTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
@@ -103,11 +94,30 @@ public class AccountAliasRequest extends SaxMapper {
 
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
-				final String alias = contents.toString();
-				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
-				temp.setGroupName(alias);
+				final String name = new String(contents.toString());
+				final TradeAccount temp = (TradeAccount) m_stack.peek();
+				temp.setAlias(name);
 			}
 		};
+
+		accountAlias.track("AccountAlias/alias", aliasTracker);
+		aliasTracker.track("alias", aliasTracker);
+
+		final TagTracker accountTracker = new TagTracker() {
+			public void onStart(String namespaceURI, String localName,
+					String qName, Attributes attr) {
+			}
+
+			public void onEnd(String namespaceURI, String localName,
+					String qName, CharArrayWriter contents) {
+				final String name = new String(contents.toString());
+				final TradeAccount temp = (TradeAccount) m_stack.peek();
+				temp.setAccountNumber(name);
+			}
+		};
+
+		accountAlias.track("AccountAlias/account", accountTracker);
+		accountTracker.track("account", accountTracker);
 		return rootTagTracker;
 	}
 }

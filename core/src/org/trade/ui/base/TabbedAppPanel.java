@@ -176,8 +176,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	public void doLFWindows() {
 		try {
-			UIManager
-					.setLookAndFeel(new com.sun.java.swing.plaf.windows.WindowsLookAndFeel());
+			// UIManager
+			// .setLookAndFeel(new
+			// com.sun.java.swing.plaf.windows.WindowsLookAndFeel());
 			SwingUtilities.updateComponentTreeUI(getFrame());
 		} catch (Exception eMetal) {
 			_log.error("Could not load LookAndFeel: " + eMetal);
@@ -186,8 +187,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 
 	public void doLFMotif() {
 		try {
-			UIManager
-					.setLookAndFeel(new com.sun.java.swing.plaf.motif.MotifLookAndFeel());
+			// UIManager
+			// .setLookAndFeel(new
+			// com.sun.java.swing.plaf.motif.MotifLookAndFeel());
 			UIManager.put("swing.boldMetal", Boolean.FALSE);
 			SwingUtilities.updateComponentTreeUI(getFrame());
 		} catch (Exception eMetal) {
