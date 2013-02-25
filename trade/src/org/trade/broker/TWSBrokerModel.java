@@ -55,6 +55,7 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -1821,6 +1822,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void accountDownloadEnd(String accountNumber) {
 		_log.info("accountDownloadEnd:" + accountNumber);
+		TradeAccount tradeAccount = m_accountRequests.get(accountNumber);
+		if (AccountType.CORPORATION.equals(tradeAccount.getAccountType())) {
+			m_client.requestFA(EClientSocket.GROUPS);
+			m_client.requestFA(EClientSocket.PROFILES);
+			m_client.requestFA(EClientSocket.ALIASES);
+		}
 	}
 
 	/**
@@ -2008,6 +2015,23 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void receiveFA(int faDataType, String xml) {
 
+		switch (faDataType) {
+		case EClientSocket.ALIASES: {
+			_log.info("Aliases: /n" + xml);
+			break;
+		}
+		case EClientSocket.PROFILES: {
+			_log.info("Profiles: /n" + xml);
+			break;
+		}
+		case EClientSocket.GROUPS: {
+			_log.info("Groups: /n" + xml);
+			break;
+		}
+		default: {
+
+		}
+		}
 	}
 
 	/**

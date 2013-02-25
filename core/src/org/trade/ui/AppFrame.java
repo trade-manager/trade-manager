@@ -59,7 +59,7 @@ public class AppFrame extends JFrame {
 		this.setTitle("Application");
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		this.setLocationRelativeTo(null);
-		this.getContentPane().add(mainPanel, BorderLayout.CENTER);		
+		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 	}
 
 	static {
