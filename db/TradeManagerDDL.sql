@@ -489,6 +489,7 @@ CREATE  TABLE IF NOT EXISTS financialaccount (
   description VARCHAR(100) NULL ,
   method VARCHAR(20) NULL ,
   percent DECIMAL(10,6) NULL ,
+  type INT NULL ,
   version INT NULL,
   PRIMARY KEY (idFinancialAccount) ,
   UNIQUE INDEX financialaccount_groupName_uq (groupName ASC),

@@ -47,6 +47,7 @@ import org.trade.core.util.CoreUtils;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
+import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.TradeAccount;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
@@ -88,8 +89,8 @@ public class FinancialAccountRequestTest extends TestCase {
 
 		try {
 
-			final AccountAliasRequest financialAccountRequest = new AccountAliasRequest();
-			final Aspects aspects = (Aspects) financialAccountRequest
+			final AccountAliasRequest request = new AccountAliasRequest();
+			final Aspects aspects = (Aspects) request
 					.fromXML(Thread
 							.currentThread()
 							.getContextClassLoader()
@@ -102,7 +103,8 @@ public class FinancialAccountRequestTest extends TestCase {
 				account.setCurrency(Currency.USD);
 				account.setName(account.getAccountNumber());
 				tradePersistentModel.persistAspect(account);
-				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+				_log.info("Aspect: \n"
+						+ CoreUtils.toFormattedXMLString(account));
 			}
 
 		} catch (Exception e) {
@@ -115,8 +117,8 @@ public class FinancialAccountRequestTest extends TestCase {
 
 		try {
 
-			final AccountAliasRequest financialAccountRequest = new AccountAliasRequest();
-			final Aspects aspects = (Aspects) financialAccountRequest
+			final GroupRequest request = new GroupRequest();
+			final Aspects aspects = (Aspects) request
 					.fromXML(Thread
 							.currentThread()
 							.getContextClassLoader()
@@ -124,12 +126,10 @@ public class FinancialAccountRequestTest extends TestCase {
 									"org/trade/broker/request/groups.xml"));
 
 			for (Aspect aspect : aspects.getAspect()) {
-				TradeAccount account = (TradeAccount) aspect;
-				account.setAccountType(AccountType.INDIVIDUAL);
-				account.setCurrency(Currency.USD);
-				account.setName(account.getAccountNumber());
+				FinancialAccount account = (FinancialAccount) aspect;
 				tradePersistentModel.persistAspect(account);
-				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+				_log.info("Aspect: \n"
+						+ CoreUtils.toFormattedXMLString(account));
 			}
 
 		} catch (Exception e) {
@@ -142,21 +142,18 @@ public class FinancialAccountRequestTest extends TestCase {
 
 		try {
 
-			final AccountAliasRequest financialAccountRequest = new AccountAliasRequest();
-			final Aspects aspects = (Aspects) financialAccountRequest
-					.fromXML(Thread
-							.currentThread()
-							.getContextClassLoader()
-							.getResourceAsStream(
-									"org/trade/broker/request/allocation.xml"));
+			final AllocationRequest request = new AllocationRequest();
+			final Aspects aspects = (Aspects) request.fromXML(Thread
+					.currentThread()
+					.getContextClassLoader()
+					.getResourceAsStream(
+							"org/trade/broker/request/allocation.xml"));
 
 			for (Aspect aspect : aspects.getAspect()) {
-				TradeAccount account = (TradeAccount) aspect;
-				account.setAccountType(AccountType.INDIVIDUAL);
-				account.setCurrency(Currency.USD);
-				account.setName(account.getAccountNumber());
+				FinancialAccount account = (FinancialAccount) aspect;
 				tradePersistentModel.persistAspect(account);
-				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+				_log.info("Aspect: \n"
+						+ CoreUtils.toFormattedXMLString(account));
 			}
 
 		} catch (Exception e) {

@@ -45,7 +45,7 @@ public class AccountAliasRequest extends SaxMapper {
 				// create the root "dir" object.
 				m_target = new Aspects();
 
-				_log.error("rootTagTracker onDeactivate");
+				_log.trace("rootTagTracker onDeactivate");
 				// push the root dir on the stack...
 			}
 		};
@@ -53,7 +53,7 @@ public class AccountAliasRequest extends SaxMapper {
 		final TagTracker accountAliasTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				_log.error("accountAliasTracker onStart()");
+				_log.trace("accountAliasTracker onStart()");
 				TradeAccount aspect = new TradeAccount();
 				m_target.add(aspect);
 				m_stack.push(aspect);
@@ -63,7 +63,7 @@ public class AccountAliasRequest extends SaxMapper {
 					String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
-				_log.error("accountAliasTracker onEnd() " + contents.toString());
+				_log.trace("accountAliasTracker onEnd() " + contents.toString());
 			}
 		};
 
@@ -81,7 +81,7 @@ public class AccountAliasRequest extends SaxMapper {
 				final String value = new String(contents.toString());
 				final TradeAccount temp = (TradeAccount) m_stack.peek();
 				temp.setAccountNumber(value);
-				_log.error("accountTracker: " + value);
+				_log.trace("accountTracker: " + value);
 			}
 		};
 
@@ -98,7 +98,7 @@ public class AccountAliasRequest extends SaxMapper {
 				final String value = new String(contents.toString());
 				final TradeAccount temp = (TradeAccount) m_stack.peek();
 				temp.setAlias(value);
-				_log.error("aliasTracker: " + value);
+				_log.trace("aliasTracker: " + value);
 			}
 		};
 

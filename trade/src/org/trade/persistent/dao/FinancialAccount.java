@@ -58,6 +58,7 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	private String profileName;
 	private String description;
 	private String method;
+	private Integer type;
 	private BigDecimal percent;
 
 	public FinancialAccount() {
@@ -87,9 +88,10 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	 * @param description
 	 *            String
 	 */
-	public FinancialAccount(String profileName, String description) {
+	public FinancialAccount(String profileName, String description, Integer type) {
 		this.profileName = profileName;
 		this.description = description;
+		this.type = type;
 	}
 
 	/**
@@ -192,6 +194,26 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	 */
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	/**
+	 * Method getMethod.
+	 * 
+	 * @return Integer
+	 */
+	@Column(name = "type")
+	public Integer getType() {
+		return this.type;
+	}
+
+	/**
+	 * Method setType.
+	 * 
+	 * @param type
+	 *            Integer
+	 */
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	/**
