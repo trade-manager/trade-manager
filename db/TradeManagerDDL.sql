@@ -420,6 +420,7 @@ CREATE  TABLE IF NOT EXISTS codetype (
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
+
 -- -----------------------------------------------------
 -- Table CodeAttribute
 -- -----------------------------------------------------
@@ -476,7 +477,7 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- Table financialaccount
+-- Table FinancialAccount
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS financialaccount;
 
@@ -484,8 +485,8 @@ SHOW WARNINGS;
 
 CREATE  TABLE IF NOT EXISTS financialaccount (
   idFinancialAccount INT NOT NULL AUTO_INCREMENT ,
-  groupName VARCHAR(45) NOT NULL ,
-  profileName VARCHAR(45) NOT NULL ,
+  groupName VARCHAR(45) NULL ,
+  profileName VARCHAR(45) NULL ,
   description VARCHAR(100) NULL ,
   method VARCHAR(20) NULL ,
   percent DECIMAL(10,6) NULL ,
@@ -494,6 +495,30 @@ CREATE  TABLE IF NOT EXISTS financialaccount (
   PRIMARY KEY (idFinancialAccount) ,
   UNIQUE INDEX financialaccount_groupName_uq (groupName ASC),
   UNIQUE INDEX financialaccount_groupProfile_uq (profileName ASC))
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table AccountAllocation
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS accountallocation;
+
+SHOW WARNINGS;
+CREATE  TABLE IF NOT EXISTS accountallocation(
+  idAccountAllocation INT NOT NULL AUTO_INCREMENT ,
+  accountNumber VARCHAR(20) NOT NULL ,
+  amount DECIMAL(10,2) NULL ,
+  posEff VARCHAR(10) NULL ,
+  version INT NULL,
+  idFinancialAccount INT NOT NULL ,
+  PRIMARY KEY (idAccountAllocation) ,
+  INDEX accountAllocation_FinancialAccount_idx (idFinancialAccount ASC) ,
+  CONSTRAINT accountAllocation_FinancialAccount_fk
+    FOREIGN KEY (idFinancialAccount )
+    REFERENCES financialaccount (idFinancialAccount )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 SHOW WARNINGS;

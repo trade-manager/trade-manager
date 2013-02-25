@@ -38,12 +38,18 @@ package org.trade.persistent.dao;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import org.trade.core.dao.Aspect;
 
 /**
@@ -60,6 +66,8 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	private String method;
 	private Integer type;
 	private BigDecimal percent;
+	private List<AccountAllocation> accountAllocations = new ArrayList<AccountAllocation>(
+			0);
 
 	public FinancialAccount() {
 	}
@@ -121,7 +129,7 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "groupName", nullable = false, length = 45)
+	@Column(name = "groupName", length = 45)
 	public String getGroupName() {
 		return this.groupName;
 	}
@@ -141,7 +149,7 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "profileName", nullable = false, length = 45)
+	@Column(name = "profileName", length = 45)
 	public String getProfileName() {
 		return this.profileName;
 	}
@@ -161,7 +169,7 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "description", nullable = false, length = 100)
+	@Column(name = "description", length = 100)
 	public String getDescription() {
 		return this.description;
 	}
@@ -234,5 +242,25 @@ public class FinancialAccount extends Aspect implements java.io.Serializable {
 	 */
 	public void setPercent(BigDecimal percent) {
 		this.percent = percent;
+	}
+
+	/**
+	 * Method getAccountAllocation.
+	 * 
+	 * @return List<AccountAllocation>
+	 */
+	@OneToMany(mappedBy = "financialAccount", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
+	public List<AccountAllocation> getAccountAllocation() {
+		return this.accountAllocations;
+	}
+
+	/**
+	 * Method setAccountAllocation.
+	 * 
+	 * @param accountAllocations
+	 *            List<AccountAllocation>
+	 */
+	public void setAccountAllocation(List<AccountAllocation> accountAllocations) {
+		this.accountAllocations = accountAllocations;
 	}
 }

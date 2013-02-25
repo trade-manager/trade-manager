@@ -54,6 +54,8 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CandleHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
+import org.trade.persistent.dao.FinancialAccount;
+import org.trade.persistent.dao.FinancialAccountHome;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
 import org.trade.persistent.dao.Strategy;
@@ -90,6 +92,7 @@ public class TradePersistentModel implements PersistentModel {
 	private TradeAccountHome m_tradeAccountHome = null;
 	private TradestrategyHome m_tradestrategyHome = null;
 	private CandleHome m_candleHome = null;
+	private FinancialAccountHome m_financialAccountHome = null;
 	private AspectHome m_aspectHome = null;
 	private RuleHome m_ruleHome = null;
 
@@ -106,6 +109,7 @@ public class TradePersistentModel implements PersistentModel {
 		m_tradeAccountHome = new TradeAccountHome();
 		m_tradestrategyHome = new TradestrategyHome();
 		m_candleHome = new CandleHome();
+		m_financialAccountHome = new FinancialAccountHome();
 		m_aspectHome = new AspectHome();
 		m_ruleHome = new RuleHome();
 	}
@@ -236,6 +240,32 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 		return m_contractHome.findByUniqueKey(SECType, symbol, exchange,
 				currency, expiry);
+	}
+
+	/**
+	 * Method findFinancialAccountByGroupName.
+	 * 
+	 * @param groupName
+	 *            String
+	 * @return FinancialAccount
+	 * @throws PersistentModelException
+	 */
+	public FinancialAccount findFinancialAccountByGroupName(String groupName)
+			throws PersistentModelException {
+		return m_financialAccountHome.findByGroupName(groupName);
+	}
+
+	/**
+	 * Method findFinancialAccountByProfileName.
+	 * 
+	 * @param groupName
+	 *            String
+	 * @return FinancialAccount
+	 * @throws PersistentModelException
+	 */
+	public FinancialAccount findFinancialAccountByProfileName(String profileName)
+			throws PersistentModelException {
+		return m_financialAccountHome.findByProfileName(profileName);
 	}
 
 	/**

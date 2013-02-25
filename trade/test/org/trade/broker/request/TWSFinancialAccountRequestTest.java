@@ -47,10 +47,9 @@ import org.trade.core.util.CoreUtils;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
+import org.trade.persistent.dao.AccountAllocation;
 import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.TradeAccount;
-import org.trade.persistent.dao.Tradestrategy;
-import org.trade.persistent.dao.TradestrategyTest;
 import org.trade.ui.TradeAppLoadConfig;
 
 /**
@@ -60,7 +59,6 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 	private final static Logger _log = LoggerFactory
 			.getLogger(TWSFinancialAccountRequestTest.class);
 	private PersistentModel tradePersistentModel = null;
-	private Tradestrategy tradestrategy = null;
 
 	/**
 	 * Method setUp.
@@ -71,8 +69,6 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 		TradeAppLoadConfig.loadAppProperties();
 		tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
-		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
-		TestCase.assertNotNull(this.tradestrategy);
 	}
 
 	/**
@@ -81,7 +77,11 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy();
+		Aspects items = tradePersistentModel
+				.findAspectsByClassName(FinancialAccount.class.getName());
+		for (Aspect aspect : items.getAspect()) {
+			tradePersistentModel.removeAspect(aspect);
+		}
 	}
 
 	@Test
@@ -99,12 +99,18 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 
 			for (Aspect aspect : aspects.getAspect()) {
 				TradeAccount account = (TradeAccount) aspect;
-				account.setAccountType(AccountType.INDIVIDUAL);
-				account.setCurrency(Currency.USD);
-				account.setName(account.getAccountNumber());
-				tradePersistentModel.persistAspect(account);
-				_log.info("Aspect: \n"
-						+ CoreUtils.toFormattedXMLString(account));
+				TradeAccount ta = tradePersistentModel
+						.findTradeAccountByNumber(account.getAccountNumber());
+				if (null != ta) {
+					account.setAlias(account.getAlias());
+					tradePersistentModel.persistAspect(ta);
+				} else {
+					account.setAccountType(AccountType.INDIVIDUAL);
+					account.setCurrency(Currency.USD);
+					account.setName(account.getAccountNumber());
+					tradePersistentModel.persistAspect(account);
+				}
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
 			}
 
 		} catch (Exception e) {
@@ -127,9 +133,28 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 
 			for (Aspect aspect : aspects.getAspect()) {
 				FinancialAccount account = (FinancialAccount) aspect;
-				tradePersistentModel.persistAspect(account);
-				_log.info("Aspect: \n"
-						+ CoreUtils.toFormattedXMLString(account));
+				for (AccountAllocation item : account.getAccountAllocation()) {
+					FinancialAccount parent = tradePersistentModel
+							.findFinancialAccountByGroupName(item
+									.getFinancialAccount().getGroupName());
+					if (null == parent) {
+						parent = (FinancialAccount) tradePersistentModel
+								.persistAspect(item.getFinancialAccount());
+					} else {
+						if (!parent.getMethod().equals(
+								item.getFinancialAccount().getMethod())) {
+							parent.setMethod(item.getFinancialAccount()
+									.getMethod());
+							parent = (FinancialAccount) tradePersistentModel
+									.persistAspect(parent);
+						}
+
+					}
+					item.setFinancialAccount(parent);
+					tradePersistentModel.persistAspect(item);
+				}
+
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
 			}
 
 		} catch (Exception e) {
@@ -151,9 +176,26 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 
 			for (Aspect aspect : aspects.getAspect()) {
 				FinancialAccount account = (FinancialAccount) aspect;
-				tradePersistentModel.persistAspect(account);
-				_log.info("Aspect: \n"
-						+ CoreUtils.toFormattedXMLString(account));
+				for (AccountAllocation item : account.getAccountAllocation()) {
+					FinancialAccount parent = tradePersistentModel
+							.findFinancialAccountByProfileName(item
+									.getFinancialAccount().getProfileName());
+					if (null == parent) {
+						parent = (FinancialAccount) tradePersistentModel
+								.persistAspect(item.getFinancialAccount());
+					} else {
+						if (!parent.getType().equals(
+								item.getFinancialAccount().getType())) {
+							parent.setType(item.getFinancialAccount().getType());
+							parent = (FinancialAccount) tradePersistentModel
+									.persistAspect(parent);
+						}
+
+					}
+					item.setFinancialAccount(parent);
+					tradePersistentModel.persistAspect(item);
+				}
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
 			}
 
 		} catch (Exception e) {

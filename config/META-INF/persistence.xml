@@ -25,6 +25,7 @@
 		<class>org.trade.persistent.dao.CodeAttribute</class>
 		<class>org.trade.persistent.dao.CodeValue</class>	
 	      <class>org.trade.persistent.dao.FinancialAccount</class>	
+	      <class>org.trade.persistent.dao.AccountAllocation</class>
 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 		<validation-mode>CALLBACK</validation-mode>
 		<properties>

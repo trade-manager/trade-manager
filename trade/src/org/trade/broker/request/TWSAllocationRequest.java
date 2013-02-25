@@ -1,24 +1,19 @@
 package org.trade.broker.request;
 
 import java.io.CharArrayWriter;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Stack;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.dao.Aspects;
 import org.trade.core.xml.SaxMapper;
 import org.trade.core.xml.TagTracker;
 import org.trade.core.xml.XMLModelException;
+import org.trade.persistent.dao.AccountAllocation;
 import org.trade.persistent.dao.FinancialAccount;
 
 import org.xml.sax.Attributes;
 
 public class TWSAllocationRequest extends SaxMapper {
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(TWSAllocationRequest.class);
-
 	private Aspects m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
 
@@ -31,8 +26,6 @@ public class TWSAllocationRequest extends SaxMapper {
 	}
 
 	public TagTracker createTagTrackerNetwork() throws ParseException {
-		_log.trace("creating tag track network");
-
 		// -- create root: /
 		final TagTracker rootTagTracker = new TagTracker() {
 
@@ -44,8 +37,6 @@ public class TWSAllocationRequest extends SaxMapper {
 
 				// create the root "dir" object.
 				m_target = new Aspects();
-
-				_log.trace("rootTagTracker onDeactivate");
 				// push the root dir on the stack...
 			}
 		};
@@ -53,7 +44,6 @@ public class TWSAllocationRequest extends SaxMapper {
 		final TagTracker allocationProfileTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				_log.trace("allocationProfileTracker onStart()");
 				FinancialAccount aspect = new FinancialAccount();
 				m_target.add(aspect);
 				m_stack.push(aspect);
@@ -63,8 +53,6 @@ public class TWSAllocationRequest extends SaxMapper {
 					String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
-				_log.trace("allocationProfileTracker onEnd() "
-						+ contents.toString());
 			}
 		};
 
@@ -83,7 +71,6 @@ public class TWSAllocationRequest extends SaxMapper {
 				final String value = new String(contents.toString());
 				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
 				temp.setProfileName(value);
-				_log.trace("nameTracker: " + value);
 			}
 		};
 
@@ -100,12 +87,100 @@ public class TWSAllocationRequest extends SaxMapper {
 				final String value = new String(contents.toString());
 				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
 				temp.setType(new Integer(value));
-				_log.trace("typeTracker: " + value);
+			}
+		};
+		allocationProfileTracker.track("AllocationProfile/type", typeTracker);
+		typeTracker.track("type", typeTracker);
+
+		final TagTracker listOfAllocationsTracker = new TagTracker() {
+			public void onStart(String namespaceURI, String localName,
+					String qName, Attributes attr) {
+				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
+				m_stack.push(temp);
+			}
+
+			public void onEnd(String namespaceURI, String localName,
+					String qName, CharArrayWriter contents) {
+				// Clean up the directory stack...
+				m_stack.pop();
 			}
 		};
 
-		allocationProfileTracker.track("AllocationProfile/type", typeTracker);
-		typeTracker.track("type", typeTracker);
+		allocationProfileTracker.track("AllocationProfile/ListOfAllocations",
+				listOfAllocationsTracker);
+		listOfAllocationsTracker.track("ListOfAllocations",
+				listOfAllocationsTracker);
+
+		final TagTracker allocationTracker = new TagTracker() {
+			public void onStart(String namespaceURI, String localName,
+					String qName, Attributes attr) {
+				final FinancialAccount aspect = (FinancialAccount) m_stack
+						.peek();
+				AccountAllocation temp = new AccountAllocation();
+				temp.setFinancialAccount(aspect);
+				aspect.getAccountAllocation().add(temp);
+				m_stack.push(temp);
+			}
+
+			public void onEnd(String namespaceURI, String localName,
+					String qName, CharArrayWriter contents) {
+				// Clean up the directory stack...
+				m_stack.pop();
+			}
+		};
+
+		allocationProfileTracker.track("ListOfAllocations/Allocation",
+				allocationTracker);
+		allocationTracker.track("Allocation", allocationTracker);
+
+		final TagTracker acctTracker = new TagTracker() {
+			public void onStart(String namespaceURI, String localName,
+					String qName, Attributes attr) {
+			}
+
+			public void onEnd(String namespaceURI, String localName,
+					String qName, CharArrayWriter contents) {
+				final String value = new String(contents.toString());
+				final AccountAllocation aspect = (AccountAllocation) m_stack
+						.peek();
+				aspect.setAccountNumber(value);
+			}
+		};
+		allocationTracker.track("Allocation/acct", acctTracker);
+		acctTracker.track("acct", acctTracker);
+
+		final TagTracker amountTracker = new TagTracker() {
+			public void onStart(String namespaceURI, String localName,
+					String qName, Attributes attr) {
+			}
+
+			public void onEnd(String namespaceURI, String localName,
+					String qName, CharArrayWriter contents) {
+				final String value = new String(contents.toString());
+				final AccountAllocation aspect = (AccountAllocation) m_stack
+						.peek();
+				aspect.setAmount(new BigDecimal(value));
+			}
+		};
+		allocationTracker.track("Allocation/amount", amountTracker);
+		amountTracker.track("amount", amountTracker);
+
+		final TagTracker posEffTracker = new TagTracker() {
+			public void onStart(String namespaceURI, String localName,
+					String qName, Attributes attr) {
+			}
+
+			public void onEnd(String namespaceURI, String localName,
+					String qName, CharArrayWriter contents) {
+				final String value = new String(contents.toString());
+				final AccountAllocation aspect = (AccountAllocation) m_stack
+						.peek();
+				aspect.setPosEff(value);
+			}
+		};
+		allocationTracker.track("Allocation/posEff", posEffTracker);
+		posEffTracker.track("posEff", posEffTracker);
+
 		return rootTagTracker;
 	}
 }

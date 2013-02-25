@@ -42,6 +42,7 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
@@ -204,6 +205,28 @@ public interface PersistentModel {
 	 */
 	Contract findContractByUniqueKey(String SECType, String symbol,
 			String exchange, String currency, Date expiry)
+			throws PersistentModelException;
+
+	/**
+	 * Method findFinancialAccountByGroupName.
+	 * 
+	 * @param groupName
+	 *            String
+	 * @return FinancialAccount
+	 * @throws PersistentModelException
+	 */
+	FinancialAccount findFinancialAccountByGroupName(String groupName)
+			throws PersistentModelException;
+
+	/**
+	 * Method findFinancialAccountByProfileName.
+	 * 
+	 * @param profileName
+	 *            String
+	 * @return FinancialAccount
+	 * @throws PersistentModelException
+	 */
+	FinancialAccount findFinancialAccountByProfileName(String profileName)
 			throws PersistentModelException;
 
 	/**
