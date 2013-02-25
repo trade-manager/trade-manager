@@ -40,10 +40,14 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.trade.core.dao.Aspect;
+import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.CoreUtils;
+import org.trade.dictionary.valuetype.AccountType;
+import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.dao.FinancialAccount;
+import org.trade.persistent.dao.TradeAccount;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
 import org.trade.ui.TradeAppLoadConfig;
@@ -85,21 +89,78 @@ public class FinancialAccountRequestTest extends TestCase {
 		try {
 
 			final AccountAliasRequest financialAccountRequest = new AccountAliasRequest();
-			final FinancialAccount financialAccount = (FinancialAccount) financialAccountRequest
+			final Aspects aspects = (Aspects) financialAccountRequest
 					.fromXML(Thread
 							.currentThread()
 							.getContextClassLoader()
 							.getResourceAsStream(
-									"org/trade/broker/request/alias.xml"));
+									"org/trade/broker/request/aliases.xml"));
 
-			tradePersistentModel.persistAspect(financialAccount);
-
-			_log.info("Alias: \n"
-					+ CoreUtils.toFormattedXMLString(financialAccount));
+			for (Aspect aspect : aspects.getAspect()) {
+				TradeAccount account = (TradeAccount) aspect;
+				account.setAccountType(AccountType.INDIVIDUAL);
+				account.setCurrency(Currency.USD);
+				account.setName(account.getAccountNumber());
+				tradePersistentModel.persistAspect(account);
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+			}
 
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
 		}
 	}
 
+	@Test
+	public void testGroupRequest() {
+
+		try {
+
+			final AccountAliasRequest financialAccountRequest = new AccountAliasRequest();
+			final Aspects aspects = (Aspects) financialAccountRequest
+					.fromXML(Thread
+							.currentThread()
+							.getContextClassLoader()
+							.getResourceAsStream(
+									"org/trade/broker/request/groups.xml"));
+
+			for (Aspect aspect : aspects.getAspect()) {
+				TradeAccount account = (TradeAccount) aspect;
+				account.setAccountType(AccountType.INDIVIDUAL);
+				account.setCurrency(Currency.USD);
+				account.setName(account.getAccountNumber());
+				tradePersistentModel.persistAspect(account);
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testAllocationRequest() {
+
+		try {
+
+			final AccountAliasRequest financialAccountRequest = new AccountAliasRequest();
+			final Aspects aspects = (Aspects) financialAccountRequest
+					.fromXML(Thread
+							.currentThread()
+							.getContextClassLoader()
+							.getResourceAsStream(
+									"org/trade/broker/request/allocation.xml"));
+
+			for (Aspect aspect : aspects.getAspect()) {
+				TradeAccount account = (TradeAccount) aspect;
+				account.setAccountType(AccountType.INDIVIDUAL);
+				account.setCurrency(Currency.USD);
+				account.setName(account.getAccountNumber());
+				tradePersistentModel.persistAspect(account);
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
 }

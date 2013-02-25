@@ -14,15 +14,15 @@ import org.trade.persistent.dao.TradeAccount;
 
 import org.xml.sax.Attributes;
 
-public class AccountAliasRequest extends SaxMapper {
+public class AllocationRequest extends SaxMapper {
 
 	private final static Logger _log = LoggerFactory
-			.getLogger(AccountAliasRequest.class);
+			.getLogger(AllocationRequest.class);
 
 	private Aspects m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
 
-	public AccountAliasRequest() throws XMLModelException {
+	public AllocationRequest() throws XMLModelException {
 		super();
 	}
 
