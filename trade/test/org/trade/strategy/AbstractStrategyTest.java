@@ -408,7 +408,7 @@ public class AbstractStrategyTest extends TestCase {
 			TradeOrder result = this.strategyProxy.createOrder(Action.BUY,
 					OrderType.STPLMT, new Money(100.04), new Money(100.01),
 					1000, null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
-					TimeInForce.DAY, true, true);
+					TimeInForce.DAY, true, true, null, null, null, null);
 			TestCase.assertNotNull(result);
 		} catch (Exception ex) {
 			TestCase.fail("Error testCreateOrder Msg:" + ex.getMessage());
@@ -813,7 +813,7 @@ public class AbstractStrategyTest extends TestCase {
 		TradeOrder openOrder = this.strategyProxy.createOrder(Action.BUY,
 				OrderType.STPLMT, price, price.subtract(new Money(0.2)), 1000,
 				null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
-				TimeInForce.DAY, true, true);
+				TimeInForce.DAY, true, true, null, null, null, null);
 		if (fillOpenPosition) {
 
 			TestCase.assertNotNull(openOrder);

@@ -2505,17 +2505,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != order.getAllOrNothing()) {
 			ibOrder.m_allOrNone = order.getAllOrNothing();
 		}
-		if (null != order.getTrade().getTradestrategy()) {
-			ibOrder.m_account = order.getTrade().getTradestrategy()
-					.getTradeAccount().getAccountNumber();
+		if (null != order.getFAProfile()) {
+			ibOrder.m_faProfile = order.getFAProfile();
 		} else {
-			if (null != order.getTrade().getTradestrategy()) {
-				ibOrder.m_faProfile = order.getFAProfile();
-			} else {
-				if (null != order.getTrade().getTradestrategy()) {
-					ibOrder.m_faGroup = order.getFAGroup();
-				}
-
+			if (null != order.getFAGroup()) {
+				ibOrder.m_faGroup = order.getFAGroup();
 				if (null != order.getTrade().getTradestrategy()) {
 					ibOrder.m_faMethod = order.getFAMethod();
 				}
@@ -2524,6 +2518,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					ibOrder.m_faPercentage = faPercent.getBigDecimalValue()
 							.toString();
 				}
+			} else {
+				ibOrder.m_account = order.getAccountNumber();
 			}
 		}
 

@@ -611,7 +611,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			PersistentModelException {
 		return createOrder(action, orderType, limitPrice, auxPrice, quantity,
 				ocaGroupName, TriggerMethod.DEFAULT, OverrideConstraints.YES,
-				TimeInForce.DAY, roundPrice, transmit);
+				TimeInForce.DAY, roundPrice, transmit, null, null, null, null);
 	}
 
 	/*
@@ -681,9 +681,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public TradeOrder createOrder(String action, String orderType,
 			Money limitPrice, Money auxPrice, int quantity,
 			String ocaGroupName, int triggerMethod, int overrideConstraints,
-			String timeInForce, boolean roundPrice, boolean transmit)
-			throws ValueTypeException, BrokerModelException,
-			PersistentModelException {
+			String timeInForce, boolean roundPrice, boolean transmit,
+			String FAProfile, String FAGroup, String FAMethod,
+			BigDecimal FAPercent) throws ValueTypeException,
+			BrokerModelException, PersistentModelException {
 		/*
 		 * If no trade exists create the trade and set the side based on the
 		 * action.
@@ -720,6 +721,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 				timeInForce, triggerMethod);
 		tradeOrder.setOcaGroupName(ocaGroupName);
 		tradeOrder.setTransmit(transmit);
+		if (FAProfile != null) {
+			tradeOrder.setFAProfile(FAProfile);
+		} else {
+			if (FAGroup != null) {
+				tradeOrder.setFAGroup(FAGroup);
+				tradeOrder.setFAMethod(FAMethod);
+				tradeOrder.setFAPercent(FAPercent);
+			} else {
+				tradeOrder.setAccountNumber(getTradestrategy()
+						.getTradeAccount().getAccountNumber());
+			}
+		}
 		tradeOrder = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), tradeOrder);
 		this.getTrade().addTradeOrder(tradeOrder);
@@ -918,6 +931,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
 		tradeOrder.setTransmit(transmit);
+		tradeOrder.setAccountNumber(getTradestrategy().getTradeAccount()
+				.getAccountNumber());
 		tradeOrder = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), tradeOrder);
 		this.getTrade().addTradeOrder(tradeOrder);
@@ -1057,6 +1072,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setOcaType(2);
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
+		orderTarget.setAccountNumber(getTradestrategy().getTradeAccount()
+				.getAccountNumber());
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
 		this.getTrade().addTradeOrder(orderTarget);
@@ -1072,6 +1089,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setOcaType(2);
 		orderStop.setTransmit(stopTransmit);
 		orderStop.setOcaGroupName(ocaID);
+		orderStop.setAccountNumber(getTradestrategy().getTradeAccount()
+				.getAccountNumber());
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
 		this.getTrade().addTradeOrder(orderStop);
@@ -1179,6 +1198,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setOcaType(2);
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
+		orderTarget.setAccountNumber(getTradestrategy().getTradeAccount()
+				.getAccountNumber());
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
 		this.getTrade().addTradeOrder(orderTarget);
@@ -1193,6 +1214,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setOcaType(2);
 		orderStop.setTransmit(stopTransmit);
 		orderStop.setOcaGroupName(ocaID);
+		orderStop.setAccountNumber(getTradestrategy().getTradeAccount()
+				.getAccountNumber());
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
 		this.getTrade().addTradeOrder(orderStop);

@@ -226,6 +226,7 @@ SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS tradeorder (
   idTradeOrder INT NOT NULL AUTO_INCREMENT ,
   action VARCHAR(6) NOT NULL ,
+  accountNumber VARCHAR(20) NULL ,
   allOrNothing TINYINT(1)  NULL ,
   auxPrice DECIMAL(10,2) NULL ,
   averageFilledPrice DECIMAL(11,3) NULL ,

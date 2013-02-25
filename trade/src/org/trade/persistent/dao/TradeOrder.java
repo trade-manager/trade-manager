@@ -82,6 +82,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private static final long serialVersionUID = -832064631322873796L;
 	private Trade trade;
 	private String action;
+	private String accountNumber;
 	private BigDecimal averageFilledPrice;
 	private Boolean allOrNothing = new Boolean(false);
 	private BigDecimal auxPrice;
@@ -376,6 +377,26 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 */
 	public void setAction(String action) {
 		this.action = action;
+	}
+	
+	/**
+	 * Method getAccountNumber.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "accountNumber", unique = true, nullable = false, length = 20)
+	public String getAccountNumber() {
+		return this.accountNumber;
+	}
+
+	/**
+	 * Method setAccountNumber.
+	 * 
+	 * @param accountNumber
+	 *            String
+	 */
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 
 	/**
