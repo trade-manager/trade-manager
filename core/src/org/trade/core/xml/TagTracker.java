@@ -40,15 +40,9 @@ import java.text.ParseException;
 import java.util.Hashtable;
 import java.util.Stack;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 
 public class TagTracker {
-
-	protected final static Logger _log = LoggerFactory
-			.getLogger(TagTracker.class);
-
 	/*
 	 * Table of tag trackers. This table contains an entry for every tag name
 	 * that this TagTracker has been configured to follow. This is a
@@ -103,10 +97,6 @@ public class TagTracker {
 	public void startElement(String namespaceURI, String localName,
 			String qName, Attributes attr, Stack<TagTracker> tagStack) {
 
-		_log.trace("NamespaceURI: [" + namespaceURI + "]");
-		_log.trace("LocalName: [" + localName + "]");
-		_log.trace("Que Name: [" + qName + "]");
-
 		if ((null == localName) || (localName.trim().length() == 0)) {
 			localName = qName;
 		}
@@ -121,20 +111,16 @@ public class TagTracker {
 
 		if (tracker == null) {
 			// Not tracking this tag name. Skip the entire branch.
-			_log.trace("Skipping tag: [" + localName + "]");
 			tagStack.push(skip);
 		} else {
 
-			// Found a tracker for this tag name. Make it the new top of stack
-			// tag tracker
-			_log.trace("Tracking tag: [" + localName + "]");
-
-			// Send the deactivate event to this tracker.
-			_log.trace("Deactivating current tracker.");
+			/*
+			 * Found a tracker for this tag name. Make it the new top of stack
+			 * tag tracker Send the deactivate event to this tracker.
+			 */
 			onDeactivate();
 
 			// Send the on start to the new active tracker.
-			_log.trace("Sending start event to [" + localName + "] tracker.");
 			tracker.onStart(namespaceURI, localName, qName, attr);
 			tagStack.push(tracker);
 
@@ -156,7 +142,6 @@ public class TagTracker {
 			localName = qName;
 		}
 		// Send the end event.
-		_log.trace("Finished tracking tag: [" + localName + "]");
 		onEnd(namespaceURI, localName, qName, contents);
 
 		// Clean up the stack...
@@ -165,7 +150,6 @@ public class TagTracker {
 		// Send the reactivate event.
 		final TagTracker activeTracker = (TagTracker) tagStack.peek();
 		if (activeTracker != null) {
-			_log.trace("Reactivating previous tag tracker.");
 			activeTracker.onReactivate();
 		}
 
@@ -224,10 +208,7 @@ class SkippingTagTracker extends TagTracker {
 		 * If the current tag name is being skipped, all children should be
 		 * skipped.
 		 */
-
-		_log.trace("Skipping tag: [" + localName + "]");
 		tagStack.push(this);
-
 	}
 
 	/*
@@ -242,7 +223,6 @@ class SkippingTagTracker extends TagTracker {
 			localName = qName;
 		}
 		// Clean up the stack...
-		_log.trace("Finished skipping tag: [" + localName + "]");
 		tagStack.pop();
 	}
 }

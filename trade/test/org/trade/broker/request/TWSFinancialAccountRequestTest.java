@@ -55,10 +55,10 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  */
-public class FinancialAccountRequestTest extends TestCase {
+public class TWSFinancialAccountRequestTest extends TestCase {
 
 	private final static Logger _log = LoggerFactory
-			.getLogger(FinancialAccountRequestTest.class);
+			.getLogger(TWSFinancialAccountRequestTest.class);
 	private PersistentModel tradePersistentModel = null;
 	private Tradestrategy tradestrategy = null;
 
@@ -89,7 +89,7 @@ public class FinancialAccountRequestTest extends TestCase {
 
 		try {
 
-			final AccountAliasRequest request = new AccountAliasRequest();
+			final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
 			final Aspects aspects = (Aspects) request
 					.fromXML(Thread
 							.currentThread()
@@ -117,7 +117,7 @@ public class FinancialAccountRequestTest extends TestCase {
 
 		try {
 
-			final GroupRequest request = new GroupRequest();
+			final TWSGroupRequest request = new TWSGroupRequest();
 			final Aspects aspects = (Aspects) request
 					.fromXML(Thread
 							.currentThread()
@@ -142,7 +142,7 @@ public class FinancialAccountRequestTest extends TestCase {
 
 		try {
 
-			final AllocationRequest request = new AllocationRequest();
+			final TWSAllocationRequest request = new TWSAllocationRequest();
 			final Aspects aspects = (Aspects) request.fromXML(Thread
 					.currentThread()
 					.getContextClassLoader()

@@ -44,8 +44,6 @@ import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -53,9 +51,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 public abstract class SaxMapper extends DefaultHandler {
-
-	private final static Logger _log = LoggerFactory.getLogger(SaxMapper.class);
-
 	/*
 	 * Must be overridden by all subclasses...
 	 */
@@ -97,9 +92,7 @@ public abstract class SaxMapper extends DefaultHandler {
 			 * a tag tracking network that will perform the mapping for the
 			 * subclass.
 			 */
-			_log.trace("Creating the tag tracker network.");
 			tagStack.push(createTagTrackerNetwork());
-			_log.trace("Tag tracker network created.");
 
 		} catch (final Exception e) {
 			throw new XMLModelException(e);
@@ -142,11 +135,8 @@ public abstract class SaxMapper extends DefaultHandler {
 		 * Set the ContentHandler...
 		 */
 		xr.setContentHandler(this);
-
 		// Parse the file...
-		_log.trace("About to parser XML document.");
 		xr.parse(in);
-		_log.trace("XML document parsing complete.");
 
 		return getMappedObject();
 	}
