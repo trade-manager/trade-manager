@@ -86,6 +86,19 @@ public class DAODecode extends Decode {
 	 * @param codeDecodeType
 	 *            String
 	 */
+	public DAODecode(String codeDecodeType) {
+		this(codeDecodeType, false);
+	}
+
+	/**
+	 * Default Constructor
+	 * 
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param none
+	 *            boolean
+	 */
 	public DAODecode(String codeDecodeType, boolean none) {
 		super(codeDecodeType, DAO_DECODE_IDENTIFIER, none);
 	}

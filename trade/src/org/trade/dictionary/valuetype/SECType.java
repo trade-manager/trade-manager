@@ -50,7 +50,7 @@ public class SECType extends Decode {
 	public static final String FUTURE = "FUT";
 
 	public SECType() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

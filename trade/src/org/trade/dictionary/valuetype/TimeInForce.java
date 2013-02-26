@@ -49,7 +49,7 @@ public class TimeInForce extends Decode {
 	public static final String DAY = "DAY";
 
 	public TimeInForce() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

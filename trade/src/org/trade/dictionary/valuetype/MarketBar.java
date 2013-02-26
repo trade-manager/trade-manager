@@ -45,7 +45,7 @@ public class MarketBar extends Decode {
 	public static final String DECODE = "MKT_BAR";
 
 	public MarketBar() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

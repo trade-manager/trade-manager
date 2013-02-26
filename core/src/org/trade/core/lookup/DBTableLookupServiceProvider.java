@@ -197,30 +197,33 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 					/*
 					 * Add the None selected row.
 					 */
-					if(none){
+					if (none) {
 						Vector<Object> newRowNone = new Vector<Object>();
 						Class<?> clazz = Class.forName(dao);
 						Object daoObjectNone = ClassFactory.create(clazz);
 						newRowNone.add(type);
 						newRowNone.add(daoObjectNone);
 						newRowNone.add("None");
-						rows.add(newRowNone);		
+						rows.add(newRowNone);
 					}
 
 					List<?> codes = getCodes(dao);
 					for (Object daoObject : codes) {
-						Vector<Object> newRow = new Vector<Object>();
+
 						Method method = Reflector.findMethod(
 								daoObject.getClass(), methodName, null);
 						if (null != method) {
 							Object[] o = new Object[0];
 							Object displayNameValue = method.invoke(daoObject,
 									o);
-							newRow.add(type);
-							newRow.add(daoObject);
-							newRow.add(displayNameValue);
+							if (null != displayNameValue) {
+								Vector<Object> newRow = new Vector<Object>();
+								newRow.add(type);
+								newRow.add(daoObject);
+								newRow.add(displayNameValue);
+								rows.add(newRow);
+							}
 						}
-						rows.add(newRow);
 					}
 				}
 

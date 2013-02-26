@@ -86,6 +86,19 @@ public class BaseDecode extends Decode {
 	 * @param codeDecodeType
 	 *            String
 	 */
+	public BaseDecode(String codeDecodeType) {
+		this(codeDecodeType, false);
+	}
+
+	/**
+	 * Default Constructor
+	 * 
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param none
+	 *            boolean
+	 */
 	public BaseDecode(String codeDecodeType, boolean none) {
 		super(codeDecodeType, BASE_DECODE_IDENTIFIER, none);
 	}

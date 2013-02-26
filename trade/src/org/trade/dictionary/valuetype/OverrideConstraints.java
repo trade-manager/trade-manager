@@ -49,7 +49,7 @@ public class OverrideConstraints extends Decode {
 	public static final int YES = 1;
 
 	public OverrideConstraints() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

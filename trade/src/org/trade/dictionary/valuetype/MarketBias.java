@@ -45,7 +45,7 @@ public class MarketBias extends Decode {
 	public static final String DECODE = "MKT_BIAS";
 
 	public MarketBias() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

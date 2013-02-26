@@ -48,8 +48,11 @@ import org.trade.core.properties.ConfigProperties;
  * @author Simon Allen
  */
 public class PropertyFileLookupServiceProvider implements LookupServiceProvider {
-	// This will be a hashtable of hashtables of Lookup objects. The first
-	// key is the lookup name and the second key is the LookupQualifier.
+	/*
+	 * This will be a hashtable of hashtables of Lookup objects. The first key
+	 * is the lookup name and the second key is the LookupQualifier.
+	 */
+	
 	private static Hashtable<String, Hashtable<String, Lookup>> _lookups = new Hashtable<String, Hashtable<String, Lookup>>();
 
 	/**
@@ -70,8 +73,8 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String,
 	 *      LookupQualifier)
 	 */
-	public Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean none)
-			throws LookupException {
+	public Lookup getLookup(String lookupName, LookupQualifier qualifier,
+			boolean none) throws LookupException {
 		Lookup lookup = getCachedLookup(lookupName, qualifier);
 
 		if (null == lookup) {
@@ -99,7 +102,15 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 				// Now construct a Vector Vector - representing the table of
 				// data
 				boolean exit = false;
-
+				/*
+				 * Add the None selected row.
+				 */
+				if (none) {
+					Vector<Object> newRowNone = new Vector<Object>();
+					newRowNone.add("");
+					newRowNone.add("None");
+					rows.add(newRowNone);
+				}
 				do {
 					Vector<Object> row = new Vector<Object>();
 					boolean foundOne = false;

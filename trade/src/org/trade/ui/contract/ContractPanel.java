@@ -84,6 +84,7 @@ import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.DAOGroup;
 import org.trade.dictionary.valuetype.DAOProfile;
@@ -331,16 +332,30 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            IndicatorSeries
 	 */
 
-	public void doProperties(TradeOrder item) {
+	public void doProperties(TradeOrder instance) {
 		try {
-			FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(item);
+			FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
+					instance);
 			if (null != fAPropertiesPanel) {
 				TextDialog dialog = new TextDialog(this.getFrame(),
 						"Indicator Properties", true, fAPropertiesPanel);
 				dialog.setLocationRelativeTo(this);
 				dialog.setVisible(true);
 				if (!dialog.getCancel()) {
-
+					if (AccountType.INDIVIDUAL.equals(instance.getTrade()
+							.getTradestrategy().getTradeAccount()
+							.getAccountType())) {
+						instance.setAccountNumber(instance.getTrade()
+								.getTradestrategy().getTradeAccount()
+								.getAccountNumber());
+					} else {
+						if (null == instance.getFAProfile()
+								&& null == instance.getFAGroup()) {
+							instance.setAccountNumber(instance.getTrade()
+									.getTradestrategy().getTradeAccount()
+									.getAccountNumber());
+						}
+					}
 				}
 			}
 		} catch (Exception ex) {

@@ -48,7 +48,7 @@ public class YesNo extends BaseDecode {
 	public static final String DECODE = "YES_NO";
 
 	public YesNo() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

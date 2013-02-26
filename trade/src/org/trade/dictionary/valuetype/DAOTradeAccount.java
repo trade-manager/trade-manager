@@ -53,7 +53,7 @@ public class DAOTradeAccount extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOTradeAccount() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

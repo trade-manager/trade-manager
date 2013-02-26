@@ -46,7 +46,7 @@ public class ReferenceTable extends Decode {
 	public static final String TRADE_ACCOUNT = "TradeAccount";
 
 	public ReferenceTable() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

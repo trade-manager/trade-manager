@@ -45,7 +45,7 @@ public class IndicatorSeries extends Decode {
 	public static final String DECODE = "INDICATOR_SERIES";
 
 	public IndicatorSeries() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

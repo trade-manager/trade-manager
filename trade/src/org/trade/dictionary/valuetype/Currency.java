@@ -46,7 +46,7 @@ public class Currency extends Decode {
 	public static final String USD = "USD";
 
 	public Currency() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

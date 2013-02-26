@@ -45,7 +45,7 @@ public class DataType extends Decode {
 	public static final String DECODE = "DATA_TYPE";
 
 	public DataType() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

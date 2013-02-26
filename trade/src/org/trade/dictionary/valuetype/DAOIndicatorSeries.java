@@ -48,7 +48,7 @@ public class DAOIndicatorSeries extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOIndicatorSeries() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

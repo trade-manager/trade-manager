@@ -149,6 +149,19 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * @param codeDecodeType
 	 *            String
 	 */
+	public Decode(String codeDecodeType) {
+		this(codeDecodeType, false);
+	}
+
+	/**
+	 * Default Constructor
+	 * 
+	 * 
+	 * @param codeDecodeType
+	 *            String
+	 * @param none
+	 *            boolean
+	 */
 	public Decode(String codeDecodeType, boolean none) {
 		m_codeDecodeType = codeDecodeType;
 		m_codeDecodeIdentifier = CODE_DECODE_IDENTIFIER;

@@ -48,7 +48,7 @@ public class DAOGroup extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOGroup() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**

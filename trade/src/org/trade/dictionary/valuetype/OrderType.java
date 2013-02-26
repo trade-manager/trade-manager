@@ -52,7 +52,7 @@ public class OrderType extends Decode {
 	public static final String MKT = "MKT";
 
 	public OrderType() {
-		super(DECODE, false);
+		super(DECODE);
 	}
 
 	/**
