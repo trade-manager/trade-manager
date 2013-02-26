@@ -79,7 +79,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 
 		if (null == lookup) {
 			try {
-				Vector<Vector<Object>> rows = new Vector<Vector<Object>>();
+			
 				Vector<String> colNames = new Vector<String>();
 				Enumeration<?> en = ConfigProperties
 						.getPropAsEnumeration(lookupName + "_PropertyFile");
@@ -105,9 +105,10 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 				/*
 				 * Add the None selected row.
 				 */
+				Vector<Vector<Object>> rows = new Vector<Vector<Object>>();
 				if (none) {
 					Vector<Object> newRowNone = new Vector<Object>();
-					newRowNone.add("");
+					newRowNone.add(null);
 					newRowNone.add("None");
 					rows.add(newRowNone);
 				}

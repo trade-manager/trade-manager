@@ -49,7 +49,7 @@ public class Tier extends Decode {
 	public static final String NO_GAP = "0";
 
 	public Tier() {
-		super(DECODE);
+		super(DECODE, true);
 	}
 
 	/**

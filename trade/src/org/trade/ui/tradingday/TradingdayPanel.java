@@ -455,7 +455,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public void doSave() {
 		try {
 
-			this.setStatusBarMessage("Save in progress ...\n",
+			this.setStatusBarMessage("Save in progress ...",
 					BasePanel.INFORMATION);
 
 			// Save the Trading days

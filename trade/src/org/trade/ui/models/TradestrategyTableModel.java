@@ -356,7 +356,13 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 4: {
-			element.setTier(((Tier) value).getCode());
+			int code = ((Tier) value).getCode().trim().length();
+			if (code > 0) {
+				element.setTier(((Tier) value).getCode());
+			} else {
+				element.setTier(null);
+			}
+
 			break;
 		}
 		case 5: {
