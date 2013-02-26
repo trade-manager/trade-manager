@@ -46,6 +46,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -74,7 +76,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.MaskFormatter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -84,6 +85,7 @@ import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
+import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.DAOGroup;
@@ -334,6 +336,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	public void doProperties(TradeOrder instance) {
 		try {
+			 if (AccountType.CORPORATION.equals(instance.getTrade()
+			 .getTradestrategy().getTradeAccount().getAccountType())) {
 			FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
 					instance);
 			if (null != fAPropertiesPanel) {
@@ -342,21 +346,26 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				dialog.setLocationRelativeTo(this);
 				dialog.setVisible(true);
 				if (!dialog.getCancel()) {
-					if (AccountType.INDIVIDUAL.equals(instance.getTrade()
-							.getTradestrategy().getTradeAccount()
-							.getAccountType())) {
-						instance.setAccountNumber(instance.getTrade()
-								.getTradestrategy().getTradeAccount()
-								.getAccountNumber());
+					if (null != instance.getFAProfile()) {
+						instance.setFAGroup(null);
+						instance.setFAMethod(null);
+						instance.setFAPercent(null);
+						instance.setAccountNumber(null);
 					} else {
-						if (null == instance.getFAProfile()
-								&& null == instance.getFAGroup()) {
+						if (null != instance.getFAGroup()) {
+							instance.setAccountNumber(null);
+						} else {
 							instance.setAccountNumber(instance.getTrade()
 									.getTradestrategy().getTradeAccount()
 									.getAccountNumber());
 						}
 					}
 				}
+			}
+			} else {
+				this.setStatusBarMessage(
+						"No properties for Individual accounts ...\n",
+						BasePanel.INFORMATION);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error setting FA properties.",
@@ -826,7 +835,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 								cancelButton.setTransferObject(tradeOrder);
 								executeButton.setTransferObject(tradeOrder);
 								propertiesButton.setTransferObject(tradeOrder);
-								propertiesButton.setEnabled(true);
 								break;
 							}
 							i++;
@@ -1024,7 +1032,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 */
 	private void enableChartButtons(Tradestrategy transferObject)
 			throws Exception {
-
+		propertiesButton.setEnabled(false);
 		executeButton.setEnabled(false);
 		brokerDataButton.setEnabled(false);
 		cancelButton.setEnabled(false);
@@ -1041,6 +1049,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderModel.setData(new Tradestrategy());
 			setTradeLabel(null, null);
 		} else {
+			if (AccountType.CORPORATION.equals(transferObject.getTradeAccount()
+					.getAccountType())) {
+				propertiesButton.setEnabled(true);
+			}
 			cancelStrategiesButton.setEnabled(true);
 			brokerDataButton.setEnabled(true);
 			periodEditorComboBox.setEnabled(true);
@@ -1158,10 +1170,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxEditor profileEditorComboBox = new DecodeComboBoxEditor(
 					DAOProfile.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer profileTableRenderer = new DecodeComboBoxRenderer();
+			profileEditorComboBox.setRenderer(profileTableRenderer);
 			if (null != tradeOrder.getFAProfile())
 				profileEditorComboBox.setItem(DAOProfile.newInstance(tradeOrder
 						.getFAProfile()));
-			profileEditorComboBox.setRenderer(profileTableRenderer);
 			profileEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -1176,10 +1188,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxEditor groupEditorComboBox = new DecodeComboBoxEditor(
 					DAOGroup.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer groupTableRenderer = new DecodeComboBoxRenderer();
-			if (null != tradeOrder.getFAGroup())
-				profileEditorComboBox.setItem(DAOGroup.newInstance(tradeOrder
-						.getFAGroup()));
 			groupEditorComboBox.setRenderer(groupTableRenderer);
+			if (null != tradeOrder.getFAGroup())
+				groupEditorComboBox.setItem(DAOGroup.newInstance(tradeOrder
+						.getFAGroup()));
 			groupEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -1192,10 +1204,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxEditor methodEditorComboBox = new DecodeComboBoxEditor(
 					FAMethod.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer methodTableRenderer = new DecodeComboBoxRenderer();
-			if (null != tradeOrder.getFAMethod())
-				profileEditorComboBox.setItem(FAMethod.newInstance(tradeOrder
-						.getFAMethod()));
 			methodEditorComboBox.setRenderer(methodTableRenderer);
+			if (null != tradeOrder.getFAMethod())
+				methodEditorComboBox.setItem(FAMethod.newInstance(tradeOrder
+						.getFAMethod()));
 			methodEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -1204,12 +1216,28 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					}
 				}
 			});
-
-			JFormattedTextField percentTextField = new JFormattedTextField(
-					new MaskFormatter("####"));
+			NumberFormat percentFormat = NumberFormat.getNumberInstance();
+			percentFormat.setMinimumFractionDigits(2);
+			final JFormattedTextField percentTextField = new JFormattedTextField(
+					percentFormat);
 			if (null != tradeOrder.getFAPercent())
 				percentTextField.setText(Integer.toString(new Integer(
 						tradeOrder.getFAPercent().intValue())));
+			percentTextField
+					.addPropertyChangeListener(new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent e) {
+							Object source = e.getSource();
+							if ("value".equals(e.getPropertyName())) {
+								if (source == percentTextField) {
+									if (percentTextField.isEditValid()) {
+										tradeOrder.setFAPercent((new Percent(
+												percentTextField.getText()))
+												.getBigDecimalValue());
+									}
+								}
+							}
+						}
+					});
 			this.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.WEST, GridBagConstraints.NONE,
 					new Insets(1, 1, 0, 0), 20, 5));

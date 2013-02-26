@@ -48,7 +48,7 @@ public class DAOProfile extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOProfile() {
-		super(DECODE);
+		super(DECODE, true);
 	}
 
 	/**
