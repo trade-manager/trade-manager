@@ -85,7 +85,6 @@ import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
-import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.DAOGroup;
@@ -336,32 +335,32 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	public void doProperties(TradeOrder instance) {
 		try {
-			 if (AccountType.CORPORATION.equals(instance.getTrade()
-			 .getTradestrategy().getTradeAccount().getAccountType())) {
-			FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
-					instance);
-			if (null != fAPropertiesPanel) {
-				TextDialog dialog = new TextDialog(this.getFrame(),
-						"Indicator Properties", true, fAPropertiesPanel);
-				dialog.setLocationRelativeTo(this);
-				dialog.setVisible(true);
-				if (!dialog.getCancel()) {
-					if (null != instance.getFAProfile()) {
-						instance.setFAGroup(null);
-						instance.setFAMethod(null);
-						instance.setFAPercent(null);
-						instance.setAccountNumber(null);
-					} else {
-						if (null != instance.getFAGroup()) {
+			if (AccountType.CORPORATION.equals(instance.getTrade()
+					.getTradestrategy().getTradeAccount().getAccountType())) {
+				FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
+						instance);
+				if (null != fAPropertiesPanel) {
+					TextDialog dialog = new TextDialog(this.getFrame(),
+							"Indicator Properties", true, fAPropertiesPanel);
+					dialog.setLocationRelativeTo(this);
+					dialog.setVisible(true);
+					if (!dialog.getCancel()) {
+						if (null != instance.getFAProfile()) {
+							instance.setFAGroup(null);
+							instance.setFAMethod(null);
+							instance.setFAPercent(null);
 							instance.setAccountNumber(null);
 						} else {
-							instance.setAccountNumber(instance.getTrade()
-									.getTradestrategy().getTradeAccount()
-									.getAccountNumber());
+							if (null != instance.getFAGroup()) {
+								instance.setAccountNumber(null);
+							} else {
+								instance.setAccountNumber(instance.getTrade()
+										.getTradestrategy().getTradeAccount()
+										.getAccountNumber());
+							}
 						}
 					}
 				}
-			}
 			} else {
 				this.setStatusBarMessage(
 						"No properties for Individual accounts ...\n",
@@ -1230,9 +1229,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							if ("value".equals(e.getPropertyName())) {
 								if (source == percentTextField) {
 									if (percentTextField.isEditValid()) {
-										tradeOrder.setFAPercent((new Percent(
-												percentTextField.getText()))
-												.getBigDecimalValue());
+										Number rate = ((Number) percentTextField
+												.getValue()).doubleValue();
+										tradeOrder.setFAPercent(new BigDecimal(
+												rate.doubleValue()));
 									}
 								}
 							}

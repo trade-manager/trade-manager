@@ -142,10 +142,14 @@ public class StrategyTableModel extends AspectTableModel {
 		}
 		case 3: {
 			if (value instanceof DAOStrategyManager) {
-				element.setStrategyManager((Strategy) ((DAOStrategyManager) value)
-						.getObject());
-			} else {
-				element.setStrategyManager(null);
+				Strategy strategy = (Strategy) ((DAOStrategyManager) value)
+						.getObject();
+				if (null != strategy.getName()) {
+					element.setStrategyManager((Strategy) ((DAOStrategyManager) value)
+							.getObject());
+				} else {
+					element.setStrategyManager(null);
+				}
 			}
 			break;
 		}

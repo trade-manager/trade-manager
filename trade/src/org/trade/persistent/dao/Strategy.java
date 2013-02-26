@@ -85,7 +85,6 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	private List<Strategy> strategies = new ArrayList<Strategy>(0);
 
 	public Strategy() {
-
 	}
 
 	/**

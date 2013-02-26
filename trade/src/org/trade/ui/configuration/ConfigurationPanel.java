@@ -226,7 +226,7 @@ public class ConfigurationPanel extends BasePanel {
 
 	public void doSave() {
 		try {
-			this.setStatusBarMessage("Save in progress ...\n",
+			this.setStatusBarMessage("Save in progress ...",
 					BasePanel.INFORMATION);
 			int selectedRow = m_table.getSelectedRow();
 			String className = "org.trade.persistent.dao."
