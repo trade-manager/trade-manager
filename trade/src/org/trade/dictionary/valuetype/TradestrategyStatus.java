@@ -56,7 +56,7 @@ public class TradestrategyStatus extends Decode {
 	public static final String OPEN = "OPEN";
 
 	public TradestrategyStatus() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

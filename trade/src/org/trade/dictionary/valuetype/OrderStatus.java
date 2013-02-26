@@ -55,7 +55,7 @@ public class OrderStatus extends Decode {
 	public static final String PARTIALFILLED = "PARTIALFILLED";
 
 	public OrderStatus() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

@@ -70,7 +70,7 @@ public class LookupService {
 	 * @return Lookup
 	 * @exception LookupException
 	 */
-	public static Lookup getLookup(String lookupName, LookupQualifier qualifier)
+	public static Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean none)
 			throws LookupException {
 		Lookup lookup = null;
 		// Loop through the registered providers and find and try to find one
@@ -78,7 +78,7 @@ public class LookupService {
 		int providersSize = _providers.size();
 
 		for (int i = 0; i < providersSize; i++) {
-			lookup = _providers.elementAt(i).getLookup(lookupName, qualifier);
+			lookup = _providers.elementAt(i).getLookup(lookupName, qualifier, none);
 
 			if (null != lookup) {
 				// Have found a Lookup - don't care if another provider can

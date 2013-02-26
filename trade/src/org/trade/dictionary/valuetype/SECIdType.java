@@ -48,7 +48,7 @@ public class SECIdType extends Decode {
 	public static final String DECODE = "SEC_ID_TYPE";
 
 	public SECIdType() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

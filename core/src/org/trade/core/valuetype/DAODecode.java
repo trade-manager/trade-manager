@@ -86,8 +86,8 @@ public class DAODecode extends Decode {
 	 * @param codeDecodeType
 	 *            String
 	 */
-	public DAODecode(String codeDecodeType) {
-		super(codeDecodeType, DAO_DECODE_IDENTIFIER);
+	public DAODecode(String codeDecodeType, boolean none) {
+		super(codeDecodeType, DAO_DECODE_IDENTIFIER, none);
 	}
 
 	/**
@@ -99,8 +99,8 @@ public class DAODecode extends Decode {
 	 * @param identifier
 	 *            String
 	 */
-	public DAODecode(String codeDecodeType, String identifier) {
-		super(codeDecodeType, DAO_DECODE_IDENTIFIER);
+	public DAODecode(String codeDecodeType, String identifier, boolean none) {
+		super(codeDecodeType, DAO_DECODE_IDENTIFIER, none);
 	}
 
 	// override this method for value types that need to distinguish upper case

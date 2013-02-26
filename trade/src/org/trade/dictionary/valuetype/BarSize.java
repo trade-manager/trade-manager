@@ -48,7 +48,7 @@ public class BarSize extends Decode {
 	public static final Integer DAY = 1;
 
 	public BarSize() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

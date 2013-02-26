@@ -115,7 +115,7 @@ public class BaseUIPropertyCodes extends Decode {
 	 * Default Constructor
 	 */
 	public BaseUIPropertyCodes() {
-		super(BASE_UI_WIDGET_PROP, BASE_UI_WIDGET);
+		super(BASE_UI_WIDGET_PROP, BASE_UI_WIDGET, false);
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class BaseUIPropertyCodes extends Decode {
 	 *            String
 	 */
 	public BaseUIPropertyCodes(String propertyType, String propertyCode) {
-		super(propertyType, propertyCode);
+		super(propertyType, propertyCode, false);
 	}
 
 	/**

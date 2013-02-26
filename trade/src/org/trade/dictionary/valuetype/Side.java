@@ -50,7 +50,7 @@ public class Side extends Decode {
 	public static final String SLD = "SLD";
 
 	public Side() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

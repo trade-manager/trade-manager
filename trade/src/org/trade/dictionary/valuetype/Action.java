@@ -47,7 +47,7 @@ public class Action extends Decode {
 	public static final String BUY = "BUY";
 
 	public Action() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

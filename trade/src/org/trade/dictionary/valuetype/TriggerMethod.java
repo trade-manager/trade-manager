@@ -49,7 +49,7 @@ public class TriggerMethod extends Decode {
 	public static final int DEFAULT = 0;
 
 	public TriggerMethod() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

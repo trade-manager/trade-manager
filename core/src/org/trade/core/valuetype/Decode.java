@@ -149,7 +149,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * @param codeDecodeType
 	 *            String
 	 */
-	public Decode(String codeDecodeType) {
+	public Decode(String codeDecodeType, boolean none) {
 		m_codeDecodeType = codeDecodeType;
 		m_codeDecodeIdentifier = CODE_DECODE_IDENTIFIER;
 
@@ -159,7 +159,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 		try {
 			m_lookup = LookupService.getLookup(m_codeDecodeIdentifier,
-					qualifier);
+					qualifier, none);
 		} catch (final Exception ex) {
 			m_lookup = new PropertiesLookup(null, null);
 		}
@@ -174,7 +174,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * @param identifier
 	 *            String
 	 */
-	public Decode(String codeDecodeType, String identifier) {
+	public Decode(String codeDecodeType, String identifier, boolean none) {
 		m_codeDecodeType = codeDecodeType;
 		m_codeDecodeIdentifier = identifier;
 
@@ -184,7 +184,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 		try {
 			m_lookup = LookupService.getLookup(m_codeDecodeIdentifier,
-					qualifier);
+					qualifier, none);
 		} catch (final Exception ex) {
 			m_lookup = new PropertiesLookup(null, null);
 		}

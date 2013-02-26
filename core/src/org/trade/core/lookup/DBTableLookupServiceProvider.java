@@ -54,6 +54,8 @@ import org.trade.core.dao.EntityManagerHelper;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.Reflector;
 
+import com.sun.xml.internal.bind.v2.ClassFactory;
+
 /**
  * Implementation of the LookupServiceProvider interface that uses the
  * devtool.properties.ConfigProperties object for obtaining Lookup information.
@@ -93,7 +95,7 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 	 *      LookupQualifier)
 	 */
 	public synchronized Lookup getLookup(String lookupName,
-			LookupQualifier qualifier) throws LookupException {
+			LookupQualifier qualifier, boolean none) throws LookupException {
 		Lookup lookup = getCachedLookup(lookupName, qualifier);
 
 		if (null == lookup) {
@@ -192,6 +194,19 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 					// Clear the first row and add the objects and display name
 					// from the DB
 					rows.clear();
+					/*
+					 * Add the None selected row.
+					 */
+					if(none){
+						Vector<Object> newRowNone = new Vector<Object>();
+						Class<?> clazz = Class.forName(dao);
+						Object daoObjectNone = ClassFactory.create(clazz);
+						newRowNone.add(type);
+						newRowNone.add(daoObjectNone);
+						newRowNone.add("None");
+						rows.add(newRowNone);		
+					}
+
 					List<?> codes = getCodes(dao);
 					for (Object daoObject : codes) {
 						Vector<Object> newRow = new Vector<Object>();
@@ -208,11 +223,11 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 						rows.add(newRow);
 					}
 				}
+
 				// If rows where found then I managed to provide the lookup
 				if (rows.size() > 0) {
 					lookup = new PropertiesLookup(colNames, rows);
 				}
-
 			} catch (Throwable t) {
 				// If this occurs means this provider is unable to provide
 				// the lookup ignore the exception.
@@ -242,8 +257,10 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 			lookup = (Lookup) lookupsByQualifier.get(qualifier.toString());
 		}
 
-		// Need to clone the object otherwise changes in position in
-		// the object returned would effect everyone using the object
+		/*
+		 * Need to clone the object otherwise changes in position in the object
+		 * returned would effect everyone using the object.
+		 */
 		if (null != lookup) {
 			lookup = (Lookup) lookup.clone();
 		}

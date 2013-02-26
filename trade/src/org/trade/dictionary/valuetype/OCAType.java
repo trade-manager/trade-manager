@@ -48,7 +48,7 @@ public class OCAType extends Decode {
 	public static final String DECODE = "OCA_TYPE";
 
 	public OCAType() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

@@ -80,7 +80,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
@@ -341,12 +340,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				dialog.setLocationRelativeTo(this);
 				dialog.setVisible(true);
 				if (!dialog.getCancel()) {
-					
+
 				}
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error setting FA properties.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Error setting FA properties.",
+					ex.getMessage(), ex);
 		}
 	}
 
@@ -1144,11 +1143,17 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxEditor profileEditorComboBox = new DecodeComboBoxEditor(
 					DAOProfile.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer profileTableRenderer = new DecodeComboBoxRenderer();
+			if (null != tradeOrder.getFAProfile())
+				profileEditorComboBox.setItem(DAOProfile.newInstance(tradeOrder
+						.getFAProfile()));
 			profileEditorComboBox.setRenderer(profileTableRenderer);
 			profileEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						tradeOrder.setFAProfile(((DAOProfile) e.getItem()).getCode());
+						tradeOrder
+								.setFAProfile(((FinancialAccount) ((DAOProfile) e
+										.getItem()).getObject())
+										.getProfileName());
 					}
 				}
 			});
@@ -1156,11 +1161,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxEditor groupEditorComboBox = new DecodeComboBoxEditor(
 					DAOGroup.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer groupTableRenderer = new DecodeComboBoxRenderer();
+			if (null != tradeOrder.getFAGroup())
+				profileEditorComboBox.setItem(DAOGroup.newInstance(tradeOrder
+						.getFAGroup()));
 			groupEditorComboBox.setRenderer(groupTableRenderer);
 			groupEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						tradeOrder.setFAGroup(((DAOGroup) e.getItem()).getCode());
+						tradeOrder.setFAGroup(((FinancialAccount) ((DAOGroup) e
+								.getItem()).getObject()).getGroupName());
 					}
 				}
 			});
@@ -1168,18 +1177,24 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxEditor methodEditorComboBox = new DecodeComboBoxEditor(
 					FAMethod.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer methodTableRenderer = new DecodeComboBoxRenderer();
+			if (null != tradeOrder.getFAMethod())
+				profileEditorComboBox.setItem(FAMethod.newInstance(tradeOrder
+						.getFAMethod()));
 			methodEditorComboBox.setRenderer(methodTableRenderer);
 			methodEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						tradeOrder.setFAMethod(((FAMethod) e.getItem()).getCode());
+						tradeOrder.setFAMethod(((FAMethod) e.getItem())
+								.getCode());
 					}
 				}
 			});
 
 			JFormattedTextField percentTextField = new JFormattedTextField(
 					new MaskFormatter("####"));
-
+			if (null != tradeOrder.getFAPercent())
+				percentTextField.setText(Integer.toString(new Integer(
+						tradeOrder.getFAPercent().intValue())));
 			this.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.WEST, GridBagConstraints.NONE,
 					new Insets(1, 1, 0, 0), 20, 5));

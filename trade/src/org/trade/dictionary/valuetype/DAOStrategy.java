@@ -53,7 +53,7 @@ public class DAOStrategy extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOStrategy() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

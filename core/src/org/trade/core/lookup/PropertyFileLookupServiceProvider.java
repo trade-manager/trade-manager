@@ -70,7 +70,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String,
 	 *      LookupQualifier)
 	 */
-	public Lookup getLookup(String lookupName, LookupQualifier qualifier)
+	public Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean none)
 			throws LookupException {
 		Lookup lookup = getCachedLookup(lookupName, qualifier);
 
@@ -203,7 +203,6 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 
 		if (null == lookupsByQualifier) {
 			lookupsByQualifier = new Hashtable<String, Lookup>();
-
 			_lookups.put(lookupName, lookupsByQualifier);
 		}
 

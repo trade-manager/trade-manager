@@ -47,7 +47,7 @@ public class ChartDays extends Decode {
 	public static final int TWO_MONTHS = 60;
 
 	public ChartDays() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

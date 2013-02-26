@@ -37,7 +37,6 @@ package org.trade.dictionary.valuetype;
 
 import org.trade.core.valuetype.DAODecode;
 
-
 /**
  */
 public class DAOGroup extends DAODecode {
@@ -49,7 +48,7 @@ public class DAOGroup extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOGroup() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

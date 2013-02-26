@@ -64,17 +64,11 @@ public class ConfigProperties {
 	private final static Logger _log = LoggerFactory
 			.getLogger(ConfigProperties.class);
 
-	private final static String ENVIRONMENT_VARIABLE_CONTAINING_INSTALLATION_HOME = "trade.install.dir";
-
-	private final static String ENVIRONMENT_VARIABLE_PROPERTY_FILE = "config.properties";
-
 	public final static String MANDATORY_PROPERTY = "mandatory_property";
 
-	//
-	// Private Attributes
-	//
+	private final static String ENVIRONMENT_VARIABLE_CONTAINING_INSTALLATION_HOME = "trade.install.dir";
+	private final static String ENVIRONMENT_VARIABLE_PROPERTY_FILE = "config.properties";
 	private Properties m_properties = null;
-
 	private static ConfigProperties m_theConfig = new ConfigProperties();
 
 	/**
@@ -86,11 +80,7 @@ public class ConfigProperties {
 	 * @throws IOException
 	 */
 	public static String getPropAsString(String key) throws IOException {
-		String strRet = null;
-
-		strRet = m_theConfig.retrieveProperty(key);
-
-		return strRet;
+		return m_theConfig.retrieveProperty(key);
 	}
 
 	/**
@@ -111,7 +101,6 @@ public class ConfigProperties {
 			}
 		} catch (Throwable e) {
 			// do nothing as we are an applet !!!
-
 		}
 		return filename;
 	}
@@ -128,11 +117,7 @@ public class ConfigProperties {
 	 */
 	public static Properties getDeploymentProperties(Object context,
 			String fileName) throws IOException {
-		Properties deploymentProperties = null;
-
-		deploymentProperties = m_theConfig.getProperties(context, fileName);
-
-		return deploymentProperties;
+		return m_theConfig.getProperties(context, fileName);
 	}
 
 	/**
@@ -167,11 +152,7 @@ public class ConfigProperties {
 	 * @throws IOException
 	 */
 	public static int getPropAsInt(String key) throws IOException {
-		int ret = 0;
-
-		ret = Integer.parseInt(m_theConfig.retrieveProperty(key));
-
-		return ret;
+		return Integer.parseInt(m_theConfig.retrieveProperty(key));
 	}
 
 	/**
@@ -206,9 +187,7 @@ public class ConfigProperties {
 
 		for (int iCount = 1; iCount < (iNumEntries + 1); iCount++) {
 			String val = getPropAsString(key.append("_" + iCount).toString());
-
 			key.setLength(keyLen); // reset key
-
 			if (null != val) {
 				resVec.addElement(val);
 			}
@@ -240,9 +219,8 @@ public class ConfigProperties {
 		return propArray;
 	}
 
-	// read configuration properties
 	/**
-	 * Method getProperties.
+	 * Method getProperties. read configuration properties
 	 * 
 	 * @param context
 	 *            Object
@@ -257,14 +235,10 @@ public class ConfigProperties {
 
 		loadPropertiesAsResource(m_theConfig, getSystemPropertyFileName(),
 				systemProperties);
-
 		loadPropertiesAsResource(context, fileName, systemProperties);
-
 		Properties deploymentProperties = new Properties(systemProperties);
-
 		loadPropertiesAsFile(getDeploymentPropertyFileName(),
 				deploymentProperties);
-
 		m_properties = deploymentProperties;
 
 		return deploymentProperties;
@@ -323,13 +297,11 @@ public class ConfigProperties {
 			throws IOException {
 		String list = getPropAsString(key);
 		StringTokenizer t = new StringTokenizer(list, ",");
-
 		return t;
 	}
 
-	// read configuration properties
 	/**
-	 * Method retrieveProperty.
+	 * Method retrieveProperty. read configuration properties
 	 * 
 	 * @param key
 	 *            String
@@ -447,7 +419,6 @@ public class ConfigProperties {
 					+ "\" is installed and available in the class path.");
 		} else {
 			InputStream in = new BufferedInputStream(unbuffered);
-
 			properties.load(in);
 			in.close();
 			unbuffered.close();
@@ -471,7 +442,6 @@ public class ConfigProperties {
 
 			if (propertyFile.exists()) {
 				FileInputStream is = new FileInputStream(propertyFile);
-
 				properties.load(is);
 				is.close();
 			} else {

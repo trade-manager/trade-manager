@@ -55,7 +55,7 @@ public class DAOEntryLimit extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOEntryLimit() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**

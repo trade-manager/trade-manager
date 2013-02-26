@@ -45,12 +45,9 @@ import org.trade.ui.base.Parametric;
  * @author Simon Allen
  */
 public class Reflector extends Object {
+
 	/**
 	 * Find the specified method by walking the classes class hierarchy.
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * 
 	 * @param cl
@@ -96,10 +93,6 @@ public class Reflector extends Object {
 
 	/**
 	 * Find the specified method by walking the classes class hierarchy.
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * 
 	 * @param cl

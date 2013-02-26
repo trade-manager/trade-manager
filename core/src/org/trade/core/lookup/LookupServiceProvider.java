@@ -41,13 +41,7 @@ package org.trade.core.lookup;
 public interface LookupServiceProvider {
 	/**
 	 * Get the appropriate Lookup.
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
+
 	 * @param lookupName
 	 *            String
 	 * @param qualifier
@@ -55,6 +49,7 @@ public interface LookupServiceProvider {
 	 * @return Lookup
 	 * @exception LookupException
 	 */
-	Lookup getLookup(String lookupName, LookupQualifier qualifier)
+	Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean none)
 			throws LookupException;
+	
 }

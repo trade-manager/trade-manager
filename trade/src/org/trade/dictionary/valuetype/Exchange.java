@@ -46,7 +46,7 @@ public class Exchange extends Decode {
 	public static final String SMART = "SMART";
 
 	public Exchange() {
-		super(DECODE);
+		super(DECODE, false);
 	}
 
 	/**
