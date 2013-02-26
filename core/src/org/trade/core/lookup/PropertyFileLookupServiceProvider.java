@@ -40,6 +40,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.valuetype.Decode;
 
 /**
  * Implementation of the LookupServiceProvider interface that uses the
@@ -52,7 +53,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 	 * This will be a hashtable of hashtables of Lookup objects. The first key
 	 * is the lookup name and the second key is the LookupQualifier.
 	 */
-	
+
 	private static Hashtable<String, Hashtable<String, Lookup>> _lookups = new Hashtable<String, Hashtable<String, Lookup>>();
 
 	/**
@@ -79,7 +80,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 
 		if (null == lookup) {
 			try {
-			
+
 				Vector<String> colNames = new Vector<String>();
 				Enumeration<?> en = ConfigProperties
 						.getPropAsEnumeration(lookupName + "_PropertyFile");
@@ -108,8 +109,15 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 				Vector<Vector<Object>> rows = new Vector<Vector<Object>>();
 				if (none) {
 					Vector<Object> newRowNone = new Vector<Object>();
-					newRowNone.add(null);
-					newRowNone.add("None");
+					for (i = 0; i < colRows.size(); i++) {
+						Object qualVal = qualifier.getValue(""
+								+ colNames.elementAt(i));
+						if (null != qualVal) {
+							newRowNone.add(qualVal);
+						} else {
+							newRowNone.add(Decode.NONE);
+						}
+					}
 					rows.add(newRowNone);
 				}
 				do {
@@ -120,13 +128,11 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 
 					for (i = 0; i < colRowsSize; i++) {
 						Object value = null;
-
 						en = colRows.elementAt(i);
 
 						if (en.hasMoreElements()) {
 							foundOne = true;
 							value = en.nextElement();
-
 							row.addElement(value);
 						} else {
 							// Represent an empty value

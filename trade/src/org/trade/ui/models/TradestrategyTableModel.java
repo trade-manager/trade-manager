@@ -46,6 +46,7 @@ import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Date;
+import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
 import org.trade.core.valuetype.YesNo;
@@ -356,8 +357,7 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 4: {
-			int code = ((Tier) value).getCode().trim().length();
-			if (code > 0) {
+			if (!Decode.NONE.equals(((Tier) value).getDisplayName())) {
 				element.setTier(((Tier) value).getCode());
 			} else {
 				element.setTier(null);
@@ -371,8 +371,8 @@ public class TradestrategyTableModel extends TableModel {
 			element.setStrategy(strategy);
 
 			if (null == strategy.getStrategyManager()) {
-				this.setValueAt(DAOStrategyManager.newInstance("None"), row,
-						column + 1);
+				this.setValueAt(DAOStrategyManager.newInstance(Decode.NONE),
+						row, column + 1);
 			} else {
 				this.setValueAt(DAOStrategyManager.newInstance(strategy
 						.getStrategyManager().getName()), row, column + 1);
@@ -572,14 +572,14 @@ public class TradestrategyTableModel extends TableModel {
 			newRow.addElement(Side.newInstance(element.getSide()));
 		}
 		if (null == element.getTier()) {
-			newRow.addElement(new Tier());
+			newRow.addElement(Tier.newInstance(Decode.NONE));
 		} else {
 			newRow.addElement(Tier.newInstance(element.getTier()));
 		}
 		newRow.addElement(DAOStrategy.newInstance(element.getStrategy()
 				.getName()));
 		if (null == element.getStrategy().getStrategyManager()) {
-			newRow.addElement(DAOStrategyManager.newInstance("None"));
+			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
 		} else {
 			newRow.addElement(DAOStrategyManager.newInstance(element
 					.getStrategy().getStrategyManager().getName()));

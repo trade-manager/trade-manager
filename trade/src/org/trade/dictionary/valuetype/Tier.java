@@ -61,7 +61,7 @@ public class Tier extends Decode {
 	 */
 	public static Tier newInstance(String value) {
 		final Tier returnInstance = new Tier();
-		returnInstance.setValue(value);
+		returnInstance.setDisplayName(value);
 		return returnInstance;
 	}
 
@@ -74,5 +74,14 @@ public class Tier extends Decode {
 		final Tier returnInstance = new Tier();
 		returnInstance.setDefaultCode();
 		return returnInstance;
+	}
+	
+	/**
+	 * Method convertToUppercase.
+	 * 
+	 * @return boolean
+	 */
+	protected boolean convertToUppercase() {
+		return false;
 	}
 }

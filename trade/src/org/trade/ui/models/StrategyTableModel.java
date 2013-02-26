@@ -40,6 +40,7 @@ import java.util.Vector;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
+import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.persistent.dao.Strategy;
@@ -142,9 +143,7 @@ public class StrategyTableModel extends AspectTableModel {
 		}
 		case 3: {
 			if (value instanceof DAOStrategyManager) {
-				Strategy strategy = (Strategy) ((DAOStrategyManager) value)
-						.getObject();
-				if (null != strategy.getName()) {
+				if (!Decode.NONE.equals(((DAOStrategyManager) value).getDisplayName())) {
 					element.setStrategyManager((Strategy) ((DAOStrategyManager) value)
 							.getObject());
 				} else {
@@ -210,7 +209,7 @@ public class StrategyTableModel extends AspectTableModel {
 		newRow.addElement(element.getDescription());
 		newRow.addElement(element.getClassName());
 		if (null == element.getStrategyManager()) {
-			newRow.addElement(DAOStrategyManager.newInstance("None"));
+			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
 		} else {
 			newRow.addElement(DAOStrategyManager.newInstance(element
 					.getStrategyManager().getName()));

@@ -69,6 +69,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * The Lookup Identifier for CODE_DECODE values
 	 */
 	public static final String CODE_DECODE_IDENTIFIER = "CODE_DECODE";
+	public static final String NONE = " ";
 
 	static {
 		// Register the appropriate converters

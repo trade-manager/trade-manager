@@ -53,8 +53,7 @@ import org.slf4j.LoggerFactory;
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.Reflector;
-
-import com.sun.xml.internal.bind.v2.ClassFactory;
+import org.trade.core.valuetype.Decode;
 
 /**
  * Implementation of the LookupServiceProvider interface that uses the
@@ -200,10 +199,10 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 					if (none) {
 						Vector<Object> newRowNone = new Vector<Object>();
 						Class<?> clazz = Class.forName(dao);
-						Object daoObjectNone = ClassFactory.create(clazz);
+						Object daoObjectNone = clazz.newInstance();
 						newRowNone.add(type);
 						newRowNone.add(daoObjectNone);
-						newRowNone.add("None");
+						newRowNone.add(Decode.NONE);
 						rows.add(newRowNone);
 					}
 
