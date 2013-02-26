@@ -36,6 +36,7 @@
 package org.trade.core.lookup;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -306,6 +307,6 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 		} finally {
 			EntityManagerHelper.close();
 		}
-		return null;
+		return new ArrayList<Object>(0);
 	}
 }

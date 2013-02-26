@@ -41,15 +41,21 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -68,16 +74,21 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.MaskFormatter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+
 
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.BarSize;
+import org.trade.dictionary.valuetype.DAOGroup;
+import org.trade.dictionary.valuetype.DAOProfile;
+import org.trade.dictionary.valuetype.FAMethod;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.Tier;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
@@ -100,6 +111,7 @@ import org.trade.ui.base.BaseUIPropertyCodes;
 import org.trade.ui.base.TabbedAppPanel;
 import org.trade.ui.base.TabbedCloseButton;
 import org.trade.ui.base.Table;
+import org.trade.ui.base.TextDialog;
 import org.trade.ui.base.Tree;
 import org.trade.ui.chart.CandlestickChart;
 import org.trade.ui.models.TradeOrderTableModel;
@@ -321,7 +333,21 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 */
 
 	public void doProperties(TradeOrder item) {
-
+		try {
+			FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(item);
+			if (null != fAPropertiesPanel) {
+				TextDialog dialog = new TextDialog(this.getFrame(),
+						"Indicator Properties", true, fAPropertiesPanel);
+				dialog.setLocationRelativeTo(this);
+				dialog.setVisible(true);
+				if (!dialog.getCancel()) {
+					
+				}
+			}
+		} catch (Exception ex) {
+			this.setErrorMessage("Error setting FA properties.", ex.getMessage(),
+					ex);
+		}
 	}
 
 	public void doCloseAll() {
@@ -1083,4 +1109,116 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			return this.candlestickChart;
 		}
 	}
+
+	/**
+	 */
+	class FAPropertiesPanel extends JPanel {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 5972331201407363985L;
+		private Hashtable<String, JComponent> fields = new Hashtable<String, JComponent>();
+
+		/**
+		 * Constructor for CodeAttributesPanel.
+		 * 
+		 * @param aspects
+		 *            Aspects
+		 * @param series
+		 *            IndicatorSeries
+		 * @throws Exception
+		 */
+
+		@SuppressWarnings("unchecked")
+		public FAPropertiesPanel(final TradeOrder tradeOrder) throws Exception {
+
+			GridBagLayout gridBagLayout1 = new GridBagLayout();
+			this.setLayout(gridBagLayout1);
+
+			JLabel profileLabel = new JLabel("Profile");
+			JLabel groupLabel = new JLabel("Group");
+			JLabel mthodLabel = new JLabel("Method");
+			JLabel percentLabel = new JLabel("Percent");
+
+			DecodeComboBoxEditor profileEditorComboBox = new DecodeComboBoxEditor(
+					DAOProfile.newInstance().getCodesDecodes());
+			DecodeComboBoxRenderer profileTableRenderer = new DecodeComboBoxRenderer();
+			profileEditorComboBox.setRenderer(profileTableRenderer);
+			profileEditorComboBox.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						tradeOrder.setFAProfile(((DAOProfile) e.getItem()).getCode());
+					}
+				}
+			});
+
+			DecodeComboBoxEditor groupEditorComboBox = new DecodeComboBoxEditor(
+					DAOGroup.newInstance().getCodesDecodes());
+			DecodeComboBoxRenderer groupTableRenderer = new DecodeComboBoxRenderer();
+			groupEditorComboBox.setRenderer(groupTableRenderer);
+			groupEditorComboBox.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						tradeOrder.setFAGroup(((DAOGroup) e.getItem()).getCode());
+					}
+				}
+			});
+
+			DecodeComboBoxEditor methodEditorComboBox = new DecodeComboBoxEditor(
+					FAMethod.newInstance().getCodesDecodes());
+			DecodeComboBoxRenderer methodTableRenderer = new DecodeComboBoxRenderer();
+			methodEditorComboBox.setRenderer(methodTableRenderer);
+			methodEditorComboBox.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						tradeOrder.setFAMethod(((FAMethod) e.getItem()).getCode());
+					}
+				}
+			});
+
+			JFormattedTextField percentTextField = new JFormattedTextField(
+					new MaskFormatter("####"));
+
+			this.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					new Insets(1, 1, 0, 0), 20, 5));
+			this.add(groupLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					new Insets(1, 1, 0, 0), 20, 5));
+			this.add(mthodLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					new Insets(1, 1, 0, 0), 20, 5));
+			this.add(percentLabel, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
+					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					new Insets(1, 1, 0, 0), 20, 5));
+
+			this.add(profileEditorComboBox, new GridBagConstraints(1, 1, 1, 1,
+					1.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
+					196, 0));
+			this.add(groupEditorComboBox, new GridBagConstraints(1, 2, 1, 1,
+					1.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
+					196, 0));
+			this.add(methodEditorComboBox, new GridBagConstraints(1, 3, 1, 1,
+					1.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
+					196, 0));
+			this.add(percentTextField, new GridBagConstraints(1, 4, 1, 1, 1.0,
+					0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
+					196, 0));
+		}
+
+		/**
+		 * Method getFields.
+		 * 
+		 * @return Hashtable<String,JComponent>
+		 */
+		public Hashtable<String, JComponent> getFields() {
+			return this.fields;
+		}
+	}
+
 }
