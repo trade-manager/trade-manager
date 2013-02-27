@@ -5,7 +5,7 @@
 	<persistence-unit name="dbresource" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<!-- <jta-data-source>java:/DefaultDS</jta-data-source> <mapping-file>ormap.xml</mapping-file> 
-			<jar-file>trademanager-2.9.jar</jar-file> -->
+			<jar-file>trademanager-2.10.jar</jar-file> -->
 		<class>org.trade.persistent.dao.Contract</class>
 		<class>org.trade.persistent.dao.Candle</class>
 		<class>org.trade.persistent.dao.Entrylimit</class>

@@ -1,11 +1,11 @@
 <jnlp-versions> 
    <resource> 
      <pattern> 
-       <name>tradermanager-2.9.jar</name> 
+       <name>tradermanager-2.10.jar</name> 
 <!-- Update the version number to force a new download of the ide.jar -->
-       <version-id>2.9</version-id> 
+       <version-id>2.10</version-id> 
      </pattern> 
-     <file>tradermanager-2.9.jar</file> 
+     <file>tradermanager-2.10.jar</file> 
    </resource>
    <platform> 
      <pattern> 
