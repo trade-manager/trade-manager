@@ -45,7 +45,7 @@ public class FAMethod extends Decode {
 	public static final String DECODE = "FA_METHOD";
 
 	public FAMethod() {
-		super(DECODE);
+		super(DECODE, true);
 	}
 
 	/**

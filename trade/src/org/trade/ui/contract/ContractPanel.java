@@ -84,6 +84,7 @@ import javax.swing.tree.TreePath;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
+import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
@@ -1176,10 +1177,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			profileEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						tradeOrder
-								.setFAProfile(((FinancialAccount) ((DAOProfile) e
-										.getItem()).getObject())
-										.getProfileName());
+						if (!Decode.NONE.equals(((DAOProfile) e.getItem())
+								.getDisplayName())) {
+							tradeOrder
+									.setFAProfile(((FinancialAccount) ((DAOProfile) e
+											.getItem()).getObject())
+											.getProfileName());
+						} else {
+							tradeOrder.setFAProfile(null);
+						}
 					}
 				}
 			});
@@ -1194,8 +1200,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			groupEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						tradeOrder.setFAGroup(((FinancialAccount) ((DAOGroup) e
-								.getItem()).getObject()).getGroupName());
+						if (!Decode.NONE.equals(((DAOGroup) e.getItem())
+								.getDisplayName())) {
+							tradeOrder
+									.setFAProfile(((FinancialAccount) ((DAOGroup) e
+											.getItem()).getObject())
+											.getGroupName());
+						} else {
+							tradeOrder.setFAGroup(null);
+						}
 					}
 				}
 			});
@@ -1210,8 +1223,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			methodEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						tradeOrder.setFAMethod(((FAMethod) e.getItem())
-								.getCode());
+						if (!Decode.NONE.equals(((FAMethod) e.getItem())
+								.getDisplayName())) {
+							tradeOrder.setFAMethod(((FAMethod) e.getItem())
+									.getCode());
+						} else {
+							tradeOrder.setFAMethod(null);
+						}
 					}
 				}
 			});
