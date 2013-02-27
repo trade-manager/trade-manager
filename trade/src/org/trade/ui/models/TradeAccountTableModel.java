@@ -60,7 +60,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 	private static final String ACCT_TYPE = "Type";
 	private static final String ACCT_ALIAS = "Alias";
 	private static final String IS_DEFAULT = "Default";
-	private static final String CURRENCY = "Currency";
+	private static final String CURRENCY = "Curr";
 	private static final String AVAILABLE_FUNDS = "Availble Funds";
 	private static final String BUYING_POWER = " Buying Power";
 	private static final String CASH_BALANCE = "Cash Bal";

@@ -130,7 +130,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	// private final static String ALL_GENERIC_TICK_TAGS = "221,233";
 	private final static String ALL_GENERIC_TICK_TAGS = "233";
 	private static final String AVAILABLE_FUNDS = "AvailableFunds";
-	private static final String ACCOUNTCODE = "AccountCode";
 	private static final String ACCOUNTTYPE = "AccountType";
 	private static final String BUYING_POWER = "BuyingPower";
 	private static final String CASH_BALANCE = "CashBalance";
@@ -1757,13 +1756,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (m_accountRequests.containsKey(accountNumber)) {
 				TradeAccount tradeAccount = m_accountRequests
 						.get(accountNumber);
+				if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
+					tradeAccount.setAccountType(value);
+				}
 				if (tradeAccount.getCurrency().equals(currency)) {
-					if (key.equals(TWSBrokerModel.ACCOUNTCODE)) {
-						tradeAccount.setAvailableFunds(new BigDecimal(value));
-					}
-					if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
-						tradeAccount.setAvailableFunds(new BigDecimal(value));
-					}
 					if (key.equals(TWSBrokerModel.AVAILABLE_FUNDS)) {
 						tradeAccount.setAvailableFunds(new BigDecimal(value));
 					}
