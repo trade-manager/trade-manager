@@ -82,8 +82,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	private final static Logger _log = LoggerFactory
 			.getLogger(BackTestBrokerModel.class);
 
-	// Candle series this is listened to by the chart panel
-	// and main controller for updates.
+	// Candle series this is listened to by the chart panel and main controller
+	// for updates.
 	private static final ConcurrentHashMap<Integer, Contract> m_historyDataRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_realTimeBarsRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_contractRequests = new ConcurrentHashMap<Integer, Contract>();
@@ -253,6 +253,28 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#onCancelAccountUpdates(String)
 	 */
 	public void onCancelAccountUpdates(String accountNumber) {
+	}
+
+	/**
+	 * Method onReqFinancialAccount.
+	 * 
+	 * @see org.trade.broker.onReqFinancialAccount()
+	 */
+	public void onReqFinancialAccount() throws BrokerModelException {
+	}
+
+	/**
+	 * Method onReqReplaceFinancialAccount.
+	 * 
+	 * @param xml
+	 *            String
+	 * @param faDataType
+	 *            int
+	 * 
+	 * @see org.trade.broker.onReqReplaceFinancialAccount()
+	 */
+	public void onReqReplaceFinancialAccount(int faDataType, String xml)
+			throws BrokerModelException {
 	}
 
 	/**

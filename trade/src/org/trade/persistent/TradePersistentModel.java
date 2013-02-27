@@ -1173,6 +1173,33 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method persistAspect.
+	 * 
+	 * @param aspect
+	 *            Aspect
+	 * @param overrideVersion
+	 *            boolean
+	 * @return Aspect
+	 * @throws PersistentModelException
+	 * 
+	 * @see org.trade.persistent.PersistentModel#persistAspect(Aspect)
+	 */
+	public Aspect persistAspect(Aspect transientInstance,
+			boolean overrideVersion) throws PersistentModelException {
+		try {
+			return m_aspectHome.persist(transientInstance, overrideVersion);
+		} catch (OptimisticLockException ex1) {
+			throw new PersistentModelException("Error saving "
+					+ transientInstance.getClass().getSimpleName()
+					+ " please refresh before save.");
+		} catch (Exception e) {
+			throw new PersistentModelException("Error saving  "
+					+ transientInstance.getClass().getSimpleName() + " : "
+					+ e.getMessage());
+		}
+	};
+
+	/**
 	 * Method removeAspect.
 	 * 
 	 * @param transientInstance

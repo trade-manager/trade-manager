@@ -246,6 +246,60 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
+	 * Method onReqFinancialAccount.
+	 * 
+	 * @see org.trade.broker.onReqFinancialAccount()
+	 */
+	public void onReqFinancialAccount() throws BrokerModelException {
+		try {
+			if (m_client.isConnected()) {
+				Aspects items = m_tradePersistentModel
+						.findAspectsByClassName(FinancialAccount.class
+								.getName());
+				for (Aspect aspect : items.getAspect()) {
+					m_tradePersistentModel.removeAspect(aspect);
+				}
+				m_client.requestFA(EClientSocket.GROUPS);
+				m_client.requestFA(EClientSocket.PROFILES);
+				m_client.requestFA(EClientSocket.ALIASES);
+			} else {
+				throw new BrokerModelException(0, 3010,
+						"Not conected Financial Account data cannot be retrieved");
+			}
+		} catch (Exception ex) {
+			error(0,
+					3295,
+					"Error requesting Financial Account Msg: "
+							+ ex.getMessage());
+		}
+	}
+
+	/**
+	 * Method onReqReplaceFinancialAccount.
+	 * 
+	 * @param xml
+	 *            String
+	 * @param faDataType
+	 *            int
+	 * 
+	 * @see org.trade.broker.onReqReplaceFinancialAccount()
+	 */
+	public void onReqReplaceFinancialAccount(int faDataType, String xml)
+			throws BrokerModelException {
+		try {
+			if (m_client.isConnected()) {
+				m_client.replaceFA(faDataType, xml);
+			} else {
+				throw new BrokerModelException(0, 3010,
+						"Not conected Financial Account data cannot be replaced");
+			}
+		} catch (Exception ex) {
+			error(0, 3295,
+					"Error replacing Financial Account Msg: " + ex.getMessage());
+		}
+	}
+
+	/**
 	 * Method onReqManagedAccount.
 	 * 
 	 * @throws BrokerModelException
@@ -920,9 +974,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					logContract(TWSBrokerModel.getIBContract(contract));
 					logTradeOrder(TWSBrokerModel.getIBOrder(tradeOrder));
 
-					m_client.placeOrder(tradeOrder.getOrderKey(),
-							TWSBrokerModel.getIBContract(contract),
-							TWSBrokerModel.getIBOrder(tradeOrder));
+					// m_client.placeOrder(tradeOrder.getOrderKey(),
+					// TWSBrokerModel.getIBContract(contract),
+					// TWSBrokerModel.getIBOrder(tradeOrder));
 				}
 				return tradeOrder;
 
@@ -1808,7 +1862,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 */
 				tradeAccount.setUpdateDate(new Date());
 				tradeAccount = (TradeAccount) m_tradePersistentModel
-						.persistAspect(tradeAccount);
+						.persistAspect(tradeAccount, true);
 				m_accountRequests.replace(accountNumber, tradeAccount);
 				this.fireUpdateAccountTime(accountNumber);
 			}
@@ -1829,18 +1883,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			TradeAccount tradeAccount = m_accountRequests.get(accountNumber);
 			if (AccountType.CORPORATION.equals(tradeAccount.getAccountType())) {
-				Aspects items = m_tradePersistentModel
-						.findAspectsByClassName(FinancialAccount.class
-								.getName());
-				for (Aspect aspect : items.getAspect()) {
-					m_tradePersistentModel.removeAspect(aspect);
-				}
-				m_client.requestFA(EClientSocket.GROUPS);
-				m_client.requestFA(EClientSocket.PROFILES);
-				m_client.requestFA(EClientSocket.ALIASES);
+				/*
+				 * Delete all the FinancialAccount/AllocationAccount and
+				 * re-populate via the xml.
+				 * 
+				 * TODO check to see it this method is call only one on login or
+				 * is it called for every account. If so this needs to be
+				 * changed so that we only call this method once.
+				 */
+				onReqFinancialAccount();
 			}
 		} catch (Exception ex) {
-			error(0, 3315, "Errors removing FA Accounts: " + ex.getMessage());
+			error(0,
+					3315,
+					"Errors removing FinancialAccount/AllocationAccount: "
+							+ ex.getMessage());
 		}
 	}
 

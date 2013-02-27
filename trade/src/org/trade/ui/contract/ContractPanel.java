@@ -1203,7 +1203,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						if (!Decode.NONE.equals(((DAOGroup) e.getItem())
 								.getDisplayName())) {
 							tradeOrder
-									.setFAProfile(((FinancialAccount) ((DAOGroup) e
+									.setFAGroup(((FinancialAccount) ((DAOGroup) e
 											.getItem()).getObject())
 											.getGroupName());
 						} else {
@@ -1246,7 +1246,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							Object source = e.getSource();
 							if ("value".equals(e.getPropertyName())) {
 								if (source == percentTextField) {
-									if (percentTextField.isEditValid()) {
+									if (percentTextField.isEditValid() && null != e.getNewValue()) {
 										Number rate = ((Number) percentTextField
 												.getValue()).doubleValue();
 										tradeOrder.setFAPercent(new BigDecimal(

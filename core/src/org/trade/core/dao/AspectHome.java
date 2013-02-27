@@ -63,6 +63,20 @@ public class AspectHome {
 	 * @return Aspect
 	 */
 	public synchronized Aspect persist(Aspect transientInstance) {
+		return persist(transientInstance, false);
+	}
+
+	/**
+	 * Method persist.
+	 * 
+	 * @param transientInstance
+	 *            Aspect
+	 * @param overrideVersion
+	 *            boolean
+	 * @return Aspect
+	 */
+	public synchronized Aspect persist(Aspect transientInstance,
+			boolean overrideVersion) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -73,6 +87,12 @@ public class AspectHome {
 				transientInstance.setDirty(false);
 				return transientInstance;
 			} else {
+				if (overrideVersion) {
+					Aspect aspect = entityManager.find(
+							transientInstance.getClass(),
+							transientInstance.getId());
+					transientInstance.setVersion(aspect.getVersion());
+				}
 				Aspect instance = entityManager.merge(transientInstance);
 				entityManager.getTransaction().commit();
 				transientInstance.setVersion(instance.getVersion());

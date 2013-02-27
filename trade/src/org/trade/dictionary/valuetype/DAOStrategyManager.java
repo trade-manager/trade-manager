@@ -98,7 +98,7 @@ public class DAOStrategyManager extends DAODecode {
 		returnInstance.setDefaultCode();
 		return returnInstance;
 	}
-	
+
 	/**
 	 * Method convertToUppercase.
 	 * 

@@ -318,7 +318,7 @@ public class ConfigurationPanel extends BasePanel {
 							"name", indicatorName);
 			if (aspects.getAspect().isEmpty()) {
 				this.setStatusBarMessage(
-						"There are no properties for this Indicator ...\n",
+						"There are no properties for this Indicator ...",
 						BasePanel.INFORMATION);
 			} else {
 

@@ -91,7 +91,7 @@ public class TWSGroupRequest extends SaxMapper {
 
 		groupsTracker.track("Group/defaultMethod", methodTracker);
 		methodTracker.track("defaultMethod", methodTracker);
-		
+
 		final TagTracker listOfAcctsTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
@@ -108,7 +108,7 @@ public class TWSGroupRequest extends SaxMapper {
 
 		groupsTracker.track("Group/ListOfAccts", listOfAcctsTracker);
 		listOfAcctsTracker.track("ListOfAccts", listOfAcctsTracker);
-		
+
 		final TagTracker accountTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
@@ -121,7 +121,7 @@ public class TWSGroupRequest extends SaxMapper {
 				aspect.setAccountNumber(value);
 				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
 				aspect.setFinancialAccount(temp);
-				temp.getAccountAllocation().add(aspect);				
+				temp.getAccountAllocation().add(aspect);
 			}
 		};
 

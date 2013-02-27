@@ -560,6 +560,19 @@ public interface PersistentModel {
 	Aspect persistAspect(Aspect aspect) throws PersistentModelException;
 
 	/**
+	 * Method persistAspect.
+	 * 
+	 * @param aspect
+	 *            Aspect
+	 * @param overrideVersion
+	 *            boolean
+	 * @return Aspect
+	 * @throws PersistentModelException
+	 */
+	Aspect persistAspect(Aspect aspect, boolean overrideVersion)
+			throws PersistentModelException;
+
+	/**
 	 * Method removeAspect.
 	 * 
 	 * @param aspect

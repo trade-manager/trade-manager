@@ -143,7 +143,8 @@ public class StrategyTableModel extends AspectTableModel {
 		}
 		case 3: {
 			if (value instanceof DAOStrategyManager) {
-				if (!Decode.NONE.equals(((DAOStrategyManager) value).getDisplayName())) {
+				if (!Decode.NONE.equals(((DAOStrategyManager) value)
+						.getDisplayName())) {
 					element.setStrategyManager((Strategy) ((DAOStrategyManager) value)
 							.getObject());
 				} else {

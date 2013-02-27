@@ -75,7 +75,7 @@ public class Tier extends Decode {
 		returnInstance.setDefaultCode();
 		return returnInstance;
 	}
-	
+
 	/**
 	 * Method convertToUppercase.
 	 * 

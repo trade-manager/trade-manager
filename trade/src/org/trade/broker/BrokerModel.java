@@ -130,7 +130,6 @@ public interface BrokerModel {
 	 * 
 	 * @param idTradestrategy
 	 *            Integer
-	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
 	 */
 	BackTestBroker getBackTestBroker(Integer idTradestrategy);
 
@@ -153,6 +152,25 @@ public interface BrokerModel {
 	 *            String
 	 */
 	void onCancelAccountUpdates(String accountNumber);
+
+	/**
+	 * Method onReqFinancialAccount.
+	 * 
+	 * @throws BrokerModelException
+	 */
+	void onReqFinancialAccount() throws BrokerModelException;
+
+	/**
+	 * Method onReqReplaceFinancialAccount.
+	 * 
+	 * @param xml
+	 *            String
+	 * @param faDataType
+	 *            int
+	 * @throws BrokerModelException
+	 */
+	void onReqReplaceFinancialAccount(int faDataType, String xml)
+			throws BrokerModelException;
 
 	/**
 	 * Method onReqManagedAccount.
@@ -189,8 +207,6 @@ public interface BrokerModel {
 	 * @param Integer
 	 *            chartDays
 	 * @throws BrokerModelException
-	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
-	 *      )
 	 */
 	public void onBrokerData(Contract contract, Date endDate, Integer barSize,
 			Integer chartDays) throws BrokerModelException;

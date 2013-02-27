@@ -39,6 +39,7 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
@@ -61,17 +62,9 @@ public class TextDialog extends JDialog {
 
 	private String m_text = null;
 	private boolean m_cancel = true;
-	private JPanel jPanel2 = new JPanel();
-	private JPanel jPanel3 = new JPanel();
-	private JPanel jPanel = new JPanel();
-	private JPanel jPanel1 = new JPanel();
 	private JComponent m_component = null;
-	private JScrollPane detailArea = new JScrollPane();
-	private BorderLayout borderLayout1 = new BorderLayout();
 	private JButton buttonOk = new JButton();
 	private JButton buttonCancel = new JButton();
-	private BorderLayout borderLayout2 = new BorderLayout();
-	private GridLayout gridLayout1 = new GridLayout();
 
 	/**
 	 * Constructor for TextDialog.
@@ -94,41 +87,37 @@ public class TextDialog extends JDialog {
 		} else {
 			m_component = component;
 		}
+		JScrollPane detailArea = new JScrollPane();
 		buttonOk.setText("OK");
-		buttonOk.addActionListener(new OKButtonAdapter(this));
+		buttonOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (m_component instanceof JTextArea) {
+					setText(((JTextArea) m_component).getText().trim());
+				}
+				setCancel(false);
+				dispose();
+			}
+		});
 		buttonCancel.setText("Cancel");
-		buttonCancel.addActionListener(new CancelButtonAdapter(this));
-		jPanel2.setLayout(borderLayout1);
-		jPanel3.setLayout(gridLayout1);
+		buttonCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCancel(true);
+				dispose();
+			}
+		});
+		JPanel jPanel = new JPanel(new BorderLayout());
+		JPanel jPanel1 = new JPanel();
+		JPanel jPanel2 = new JPanel(new BorderLayout());
+		JPanel jPanel3 = new JPanel(new GridLayout());
 		jPanel3.add(buttonOk, null);
 		jPanel3.add(buttonCancel, null);
 		detailArea.getViewport().add(m_component, null);
 		jPanel2.add(detailArea, BorderLayout.CENTER);
-		jPanel.setLayout(borderLayout2);
 		jPanel1.add(jPanel3, BorderLayout.CENTER);
 		jPanel.add(jPanel2, BorderLayout.CENTER);
 		jPanel.add(jPanel1, BorderLayout.SOUTH);
 		this.getContentPane().add(jPanel);
 		pack();
-
-	}
-
-	/**
-	 * Method getOKButton.
-	 * 
-	 * @return JButton
-	 */
-	public JButton getOKButton() {
-		return buttonOk;
-	}
-
-	/**
-	 * Method getCancelButton.
-	 * 
-	 * @return JButton
-	 */
-	public JButton getCancelButton() {
-		return buttonCancel;
 	}
 
 	/**
@@ -151,31 +140,6 @@ public class TextDialog extends JDialog {
 	 */
 	public TextDialog(Frame frame) {
 		this(frame, "", false, null);
-	}
-
-	/**
-	 * Method doOK.
-	 * 
-	 * @param e
-	 *            ActionEvent
-	 */
-	void doOK(ActionEvent e) {
-		if (m_component instanceof JTextArea) {
-			this.setText(((JTextArea) m_component).getText().trim());
-		}
-		setCancel(false);
-		dispose();
-	}
-
-	/**
-	 * Method doCancel.
-	 * 
-	 * @param e
-	 *            ActionEvent
-	 */
-	void doCancel(ActionEvent e) {
-		setCancel(true);
-		dispose();
 	}
 
 	/**
@@ -211,10 +175,28 @@ public class TextDialog extends JDialog {
 	/**
 	 * Method getCancel.
 	 * 
-	 * @return boolean
+	 * @return String
 	 */
 	public boolean getCancel() {
 		return m_cancel;
+	}
+	
+	/**
+	 * Method getOKButton.
+	 * 
+	 * @return JButton
+	 */
+	public JButton getOKButton() {
+		return buttonOk;
+	}
+	
+	/**
+	 * Method getCancelButton.
+	 * 
+	 * @return JButton
+	 */
+	public JButton getCancelButton() {
+		return buttonCancel;
 	}
 
 	/**
@@ -225,59 +207,5 @@ public class TextDialog extends JDialog {
 	 */
 	public void setCancel(boolean cancel) {
 		m_cancel = cancel;
-	}
-}
-
-/**
- */
-class CancelButtonAdapter implements java.awt.event.ActionListener {
-	TextDialog adaptee;
-
-	/**
-	 * Constructor for CancelButtonAdapter.
-	 * 
-	 * @param adaptee
-	 *            TextDialog
-	 */
-	CancelButtonAdapter(TextDialog adaptee) {
-		this.adaptee = adaptee;
-	}
-
-	/**
-	 * Method actionPerformed.
-	 * 
-	 * @param e
-	 *            ActionEvent
-	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		adaptee.doCancel(e);
-	}
-}
-
-/**
- */
-class OKButtonAdapter implements java.awt.event.ActionListener {
-	TextDialog adaptee;
-
-	/**
-	 * Constructor for OKButtonAdapter.
-	 * 
-	 * @param adaptee
-	 *            TextDialog
-	 */
-	OKButtonAdapter(TextDialog adaptee) {
-		this.adaptee = adaptee;
-	}
-
-	/**
-	 * Method actionPerformed.
-	 * 
-	 * @param e
-	 *            ActionEvent
-	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		adaptee.doOK(e);
 	}
 }

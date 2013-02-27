@@ -378,7 +378,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	public void setAction(String action) {
 		this.action = action;
 	}
-	
+
 	/**
 	 * Method getAccountNumber.
 	 * 
