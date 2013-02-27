@@ -172,7 +172,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public TradingdayPanel(Tradingdays tradingdays, BasePanel controller,
 			PersistentModel tradePersistentModel) {
 		try {
-			getMenu().addMessageListener(this);
+			if (null != getMenu())
+				getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
 
 			m_tradingdays = tradingdays;

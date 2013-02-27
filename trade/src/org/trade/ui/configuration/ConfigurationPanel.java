@@ -120,7 +120,8 @@ public class ConfigurationPanel extends BasePanel {
 	@SuppressWarnings("unchecked")
 	public ConfigurationPanel(PersistentModel tradePersistentModel) {
 		try {
-			getMenu().addMessageListener(this);
+			if (null != getMenu())
+				getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
 			/*
 			 * Initialize the ValueType decode tables. This caused the tables to
