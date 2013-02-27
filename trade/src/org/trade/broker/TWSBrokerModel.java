@@ -2101,7 +2101,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						account.setAlias(account.getAlias());
 						m_tradePersistentModel.persistAspect(ta);
 					} else {
-						account.setAccountType(AccountType.INDIVIDUAL);
+						account.setAccountType(AccountType.CORPORATION);
 						account.setCurrency(Currency.USD);
 						account.setName(account.getAccountNumber());
 						m_tradePersistentModel.persistAspect(account);
