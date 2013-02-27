@@ -69,13 +69,15 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 	 *            String
 	 * @param qualifier
 	 *            LookupQualifier
+	 * @param optional
+	 *            boolean
 	 * @return Lookup
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String,
 	 *      LookupQualifier)
 	 */
 	public Lookup getLookup(String lookupName, LookupQualifier qualifier,
-			boolean none) throws LookupException {
+			boolean optional) throws LookupException {
 		Lookup lookup = getCachedLookup(lookupName, qualifier);
 
 		if (null == lookup) {
@@ -107,7 +109,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 				 * Add the None selected row.
 				 */
 				Vector<Vector<Object>> rows = new Vector<Vector<Object>>();
-				if (none) {
+				if (optional) {
 					Vector<Object> newRowNone = new Vector<Object>();
 					for (i = 0; i < colRows.size(); i++) {
 						Object qualVal = qualifier.getValue(""

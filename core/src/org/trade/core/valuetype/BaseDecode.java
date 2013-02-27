@@ -99,8 +99,8 @@ public class BaseDecode extends Decode {
 	 * @param none
 	 *            boolean
 	 */
-	public BaseDecode(String codeDecodeType, boolean none) {
-		super(codeDecodeType, BASE_DECODE_IDENTIFIER, none);
+	public BaseDecode(String codeDecodeType, boolean optional) {
+		super(codeDecodeType, BASE_DECODE_IDENTIFIER, optional);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class BaseDecode extends Decode {
 	 * @param identifier
 	 *            String
 	 */
-	public BaseDecode(String codeDecodeType, String identifier, boolean none) {
-		super(codeDecodeType, BASE_DECODE_IDENTIFIER, none);
+	public BaseDecode(String codeDecodeType, String identifier, boolean optional) {
+		super(codeDecodeType, BASE_DECODE_IDENTIFIER, optional);
 	}
 }

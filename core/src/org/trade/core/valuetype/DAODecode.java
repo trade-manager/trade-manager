@@ -49,9 +49,7 @@ import java.util.Vector;
  * @author Simon Allen
  */
 public class DAODecode extends Decode {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -5356057478795774210L;
 
 	private static final String DAO_DECODE_IDENTIFIER = "DAO_DECODE";
@@ -96,11 +94,11 @@ public class DAODecode extends Decode {
 	 * 
 	 * @param codeDecodeType
 	 *            String
-	 * @param none
+	 * @param optional
 	 *            boolean
 	 */
-	public DAODecode(String codeDecodeType, boolean none) {
-		super(codeDecodeType, DAO_DECODE_IDENTIFIER, none);
+	public DAODecode(String codeDecodeType, boolean optional) {
+		super(codeDecodeType, DAO_DECODE_IDENTIFIER, optional);
 	}
 
 	/**
@@ -111,15 +109,16 @@ public class DAODecode extends Decode {
 	 *            String
 	 * @param identifier
 	 *            String
+	 * @param optional
+	 *            boolean
 	 */
-	public DAODecode(String codeDecodeType, String identifier, boolean none) {
-		super(codeDecodeType, DAO_DECODE_IDENTIFIER, none);
+	public DAODecode(String codeDecodeType, String identifier, boolean optional) {
+		super(codeDecodeType, DAO_DECODE_IDENTIFIER, optional);
 	}
 
-	// override this method for value types that need to distinguish upper case
-	// from lowercase
 	/**
-	 * Method convertToUppercase.
+	 * Method convertToUppercase. override this method for value types that need
+	 * to distinguish upper case from lowercase
 	 * 
 	 * @return boolean
 	 */

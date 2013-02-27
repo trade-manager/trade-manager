@@ -84,9 +84,6 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	public static final String _CODE = "_CODE";
 	public static final String _DISPLAY_NAME = "_DISPLAY_NAME";
 
-	//
-	// Private Attributes
-	//
 	private String m_codeDecodeType = "";
 	private String m_codeDecodeIdentifier = "";
 
@@ -160,10 +157,10 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * 
 	 * @param codeDecodeType
 	 *            String
-	 * @param none
+	 * @param optional
 	 *            boolean
 	 */
-	public Decode(String codeDecodeType, boolean none) {
+	public Decode(String codeDecodeType, boolean optional) {
 		m_codeDecodeType = codeDecodeType;
 		m_codeDecodeIdentifier = CODE_DECODE_IDENTIFIER;
 
@@ -173,7 +170,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 		try {
 			m_lookup = LookupService.getLookup(m_codeDecodeIdentifier,
-					qualifier, none);
+					qualifier, optional);
 		} catch (final Exception ex) {
 			m_lookup = new PropertiesLookup(null, null);
 		}
@@ -187,8 +184,10 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 *            String
 	 * @param identifier
 	 *            String
+	 * @param optional
+	 *            boolean
 	 */
-	public Decode(String codeDecodeType, String identifier, boolean none) {
+	public Decode(String codeDecodeType, String identifier, boolean optional) {
 		m_codeDecodeType = codeDecodeType;
 		m_codeDecodeIdentifier = identifier;
 
@@ -198,7 +197,7 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 		try {
 			m_lookup = LookupService.getLookup(m_codeDecodeIdentifier,
-					qualifier, none);
+					qualifier, optional);
 		} catch (final Exception ex) {
 			m_lookup = new PropertiesLookup(null, null);
 		}
@@ -361,11 +360,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 		return equals;
 	}
 
-	//
-	// Use Default Implementations for these 3 methods at the moment
-	//
 	/**
-	 * Method equals.
+	 * Method equals. Use Default Implementations for these 3 methods at the
+	 * moment
 	 * 
 	 * @param objectToCompare
 	 *            Object
@@ -420,9 +417,11 @@ public class Decode extends ValueType implements Comparator<Decode>,
 	 * @return String
 	 */
 	public String toString() {
-		// in cases where the value is not valid, toString will return the
-		// invalid value.
-		// (getCode still returns "" if the value is not valid.)
+		/*
+		 * in cases where the value is not valid, toString will return the
+		 * invalid value. (getCode still returns "" if the value is not valid.)
+		 */
+
 		if (isValid()) {
 			return (getDisplayName());
 		} else {
@@ -498,10 +497,10 @@ public class Decode extends ValueType implements Comparator<Decode>,
 		}
 	}
 
-	// override this method for value types that need to distinguish upper case
-	// from lowercase
+	//
 	/**
-	 * Method convertToUppercase.
+	 * Method convertToUppercase. override this method for value types that need
+	 * to distinguish upper case from lowercase
 	 * 
 	 * @return boolean
 	 */
@@ -526,19 +525,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 			}
 
 			if (!m_lookup.setPos(codeToLookup, m_codeDecodeIdentifier + _CODE)) {
-				// save the original code to return as part of an error message
-				// + distinguish bad value from empty
-				// see if its a description
-				// setDisplayName(codeToLookup);
 				m_badValue = code;
 			}
 		} catch (Exception ex) {
-			// an exception should only be thrown if the column name is bad,
-			// which it should never be
-			// note that there is no way to throw a system error from here, so
-			// we just
-			// act like the code was bad
-			// todo: something better than this
 			m_badValue = code;
 		}
 	}
@@ -553,19 +542,10 @@ public class Decode extends ValueType implements Comparator<Decode>,
 		try {
 
 			if (!(m_lookup.setPos(code, m_codeDecodeIdentifier + _CODE))) {
-				// save the original code to return as part of an error message
-				// + distinguish bad value from empty
-				// see if its a description
-				// setDisplayName(codeToLookup);
 				m_badValue = code;
 			}
 		} catch (final Exception ex) {
-			// an exception should only be thrown if the column name is bad,
-			// which it should never be
-			// note that there is no way to throw a system error from here, so
-			// we just
-			// act like the code was bad
-			// todo: something better than this
+
 			m_badValue = code;
 		}
 	}
@@ -574,19 +554,9 @@ public class Decode extends ValueType implements Comparator<Decode>,
 		try {
 
 			if (!m_lookup.setDefaultPos(m_codeDecodeIdentifier + _CODE)) {
-				// save the original code to return as part of an error message
-				// + distinguish bad value from empty
-				// see if its a description
-				// setDisplayName(codeToLookup);
 				m_badValue = null;
 			}
 		} catch (Exception ex) {
-			// an exception should only be thrown if the column name is bad,
-			// which it should never be
-			// note that there is no way to throw a system error from here, so
-			// we just
-			// act like the code was bad
-			// todo: something better than this
 			m_badValue = null;
 		}
 	}
@@ -609,24 +579,21 @@ public class Decode extends ValueType implements Comparator<Decode>,
 
 			if (!(m_lookup.setPos(displayNameToLookup, m_codeDecodeIdentifier
 					+ _DISPLAY_NAME))) {
-				// save the original code to return as part of an error message
-				// + distinguish bad value from empty
+				/*
+				 * save the original code to return as part of an error message
+				 * + distinguish bad value from empty
+				 */
 				m_badValue = displayName;
 			}
 		} catch (Exception ex) {
-			// an exception should only be thrown if the column name is bad,
-			// which it should never be
-			// note that there is no way to throw a system error from here, so
-			// we just
-			// act like the code was bad
-			// todo: something better than this
+
 			m_badValue = displayName;
 		}
 	}
 
-	// primarily by name, secondarily by value; null-safe; case-insensitive
 	/**
-	 * Method compareTo.
+	 * Method compareTo. primarily by name, secondarily by value; null-safe;
+	 * case-insensitive
 	 * 
 	 * @param other
 	 *            Decode
