@@ -1161,7 +1161,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			GridBagLayout gridBagLayout1 = new GridBagLayout();
 			this.setLayout(gridBagLayout1);
-
+			this.setBorder(BorderFactory.createCompoundBorder(
+					BorderFactory.createTitledBorder("Select Profile or Group"),
+					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 			JLabel profileLabel = new JLabel("Profile");
 			JLabel groupLabel = new JLabel("Group");
 			JLabel mthodLabel = new JLabel("Method");
