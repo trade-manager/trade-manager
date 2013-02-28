@@ -98,7 +98,7 @@ public class TradestrategyTableModel extends TableModel {
 
 	private static final String[] columnHeaderToolTip = {
 			"<html>Tradingday<br>"
-					+ "Tradestrategies are unique based on Tradingday/Contract/Tradeaccount/Strategy/BarSize</html>",
+					+ "Tradestrategies are unique based on Tradingday/Contract/Portfolio/Strategy/BarSize</html>",
 			"If checked the Tradestrategy will trade",
 			"<html>Contract symbol<br>"
 					+ "Contracts are unique based on Symbol/SECType/Exchange/Currency/Expiry date<br>"

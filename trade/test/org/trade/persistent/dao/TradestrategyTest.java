@@ -48,6 +48,7 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
+import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.Exchange;
@@ -201,8 +202,8 @@ public class TradestrategyTest extends TestCase {
 
 		Tradestrategy tradestrategy = null;
 		Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
-		Portfolio portfolio = (Portfolio) DAOPortfolio
-				.newInstance().getObject();
+		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
+				.getObject();
 		Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 				.getMostRecentTradingDay(new Date()));
 
@@ -216,7 +217,7 @@ public class TradestrategyTest extends TestCase {
 		} else {
 			tradestrategy = tradestrategyHome.findTradestrategyByUniqueKeys(
 					open, strategy.getName(), contract.getIdContract(),
-					tradeAccount.getAccountNumber());
+					portfolio.getName());
 			if (null != tradestrategy) {
 				tradestrategy = tradestrategyHome.findById(tradestrategy
 						.getIdTradeStrategy());
@@ -263,12 +264,12 @@ public class TradestrategyTest extends TestCase {
 					.getMostRecentTradingDay(new Date()));
 			Strategy strategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
-			Account tradeAccount = (Account) DAOAccount
-					.newInstance().getObject();
+			Account account = (Account) DAOAccount.newInstance()
+					.getObject();
 			Tradestrategy tradestrategy = tradestrategyHome
 					.findTradestrategyByUniqueKeys(open, strategy.getName(),
 							contract.getIdContract(),
-							tradeAccount.getAccountNumber());
+							account.getAccountNumber());
 			if (null != tradestrategy) {
 				aspectHome.remove(tradestrategy);
 				aspectHome.remove(tradestrategy.getContract());

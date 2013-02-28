@@ -43,7 +43,7 @@ public class ReferenceTable extends Decode {
 
 	private static final long serialVersionUID = -5381026427696898592L;
 	public static final String DECODE = "REF_TABLE";
-	public static final String TRADE_ACCOUNT = "TradeAccount";
+	public static final String PORTFOLIO = "Portfolio";
 
 	public ReferenceTable() {
 		super(DECODE);

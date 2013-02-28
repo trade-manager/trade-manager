@@ -86,8 +86,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 	private final static Logger _log = LoggerFactory
 			.getLogger(AbstractStrategyRule.class);
 
-	// Message handler that allows the main controller to listen for errors
-	/** Storage for registered change listeners. */
+	/*
+	 * Message handler that allows the main controller to listen for errors.
+	 * Storage for registered change listeners.
+	 */
 	private transient EventListenerList listenerList;
 
 	private BrokerModel brokerModel;
@@ -643,8 +645,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 				timeInForce, triggerMethod);
 		tradeOrder.setOcaGroupName(ocaGroupName);
 		tradeOrder.setTransmit(transmit);
-		if (AccountType.INDIVIDUAL.equals(getTradestrategy().getAccount()
-				.getAccountType())) {
+		Account account = tradePersistentModel
+				.findAccountByNumber(getTradestrategy().getPortfolio()
+						.getMasterAccountNumber());
+		if (AccountType.INDIVIDUAL.equals(account.getAccountType())) {
 			tradeOrder.setAccountNumber(getTradestrategy().getPortfolio()
 					.getMasterAccountNumber());
 		} else {
@@ -1330,16 +1334,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return this.tradestrategy;
 	}
 
-	/*
-	 * Return a refreshed trade account note this is updated when connected to
-	 * TWS every time the account values change.
-	 * 
-	 * @return tradeAccount The current trade account.
-	 */
 	/**
-	 * Method getTradeAccount.
+	 * Method getAccount. Return a refreshed trade account note this is updated
+	 * when connected to TWS every time the account values change.
 	 * 
-	 * @return TradeAccount
+	 * @return Account
 	 * @throws PersistentModelException
 	 */
 	public Account getAccount() throws PersistentModelException {

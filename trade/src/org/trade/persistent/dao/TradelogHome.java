@@ -58,8 +58,8 @@ public class TradelogHome {
 	/**
 	 * Method findByTradelogReport.
 	 * 
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param portfolio
+	 *            Portfolio
 	 * @param start
 	 *            Date
 	 * @param end
@@ -68,7 +68,7 @@ public class TradelogHome {
 	 *            boolean
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogReport(Account account, Date start,
+	public TradelogReport findByTradelogReport(Portfolio portfolio, Date start,
 			Date end, boolean filter) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
@@ -77,7 +77,7 @@ public class TradelogHome {
 			Query queryDetail = entityManagerLocal.createNativeQuery(
 					TradelogDetail.getSQLString(), TradelogDetail.class);
 
-			queryDetail.setParameter("idAccount", account.getIdAccount());
+			queryDetail.setParameter("idPortfolio", portfolio.getIdPortfolio());
 			queryDetail.setParameter("start", m_sdf.format(start));
 			queryDetail.setParameter("end", m_sdf.format(end));
 			queryDetail.setParameter("filter", filter);
@@ -90,7 +90,8 @@ public class TradelogHome {
 			Query querySummary = entityManagerLocal.createNativeQuery(
 					TradelogSummary.getSQLString(), TradelogSummary.class);
 
-			querySummary.setParameter("idAccount", account.getIdAccount());
+			querySummary
+					.setParameter("idPortfolio", portfolio.getIdPortfolio());
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
 
@@ -114,8 +115,8 @@ public class TradelogHome {
 	/**
 	 * Method findByTradelogDetail.
 	 * 
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param portfolio
+	 *            Portfolio
 	 * @param start
 	 *            Date
 	 * @param end
@@ -124,7 +125,7 @@ public class TradelogHome {
 	 *            boolean
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogDetail(Account account, Date start,
+	public TradelogReport findByTradelogDetail(Portfolio portfolio, Date start,
 			Date end, boolean filter) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
@@ -133,7 +134,7 @@ public class TradelogHome {
 			Query queryDetail = entityManagerLocal.createNativeQuery(
 					TradelogDetail.getSQLString(), "TradelogDetailMapping");
 
-			queryDetail.setParameter("idAccount", account.getIdAccount());
+			queryDetail.setParameter("idPortfolio", portfolio.getIdPortfolio());
 			queryDetail.setParameter("start", m_sdf.format(start));
 			queryDetail.setParameter("end", m_sdf.format(end));
 			queryDetail.setParameter("filter", filter);
@@ -159,16 +160,16 @@ public class TradelogHome {
 	/**
 	 * Method findByTradelogSummary.
 	 * 
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param portfolio
+	 *            Portfolio
 	 * @param start
 	 *            Date
 	 * @param end
 	 *            Date
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogSummary(Account account, Date start,
-			Date end) {
+	public TradelogReport findByTradelogSummary(Portfolio portfolio,
+			Date start, Date end) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -176,7 +177,8 @@ public class TradelogHome {
 			Query querySummary = entityManagerLocal.createNativeQuery(
 					TradelogSummary.getSQLString(), TradelogSummary.class);
 
-			querySummary.setParameter("idAccount", account.getIdAccount());
+			querySummary
+					.setParameter("idPortfolio", portfolio.getIdPortfolio());
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
 

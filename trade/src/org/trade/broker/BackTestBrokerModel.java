@@ -60,7 +60,6 @@ import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
@@ -235,14 +234,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * 
 	 * @param subscribe
 	 *            boolean
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param account
+	 *            Account
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean,
-	 *      Account)
+	 *      account)
 	 */
 	public void onSubscribeAccountUpdates(boolean subscribe,
-			Account tradeAccount) throws BrokerModelException {
+			String accountNumber) throws BrokerModelException {
 	}
 
 	/**

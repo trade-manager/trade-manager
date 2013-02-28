@@ -723,7 +723,7 @@ public class AbstractStrategyTest extends TestCase {
 	public void testGetTradeAccount() {
 		try {
 			createOpenPosition(new Money(100), false);
-			TestCase.assertNotNull(this.strategyProxy.getTradeAccount());
+			TestCase.assertNotNull(this.strategyProxy.getAccount());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetTradeAccount Msg:" + ex.getMessage());
 		}

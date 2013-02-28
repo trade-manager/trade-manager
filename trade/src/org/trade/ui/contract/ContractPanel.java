@@ -96,6 +96,7 @@ import org.trade.dictionary.valuetype.Tier;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.FinancialAccount;
@@ -337,8 +338,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	public void doProperties(TradeOrder instance) {
 		try {
-			if (AccountType.CORPORATION.equals(instance.getTrade()
-					.getTradestrategy().getAccount().getAccountType())) {
+			Account account = m_tradePersistentModel
+					.findAccountByNumber(instance.getTrade().getTradestrategy()
+							.getPortfolio().getMasterAccountNumber());
+			if (AccountType.CORPORATION.equals(account.getAccountType())) {
 				FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
 						instance);
 				if (null != fAPropertiesPanel) {
@@ -357,7 +360,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 								instance.setAccountNumber(null);
 							} else {
 								instance.setAccountNumber(instance.getTrade()
-										.getTradestrategy().getPortfolio().getMasterAccountNumber());
+										.getTradestrategy().getPortfolio()
+										.getMasterAccountNumber());
 							}
 						}
 					}
@@ -918,7 +922,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				status = (tradestrategy.getStatus() == null ? ""
 						: TradestrategyStatus.newInstance(
 								tradestrategy.getStatus()).getDisplayName());
-				account = tradestrategy.getAccount().toString();
+				account = tradestrategy.getPortfolio().getMasterAccountNumber();
 				risk = currencyFormater
 						.format((tradestrategy.getRiskAmount() == null ? 0
 								: tradestrategy.getRiskAmount().doubleValue()));
@@ -1049,10 +1053,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderModel.setData(new Tradestrategy());
 			setTradeLabel(null, null);
 		} else {
-			if (AccountType.CORPORATION.equals(transferObject.getAccount()
-					.getAccountType())) {
-				propertiesButton.setEnabled(true);
-			}
+			propertiesButton.setEnabled(true);
 			cancelStrategiesButton.setEnabled(true);
 			brokerDataButton.setEnabled(true);
 			periodEditorComboBox.setEnabled(true);

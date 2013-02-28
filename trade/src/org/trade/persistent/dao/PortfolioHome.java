@@ -48,10 +48,10 @@ import org.trade.core.dao.EntityManagerHelper;
 /**
  */
 @Stateless
-public class AccountHome {
+public class PortfolioHome {
 	private EntityManager entityManager = null;
 
-	public AccountHome() {
+	public PortfolioHome() {
 
 	}
 
@@ -60,14 +60,14 @@ public class AccountHome {
 	 * 
 	 * @param id
 	 *            Integer
-	 * @return Account
+	 * @return Portfolio
 	 */
-	public Account findById(Integer id) {
+	public Portfolio findById(Integer id) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			Account instance = entityManager.find(Account.class, id);
+			Portfolio instance = entityManager.find(Portfolio.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {
@@ -79,23 +79,24 @@ public class AccountHome {
 	}
 
 	/**
-	 * Method findByAccountNumber.
+	 * Method findByName.
 	 * 
-	 * @param accountNumber
+	 * @param name
 	 *            String
-	 * @return Account
+	 * @return Portfolio
 	 */
-	public Account findByAccountNumber(String accountNumber) {
+	public Portfolio findByName(String name) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Account> query = builder.createQuery(Account.class);
-			Root<Account> from = query.from(Account.class);
+			CriteriaQuery<Portfolio> query = builder
+					.createQuery(Portfolio.class);
+			Root<Portfolio> from = query.from(Portfolio.class);
 			query.select(from);
-			query.where(builder.equal(from.get("accountNumber"), accountNumber));
-			List<Account> items = entityManager.createQuery(query)
+			query.where(builder.equal(from.get("name"), name));
+			List<Portfolio> items = entityManager.createQuery(query)
 					.getResultList();
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
@@ -112,28 +113,64 @@ public class AccountHome {
 	}
 
 	/**
-	 * Method resetDefaultAccount.
+	 * Method findByMasterAccountNumber.
 	 * 
-	 * @param defaultAccount
-	 *            Account
+	 * @param accountNumber
+	 *            String
+	 * @return Portfolio
 	 */
-	public void resetDefaultAccount(Account defaultAccount) {
+	public Portfolio findByMasterAccountNumber(String accountNumber) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Account> query = builder.createQuery(Account.class);
-			Root<Account> from = query.from(Account.class);
+			CriteriaQuery<Portfolio> query = builder
+					.createQuery(Portfolio.class);
+			Root<Portfolio> from = query.from(Portfolio.class);
 			query.select(from);
-			List<Account> items = entityManager.createQuery(query)
+			query.where(builder.equal(from.get("masterAccountNumber"),
+					accountNumber));
+			List<Portfolio> items = entityManager.createQuery(query)
 					.getResultList();
-			for (Account account : items) {
-				if (account.getIsDefault()
-						&& !defaultAccount.getIdAccount().equals(
-								account.getIdAccount())) {
-					account.setIsDefault(false);
-					entityManager.persist(account);
+			entityManager.getTransaction().commit();
+			if (items.size() > 0) {
+				return items.get(0);
+			}
+			return null;
+
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
+	 * Method resetDefaultPortfolio.
+	 * 
+	 * @param defaultPortfolio
+	 *            Portfolio
+	 */
+	public void resetDefaultPortfolio(Portfolio defaultPortfolio) {
+
+		try {
+			entityManager = EntityManagerHelper.getEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Portfolio> query = builder
+					.createQuery(Portfolio.class);
+			Root<Portfolio> from = query.from(Portfolio.class);
+			query.select(from);
+			List<Portfolio> items = entityManager.createQuery(query)
+					.getResultList();
+			for (Portfolio portfolio : items) {
+				if (portfolio.getIsDefault()
+						&& !defaultPortfolio.getIdPortfolio().equals(
+								portfolio.getIdPortfolio())) {
+					portfolio.setIsDefault(false);
+					entityManager.persist(portfolio);
 				}
 			}
 			entityManager.getTransaction().commit();

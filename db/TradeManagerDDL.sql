@@ -232,7 +232,7 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
     ON UPDATE NO ACTION,
   CONSTRAINT tradeStrategy_Portfolio_fk
     FOREIGN KEY (idPortfolio)
-    REFERENCES tradeaccount (idPortfolio)
+    REFERENCES portfolio (idPortfolio)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

@@ -320,32 +320,28 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 * @param subscribe
 	 *            boolean
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param accountNumber
+	 *            String
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean,
 	 *      Account)
 	 */
 	public void onSubscribeAccountUpdates(boolean subscribe,
-			Account tradeAccount) throws BrokerModelException {
+			String accountNumber) throws BrokerModelException {
 		try {
-
-			m_accountRequests
-					.put(tradeAccount.getAccountNumber(), tradeAccount);
+			Account account = m_tradePersistentModel
+					.findAccountByNumber(accountNumber);
+			m_accountRequests.put(accountNumber, account);
 			if (m_client.isConnected()) {
-				m_client.reqAccountUpdates(subscribe,
-						tradeAccount.getAccountNumber());
+				m_client.reqAccountUpdates(subscribe, accountNumber);
 			} else {
 				throw new BrokerModelException(0, 3010,
 						"Not conected to TWS historical account data cannot be retrieved");
 			}
 
 		} catch (Exception ex) {
-			error(0,
-					3290,
-					"Error requesting Trade Account: "
-							+ tradeAccount.getAccountNumber() + " Msg: "
-							+ ex.getMessage());
+			error(0, 3290, "Error requesting Account: " + accountNumber
+					+ " Msg: " + ex.getMessage());
 		}
 
 	}
@@ -1808,34 +1804,32 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			_log.info("updateAccountValue Account#: " + accountNumber + " Key:"
 					+ key + " Value:" + value + " Currency:" + currency);
 			if (m_accountRequests.containsKey(accountNumber)) {
-				Account tradeAccount = m_accountRequests
-						.get(accountNumber);
+				Account account = m_accountRequests.get(accountNumber);
 				if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
-					tradeAccount.setAccountType(value);
+					account.setAccountType(value);
 				}
-				if (tradeAccount.getCurrency().equals(currency)) {
+				if (account.getCurrency().equals(currency)) {
 					if (key.equals(TWSBrokerModel.AVAILABLE_FUNDS)) {
-						tradeAccount.setAvailableFunds(new BigDecimal(value));
+						account.setAvailableFunds(new BigDecimal(value));
 					}
 					if (key.equals(TWSBrokerModel.BUYING_POWER)) {
-						tradeAccount.setBuyingPower(new BigDecimal(value));
+						account.setBuyingPower(new BigDecimal(value));
 					}
 					if (key.equals(TWSBrokerModel.CASH_BALANCE)) {
-						tradeAccount.setCashBalance(new BigDecimal(value));
+						account.setCashBalance(new BigDecimal(value));
 					}
 					if (key.equals(TWSBrokerModel.CURRENCY)) {
-						tradeAccount.setCurrency(value);
+						account.setCurrency(value);
 					}
 					if (key.equals(TWSBrokerModel.GROSS_POSITION_VALUE)
 							|| key.equals(TWSBrokerModel.STOCK_MKT_VALUE)) {
-						tradeAccount
-								.setGrossPositionValue(new BigDecimal(value));
+						account.setGrossPositionValue(new BigDecimal(value));
 					}
 					if (key.equals(TWSBrokerModel.REALIZED_P_L)) {
-						tradeAccount.setRealizedPnL(new BigDecimal(value));
+						account.setRealizedPnL(new BigDecimal(value));
 					}
 					if (key.equals(TWSBrokerModel.UNREALIZED_P_L)) {
-						tradeAccount.setUnrealizedPnL(new BigDecimal(value));
+						account.setUnrealizedPnL(new BigDecimal(value));
 					}
 				}
 			}
@@ -1854,16 +1848,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			_log.info("updateAccountTime:" + timeStamp);
 			for (String accountNumber : m_accountRequests.keySet()) {
-				Account tradeAccount = m_accountRequests
-						.get(accountNumber);
+				Account account = m_accountRequests.get(accountNumber);
 				/*
 				 * Don't use the incoming time stamp as this does not show
 				 * seconds just HH:mm format.
 				 */
-				tradeAccount.setUpdateDate(new Date());
-				tradeAccount = (Account) m_tradePersistentModel
-						.persistAspect(tradeAccount, true);
-				m_accountRequests.replace(accountNumber, tradeAccount);
+				account.setUpdateDate(new Date());
+				account = (Account) m_tradePersistentModel.persistAspect(
+						account, true);
+				m_accountRequests.replace(accountNumber, account);
 				this.fireUpdateAccountTime(accountNumber);
 			}
 		} catch (Exception ex) {
@@ -1881,8 +1874,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void accountDownloadEnd(String accountNumber) {
 		_log.info("accountDownloadEnd:" + accountNumber);
 		try {
-			Account tradeAccount = m_accountRequests.get(accountNumber);
-			if (AccountType.CORPORATION.equals(tradeAccount.getAccountType())) {
+			Account account = m_accountRequests.get(accountNumber);
+			if (AccountType.CORPORATION.equals(account.getAccountType())) {
 				/*
 				 * Delete all the FinancialAccount/AllocationAccount and
 				 * re-populate via the xml.
@@ -2095,8 +2088,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				for (Aspect aspect : aspects.getAspect()) {
 					Account account = (Account) aspect;
 					Account ta = m_tradePersistentModel
-							.findAccountByNumber(account
-									.getAccountNumber());
+							.findAccountByNumber(account.getAccountNumber());
 					if (null != ta) {
 						account.setAlias(account.getAlias());
 						m_tradePersistentModel.persistAspect(ta);

@@ -28,7 +28,7 @@ echo ClassPath=%CLASSPATH%
 
 rem Build and compile the trademanager application
 
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml all
+java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml all
 
 rem Build and compile the test cases optional
 
@@ -44,7 +44,7 @@ rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/buil
 
 rem Clean all the orders from the DB and reload the default data
 
-java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanTradeOrdersDB
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanTradeOrdersDB
 
 pause
 

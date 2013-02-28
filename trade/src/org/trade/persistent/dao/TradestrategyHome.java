@@ -170,12 +170,12 @@ public class TradestrategyHome {
 	 *            String
 	 * @param idContract
 	 *            Integer
-	 * @param accountNumber
+	 * @param portfolioName
 	 *            String
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy findTradestrategyByUniqueKeys(Date open,
-			String strategyName, Integer idContract, String accountNumber) {
+			String strategyName, Integer idContract, String portfolioName) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -193,11 +193,11 @@ public class TradestrategyHome {
 						strategyName);
 				predicates.add(predicate);
 			}
-			if (null != accountNumber) {
-				Join<Tradestrategy, Account> tradeAccount = from
-						.join("tradeAccount");
-				Predicate predicate = builder.equal(
-						tradeAccount.get("accountNumber"), accountNumber);
+			if (null != portfolioName) {
+				Join<Tradestrategy, Portfolio> portfolio = from
+						.join("portfolio");
+				Predicate predicate = builder.equal(portfolio.get("name"),
+						portfolioName);
 				predicates.add(predicate);
 			}
 			if (null != open) {

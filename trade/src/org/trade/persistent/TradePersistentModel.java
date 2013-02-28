@@ -56,6 +56,8 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.FinancialAccountHome;
+import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioHome;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
 import org.trade.persistent.dao.Strategy;
@@ -90,6 +92,7 @@ public class TradePersistentModel implements PersistentModel {
 	private TradeHome m_tradeHome = null;
 	private TradelogHome m_tradelogHome = null;
 	private AccountHome m_accountHome = null;
+	private PortfolioHome m_portfolioHome = null;
 	private TradestrategyHome m_tradestrategyHome = null;
 	private CandleHome m_candleHome = null;
 	private FinancialAccountHome m_financialAccountHome = null;
@@ -107,6 +110,7 @@ public class TradePersistentModel implements PersistentModel {
 		m_tradeHome = new TradeHome();
 		m_tradelogHome = new TradelogHome();
 		m_accountHome = new AccountHome();
+		m_portfolioHome = new PortfolioHome();
 		m_tradestrategyHome = new TradestrategyHome();
 		m_candleHome = new CandleHome();
 		m_financialAccountHome = new FinancialAccountHome();
@@ -117,8 +121,8 @@ public class TradePersistentModel implements PersistentModel {
 	/**
 	 * Method findTradelogReport.
 	 * 
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param portfolio
+	 *            Portfolio
 	 * @param start
 	 *            Date
 	 * @param end
@@ -130,10 +134,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradelogReport(Account,
 	 *      Date, Date, boolean)
 	 */
-	public TradelogReport findTradelogReport(Account tradeAccount,
-			Date start, Date end, boolean filter)
-			throws PersistentModelException {
-		return m_tradelogHome.findByTradelogReport(tradeAccount, start, end,
+	public TradelogReport findTradelogReport(Portfolio portfolio, Date start,
+			Date end, boolean filter) throws PersistentModelException {
+		return m_tradelogHome.findByTradelogReport(portfolio, start, end,
 				filter);
 	}
 
@@ -146,12 +149,11 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAccountById(Integer)
 	 */
-	public Account findAccountById(Integer id)
-			throws PersistentModelException {
+	public Account findAccountById(Integer id) throws PersistentModelException {
 		Account instance = m_accountHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException(
-					"Account not found for id: " + id);
+			throw new PersistentModelException("Account not found for id: "
+					+ id);
 		return instance;
 	}
 
@@ -344,6 +346,59 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method findPortfolioById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+	public Portfolio findPortfolioById(Integer id)
+			throws PersistentModelException {
+		Portfolio instance = m_portfolioHome.findById(id);
+		if (null == instance)
+			throw new PersistentModelException("Portfolio not found for id: "
+					+ id);
+		return instance;
+	}
+
+	/**
+	 * Method findPortfolioByNumber.
+	 * 
+	 * @param accountNumber
+	 *            String
+	 * @return Account
+	 * @throws PersistentModelException
+	 */
+	public Portfolio findPortfolioByMasterAccountNumber(String accountNumber)
+			throws PersistentModelException {
+		return m_portfolioHome.findByMasterAccountNumber(accountNumber);
+	}
+
+	/**
+	 * Method resetDefaultPortfolio.
+	 * 
+	 * @param transientInstance
+	 *            Portfolio
+	 * @throws PersistentModelException
+	 */
+	public Portfolio resetDefaultPortfolio(Portfolio transientInstance)
+			throws PersistentModelException {
+		try {
+			m_portfolioHome.resetDefaultPortfolio(transientInstance);
+			return (Portfolio) m_aspectHome.persist(transientInstance);
+
+		} catch (OptimisticLockException ex1) {
+			throw new PersistentModelException(
+					"Error setting default portfolio. Please refresh before save.");
+		} catch (Exception e) {
+			throw new PersistentModelException("Error saving Portfolio: "
+					+ transientInstance.getName() + "\n Msg: " + e.getMessage());
+		}
+
+	}
+
+	/**
 	 * Method findTradesByTradestrategyId.
 	 * 
 	 * @param idTradestrategy
@@ -379,7 +434,7 @@ public class TradePersistentModel implements PersistentModel {
 	 *            String
 	 * @param idContract
 	 *            Integer
-	 * @param accountNumber
+	 * @param portfolioName
 	 *            String
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
@@ -387,10 +442,10 @@ public class TradePersistentModel implements PersistentModel {
 	 *      String, Integer, String)
 	 */
 	public Tradestrategy findTradestrategyByUniqueKeys(Date open,
-			String strategy, Integer idContract, String accountNumber)
+			String strategy, Integer idContract, String portfolioName)
 			throws PersistentModelException {
 		return m_tradestrategyHome.findTradestrategyByUniqueKeys(open,
-				strategy, idContract, accountNumber);
+				strategy, idContract, portfolioName);
 	}
 
 	/**

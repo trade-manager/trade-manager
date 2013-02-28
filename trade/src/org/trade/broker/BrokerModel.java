@@ -41,7 +41,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.trade.broker.client.BackTestBroker;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 
@@ -138,11 +137,11 @@ public interface BrokerModel {
 	 * 
 	 * @param subscribe
 	 *            boolean
-	 * @param tradeAccounte
-	 *            TradeAccount
+	 * @param accountNumber
+	 *            String
 	 * @throws BrokerModelException
 	 */
-	void onSubscribeAccountUpdates(boolean subscribe, Account tradeAccounte)
+	void onSubscribeAccountUpdates(boolean subscribe, String accountNumber)
 			throws BrokerModelException;
 
 	/**

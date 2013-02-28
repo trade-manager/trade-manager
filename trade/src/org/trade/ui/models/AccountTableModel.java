@@ -133,8 +133,7 @@ public class AccountTableModel extends AspectTableModel {
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
-		final Account element = (Account) getData().getAspect().get(
-				row);
+		final Account element = (Account) getData().getAspect().get(row);
 
 		switch (column) {
 		case 0: {
@@ -234,7 +233,7 @@ public class AccountTableModel extends AspectTableModel {
 	 * @param newRow
 	 *            Vector<Object>
 	 * @param element
-	 *            TradeAccount
+	 *            Account
 	 */
 	public void getNewRow(Vector<Object> newRow, Account element) {
 		newRow.addElement(element.getName());

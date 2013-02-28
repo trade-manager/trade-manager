@@ -1165,50 +1165,50 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		scanLine.useDelimiter("\\,");
 
 		try {
-			Account masterTradeAccount = null;
+			Account masterAccount = null;
 
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
 				if (accountNumber.length() > 0) {
-					Account tradeAccount = m_tradePersistentModel
+					Account account = m_tradePersistentModel
 							.findAccountByNumber(accountNumber);
-					if (null == tradeAccount) {
-						tradeAccount = new Account(accountNumber,
-								accountNumber, AccountType.INDIVIDUAL,
-								Currency.USD, false);
-						tradeAccount = (Account) m_tradePersistentModel
-								.persistAspect(tradeAccount);
+					if (null == account) {
+						account = new Account(accountNumber, accountNumber,
+								AccountType.INDIVIDUAL, Currency.USD, false);
+						account = (Account) m_tradePersistentModel
+								.persistAspect(account);
 					}
-					if (null == masterTradeAccount)
-						masterTradeAccount = tradeAccount;
+					if (null == masterAccount)
+						masterAccount = account;
 				}
 			}
 
 			DBTableLookupServiceProvider.clearLookup();
-			if (!masterTradeAccount.getIsDefault()) {
+			if (!masterAccount.getIsDefault()) {
 				DAOAccount code = DAOAccount.newInstance();
-				Account defaultTradeAccount = (Account) code.getObject();
-				if (!defaultTradeAccount.getAccountNumber().equals(
-						masterTradeAccount.getAccountNumber())) {
+				Account defaultAccount = (Account) code.getObject();
+				if (!defaultAccount.getAccountNumber().equals(
+						masterAccount.getAccountNumber())) {
 
-					int result = JOptionPane.showConfirmDialog(this.getFrame(),
+					int result = JOptionPane.showConfirmDialog(
+							this.getFrame(),
 							"Do you want to make account: "
-									+ masterTradeAccount.getAccountNumber()
+									+ masterAccount.getAccountNumber()
 									+ " the default account?", "Information",
 							JOptionPane.YES_NO_OPTION);
 					if (result == JOptionPane.YES_OPTION) {
-						masterTradeAccount.setIsDefault(true);
-						masterTradeAccount = m_tradePersistentModel
-								.resetDefaultAccount(masterTradeAccount);
+						masterAccount.setIsDefault(true);
+						masterAccount = m_tradePersistentModel
+								.resetDefaultAccount(masterAccount);
 					}
 				}
 			}
 
 			tradingdayPanel.doWindowActivated();
-			m_brokerModel.onSubscribeAccountUpdates(true, masterTradeAccount);
+			m_brokerModel.onSubscribeAccountUpdates(true,
+					masterAccount.getAccountNumber());
 			this.setStatusBarMessage("Connected to IB Account: "
-					+ masterTradeAccount.getAccountNumber(),
-					BasePanel.INFORMATION);
+					+ masterAccount.getAccountNumber(), BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);
@@ -1226,9 +1226,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	public void updateAccountTime(String accountNumber) {
 		try {
-			Account tradeAccount = m_tradePersistentModel
+			Account account = m_tradePersistentModel
 					.findAccountByNumber(accountNumber);
-			tradingdayPanel.setTradeAccountLabel(tradeAccount);
+			tradingdayPanel.setAccountLabel(account);
 			this.setStatusBarMessage("Connected to IB Account: "
 					+ accountNumber, BasePanel.INFORMATION);
 		} catch (Exception ex) {

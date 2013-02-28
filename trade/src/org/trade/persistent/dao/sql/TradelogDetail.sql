@@ -46,12 +46,12 @@ FROM
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
-inner join account on tradestrategy.idAccount = account.idAccount
+inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 left outer join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
 left outer join tradeorder on trade.idTrade = tradeorder.idTrade
 where (1 = :filter or tradeorder.isFilled = 1)
 and tradingday.open between :start and :end
-and account.idAccount = :idAccount
+and portfolio.idPortfolio = :idPortfolio
 and tradestrategy.trade = 1
 union all
 SELECT 
@@ -80,13 +80,13 @@ FROM
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
-inner join account on tradestrategy.idAccount = account.idAccount
+inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 inner join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
 inner join tradeorder on trade.idTrade = tradeorder.idTrade
 where tradeorder.isFilled =1
 and (1 = :filter or tradeorder.isFilled = 1)
 and tradingday.open between :start and :end
-and account.idAccount = :idAccount
+and portfolio.idPortfolio = :idPortfolio
 and tradestrategy.trade = 1
 group by
 tradingday.open,

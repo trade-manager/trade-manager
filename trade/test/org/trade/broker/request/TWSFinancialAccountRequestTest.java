@@ -99,8 +99,8 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 
 			for (Aspect aspect : aspects.getAspect()) {
 				Account account = (Account) aspect;
-				Account ta = tradePersistentModel
-						.findAccountByNumber(account.getAccountNumber());
+				Account ta = tradePersistentModel.findAccountByNumber(account
+						.getAccountNumber());
 				if (null != ta) {
 					account.setAlias(account.getAlias());
 					tradePersistentModel.persistAspect(ta);

@@ -42,7 +42,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
-import org.trade.dictionary.valuetype.DAOAccount;
+import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.ui.TradeAppLoadConfig;
 
 /**
@@ -78,10 +78,10 @@ public class TradelogReportTest extends TestCase {
 
 		try {
 			TradelogHome tradelogHome = new TradelogHome();
-			Account tradeAccount = (Account) DAOAccount
-					.newInstance().getObject();
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
+					.getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(
-					tradeAccount, TradingCalendar.getYearStart(),
+					portfolio, TradingCalendar.getYearStart(),
 					TradingCalendar.getTodayBusinessDayEnd(), false);
 			TestCase.assertFalse(!tradelogReport.getTradelogDetail().isEmpty());
 			for (TradelogDetail tradelogDetail : tradelogReport
@@ -109,10 +109,10 @@ public class TradelogReportTest extends TestCase {
 
 		try {
 			TradelogHome tradelogHome = new TradelogHome();
-			Account tradeAccount = (Account) DAOAccount
-					.newInstance().getObject();
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
+					.getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogSummary(
-					tradeAccount, TradingCalendar.getYearStart(),
+					portfolio, TradingCalendar.getYearStart(),
 					TradingCalendar.getTodayBusinessDayEnd());
 			TestCase.assertFalse(!tradelogReport.getTradelogSummary().isEmpty());
 			for (TradelogSummary tradelogSummary : tradelogReport

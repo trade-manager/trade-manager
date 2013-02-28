@@ -58,7 +58,6 @@ import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
-import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.Exchange;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
@@ -522,12 +521,13 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testResetDefaultTradeAccount() {
+	public void testResetDefaultAccount() {
 
 		try {
-			this.tradePersistentModel.resetDefaultAccount(this.tradestrategy
-					.getAccount());
-			TestCase.assertTrue(this.tradestrategy.getAccount().getIsDefault());
+			this.tradePersistentModel.resetDefaultPortfolio(this.tradestrategy
+					.getPortfolio());
+			TestCase.assertTrue(this.tradestrategy.getPortfolio()
+					.getIsDefault());
 		} catch (Exception e) {
 			TestCase.fail("Error testResetDefaultTradeAccount Msg: "
 					+ e.getMessage());
@@ -701,12 +701,12 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testFindTradeAccountById() {
+	public void testFindAccountById() {
 
 		try {
-			Account result = this.tradePersistentModel
-					.findAccountById(this.tradestrategy.getAccount()
-							.getIdAccount());
+			Portfolio result = this.tradePersistentModel
+					.findPortfolioById(this.tradestrategy.getPortfolio()
+							.getIdPortfolio());
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradeAccountById Msg: "
@@ -715,12 +715,12 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testFindTradeAccountByNumber() {
+	public void testFindAccountByNumber() {
 
 		try {
 			Account result = this.tradePersistentModel
-					.findAccountByNumber(this.tradestrategy.getAccount()
-							.getAccountNumber());
+					.findAccountByNumber(this.tradestrategy.getPortfolio()
+							.getMasterAccountNumber());
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradeAccountByNumber Msg: "
@@ -794,7 +794,7 @@ public class TradePersistentModelTest extends TestCase {
 							.getTradingday().getOpen(), this.tradestrategy
 							.getStrategy().getName(), this.tradestrategy
 							.getContract().getIdContract(), this.tradestrategy
-							.getAccount().getAccountNumber());
+							.getPortfolio().getName());
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradestrategyByUniqueKeys Msg: "
@@ -1017,7 +1017,7 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			TradelogReport result = this.tradePersistentModel
-					.findTradelogReport(this.tradestrategy.getAccount(),
+					.findTradelogReport(this.tradestrategy.getPortfolio(),
 							TradingCalendar.getYearStart(), this.tradestrategy
 									.getTradingday().getClose(), true);
 			TestCase.assertNotNull(result);

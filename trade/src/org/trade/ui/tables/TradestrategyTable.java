@@ -51,9 +51,9 @@ import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
+import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
-import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.Exchange;
 import org.trade.dictionary.valuetype.SECIdType;
 import org.trade.dictionary.valuetype.SECType;
@@ -132,8 +132,8 @@ public class TradestrategyTable extends Table {
 				(new DAOStrategyManager()).getCodesDecodes());
 		DecodeTableEditor strategyManagerEditor = new DecodeTableEditor(
 				strategyManagerComboBox);
-		DecodeTableEditor tradeAccountEditor = new DecodeTableEditor(
-				new JComboBox((new DAOAccount()).getCodesDecodes()));
+		DecodeTableEditor portfolioEditor = new DecodeTableEditor(
+				new JComboBox((new DAOPortfolio()).getCodesDecodes()));
 		DecodeTableEditor chartDaysEditor = new DecodeTableEditor(
 				new JComboBox((new ChartDays()).getCodesDecodes()));
 		DecodeTableEditor barSizeEditor = new DecodeTableEditor(new JComboBox(
@@ -146,7 +146,7 @@ public class TradestrategyTable extends Table {
 		this.setDefaultRenderer(String.class, rString);
 		this.setDefaultEditor(DAOStrategy.class, strategyEditor);
 		this.setDefaultEditor(DAOStrategyManager.class, strategyManagerEditor);
-		this.setDefaultEditor(DAOAccount.class, tradeAccountEditor);
+		this.setDefaultEditor(DAOPortfolio.class, portfolioEditor);
 		this.setDefaultEditor(Currency.class, currencyEditor);
 		this.setDefaultEditor(Exchange.class, exchangeEditor);
 		this.setDefaultEditor(SECIdType.class, sECIdTypeEditor);

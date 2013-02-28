@@ -43,6 +43,7 @@ import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.FinancialAccount;
+import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
@@ -164,8 +165,7 @@ public interface PersistentModel {
 	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	Account findAccountById(Integer id)
-			throws PersistentModelException;
+	Account findAccountById(Integer id) throws PersistentModelException;
 
 	/**
 	 * Method findAccountByNumber.
@@ -260,13 +260,13 @@ public interface PersistentModel {
 	 *            String
 	 * @param idContract
 	 *            Integer
-	 * @param accountNumber
+	 * @param portfolioName
 	 *            String
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
 	Tradestrategy findTradestrategyByUniqueKeys(Date open, String strategy,
-			Integer idContract, String accountNumber)
+			Integer idContract, String portfolioName)
 			throws PersistentModelException;
 
 	/**
@@ -297,6 +297,38 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	Trade findOpenTradeByTradestrategyId(Integer id)
+			throws PersistentModelException;
+
+	/**
+	 * Method findPortfolioById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+	Portfolio findPortfolioById(Integer id) throws PersistentModelException;
+
+	/**
+	 * Method findPortfolioByNumber.
+	 * 
+	 * @param accountNumber
+	 *            String
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+	Portfolio findPortfolioByMasterAccountNumber(String accountNumber)
+			throws PersistentModelException;
+
+	/**
+	 * Method resetDefaultPortfolio.
+	 * 
+	 * @param transientInstance
+	 *            Portfolio
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+	Portfolio resetDefaultPortfolio(Portfolio transientInstance)
 			throws PersistentModelException;
 
 	/**
@@ -398,8 +430,8 @@ public interface PersistentModel {
 	/**
 	 * Method findTradelogReport.
 	 * 
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param portfolio
+	 *            Portfolio
 	 * @param start
 	 *            Date
 	 * @param end
@@ -409,7 +441,7 @@ public interface PersistentModel {
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 */
-	TradelogReport findTradelogReport(Account tradeAccount, Date start,
+	TradelogReport findTradelogReport(Portfolio portfolio, Date start,
 			Date end, boolean filter) throws PersistentModelException;
 
 	/**
