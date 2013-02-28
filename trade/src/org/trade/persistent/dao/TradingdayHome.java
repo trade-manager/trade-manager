@@ -264,6 +264,7 @@ public class TradingdayHome {
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
 					tradestrategy.getTrades().size();
+					tradestrategy.getPortfolio().getPortfolioAccounts().size();
 					for (IndicatorSeries indicatorSeries : tradestrategy
 							.getStrategy().getIndicatorSeries()) {
 						indicatorSeries.getCodeValues().size();

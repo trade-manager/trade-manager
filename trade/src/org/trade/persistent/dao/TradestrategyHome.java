@@ -75,6 +75,7 @@ public class TradestrategyHome {
 			entityManager.getTransaction().begin();
 			Tradestrategy instance = entityManager
 					.find(Tradestrategy.class, id);
+
 			if (null != instance) {
 				for (IndicatorSeries indicatorSeries : instance.getStrategy()
 						.getIndicatorSeries()) {
@@ -83,6 +84,7 @@ public class TradestrategyHome {
 				for (Trade trade : instance.getTrades()) {
 					trade.getTradeOrders().size();
 				}
+				instance.getPortfolio().getPortfolioAccounts().size();
 			}
 			entityManager.getTransaction().commit();
 			return instance;
