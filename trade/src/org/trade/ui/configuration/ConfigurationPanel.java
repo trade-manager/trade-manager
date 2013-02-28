@@ -77,6 +77,7 @@ import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.CodeAttribute;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.CodeValue;
+import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.IndicatorSeries;
 import org.trade.ui.base.BaseButton;
@@ -84,6 +85,7 @@ import org.trade.ui.base.BasePanel;
 import org.trade.ui.base.BaseUIPropertyCodes;
 import org.trade.ui.base.TableModel;
 import org.trade.ui.base.TextDialog;
+import org.trade.ui.models.AccountTableModel;
 import org.trade.ui.models.AspectTableModel;
 import org.trade.ui.models.CodeAttributeTableModel;
 import org.trade.ui.models.IndicatorSeriesTableModel;
@@ -524,6 +526,22 @@ public class ConfigurationPanel extends BasePanel {
 				m_tableModelChild = new CodeAttributeTableModel();
 				((CodeAttributeTableModel) m_tableModelChild)
 						.setData((CodeType) aspect);
+				m_tableChild = new ConfigurationTable(m_tableModelChild);
+				m_tableChild.setFont(new Font("Monospaced", Font.PLAIN, 12));
+				m_tableChild.setPreferredScrollableViewportSize(new Dimension(
+						300, 200));
+				m_tableChild.setFillsViewportHeight(true);
+				m_tableChild.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+
+				m_jScrollPane1.getViewport().add(m_tableChild,
+						BorderLayout.CENTER);
+				m_jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			}
+			if (aspect instanceof Portfolio) {
+
+				m_tableModelChild = new AccountTableModel();
+				((AccountTableModel) m_tableModelChild)
+						.setData((Portfolio) aspect);
 				m_tableChild = new ConfigurationTable(m_tableModelChild);
 				m_tableChild.setFont(new Font("Monospaced", Font.PLAIN, 12));
 				m_tableChild.setPreferredScrollableViewportSize(new Dimension(

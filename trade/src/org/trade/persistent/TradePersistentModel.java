@@ -1150,7 +1150,21 @@ public class TradePersistentModel implements PersistentModel {
 				}
 				aspects.setDirty(false);
 				return aspects;
+			} else if ("org.trade.persistent.dao.Portfolio"
+					.equals(aspectClassName)) {
+				/*
+				 * TODO Eager does not work on the relationship Portfolio ->
+				 * PortfilioAccount so hack needed.
+				 */
+				List<Portfolio> portfolios = m_portfolioHome.findAll();
+				Aspects aspects = new Aspects();
+				for (Object item : portfolios) {
+					aspects.add((Aspect) item);
+				}
+				aspects.setDirty(false);
+				return aspects;
 			} else {
+
 				return m_aspectHome.findByClassName(aspectClassName);
 			}
 
