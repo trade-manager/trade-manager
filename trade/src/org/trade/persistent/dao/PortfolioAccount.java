@@ -80,8 +80,8 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * @param idPortfolioAccount
 	 *            Integer
 	 */
-	public void setIdPortfolioAccount(Integer idPortfolio) {
-		this.id = idPortfolio;
+	public void setIdPortfolioAccount(Integer idPortfolioAccount) {
+		this.id = idPortfolioAccount;
 	}
 
 	/**

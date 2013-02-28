@@ -84,7 +84,7 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String TIER = "Tier";
 	private static final String STRATEGY = "      Strategy*     ";
 	private static final String STRATEGY_MGR = "   Strategy Manager ";
-	private static final String ACCOUNT = "Account*";
+	private static final String PORTFOLIO = "Portfolio*";
 	private static final String BAR_SIZE = "Bar Size*";
 	private static final String CHART_HISTORY = "Chart Hist*";
 	private static final String RISK_AMOUNT = "Risk Amt*";
@@ -111,7 +111,7 @@ public class TradestrategyTableModel extends TableModel {
 			"<html>The strategy to trade with<br>"
 					+ "Note the default is set in the config.properties (<b>trade.strategy.default</b>)</html>",
 			null,
-			"Trading account",
+			"Portfolio",
 			"<html>Bar size for strategy <br/>"
 					+ "<b>1 Y</b>(1 day), <b>6 M</b>(1 day), <b>3 M</b>(1 day) <b>1 M</b>(1 day, 1 hour)<br/>"
 					+ "<b>1 W</b>(1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins, 2 mins, 1 min)<br/>"
@@ -144,7 +144,7 @@ public class TradestrategyTableModel extends TableModel {
 		columnNames[4] = TIER;
 		columnNames[5] = STRATEGY;
 		columnNames[6] = STRATEGY_MGR;
-		columnNames[7] = ACCOUNT;
+		columnNames[7] = PORTFOLIO;
 		columnNames[8] = BAR_SIZE;
 		columnNames[9] = CHART_HISTORY;
 		columnNames[10] = RISK_AMOUNT;

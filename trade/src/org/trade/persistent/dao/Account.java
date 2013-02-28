@@ -41,16 +41,21 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
 
@@ -82,6 +87,8 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	private BigDecimal unrealizedPnL;
 	private Date updateDate;
 	private Boolean isDefault = new Boolean(false);
+	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
+			0);
 
 	public Account() {
 
@@ -436,24 +443,23 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getVersion.
+	 * Method getPortfolioAccounts.
 	 * 
-	 * @return Integer
+	 * @return List<PortfolioAccounts>
 	 */
-	@Version
-	@Column(name = "version")
-	public Integer getVersion() {
-		return this.version;
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, orphanRemoval = true, cascade = { CascadeType.ALL })
+	public List<PortfolioAccount> getPortfolioAccounts() {
+		return this.portfolioAccounts;
 	}
 
 	/**
-	 * Method setVersion.
+	 * Method setPortfolioAccounts.
 	 * 
-	 * @param version
-	 *            Integer
+	 * @param codeAttributes
+	 *            List<CodeAttribute>
 	 */
-	public void setVersion(Integer version) {
-		this.version = version;
+	public void setPortfolioAccounts(List<PortfolioAccount> portfolioAccounts) {
+		this.portfolioAccounts = portfolioAccounts;
 	}
 
 	/**

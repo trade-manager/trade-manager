@@ -41,6 +41,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -65,6 +66,8 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	private Boolean isDefault = new Boolean(false);
 	private String masterAccountNumber;
 	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
+			0);
+	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
 			0);
 
 	public Portfolio() {
@@ -201,7 +204,7 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	 * @param masterAccountNumber
 	 *            String
 	 */
-	public void setAccountNumber(String masterAccountNumber) {
+	public void setMasterAccountNumber(String masterAccountNumber) {
 		this.masterAccountNumber = masterAccountNumber;
 	}
 
@@ -223,6 +226,26 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setTradestrategies(List<Tradestrategy> tradestrategies) {
 		this.tradestrategies = tradestrategies;
+	}
+
+	/**
+	 * Method getPortfolioAccounts.
+	 * 
+	 * @return List<PortfolioAccounts>
+	 */
+	@OneToMany(mappedBy = "portfolio", fetch = FetchType.LAZY, orphanRemoval = true, cascade = { CascadeType.ALL })
+	public List<PortfolioAccount> getPortfolioAccounts() {
+		return this.portfolioAccounts;
+	}
+
+	/**
+	 * Method setPortfolioAccounts.
+	 * 
+	 * @param codeAttributes
+	 *            List<CodeAttribute>
+	 */
+	public void setPortfolioAccounts(List<PortfolioAccount> portfolioAccounts) {
+		this.portfolioAccounts = portfolioAccounts;
 	}
 
 	/**

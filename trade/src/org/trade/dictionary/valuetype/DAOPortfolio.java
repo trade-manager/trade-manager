@@ -40,7 +40,7 @@ import java.util.Iterator;
 import org.trade.core.valuetype.DAODecode;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
-import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.Portfolio;
 
 /**
  */
@@ -82,8 +82,8 @@ public class DAOPortfolio extends DAODecode {
 			for (Iterator<Decode> iterCodes = returnInstance.getCodesDecodes()
 					.iterator(); iterCodes.hasNext();) {
 				code = (DAOPortfolio) iterCodes.next();
-				Account account = (Account) code.getObject();
-				if (account.getIsDefault())
+				Portfolio portfolio = (Portfolio) code.getObject();
+				if (portfolio.getIsDefault())
 					return code;
 			}
 			if (null == code) {
