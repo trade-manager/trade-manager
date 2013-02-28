@@ -70,7 +70,7 @@ import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
-import org.trade.dictionary.valuetype.DAOTradeAccount;
+import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
@@ -78,7 +78,7 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
@@ -1165,18 +1165,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		scanLine.useDelimiter("\\,");
 
 		try {
-			TradeAccount masterTradeAccount = null;
+			Account masterTradeAccount = null;
 
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
 				if (accountNumber.length() > 0) {
-					TradeAccount tradeAccount = m_tradePersistentModel
-							.findTradeAccountByNumber(accountNumber);
+					Account tradeAccount = m_tradePersistentModel
+							.findAccountByNumber(accountNumber);
 					if (null == tradeAccount) {
-						tradeAccount = new TradeAccount(accountNumber,
+						tradeAccount = new Account(accountNumber,
 								accountNumber, AccountType.INDIVIDUAL,
 								Currency.USD, false);
-						tradeAccount = (TradeAccount) m_tradePersistentModel
+						tradeAccount = (Account) m_tradePersistentModel
 								.persistAspect(tradeAccount);
 					}
 					if (null == masterTradeAccount)
@@ -1186,9 +1186,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			DBTableLookupServiceProvider.clearLookup();
 			if (!masterTradeAccount.getIsDefault()) {
-				DAOTradeAccount code = DAOTradeAccount.newInstance();
-				TradeAccount defaultTradeAccount = (TradeAccount) code
-						.getObject();
+				DAOAccount code = DAOAccount.newInstance();
+				Account defaultTradeAccount = (Account) code.getObject();
 				if (!defaultTradeAccount.getAccountNumber().equals(
 						masterTradeAccount.getAccountNumber())) {
 
@@ -1200,7 +1199,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					if (result == JOptionPane.YES_OPTION) {
 						masterTradeAccount.setIsDefault(true);
 						masterTradeAccount = m_tradePersistentModel
-								.resetDefaultTradeAccount(masterTradeAccount);
+								.resetDefaultAccount(masterTradeAccount);
 					}
 				}
 			}
@@ -1227,8 +1226,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	public void updateAccountTime(String accountNumber) {
 		try {
-			TradeAccount tradeAccount = m_tradePersistentModel
-					.findTradeAccountByNumber(accountNumber);
+			Account tradeAccount = m_tradePersistentModel
+					.findAccountByNumber(accountNumber);
 			tradingdayPanel.setTradeAccountLabel(tradeAccount);
 			this.setStatusBarMessage("Connected to IB Account: "
 					+ accountNumber, BasePanel.INFORMATION);
@@ -2017,8 +2016,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								tradestrategy.getBarSize())
 						&& indicator.getChartDays().equals(
 								tradestrategy.getChartDays())
-						&& indicator.getTradeAccount().equals(
-								tradestrategy.getTradeAccount())) {
+						&& indicator.getPortfolio().equals(
+								tradestrategy.getPortfolio())) {
 					indicatorTradestrategy = indicator;
 					break;
 				}
@@ -2039,8 +2038,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				indicatorTradestrategy = new Tradestrategy(contract,
 						tradestrategy.getTradingday(), new Strategy(),
-						tradestrategy.getTradeAccount(), new BigDecimal(0),
-						null, null, false, tradestrategy.getChartDays(),
+						tradestrategy.getPortfolio(), new BigDecimal(0), null,
+						null, false, tradestrategy.getChartDays(),
 						tradestrategy.getBarSize());
 				indicatorTradestrategy.setIdTradeStrategy(m_brokerModel
 						.getNextRequestId());

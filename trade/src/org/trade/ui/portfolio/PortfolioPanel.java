@@ -71,9 +71,9 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
-import org.trade.dictionary.valuetype.DAOTradeAccount;
+import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradelogDetail;
 import org.trade.persistent.dao.TradelogReport;
 import org.trade.persistent.dao.TradelogSummary;
@@ -112,7 +112,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private DAODecodeComboBoxEditor tradeAccountEditorComboBox = null;
 	private static final String DATEFORMAT = "MM/dd/yyyy";
 	private TradelogDetail selectedTradelogDetail = null;
-	private TradeAccount tradeAccount = null;
+	private Account tradeAccount = null;
 
 	/**
 	 * Constructor for PortfolioPanel.
@@ -136,12 +136,12 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 					BaseUIPropertyCodes.TRANSFER);
 			JLabel accountLabel = new JLabel("Account:");
 			tradeAccountEditorComboBox = new DAODecodeComboBoxEditor(
-					DAOTradeAccount.newInstance().getCodesDecodes());
+					DAOAccount.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer tradeAccountRenderer = new DecodeComboBoxRenderer();
 			tradeAccountEditorComboBox.setRenderer(tradeAccountRenderer);
-			this.tradeAccount = (TradeAccount) DAOTradeAccount.newInstance()
+			this.tradeAccount = (Account) DAOAccount.newInstance()
 					.getObject();
-			tradeAccountEditorComboBox.setItem(DAOTradeAccount.newInstance());
+			tradeAccountEditorComboBox.setItem(DAOAccount.newInstance());
 			tradeAccountEditorComboBox.addItemListener(this);
 
 			m_tradelogSummaryModel = new TradelogSummaryTableModel();
@@ -276,7 +276,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	public void itemStateChanged(ItemEvent e) {
 
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			this.tradeAccount = (TradeAccount) ((DAOTradeAccount) e.getItem())
+			this.tradeAccount = (Account) ((DAOAccount) e.getItem())
 					.getObject();
 		}
 	}
@@ -339,11 +339,11 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private void resetTradeAccountComboBox(
 			DAODecodeComboBoxEditor editorComboBox) throws ValueTypeException {
 
-		Vector<Decode> codesNew = ((new DAOTradeAccount()).getCodesDecodes());
+		Vector<Decode> codesNew = ((new DAOAccount()).getCodesDecodes());
 		@SuppressWarnings("rawtypes")
 		DefaultComboBoxModel model = new DefaultComboBoxModel(codesNew);
 		editorComboBox.setModel(model);
-		editorComboBox.setItem(DAOTradeAccount.newInstance());
+		editorComboBox.setItem(DAOAccount.newInstance());
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());
 	}
 

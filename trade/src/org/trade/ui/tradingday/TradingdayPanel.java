@@ -91,12 +91,12 @@ import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
-import org.trade.dictionary.valuetype.DAOTradeAccount;
+import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.UIPropertyCodes;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.Tradingdays;
@@ -335,8 +335,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
 			this.add(jSplitPane1);
-			DAOTradeAccount account = DAOTradeAccount.newInstance();
-			this.setTradeAccountLabel((TradeAccount) account.getObject());
+			DAOAccount account = DAOAccount.newInstance();
+			this.setTradeAccountLabel((Account) account.getObject());
 			enableTradestrategyButtons(null);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
@@ -348,8 +348,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		try {
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			DecodeTableEditor tradeAccountEditor = new DecodeTableEditor(
-					new JComboBox((new DAOTradeAccount()).getCodesDecodes()));
-			m_tradestrategyTable.setDefaultEditor(DAOTradeAccount.class,
+					new JComboBox((new DAOAccount()).getCodesDecodes()));
+			m_tradestrategyTable.setDefaultEditor(DAOAccount.class,
 					tradeAccountEditor);
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			DecodeTableEditor strategyEditor = new DecodeTableEditor(
@@ -828,7 +828,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 * @param tradeAccount
 	 *            TradeAccount
 	 */
-	public void setTradeAccountLabel(TradeAccount tradeAccount) {
+	public void setTradeAccountLabel(Account tradeAccount) {
 		try {
 			tradeAccountLabel.setText(null);
 			CoreUtils.setDocumentText(tradeAccountLabel.getDocument(),

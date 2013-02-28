@@ -338,7 +338,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	public void doProperties(TradeOrder instance) {
 		try {
 			if (AccountType.CORPORATION.equals(instance.getTrade()
-					.getTradestrategy().getTradeAccount().getAccountType())) {
+					.getTradestrategy().getAccount().getAccountType())) {
 				FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
 						instance);
 				if (null != fAPropertiesPanel) {
@@ -357,8 +357,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 								instance.setAccountNumber(null);
 							} else {
 								instance.setAccountNumber(instance.getTrade()
-										.getTradestrategy().getTradeAccount()
-										.getAccountNumber());
+										.getTradestrategy().getPortfolio().getMasterAccountNumber());
 							}
 						}
 					}
@@ -773,7 +772,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				if (null != contract) {
 					Tradestrategy childTradestrategy = new Tradestrategy(
 							contract, tradestrategy.getTradingday(),
-							new Strategy(), tradestrategy.getTradeAccount(),
+							new Strategy(), tradestrategy.getPortfolio(),
 							new BigDecimal(0), null, null, false,
 							tradestrategy.getChartDays(),
 							tradestrategy.getBarSize());
@@ -919,7 +918,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				status = (tradestrategy.getStatus() == null ? ""
 						: TradestrategyStatus.newInstance(
 								tradestrategy.getStatus()).getDisplayName());
-				account = tradestrategy.getTradeAccount().toString();
+				account = tradestrategy.getAccount().toString();
 				risk = currencyFormater
 						.format((tradestrategy.getRiskAmount() == null ? 0
 								: tradestrategy.getRiskAmount().doubleValue()));
@@ -1050,7 +1049,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderModel.setData(new Tradestrategy());
 			setTradeLabel(null, null);
 		} else {
-			if (AccountType.CORPORATION.equals(transferObject.getTradeAccount()
+			if (AccountType.CORPORATION.equals(transferObject.getAccount()
 					.getAccountType())) {
 				propertiesButton.setEnabled(true);
 			}
@@ -1249,7 +1248,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							Object source = e.getSource();
 							if ("value".equals(e.getPropertyName())) {
 								if (source == percentTextField) {
-									if (percentTextField.isEditValid() && null != e.getNewValue()) {
+									if (percentTextField.isEditValid()
+											&& null != e.getNewValue()) {
 										Number rate = ((Number) percentTextField
 												.getValue()).doubleValue();
 										tradeOrder.setFAPercent(new BigDecimal(

@@ -68,8 +68,8 @@ public class TradelogHome {
 	 *            boolean
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogReport(TradeAccount tradeAccount,
-			Date start, Date end, boolean filter) {
+	public TradelogReport findByTradelogReport(Account account, Date start,
+			Date end, boolean filter) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -77,8 +77,7 @@ public class TradelogHome {
 			Query queryDetail = entityManagerLocal.createNativeQuery(
 					TradelogDetail.getSQLString(), TradelogDetail.class);
 
-			queryDetail.setParameter("idTradeAccount",
-					tradeAccount.getIdTradeAccount());
+			queryDetail.setParameter("idAccount", account.getIdAccount());
 			queryDetail.setParameter("start", m_sdf.format(start));
 			queryDetail.setParameter("end", m_sdf.format(end));
 			queryDetail.setParameter("filter", filter);
@@ -91,8 +90,7 @@ public class TradelogHome {
 			Query querySummary = entityManagerLocal.createNativeQuery(
 					TradelogSummary.getSQLString(), TradelogSummary.class);
 
-			querySummary.setParameter("idTradeAccount",
-					tradeAccount.getIdTradeAccount());
+			querySummary.setParameter("idAccount", account.getIdAccount());
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
 
@@ -126,8 +124,8 @@ public class TradelogHome {
 	 *            boolean
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogDetail(TradeAccount tradeAccount,
-			Date start, Date end, boolean filter) {
+	public TradelogReport findByTradelogDetail(Account account, Date start,
+			Date end, boolean filter) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -135,8 +133,7 @@ public class TradelogHome {
 			Query queryDetail = entityManagerLocal.createNativeQuery(
 					TradelogDetail.getSQLString(), "TradelogDetailMapping");
 
-			queryDetail.setParameter("idTradeAccount",
-					tradeAccount.getIdTradeAccount());
+			queryDetail.setParameter("idAccount", account.getIdAccount());
 			queryDetail.setParameter("start", m_sdf.format(start));
 			queryDetail.setParameter("end", m_sdf.format(end));
 			queryDetail.setParameter("filter", filter);
@@ -170,8 +167,8 @@ public class TradelogHome {
 	 *            Date
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogSummary(TradeAccount tradeAccount,
-			Date start, Date end) {
+	public TradelogReport findByTradelogSummary(Account account, Date start,
+			Date end) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -179,8 +176,7 @@ public class TradelogHome {
 			Query querySummary = entityManagerLocal.createNativeQuery(
 					TradelogSummary.getSQLString(), TradelogSummary.class);
 
-			querySummary.setParameter("idTradeAccount",
-					tradeAccount.getIdTradeAccount());
+			querySummary.setParameter("idAccount", account.getIdAccount());
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
 

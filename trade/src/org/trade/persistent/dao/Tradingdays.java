@@ -52,8 +52,8 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
+import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
-import org.trade.dictionary.valuetype.DAOTradeAccount;
 import org.trade.persistent.PersistentModelException;
 
 /**
@@ -353,8 +353,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			Strategy strategy = (Strategy) DAOStrategy
 					.newInstance(strategyName).getObject();
 
-			TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
-					.newInstance().getObject();
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
+					.getObject();
 			String strLine = "";
 
 			// read comma separated file line by line
@@ -409,7 +409,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					tradestrategy.setTrade(true);
 					tradestrategy.setDirty(true);
 					tradestrategy.setStrategy(strategy);
-					tradestrategy.setTradeAccount(tradeAccount);
+					tradestrategy.setPortfolio(portfolio);
 
 					if (!this.getTradingdays().containsKey(
 							tradestrategy.getTradingday().getOpen())) {

@@ -478,10 +478,10 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onSubscribeAccountUpdates(true,
-					tradestrategy.getTradeAccount());
+					tradestrategy.getPortfolio());
 			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(tradestrategy.getTradeAccount()
-							.getAccountNumber()));
+					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
+							.getMasterAccountNumber()));
 
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnSubscribeAccountUpdates Msg: "
@@ -494,11 +494,11 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onSubscribeAccountUpdates(true,
-					tradestrategy.getTradeAccount());
-			m_brokerModel.onCancelAccountUpdates(tradestrategy
-					.getTradeAccount().getAccountNumber());
+					tradestrategy.getAccount());
+			m_brokerModel.onCancelAccountUpdates(tradestrategy.getAccount()
+					.getAccountNumber());
 			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(tradestrategy.getTradeAccount()
+					.isAccountUpdatesRunning(tradestrategy.getAccount()
 							.getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnCancelAccountUpdates Msg: "
@@ -512,7 +512,7 @@ public class BrokerModelTest extends TestCase {
 		try {
 			m_brokerModel.onReqManagedAccount();
 			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(tradestrategy.getTradeAccount()
+					.isAccountUpdatesRunning(tradestrategy.getAccount()
 							.getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnReqManagedAccount Msg: "
@@ -597,10 +597,10 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelAccountUpdates(this.tradestrategy
-					.getTradeAccount().getAccountNumber());
+					.getAccount().getAccountNumber());
 			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(this.tradestrategy
-							.getTradeAccount().getAccountNumber()));
+					.isAccountUpdatesRunning(this.tradestrategy.getAccount()
+							.getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
 					+ ex.getMessage());

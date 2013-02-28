@@ -2,6 +2,8 @@
 
 USE ${sql.database};
 
+DELETE FROM accountallocation WHERE idAccountAllocation >='0';
+DELETE FROM financialaccount WHERE idFinancialAccount >='0';
 DELETE FROM tradeorderfill WHERE idTradeOrderFill >='0';
 DELETE FROM tradeorder WHERE idTradeOrder>='0';
 DELETE FROM trade WHERE idTrade >='0';
@@ -9,7 +11,9 @@ DELETE FROM candle WHERE idCandle >='0';
 DELETE FROM tradestrategy WHERE idTradestrategy >='0';
 DELETE FROM rule WHERE idRule >='0';
 DELETE FROM codevalue WHERE idcodeValue >='0';
-DELETE FROM tradeaccount WHERE idTradeAccount >='0';
+DELETE FROM portfolioaccount WHERE idPortfolioAccount >='0';
+DELETE FROM portfolio WHERE idPortfolio >='0';
+DELETE FROM account WHERE idAccount >='0';
 DELETE FROM indicatorseries WHERE idindicatorSeries >='0';
 DELETE FROM strategy WHERE idStrategyManager >='0';
 DELETE FROM strategy WHERE idStrategy >='0';
@@ -115,6 +119,14 @@ INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfP
 
 COMMIT;
 
-INSERT INTO tradeaccount (idTradeAccount, name, accountNumber,  accountType, alias, currency, isDefault, availableFunds, cashBalance, buyingPower, version) VALUES (1, 'Test','DU12345','INDIVIDUAL','Paper Account','USD',1,'25000.00','25000.00','100000.00', 0);
+INSERT INTO account (idAccount, name, accountNumber,  accountType, alias, currency, isDefault, availableFunds, cashBalance, buyingPower, version) VALUES (1, 'Test','DU12345','INDIVIDUAL','Paper Account','USD',1,'25000.00','25000.00','100000.00', 0);
+
+COMMIT;
+
+INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, masterAccountNumber, version) VALUES (1, 'Paper','Paper Account','Paper trading account',1,'DU12345',  0);
+
+COMMIT;
+
+INSERT INTO portfolioaccount (idPortfolioAccount,idPortfolio, idAccount, version) VALUES (1, 1, 1 , 0);
 
 COMMIT;

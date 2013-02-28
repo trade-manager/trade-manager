@@ -49,7 +49,7 @@ import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOStrategy;
-import org.trade.dictionary.valuetype.DAOTradeAccount;
+import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.Exchange;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
@@ -201,7 +201,7 @@ public class TradestrategyTest extends TestCase {
 
 		Tradestrategy tradestrategy = null;
 		Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
-		TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
+		Portfolio portfolio = (Portfolio) DAOPortfolio
 				.newInstance().getObject();
 		Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 				.getMostRecentTradingDay(new Date()));
@@ -239,7 +239,7 @@ public class TradestrategyTest extends TestCase {
 			tradingday = instance;
 		}
 		tradestrategy = new Tradestrategy(contract, tradingday, strategy,
-				tradeAccount, new BigDecimal(100), "BUY", "0", true,
+				portfolio, new BigDecimal(100), "BUY", "0", true,
 				ChartDays.TWO_DAYS, BarSize.FIVE_MIN);
 		tradingday.addTradestrategy(tradestrategy);
 		tradingdayHome.persist(tradingday);
@@ -263,7 +263,7 @@ public class TradestrategyTest extends TestCase {
 					.getMostRecentTradingDay(new Date()));
 			Strategy strategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
-			TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
+			Account tradeAccount = (Account) DAOAccount
 					.newInstance().getObject();
 			Tradestrategy tradestrategy = tradestrategyHome
 					.findTradestrategyByUniqueKeys(open, strategy.getName(),

@@ -48,10 +48,10 @@ import org.trade.core.dao.EntityManagerHelper;
 /**
  */
 @Stateless
-public class TradeAccountHome {
+public class AccountHome {
 	private EntityManager entityManager = null;
 
-	public TradeAccountHome() {
+	public AccountHome() {
 
 	}
 
@@ -62,12 +62,12 @@ public class TradeAccountHome {
 	 *            Integer
 	 * @return TradeAccount
 	 */
-	public TradeAccount findById(Integer id) {
+	public Account findById(Integer id) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradeAccount instance = entityManager.find(TradeAccount.class, id);
+			Account instance = entityManager.find(Account.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {
@@ -85,18 +85,18 @@ public class TradeAccountHome {
 	 *            String
 	 * @return TradeAccount
 	 */
-	public TradeAccount findByAccountNumber(String accountNumber) {
+	public Account findByAccountNumber(String accountNumber) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<TradeAccount> query = builder
-					.createQuery(TradeAccount.class);
-			Root<TradeAccount> from = query.from(TradeAccount.class);
+			CriteriaQuery<Account> query = builder
+					.createQuery(Account.class);
+			Root<Account> from = query.from(Account.class);
 			query.select(from);
 			query.where(builder.equal(from.get("accountNumber"), accountNumber));
-			List<TradeAccount> items = entityManager.createQuery(query)
+			List<Account> items = entityManager.createQuery(query)
 					.getResultList();
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
@@ -113,29 +113,29 @@ public class TradeAccountHome {
 	}
 
 	/**
-	 * Method resetDefaultTradeAccount.
+	 * Method resetDefaultAccount.
 	 * 
-	 * @param defaultTradeAccount
-	 *            TradeAccount
+	 * @param defaultAccount
+	 *            Account
 	 */
-	public void resetDefaultTradeAccount(TradeAccount defaultTradeAccount) {
+	public void resetDefaultAccount(Account defaultAccount) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<TradeAccount> query = builder
-					.createQuery(TradeAccount.class);
-			Root<TradeAccount> from = query.from(TradeAccount.class);
+			CriteriaQuery<Account> query = builder
+					.createQuery(Account.class);
+			Root<Account> from = query.from(Account.class);
 			query.select(from);
-			List<TradeAccount> items = entityManager.createQuery(query)
+			List<Account> items = entityManager.createQuery(query)
 					.getResultList();
-			for (TradeAccount tradeAccount : items) {
-				if (tradeAccount.getIsDefault()
-						&& !defaultTradeAccount.getIdTradeAccount().equals(
-								tradeAccount.getIdTradeAccount())) {
-					tradeAccount.setIsDefault(false);
-					entityManager.persist(tradeAccount);
+			for (Account account : items) {
+				if (account.getIsDefault()
+						&& !defaultAccount.getIdAccount().equals(
+								account.getIdAccount())) {
+					account.setIsDefault(false);
+					entityManager.persist(account);
 				}
 			}
 			entityManager.getTransaction().commit();

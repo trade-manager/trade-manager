@@ -194,7 +194,7 @@ public class TradestrategyHome {
 				predicates.add(predicate);
 			}
 			if (null != accountNumber) {
-				Join<Tradestrategy, TradeAccount> tradeAccount = from
+				Join<Tradestrategy, Account> tradeAccount = from
 						.join("tradeAccount");
 				Predicate predicate = builder.equal(
 						tradeAccount.get("accountNumber"), accountNumber);

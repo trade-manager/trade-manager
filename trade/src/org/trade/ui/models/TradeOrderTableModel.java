@@ -429,8 +429,6 @@ public class TradeOrderTableModel extends TableModel {
 						.getBigDecimalValue(), createDate.getDate());
 		tradeOrder.setIsOpenPosition(openPosition);
 		tradeOrder.setOcaGroupName("");
-		tradeOrder.setAccountNumber(tradestrategy.getTradeAccount()
-				.getAccountNumber());
 		tradeOrder.setStatus(OrderStatus.newInstance().getCode());
 		trade.addTradeOrder(tradeOrder);
 

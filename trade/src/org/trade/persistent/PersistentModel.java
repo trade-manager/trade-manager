@@ -46,7 +46,7 @@ import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.TradelogReport;
@@ -95,13 +95,13 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method resetDefaultTradeAccount.
+	 * Method resetDefaultAccount.
 	 * 
 	 * @param transientInstance
-	 *            TradeAccount
+	 *            Account
 	 * @throws PersistentModelException
 	 */
-	TradeAccount resetDefaultTradeAccount(TradeAccount transientInstance)
+	Account resetDefaultAccount(Account transientInstance)
 			throws PersistentModelException;
 
 	/**
@@ -157,25 +157,25 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method findTradeAccountById.
+	 * Method findAccountById.
 	 * 
 	 * @param id
 	 *            Integer
-	 * @return TradeAccount
+	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	TradeAccount findTradeAccountById(Integer id)
+	Account findAccountById(Integer id)
 			throws PersistentModelException;
 
 	/**
-	 * Method findTradeAccountByNumber.
+	 * Method findAccountByNumber.
 	 * 
 	 * @param accountNumber
 	 *            String
-	 * @return TradeAccount
+	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	TradeAccount findTradeAccountByNumber(String accountNumber)
+	Account findAccountByNumber(String accountNumber)
 			throws PersistentModelException;
 
 	/**
@@ -409,7 +409,7 @@ public interface PersistentModel {
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 */
-	TradelogReport findTradelogReport(TradeAccount tradeAccount, Date start,
+	TradelogReport findTradelogReport(Account tradeAccount, Date start,
 			Date end, boolean filter) throws PersistentModelException;
 
 	/**

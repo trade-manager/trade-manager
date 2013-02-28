@@ -61,8 +61,8 @@ import org.trade.persistent.dao.RuleHome;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.StrategyHome;
 import org.trade.persistent.dao.Trade;
-import org.trade.persistent.dao.TradeAccount;
-import org.trade.persistent.dao.TradeAccountHome;
+import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.AccountHome;
 import org.trade.persistent.dao.TradeHome;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderHome;
@@ -89,7 +89,7 @@ public class TradePersistentModel implements PersistentModel {
 	private TradeOrderfillHome m_tradeOrderfillHome = null;
 	private TradeHome m_tradeHome = null;
 	private TradelogHome m_tradelogHome = null;
-	private TradeAccountHome m_tradeAccountHome = null;
+	private AccountHome m_accountHome = null;
 	private TradestrategyHome m_tradestrategyHome = null;
 	private CandleHome m_candleHome = null;
 	private FinancialAccountHome m_financialAccountHome = null;
@@ -106,7 +106,7 @@ public class TradePersistentModel implements PersistentModel {
 		m_tradeOrderfillHome = new TradeOrderfillHome();
 		m_tradeHome = new TradeHome();
 		m_tradelogHome = new TradelogHome();
-		m_tradeAccountHome = new TradeAccountHome();
+		m_accountHome = new AccountHome();
 		m_tradestrategyHome = new TradestrategyHome();
 		m_candleHome = new CandleHome();
 		m_financialAccountHome = new FinancialAccountHome();
@@ -127,10 +127,10 @@ public class TradePersistentModel implements PersistentModel {
 	 *            boolean
 	 * @return TradelogReport
 	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#findTradelogReport(TradeAccount,
+	 * @see org.trade.persistent.PersistentModel#findTradelogReport(Account,
 	 *      Date, Date, boolean)
 	 */
-	public TradelogReport findTradelogReport(TradeAccount tradeAccount,
+	public TradelogReport findTradelogReport(Account tradeAccount,
 			Date start, Date end, boolean filter)
 			throws PersistentModelException {
 		return m_tradelogHome.findByTradelogReport(tradeAccount, start, end,
@@ -138,35 +138,35 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method findTradeAccountById.
+	 * Method findAccountById.
 	 * 
 	 * @param id
 	 *            Integer
-	 * @return TradeAccount
+	 * @return Account
 	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#findTradeAccountById(Integer)
+	 * @see org.trade.persistent.PersistentModel#findAccountById(Integer)
 	 */
-	public TradeAccount findTradeAccountById(Integer id)
+	public Account findAccountById(Integer id)
 			throws PersistentModelException {
-		TradeAccount instance = m_tradeAccountHome.findById(id);
+		Account instance = m_accountHome.findById(id);
 		if (null == instance)
 			throw new PersistentModelException(
-					"TradeAccount not found for id: " + id);
+					"Account not found for id: " + id);
 		return instance;
 	}
 
 	/**
-	 * Method findTradeAccountByNumber.
+	 * Method findAccountByNumber.
 	 * 
 	 * @param accountNumber
 	 *            String
-	 * @return TradeAccount
+	 * @return Account
 	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#findTradeAccountByNumber(String)
+	 * @see org.trade.persistent.PersistentModel#findAccountByNumber(String)
 	 */
-	public TradeAccount findTradeAccountByNumber(String accountNumber)
+	public Account findAccountByNumber(String accountNumber)
 			throws PersistentModelException {
-		return m_tradeAccountHome.findByAccountNumber(accountNumber);
+		return m_accountHome.findByAccountNumber(accountNumber);
 	}
 
 	/**
@@ -602,19 +602,19 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method resetDefaultTradeAccount.
+	 * Method resetDefaultAccount.
 	 * 
 	 * @param transientInstance
-	 *            TradeAccount
+	 *            Account
 	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#resetDefaultTradeAccount(TradeAccount)
+	 * @see org.trade.persistent.PersistentModel#resetDefaultAccount(Account)
 	 */
-	public TradeAccount resetDefaultTradeAccount(TradeAccount transientInstance)
+	public Account resetDefaultAccount(Account transientInstance)
 			throws PersistentModelException {
 
 		try {
-			m_tradeAccountHome.resetDefaultTradeAccount(transientInstance);
-			return (TradeAccount) m_aspectHome.persist(transientInstance);
+			m_accountHome.resetDefaultAccount(transientInstance);
+			return (Account) m_aspectHome.persist(transientInstance);
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(

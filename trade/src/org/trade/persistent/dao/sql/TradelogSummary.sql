@@ -61,12 +61,12 @@ FROM
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
-inner join tradeaccount on tradestrategy.idTradeAccount = tradeaccount.idTradeAccount
+inner join account on tradestrategy.idAccount = account.idAccount
 left outer join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
 left outer join tradeorder on trade.idTrade = tradeorder.idTrade
 where tradeorder.isFilled =1
 and tradingday.open between :start and :end
-and tradeaccount.idTradeAccount = :idTradeAccount
+and account.idAccount = :idAccount
 and tradestrategy.trade = 1
 group by
 period,
@@ -90,9 +90,9 @@ FROM
 tradingday left outer join tradestrategy on tradingday.idTradingday = tradestrategy.idTradingday  
 left outer join contract on tradestrategy.idContract = contract.idContract
 left outer join strategy on tradestrategy.idStrategy = strategy.idStrategy
-left outer join tradeaccount on tradestrategy.idTradeAccount = tradeaccount.idTradeAccount
+left outer join account on tradestrategy.idAccount = account.idAccount
 where tradingday.open between :start and :end
-and (tradeaccount.idTradeAccount = :idTradeAccount or tradeaccount.idTradeAccount is null)
+and (account.idAccount = :idAccount or account.idAccount is null)
 group by
 period,
 contract.symbol,
@@ -140,12 +140,12 @@ FROM
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
-inner join tradeaccount on tradestrategy.idTradeAccount = tradeaccount.idTradeAccount
+inner join account on tradestrategy.idAccount = account.idAccount
 left outer join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
 left outer join tradeorder on trade.idTrade = tradeorder.idTrade
 where tradeorder.isFilled =1
 and tradingday.open between :start and :end
-and tradeaccount.idTradeAccount = :idTradeAccount
+and account.idAccount = :idAccount
 and tradestrategy.trade = 1
 group by
 period,
@@ -169,9 +169,9 @@ FROM
 tradingday left outer join tradestrategy on tradingday.idTradingday = tradestrategy.idTradingday  
 left outer join contract on tradestrategy.idContract = contract.idContract
 left outer join strategy on tradestrategy.idStrategy = strategy.idStrategy
-left outer join tradeaccount on tradestrategy.idTradeAccount = tradeaccount.idTradeAccount
+left outer join account on tradestrategy.idAccount = account.idAccount
 where tradingday.open between :start and :end
-and (tradeaccount.idTradeAccount = :idTradeAccount or tradeaccount.idTradeAccount is null)
+and (account.idAccount = :idAccount or account.idAccount is null)
 group by
 period,
 contract.symbol,

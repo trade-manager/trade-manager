@@ -41,16 +41,12 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,8 +61,8 @@ import org.trade.core.dao.Aspect;
  * @version $Revision: 1.0 $
  */
 @Entity
-@Table(name = "tradeaccount")
-public class TradeAccount extends Aspect implements Serializable, Cloneable {
+@Table(name = "account")
+public class Account extends Aspect implements Serializable, Cloneable {
 
 	/**
 	 * 
@@ -86,10 +82,9 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	private BigDecimal unrealizedPnL;
 	private Date updateDate;
 	private Boolean isDefault = new Boolean(false);
-	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
-			0);;
 
-	public TradeAccount() {
+
+	public Account() {
 
 	}
 
@@ -105,7 +100,7 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	 * @param isDefault
 	 *            Boolean
 	 */
-	public TradeAccount(String name, String accountNumber, String accountType,
+	public Account(String name, String accountNumber, String accountType,
 			String currency, Boolean isDefault) {
 		this.accountNumber = accountNumber;
 		this.accountType = accountType;
@@ -115,7 +110,7 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Constructor for TradeAccount.
+	 * Constructor for Account.
 	 * 
 	 * @param accountNumber
 	 *            String
@@ -140,12 +135,11 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	 * @param tradestrategies
 	 *            List<Tradestrategy>
 	 */
-	public TradeAccount(String accountNumber, String name, String accountType,
+	public Account(String accountNumber, String name, String accountType,
 			BigDecimal availableFunds, BigDecimal buyingPower,
 			BigDecimal cashBalance, String currency,
 			BigDecimal grossPositionValue, BigDecimal realizedPnL,
-			BigDecimal unrealizedPnL, Boolean isDefault,
-			List<Tradestrategy> tradestrategies) {
+			BigDecimal unrealizedPnL, Boolean isDefault) {
 		this.accountNumber = accountNumber;
 		this.accountType = accountType;
 		this.name = name;
@@ -157,29 +151,28 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 		this.realizedPnL = realizedPnL;
 		this.unrealizedPnL = unrealizedPnL;
 		this.isDefault = isDefault;
-		this.tradestrategies = tradestrategies;
 	}
 
 	/**
-	 * Method getIdTradeAccount.
+	 * Method getIdAccount.
 	 * 
 	 * @return Integer
 	 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "idTradeAccount", unique = true, nullable = false)
-	public Integer getIdTradeAccount() {
+	@Column(name = "idAccount", unique = true, nullable = false)
+	public Integer getIdAccount() {
 		return this.id;
 	}
 
 	/**
-	 * Method setIdTradeAccount.
+	 * Method setIdAccount.
 	 * 
 	 * @param idTradeAccount
 	 *            Integer
 	 */
-	public void setIdTradeAccount(Integer idTradeAccount) {
-		this.id = idTradeAccount;
+	public void setIdAccount(Integer idAccount) {
+		this.id = idAccount;
 	}
 
 	/**
@@ -464,25 +457,7 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 		this.version = version;
 	}
 
-	/**
-	 * Method getTradestrategies.
-	 * 
-	 * @return List<Tradestrategy>
-	 */
-	@OneToMany(mappedBy = "tradeAccount", fetch = FetchType.LAZY)
-	public List<Tradestrategy> getTradestrategies() {
-		return this.tradestrategies;
-	}
 
-	/**
-	 * Method setTradestrategies.
-	 * 
-	 * @param tradestrategies
-	 *            List<Tradestrategy>
-	 */
-	public void setTradestrategies(List<Tradestrategy> tradestrategies) {
-		this.tradestrategies = tradestrategies;
-	}
 
 	/**
 	 * Method clone.
@@ -492,10 +467,8 @@ public class TradeAccount extends Aspect implements Serializable, Cloneable {
 	 */
 	public Object clone() throws CloneNotSupportedException {
 
-		TradeAccount tradeAccount = (TradeAccount) super.clone();
-		List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
-		tradeAccount.setTradestrategies(tradestrategies);
-		return tradeAccount;
+		Account account = (Account) super.clone();
+		return account;
 	}
 
 	/**

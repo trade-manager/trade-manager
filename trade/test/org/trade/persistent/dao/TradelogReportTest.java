@@ -42,7 +42,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
-import org.trade.dictionary.valuetype.DAOTradeAccount;
+import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.ui.TradeAppLoadConfig;
 
 /**
@@ -78,7 +78,7 @@ public class TradelogReportTest extends TestCase {
 
 		try {
 			TradelogHome tradelogHome = new TradelogHome();
-			TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
+			Account tradeAccount = (Account) DAOAccount
 					.newInstance().getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(
 					tradeAccount, TradingCalendar.getYearStart(),
@@ -109,7 +109,7 @@ public class TradelogReportTest extends TestCase {
 
 		try {
 			TradelogHome tradelogHome = new TradelogHome();
-			TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
+			Account tradeAccount = (Account) DAOAccount
 					.newInstance().getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogSummary(
 					tradeAccount, TradingCalendar.getYearStart(),

@@ -40,19 +40,19 @@ import java.util.Iterator;
 import org.trade.core.valuetype.DAODecode;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 
 /**
  */
-public class DAOTradeAccount extends DAODecode {
+public class DAOAccount extends DAODecode {
 
 	private static final long serialVersionUID = -5381026427696898592L;
-	public static final String DECODE = "TRADE_ACCOUNT";
+	public static final String DECODE = "ACCOUNT";
 	public static final String _TABLE = "_TABLE";
 	public static final String _TABLE_ID = "_TABLE_ID";
 	public static final String _COLUMN = "_COLUMN";
 
-	public DAOTradeAccount() {
+	public DAOAccount() {
 		super(DECODE);
 	}
 
@@ -63,8 +63,8 @@ public class DAOTradeAccount extends DAODecode {
 	 *            String
 	 * @return DAOTradeAccount
 	 */
-	public static DAOTradeAccount newInstance(String displayName) {
-		final DAOTradeAccount returnInstance = new DAOTradeAccount();
+	public static DAOAccount newInstance(String displayName) {
+		final DAOAccount returnInstance = new DAOAccount();
 		returnInstance.setDisplayName(displayName);
 		return returnInstance;
 	}
@@ -74,16 +74,16 @@ public class DAOTradeAccount extends DAODecode {
 	 * 
 	 * @return DAOTradeAccount
 	 */
-	public static DAOTradeAccount newInstance() {
+	public static DAOAccount newInstance() {
 
 		try {
-			final DAOTradeAccount returnInstance = new DAOTradeAccount();
-			DAOTradeAccount code = null;
+			final DAOAccount returnInstance = new DAOAccount();
+			DAOAccount code = null;
 			for (Iterator<Decode> iterCodes = returnInstance.getCodesDecodes()
 					.iterator(); iterCodes.hasNext();) {
-				code = (DAOTradeAccount) iterCodes.next();
-				TradeAccount tradeAccount = (TradeAccount) code.getObject();
-				if (tradeAccount.getIsDefault())
+				code = (DAOAccount) iterCodes.next();
+				Account account = (Account) code.getObject();
+				if (account.getIsDefault())
 					return code;
 			}
 			if (null == code) {

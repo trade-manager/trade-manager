@@ -79,7 +79,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private Contract contract;
 	private Tradingday tradingday;
 	private Strategy strategy;
-	private TradeAccount tradeAccount;
+	private Portfolio portfolio;
 	private String tier;
 	private String status;
 	private String side;
@@ -101,8 +101,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 *            Tradingday
 	 * @param strategy
 	 *            Strategy
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param account
+	 *            Account
 	 * @param riskAmount
 	 *            BigDecimal
 	 * @param side
@@ -117,15 +117,15 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 *            Integer
 	 */
 	public Tradestrategy(Contract contract, Tradingday tradingday,
-			Strategy strategy, TradeAccount tradeAccount,
-			BigDecimal riskAmount, String side, String tier, Boolean trade,
-			Integer chartDays, Integer barSize) {
+			Strategy strategy, Portfolio portfolio, BigDecimal riskAmount,
+			String side, String tier, Boolean trade, Integer chartDays,
+			Integer barSize) {
 		this.setBarSize(barSize);
 		this.chartDays = chartDays;
 		this.contract = contract;
 		this.strategy = strategy;
 		this.tradingday = tradingday;
-		this.tradeAccount = tradeAccount;
+		this.portfolio = portfolio;
 		this.riskAmount = riskAmount;
 		this.side = side;
 		this.tier = tier;
@@ -359,24 +359,24 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getTradeAccount.
+	 * Method getPortfolio.
 	 * 
-	 * @return TradeAccount
+	 * @return Portfolio
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "idTradeAccount", insertable = true, updatable = true, nullable = false)
-	public TradeAccount getTradeAccount() {
-		return this.tradeAccount;
+	@JoinColumn(name = "idPortfolio", insertable = true, updatable = true, nullable = false)
+	public Portfolio getPortfolio() {
+		return this.portfolio;
 	}
 
 	/**
-	 * Method setTradeAccount.
+	 * Method setPortfolio.
 	 * 
-	 * @param tradeAccount
-	 *            TradeAccount
+	 * @param portfolio
+	 *            Portfolio
 	 */
-	public void setTradeAccount(TradeAccount tradeAccount) {
-		this.tradeAccount = tradeAccount;
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
 	}
 
 	/**
@@ -605,10 +605,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 						.compareTo(tradestrategy.getTradingday().getOpen()) == 0) {
 					if (this.getStrategy().getName()
 							.equals(tradestrategy.getStrategy().getName())) {
-						if (this.getTradeAccount()
-								.getName()
-								.equals(tradestrategy.getTradeAccount()
-										.getName())) {
+						if (this.getPortfolio().getName()
+								.equals(tradestrategy.getPortfolio().getName())) {
 							if (this.getBarSize().equals(
 									tradestrategy.getBarSize())) {
 								return true;
@@ -657,9 +655,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		tradestrategy.setContract(contract);
 		Tradingday tradingday = (Tradingday) this.getTradingday().clone();
 		tradestrategy.setTradingday(tradingday);
-		TradeAccount tradeAccount = (TradeAccount) this.getTradeAccount()
-				.clone();
-		tradestrategy.setTradeAccount(tradeAccount);
+		Portfolio portfolio = (Portfolio) this.getPortfolio().clone();
+		tradestrategy.setPortfolio(portfolio);
 		Strategy strategy = (Strategy) this.getStrategy().clone();
 		tradestrategy.setStrategy(strategy);
 		List<Trade> trade = new ArrayList<Trade>(0);

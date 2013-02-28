@@ -70,7 +70,7 @@ import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.AccountAllocation;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.FinancialAccount;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
@@ -105,7 +105,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private static final ConcurrentHashMap<Integer, Contract> m_realTimeBarsRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_marketDataRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_contractRequests = new ConcurrentHashMap<Integer, Contract>();
-	private static final ConcurrentHashMap<String, TradeAccount> m_accountRequests = new ConcurrentHashMap<String, TradeAccount>();
+	private static final ConcurrentHashMap<String, Account> m_accountRequests = new ConcurrentHashMap<String, Account>();
 
 	private static final ConcurrentHashMap<Integer, TradeOrder> openOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 	private static final ConcurrentHashMap<Integer, TradeOrder> execDetails = new ConcurrentHashMap<Integer, TradeOrder>();;
@@ -324,10 +324,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            TradeAccount
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean,
-	 *      TradeAccount)
+	 *      Account)
 	 */
 	public void onSubscribeAccountUpdates(boolean subscribe,
-			TradeAccount tradeAccount) throws BrokerModelException {
+			Account tradeAccount) throws BrokerModelException {
 		try {
 
 			m_accountRequests
@@ -1808,7 +1808,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			_log.info("updateAccountValue Account#: " + accountNumber + " Key:"
 					+ key + " Value:" + value + " Currency:" + currency);
 			if (m_accountRequests.containsKey(accountNumber)) {
-				TradeAccount tradeAccount = m_accountRequests
+				Account tradeAccount = m_accountRequests
 						.get(accountNumber);
 				if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
 					tradeAccount.setAccountType(value);
@@ -1854,14 +1854,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			_log.info("updateAccountTime:" + timeStamp);
 			for (String accountNumber : m_accountRequests.keySet()) {
-				TradeAccount tradeAccount = m_accountRequests
+				Account tradeAccount = m_accountRequests
 						.get(accountNumber);
 				/*
 				 * Don't use the incoming time stamp as this does not show
 				 * seconds just HH:mm format.
 				 */
 				tradeAccount.setUpdateDate(new Date());
-				tradeAccount = (TradeAccount) m_tradePersistentModel
+				tradeAccount = (Account) m_tradePersistentModel
 						.persistAspect(tradeAccount, true);
 				m_accountRequests.replace(accountNumber, tradeAccount);
 				this.fireUpdateAccountTime(accountNumber);
@@ -1881,7 +1881,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void accountDownloadEnd(String accountNumber) {
 		_log.info("accountDownloadEnd:" + accountNumber);
 		try {
-			TradeAccount tradeAccount = m_accountRequests.get(accountNumber);
+			Account tradeAccount = m_accountRequests.get(accountNumber);
 			if (AccountType.CORPORATION.equals(tradeAccount.getAccountType())) {
 				/*
 				 * Delete all the FinancialAccount/AllocationAccount and
@@ -2093,9 +2093,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final Aspects aspects = (Aspects) request.fromXML(xml);
 
 				for (Aspect aspect : aspects.getAspect()) {
-					TradeAccount account = (TradeAccount) aspect;
-					TradeAccount ta = m_tradePersistentModel
-							.findTradeAccountByNumber(account
+					Account account = (Account) aspect;
+					Account ta = m_tradePersistentModel
+							.findAccountByNumber(account
 									.getAccountNumber());
 					if (null != ta) {
 						account.setAlias(account.getAlias());

@@ -63,13 +63,35 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- Table TradeAccount
+-- Table Portfolio
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS tradeaccount ;
+DROP TABLE IF EXISTS portfolio ;
 
 SHOW WARNINGS;
-CREATE  TABLE IF NOT EXISTS tradeaccount (
-  idTradeAccount INT NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS portfolio (
+  idPortfolio INT NOT NULL AUTO_INCREMENT ,
+  name VARCHAR(45) NOT NULL ,
+  alias VARCHAR(45) NULL ,  
+  description VARCHAR(240) NULL ,  
+  isDefault TINYINT(1)  NOT NULL ,
+  masterAccountNumber VARCHAR(20) NULL ,
+  updateDate DATETIME NULL ,
+  version INT NULL,
+  PRIMARY KEY (idPortfolio) ,
+  INDEX portfolio_masterAccountNumber_idx (masterAccountNumber ASC),
+  UNIQUE INDEX portfolio_name_uq (name ASC))
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table Account
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS account ;
+
+SHOW WARNINGS;
+CREATE  TABLE IF NOT EXISTS account (
+  idAccount INT NOT NULL AUTO_INCREMENT ,
   accountNumber VARCHAR(20) NOT NULL ,
   accountType VARCHAR(20) NOT NULL ,
   name VARCHAR(45) NOT NULL ,
@@ -84,9 +106,39 @@ CREATE  TABLE IF NOT EXISTS tradeaccount (
   unrealizedPnL DECIMAL(10,2) NULL ,
   updateDate DATETIME NULL ,
   version INT NULL,
-  PRIMARY KEY (idTradeAccount) ,
-  UNIQUE INDEX tradeaccount_name_uq (name ASC),
+  PRIMARY KEY (idAccount) ,
+  UNIQUE INDEX account_name_uq (name ASC),
   UNIQUE INDEX accountNumber_uq (accountNumber ASC) )
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table PortfolioAccount
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS portfolioaccount ;
+
+SHOW WARNINGS;
+CREATE  TABLE IF NOT EXISTS portfolioaccount (
+  idPortfolioAccount INT NOT NULL AUTO_INCREMENT ,
+  updateDate DATETIME NULL ,
+  version INT NULL,
+  idPortfolio INT NOT NULL ,
+  idAccount INT NOT NULL ,
+  PRIMARY KEY (idPortfolioAccount) ,
+  INDEX portfolioaccount_Account_idx  (idAccount ASC) ,
+  INDEX portfolioaccount_Portfolio_idx  (idPortfolio ASC) ,
+  UNIQUE INDEX portfolioaccount_uq (idPortfolio ASC, idAccount ASC),
+  CONSTRAINT portfolioaccount_Portfolio_fk
+    FOREIGN KEY (idPortfolio )
+    REFERENCES portfolio (idPortfolio)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT portfolioaccount_Account_fk
+    FOREIGN KEY (idAccount)
+    REFERENCES account (idAccount)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION )
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -156,13 +208,13 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
   idTradingDay INT NOT NULL ,
   idContract INT NOT NULL ,
   idStrategy INT NOT NULL ,
-  idTradeAccount INT NOT NULL ,
+  idPortfolio INT NOT NULL ,
   PRIMARY KEY (idTradeStrategy) ,
   INDEX tradeStrategy_TradingDay_idx (idTradingDay ASC) ,
   INDEX tradeStrategy_Contract_idx  (idContract ASC) ,
   INDEX tradeStrategy_Stategy_idx  (idStrategy ASC) ,
-  INDEX tradeStrategy_TradeAccount_idx  (idTradeAccount ASC) ,
-  UNIQUE INDEX tradeStrategy_uq (idTradingDay ASC, idContract ASC, idStrategy ASC, idTradeAccount ASC, barSize ASC), 
+  INDEX tradeStrategy_Portfolio_idx  (idPortfolio ASC) ,
+  UNIQUE INDEX tradeStrategy_uq (idTradingDay ASC, idContract ASC, idStrategy ASC, idPortfolio ASC, barSize ASC), 
   CONSTRAINT tradeStrategy_TradingDay_fk
     FOREIGN KEY (idTradingDay )
     REFERENCES tradingday (idTradingDay )
@@ -178,9 +230,9 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
     REFERENCES strategy (idStrategy )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT trade_TradeAccount_fk
-    FOREIGN KEY (idTradeAccount)
-    REFERENCES tradeaccount (idTradeAccount)
+  CONSTRAINT tradeStrategy_Portfolio_fk
+    FOREIGN KEY (idPortfolio)
+    REFERENCES tradeaccount (idPortfolio)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

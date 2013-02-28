@@ -10,7 +10,7 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.xml.SaxMapper;
 import org.trade.core.xml.TagTracker;
 import org.trade.core.xml.XMLModelException;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 
 import org.xml.sax.Attributes;
 
@@ -54,7 +54,7 @@ public class TWSAccountAliasRequest extends SaxMapper {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
 				_log.trace("accountAliasTracker onStart()");
-				TradeAccount aspect = new TradeAccount();
+				Account aspect = new Account();
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}
@@ -79,7 +79,7 @@ public class TWSAccountAliasRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final TradeAccount temp = (TradeAccount) m_stack.peek();
+				final Account temp = (Account) m_stack.peek();
 				temp.setAccountNumber(value);
 				_log.trace("accountTracker: " + value);
 			}
@@ -96,7 +96,7 @@ public class TWSAccountAliasRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final TradeAccount temp = (TradeAccount) m_stack.peek();
+				final Account temp = (Account) m_stack.peek();
 				temp.setAlias(value);
 				_log.trace("aliasTracker: " + value);
 			}

@@ -53,17 +53,17 @@ import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
+import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
-import org.trade.dictionary.valuetype.DAOTradeAccount;
 import org.trade.dictionary.valuetype.Exchange;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.Tier;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.TradeAccount;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.Tradingdays;
@@ -385,9 +385,9 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 7: {
-			TradeAccount tradeAccount = (TradeAccount) ((DAOTradeAccount) value)
+			Portfolio portfolio = (Portfolio) ((DAOPortfolio) value)
 					.getObject();
-			element.setTradeAccount(tradeAccount);
+			element.setPortfolio(portfolio);
 			break;
 		}
 		case 8: {
@@ -448,8 +448,8 @@ public class TradestrategyTableModel extends TableModel {
 				.toUpperCase();
 		final Strategy strategy = (Strategy) ((DAOStrategy) this.getValueAt(
 				selectedRow, 5)).getObject();
-		TradeAccount tradeAccount = (TradeAccount) ((DAOTradeAccount) this
-				.getValueAt(selectedRow, 7)).getObject();
+		Portfolio portfolio = (Portfolio) ((DAOPortfolio) this.getValueAt(
+				selectedRow, 7)).getObject();
 		Integer barSize = new Integer(
 				((BarSize) this.getValueAt(selectedRow, 8)).getCode());
 		String currency = ((Currency) this.getValueAt(selectedRow, 14))
@@ -465,8 +465,8 @@ public class TradestrategyTableModel extends TableModel {
 							.getSymbol(), symbol) == 0
 							&& element.getStrategy().getName()
 									.equals(strategy.getName())
-							&& element.getTradeAccount().getAccountNumber()
-									.equals(tradeAccount.getAccountNumber())
+							&& element.getPortfolio().getName()
+									.equals(portfolio.getName())
 							&& element.getBarSize().equals(barSize)
 							&& element.getContract().getCurrency()
 									.equals(currency)
@@ -489,8 +489,8 @@ public class TradestrategyTableModel extends TableModel {
 		Tradestrategy tradestrategy = null;
 		String strategyName = null;
 		Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
-		TradeAccount tradeAccount = (TradeAccount) DAOTradeAccount
-				.newInstance().getObject();
+		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
+				.getObject();
 		Integer chartDays = ChartDays.TWO_DAYS;
 		Integer barSize = BarSize.FIVE_MIN;
 		Integer riskAmount = new Integer(0);
@@ -527,7 +527,7 @@ public class TradestrategyTableModel extends TableModel {
 			if (null == tradestrategy) {
 				tradestrategy = new Tradestrategy(new Contract(SECType.STOCK,
 						"", Exchange.SMART, Currency.USD, null, null),
-						tradingday, strategy, tradeAccount, new BigDecimal(
+						tradingday, strategy, portfolio, new BigDecimal(
 								riskAmount), null, null, true, chartDays,
 						barSize);
 			} else {
@@ -540,7 +540,7 @@ public class TradestrategyTableModel extends TableModel {
 			tradestrategy.setTrade(true);
 			tradestrategy.setDirty(true);
 			tradestrategy.setStrategy(strategy);
-			tradestrategy.setTradeAccount(tradeAccount);
+			tradestrategy.setPortfolio(portfolio);
 
 			getData().getTradestrategies().add(tradestrategy);
 			Vector<Object> newRow = new Vector<Object>();
@@ -585,7 +585,7 @@ public class TradestrategyTableModel extends TableModel {
 					.getStrategy().getStrategyManager().getName()));
 		}
 
-		newRow.addElement(DAOTradeAccount.newInstance(element.getTradeAccount()
+		newRow.addElement(DAOPortfolio.newInstance(element.getPortfolio()
 				.getName()));
 		newRow.addElement(BarSize.newInstance(element.getBarSize()));
 		newRow.addElement(ChartDays.newInstance(element.getChartDays()));

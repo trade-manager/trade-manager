@@ -627,8 +627,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 				Tradestrategy childTradestrategy = new Tradestrategy(contract,
 						tradestrategy.getTradingday(), new Strategy(),
-						tradestrategy.getTradeAccount(), new BigDecimal(0),
-						null, null, false, tradestrategy.getChartDays(),
+						tradestrategy.getPortfolio(), new BigDecimal(0), null,
+						null, false, tradestrategy.getChartDays(),
 						tradestrategy.getBarSize());
 				childTradestrategy.setDirty(false);
 

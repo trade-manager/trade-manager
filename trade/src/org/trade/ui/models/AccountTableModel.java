@@ -45,11 +45,11 @@ import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 
 /**
  */
-public class TradeAccountTableModel extends AspectTableModel {
+public class AccountTableModel extends AspectTableModel {
 	/**
 	 * 
 	 */
@@ -71,7 +71,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 	private Aspects m_data = null;
 
-	public TradeAccountTableModel() {
+	public AccountTableModel() {
 
 		// Get the column names and cache them.
 		// Then we can close the connection.
@@ -114,7 +114,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 
 			for (final Aspect element : getData().getAspect()) {
 				final Vector<Object> newRow = new Vector<Object>();
-				getNewRow(newRow, (TradeAccount) element);
+				getNewRow(newRow, (Account) element);
 				rows.add(newRow);
 			}
 			fireTableDataChanged();
@@ -133,7 +133,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
-		final TradeAccount element = (TradeAccount) getData().getAspect().get(
+		final Account element = (Account) getData().getAspect().get(
 				row);
 
 		switch (column) {
@@ -206,7 +206,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 		String acctNumber = (String) this.getValueAt(selectedRow, 1);
 		for (final Aspect element : getData().getAspect()) {
 			if (CoreUtils.nullSafeComparator(
-					((TradeAccount) element).getAccountNumber(), acctNumber) == 0) {
+					((Account) element).getAccountNumber(), acctNumber) == 0) {
 				getData().remove(element);
 				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
@@ -218,7 +218,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 	}
 
 	public void addRow() {
-		final TradeAccount element = new TradeAccount();
+		final Account element = new Account();
 		getData().getAspect().add(element);
 
 		final Vector<Object> newRow = new Vector<Object>();
@@ -236,7 +236,7 @@ public class TradeAccountTableModel extends AspectTableModel {
 	 * @param element
 	 *            TradeAccount
 	 */
-	public void getNewRow(Vector<Object> newRow, TradeAccount element) {
+	public void getNewRow(Vector<Object> newRow, Account element) {
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getAccountNumber());
 		if (null == element.getAccountType()) {

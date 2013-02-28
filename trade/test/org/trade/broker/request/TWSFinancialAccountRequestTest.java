@@ -49,7 +49,7 @@ import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.AccountAllocation;
 import org.trade.persistent.dao.FinancialAccount;
-import org.trade.persistent.dao.TradeAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.ui.TradeAppLoadConfig;
 
 /**
@@ -98,9 +98,9 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 									"org/trade/broker/request/aliases.xml"));
 
 			for (Aspect aspect : aspects.getAspect()) {
-				TradeAccount account = (TradeAccount) aspect;
-				TradeAccount ta = tradePersistentModel
-						.findTradeAccountByNumber(account.getAccountNumber());
+				Account account = (Account) aspect;
+				Account ta = tradePersistentModel
+						.findAccountByNumber(account.getAccountNumber());
 				if (null != ta) {
 					account.setAlias(account.getAlias());
 					tradePersistentModel.persistAspect(ta);
