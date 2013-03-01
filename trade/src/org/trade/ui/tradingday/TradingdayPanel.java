@@ -832,21 +832,21 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public void setAccountLabel(Account account) {
 		try {
 			accountLabel.setText(null);
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					"Acct #:", false, bold);
+			CoreUtils.setDocumentText(accountLabel.getDocument(), "Acct #:",
+					false, bold);
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
 					CoreUtils.padRight(account.toString(), 15), false, null);
 
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
 					" Avail Bal:", false, bold);
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					CoreUtils.padLeft(currencyFormater.format((account
+			CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+					.padLeft(currencyFormater.format((account
 							.getAvailableFunds() == null ? 0 : account
 							.getAvailableFunds().doubleValue())), 13), false,
 					null);
 
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					" Margin:", false, bold);
+			CoreUtils.setDocumentText(accountLabel.getDocument(), " Margin:",
+					false, bold);
 			CoreUtils
 					.setDocumentText(accountLabel.getDocument(), CoreUtils
 							.padLeft(currencyFormater.format((account
@@ -854,10 +854,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 									.getBuyingPower().doubleValue())), 13),
 							false, null);
 
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					" Pos Val:", false, bold);
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					CoreUtils.padLeft(currencyFormater.format((account
+			CoreUtils.setDocumentText(accountLabel.getDocument(), " Pos Val:",
+					false, bold);
+			CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+					.padLeft(currencyFormater.format((account
 							.getGrossPositionValue() == null ? 0 : account
 							.getGrossPositionValue().doubleValue())), 13),
 					false, null);
@@ -867,17 +867,17 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			double realizedPnL = (account.getRealizedPnL() == null ? 0
 					: account.getRealizedPnL().doubleValue());
 			if (realizedPnL < 0) {
-				CoreUtils.setDocumentText(accountLabel.getDocument(),
-						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
-								13), false, colorRedAttr);
+				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(realizedPnL), 13),
+						false, colorRedAttr);
 			} else if (realizedPnL > 0) {
-				CoreUtils.setDocumentText(accountLabel.getDocument(),
-						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
-								13), false, colorGreenAttr);
+				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(realizedPnL), 13),
+						false, colorGreenAttr);
 			} else {
-				CoreUtils.setDocumentText(accountLabel.getDocument(),
-						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
-								13), false, null);
+				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(realizedPnL), 13),
+						false, null);
 			}
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
 					" Unrealized P/L:", false, bold);
@@ -902,8 +902,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 								currencyFormater.format(unRealizedPnL), 13),
 						false, null);
 			}
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					" Date:", false, bold);
+			CoreUtils.setDocumentText(accountLabel.getDocument(), " Date:",
+					false, bold);
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
 					CoreUtils.padRight(dateFormater.format((account
 							.getUpdateDate() == null ? new Date() : account

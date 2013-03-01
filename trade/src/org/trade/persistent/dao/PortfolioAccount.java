@@ -37,6 +37,7 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -89,7 +90,7 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Portfolio
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "idPortfolio", nullable = false)
 	public Portfolio getPortfolio() {
 		return this.portfolio;
@@ -110,7 +111,7 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Account
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "idAccount", nullable = false)
 	public Account getAccount() {
 		return this.account;

@@ -49,6 +49,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.trade.core.dao.Aspect;
 
@@ -246,6 +247,20 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setPortfolioAccounts(List<PortfolioAccount> portfolioAccounts) {
 		this.portfolioAccounts = portfolioAccounts;
+	}
+
+	/**
+	 * Method isDirty.
+	 * 
+	 * @return boolean
+	 */
+	@Transient
+	public boolean isDirty() {
+		for (PortfolioAccount item : this.getPortfolioAccounts()) {
+			if (item.isDirty())
+				return true;
+		}
+		return super.isDirty();
 	}
 
 	/**
