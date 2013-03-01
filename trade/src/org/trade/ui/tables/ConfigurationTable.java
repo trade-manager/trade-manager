@@ -43,6 +43,7 @@ import javax.swing.JComboBox;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
+import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.dictionary.valuetype.DataType;
 import org.trade.dictionary.valuetype.IndicatorSeries;
@@ -87,6 +88,10 @@ public class ConfigurationTable extends Table {
 				(new DAOStrategyManager()).getCodesDecodes());
 		DecodeTableEditor dAOStrategyManagerEditor = new DecodeTableEditor(
 				strategyManagerComboBox);
+		JComboBox daoAccountComboBox = new JComboBox(
+				(new DAOAccount()).getCodesDecodes());
+		DecodeTableEditor dAOAccountEditor = new DecodeTableEditor(
+				daoAccountComboBox);
 		this.setDefaultEditor(Currency.class, currencyEditor);
 		this.setDefaultEditor(AccountType.class, accountTypeEditor);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
@@ -95,5 +100,6 @@ public class ConfigurationTable extends Table {
 		this.setDefaultEditor(IndicatorSeries.class, indicatorSeriesEditor);
 		this.setDefaultEditor(DAOStrategyManager.class,
 				dAOStrategyManagerEditor);
+		this.setDefaultEditor(DAOAccount.class, dAOAccountEditor);
 	}
 }

@@ -264,9 +264,8 @@ public class ConfigurationPanel extends BasePanel {
 			}
 			DBTableLookupServiceProvider.clearLookup();
 			doRefresh();
-			if (selectedRow == -1)
-				selectedRow = 0;
-			m_table.setRowSelectionInterval(selectedRow, selectedRow);
+			if (selectedRow > -1)
+				m_table.setRowSelectionInterval(selectedRow, selectedRow);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error saving item.", ex.getMessage(), ex);
 		}

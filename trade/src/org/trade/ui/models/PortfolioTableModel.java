@@ -40,7 +40,10 @@ import java.util.Vector;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
+import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.YesNo;
+import org.trade.dictionary.valuetype.DAOAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Portfolio;
 
 /**
@@ -54,13 +57,16 @@ public class PortfolioTableModel extends AspectTableModel {
 	private static final String NAME = "Name*";
 	private static final String PORTFOLIO_ALIAS = "Alias";
 	private static final String DESCRIPTION = "Description";
-	private static final String MASTER_ACCT_NUMBER = "Master Acct #";
+	private static final String MASTER_ACCT_NUMBER = "Master Acct #*";
 	private static final String IS_DEFAULT = "Default";
+
+	private static final String[] columnHeaderToolTip = { null, null, null,
+			"The account that is subscribed to", null };
 
 	private Aspects m_data = null;
 
 	public PortfolioTableModel() {
-
+		super(columnHeaderToolTip);
 		/*
 		 * Get the column names and cache them. Then we can close the
 		 * connection.
@@ -93,7 +99,6 @@ public class PortfolioTableModel extends AspectTableModel {
 		this.m_data = data;
 		this.clearAll();
 		if (!getData().getAspect().isEmpty()) {
-
 			for (final Aspect element : getData().getAspect()) {
 				final Vector<Object> newRow = new Vector<Object>();
 				getNewRow(newRow, (Portfolio) element);
@@ -131,7 +136,9 @@ public class PortfolioTableModel extends AspectTableModel {
 			break;
 		}
 		case 3: {
-			element.setMasterAccountNumber((String) value);
+			Account account = (Account) ((DAOAccount) value)
+					.getObject();
+			element.setMasterAccountNumber(account.getAccountNumber());
 			break;
 		}
 		case 4: {
@@ -151,17 +158,18 @@ public class PortfolioTableModel extends AspectTableModel {
 	 *            int
 	 */
 	public void deleteRow(int selectedRow) {
-
-		String name = (String) this.getValueAt(selectedRow, 1);
-		for (final Aspect element : getData().getAspect()) {
-			if (CoreUtils.nullSafeComparator(((Portfolio) element).getName(),
-					name) == 0) {
-				getData().remove(element);
-				getData().setDirty(true);
-				final Vector<Object> currRow = rows.get(selectedRow);
-				rows.remove(currRow);
-				this.fireTableRowsDeleted(selectedRow, selectedRow);
-				break;
+		if (getData().getAspect().size() > 1) {
+			String name = (String) this.getValueAt(selectedRow, 0);
+			for (final Aspect element : getData().getAspect()) {
+				if (CoreUtils.nullSafeComparator(
+						((Portfolio) element).getName(), name) == 0) {
+					getData().remove(element);
+					getData().setDirty(true);
+					final Vector<Object> currRow = rows.get(selectedRow);
+					rows.remove(currRow);
+					this.fireTableRowsDeleted(selectedRow, selectedRow);
+					break;
+				}
 			}
 		}
 	}
@@ -189,7 +197,11 @@ public class PortfolioTableModel extends AspectTableModel {
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getAlias());
 		newRow.addElement(element.getDescription());
-		newRow.addElement(element.getMasterAccountNumber());
+		if (null == element.getMasterAccountNumber()) {
+			newRow.addElement(DAOAccount.newInstance(Decode.NONE));
+		} else {
+			newRow.addElement(DAOAccount.newInstance(element.getMasterAccountNumber()));
+		}
 		newRow.addElement(YesNo.newInstance(element.getIsDefault()));
 	}
 }

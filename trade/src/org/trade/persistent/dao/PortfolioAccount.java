@@ -90,7 +90,7 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Portfolio
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idPortfolio", nullable = false)
 	public Portfolio getPortfolio() {
 		return this.portfolio;

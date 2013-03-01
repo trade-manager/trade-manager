@@ -35,8 +35,6 @@
  */
 package org.trade.ui.models;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 import org.trade.core.util.CoreUtils;
@@ -59,11 +57,11 @@ public class AccountTableModel extends TableModel {
 	private static final long serialVersionUID = 3087514589731145479L;
 
 	private static final String NAME = "Name*";
-	private static final String ACCT_NUMBER = "Acct #";
-	private static final String ACCT_TYPE = "Type";
+	private static final String ACCT_NUMBER = "Acct #*";
+	private static final String ACCT_TYPE = "Type*";
 	private static final String ACCT_ALIAS = "Alias";
 	private static final String IS_DEFAULT = "Default";
-	private static final String CURRENCY = "Curr";
+	private static final String CURRENCY = "Currency*";
 	private static final String AVAILABLE_FUNDS = "Availble Funds";
 	private static final String BUYING_POWER = " Buying Power";
 	private static final String CASH_BALANCE = "Cash Bal";
@@ -72,10 +70,15 @@ public class AccountTableModel extends TableModel {
 	private static final String UNREALIZED_PL = "Unrealized P/L";
 	private static final String LAST_UPDATED = "  Last Update  ";
 
+	private static final String[] columnHeaderToolTip = { null, null,
+			"Use Corp for FA accounts", null,
+			"The account that is subscribed to", null, null, null, null, null,
+			null, null, null };
+
 	private Portfolio m_data = null;
 
 	public AccountTableModel() {
-
+		super(columnHeaderToolTip);
 		// Get the column names and cache them.
 		// Then we can close the connection.
 		columnNames = new String[13];
@@ -231,12 +234,11 @@ public class AccountTableModel extends TableModel {
 
 	public void addRow() {
 		final PortfolioAccount element = new PortfolioAccount();
+		element.setPortfolio(getData());
 		final Account account = new Account();
+		account.setCurrency(Currency.USD);
+		account.setAccountType(AccountType.INDIVIDUAL);
 		element.setAccount(account);
-		List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
-				0);
-		portfolioAccounts.add(element);
-		account.setPortfolioAccounts(portfolioAccounts);
 		getData().getPortfolioAccounts().add(element);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
