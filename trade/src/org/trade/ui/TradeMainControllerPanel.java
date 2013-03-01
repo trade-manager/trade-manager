@@ -1210,7 +1210,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					break;
 				}
 			}
-			if (!masterAccount.getIsDefault()) {
+			if (!masterAccount.getIsDefault() && contrainAccount) {
 				int result = JOptionPane.showConfirmDialog(
 						this.getFrame(),
 						"Do you want to make account: "
@@ -1219,8 +1219,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					masterAccount.setIsDefault(true);
-					masterAccount = m_tradePersistentModel
-							.resetDefaultAccount(masterAccount);
+					masterAccount = m_tradePersistentModel.resetDefaultAccount(
+							defaultPortfolio, masterAccount);
 				}
 			}
 			if (!contrainAccount) {

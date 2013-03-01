@@ -98,11 +98,13 @@ public interface PersistentModel {
 	/**
 	 * Method resetDefaultAccount.
 	 * 
-	 * @param transientInstance
+	 * @param account
 	 *            Account
+	 * @param portfolio
+	 *            Portfolio
 	 * @throws PersistentModelException
 	 */
-	Account resetDefaultAccount(Account transientInstance)
+	Account resetDefaultAccount(Portfolio portfolio, Account account)
 			throws PersistentModelException;
 
 	/**

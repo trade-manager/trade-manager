@@ -35,12 +35,16 @@
  */
 package org.trade.persistent.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
@@ -119,8 +123,11 @@ public class AccountHome {
 	 * 
 	 * @param defaultAccount
 	 *            Account
+	 * 
+	 * @param portfolio
+	 *            Portfolio
 	 */
-	public void resetDefaultAccount(Account defaultAccount) {
+	public void resetDefaultAccount(Portfolio portfolio, Account defaultAccount) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
@@ -129,8 +136,16 @@ public class AccountHome {
 			CriteriaQuery<Account> query = builder.createQuery(Account.class);
 			Root<Account> from = query.from(Account.class);
 			query.select(from);
-			List<Account> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			Join<Account, Portfolio> portfolioAccounts = from
+					.join("portfolioAccount");
+			Predicate predicate = builder.equal(
+					portfolioAccounts.get("idPortfolio"),
+					portfolio.getIdPortfolio());
+			predicates.add(predicate);
+			query.where(predicates.toArray(new Predicate[] {}));
+			TypedQuery<Account> typedQuery = entityManager.createQuery(query);
+			List<Account> items = typedQuery.getResultList();
 			for (Account account : items) {
 				if (account.getIsDefault()
 						&& !defaultAccount.getIdAccount().equals(
