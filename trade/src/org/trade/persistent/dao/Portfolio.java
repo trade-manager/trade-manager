@@ -65,7 +65,6 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	private String alias;
 	private String description;
 	private Boolean isDefault = new Boolean(false);
-	private String masterAccountNumber;
 	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
 			0);
 	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
@@ -194,9 +193,15 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "masterAccountNumber", length = 20)
+	// @Column(name = "masterAccountNumber", length = 20)
+	@Transient
 	public String getMasterAccountNumber() {
-		return this.masterAccountNumber;
+		for (PortfolioAccount item : this.portfolioAccounts) {
+			if (item.getAccount().getIsDefault()) {
+				return item.getAccount().getAccountNumber();
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -205,8 +210,22 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	 * @param masterAccountNumber
 	 *            String
 	 */
-	public void setMasterAccountNumber(String masterAccountNumber) {
-		this.masterAccountNumber = masterAccountNumber;
+	public void setMasterAccountNumber(Account account) {
+		boolean set = false;
+		for (PortfolioAccount item : this.portfolioAccounts) {
+			if (item.getAccount().getAccountNumber()
+					.equals(account.getAccountNumber())) {
+				item.getAccount().setIsDefault(true);
+				set = true;
+			} else {
+				item.getAccount().setIsDefault(false);
+			}
+		}
+		if (!set) {
+			account.setIsDefault(true);
+			PortfolioAccount pa = new PortfolioAccount(this, account);
+			this.portfolioAccounts.add(pa);
+		}
 	}
 
 	/**

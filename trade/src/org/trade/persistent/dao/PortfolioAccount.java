@@ -63,6 +63,11 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	public PortfolioAccount() {
 	}
 
+	public PortfolioAccount(Portfolio portfolio, Account account) {
+		this.portfolio = portfolio;
+		this.account = account;
+	}
+
 	/**
 	 * Method getIdPortfolioAccount.
 	 * 

@@ -74,11 +74,9 @@ CREATE  TABLE IF NOT EXISTS portfolio (
   alias VARCHAR(45) NULL ,  
   description VARCHAR(240) NULL ,  
   isDefault TINYINT(1)  NOT NULL ,
-  masterAccountNumber VARCHAR(20) NULL ,
   updateDate DATETIME NULL ,
   version INT NULL,
   PRIMARY KEY (idPortfolio) ,
-  INDEX portfolio_masterAccountNumber_idx (masterAccountNumber ASC),
   UNIQUE INDEX portfolio_name_uq (name ASC))
 ENGINE = InnoDB;
 

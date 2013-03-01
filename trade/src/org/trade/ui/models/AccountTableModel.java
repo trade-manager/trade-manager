@@ -233,12 +233,11 @@ public class AccountTableModel extends TableModel {
 	}
 
 	public void addRow() {
-		final PortfolioAccount element = new PortfolioAccount();
-		element.setPortfolio(getData());
 		final Account account = new Account();
 		account.setCurrency(Currency.USD);
 		account.setAccountType(AccountType.INDIVIDUAL);
-		element.setAccount(account);
+		final PortfolioAccount element = new PortfolioAccount(getData(),
+				account);
 		getData().getPortfolioAccounts().add(element);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);

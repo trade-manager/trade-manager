@@ -97,6 +97,9 @@ public class AccountHome {
 			query.where(builder.equal(from.get("accountNumber"), accountNumber));
 			List<Account> items = entityManager.createQuery(query)
 					.getResultList();
+			for (Account account : items) {
+				account.getPortfolioAccounts().size();
+			}
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
 				return items.get(0);

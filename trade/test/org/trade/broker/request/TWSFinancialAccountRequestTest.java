@@ -80,7 +80,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 		Aspects items = tradePersistentModel
 				.findAspectsByClassName(FinancialAccount.class.getName());
 		for (Aspect aspect : items.getAspect()) {
-			tradePersistentModel.removeAspect(aspect);
+ 		tradePersistentModel.removeAspect(aspect);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					account.setAlias(account.getAlias());
 					tradePersistentModel.persistAspect(ta);
 				} else {
-					account.setAccountType(AccountType.INDIVIDUAL);
+					account.setAccountType(AccountType.CORPORATION);
 					account.setCurrency(Currency.USD);
 					account.setName(account.getAccountNumber());
 					tradePersistentModel.persistAspect(account);

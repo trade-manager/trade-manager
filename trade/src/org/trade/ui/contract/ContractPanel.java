@@ -51,11 +51,9 @@ import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -1145,15 +1143,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 * 
 		 */
 		private static final long serialVersionUID = 5972331201407363985L;
-		private Hashtable<String, JComponent> fields = new Hashtable<String, JComponent>();
 
 		/**
-		 * Constructor for CodeAttributesPanel.
+		 * Constructor for FAPropertiesPanel.
 		 * 
-		 * @param aspects
-		 *            Aspects
-		 * @param series
-		 *            IndicatorSeries
+		 * @param tradeOrder
+		 *            TradeOrder
 		 * @throws Exception
 		 */
 
@@ -1290,15 +1285,5 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
 					196, 0));
 		}
-
-		/**
-		 * Method getFields.
-		 * 
-		 * @return Hashtable<String,JComponent>
-		 */
-		public Hashtable<String, JComponent> getFields() {
-			return this.fields;
-		}
 	}
-
 }

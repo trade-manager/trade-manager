@@ -136,9 +136,8 @@ public class PortfolioTableModel extends AspectTableModel {
 			break;
 		}
 		case 3: {
-			Account account = (Account) ((DAOAccount) value)
-					.getObject();
-			element.setMasterAccountNumber(account.getAccountNumber());
+			Account account = (Account) ((DAOAccount) value).getObject();
+			element.setMasterAccountNumber(account);
 			break;
 		}
 		case 4: {
@@ -200,7 +199,8 @@ public class PortfolioTableModel extends AspectTableModel {
 		if (null == element.getMasterAccountNumber()) {
 			newRow.addElement(DAOAccount.newInstance(Decode.NONE));
 		} else {
-			newRow.addElement(DAOAccount.newInstance(element.getMasterAccountNumber()));
+			newRow.addElement(DAOAccount.newInstance(element
+					.getMasterAccountNumber()));
 		}
 		newRow.addElement(YesNo.newInstance(element.getIsDefault()));
 	}

@@ -123,7 +123,7 @@ INSERT INTO account (idAccount, name, accountNumber,  accountType, alias, curren
 
 COMMIT;
 
-INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, masterAccountNumber, version) VALUES (1, 'Paper','Paper Account','Paper trading account',1,'DU12345',  0);
+INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, version) VALUES (1, 'Paper','Paper Account','Paper trading account', 1, 0);
 
 COMMIT;
 
