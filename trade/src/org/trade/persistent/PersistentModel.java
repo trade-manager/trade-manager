@@ -310,6 +310,17 @@ public interface PersistentModel {
 	Portfolio findPortfolioById(Integer id) throws PersistentModelException;
 
 	/**
+	 * Method findPortfolioByName.
+	 * 
+	 * @param name
+	 *            String
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+
+	Portfolio findPortfolioByName(String name) throws PersistentModelException;
+
+	/**
 	 * Method findPortfolioByNumber.
 	 * 
 	 * @param accountNumber

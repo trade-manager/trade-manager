@@ -129,6 +129,9 @@ public class PortfolioHome {
 			query.where(builder.equal(from.get("name"), name));
 			List<Portfolio> items = entityManager.createQuery(query)
 					.getResultList();
+			for (Portfolio item : items) {
+				item.getPortfolioAccounts().size();
+			}
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
 				return items.get(0);

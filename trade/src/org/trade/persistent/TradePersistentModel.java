@@ -363,6 +363,23 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method findPortfolioByName.
+	 * 
+	 * @param name
+	 *            String
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+	public Portfolio findPortfolioByName(String name)
+			throws PersistentModelException {
+		Portfolio instance = m_portfolioHome.findByName(name);
+		if (null == instance)
+			throw new PersistentModelException("Portfolio not found for name: "
+					+ name);
+		return instance;
+	}
+
+	/**
 	 * Method findPortfolioByNumber.
 	 * 
 	 * @param accountNumber

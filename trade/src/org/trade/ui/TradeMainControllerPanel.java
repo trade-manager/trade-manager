@@ -1196,51 +1196,73 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						masterAccount = account;
 				}
 			}
-			Portfolio defaultPortfolio = null;
 			DBTableLookupServiceProvider.clearLookup();
-			if (!masterAccount.getIsDefault()) {
-				DAOAccount code = DAOAccount.newInstance();
-				Account defaultAccount = (Account) code.getObject();
-				defaultAccount = m_tradePersistentModel
-						.findAccountByNumber(defaultAccount.getAccountNumber());
-				if (defaultAccount.getPortfolioAccounts().size() == 1) {
-					if (defaultAccount.getPortfolioAccounts().get(0)
-							.getPortfolio().getIsDefault()) {
-						defaultPortfolio = defaultAccount
-								.getPortfolioAccounts().get(0).getPortfolio();
-					}
-				} else {
-					for (PortfolioAccount item : defaultAccount
-							.getPortfolioAccounts()) {
-						if (item.getPortfolio().getIsDefault()) {
-							defaultPortfolio = item.getPortfolio();
-							break;
-						}
-					}
+			DAOPortfolio code = DAOPortfolio.newInstance();
+			Portfolio defaultPortfolio = (Portfolio) code.getObject();
+			defaultPortfolio = m_tradePersistentModel
+					.findPortfolioByName(defaultPortfolio.getName());
+			boolean contrainAccount = false;
+			for (PortfolioAccount item : defaultPortfolio
+					.getPortfolioAccounts()) {
+				if (item.getAccount().getAccountNumber()
+						.equals(masterAccount.getAccountNumber())) {
+					contrainAccount = true;
+					break;
 				}
+			}
+			if (!masterAccount.getIsDefault()) {
+				int result = JOptionPane.showConfirmDialog(
+						this.getFrame(),
+						"Do you want to make account: "
+								+ masterAccount.getAccountNumber()
+								+ " the default account?", "Information",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					masterAccount.setIsDefault(true);
+					masterAccount = m_tradePersistentModel
+							.resetDefaultAccount(masterAccount);
+				}
+			}
+			if (!contrainAccount) {
+				if (null == defaultPortfolio) {
+					int result = JOptionPane.showConfirmDialog(this.getFrame(),
+							"Do you want to create a Portfolio for  account: "
+									+ masterAccount.getAccountNumber(),
+							"Information", JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						Portfolio portfolio = new Portfolio();
+						portfolio.setName(masterAccount.getName());
+						portfolio.setAlias(masterAccount.getAlias());
+						PortfolioAccount portfolioAccount = new PortfolioAccount(
+								portfolio, masterAccount);
+						masterAccount.getPortfolioAccounts().add(
+								portfolioAccount);
+					}
 
-				if (!defaultAccount.getAccountNumber().equals(
-						masterAccount.getAccountNumber())) {
-
+				} else {
 					int result = JOptionPane.showConfirmDialog(
 							this.getFrame(),
-							"Do you want to make account: "
+							"Do you want to add this account: "
 									+ masterAccount.getAccountNumber()
-									+ " the default account?", "Information",
-							JOptionPane.YES_NO_OPTION);
+									+ " to the default Portfolio?",
+							"Information", JOptionPane.YES_NO_OPTION);
 					if (result == JOptionPane.YES_OPTION) {
-						masterAccount.setIsDefault(true);
-						masterAccount = m_tradePersistentModel
-								.resetDefaultAccount(masterAccount);
+						PortfolioAccount portfolioAccount = new PortfolioAccount(
+								defaultPortfolio, masterAccount);
+						masterAccount.getPortfolioAccounts().add(
+								portfolioAccount);
 					}
 				}
+			} else {
+
 			}
 
 			tradingdayPanel.doWindowActivated();
 			m_brokerModel.onSubscribeAccountUpdates(true,
 					masterAccount.getAccountNumber());
 			this.setStatusBarMessage("Connected to IB Account: "
-					+ masterAccount.getAccountNumber(), BasePanel.INFORMATION);
+					+ masterAccount.getAccountNumber()
+					+ " and subscribed to updates.", BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);
