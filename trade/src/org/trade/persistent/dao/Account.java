@@ -79,14 +79,14 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	private String accountNumber;
 	private String accountType;
 	private String alias;
-	private BigDecimal availableFunds;
-	private BigDecimal buyingPower;
-	private BigDecimal cashBalance;
+	private BigDecimal availableFunds = new BigDecimal(0);
+	private BigDecimal buyingPower = new BigDecimal(0);
+	private BigDecimal cashBalance = new BigDecimal(0);
 	private String currency;
-	private BigDecimal grossPositionValue;
+	private BigDecimal grossPositionValue = new BigDecimal(0);
 	private String name;
-	private BigDecimal realizedPnL;
-	private BigDecimal unrealizedPnL;
+	private BigDecimal realizedPnL = new BigDecimal(0);
+	private BigDecimal unrealizedPnL = new BigDecimal(0);
 	private Date updateDate;
 	private Boolean isDefault = new Boolean(false);
 	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
@@ -421,6 +421,21 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setUnrealizedPnL(BigDecimal unrealizedPnL) {
 		this.unrealizedPnL = unrealizedPnL;
+	}
+
+	/**
+	 * Method getDefaultPortfolio.
+	 * 
+	 * @return Portfolio
+	 */
+	@Transient
+	public Portfolio getDefaultPortfolio() {
+		for (PortfolioAccount item : this.portfolioAccounts) {
+			if (item.getPortfolio().getIsDefault()) {
+				return item.getPortfolio();
+			}
+		}
+		return null;
 	}
 
 	/**

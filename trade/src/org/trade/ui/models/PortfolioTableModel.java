@@ -196,11 +196,11 @@ public class PortfolioTableModel extends AspectTableModel {
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getAlias());
 		newRow.addElement(element.getDescription());
-		if (null == element.getMasterAccountNumber()) {
+		if (null == element.getMasterAccount()) {
 			newRow.addElement(DAOAccount.newInstance(Decode.NONE));
 		} else {
-			newRow.addElement(DAOAccount.newInstance(element
-					.getMasterAccountNumber()));
+			newRow.addElement(DAOAccount.newInstance(element.getMasterAccount()
+					.getAccountNumber()));
 		}
 		newRow.addElement(YesNo.newInstance(element.getIsDefault()));
 	}

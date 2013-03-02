@@ -47,6 +47,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -92,12 +93,12 @@ import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
-import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.UIPropertyCodes;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
+import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.Tradingdays;
@@ -336,8 +337,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
 			this.add(jSplitPane1);
-			DAOAccount account = DAOAccount.newInstance();
-			this.setAccountLabel((Account) account.getObject());
+			DAOPortfolio account = DAOPortfolio.newInstance();
+			this.setPortfolioLabel((Portfolio) account.getObject());
 			enableTradestrategyButtons(null);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
@@ -824,53 +825,71 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	}
 
 	/**
-	 * Method setAccountLabel.
+	 * Method setPortfolioLabel.
 	 * 
-	 * @param account
-	 *            Account
+	 * @param portfolio
+	 *            Portfolio
 	 */
-	public void setAccountLabel(Account account) {
+	public void setPortfolioLabel(Portfolio portfolio) {
 		try {
+			BigDecimal availableFunds = new BigDecimal(0);
+			BigDecimal buyingPower = new BigDecimal(0);
+			BigDecimal grossPositionValue = new BigDecimal(0);
+			BigDecimal realizedPnL = new BigDecimal(0);
+			BigDecimal unrealizedPnL = new BigDecimal(0);
+			Date updateDate = new Date();
+			for (PortfolioAccount portfolioAccount : portfolio
+					.getPortfolioAccounts()) {
+				availableFunds.add(portfolioAccount.getAccount()
+						.getAvailableFunds());
+				buyingPower.add(portfolioAccount.getAccount()
+						.getAvailableFunds());
+				grossPositionValue.add(portfolioAccount.getAccount()
+						.getAvailableFunds());
+				realizedPnL.add(portfolioAccount.getAccount()
+						.getAvailableFunds());
+				unrealizedPnL.add(portfolioAccount.getAccount()
+						.getAvailableFunds());
+				if (portfolioAccount.getAccount().getIsDefault()) {
+					updateDate = portfolioAccount.getAccount().getUpdateDate();
+				}
+			}
 			accountLabel.setText(null);
-			CoreUtils.setDocumentText(accountLabel.getDocument(), "Acct #:",
+			CoreUtils.setDocumentText(accountLabel.getDocument(), "Portfolio:",
 					false, bold);
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					CoreUtils.padRight(account.toString(), 15), false, null);
+					CoreUtils.padRight(portfolio.getName(), 15), false, null);
 
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
 					" Avail Bal:", false, bold);
 			CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
-					.padLeft(currencyFormater.format((account
-							.getAvailableFunds() == null ? 0 : account
-							.getAvailableFunds().doubleValue())), 13), false,
-					null);
+					.padLeft(currencyFormater.format(availableFunds), 13),
+					false, null);
 
 			CoreUtils.setDocumentText(accountLabel.getDocument(), " Margin:",
 					false, bold);
 			CoreUtils
-					.setDocumentText(accountLabel.getDocument(), CoreUtils
-							.padLeft(currencyFormater.format((account
-									.getBuyingPower() == null ? 0 : account
-									.getBuyingPower().doubleValue())), 13),
+					.setDocumentText(
+							accountLabel.getDocument(),
+							CoreUtils.padLeft(
+									currencyFormater.format(buyingPower), 13),
 							false, null);
 
 			CoreUtils.setDocumentText(accountLabel.getDocument(), " Pos Val:",
 					false, bold);
-			CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
-					.padLeft(currencyFormater.format((account
-							.getGrossPositionValue() == null ? 0 : account
-							.getGrossPositionValue().doubleValue())), 13),
+			CoreUtils.setDocumentText(
+					accountLabel.getDocument(),
+					CoreUtils.padLeft(
+							currencyFormater.format(grossPositionValue), 13),
 					false, null);
 
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
 					" Realized P/L:", false, bold);
-			double realizedPnL = (account.getRealizedPnL() == null ? 0
-					: account.getRealizedPnL().doubleValue());
-			if (realizedPnL < 0) {
+			if (realizedPnL.doubleValue() < 0) {
 				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
 						.padLeft(currencyFormater.format(realizedPnL), 13),
 						false, colorRedAttr);
-			} else if (realizedPnL > 0) {
+			} else if (realizedPnL.doubleValue() > 0) {
 				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
 						.padLeft(currencyFormater.format(realizedPnL), 13),
 						false, colorGreenAttr);
@@ -881,33 +900,30 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			}
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
 					" Unrealized P/L:", false, bold);
-			double unRealizedPnL = (account.getUnrealizedPnL() == null ? 0
-					: account.getUnrealizedPnL().doubleValue());
-			if (unRealizedPnL < 0) {
+			if (unrealizedPnL.doubleValue() < 0) {
 				CoreUtils.setDocumentText(
 						accountLabel.getDocument(),
 						CoreUtils.padLeft(
-								currencyFormater.format(unRealizedPnL), 13),
+								currencyFormater.format(unrealizedPnL), 13),
 						false, colorRedAttr);
-			} else if (unRealizedPnL > 0) {
+			} else if (unrealizedPnL.doubleValue() > 0) {
 				CoreUtils.setDocumentText(
 						accountLabel.getDocument(),
 						CoreUtils.padLeft(
-								currencyFormater.format(unRealizedPnL), 13),
+								currencyFormater.format(unrealizedPnL), 13),
 						false, colorGreenAttr);
 			} else {
 				CoreUtils.setDocumentText(
 						accountLabel.getDocument(),
 						CoreUtils.padLeft(
-								currencyFormater.format(unRealizedPnL), 13),
+								currencyFormater.format(unrealizedPnL), 13),
 						false, null);
 			}
 			CoreUtils.setDocumentText(accountLabel.getDocument(), " Date:",
 					false, bold);
 			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					CoreUtils.padRight(dateFormater.format((account
-							.getUpdateDate() == null ? new Date() : account
-							.getUpdateDate())), 17), false, null);
+					CoreUtils.padRight(dateFormater.format(updateDate), 17),
+					false, null);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error setting Trade Account Label.",

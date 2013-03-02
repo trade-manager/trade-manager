@@ -190,16 +190,15 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getMasterAccountNumber.
+	 * Method getMasterAccount.
 	 * 
-	 * @return String
+	 * @return Account
 	 */
-	// @Column(name = "masterAccountNumber", length = 20)
 	@Transient
-	public String getMasterAccountNumber() {
+	public Account getMasterAccount() {
 		for (PortfolioAccount item : this.portfolioAccounts) {
 			if (item.getAccount().getIsDefault()) {
-				return item.getAccount().getAccountNumber();
+				return item.getAccount();
 			}
 		}
 		return null;

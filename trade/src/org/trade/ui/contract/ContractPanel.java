@@ -338,7 +338,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		try {
 			Account account = m_tradePersistentModel
 					.findAccountByNumber(instance.getTrade().getTradestrategy()
-							.getPortfolio().getMasterAccountNumber());
+							.getPortfolio().getMasterAccount()
+							.getAccountNumber());
 			if (AccountType.CORPORATION.equals(account.getAccountType())) {
 				FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
 						instance);
@@ -359,7 +360,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							} else {
 								instance.setAccountNumber(instance.getTrade()
 										.getTradestrategy().getPortfolio()
-										.getMasterAccountNumber());
+										.getMasterAccount().getAccountNumber());
 							}
 						}
 					}
@@ -920,7 +921,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				status = (tradestrategy.getStatus() == null ? ""
 						: TradestrategyStatus.newInstance(
 								tradestrategy.getStatus()).getDisplayName());
-				account = tradestrategy.getPortfolio().getMasterAccountNumber();
+				account = tradestrategy.getPortfolio().getMasterAccount()
+						.getAccountNumber();
 				risk = currencyFormater
 						.format((tradestrategy.getRiskAmount() == null ? 0
 								: tradestrategy.getRiskAmount().doubleValue()));

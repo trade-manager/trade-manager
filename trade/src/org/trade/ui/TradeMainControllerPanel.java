@@ -1282,7 +1282,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		try {
 			Account account = m_tradePersistentModel
 					.findAccountByNumber(accountNumber);
-			tradingdayPanel.setAccountLabel(account);
+			Portfolio portfolio = account.getDefaultPortfolio();
+			portfolio = m_tradePersistentModel.findPortfolioById(portfolio
+					.getId());
+			tradingdayPanel.setPortfolioLabel(portfolio);
 			this.setStatusBarMessage("Connected to IB Account: "
 					+ accountNumber, BasePanel.INFORMATION);
 		} catch (Exception ex) {

@@ -647,10 +647,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 		tradeOrder.setTransmit(transmit);
 		Account account = tradePersistentModel
 				.findAccountByNumber(getTradestrategy().getPortfolio()
-						.getMasterAccountNumber());
+						.getMasterAccount().getAccountNumber());
 		if (AccountType.INDIVIDUAL.equals(account.getAccountType())) {
 			tradeOrder.setAccountNumber(getTradestrategy().getPortfolio()
-					.getMasterAccountNumber());
+					.getMasterAccount().getAccountNumber());
 		} else {
 			if (FAProfile != null) {
 				tradeOrder.setFAProfile(FAProfile);
@@ -661,7 +661,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 					tradeOrder.setFAPercent(FAPercent);
 				} else {
 					tradeOrder.setAccountNumber(getTradestrategy()
-							.getPortfolio().getMasterAccountNumber());
+							.getPortfolio().getMasterAccount()
+							.getAccountNumber());
 				}
 			}
 		}
@@ -832,7 +833,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
 		tradeOrder.setTransmit(transmit);
 		tradeOrder.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccountNumber());
+				.getMasterAccount().getAccountNumber());
 		tradeOrder = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), tradeOrder);
 		this.getTrade().addTradeOrder(tradeOrder);
@@ -946,7 +947,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
 		orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccountNumber());
+				.getMasterAccount().getAccountNumber());
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
 		this.getTrade().addTradeOrder(orderTarget);
@@ -963,7 +964,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setTransmit(stopTransmit);
 		orderStop.setOcaGroupName(ocaID);
 		orderStop.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccountNumber());
+				.getMasterAccount().getAccountNumber());
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
 		this.getTrade().addTradeOrder(orderStop);
@@ -1054,7 +1055,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
 		orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccountNumber());
+				.getMasterAccount().getAccountNumber());
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
 		this.getTrade().addTradeOrder(orderTarget);
@@ -1070,7 +1071,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setTransmit(stopTransmit);
 		orderStop.setOcaGroupName(ocaID);
 		orderStop.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccountNumber());
+				.getMasterAccount().getAccountNumber());
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
 		this.getTrade().addTradeOrder(orderStop);
@@ -1343,7 +1344,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public Account getAccount() throws PersistentModelException {
 		return this.tradePersistentModel.findAccountByNumber(getTradestrategy()
-				.getPortfolio().getMasterAccountNumber());
+				.getPortfolio().getMasterAccount().getAccountNumber());
 	}
 
 	/**
@@ -1364,11 +1365,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return this.symbol;
 	}
 
-	/*
+	/**
 	 * The open position is initially created in createSubmitOpenPosition this
 	 * is called from the Strategy that has rules to enter a position.
 	 * Strategies that manage positions also need access to the openPosition
-	 * order so here we populated this from the trade. <p><blockquote><pre>
+	 * order so here we populated this from the trade.
+	 * <p>
+	 * <blockquote>
+	 * 
+	 * <pre>
 	 * State isOpen = false and ProfitLoss is null when created not filled.
 	 * State isOpen = true when position is open and filled. State isOpen =
 	 * false and ProfitLoss not null when closed.
