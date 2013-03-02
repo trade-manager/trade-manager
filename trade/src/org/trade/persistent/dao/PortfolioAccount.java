@@ -46,6 +46,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
 
@@ -95,7 +96,8 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Portfolio
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "idPortfolio", nullable = false)
 	public Portfolio getPortfolio() {
 		return this.portfolio;
@@ -116,7 +118,8 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Account
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "idAccount", nullable = false)
 	public Account getAccount() {
 		return this.account;
@@ -130,5 +133,26 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 */
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	/**
+	 * Method getVersion.
+	 * 
+	 * @return Integer
+	 */
+	@Version
+	@Column(name = "version")
+	public Integer getVersion() {
+		return this.version;
+	}
+
+	/**
+	 * Method setVersion.
+	 * 
+	 * @param version
+	 *            Integer
+	 */
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 }

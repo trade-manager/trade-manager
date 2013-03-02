@@ -1201,16 +1201,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Portfolio defaultPortfolio = (Portfolio) code.getObject();
 			defaultPortfolio = m_tradePersistentModel
 					.findPortfolioByName(defaultPortfolio.getName());
-			boolean contrainAccount = false;
+			boolean containsAccount = false;
 			for (PortfolioAccount item : defaultPortfolio
 					.getPortfolioAccounts()) {
 				if (item.getAccount().getAccountNumber()
 						.equals(masterAccount.getAccountNumber())) {
-					contrainAccount = true;
+					containsAccount = true;
 					break;
 				}
 			}
-			if (!masterAccount.getIsDefault() && contrainAccount) {
+			if (!masterAccount.getIsDefault() && containsAccount) {
 				int result = JOptionPane.showConfirmDialog(
 						this.getFrame(),
 						"Do you want to make account: "
@@ -1223,7 +1223,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							defaultPortfolio, masterAccount);
 				}
 			}
-			if (!contrainAccount) {
+			if (!containsAccount) {
 				if (null == defaultPortfolio) {
 					int result = JOptionPane.showConfirmDialog(this.getFrame(),
 							"Do you want to create a Portfolio for  account: "

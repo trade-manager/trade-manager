@@ -57,6 +57,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
 
@@ -441,6 +442,27 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	/**
+	 * Method getVersion.
+	 * 
+	 * @return Integer
+	 */
+	@Version
+	@Column(name = "version")
+	public Integer getVersion() {
+		return this.version;
+	}
+
+	/**
+	 * Method setVersion.
+	 * 
+	 * @param version
+	 *            Integer
+	 */
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	/**

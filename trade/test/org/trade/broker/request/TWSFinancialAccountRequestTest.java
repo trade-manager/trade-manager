@@ -80,7 +80,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 		Aspects items = tradePersistentModel
 				.findAspectsByClassName(FinancialAccount.class.getName());
 		for (Aspect aspect : items.getAspect()) {
- 		tradePersistentModel.removeAspect(aspect);
+			tradePersistentModel.removeAspect(aspect);
 		}
 	}
 

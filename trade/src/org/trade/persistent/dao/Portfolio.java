@@ -50,6 +50,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
 
@@ -226,6 +227,27 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 			PortfolioAccount pa = new PortfolioAccount(this, account);
 			this.portfolioAccounts.add(pa);
 		}
+	}
+
+	/**
+	 * Method getVersion.
+	 * 
+	 * @return Integer
+	 */
+	@Version
+	@Column(name = "version")
+	public Integer getVersion() {
+		return this.version;
+	}
+
+	/**
+	 * Method setVersion.
+	 * 
+	 * @param version
+	 *            Integer
+	 */
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	/**

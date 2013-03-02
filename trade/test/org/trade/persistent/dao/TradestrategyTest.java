@@ -204,6 +204,7 @@ public class TradestrategyTest extends TestCase {
 		Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
 		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 				.getObject();
+
 		Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 				.getMostRecentTradingDay(new Date()));
 
@@ -264,8 +265,7 @@ public class TradestrategyTest extends TestCase {
 					.getMostRecentTradingDay(new Date()));
 			Strategy strategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
-			Account account = (Account) DAOAccount.newInstance()
-					.getObject();
+			Account account = (Account) DAOAccount.newInstance().getObject();
 			Tradestrategy tradestrategy = tradestrategyHome
 					.findTradestrategyByUniqueKeys(open, strategy.getName(),
 							contract.getIdContract(),

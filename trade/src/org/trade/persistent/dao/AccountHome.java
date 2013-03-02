@@ -133,25 +133,27 @@ public class AccountHome {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Account> query = builder.createQuery(Account.class);
-			Root<Account> from = query.from(Account.class);
+			CriteriaQuery<PortfolioAccount> query = builder
+					.createQuery(PortfolioAccount.class);
+			Root<PortfolioAccount> from = query.from(PortfolioAccount.class);
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			Join<Account, Portfolio> portfolioAccounts = from
-					.join("portfolioAccount");
-			Predicate predicate = builder.equal(
-					portfolioAccounts.get("idPortfolio"),
+			Join<PortfolioAccount, Portfolio> portfolios = from
+					.join("portfolio");
+			Predicate predicate = builder.equal(portfolios.get("idPortfolio"),
 					portfolio.getIdPortfolio());
 			predicates.add(predicate);
 			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<Account> typedQuery = entityManager.createQuery(query);
-			List<Account> items = typedQuery.getResultList();
-			for (Account account : items) {
-				if (account.getIsDefault()
+			TypedQuery<PortfolioAccount> typedQuery = entityManager
+					.createQuery(query);
+			List<PortfolioAccount> items = typedQuery.getResultList();
+
+			for (PortfolioAccount item : items) {
+				if (item.getAccount().getIsDefault()
 						&& !defaultAccount.getIdAccount().equals(
-								account.getIdAccount())) {
-					account.setIsDefault(false);
-					entityManager.persist(account);
+								item.getAccount().getIdAccount())) {
+					item.getAccount().setIsDefault(false);
+					entityManager.persist(item);
 				}
 			}
 			entityManager.getTransaction().commit();

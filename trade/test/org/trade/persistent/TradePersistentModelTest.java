@@ -52,6 +52,7 @@ import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
@@ -67,6 +68,7 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
@@ -521,13 +523,47 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testResetDefaultAccount() {
+	public void testResetDefaultPortfolio() {
 
 		try {
 			this.tradePersistentModel.resetDefaultPortfolio(this.tradestrategy
 					.getPortfolio());
 			TestCase.assertTrue(this.tradestrategy.getPortfolio()
 					.getIsDefault());
+		} catch (Exception e) {
+			TestCase.fail("Error testResetDefaultTradeAccount Msg: "
+					+ e.getMessage());
+		}
+	}
+
+	@Test
+	public void testResetDefaultAccount() {
+
+		try {
+
+			Account account = new Account("Test1", "DU12366",
+					AccountType.INDIVIDUAL, Currency.USD, true);
+			Portfolio portfolio = this.tradestrategy.getPortfolio();
+			portfolio = this.tradePersistentModel.findPortfolioByName(portfolio
+					.getName());
+			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
+					account);
+			portfolio.getPortfolioAccounts().add(portfolioAccount);
+			portfolio = (Portfolio) this.tradePersistentModel
+					.persistAspect(portfolio);
+			account = this.tradePersistentModel.findAccountByNumber(account
+					.getAccountNumber());
+			this.tradePersistentModel.resetDefaultAccount(
+					this.tradestrategy.getPortfolio(), account);
+			TestCase.assertTrue(account.getIsDefault());
+			for (PortfolioAccount pa : portfolio.getPortfolioAccounts()) {
+				if (pa.getAccount().getAccountNumber()
+						.equals(account.getAccountNumber())) {
+					this.tradePersistentModel.removeAspect(pa);
+					this.tradePersistentModel.removeAspect(account);
+					break;
+				}
+			}
 		} catch (Exception e) {
 			TestCase.fail("Error testResetDefaultTradeAccount Msg: "
 					+ e.getMessage());
