@@ -688,6 +688,7 @@ public class TradePersistentModel implements PersistentModel {
 
 		try {
 			m_accountHome.resetDefaultAccount(portfolio, account);
+			account.setIsDefault(true);
 			return (Account) m_aspectHome.persist(account);
 
 		} catch (OptimisticLockException ex1) {

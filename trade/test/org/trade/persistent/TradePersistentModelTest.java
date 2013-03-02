@@ -554,10 +554,14 @@ public class TradePersistentModelTest extends TestCase {
 					.persistAspect(portfolio);
 			account = this.tradePersistentModel.findAccountByNumber(account
 					.getAccountNumber());
-			this.tradePersistentModel.resetDefaultAccount(
+			account = this.tradePersistentModel.resetDefaultAccount(
 					this.tradestrategy.getPortfolio(), account);
 			TestCase.assertTrue(account.getIsDefault());
-			TestCase.assertFalse(defaultAccount.getIsDefault());
+			defaultAccount = this.tradePersistentModel
+					.findAccountByNumber(defaultAccount.getAccountNumber());
+			defaultAccount = this.tradePersistentModel.resetDefaultAccount(
+					this.tradestrategy.getPortfolio(), defaultAccount);
+			TestCase.assertTrue(defaultAccount.getIsDefault());
 			for (PortfolioAccount pa : portfolio.getPortfolioAccounts()) {
 				if (pa.getAccount().getAccountNumber()
 						.equals(account.getAccountNumber())) {
@@ -566,8 +570,6 @@ public class TradePersistentModelTest extends TestCase {
 					break;
 				}
 			}
-			defaultAccount.setIsDefault(true);
-			tradePersistentModel.persistAspect(defaultAccount);
 		} catch (Exception e) {
 			TestCase.fail("Error testResetDefaultTradeAccount Msg: "
 					+ e.getMessage());
