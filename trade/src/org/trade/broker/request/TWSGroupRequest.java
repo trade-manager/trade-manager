@@ -15,7 +15,7 @@ import org.xml.sax.Attributes;
 
 public class TWSGroupRequest extends SaxMapper {
 
-	private Aspects m_target = null;
+	private Aspects m_target = new Aspects();
 	private final Stack<Object> m_stack = new Stack<Object>();
 
 	public TWSGroupRequest() throws XMLModelException {

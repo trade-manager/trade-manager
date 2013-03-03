@@ -202,4 +202,127 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 			TestCase.fail("Error :" + e.getMessage());
 		}
 	}
+
+	@Test
+	public void testAliasEmptyRequest() {
+
+		try {
+
+			final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
+
+			// String xml =
+			// "<?xml version=\"1.0\" encoding=\"UTF-8\"?><ListOfAccountAliases/>";
+			// ByteArrayInputStream inputSource = new ByteArrayInputStream(
+			// xml.getBytes("utf-8"));
+			// final Aspects aspects = (Aspects) request.fromXML(inputSource);
+			final Aspects aspects = (Aspects) request.fromXML(Thread
+					.currentThread()
+					.getContextClassLoader()
+					.getResourceAsStream(
+							"org/trade/broker/request/aliasesEmpty.xml"));
+
+			for (Aspect aspect : aspects.getAspect()) {
+				Account account = (Account) aspect;
+				Account ta = tradePersistentModel.findAccountByNumber(account
+						.getAccountNumber());
+				if (null != ta) {
+					account.setAlias(account.getAlias());
+					tradePersistentModel.persistAspect(ta);
+				} else {
+					account.setAccountType(AccountType.CORPORATION);
+					account.setCurrency(Currency.USD);
+					account.setName(account.getAccountNumber());
+					tradePersistentModel.persistAspect(account);
+				}
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testGroupEmptyRequest() {
+
+		try {
+
+			final TWSGroupRequest request = new TWSGroupRequest();
+			final Aspects aspects = (Aspects) request.fromXML(Thread
+					.currentThread()
+					.getContextClassLoader()
+					.getResourceAsStream(
+							"org/trade/broker/request/groupsEmpty.xml"));
+
+			for (Aspect aspect : aspects.getAspect()) {
+				FinancialAccount account = (FinancialAccount) aspect;
+				for (AccountAllocation item : account.getAccountAllocation()) {
+					FinancialAccount parent = tradePersistentModel
+							.findFinancialAccountByGroupName(item
+									.getFinancialAccount().getGroupName());
+					if (null == parent) {
+						parent = (FinancialAccount) tradePersistentModel
+								.persistAspect(item.getFinancialAccount());
+					} else {
+						if (!parent.getMethod().equals(
+								item.getFinancialAccount().getMethod())) {
+							parent.setMethod(item.getFinancialAccount()
+									.getMethod());
+							parent = (FinancialAccount) tradePersistentModel
+									.persistAspect(parent);
+						}
+
+					}
+					item.setFinancialAccount(parent);
+					tradePersistentModel.persistAspect(item);
+				}
+
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testAllocationEmptyRequest() {
+
+		try {
+
+			final TWSAllocationRequest request = new TWSAllocationRequest();
+			final Aspects aspects = (Aspects) request.fromXML(Thread
+					.currentThread()
+					.getContextClassLoader()
+					.getResourceAsStream(
+							"org/trade/broker/request/allocationEmpty.xml"));
+
+			for (Aspect aspect : aspects.getAspect()) {
+				FinancialAccount account = (FinancialAccount) aspect;
+				for (AccountAllocation item : account.getAccountAllocation()) {
+					FinancialAccount parent = tradePersistentModel
+							.findFinancialAccountByProfileName(item
+									.getFinancialAccount().getProfileName());
+					if (null == parent) {
+						parent = (FinancialAccount) tradePersistentModel
+								.persistAspect(item.getFinancialAccount());
+					} else {
+						if (!parent.getType().equals(
+								item.getFinancialAccount().getType())) {
+							parent.setType(item.getFinancialAccount().getType());
+							parent = (FinancialAccount) tradePersistentModel
+									.persistAspect(parent);
+						}
+
+					}
+					item.setFinancialAccount(parent);
+					tradePersistentModel.persistAspect(item);
+				}
+				_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
 }

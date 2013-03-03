@@ -35,6 +35,7 @@
  */
 package org.trade.broker;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -2078,12 +2079,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#receiveFA(int, String)
 	 */
 	public void receiveFA(int faDataType, String xml) {
+		ByteArrayInputStream inputSource = null;
 		try {
+			inputSource = new ByteArrayInputStream(xml.getBytes("utf-8"));
 			switch (faDataType) {
 			case EClientSocket.ALIASES: {
 				_log.info("Aliases: /n" + xml);
 				final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
-				final Aspects aspects = (Aspects) request.fromXML(xml);
+				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 
 				for (Aspect aspect : aspects.getAspect()) {
 					Account account = (Account) aspect;
@@ -2104,7 +2107,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			case EClientSocket.PROFILES: {
 				_log.info("Profiles: /n" + xml);
 				final TWSAllocationRequest request = new TWSAllocationRequest();
-				final Aspects aspects = (Aspects) request.fromXML(xml);
+				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 
 				for (Aspect aspect : aspects.getAspect()) {
 					FinancialAccount account = (FinancialAccount) aspect;
@@ -2134,7 +2137,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			case EClientSocket.GROUPS: {
 				_log.info("Groups: /n" + xml);
 				final TWSGroupRequest request = new TWSGroupRequest();
-				final Aspects aspects = (Aspects) request.fromXML(xml);
+				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 
 				for (Aspect aspect : aspects.getAspect()) {
 					FinancialAccount account = (FinancialAccount) aspect;
@@ -2168,6 +2171,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		} catch (Exception ex) {
 			error(faDataType, 3235, ex.getMessage());
+		} finally {
+			if (null != inputSource)
+				try {
+					inputSource.close();
+				} catch (IOException ex) {
+					error(faDataType, 3236, ex.getMessage());
+				}
 		}
 	}
 
