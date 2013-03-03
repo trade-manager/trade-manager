@@ -1210,20 +1210,24 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					break;
 				}
 			}
-			if (!masterAccount.getIsDefault() && containsAccount) {
-				int result = JOptionPane.showConfirmDialog(
-						this.getFrame(),
-						"Do you want to make account: "
-								+ masterAccount.getAccountNumber()
-								+ " the default account?", "Information",
-						JOptionPane.YES_NO_OPTION);
-				if (result == JOptionPane.YES_OPTION) {
-					masterAccount.setIsDefault(true);
-					masterAccount = m_tradePersistentModel.resetDefaultAccount(
-							defaultPortfolio, masterAccount);
+
+			if (containsAccount) {
+				if (!masterAccount.getIsDefault()) {
+					int result = JOptionPane.showConfirmDialog(
+							this.getFrame(),
+							"Do you want to make account: "
+									+ masterAccount.getAccountNumber()
+									+ " the default account?", "Information",
+							JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						masterAccount.setIsDefault(true);
+						masterAccount = m_tradePersistentModel
+								.resetDefaultAccount(defaultPortfolio,
+										masterAccount);
+					}
 				}
-			}
-			if (!containsAccount) {
+			} else {
+
 				if (null == defaultPortfolio) {
 					int result = JOptionPane.showConfirmDialog(this.getFrame(),
 							"Do you want to create a Portfolio for  account: "
@@ -1237,6 +1241,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								portfolio, masterAccount);
 						masterAccount.getPortfolioAccounts().add(
 								portfolioAccount);
+						masterAccount = (Account) m_tradePersistentModel
+								.persistAspect(masterAccount);
 					}
 
 				} else {
@@ -1251,10 +1257,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								defaultPortfolio, masterAccount);
 						masterAccount.getPortfolioAccounts().add(
 								portfolioAccount);
+						masterAccount = (Account) m_tradePersistentModel
+								.persistAspect(masterAccount);
 					}
 				}
-			} else {
-
 			}
 
 			tradingdayPanel.doWindowActivated();

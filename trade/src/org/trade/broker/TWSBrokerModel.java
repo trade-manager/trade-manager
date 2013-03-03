@@ -2172,12 +2172,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		} catch (Exception ex) {
 			error(faDataType, 3235, ex.getMessage());
 		} finally {
-			if (null != inputSource)
-				try {
+			try {
+				if (null != inputSource)
 					inputSource.close();
-				} catch (IOException ex) {
-					error(faDataType, 3236, ex.getMessage());
-				}
+			} catch (IOException ex) {
+				error(faDataType, 3236, ex.getMessage());
+			}
 		}
 	}
 
