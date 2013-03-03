@@ -39,12 +39,12 @@ import org.trade.core.valuetype.Decode;
 
 /**
  */
-public class FAMethod extends Decode {
+public class AllocationMethod extends Decode {
 
 	private static final long serialVersionUID = -5381026427696898592L;
-	public static final String DECODE = "FA_METHOD";
+	public static final String DECODE = "ALLOCATION_METHOD";
 
-	public FAMethod() {
+	public AllocationMethod() {
 		super(DECODE, true);
 	}
 
@@ -55,8 +55,8 @@ public class FAMethod extends Decode {
 	 *            Integer
 	 * @return BarSize
 	 */
-	public static FAMethod newInstance(String value) {
-		final FAMethod returnInstance = new FAMethod();
+	public static AllocationMethod newInstance(String value) {
+		final AllocationMethod returnInstance = new AllocationMethod();
 		returnInstance.setValue(value);
 		return returnInstance;
 	}
@@ -66,8 +66,8 @@ public class FAMethod extends Decode {
 	 * 
 	 * @return BarSize
 	 */
-	public static FAMethod newInstance() {
-		final FAMethod returnInstance = new FAMethod();
+	public static AllocationMethod newInstance() {
+		final AllocationMethod returnInstance = new AllocationMethod();
 		returnInstance.setDefaultCode();
 		return returnInstance;
 	}

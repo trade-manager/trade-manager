@@ -64,6 +64,7 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 
 	private String name;
 	private String alias;
+	private String allocationMethod;
 	private String description;
 	private Boolean isDefault = new Boolean(false);
 	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
@@ -147,6 +148,26 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setAlias(String alias) {
 		this.alias = alias;
+	}
+
+	/**
+	 * Method getAllocationMethod.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "allocationMethod", nullable = false, length = 20)
+	public String getAllocationMethod() {
+		return this.allocationMethod;
+	}
+
+	/**
+	 * Method setAllocationMethod.
+	 * 
+	 * @param allocationMethod
+	 *            String
+	 */
+	public void setAllocationMethod(String allocationMethod) {
+		this.allocationMethod = allocationMethod;
 	}
 
 	/**

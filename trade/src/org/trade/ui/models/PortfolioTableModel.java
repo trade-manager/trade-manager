@@ -42,6 +42,7 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.YesNo;
+import org.trade.dictionary.valuetype.AllocationMethod;
 import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Portfolio;
@@ -57,6 +58,7 @@ public class PortfolioTableModel extends AspectTableModel {
 	private static final String NAME = "Name*";
 	private static final String PORTFOLIO_ALIAS = "Alias";
 	private static final String DESCRIPTION = "Description";
+	private static final String ALLOCATION_METHOD = "Allocation Method";
 	private static final String MASTER_ACCT_NUMBER = "Master Acct #*";
 	private static final String IS_DEFAULT = "Default";
 
@@ -71,12 +73,13 @@ public class PortfolioTableModel extends AspectTableModel {
 		 * Get the column names and cache them. Then we can close the
 		 * connection.
 		 */
-		columnNames = new String[5];
+		columnNames = new String[6];
 		columnNames[0] = NAME;
 		columnNames[1] = PORTFOLIO_ALIAS;
 		columnNames[2] = DESCRIPTION;
-		columnNames[3] = MASTER_ACCT_NUMBER;
-		columnNames[4] = IS_DEFAULT;
+		columnNames[3] = ALLOCATION_METHOD;
+		columnNames[4] = MASTER_ACCT_NUMBER;
+		columnNames[5] = IS_DEFAULT;
 	}
 
 	/**
@@ -136,11 +139,15 @@ public class PortfolioTableModel extends AspectTableModel {
 			break;
 		}
 		case 3: {
+			element.setAllocationMethod(((AllocationMethod) value).getCode());
+			break;
+		}
+		case 4: {
 			Account account = (Account) ((DAOAccount) value).getObject();
 			element.setMasterAccountNumber(account);
 			break;
 		}
-		case 4: {
+		case 5: {
 			element.setIsDefault(new Boolean(((YesNo) value).getCode()));
 			break;
 		}
@@ -196,6 +203,13 @@ public class PortfolioTableModel extends AspectTableModel {
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getAlias());
 		newRow.addElement(element.getDescription());
+		if (null == element.getAllocationMethod()) {
+			newRow.addElement(AllocationMethod.newInstance(Decode.NONE));
+		} else {
+			newRow.addElement(AllocationMethod.newInstance(element
+					.getAllocationMethod()));
+		}
+
 		if (null == element.getMasterAccount()) {
 			newRow.addElement(DAOAccount.newInstance(Decode.NONE));
 		} else {

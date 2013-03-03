@@ -42,6 +42,7 @@ import javax.swing.JComboBox;
 
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.AccountType;
+import org.trade.dictionary.valuetype.AllocationMethod;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
@@ -92,7 +93,12 @@ public class ConfigurationTable extends Table {
 				(new DAOAccount()).getCodesDecodes());
 		DecodeTableEditor dAOAccountEditor = new DecodeTableEditor(
 				daoAccountComboBox);
+		JComboBox allocationMethodComboBox = new JComboBox(
+				(new AllocationMethod()).getCodesDecodes());
+		DecodeTableEditor allocationMethodEditor = new DecodeTableEditor(
+				allocationMethodComboBox);
 		this.setDefaultEditor(Currency.class, currencyEditor);
+		this.setDefaultEditor(AllocationMethod.class, allocationMethodEditor);
 		this.setDefaultEditor(AccountType.class, accountTypeEditor);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);

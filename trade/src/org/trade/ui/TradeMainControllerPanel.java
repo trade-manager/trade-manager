@@ -1258,8 +1258,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 
 			tradingdayPanel.doWindowActivated();
-			m_brokerModel.onSubscribeAccountUpdates(true,
-					masterAccount.getAccountNumber());
+			for (PortfolioAccount item : defaultPortfolio
+					.getPortfolioAccounts()) {
+				m_brokerModel.onSubscribeAccountUpdates(true, item.getAccount()
+						.getAccountNumber());
+			}
+
 			this.setStatusBarMessage("Connected to IB Account: "
 					+ masterAccount.getAccountNumber()
 					+ " and subscribed to updates.", BasePanel.INFORMATION);

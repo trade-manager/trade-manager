@@ -337,8 +337,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jSplitPane1.setResizeWeight(0.2d);
 			jSplitPane1.setOneTouchExpandable(true);
 			this.add(jSplitPane1);
-			DAOPortfolio account = DAOPortfolio.newInstance();
-			this.setPortfolioLabel((Portfolio) account.getObject());
+			DAOPortfolio code = DAOPortfolio.newInstance();
+			Portfolio portfolio = tradePersistentModel
+					.findPortfolioByName(((Portfolio) code.getObject())
+							.getName());
+			this.setPortfolioLabel(portfolio);
 			enableTradestrategyButtons(null);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
@@ -921,9 +924,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			}
 			CoreUtils.setDocumentText(accountLabel.getDocument(), " Date:",
 					false, bold);
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
-					CoreUtils.padRight(dateFormater.format(updateDate), 17),
-					false, null);
+			CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+					.padRight(dateFormater
+							.format((updateDate == null ? new Date()
+									: updateDate)), 17), false, null);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error setting Trade Account Label.",

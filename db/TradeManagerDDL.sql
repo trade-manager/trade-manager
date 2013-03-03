@@ -72,6 +72,7 @@ CREATE  TABLE IF NOT EXISTS portfolio (
   idPortfolio INT NOT NULL AUTO_INCREMENT ,
   name VARCHAR(45) NOT NULL ,
   alias VARCHAR(45) NULL ,  
+  allocationMethod  VARCHAR(20) NULL ,
   description VARCHAR(240) NULL ,  
   isDefault TINYINT(1)  NOT NULL ,
   updateDate DATETIME NULL ,

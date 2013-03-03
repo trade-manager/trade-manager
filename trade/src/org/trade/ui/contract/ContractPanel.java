@@ -88,7 +88,7 @@ import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.DAOGroup;
 import org.trade.dictionary.valuetype.DAOProfile;
-import org.trade.dictionary.valuetype.FAMethod;
+import org.trade.dictionary.valuetype.AllocationMethod;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.Tier;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
@@ -341,11 +341,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							.getPortfolio().getMasterAccount()
 							.getAccountNumber());
 			if (AccountType.CORPORATION.equals(account.getAccountType())) {
-				FAPropertiesPanel fAPropertiesPanel = new FAPropertiesPanel(
+				AllocationMethodPanel allocationMethodPanel = new AllocationMethodPanel(
 						instance);
-				if (null != fAPropertiesPanel) {
+				if (null != allocationMethodPanel) {
 					TextDialog dialog = new TextDialog(this.getFrame(),
-							"Indicator Properties", true, fAPropertiesPanel);
+							"Indicator Properties", true, allocationMethodPanel);
 					dialog.setLocationRelativeTo(this);
 					dialog.setVisible(true);
 					if (!dialog.getCancel()) {
@@ -1139,7 +1139,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	/**
 	 */
-	class FAPropertiesPanel extends JPanel {
+	class AllocationMethodPanel extends JPanel {
 
 		/**
 		 * 
@@ -1155,7 +1155,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 */
 
 		@SuppressWarnings("unchecked")
-		public FAPropertiesPanel(final TradeOrder tradeOrder) throws Exception {
+		public AllocationMethodPanel(final TradeOrder tradeOrder)
+				throws Exception {
 
 			GridBagLayout gridBagLayout1 = new GridBagLayout();
 			this.setLayout(gridBagLayout1);
@@ -1214,19 +1215,19 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			});
 
 			DecodeComboBoxEditor methodEditorComboBox = new DecodeComboBoxEditor(
-					FAMethod.newInstance().getCodesDecodes());
+					AllocationMethod.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer methodTableRenderer = new DecodeComboBoxRenderer();
 			methodEditorComboBox.setRenderer(methodTableRenderer);
 			if (null != tradeOrder.getFAMethod())
-				methodEditorComboBox.setItem(FAMethod.newInstance(tradeOrder
-						.getFAMethod()));
+				methodEditorComboBox.setItem(AllocationMethod
+						.newInstance(tradeOrder.getFAMethod()));
 			methodEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if (!Decode.NONE.equals(((FAMethod) e.getItem())
+						if (!Decode.NONE.equals(((AllocationMethod) e.getItem())
 								.getDisplayName())) {
-							tradeOrder.setFAMethod(((FAMethod) e.getItem())
-									.getCode());
+							tradeOrder.setFAMethod(((AllocationMethod) e
+									.getItem()).getCode());
 						} else {
 							tradeOrder.setFAMethod(null);
 						}
