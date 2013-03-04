@@ -119,14 +119,7 @@ INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfP
 
 COMMIT;
 
-INSERT INTO account (idAccount, name, accountNumber,  accountType, alias, currency, isDefault, availableFunds, cashBalance, buyingPower, version) VALUES (1, 'Test','DU12345','INDIVIDUAL','Paper Account','USD',1,'25000.00','25000.00','100000.00', 0);
-
-COMMIT;
 
 INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, version) VALUES (1, 'Paper','Paper Account','Paper trading account', 1, 0);
-
-COMMIT;
-
-INSERT INTO portfolioaccount (idPortfolioAccount,idPortfolio, idAccount, version) VALUES (1, 1, 1 , 0);
 
 COMMIT;

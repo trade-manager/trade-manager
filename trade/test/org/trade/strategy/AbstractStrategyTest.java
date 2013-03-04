@@ -200,7 +200,8 @@ public class AbstractStrategyTest extends TestCase {
 
 			Money price = new Money(37.99);
 			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
-					Action.BUY, price, price.subtract(new Money(0.2)), true);
+					Action.BUY, price, price.subtract(new Money(0.2)), true,
+					null, null, null, null);
 			openOrder.setAverageFilledPrice(price.getBigDecimalValue());
 			openOrder.setCommission((new Money(1.0)).getBigDecimalValue());
 			openOrder.setFilledDate(new Date());
@@ -419,7 +420,8 @@ public class AbstractStrategyTest extends TestCase {
 	public void testCreateRiskOpenPosition() {
 		try {
 			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
-					Action.BUY, new Money(100.00), new Money(99.00), true);
+					Action.BUY, new Money(100.00), new Money(99.00), true,
+					null, null, null, null);
 			TestCase.assertNotNull(result);
 		} catch (Exception ex) {
 			TestCase.fail("Error testCreateOpenPosition Msg:" + ex.getMessage());
@@ -443,7 +445,8 @@ public class AbstractStrategyTest extends TestCase {
 			tradePersistentModel.persistAspect(entryLimit);
 
 			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
-					Action.BUY, new Money(20.00), new Money(19.98), true);
+					Action.BUY, new Money(20.00), new Money(19.98), true, null,
+					null, null, null);
 
 			TestCase.assertEquals(2500, result.getQuantity(), 0);
 			entryLimit.setPercentOfMargin(new BigDecimal(0));
@@ -475,7 +478,8 @@ public class AbstractStrategyTest extends TestCase {
 			tradePersistentModel.persistAspect(entryLimit);
 
 			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
-					Action.SELL, new Money(45.75), new Money(46.00), true);
+					Action.SELL, new Money(45.75), new Money(46.00), true,
+					null, null, null, null);
 			TestCase.assertNotNull(this.strategyProxy.getOpenPositionOrder());
 			TestCase.assertEquals(400, result.getQuantity(), 0);
 			this.strategyProxy.getOpenPositionOrder().setAverageFilledPrice(

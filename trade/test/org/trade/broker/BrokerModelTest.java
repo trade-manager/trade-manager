@@ -306,7 +306,8 @@ public class BrokerModelTest extends TestCase {
 			}
 			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
 					Action.BUY, new Money(price),
-					new Money(price.subtract(new BigDecimal(1.0))), false);
+					new Money(price.subtract(new BigDecimal(1.0))), false,
+					null, null, null, null);
 			TestCase.assertNotNull(openOrder);
 			openOrder.setAverageFilledPrice(price);
 			openOrder.setFilledQuantity(openOrder.getQuantity());

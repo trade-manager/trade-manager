@@ -171,7 +171,7 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 								 * Create an open position order.
 								 */
 								createRiskOpenPosition(action, price,
-										priceStop, true);
+										priceStop, true, null, null, null, null);
 
 							} else {
 								_log.info("Rule Vwap 5 min Side Gap bar. Vwap not in direction of side. Symbol: "

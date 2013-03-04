@@ -61,7 +61,7 @@ public class DAOAccount extends DAODecode {
 	 * 
 	 * @param value
 	 *            String
-	 * @return DAOTradeAccount
+	 * @return DAOAccount
 	 */
 	public static DAOAccount newInstance(String displayName) {
 		final DAOAccount returnInstance = new DAOAccount();
@@ -72,7 +72,7 @@ public class DAOAccount extends DAODecode {
 	/**
 	 * Method newInstance.
 	 * 
-	 * @return DAOTradeAccount
+	 * @return DAOAccount
 	 */
 	public static DAOAccount newInstance() {
 

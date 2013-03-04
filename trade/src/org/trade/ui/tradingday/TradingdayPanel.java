@@ -146,7 +146,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private JSpinner spinnerStart = new JSpinner();
 	private JSpinner spinnerEnd = new JSpinner();
 	private Boolean connected = new Boolean(false);
-	private JEditorPane accountLabel = null;
+	private JEditorPane portfolioLabel = null;
 	private static final NumberFormat currencyFormater = NumberFormat
 			.getCurrencyInstance();
 	private final SimpleDateFormat dateFormater = new SimpleDateFormat(
@@ -277,9 +277,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					DATEFORMAT);
 			spinnerEnd.setEditor(de1);
 			spinnerEnd.setValue(tradingday.getOpen());
-			accountLabel = new JEditorPane("text/rtf", "");
-			accountLabel.setAutoscrolls(false);
-			accountLabel.setEditable(false);
+			portfolioLabel = new JEditorPane("text/rtf", "");
+			portfolioLabel.setAutoscrolls(false);
+			portfolioLabel.setEditable(false);
 
 			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -328,7 +328,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					.setPreferredScrollableViewportSize(tradingdayTableDimension);
 
 			JPanel jPanel8 = new JPanel(new BorderLayout());
-			jPanel8.add(accountLabel, BorderLayout.NORTH);
+			jPanel8.add(portfolioLabel, BorderLayout.NORTH);
 			jPanel8.add(jPanel3, BorderLayout.SOUTH);
 			jPanel2.add(jPanel8, BorderLayout.NORTH);
 			jPanel2.add(jScrollPane1, BorderLayout.CENTER);
@@ -866,74 +866,74 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					updateDate = portfolioAccount.getAccount().getUpdateDate();
 				}
 			}
-			accountLabel.setText(null);
-			CoreUtils.setDocumentText(accountLabel.getDocument(), "Portfolio:",
-					false, bold);
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
+			portfolioLabel.setText(null);
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
+					"Portfolio:", false, bold);
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
 					CoreUtils.padRight(portfolio.getName(), 15), false, null);
 
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
 					" Avail Bal:", false, bold);
-			CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(), CoreUtils
 					.padLeft(currencyFormater.format(availableFunds), 13),
 					false, null);
 
-			CoreUtils.setDocumentText(accountLabel.getDocument(), " Margin:",
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(), " Margin:",
 					false, bold);
 			CoreUtils
 					.setDocumentText(
-							accountLabel.getDocument(),
+							portfolioLabel.getDocument(),
 							CoreUtils.padLeft(
 									currencyFormater.format(buyingPower), 13),
 							false, null);
 
-			CoreUtils.setDocumentText(accountLabel.getDocument(), " Pos Val:",
-					false, bold);
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
+					" Pos Val:", false, bold);
 			CoreUtils.setDocumentText(
-					accountLabel.getDocument(),
+					portfolioLabel.getDocument(),
 					CoreUtils.padLeft(
 							currencyFormater.format(grossPositionValue), 13),
 					false, null);
 
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
 					" Realized P/L:", false, bold);
 			if (realizedPnL.doubleValue() < 0) {
-				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(realizedPnL), 13),
-						false, colorRedAttr);
+				CoreUtils.setDocumentText(portfolioLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
+								13), false, colorRedAttr);
 			} else if (realizedPnL.doubleValue() > 0) {
-				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(realizedPnL), 13),
-						false, colorGreenAttr);
+				CoreUtils.setDocumentText(portfolioLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
+								13), false, colorGreenAttr);
 			} else {
-				CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(realizedPnL), 13),
-						false, null);
+				CoreUtils.setDocumentText(portfolioLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPnL),
+								13), false, null);
 			}
-			CoreUtils.setDocumentText(accountLabel.getDocument(),
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
 					" Unrealized P/L:", false, bold);
 			if (unrealizedPnL.doubleValue() < 0) {
 				CoreUtils.setDocumentText(
-						accountLabel.getDocument(),
+						portfolioLabel.getDocument(),
 						CoreUtils.padLeft(
 								currencyFormater.format(unrealizedPnL), 13),
 						false, colorRedAttr);
 			} else if (unrealizedPnL.doubleValue() > 0) {
 				CoreUtils.setDocumentText(
-						accountLabel.getDocument(),
+						portfolioLabel.getDocument(),
 						CoreUtils.padLeft(
 								currencyFormater.format(unrealizedPnL), 13),
 						false, colorGreenAttr);
 			} else {
 				CoreUtils.setDocumentText(
-						accountLabel.getDocument(),
+						portfolioLabel.getDocument(),
 						CoreUtils.padLeft(
 								currencyFormater.format(unrealizedPnL), 13),
 						false, null);
 			}
-			CoreUtils.setDocumentText(accountLabel.getDocument(), " Date:",
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(), " Date:",
 					false, bold);
-			CoreUtils.setDocumentText(accountLabel.getDocument(), CoreUtils
+			CoreUtils.setDocumentText(portfolioLabel.getDocument(), CoreUtils
 					.padRight(dateFormater
 							.format((updateDate == null ? new Date()
 									: updateDate)), 17), false, null);

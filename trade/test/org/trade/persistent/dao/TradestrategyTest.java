@@ -45,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
@@ -196,6 +197,8 @@ public class TradestrategyTest extends TestCase {
 	public static Tradestrategy getTestTradestrategy() throws Exception {
 		String symbol = "TEST";
 		ContractHome contractHome = new ContractHome();
+		PortfolioHome portfolioHome = new PortfolioHome();
+
 		TradestrategyHome tradestrategyHome = new TradestrategyHome();
 		AspectHome aspectHome = new AspectHome();
 
@@ -203,7 +206,16 @@ public class TradestrategyTest extends TestCase {
 		Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
 		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 				.getObject();
-
+		portfolio = portfolioHome.findByName(portfolio.getName());
+		Account account = new Account("Test", "T123456",
+				AccountType.INDIVIDUAL, Currency.USD, true);
+		account.setAvailableFunds(new BigDecimal(25000));
+		account.setBuyingPower(new BigDecimal(100000));
+		account.setCashBalance(new BigDecimal(25000));
+		PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
+				account);
+		portfolio.getPortfolioAccounts().add(portfolioAccount);
+		portfolio = (Portfolio) aspectHome.persist(portfolio);
 		Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 				.getMostRecentTradingDay(new Date()));
 
@@ -255,6 +267,7 @@ public class TradestrategyTest extends TestCase {
 	public static void removeTestTradestrategy() throws Exception {
 		String symbol = "TEST";
 		ContractHome contractHome = new ContractHome();
+		PortfolioHome portfolioHome = new PortfolioHome();
 		TradestrategyHome tradestrategyHome = new TradestrategyHome();
 		AspectHome aspectHome = new AspectHome();
 		Contract contract = contractHome.findByUniqueKey(SECType.STOCK, symbol,
@@ -266,6 +279,11 @@ public class TradestrategyTest extends TestCase {
 					.getObject();
 			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 					.getObject();
+			portfolio = portfolioHome.findByName(portfolio.getName());
+			Account account = portfolio.getMasterAccount();
+			if (null != account) {
+				aspectHome.remove(account);
+			}
 			Tradestrategy tradestrategy = tradestrategyHome
 					.findTradestrategyByUniqueKeys(open, strategy.getName(),
 							contract.getIdContract(), portfolio.getName());

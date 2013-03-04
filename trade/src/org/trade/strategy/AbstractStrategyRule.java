@@ -52,7 +52,6 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -645,21 +644,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 				timeInForce, triggerMethod);
 		tradeOrder.setOcaGroupName(ocaGroupName);
 		tradeOrder.setTransmit(transmit);
-		Account account = tradePersistentModel
-				.findAccountByNumber(getTradestrategy().getPortfolio()
-						.getMasterAccount().getAccountNumber());
-		if (AccountType.INDIVIDUAL.equals(account.getAccountType())) {
-			tradeOrder.setAccountNumber(getTradestrategy().getPortfolio()
-					.getMasterAccount().getAccountNumber());
+		if (FAProfile != null) {
+			tradeOrder.setFAProfile(FAProfile);
 		} else {
-			if (FAProfile != null) {
-				tradeOrder.setFAProfile(FAProfile);
+			if (FAGroup != null) {
+				tradeOrder.setFAGroup(FAGroup);
+				tradeOrder.setFAMethod(FAMethod);
+				tradeOrder.setFAPercent(FAPercent);
 			} else {
-				if (FAGroup != null) {
-					tradeOrder.setFAGroup(FAGroup);
-					tradeOrder.setFAMethod(FAMethod);
-					tradeOrder.setFAPercent(FAPercent);
-				} else {
+				if (null != getTradestrategy().getPortfolio()
+						.getMasterAccount()) {
 					tradeOrder.setAccountNumber(getTradestrategy()
 							.getPortfolio().getMasterAccount()
 							.getAccountNumber());
@@ -723,7 +717,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 						.getTrade().getSide(), action, 0.01);
 			}
 		}
-
 		tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
 		tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
 		tradeOrder.setTransmit(transmit);
@@ -751,8 +744,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws PersistentModelException
 	 */
 	public TradeOrder createRiskOpenPosition(String action, Money entryPrice,
-			Money stopPrice, boolean transmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException {
+			Money stopPrice, boolean transmit, String FAProfile,
+			String FAGroup, String FAMethod, BigDecimal FAPercent)
+			throws ValueTypeException, BrokerModelException,
+			PersistentModelException {
 
 		/*
 		 * If no trade exists create the trade and set the side based on the
@@ -806,10 +801,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 						.doubleValue()
 						* entrylimit.getPercentOfMargin().doubleValue() / entryPrice
 						.getBigDecimalValue().doubleValue());
-				stop = risk / quantity;
-				stopPrice = (Side.BOT.equals(this.getTrade().getSide()) ? entryPrice
-						.subtract(new Money(stop)) : entryPrice.add(new Money(
-						stop)));
 			}
 		}
 
@@ -832,8 +823,22 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
 		tradeOrder.setTransmit(transmit);
-		tradeOrder.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccount().getAccountNumber());
+		if (FAProfile != null) {
+			tradeOrder.setFAProfile(FAProfile);
+		} else {
+			if (FAGroup != null) {
+				tradeOrder.setFAGroup(FAGroup);
+				tradeOrder.setFAMethod(FAMethod);
+				tradeOrder.setFAPercent(FAPercent);
+			} else {
+				if (null != getTradestrategy().getPortfolio()
+						.getMasterAccount()) {
+					tradeOrder.setAccountNumber(getTradestrategy()
+							.getPortfolio().getMasterAccount()
+							.getAccountNumber());
+				}
+			}
+		}
 		tradeOrder = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), tradeOrder);
 		this.getTrade().addTradeOrder(tradeOrder);
@@ -946,6 +951,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setOcaType(2);
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
+		if (null != getTradestrategy().getPortfolio().getMasterAccount()) {
+			orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
+					.getMasterAccount().getAccountNumber());
+
+		} else {
+			// TODO for AccountType.CORPORATE accounts provide the group/proflie
+		}
 		orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
 				.getMasterAccount().getAccountNumber());
 		orderTarget = getBrokerManager().onPlaceOrder(
@@ -963,8 +975,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setOcaType(2);
 		orderStop.setTransmit(stopTransmit);
 		orderStop.setOcaGroupName(ocaID);
-		orderStop.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccount().getAccountNumber());
+		if (null != getTradestrategy().getPortfolio().getMasterAccount()) {
+			orderStop.setAccountNumber(getTradestrategy().getPortfolio()
+					.getMasterAccount().getAccountNumber());
+
+		} else {
+			// TODO for AccountType.CORPORATE accounts provide the group/proflie
+		}
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
 		this.getTrade().addTradeOrder(orderStop);
@@ -1054,8 +1071,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setOcaType(2);
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
-		orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccount().getAccountNumber());
+		orderTarget.setAccountNumber(openPosition.getAccountNumber());
+		orderTarget.setFAGroup(openPosition.getFAGroup());
+		orderTarget.setFAProfile(openPosition.getFAProfile());
+		orderTarget.setFAMethod(openPosition.getFAMethod());
+		orderTarget.setFAPercent(openPosition.getFAPercent());
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
 		this.getTrade().addTradeOrder(orderTarget);
@@ -1070,8 +1090,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setOcaType(2);
 		orderStop.setTransmit(stopTransmit);
 		orderStop.setOcaGroupName(ocaID);
-		orderStop.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccount().getAccountNumber());
+		orderStop.setAccountNumber(openPosition.getAccountNumber());
+		orderStop.setFAGroup(openPosition.getFAGroup());
+		orderStop.setFAProfile(openPosition.getFAProfile());
+		orderStop.setFAMethod(openPosition.getFAMethod());
+		orderStop.setFAPercent(openPosition.getFAPercent());
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
 		this.getTrade().addTradeOrder(orderStop);

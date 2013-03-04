@@ -77,9 +77,15 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		Aspects items = tradePersistentModel
+		Aspects financialAccounts = tradePersistentModel
 				.findAspectsByClassName(FinancialAccount.class.getName());
-		for (Aspect aspect : items.getAspect()) {
+		for (Aspect aspect : financialAccounts.getAspect()) {
+			tradePersistentModel.removeAspect(aspect);
+		}
+		
+		Aspects accounts = tradePersistentModel
+				.findAspectsByClassName(Account.class.getName());
+		for (Aspect aspect : accounts.getAspect()) {
 			tradePersistentModel.removeAspect(aspect);
 		}
 	}

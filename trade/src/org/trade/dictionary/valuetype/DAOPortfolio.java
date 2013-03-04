@@ -61,7 +61,7 @@ public class DAOPortfolio extends DAODecode {
 	 * 
 	 * @param value
 	 *            String
-	 * @return DAOTradeAccount
+	 * @return DAOPortfolio
 	 */
 	public static DAOPortfolio newInstance(String displayName) {
 		final DAOPortfolio returnInstance = new DAOPortfolio();
@@ -72,7 +72,7 @@ public class DAOPortfolio extends DAODecode {
 	/**
 	 * Method newInstance.
 	 * 
-	 * @return DAOTradeAccount
+	 * @return DAOPortfolio
 	 */
 	public static DAOPortfolio newInstance() {
 

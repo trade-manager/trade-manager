@@ -179,7 +179,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 							 * Create an open position.
 							 */
 							createRiskOpenPosition(action, price, priceStop,
-									true);
+									true, null, null, null, null);
 
 						} else {
 							_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
