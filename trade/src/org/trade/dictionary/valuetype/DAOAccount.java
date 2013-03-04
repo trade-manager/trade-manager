@@ -53,7 +53,7 @@ public class DAOAccount extends DAODecode {
 	public static final String _COLUMN = "_COLUMN";
 
 	public DAOAccount() {
-		super(DECODE);
+		super(DECODE, true);
 	}
 
 	/**

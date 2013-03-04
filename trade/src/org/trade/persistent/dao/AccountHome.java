@@ -150,10 +150,10 @@ public class AccountHome {
 
 			for (PortfolioAccount item : items) {
 				if (defaultAccount.getIdAccount().equals(
-								item.getAccount().getIdAccount())) {
+						item.getAccount().getIdAccount())) {
 					item.getAccount().setIsDefault(true);
-					
-				}else{
+
+				} else {
 					item.getAccount().setIsDefault(false);
 				}
 				entityManager.persist(item);

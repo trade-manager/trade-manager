@@ -910,7 +910,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			String side = "";
 			String tier = "";
 			String status = "";
-			String account = "";
+			String portfolio = "";
 			String risk = "";
 			if (null != tradestrategy) {
 				symbol = tradestrategy.getContract().getSymbol();
@@ -921,8 +921,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				status = (tradestrategy.getStatus() == null ? ""
 						: TradestrategyStatus.newInstance(
 								tradestrategy.getStatus()).getDisplayName());
-				account = tradestrategy.getPortfolio().getMasterAccount()
-						.getAccountNumber();
+				portfolio = tradestrategy.getPortfolio().getName();
 				risk = currencyFormater
 						.format((tradestrategy.getRiskAmount() == null ? 0
 								: tradestrategy.getRiskAmount().doubleValue()));
@@ -992,10 +991,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
 					CoreUtils.padRight(status, 20), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Account:",
-					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padRight(account, 15), false, null);
+					" Portfolio:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padRight(portfolio, 15), false, null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Risk:",
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),

@@ -870,7 +870,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
 					"Portfolio:", false, bold);
 			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
-					CoreUtils.padRight(portfolio.getName(), 15), false, null);
+					CoreUtils.padRight(portfolio.getName(), 12), false, null);
 
 			CoreUtils.setDocumentText(portfolioLabel.getDocument(),
 					" Avail Bal:", false, bold);

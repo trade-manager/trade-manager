@@ -1808,18 +1808,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		getProgressBar().setValue(progress);
 		if (getProgressBar().getMaximum() > 0) {
-			String message = String.format("Completed %d%%.\n", progress);
+			String message = String.format("Completed %d%%.", progress);
 			setStatusBarMessage(message, BasePanel.PROGRESS);
 		}
 
 		if (worker.isDone() || (progress == 100)) {
 			Toolkit.getDefaultToolkit().beep();
 			if (worker.isCancelled()) {
-				setStatusBarMessage("Process canceled.\n",
-						BasePanel.INFORMATION);
+				setStatusBarMessage("Process canceled.", BasePanel.INFORMATION);
 			} else {
-				setStatusBarMessage("Process completed.\n",
-						BasePanel.INFORMATION);
+				setStatusBarMessage("Process completed.", BasePanel.INFORMATION);
 				getProgressBar().setMaximum(0);
 				getProgressBar().setMinimum(0);
 			}
@@ -1984,7 +1982,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				while ((waitTime < 601000) && !this.isCancelled()) {
 					String message = "Please wait "
 							+ (10 - (waitTime / 60000))
-							+ " minutes as there are more than 60 data requests.\n";
+							+ " minutes as there are more than 60 data requests.";
 					publish(message);
 					waitTime = waitTime + 1000;
 					Thread.sleep(1000);
