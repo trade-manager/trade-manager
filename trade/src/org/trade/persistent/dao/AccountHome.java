@@ -149,12 +149,14 @@ public class AccountHome {
 			List<PortfolioAccount> items = typedQuery.getResultList();
 
 			for (PortfolioAccount item : items) {
-				if (item.getAccount().getIsDefault()
-						&& !defaultAccount.getIdAccount().equals(
+				if (defaultAccount.getIdAccount().equals(
 								item.getAccount().getIdAccount())) {
+					item.getAccount().setIsDefault(true);
+					
+				}else{
 					item.getAccount().setIsDefault(false);
-					entityManager.persist(item);
 				}
+				entityManager.persist(item);
 			}
 			entityManager.getTransaction().commit();
 		} catch (RuntimeException re) {

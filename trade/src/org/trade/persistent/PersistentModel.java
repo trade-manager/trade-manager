@@ -104,7 +104,7 @@ public interface PersistentModel {
 	 *            Portfolio
 	 * @throws PersistentModelException
 	 */
-	Account resetDefaultAccount(Portfolio portfolio, Account account)
+	void resetDefaultAccount(Portfolio portfolio, Account account)
 			throws PersistentModelException;
 
 	/**

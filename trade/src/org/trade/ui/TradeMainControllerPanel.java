@@ -1211,23 +1211,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 
-			if (containsAccount) {
-				if (!masterAccount.getIsDefault()) {
-					int result = JOptionPane.showConfirmDialog(
-							this.getFrame(),
-							"Do you want to make account: "
-									+ masterAccount.getAccountNumber()
-									+ " the default account?", "Information",
-							JOptionPane.YES_NO_OPTION);
-					if (result == JOptionPane.YES_OPTION) {
-						masterAccount.setIsDefault(true);
-						masterAccount = m_tradePersistentModel
-								.resetDefaultAccount(defaultPortfolio,
-										masterAccount);
-					}
-				}
-			} else {
-
+			if (!containsAccount) {
 				if (null == defaultPortfolio) {
 					int result = JOptionPane.showConfirmDialog(this.getFrame(),
 							"Do you want to create a Portfolio for  account: "
@@ -1262,12 +1246,26 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 			}
-
+			if (!masterAccount.getIsDefault()) {
+				int result = JOptionPane.showConfirmDialog(
+						this.getFrame(),
+						"Do you want to make account: "
+								+ masterAccount.getAccountNumber()
+								+ " the default account?", "Information",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					m_tradePersistentModel.resetDefaultAccount(
+							defaultPortfolio, masterAccount);
+				}
+			}
 			tradingdayPanel.doWindowActivated();
+			defaultPortfolio = m_tradePersistentModel
+					.findPortfolioByName(defaultPortfolio.getName());
 			for (PortfolioAccount item : defaultPortfolio
 					.getPortfolioAccounts()) {
-				m_brokerModel.onSubscribeAccountUpdates(true, item.getAccount()
-						.getAccountNumber());
+				if (item.getAccount().getIsDefault())
+					m_brokerModel.onSubscribeAccountUpdates(true, item
+							.getAccount().getAccountNumber());
 			}
 
 			this.setStatusBarMessage("Connected to IB Account: "

@@ -68,6 +68,7 @@ public class PortfolioHome {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Portfolio instance = entityManager.find(Portfolio.class, id);
+			instance.getPortfolioAccounts().size();
 			entityManager.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {

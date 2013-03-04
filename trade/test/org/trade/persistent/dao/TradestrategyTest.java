@@ -50,7 +50,6 @@ import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
-import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.Exchange;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
@@ -245,7 +244,7 @@ public class TradestrategyTest extends TestCase {
 				ChartDays.TWO_DAYS, BarSize.FIVE_MIN);
 		tradingday.addTradestrategy(tradestrategy);
 		tradingdayHome.persist(tradingday);
-		return tradestrategy;
+		return tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
 	}
 
 	/**
@@ -265,11 +264,11 @@ public class TradestrategyTest extends TestCase {
 					.getMostRecentTradingDay(new Date()));
 			Strategy strategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
-			Account account = (Account) DAOAccount.newInstance().getObject();
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
+					.getObject();
 			Tradestrategy tradestrategy = tradestrategyHome
 					.findTradestrategyByUniqueKeys(open, strategy.getName(),
-							contract.getIdContract(),
-							account.getAccountNumber());
+							contract.getIdContract(), portfolio.getName());
 			if (null != tradestrategy) {
 				aspectHome.remove(tradestrategy);
 				aspectHome.remove(tradestrategy.getContract());

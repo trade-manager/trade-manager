@@ -843,16 +843,25 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			Date updateDate = new Date();
 			for (PortfolioAccount portfolioAccount : portfolio
 					.getPortfolioAccounts()) {
-				availableFunds.add(portfolioAccount.getAccount()
-						.getAvailableFunds());
-				buyingPower.add(portfolioAccount.getAccount()
-						.getAvailableFunds());
-				grossPositionValue.add(portfolioAccount.getAccount()
-						.getAvailableFunds());
-				realizedPnL.add(portfolioAccount.getAccount()
-						.getAvailableFunds());
-				unrealizedPnL.add(portfolioAccount.getAccount()
-						.getAvailableFunds());
+				availableFunds = availableFunds
+						.add((portfolioAccount.getAccount().getAvailableFunds() == null ? new BigDecimal(
+								0) : portfolioAccount.getAccount()
+								.getAvailableFunds()));
+				buyingPower = buyingPower.add((portfolioAccount.getAccount()
+						.getBuyingPower() == null ? new BigDecimal(0)
+						: portfolioAccount.getAccount().getBuyingPower()));
+				grossPositionValue = grossPositionValue
+						.add((portfolioAccount.getAccount()
+								.getGrossPositionValue() == null ? new BigDecimal(
+								0) : portfolioAccount.getAccount()
+								.getGrossPositionValue()));
+				realizedPnL = realizedPnL.add((portfolioAccount.getAccount()
+						.getRealizedPnL() == null ? new BigDecimal(0)
+						: portfolioAccount.getAccount().getRealizedPnL()));
+				unrealizedPnL = unrealizedPnL
+						.add((portfolioAccount.getAccount().getUnrealizedPnL() == null ? new BigDecimal(
+								0) : portfolioAccount.getAccount()
+								.getUnrealizedPnL()));
 				if (portfolioAccount.getAccount().getIsDefault()) {
 					updateDate = portfolioAccount.getAccount().getUpdateDate();
 				}

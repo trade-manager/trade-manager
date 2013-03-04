@@ -554,13 +554,17 @@ public class TradePersistentModelTest extends TestCase {
 					.persistAspect(portfolio);
 			account = this.tradePersistentModel.findAccountByNumber(account
 					.getAccountNumber());
-			account = this.tradePersistentModel.resetDefaultAccount(
+			this.tradePersistentModel.resetDefaultAccount(
 					this.tradestrategy.getPortfolio(), account);
+			account = this.tradePersistentModel.findAccountByNumber(account
+					.getAccountNumber());
 			TestCase.assertTrue(account.getIsDefault());
 			defaultAccount = this.tradePersistentModel
 					.findAccountByNumber(defaultAccount.getAccountNumber());
-			defaultAccount = this.tradePersistentModel.resetDefaultAccount(
+			this.tradePersistentModel.resetDefaultAccount(
 					this.tradestrategy.getPortfolio(), defaultAccount);
+			account = this.tradePersistentModel.findAccountByNumber(account
+					.getAccountNumber());
 			TestCase.assertTrue(defaultAccount.getIsDefault());
 			for (PortfolioAccount pa : portfolio.getPortfolioAccounts()) {
 				if (pa.getAccount().getAccountNumber()

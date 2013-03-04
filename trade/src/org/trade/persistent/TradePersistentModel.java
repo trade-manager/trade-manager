@@ -683,14 +683,11 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#resetDefaultAccount(Account)
 	 */
-	public Account resetDefaultAccount(Portfolio portfolio, Account account)
+	public void resetDefaultAccount(Portfolio portfolio, Account account)
 			throws PersistentModelException {
 
 		try {
 			m_accountHome.resetDefaultAccount(portfolio, account);
-			account.setIsDefault(true);
-			return (Account) m_aspectHome.persist(account);
-
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error setting default account. Please refresh before save.");
