@@ -68,8 +68,10 @@ import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.persistent.PersistentModel;
+import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -2133,64 +2135,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				_log.info("Profiles: /n" + xml);
 				final TWSAllocationRequest request = new TWSAllocationRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-
-				for (Aspect aspect : aspects.getAspect()) {
-					PortfolioAccount item = (PortfolioAccount) aspect;
-
-					PortfolioAccount portfolioAccount = m_tradePersistentModel
-							.findPortfolioAccountByNameAndAccountNumber(item
-									.getPortfolio().getName(), item
-									.getAccount().getAccountNumber());
-					if (null == portfolioAccount) {
-						portfolioAccount = (PortfolioAccount) m_tradePersistentModel
-								.persistAspect(item);
-					} else {
-						if (!portfolioAccount
-								.getPortfolio()
-								.getAllocationMethod()
-								.equals(item.getPortfolio()
-										.getAllocationMethod())) {
-							portfolioAccount.getPortfolio()
-									.setAllocationMethod(
-											item.getPortfolio()
-													.getAllocationMethod());
-							portfolioAccount = (PortfolioAccount) m_tradePersistentModel
-									.persistAspect(item);
-						}
-					}
-				}
+				persistPortfolioAccount(aspects);
 				break;
 			}
 			case EClientSocket.GROUPS: {
 				_log.info("Groups: /n" + xml);
 				final TWSGroupRequest request = new TWSGroupRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-
-				for (Aspect aspect : aspects.getAspect()) {
-					PortfolioAccount item = (PortfolioAccount) aspect;
-
-					PortfolioAccount portfolioAccount = m_tradePersistentModel
-							.findPortfolioAccountByNameAndAccountNumber(item
-									.getPortfolio().getName(), item
-									.getAccount().getAccountNumber());
-					if (null == portfolioAccount) {
-						portfolioAccount = (PortfolioAccount) m_tradePersistentModel
-								.persistAspect(item);
-					} else {
-						if (!portfolioAccount
-								.getPortfolio()
-								.getAllocationMethod()
-								.equals(item.getPortfolio()
-										.getAllocationMethod())) {
-							portfolioAccount.getPortfolio()
-									.setAllocationMethod(
-											item.getPortfolio()
-													.getAllocationMethod());
-							portfolioAccount = (PortfolioAccount) m_tradePersistentModel
-									.persistAspect(item);
-						}
-					}
-				}
+				persistPortfolioAccount(aspects);
 				break;
 			}
 			default: {
@@ -2531,6 +2483,40 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void commissionReport(CommissionReport commsReport) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * Method persistPortfolioAccount.
+	 * 
+	 * @param aspects
+	 *            Aspects
+	 */
+
+	private void persistPortfolioAccount(Aspects aspects)
+			throws PersistentModelException {
+
+		for (Aspect aspect : aspects.getAspect()) {
+			PortfolioAccount item = (PortfolioAccount) aspect;
+
+			Account account = m_tradePersistentModel.findAccountByNumber(item
+					.getAccount().getAccountNumber());
+			if (null == account) {
+				item.getAccount().setAccountType(AccountType.CORPORATION);
+				item.getAccount().setCurrency(Currency.USD);
+				item.getAccount().setName(item.getAccount().getAccountNumber());
+			} else {
+				item.setAccount(account);
+			}
+
+			Portfolio portfolio = m_tradePersistentModel
+					.findPortfolioByName(item.getPortfolio().getName());
+			if (null != portfolio) {
+				portfolio.setAllocationMethod(item.getPortfolio()
+						.getAllocationMethod());
+				item.setPortfolio(portfolio);
+			}
+			m_tradePersistentModel.persistAspect(item.getPortfolio());
+		}
 	}
 
 	/**

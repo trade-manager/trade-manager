@@ -343,11 +343,7 @@ public class TradePersistentModel implements PersistentModel {
 	 */
 	public Portfolio findPortfolioByName(String name)
 			throws PersistentModelException {
-		Portfolio instance = m_portfolioHome.findByName(name);
-		if (null == instance)
-			throw new PersistentModelException("Portfolio not found for name: "
-					+ name);
-		return instance;
+		return m_portfolioHome.findByName(name);
 	}
 
 	/**

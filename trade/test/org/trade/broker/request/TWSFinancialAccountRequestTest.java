@@ -51,6 +51,7 @@ import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.ui.TradeAppLoadConfig;
 
@@ -233,25 +234,30 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 	private void persistPortfolioAccount(Aspects aspects)
 			throws PersistentModelException, InvocationTargetException,
 			IllegalAccessException {
+
 		for (Aspect aspect : aspects.getAspect()) {
 			PortfolioAccount item = (PortfolioAccount) aspect;
 
-			PortfolioAccount portfolioAccount = tradePersistentModel
-					.findPortfolioAccountByNameAndAccountNumber(item
-							.getPortfolio().getName(), item.getAccount()
-							.getAccountNumber());
-			if (null == portfolioAccount) {
-				portfolioAccount = (PortfolioAccount) tradePersistentModel
-						.persistAspect(item);
+			Account account = tradePersistentModel.findAccountByNumber(item
+					.getAccount().getAccountNumber());
+			if (null == account) {
+				item.getAccount().setAccountType(AccountType.CORPORATION);
+				item.getAccount().setCurrency(Currency.USD);
+				item.getAccount().setName(item.getAccount().getAccountNumber());
 			} else {
-				if (!portfolioAccount.getPortfolio().getAllocationMethod()
-						.equals(item.getPortfolio().getAllocationMethod())) {
-					portfolioAccount.getPortfolio().setAllocationMethod(
-							item.getPortfolio().getAllocationMethod());
-					portfolioAccount = (PortfolioAccount) tradePersistentModel
-							.persistAspect(item);
-				}
+				account.getPortfolioAccounts().clear();
+				item.setAccount(account);
 			}
+
+			Portfolio portfolio = tradePersistentModel.findPortfolioByName(item
+					.getPortfolio().getName());
+			if (null != portfolio) {
+				portfolio.setAllocationMethod(item.getPortfolio()
+						.getAllocationMethod());
+				item.setPortfolio(portfolio);
+			}
+
+			tradePersistentModel.persistAspect(item.getPortfolio());
 			_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
 		}
 	}
