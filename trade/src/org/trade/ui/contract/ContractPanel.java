@@ -97,7 +97,6 @@ import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
@@ -206,9 +205,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
 					new TradeOrderTableRowListener());
-			m_tradeOrderTable.setDefaultEditor(FinancialAccount.class,
+			m_tradeOrderTable.setDefaultEditor(TradeOrder.class,
 					new ButtonEditor(propertiesButton));
-			m_tradeOrderTable.setDefaultRenderer(FinancialAccount.class,
+			m_tradeOrderTable.setDefaultRenderer(TradeOrder.class,
 					new ButtonRenderer(BaseUIPropertyCodes.PROPERTIES));
 			m_treeModel = new TradingdayTreeModel(m_tradingdays);
 			m_tree = new Tree(m_treeModel);
@@ -1180,9 +1179,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						if (!Decode.NONE.equals(((DAOProfile) e.getItem())
 								.getDisplayName())) {
 							tradeOrder
-									.setFAProfile(((FinancialAccount) ((DAOProfile) e
+									.setFAProfile(((TradeOrder) ((DAOProfile) e
 											.getItem()).getObject())
-											.getProfileName());
+											.getFAProfile());
 						} else {
 							tradeOrder.setFAProfile(null);
 						}
@@ -1202,10 +1201,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if (!Decode.NONE.equals(((DAOGroup) e.getItem())
 								.getDisplayName())) {
-							tradeOrder
-									.setFAGroup(((FinancialAccount) ((DAOGroup) e
-											.getItem()).getObject())
-											.getGroupName());
+							tradeOrder.setFAGroup(((TradeOrder) ((DAOGroup) e
+									.getItem()).getObject()).getFAGroup());
 						} else {
 							tradeOrder.setFAGroup(null);
 						}

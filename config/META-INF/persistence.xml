@@ -7,13 +7,14 @@
 		<!-- <jta-data-source>java:/DefaultDS</jta-data-source> <mapping-file>ormap.xml</mapping-file> 
 			<jar-file>trademanager-2.10.jar</jar-file> -->
 		<class>org.trade.persistent.dao.Account</class>
-		<class>org.trade.persistent.dao.AccountAllocation</class>
-		<class>org.trade.persistent.dao.Contract</class>
-		<class>org.trade.persistent.dao.Candle</class>
+	      <class>org.trade.persistent.dao.Candle</class>
+		<class>org.trade.persistent.dao.CodeType</class>		
+		<class>org.trade.persistent.dao.CodeAttribute</class>
+		<class>org.trade.persistent.dao.CodeValue</class>
+		<class>org.trade.persistent.dao.Contract</class>	
 		<class>org.trade.persistent.dao.Entrylimit</class>
-		<class>org.trade.persistent.dao.FinancialAccount</class>
-	    <class>org.trade.persistent.dao.Portfolio</class>
-        <class>org.trade.persistent.dao.PortfolioAccount</class>
+	      <class>org.trade.persistent.dao.Portfolio</class>
+            <class>org.trade.persistent.dao.PortfolioAccount</class>
 		<class>org.trade.persistent.dao.Strategy</class>
 		<class>org.trade.persistent.dao.Trade</class>
 		<class>org.trade.persistent.dao.TradeOrder</class>
@@ -23,11 +24,8 @@
 		<class>org.trade.persistent.dao.Tradingday</class>
 		<class>org.trade.persistent.dao.Tradestrategy</class>
 		<class>org.trade.persistent.dao.TradestrategyId</class>
-		<class>org.trade.persistent.dao.Rule</class>
-		<class>org.trade.persistent.dao.CodeType</class>		
-		<class>org.trade.persistent.dao.CodeAttribute</class>
-		<class>org.trade.persistent.dao.CodeValue</class>	
-	    <class>org.trade.strategy.data.IndicatorSeries</class>	    
+		<class>org.trade.persistent.dao.Rule</class>	
+	      <class>org.trade.strategy.data.IndicatorSeries</class>	    
 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 		<validation-mode>CALLBACK</validation-mode>
 		<properties>

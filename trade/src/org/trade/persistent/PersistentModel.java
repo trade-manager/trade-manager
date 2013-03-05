@@ -42,8 +42,8 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
@@ -210,28 +210,6 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method findFinancialAccountByGroupName.
-	 * 
-	 * @param groupName
-	 *            String
-	 * @return FinancialAccount
-	 * @throws PersistentModelException
-	 */
-	FinancialAccount findFinancialAccountByGroupName(String groupName)
-			throws PersistentModelException;
-
-	/**
-	 * Method findFinancialAccountByProfileName.
-	 * 
-	 * @param profileName
-	 *            String
-	 * @return FinancialAccount
-	 * @throws PersistentModelException
-	 */
-	FinancialAccount findFinancialAccountByProfileName(String profileName)
-			throws PersistentModelException;
-
-	/**
 	 * Method findTradestrategyById.
 	 * 
 	 * @param tradestrategy
@@ -325,12 +303,15 @@ public interface PersistentModel {
 	/**
 	 * Method findPortfolioByNumber.
 	 * 
+	 * @param portfolioName
+	 *            String
 	 * @param accountNumber
 	 *            String
-	 * @return Portfolio
+	 * @return PortfolioAccount
 	 * @throws PersistentModelException
 	 */
-	Portfolio findPortfolioByMasterAccountNumber(String accountNumber)
+	PortfolioAccount findPortfolioAccountByNameAndAccountNumber(
+			String portfolioName, String accountNumber)
 			throws PersistentModelException;
 
 	/**

@@ -68,10 +68,9 @@ import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.dao.AccountAllocation;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
@@ -254,8 +253,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void onReqFinancialAccount() throws BrokerModelException {
 		try {
 			if (m_client.isConnected()) {
+				/*
+				 * Delete all the FinancialAccount/AllocationAccount and
+				 * re-populate via the xml.
+				 * 
+				 * TODO check to see it this method is call only one on login or
+				 * is it called for every account. If so this needs to be
+				 * changed so that we only call this method once.
+				 */
 				Aspects items = m_tradePersistentModel
-						.findAspectsByClassName(FinancialAccount.class
+						.findAspectsByClassName(PortfolioAccount.class
 								.getName());
 				for (Aspect aspect : items.getAspect()) {
 					m_tradePersistentModel.removeAspect(aspect);
@@ -1808,29 +1815,37 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Account account = m_accountRequests.get(accountNumber);
 				if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
 					account.setAccountType(value);
+					account.setDirty(true);
 				}
 				if (account.getCurrency().equals(currency)) {
 					if (key.equals(TWSBrokerModel.AVAILABLE_FUNDS)) {
 						account.setAvailableFunds(new BigDecimal(value));
+						account.setDirty(true);
 					}
 					if (key.equals(TWSBrokerModel.BUYING_POWER)) {
 						account.setBuyingPower(new BigDecimal(value));
+						account.setDirty(true);
 					}
 					if (key.equals(TWSBrokerModel.CASH_BALANCE)) {
 						account.setCashBalance(new BigDecimal(value));
+						account.setDirty(true);
 					}
 					if (key.equals(TWSBrokerModel.CURRENCY)) {
 						account.setCurrency(value);
+						account.setDirty(true);
 					}
 					if (key.equals(TWSBrokerModel.GROSS_POSITION_VALUE)
 							|| key.equals(TWSBrokerModel.STOCK_MKT_VALUE)) {
 						account.setGrossPositionValue(new BigDecimal(value));
+						account.setDirty(true);
 					}
 					if (key.equals(TWSBrokerModel.REALIZED_P_L)) {
 						account.setRealizedPnL(new BigDecimal(value));
+						account.setDirty(true);
 					}
 					if (key.equals(TWSBrokerModel.UNREALIZED_P_L)) {
 						account.setUnrealizedPnL(new BigDecimal(value));
+						account.setDirty(true);
 					}
 				}
 			}
@@ -1873,20 +1888,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#accountDownloadEnd(String)
 	 */
 	public void accountDownloadEnd(String accountNumber) {
-		_log.info("accountDownloadEnd:" + accountNumber);
+		_log.info("accountDownloadEnd: " + accountNumber);
 		try {
-			Account account = m_accountRequests.get(accountNumber);
-			if (AccountType.CORPORATION.equals(account.getAccountType())) {
-				/*
-				 * Delete all the FinancialAccount/AllocationAccount and
-				 * re-populate via the xml.
-				 * 
-				 * TODO check to see it this method is call only one on login or
-				 * is it called for every account. If so this needs to be
-				 * changed so that we only call this method once.
-				 */
+			boolean allDone = true;
+			boolean corporate = false;
+			/*
+			 * If all accounts are clean i.e downloaded and saved and at least
+			 * one account is a co-oporate then we get the FA Groups, Profiles
+			 * and Aliases.
+			 */
+			for (Account account : m_accountRequests.values()) {
+				if (AccountType.CORPORATION.equals(account.getAccountType()))
+					corporate = true;
+
+				if (account.isDirty()) {
+					allDone = false;
+					break;
+				}
+			}
+
+			if (allDone && corporate) {
 				onReqFinancialAccount();
 			}
+
 		} catch (Exception ex) {
 			error(0,
 					3315,
@@ -1914,6 +1938,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void nextValidId(int orderId) {
 		try {
+			_log.info("nextValidId: " + orderId);
 			int maxKey = m_tradePersistentModel.findTradeOrderByMaxKey();
 			if (maxKey < 100000) {
 				maxKey = 100000;
@@ -2110,26 +2135,28 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 
 				for (Aspect aspect : aspects.getAspect()) {
-					FinancialAccount account = (FinancialAccount) aspect;
-					for (AccountAllocation item : account
-							.getAccountAllocation()) {
-						FinancialAccount parent = m_tradePersistentModel
-								.findFinancialAccountByProfileName(item
-										.getFinancialAccount().getProfileName());
-						if (null == parent) {
-							parent = (FinancialAccount) m_tradePersistentModel
-									.persistAspect(item.getFinancialAccount());
-						} else {
-							if (!parent.getType().equals(
-									item.getFinancialAccount().getType())) {
-								parent.setType(item.getFinancialAccount()
-										.getType());
-								parent = (FinancialAccount) m_tradePersistentModel
-										.persistAspect(parent);
-							}
+					PortfolioAccount item = (PortfolioAccount) aspect;
+
+					PortfolioAccount portfolioAccount = m_tradePersistentModel
+							.findPortfolioAccountByNameAndAccountNumber(item
+									.getPortfolio().getName(), item
+									.getAccount().getAccountNumber());
+					if (null == portfolioAccount) {
+						portfolioAccount = (PortfolioAccount) m_tradePersistentModel
+								.persistAspect(item);
+					} else {
+						if (!portfolioAccount
+								.getPortfolio()
+								.getAllocationMethod()
+								.equals(item.getPortfolio()
+										.getAllocationMethod())) {
+							portfolioAccount.getPortfolio()
+									.setAllocationMethod(
+											item.getPortfolio()
+													.getAllocationMethod());
+							portfolioAccount = (PortfolioAccount) m_tradePersistentModel
+									.persistAspect(item);
 						}
-						item.setFinancialAccount(parent);
-						m_tradePersistentModel.persistAspect(item);
 					}
 				}
 				break;
@@ -2140,27 +2167,28 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 
 				for (Aspect aspect : aspects.getAspect()) {
-					FinancialAccount account = (FinancialAccount) aspect;
-					for (AccountAllocation item : account
-							.getAccountAllocation()) {
-						FinancialAccount parent = m_tradePersistentModel
-								.findFinancialAccountByGroupName(item
-										.getFinancialAccount().getGroupName());
-						if (null == parent) {
-							parent = (FinancialAccount) m_tradePersistentModel
-									.persistAspect(item.getFinancialAccount());
-						} else {
-							if (!parent.getMethod().equals(
-									item.getFinancialAccount().getMethod())) {
-								parent.setMethod(item.getFinancialAccount()
-										.getMethod());
-								parent = (FinancialAccount) m_tradePersistentModel
-										.persistAspect(parent);
-							}
+					PortfolioAccount item = (PortfolioAccount) aspect;
 
+					PortfolioAccount portfolioAccount = m_tradePersistentModel
+							.findPortfolioAccountByNameAndAccountNumber(item
+									.getPortfolio().getName(), item
+									.getAccount().getAccountNumber());
+					if (null == portfolioAccount) {
+						portfolioAccount = (PortfolioAccount) m_tradePersistentModel
+								.persistAspect(item);
+					} else {
+						if (!portfolioAccount
+								.getPortfolio()
+								.getAllocationMethod()
+								.equals(item.getPortfolio()
+										.getAllocationMethod())) {
+							portfolioAccount.getPortfolio()
+									.setAllocationMethod(
+											item.getPortfolio()
+													.getAllocationMethod());
+							portfolioAccount = (PortfolioAccount) m_tradePersistentModel
+									.persistAspect(item);
 						}
-						item.setFinancialAccount(parent);
-						m_tradePersistentModel.persistAspect(item);
 					}
 				}
 				break;

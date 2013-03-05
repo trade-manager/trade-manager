@@ -51,7 +51,6 @@ import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Entrylimit;
-import org.trade.persistent.dao.FinancialAccount;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
@@ -318,12 +317,11 @@ public class TradeOrderTableModel extends TableModel {
 			break;
 		}
 		case 14: {
-			if (value instanceof FinancialAccount) {
-				element.setFAProfile(((FinancialAccount) value)
-						.getProfileName());
-				element.setFAGroup(((FinancialAccount) value).getGroupName());
-				element.setFAMethod(((FinancialAccount) value).getMethod());
-				element.setFAPercent(((FinancialAccount) value).getPercent());
+			if (value instanceof TradeOrder) {
+				element.setFAProfile(((TradeOrder) value).getFAProfile());
+				element.setFAGroup(((TradeOrder) value).getFAGroup());
+				element.setFAMethod(((TradeOrder) value).getFAMethod());
+				element.setFAPercent(((TradeOrder) value).getFAPercent());
 			} else {
 				element.setFAProfile(null);
 				element.setFAGroup(null);
@@ -491,16 +489,16 @@ public class TradeOrderTableModel extends TableModel {
 		}
 		newRow.addElement(new Quantity(element.getFilledQuantity()));
 		newRow.addElement(new Money(element.getStopPrice()));
-		FinancialAccount financialAccount = new FinancialAccount();
-		financialAccount.setIdFinancialAccount(1);
+		TradeOrder tradeOrder = new TradeOrder();
+		tradeOrder.setIdTradeOrder(1);
 		if (null == element.getFAProfile()) {
-			newRow.addElement(financialAccount);
+			newRow.addElement(tradeOrder);
 		} else {
-			financialAccount.setProfileName(element.getFAProfile());
-			financialAccount.setGroupName(element.getFAGroup());
-			financialAccount.setMethod(element.getFAMethod());
-			financialAccount.setPercent(element.getFAPercent());
-			newRow.addElement(financialAccount);
+			tradeOrder.setFAProfile(element.getFAProfile());
+			tradeOrder.setFAGroup(element.getFAGroup());
+			tradeOrder.setFAMethod(element.getFAMethod());
+			tradeOrder.setFAPercent(element.getFAPercent());
+			newRow.addElement(tradeOrder);
 		}
 	}
 }

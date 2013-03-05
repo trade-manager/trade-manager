@@ -8,8 +8,9 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.xml.SaxMapper;
 import org.trade.core.xml.TagTracker;
 import org.trade.core.xml.XMLModelException;
-import org.trade.persistent.dao.AccountAllocation;
-import org.trade.persistent.dao.FinancialAccount;
+import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 
 import org.xml.sax.Attributes;
 
@@ -45,7 +46,8 @@ public class TWSGroupRequest extends SaxMapper {
 		final TagTracker groupsTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				FinancialAccount aspect = new FinancialAccount();
+				PortfolioAccount aspect = new PortfolioAccount(new Portfolio(), new Account());
+				
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}
@@ -68,8 +70,8 @@ public class TWSGroupRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
-				temp.setGroupName(value);
+				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
+				temp.getPortfolio().setName(value);
 			}
 		};
 
@@ -84,8 +86,8 @@ public class TWSGroupRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
-				temp.setMethod(value);
+				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
+				temp.getPortfolio().setAllocationMethod(value);
 			}
 		};
 
@@ -95,7 +97,7 @@ public class TWSGroupRequest extends SaxMapper {
 		final TagTracker listOfAcctsTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
+				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
 				m_stack.push(temp);
 			}
 
@@ -117,11 +119,8 @@ public class TWSGroupRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				AccountAllocation aspect = new AccountAllocation();
-				aspect.setAccountNumber(value);
-				final FinancialAccount temp = (FinancialAccount) m_stack.peek();
-				aspect.setFinancialAccount(temp);
-				temp.getAccountAllocation().add(aspect);
+				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
+				temp.getAccount().setAccountNumber(value);
 			}
 		};
 

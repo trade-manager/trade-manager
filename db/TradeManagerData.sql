@@ -2,8 +2,6 @@
 
 USE ${sql.database};
 
-DELETE FROM accountallocation WHERE idAccountAllocation >='0';
-DELETE FROM financialaccount WHERE idFinancialAccount >='0';
 DELETE FROM tradeorderfill WHERE idTradeOrderFill >='0';
 DELETE FROM tradeorder WHERE idTradeOrder>='0';
 DELETE FROM trade WHERE idTrade >='0';

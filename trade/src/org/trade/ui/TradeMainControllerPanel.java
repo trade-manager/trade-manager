@@ -1263,9 +1263,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.findPortfolioByName(defaultPortfolio.getName());
 			for (PortfolioAccount item : defaultPortfolio
 					.getPortfolioAccounts()) {
-				if (item.getAccount().getIsDefault())
-					m_brokerModel.onSubscribeAccountUpdates(true, item
-							.getAccount().getAccountNumber());
+				m_brokerModel.onSubscribeAccountUpdates(true, item.getAccount()
+						.getAccountNumber());
 			}
 
 			this.setStatusBarMessage("Connected to IB Account: "
@@ -1294,8 +1293,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			portfolio = m_tradePersistentModel.findPortfolioById(portfolio
 					.getId());
 			tradingdayPanel.setPortfolioLabel(portfolio);
-			this.setStatusBarMessage("Connected to IB Account: "
-					+ accountNumber, BasePanel.INFORMATION);
+			this.setStatusBarMessage("Account: " + accountNumber
+					+ " information updated.", BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);

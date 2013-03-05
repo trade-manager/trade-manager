@@ -54,9 +54,8 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CandleHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
-import org.trade.persistent.dao.FinancialAccount;
-import org.trade.persistent.dao.FinancialAccountHome;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.PortfolioHome;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
@@ -95,7 +94,6 @@ public class TradePersistentModel implements PersistentModel {
 	private PortfolioHome m_portfolioHome = null;
 	private TradestrategyHome m_tradestrategyHome = null;
 	private CandleHome m_candleHome = null;
-	private FinancialAccountHome m_financialAccountHome = null;
 	private AspectHome m_aspectHome = null;
 	private RuleHome m_ruleHome = null;
 
@@ -113,7 +111,6 @@ public class TradePersistentModel implements PersistentModel {
 		m_portfolioHome = new PortfolioHome();
 		m_tradestrategyHome = new TradestrategyHome();
 		m_candleHome = new CandleHome();
-		m_financialAccountHome = new FinancialAccountHome();
 		m_aspectHome = new AspectHome();
 		m_ruleHome = new RuleHome();
 	}
@@ -245,32 +242,6 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method findFinancialAccountByGroupName.
-	 * 
-	 * @param groupName
-	 *            String
-	 * @return FinancialAccount
-	 * @throws PersistentModelException
-	 */
-	public FinancialAccount findFinancialAccountByGroupName(String groupName)
-			throws PersistentModelException {
-		return m_financialAccountHome.findByGroupName(groupName);
-	}
-
-	/**
-	 * Method findFinancialAccountByProfileName.
-	 * 
-	 * @param groupName
-	 *            String
-	 * @return FinancialAccount
-	 * @throws PersistentModelException
-	 */
-	public FinancialAccount findFinancialAccountByProfileName(String profileName)
-			throws PersistentModelException {
-		return m_financialAccountHome.findByProfileName(profileName);
-	}
-
-	/**
 	 * Method findTradestrategyById.
 	 * 
 	 * @param tradestrategy
@@ -387,9 +358,11 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	public Portfolio findPortfolioByMasterAccountNumber(String accountNumber)
+	public PortfolioAccount findPortfolioAccountByNameAndAccountNumber(
+			String portfolioName, String accountNumber)
 			throws PersistentModelException {
-		return m_portfolioHome.findByMasterAccountNumber(accountNumber);
+		return m_portfolioHome.findByNameAndAccountNumber(portfolioName,
+				accountNumber);
 	}
 
 	/**

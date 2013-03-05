@@ -35,12 +35,16 @@
  */
 package org.trade.persistent.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
@@ -148,26 +152,45 @@ public class PortfolioHome {
 	}
 
 	/**
-	 * Method findByMasterAccountNumber.
+	 * Method findByNameAndAccountNumber.
 	 * 
+	 * @param portfolioName
+	 *            String
 	 * @param accountNumber
 	 *            String
 	 * @return Portfolio
 	 */
-	public Portfolio findByMasterAccountNumber(String accountNumber) {
+	public PortfolioAccount findByNameAndAccountNumber(String portfolioName,
+			String accountNumber) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Portfolio> query = builder
-					.createQuery(Portfolio.class);
-			Root<Portfolio> from = query.from(Portfolio.class);
+			CriteriaQuery<PortfolioAccount> query = builder
+					.createQuery(PortfolioAccount.class);
+			Root<PortfolioAccount> from = query.from(PortfolioAccount.class);
 			query.select(from);
-			query.where(builder.equal(from.get("masterAccountNumber"),
-					accountNumber));
-			List<Portfolio> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			if (null != accountNumber) {
+				Join<PortfolioAccount, Account> strategies = from
+						.join("account");
+				Predicate predicate = builder.equal(
+						strategies.get("accountNumber"), accountNumber);
+				predicates.add(predicate);
+			}
+			if (null != portfolioName) {
+				Join<PortfolioAccount, Portfolio> portfolio = from
+						.join("portfolio");
+				Predicate predicate = builder.equal(portfolio.get("name"),
+						portfolioName);
+				predicates.add(predicate);
+			}
+
+			query.where(predicates.toArray(new Predicate[] {}));
+			TypedQuery<PortfolioAccount> typedQuery = entityManager
+					.createQuery(query);
+			List<PortfolioAccount> items = typedQuery.getResultList();
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
 				return items.get(0);
