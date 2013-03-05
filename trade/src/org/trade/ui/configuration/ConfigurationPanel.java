@@ -266,6 +266,9 @@ public class ConfigurationPanel extends BasePanel {
 			doRefresh();
 			if (selectedRow > -1)
 				m_table.setRowSelectionInterval(selectedRow, selectedRow);
+			this.setStatusBarMessage(
+					"Save in complete. Note for changed to take effect the Tradinday Tab Search must be re-run.",
+					BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error saving item.", ex.getMessage(), ex);
 		}

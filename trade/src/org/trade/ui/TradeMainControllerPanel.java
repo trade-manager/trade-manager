@@ -38,12 +38,7 @@ package org.trade.ui;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
@@ -58,12 +53,10 @@ import java.util.Scanner;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.swing.BorderFactory;
+
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
@@ -77,10 +70,8 @@ import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
-import org.trade.core.valuetype.Decode;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
-import org.trade.dictionary.valuetype.DAOAccount;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModel;
@@ -112,8 +103,6 @@ import org.trade.ui.contract.ContractPanel;
 import org.trade.ui.portfolio.PortfolioPanel;
 import org.trade.ui.strategy.StrategyPanel;
 import org.trade.ui.tradingday.TradingdayPanel;
-import org.trade.ui.widget.DecodeComboBoxEditor;
-import org.trade.ui.widget.DecodeComboBoxRenderer;
 
 /**
  * 
@@ -2318,98 +2307,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						reProcessTradingday);
 			}
 			return toProcessTradingday;
-		}
-	}
-
-	/**
-	 */
-	class AssignDefaultPortfolioPanel extends JPanel {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 5972331201407363985L;
-
-		/**
-		 * Constructor for AssignDefaultPortfolioPanel.
-		 * 
-		 * @param portfolio
-		 *            Portfolio
-		 * @param account
-		 *            Account
-		 * @throws Exception
-		 */
-
-		@SuppressWarnings("unchecked")
-		public AssignDefaultPortfolioPanel(final Portfolio portfolio,
-				final Account account) throws Exception {
-
-			GridBagLayout gridBagLayout1 = new GridBagLayout();
-			this.setLayout(gridBagLayout1);
-			this.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createTitledBorder("Select Profile or Group"),
-					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
-			JLabel portfolioLabel = new JLabel("Portfolio");
-			JLabel accountLabel = new JLabel("Account");
-
-			DecodeComboBoxEditor portfolioEditorComboBox = new DecodeComboBoxEditor(
-					DAOPortfolio.newInstance().getCodesDecodes());
-			DecodeComboBoxRenderer portfolioTableRenderer = new DecodeComboBoxRenderer();
-			portfolioEditorComboBox.setRenderer(portfolioTableRenderer);
-			if (null != portfolio.getName())
-				portfolioEditorComboBox.setItem(DAOPortfolio
-						.newInstance(portfolio.getName()));
-			portfolioEditorComboBox.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if (!Decode.NONE.equals(((DAOPortfolio) e.getItem())
-								.getDisplayName())) {
-							portfolio.setName(((Portfolio) ((DAOPortfolio) e
-									.getItem()).getObject()).getName());
-						} else {
-							portfolio.setName(null);
-						}
-					}
-				}
-			});
-
-			DecodeComboBoxEditor accountEditorComboBox = new DecodeComboBoxEditor(
-					DAOAccount.newInstance().getCodesDecodes());
-			DecodeComboBoxRenderer accountTableRenderer = new DecodeComboBoxRenderer();
-			accountEditorComboBox.setRenderer(accountTableRenderer);
-			if (null != account.getAccountNumber())
-				accountEditorComboBox.setItem(DAOAccount.newInstance(account
-						.getAccountNumber()));
-			accountEditorComboBox.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if (!Decode.NONE.equals(((DAOAccount) e.getItem())
-								.getDisplayName())) {
-							account.setAccountNumber(((Account) ((DAOAccount) e
-									.getItem()).getObject()).getAccountNumber());
-						} else {
-							account.setAccountNumber(null);
-						}
-					}
-				}
-			});
-
-			this.add(portfolioLabel, new GridBagConstraints(0, 1, 1, 1, 0.0,
-					0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-					new Insets(1, 1, 0, 0), 20, 5));
-			this.add(accountLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.WEST, GridBagConstraints.NONE,
-					new Insets(1, 1, 0, 0), 20, 5));
-
-			this.add(portfolioEditorComboBox, new GridBagConstraints(1, 1, 1,
-					1, 1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
-					196, 0));
-			this.add(accountEditorComboBox, new GridBagConstraints(1, 2, 1, 1,
-					1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
-					196, 0));
-
 		}
 	}
 }

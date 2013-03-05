@@ -1435,7 +1435,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		}
 
 		public void done() {
-			doRefresh();
+			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+				doRefresh(tradingday);
+			}
 			String message = "Completed delete of Trade Order data total days processed: "
 					+ grandtotal
 					+ " in : "
@@ -1519,11 +1521,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			return null;
 		}
 
-		/*
-		 * This method process the publish method from doInBackground().
-		 */
 		/**
-		 * Method process.
+		 * Method process. This method process the publish method from
+		 * doInBackground().
 		 * 
 		 * @param messages
 		 *            List<String>
@@ -1534,7 +1534,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		}
 
 		public void done() {
-			doRefresh();
+			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+				doRefresh(tradingday);
+			}
 			String message = "Complete re-assign of Strategies total days processed: "
 					+ grandtotal
 					+ " in : "
