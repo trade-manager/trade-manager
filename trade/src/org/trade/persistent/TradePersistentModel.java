@@ -57,7 +57,6 @@ import org.trade.persistent.dao.CandleHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.PortfolioHome;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
@@ -346,21 +345,6 @@ public class TradePersistentModel implements PersistentModel {
 	public Portfolio findPortfolioByName(String name)
 			throws PersistentModelException {
 		return m_portfolioHome.findByName(name);
-	}
-
-	/**
-	 * Method findPortfolioByNumber.
-	 * 
-	 * @param accountNumber
-	 *            String
-	 * @return Account
-	 * @throws PersistentModelException
-	 */
-	public PortfolioAccount findPortfolioAccountByNameAndAccountNumber(
-			String portfolioName, String accountNumber)
-			throws PersistentModelException {
-		return m_portfolioHome.findByNameAndAccountNumber(portfolioName,
-				accountNumber);
 	}
 
 	/**
@@ -1226,6 +1210,7 @@ public class TradePersistentModel implements PersistentModel {
 					account.setAccountType(AccountType.CORPORATION);
 					account.setCurrency(Currency.USD);
 					account.setName(account.getAccountNumber());
+					account.setUpdateDate(new Date());
 					m_aspectHome.persist(account);
 				}
 			}
@@ -1247,32 +1232,10 @@ public class TradePersistentModel implements PersistentModel {
 	public void persistPortfolioAccounts(Aspects aspects)
 			throws PersistentModelException {
 		try {
-			for (Aspect aspect : aspects.getAspect()) {
-				PortfolioAccount item = (PortfolioAccount) aspect;
-
-				Account account = m_accountHome.findByAccountNumber(item
-						.getAccount().getAccountNumber());
-				if (null == account) {
-					item.getAccount().setAccountType(AccountType.CORPORATION);
-					item.getAccount().setCurrency(Currency.USD);
-					item.getAccount().setName(
-							item.getAccount().getAccountNumber());
-				} else {
-					item.setAccount(account);
-				}
-
-				Portfolio portfolio = m_portfolioHome.findByName(item
-						.getPortfolio().getName());
-				if (null != portfolio) {
-					portfolio.setAllocationMethod(item.getPortfolio()
-							.getAllocationMethod());
-					item.setPortfolio(portfolio);
-				}
-				m_aspectHome.persist(item.getPortfolio());
-			}
+			m_portfolioHome.persistPortfolioAccounts(aspects);
 		} catch (Exception ex) {
-			throw new PersistentModelException("Error saving Accounts: "
-					+ ex.getMessage());
+			throw new PersistentModelException(
+					"Error saving PortfolioAccounts: " + ex.getMessage());
 		}
 	}
 

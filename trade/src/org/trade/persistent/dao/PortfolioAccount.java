@@ -37,6 +37,8 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,6 +48,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
@@ -60,6 +64,7 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 
 	private Portfolio portfolio;
 	private Account account;
+	private Date updateDate;
 
 	public PortfolioAccount() {
 	}
@@ -136,6 +141,27 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	}
 
 	/**
+	 * Method getUpdateDate.
+	 * 
+	 * @return Date
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updateDate", nullable = true, length = 19)
+	public Date getUpdateDate() {
+		return this.updateDate;
+	}
+
+	/**
+	 * Method setUpdateDate.
+	 * 
+	 * @param updateDate
+	 *            Date
+	 */
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	/**
 	 * Method getVersion.
 	 * 
 	 * @return Integer
@@ -154,5 +180,34 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 */
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	/**
+	 * Method equals.
+	 * 
+	 * @param objectToCompare
+	 *            Object
+	 * @return boolean
+	 */
+	public boolean equals(Object objectToCompare) {
+
+		if (super.equals(objectToCompare))
+			return true;
+
+		if (!(objectToCompare instanceof PortfolioAccount))
+			return false;
+
+		PortfolioAccount theOtherOrder = (PortfolioAccount) objectToCompare;
+
+		if (!theOtherOrder.getAccount().getAccountNumber()
+				.equals((this.getAccount().getAccountNumber()))) {
+			return false;
+		}
+
+		if (!theOtherOrder.getPortfolio().getName()
+				.equals((this.getPortfolio().getName()))) {
+			return false;
+		}
+		return true;
 	}
 }

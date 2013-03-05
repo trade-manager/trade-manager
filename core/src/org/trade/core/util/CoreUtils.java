@@ -51,7 +51,7 @@ import javax.swing.text.SimpleAttributeSet;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.properties.CollectionUtilities;
-
+import org.trade.core.valuetype.Decode;
 /**
  */
 public class CoreUtils {
@@ -148,8 +148,8 @@ public class CoreUtils {
 									.getClass()
 									.getSuperclass()
 									.getName()
-									.equals("org.trade.devtool.valuetype.Decode")) {
-						returnValue = ((org.trade.core.valuetype.Decode) returnValue)
+									.equals(Decode.class.getName())) {
+						returnValue = ((Decode) returnValue)
 								.getCode();
 					}
 					attributeList.put(
@@ -217,7 +217,7 @@ public class CoreUtils {
 					}
 				} else if (attributeList.get(attributeName).getClass()
 						.getSuperclass().getName()
-						.equals("com.aceva.devtool.aspect.Aspect")) {
+						.equals(Aspect.class.getName())) {
 					final Aspect aspect1 = (Aspect) attributeList
 							.get(attributeName);
 					returnStringBuf.append(toFormattedXMLString(aspect1));
@@ -280,7 +280,7 @@ public class CoreUtils {
 					}
 				} else if (attributeList.get(attributeName).getClass()
 						.getSuperclass().getName()
-						.equals("com.aceva.devtool.aspect.Aspect")) {
+						.equals(Aspect.class.getName())) {
 					final Aspect aspect1 = (Aspect) attributeList
 							.get(attributeName);
 					returnStringBuf.append(toFormattedXMLString(aspect1));

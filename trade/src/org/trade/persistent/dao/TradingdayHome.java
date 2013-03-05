@@ -351,7 +351,6 @@ public class TradingdayHome {
 			return null;
 
 		} catch (RuntimeException re) {
-			EntityManagerHelper.rollback();
 			throw re;
 		}
 	}

@@ -43,7 +43,6 @@ import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
@@ -319,20 +318,6 @@ public interface PersistentModel {
 	 */
 
 	Portfolio findPortfolioByName(String name) throws PersistentModelException;
-
-	/**
-	 * Method findPortfolioByNumber.
-	 * 
-	 * @param portfolioName
-	 *            String
-	 * @param accountNumber
-	 *            String
-	 * @return PortfolioAccount
-	 * @throws PersistentModelException
-	 */
-	PortfolioAccount findPortfolioAccountByNameAndAccountNumber(
-			String portfolioName, String accountNumber)
-			throws PersistentModelException;
 
 	/**
 	 * Method resetDefaultPortfolio.

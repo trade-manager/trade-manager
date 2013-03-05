@@ -39,6 +39,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -49,6 +50,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -67,6 +70,7 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	private String allocationMethod;
 	private String description;
 	private Boolean isDefault = new Boolean(false);
+	private Date updateDate;
 	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
 			0);
 	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
@@ -247,6 +251,27 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 			PortfolioAccount pa = new PortfolioAccount(this, account);
 			this.portfolioAccounts.add(pa);
 		}
+	}
+
+	/**
+	 * Method getUpdateDate.
+	 * 
+	 * @return Date
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updateDate", nullable = true, length = 19)
+	public Date getUpdateDate() {
+		return this.updateDate;
+	}
+
+	/**
+	 * Method setUpdateDate.
+	 * 
+	 * @param updateDate
+	 *            Date
+	 */
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	/**

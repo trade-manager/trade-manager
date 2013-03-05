@@ -563,8 +563,8 @@ public class TradePersistentModelTest extends TestCase {
 					.findAccountByNumber(defaultAccount.getAccountNumber());
 			this.tradePersistentModel.resetDefaultAccount(
 					this.tradestrategy.getPortfolio(), defaultAccount);
-			defaultAccount = this.tradePersistentModel.findAccountByNumber(defaultAccount
-					.getAccountNumber());
+			defaultAccount = this.tradePersistentModel
+					.findAccountByNumber(defaultAccount.getAccountNumber());
 			TestCase.assertTrue(defaultAccount.getIsDefault());
 			this.tradePersistentModel.removeAspect(account);
 
