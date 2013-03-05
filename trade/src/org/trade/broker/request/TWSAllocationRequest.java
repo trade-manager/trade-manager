@@ -44,7 +44,8 @@ public class TWSAllocationRequest extends SaxMapper {
 		final TagTracker allocationProfileTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				PortfolioAccount aspect = new PortfolioAccount(new Portfolio(), new Account());
+				PortfolioAccount aspect = new PortfolioAccount(new Portfolio(),
+						new Account());
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}
@@ -114,8 +115,7 @@ public class TWSAllocationRequest extends SaxMapper {
 		final TagTracker allocationTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				final PortfolioAccount temp = (PortfolioAccount) m_stack
-						.peek();
+				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
 				m_stack.push(temp);
 			}
 
@@ -138,8 +138,7 @@ public class TWSAllocationRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final PortfolioAccount temp = (PortfolioAccount) m_stack
-						.peek();
+				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
 				temp.getAccount().setAccountNumber(value);
 			}
 		};
@@ -153,10 +152,10 @@ public class TWSAllocationRequest extends SaxMapper {
 
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
-//				final String value = new String(contents.toString());
-//				final PortfolioAccount aspect = (PortfolioAccount) m_stack
-//						.peek();
-//				aspect.setAmount(new BigDecimal(value));
+				// final String value = new String(contents.toString());
+				// final PortfolioAccount aspect = (PortfolioAccount) m_stack
+				// .peek();
+				// aspect.setAmount(new BigDecimal(value));
 			}
 		};
 		allocationTracker.track("Allocation/amount", amountTracker);
@@ -169,10 +168,10 @@ public class TWSAllocationRequest extends SaxMapper {
 
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
-//				final String value = new String(contents.toString());
-//				final AccountAllocation aspect = (AccountAllocation) m_stack
-//						.peek();
-//				aspect.setPosEff(value);
+				// final String value = new String(contents.toString());
+				// final AccountAllocation aspect = (AccountAllocation) m_stack
+				// .peek();
+				// aspect.setPosEff(value);
 			}
 		};
 		allocationTracker.track("Allocation/posEff", posEffTracker);

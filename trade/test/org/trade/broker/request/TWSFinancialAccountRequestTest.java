@@ -35,8 +35,6 @@
  */
 package org.trade.broker.request;
 
-import java.lang.reflect.InvocationTargetException;
-
 import junit.framework.TestCase;
 
 import org.junit.Test;
@@ -46,12 +44,9 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.CoreUtils;
-import org.trade.dictionary.valuetype.AccountType;
-import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Account;
-import org.trade.persistent.dao.Portfolio;
+
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.ui.TradeAppLoadConfig;
 
@@ -105,7 +100,10 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							.getContextClassLoader()
 							.getResourceAsStream(
 									"org/trade/broker/request/aliases.xml"));
-			persistoAccount(aspects);
+			tradePersistentModel.persistAccounts(aspects);
+			for (Aspect aspect : aspects.getAspect()) {
+				_log.info("Aspect: " + CoreUtils.toFormattedXMLString(aspect));
+			}
 
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
@@ -124,7 +122,10 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							.getContextClassLoader()
 							.getResourceAsStream(
 									"org/trade/broker/request/groups.xml"));
-			persistPortfolioAccount(aspects);
+			tradePersistentModel.persistPortfolioAccounts(aspects);
+			for (Aspect aspect : aspects.getAspect()) {
+				_log.info("Aspect: " + CoreUtils.toFormattedXMLString(aspect));
+			}
 
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
@@ -142,7 +143,10 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getContextClassLoader()
 					.getResourceAsStream(
 							"org/trade/broker/request/allocation.xml"));
-			persistPortfolioAccount(aspects);
+			tradePersistentModel.persistPortfolioAccounts(aspects);
+			for (Aspect aspect : aspects.getAspect()) {
+				_log.info("Aspect: " + CoreUtils.toFormattedXMLString(aspect));
+			}
 
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
@@ -167,7 +171,10 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getResourceAsStream(
 							"org/trade/broker/request/aliasesEmpty.xml"));
 
-			persistoAccount(aspects);
+			tradePersistentModel.persistAccounts(aspects);
+			for (Aspect aspect : aspects.getAspect()) {
+				_log.info("Aspect: " + CoreUtils.toFormattedXMLString(aspect));
+			}
 
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
@@ -185,7 +192,10 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getContextClassLoader()
 					.getResourceAsStream(
 							"org/trade/broker/request/groupsEmpty.xml"));
-			persistPortfolioAccount(aspects);
+			tradePersistentModel.persistPortfolioAccounts(aspects);
+			for (Aspect aspect : aspects.getAspect()) {
+				_log.info("Aspect: " + CoreUtils.toFormattedXMLString(aspect));
+			}
 
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
@@ -204,61 +214,13 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getResourceAsStream(
 							"org/trade/broker/request/allocationEmpty.xml"));
 
-			persistPortfolioAccount(aspects);
+			tradePersistentModel.persistPortfolioAccounts(aspects);
+			for (Aspect aspect : aspects.getAspect()) {
+				_log.info("Aspect: " + CoreUtils.toFormattedXMLString(aspect));
+			}
 
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
-		}
-	}
-
-	private void persistoAccount(Aspects aspects)
-			throws PersistentModelException, InvocationTargetException,
-			IllegalAccessException {
-		for (Aspect aspect : aspects.getAspect()) {
-			Account account = (Account) aspect;
-			Account ta = tradePersistentModel.findAccountByNumber(account
-					.getAccountNumber());
-			if (null != ta) {
-				account.setAlias(account.getAlias());
-				tradePersistentModel.persistAspect(ta);
-			} else {
-				account.setAccountType(AccountType.CORPORATION);
-				account.setCurrency(Currency.USD);
-				account.setName(account.getAccountNumber());
-				tradePersistentModel.persistAspect(account);
-			}
-			_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
-		}
-	}
-
-	private void persistPortfolioAccount(Aspects aspects)
-			throws PersistentModelException, InvocationTargetException,
-			IllegalAccessException {
-
-		for (Aspect aspect : aspects.getAspect()) {
-			PortfolioAccount item = (PortfolioAccount) aspect;
-
-			Account account = tradePersistentModel.findAccountByNumber(item
-					.getAccount().getAccountNumber());
-			if (null == account) {
-				item.getAccount().setAccountType(AccountType.CORPORATION);
-				item.getAccount().setCurrency(Currency.USD);
-				item.getAccount().setName(item.getAccount().getAccountNumber());
-			} else {
-				account.getPortfolioAccounts().clear();
-				item.setAccount(account);
-			}
-
-			Portfolio portfolio = tradePersistentModel.findPortfolioByName(item
-					.getPortfolio().getName());
-			if (null != portfolio) {
-				portfolio.setAllocationMethod(item.getPortfolio()
-						.getAllocationMethod());
-				item.setPortfolio(portfolio);
-			}
-
-			tradePersistentModel.persistAspect(item.getPortfolio());
-			_log.info("Aspect: \n" + CoreUtils.toFormattedXMLString(aspect));
 		}
 	}
 }

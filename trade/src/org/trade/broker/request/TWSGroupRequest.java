@@ -16,7 +16,7 @@ import org.xml.sax.Attributes;
 
 public class TWSGroupRequest extends SaxMapper {
 
-	private Aspects m_target = new Aspects();
+	private Aspects m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
 
 	public TWSGroupRequest() throws XMLModelException {
@@ -46,8 +46,9 @@ public class TWSGroupRequest extends SaxMapper {
 		final TagTracker groupsTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				PortfolioAccount aspect = new PortfolioAccount(new Portfolio(), new Account());
-				
+				PortfolioAccount aspect = new PortfolioAccount(new Portfolio(),
+						new Account());
+
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}

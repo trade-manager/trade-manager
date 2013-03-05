@@ -46,7 +46,9 @@ import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Action;
+import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
@@ -1200,6 +1202,78 @@ public class TradePersistentModel implements PersistentModel {
 			throw new PersistentModelException("Aspect not found for Id: "
 					+ transientInstance.getId());
 		return instance;
+	}
+
+	/**
+	 * Method persistAccounts.
+	 * 
+	 * @param aspects
+	 *            Aspects
+	 * @throws PersistentModelException
+	 */
+	public void persistAccounts(Aspects aspects)
+			throws PersistentModelException {
+		try {
+
+			for (Aspect aspect : aspects.getAspect()) {
+				Account account = (Account) aspect;
+				Account ta = m_accountHome.findByAccountNumber(account
+						.getAccountNumber());
+				if (null != ta) {
+					account.setAlias(account.getAlias());
+					m_aspectHome.persist(ta);
+				} else {
+					account.setAccountType(AccountType.CORPORATION);
+					account.setCurrency(Currency.USD);
+					account.setName(account.getAccountNumber());
+					m_aspectHome.persist(account);
+				}
+			}
+
+		} catch (Exception ex) {
+			throw new PersistentModelException("Error saving Accounts: "
+					+ ex.getMessage());
+		}
+	}
+
+	/**
+	 * Method persistPortfolioAccounts.
+	 * 
+	 * @param aspects
+	 *            Aspects
+	 * @throws PersistentModelException
+	 */
+
+	public void persistPortfolioAccounts(Aspects aspects)
+			throws PersistentModelException {
+		try {
+			for (Aspect aspect : aspects.getAspect()) {
+				PortfolioAccount item = (PortfolioAccount) aspect;
+
+				Account account = m_accountHome.findByAccountNumber(item
+						.getAccount().getAccountNumber());
+				if (null == account) {
+					item.getAccount().setAccountType(AccountType.CORPORATION);
+					item.getAccount().setCurrency(Currency.USD);
+					item.getAccount().setName(
+							item.getAccount().getAccountNumber());
+				} else {
+					item.setAccount(account);
+				}
+
+				Portfolio portfolio = m_portfolioHome.findByName(item
+						.getPortfolio().getName());
+				if (null != portfolio) {
+					portfolio.setAllocationMethod(item.getPortfolio()
+							.getAllocationMethod());
+					item.setPortfolio(portfolio);
+				}
+				m_aspectHome.persist(item.getPortfolio());
+			}
+		} catch (Exception ex) {
+			throw new PersistentModelException("Error saving Accounts: "
+					+ ex.getMessage());
+		}
 	}
 
 	/**

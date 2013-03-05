@@ -64,14 +64,11 @@ import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
-import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
-import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -2114,35 +2111,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				_log.info("Aliases: /n" + xml);
 				final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-
-				for (Aspect aspect : aspects.getAspect()) {
-					Account account = (Account) aspect;
-					Account ta = m_tradePersistentModel
-							.findAccountByNumber(account.getAccountNumber());
-					if (null != ta) {
-						account.setAlias(account.getAlias());
-						m_tradePersistentModel.persistAspect(ta);
-					} else {
-						account.setAccountType(AccountType.CORPORATION);
-						account.setCurrency(Currency.USD);
-						account.setName(account.getAccountNumber());
-						m_tradePersistentModel.persistAspect(account);
-					}
-				}
+				m_tradePersistentModel.persistAccounts(aspects);
 				break;
 			}
 			case EClientSocket.PROFILES: {
 				_log.info("Profiles: /n" + xml);
 				final TWSAllocationRequest request = new TWSAllocationRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-				persistPortfolioAccount(aspects);
+				m_tradePersistentModel.persistPortfolioAccounts(aspects);
 				break;
 			}
 			case EClientSocket.GROUPS: {
 				_log.info("Groups: /n" + xml);
 				final TWSGroupRequest request = new TWSGroupRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-				persistPortfolioAccount(aspects);
+				m_tradePersistentModel.persistPortfolioAccounts(aspects);
 				break;
 			}
 			default: {
@@ -2483,40 +2466,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void commissionReport(CommissionReport commsReport) {
 		// TODO Auto-generated method stub
 
-	}
-
-	/**
-	 * Method persistPortfolioAccount.
-	 * 
-	 * @param aspects
-	 *            Aspects
-	 */
-
-	private void persistPortfolioAccount(Aspects aspects)
-			throws PersistentModelException {
-
-		for (Aspect aspect : aspects.getAspect()) {
-			PortfolioAccount item = (PortfolioAccount) aspect;
-
-			Account account = m_tradePersistentModel.findAccountByNumber(item
-					.getAccount().getAccountNumber());
-			if (null == account) {
-				item.getAccount().setAccountType(AccountType.CORPORATION);
-				item.getAccount().setCurrency(Currency.USD);
-				item.getAccount().setName(item.getAccount().getAccountNumber());
-			} else {
-				item.setAccount(account);
-			}
-
-			Portfolio portfolio = m_tradePersistentModel
-					.findPortfolioByName(item.getPortfolio().getName());
-			if (null != portfolio) {
-				portfolio.setAllocationMethod(item.getPortfolio()
-						.getAllocationMethod());
-				item.setPortfolio(portfolio);
-			}
-			m_tradePersistentModel.persistAspect(item.getPortfolio());
-		}
 	}
 
 	/**

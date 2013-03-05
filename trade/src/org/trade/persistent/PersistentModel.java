@@ -192,6 +192,26 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
+	 * Method persistAccounts.
+	 * 
+	 * @param aspects
+	 *            Aspects
+	 * @throws PersistentModelException
+	 */
+	void persistAccounts(Aspects aspects) throws PersistentModelException;
+
+	/**
+	 * Method persistPortfolioAccounts.
+	 * 
+	 * @param aspects
+	 *            Aspects
+	 * @throws PersistentModelException
+	 */
+
+	void persistPortfolioAccounts(Aspects aspects)
+			throws PersistentModelException;
+
+	/**
 	 * Method findContractByUniqueKey.
 	 * 
 	 * @param SECType
