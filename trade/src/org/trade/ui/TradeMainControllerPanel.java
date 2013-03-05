@@ -71,6 +71,7 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerChangeListener;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
+import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
@@ -1230,32 +1231,50 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 
 				} else {
-					int result = JOptionPane.showConfirmDialog(
-							this.getFrame(),
-							"Do you want to add this account: "
-									+ masterAccount.getAccountNumber()
-									+ " to the default Portfolio?",
-							"Information", JOptionPane.YES_NO_OPTION);
-					if (result == JOptionPane.YES_OPTION) {
+					Aspects portfolios = m_tradePersistentModel
+							.findAspectsByClassName(Portfolio.class.getName());
+					if (portfolios.getAspect().size() == 1) {
 						PortfolioAccount portfolioAccount = new PortfolioAccount(
 								defaultPortfolio, masterAccount);
 						masterAccount.getPortfolioAccounts().add(
 								portfolioAccount);
 						masterAccount = (Account) m_tradePersistentModel
 								.persistAspect(masterAccount);
+					} else {
+						int result = JOptionPane.showConfirmDialog(
+								this.getFrame(),
+								"Do you want to add this account: "
+										+ masterAccount.getAccountNumber()
+										+ " to the default Portfolio?",
+								"Information", JOptionPane.YES_NO_OPTION);
+						if (result == JOptionPane.YES_OPTION) {
+							PortfolioAccount portfolioAccount = new PortfolioAccount(
+									defaultPortfolio, masterAccount);
+							masterAccount.getPortfolioAccounts().add(
+									portfolioAccount);
+							masterAccount = (Account) m_tradePersistentModel
+									.persistAspect(masterAccount);
+						}
 					}
 				}
 			}
 			if (!masterAccount.getIsDefault()) {
-				int result = JOptionPane.showConfirmDialog(
-						this.getFrame(),
-						"Do you want to make account: "
-								+ masterAccount.getAccountNumber()
-								+ " the default account?", "Information",
-						JOptionPane.YES_NO_OPTION);
-				if (result == JOptionPane.YES_OPTION) {
+				Aspects accounts = m_tradePersistentModel
+						.findAspectsByClassName(Account.class.getName());
+				if (accounts.getAspect().size() == 1) {
 					m_tradePersistentModel.resetDefaultAccount(
 							defaultPortfolio, masterAccount);
+				} else {
+					int result = JOptionPane.showConfirmDialog(
+							this.getFrame(),
+							"Do you want to make account: "
+									+ masterAccount.getAccountNumber()
+									+ " the default account?", "Information",
+							JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						m_tradePersistentModel.resetDefaultAccount(
+								defaultPortfolio, masterAccount);
+					}
 				}
 			}
 			tradingdayPanel.doWindowActivated();
