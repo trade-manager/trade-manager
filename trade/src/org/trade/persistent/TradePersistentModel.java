@@ -57,6 +57,7 @@ import org.trade.persistent.dao.CandleHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.PortfolioHome;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
@@ -1191,30 +1192,28 @@ public class TradePersistentModel implements PersistentModel {
 	/**
 	 * Method persistAccounts.
 	 * 
-	 * @param aspects
-	 *            Aspects
+	 * @param instance
+	 *            Account
+	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	public void persistAccounts(Aspects aspects)
+	public Account persistAccount(Account instance)
 			throws PersistentModelException {
 		try {
-
-			for (Aspect aspect : aspects.getAspect()) {
-				Account account = (Account) aspect;
-				Account ta = m_accountHome.findByAccountNumber(account
-						.getAccountNumber());
-				if (null != ta) {
-					account.setAlias(account.getAlias());
-					m_aspectHome.persist(ta);
-				} else {
-					account.setAccountType(AccountType.CORPORATION);
-					account.setCurrency(Currency.USD);
-					account.setName(account.getAccountNumber());
-					account.setUpdateDate(new Date());
-					m_aspectHome.persist(account);
-				}
+			Account account = m_accountHome.findByAccountNumber(instance
+					.getAccountNumber());
+			if (null != account) {
+				account.setAlias(instance.getAlias());
+				m_aspectHome.persist(account);
+				return account;
+			} else {
+				instance.setAccountType(AccountType.CORPORATION);
+				instance.setCurrency(Currency.USD);
+				instance.setName(instance.getAccountNumber());
+				instance.setUpdateDate(new Date());
+				m_aspectHome.persist(instance);
 			}
-
+			return instance;
 		} catch (Exception ex) {
 			throw new PersistentModelException("Error saving Accounts: "
 					+ ex.getMessage());
@@ -1222,17 +1221,17 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method persistPortfolioAccounts.
+	 * Method persistPortfolioAccount.
 	 * 
 	 * @param aspects
 	 *            Aspects
 	 * @throws PersistentModelException
 	 */
 
-	public void persistPortfolioAccounts(Aspects aspects)
+	public PortfolioAccount persistPortfolioAccount(PortfolioAccount instance)
 			throws PersistentModelException {
 		try {
-			m_portfolioHome.persistPortfolioAccounts(aspects);
+			return m_portfolioHome.persistPortfolioAccount(instance);
 		} catch (Exception ex) {
 			throw new PersistentModelException(
 					"Error saving PortfolioAccounts: " + ex.getMessage());

@@ -43,6 +43,7 @@ import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
@@ -191,23 +192,25 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method persistAccounts.
+	 * Method persistAccount.
 	 * 
-	 * @param aspects
-	 *            Aspects
+	 * @param instance
+	 *            Account
+	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	void persistAccounts(Aspects aspects) throws PersistentModelException;
+	Account persistAccount(Account instance) throws PersistentModelException;
 
 	/**
-	 * Method persistPortfolioAccounts.
+	 * Method persistPortfolioAccount.
 	 * 
-	 * @param aspects
-	 *            Aspects
+	 * @param instance
+	 *            PortfolioAccount
+	 * @return PortfolioAccount
 	 * @throws PersistentModelException
 	 */
 
-	void persistPortfolioAccounts(Aspects aspects)
+	PortfolioAccount persistPortfolioAccount(PortfolioAccount instance)
 			throws PersistentModelException;
 
 	/**

@@ -48,8 +48,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.trade.core.dao.Aspect;
-import org.trade.core.dao.Aspects;
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
@@ -195,63 +193,62 @@ public class PortfolioHome {
 	/**
 	 * Method persistPortfolioAccounts.
 	 * 
-	 * @param aspects
-	 *            Aspects
+	 * @param portfolioAccount
+	 *            PortfolioAccount
+	 * @return PortfolioAccount
 	 * @throws PersistentModelException
 	 */
 
-	public void persistPortfolioAccounts(Aspects aspects)
+	public PortfolioAccount persistPortfolioAccount(PortfolioAccount instance)
 			throws PersistentModelException {
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
-			for (Aspect aspect : aspects.getAspect()) {
-				PortfolioAccount item = (PortfolioAccount) aspect;
-				entityManager.getTransaction().begin();
-				PortfolioAccount portfolioAccount = findByNameAndAccountNumber(
-						item.getPortfolio().getName(), item.getAccount()
-								.getAccountNumber());
-				if (null == portfolioAccount) {
-					Account account = findByAccountNumber(item.getAccount()
+			entityManager.getTransaction().begin();
+			PortfolioAccount portfolioAccount = findByNameAndAccountNumber(
+					instance.getPortfolio().getName(), instance.getAccount()
 							.getAccountNumber());
-					if (null == account) {
-						item.getAccount().setAccountType(
-								AccountType.CORPORATION);
-						item.getAccount().setCurrency(Currency.USD);
-						item.getAccount().setName(
-								item.getAccount().getAccountNumber());
-						item.getAccount().setUpdateDate(new Date());
-					} else {
-						item.setAccount(account);
-					}
-					Portfolio portfolio = findPortfolioByName(item
-							.getPortfolio().getName());
-					if (null != portfolio) {
-						if (!item.getPortfolio().getAllocationMethod()
-								.equals(portfolio.getAllocationMethod())) {
-							portfolio.setAllocationMethod(item.getPortfolio()
-									.getAllocationMethod());
-							item.getPortfolio().setUpdateDate(new Date());
-						}
-						item.setPortfolio(portfolio);
-					} else {
-						item.getPortfolio().setUpdateDate(new Date());
-					}
-					item.setUpdateDate(new Date());
-					entityManager.persist(item);
+			if (null == portfolioAccount) {
+				Account account = findByAccountNumber(instance.getAccount()
+						.getAccountNumber());
+				if (null == account) {
+					instance.getAccount().setAccountType(
+							AccountType.CORPORATION);
+					instance.getAccount().setCurrency(Currency.USD);
+					instance.getAccount().setName(
+							instance.getAccount().getAccountNumber());
+					instance.getAccount().setUpdateDate(new Date());
 				} else {
-					Portfolio portfolio = findPortfolioByName(item
-							.getPortfolio().getName());
-					if (null != portfolio) {
-						if (!item.getPortfolio().getAllocationMethod()
-								.equals(portfolio.getAllocationMethod())) {
-							portfolio.setAllocationMethod(item.getPortfolio()
-									.getAllocationMethod());
-							entityManager.persist(portfolio);
-						}
+					instance.setAccount(account);
+				}
+				Portfolio portfolio = findPortfolioByName(instance
+						.getPortfolio().getName());
+				if (null != portfolio) {
+					if (!instance.getPortfolio().getAllocationMethod()
+							.equals(portfolio.getAllocationMethod())) {
+						portfolio.setAllocationMethod(instance.getPortfolio()
+								.getAllocationMethod());
+						instance.getPortfolio().setUpdateDate(new Date());
+					}
+					instance.setPortfolio(portfolio);
+				} else {
+					instance.getPortfolio().setUpdateDate(new Date());
+				}
+				instance.setUpdateDate(new Date());
+				entityManager.persist(instance);
+			} else {
+				Portfolio portfolio = findPortfolioByName(instance
+						.getPortfolio().getName());
+				if (null != portfolio) {
+					if (!instance.getPortfolio().getAllocationMethod()
+							.equals(portfolio.getAllocationMethod())) {
+						portfolio.setAllocationMethod(instance.getPortfolio()
+								.getAllocationMethod());
+						entityManager.persist(portfolio);
 					}
 				}
-				entityManager.getTransaction().commit();
 			}
+			entityManager.getTransaction().commit();
+			return instance;
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();
 			throw re;

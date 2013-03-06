@@ -977,9 +977,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					logContract(TWSBrokerModel.getIBContract(contract));
 					logTradeOrder(TWSBrokerModel.getIBOrder(tradeOrder));
 
-					// m_client.placeOrder(tradeOrder.getOrderKey(),
-					// TWSBrokerModel.getIBContract(contract),
-					// TWSBrokerModel.getIBOrder(tradeOrder));
+					m_client.placeOrder(tradeOrder.getOrderKey(),
+							TWSBrokerModel.getIBContract(contract),
+							TWSBrokerModel.getIBOrder(tradeOrder));
 				}
 				return tradeOrder;
 
@@ -2111,21 +2111,30 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				_log.info("Aliases: /n" + xml);
 				final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-				m_tradePersistentModel.persistAccounts(aspects);
+				for (Aspect aspect : aspects.getAspect()) {
+					Account account = (Account) aspect;
+					m_tradePersistentModel.persistAccount(account);
+				}
 				break;
 			}
 			case EClientSocket.PROFILES: {
 				_log.info("Profiles: /n" + xml);
 				final TWSAllocationRequest request = new TWSAllocationRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-				m_tradePersistentModel.persistPortfolioAccounts(aspects);
+				for (Aspect aspect : aspects.getAspect()) {
+					PortfolioAccount item = (PortfolioAccount) aspect;
+					m_tradePersistentModel.persistPortfolioAccount(item);
+				}
 				break;
 			}
 			case EClientSocket.GROUPS: {
 				_log.info("Groups: /n" + xml);
 				final TWSGroupRequest request = new TWSGroupRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
-				m_tradePersistentModel.persistPortfolioAccounts(aspects);
+				for (Aspect aspect : aspects.getAspect()) {
+					PortfolioAccount item = (PortfolioAccount) aspect;
+					m_tradePersistentModel.persistPortfolioAccount(item);
+				}
 				break;
 			}
 			default: {
