@@ -46,8 +46,7 @@ public class TWSGroupRequest extends SaxMapper {
 		final TagTracker groupsTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				PortfolioAccount aspect = new PortfolioAccount(new Portfolio(),
-						new Account());
+				Portfolio aspect = new Portfolio();
 
 				m_target.add(aspect);
 				m_stack.push(aspect);
@@ -71,8 +70,8 @@ public class TWSGroupRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
-				temp.getPortfolio().setName(value);
+				final Portfolio temp = (Portfolio) m_stack.peek();
+				temp.setName(value);
 			}
 		};
 
@@ -87,8 +86,8 @@ public class TWSGroupRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
-				temp.getPortfolio().setAllocationMethod(value);
+				final Portfolio temp = (Portfolio) m_stack.peek();
+				temp.setAllocationMethod(value);
 			}
 		};
 
@@ -98,7 +97,7 @@ public class TWSGroupRequest extends SaxMapper {
 		final TagTracker listOfAcctsTracker = new TagTracker() {
 			public void onStart(String namespaceURI, String localName,
 					String qName, Attributes attr) {
-				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
+				final Portfolio temp = (Portfolio) m_stack.peek();
 				m_stack.push(temp);
 			}
 
@@ -120,7 +119,10 @@ public class TWSGroupRequest extends SaxMapper {
 			public void onEnd(String namespaceURI, String localName,
 					String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
-				final PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
+				final Portfolio portfolio = (Portfolio) m_stack.peek();
+				PortfolioAccount temp = new PortfolioAccount(portfolio,
+						new Account());
+				portfolio.getPortfolioAccounts().add(temp);
 				temp.getAccount().setAccountNumber(value);
 			}
 		};

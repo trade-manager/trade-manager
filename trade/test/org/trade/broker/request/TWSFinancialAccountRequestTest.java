@@ -44,6 +44,7 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.Portfolio;
 
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.ui.TradeAppLoadConfig;
@@ -74,6 +75,8 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 		Aspects portfolioAccounts = tradePersistentModel
 				.findAspectsByClassName(PortfolioAccount.class.getName());
 		for (Aspect aspect : portfolioAccounts.getAspect()) {
+			tradePersistentModel.removeAspect(((PortfolioAccount) aspect)
+					.getPortfolio());
 			tradePersistentModel.removeAspect(aspect);
 		}
 
@@ -81,70 +84,6 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 				.findAspectsByClassName(Account.class.getName());
 		for (Aspect aspect : accounts.getAspect()) {
 			tradePersistentModel.removeAspect(aspect);
-		}
-	}
-
-	@Test
-	public void testAliasRequest() {
-
-		try {
-
-			final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
-			final Aspects aspects = (Aspects) request
-					.fromXML(Thread
-							.currentThread()
-							.getContextClassLoader()
-							.getResourceAsStream(
-									"org/trade/broker/request/aliases.xml"));
-			for (Aspect aspect : aspects.getAspect()) {
-				Account account = (Account) aspect;
-				tradePersistentModel.persistAccount(account);
-			}
-		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testGroupRequest() {
-
-		try {
-
-			final TWSGroupRequest request = new TWSGroupRequest();
-			final Aspects aspects = (Aspects) request
-					.fromXML(Thread
-							.currentThread()
-							.getContextClassLoader()
-							.getResourceAsStream(
-									"org/trade/broker/request/groups.xml"));
-			for (Aspect aspect : aspects.getAspect()) {
-				PortfolioAccount item = (PortfolioAccount) aspect;
-				tradePersistentModel.persistPortfolioAccount(item);
-			}
-
-		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testAllocationRequest() {
-
-		try {
-
-			final TWSAllocationRequest request = new TWSAllocationRequest();
-			final Aspects aspects = (Aspects) request.fromXML(Thread
-					.currentThread()
-					.getContextClassLoader()
-					.getResourceAsStream(
-							"org/trade/broker/request/allocation.xml"));
-			for (Aspect aspect : aspects.getAspect()) {
-				PortfolioAccount item = (PortfolioAccount) aspect;
-				tradePersistentModel.persistPortfolioAccount(item);
-			}
-
-		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -175,21 +114,21 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 	}
 
 	@Test
-	public void testGroupEmptyRequest() {
+	public void testAliasRequest() {
 
 		try {
 
-			final TWSGroupRequest request = new TWSGroupRequest();
-			final Aspects aspects = (Aspects) request.fromXML(Thread
-					.currentThread()
-					.getContextClassLoader()
-					.getResourceAsStream(
-							"org/trade/broker/request/groupsEmpty.xml"));
+			final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
+			final Aspects aspects = (Aspects) request
+					.fromXML(Thread
+							.currentThread()
+							.getContextClassLoader()
+							.getResourceAsStream(
+									"org/trade/broker/request/aliases.xml"));
 			for (Aspect aspect : aspects.getAspect()) {
-				PortfolioAccount item = (PortfolioAccount) aspect;
-				tradePersistentModel.persistPortfolioAccount(item);
+				Account account = (Account) aspect;
+				tradePersistentModel.persistAccount(account);
 			}
-
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
 		}
@@ -208,9 +147,69 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							"org/trade/broker/request/allocationEmpty.xml"));
 
 			for (Aspect aspect : aspects.getAspect()) {
-				PortfolioAccount item = (PortfolioAccount) aspect;
-				tradePersistentModel.persistPortfolioAccount(item);
+				tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testAllocationRequest() {
+
+		try {
+
+			final TWSAllocationRequest request = new TWSAllocationRequest();
+			final Aspects aspects = (Aspects) request.fromXML(Thread
+					.currentThread()
+					.getContextClassLoader()
+					.getResourceAsStream(
+							"org/trade/broker/request/allocation.xml"));
+			for (Aspect aspect : aspects.getAspect()) {
+				tradePersistentModel.persistPortfolio((Portfolio) aspect);
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testGroupEmptyRequest() {
+
+		try {
+
+			final TWSGroupRequest request = new TWSGroupRequest();
+			final Aspects aspects = (Aspects) request.fromXML(Thread
+					.currentThread()
+					.getContextClassLoader()
+					.getResourceAsStream(
+							"org/trade/broker/request/groupsEmpty.xml"));
+			for (Aspect aspect : aspects.getAspect()) {
+				tradePersistentModel.persistPortfolio((Portfolio) aspect);
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testGroupRequest() {
+
+		try {
+
+			final TWSGroupRequest request = new TWSGroupRequest();
+			final Aspects aspects = (Aspects) request
+					.fromXML(Thread
+							.currentThread()
+							.getContextClassLoader()
+							.getResourceAsStream(
+									"org/trade/broker/request/groups.xml"));
+			for (Aspect aspect : aspects.getAspect()) {
+				tradePersistentModel.persistPortfolio((Portfolio) aspect);
+			}
+
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
 		}

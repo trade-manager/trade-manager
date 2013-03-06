@@ -191,64 +191,70 @@ public class PortfolioHome {
 	}
 
 	/**
-	 * Method persistPortfolioAccounts.
+	 * Method persistPortfolio.
 	 * 
-	 * @param portfolioAccount
-	 *            PortfolioAccount
-	 * @return PortfolioAccount
+	 * @param portfolio
+	 *            Portfolio
+	 * @return Portfolio
 	 * @throws PersistentModelException
 	 */
 
-	public PortfolioAccount persistPortfolioAccount(PortfolioAccount instance)
+	public Portfolio persistPortfolio(Portfolio instance)
 			throws PersistentModelException {
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			PortfolioAccount portfolioAccount = findByNameAndAccountNumber(
-					instance.getPortfolio().getName(), instance.getAccount()
-							.getAccountNumber());
-			if (null == portfolioAccount) {
-				Account account = findByAccountNumber(instance.getAccount()
-						.getAccountNumber());
-				if (null == account) {
-					instance.getAccount().setAccountType(
-							AccountType.CORPORATION);
-					instance.getAccount().setCurrency(Currency.USD);
-					instance.getAccount().setName(
-							instance.getAccount().getAccountNumber());
-					instance.getAccount().setUpdateDate(new Date());
-				} else {
-					instance.setAccount(account);
-				}
-				Portfolio portfolio = findPortfolioByName(instance
-						.getPortfolio().getName());
-				if (null != portfolio) {
-					if (!instance.getPortfolio().getAllocationMethod()
-							.equals(portfolio.getAllocationMethod())) {
-						portfolio.setAllocationMethod(instance.getPortfolio()
-								.getAllocationMethod());
-						instance.getPortfolio().setUpdateDate(new Date());
-					}
-					instance.setPortfolio(portfolio);
-				} else {
-					instance.getPortfolio().setUpdateDate(new Date());
-				}
+			Portfolio portfolio = findPortfolioByName(instance.getName());
+			if (null == portfolio) {
 				instance.setUpdateDate(new Date());
-				entityManager.persist(instance);
-			} else {
-				Portfolio portfolio = findPortfolioByName(instance
-						.getPortfolio().getName());
-				if (null != portfolio) {
-					if (!instance.getPortfolio().getAllocationMethod()
-							.equals(portfolio.getAllocationMethod())) {
-						portfolio.setAllocationMethod(instance.getPortfolio()
-								.getAllocationMethod());
-						entityManager.persist(portfolio);
+				for (PortfolioAccount item : instance.getPortfolioAccounts()) {
+					Account account = findByAccountNumber(item.getAccount()
+							.getAccountNumber());
+					if (null == account) {
+						item.getAccount().setAccountType(
+								AccountType.CORPORATION);
+						item.getAccount().setCurrency(Currency.USD);
+						item.getAccount().setName(
+								item.getAccount().getAccountNumber());
+						item.getAccount().setUpdateDate(new Date());
+					} else {
+						item.setAccount(account);
 					}
 				}
+				entityManager.persist(instance);
+
+			} else {
+				if (!instance.getAllocationMethod().equals(
+						portfolio.getAllocationMethod())) {
+					portfolio.setAllocationMethod(instance
+							.getAllocationMethod());
+					portfolio.setUpdateDate(new Date());
+				}
+				for (PortfolioAccount item : instance.getPortfolioAccounts()) {
+
+					Account account = findByAccountNumber(item.getAccount()
+							.getAccountNumber());
+					if (null == account) {
+						item.getAccount().setAccountType(
+								AccountType.CORPORATION);
+						item.getAccount().setCurrency(Currency.USD);
+						item.getAccount().setName(
+								item.getAccount().getAccountNumber());
+						item.getAccount().setUpdateDate(new Date());
+					} else {
+						item.setAccount(account);
+					}
+					PortfolioAccount portfolioAccount = findByNameAndAccountNumber(
+							portfolio.getName(), item.getAccount()
+									.getAccountNumber());
+					if (null == portfolioAccount) {
+						portfolio.getPortfolioAccounts().add(item);
+					}
+				}
+				entityManager.persist(portfolio);
 			}
 			entityManager.getTransaction().commit();
-			return instance;
+			return (portfolio == null ? instance : portfolio);
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();
 			throw re;

@@ -57,7 +57,6 @@ import org.trade.persistent.dao.CandleHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.PortfolioHome;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
@@ -1221,20 +1220,20 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method persistPortfolioAccount.
+	 * Method persistPortfolio.
 	 * 
-	 * @param aspects
-	 *            Aspects
+	 * @param instance
+	 *            Portfolio
 	 * @throws PersistentModelException
 	 */
 
-	public PortfolioAccount persistPortfolioAccount(PortfolioAccount instance)
+	public Portfolio persistPortfolio(Portfolio instance)
 			throws PersistentModelException {
 		try {
-			return m_portfolioHome.persistPortfolioAccount(instance);
+			return m_portfolioHome.persistPortfolio(instance);
 		} catch (Exception ex) {
 			throw new PersistentModelException(
-					"Error saving PortfolioAccounts: " + ex.getMessage());
+					"Error saving PortfolioAccount: " + ex.getMessage());
 		}
 	}
 

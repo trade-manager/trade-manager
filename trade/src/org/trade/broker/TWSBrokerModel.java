@@ -69,6 +69,7 @@ import org.trade.dictionary.valuetype.SECType;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -2122,8 +2123,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final TWSAllocationRequest request = new TWSAllocationRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
-					PortfolioAccount item = (PortfolioAccount) aspect;
-					m_tradePersistentModel.persistPortfolioAccount(item);
+					m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 				}
 				break;
 			}
@@ -2132,8 +2132,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final TWSGroupRequest request = new TWSGroupRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
-					PortfolioAccount item = (PortfolioAccount) aspect;
-					m_tradePersistentModel.persistPortfolioAccount(item);
+					m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 				}
 				break;
 			}
