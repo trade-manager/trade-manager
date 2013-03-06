@@ -97,6 +97,7 @@ import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
@@ -1179,9 +1180,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						if (!Decode.NONE.equals(((DAOProfile) e.getItem())
 								.getDisplayName())) {
 							tradeOrder
-									.setFAProfile(((TradeOrder) ((DAOProfile) e
-											.getItem()).getObject())
-											.getFAProfile());
+									.setFAProfile(((Portfolio) ((DAOProfile) e
+											.getItem()).getObject()).getName());
 						} else {
 							tradeOrder.setFAProfile(null);
 						}
@@ -1201,8 +1201,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if (!Decode.NONE.equals(((DAOGroup) e.getItem())
 								.getDisplayName())) {
-							tradeOrder.setFAGroup(((TradeOrder) ((DAOGroup) e
-									.getItem()).getObject()).getFAGroup());
+							tradeOrder.setFAGroup(((Portfolio) ((DAOGroup) e
+									.getItem()).getObject()).getName());
 						} else {
 							tradeOrder.setFAGroup(null);
 						}
