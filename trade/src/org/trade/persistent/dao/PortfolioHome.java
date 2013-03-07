@@ -200,7 +200,7 @@ public class PortfolioHome {
 	 * @throws PersistentModelException
 	 */
 
-	public Portfolio persistPortfolio(Portfolio instance)
+	public synchronized Portfolio persistPortfolio(Portfolio instance)
 			throws PersistentModelException {
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
