@@ -326,10 +326,9 @@ public interface PersistentModel {
 	 * 
 	 * @param transientInstance
 	 *            Portfolio
-	 * @return Portfolio
 	 * @throws PersistentModelException
 	 */
-	Portfolio resetDefaultPortfolio(Portfolio transientInstance)
+	void resetDefaultPortfolio(Portfolio transientInstance)
 			throws PersistentModelException;
 
 	/**

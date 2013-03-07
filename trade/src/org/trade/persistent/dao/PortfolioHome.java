@@ -173,13 +173,14 @@ public class PortfolioHome {
 			query.select(from);
 			List<Portfolio> items = entityManager.createQuery(query)
 					.getResultList();
-			for (Portfolio portfolio : items) {
-				if (portfolio.getIsDefault()
-						&& !defaultPortfolio.getIdPortfolio().equals(
-								portfolio.getIdPortfolio())) {
-					portfolio.setIsDefault(false);
-					entityManager.persist(portfolio);
+			for (Portfolio item : items) {
+				if (item.getIdPortfolio().equals(
+						defaultPortfolio.getIdPortfolio())) {
+					item.setIsDefault(true);
+				} else {
+					item.setIsDefault(false);
 				}
+				entityManager.persist(item);
 			}
 			entityManager.getTransaction().commit();
 		} catch (RuntimeException re) {

@@ -39,6 +39,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.ParseException;
 
 import javax.swing.JFormattedTextField;
@@ -51,6 +53,12 @@ import javax.swing.text.MaskFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.valuetype.Decode;
+import org.trade.core.valuetype.ValueTypeException;
+import org.trade.dictionary.valuetype.DAOPortfolio;
+import org.trade.persistent.dao.Portfolio;
+import org.trade.ui.widget.DecodeComboBoxEditor;
+import org.trade.ui.widget.DecodeComboBoxRenderer;
 
 /**
  */
@@ -60,15 +68,18 @@ public class ConnectionPane extends JPanel {
 	private final static Logger _log = LoggerFactory
 			.getLogger(ConnectionPane.class);
 
-	private JTextField hostTextField = new JTextField();
+	private JTextField hostTextField = null;
 	private JFormattedTextField portTextField = null;
 	private JFormattedTextField clientIdTextField = null;
+	private Portfolio portfolio = null;
 
-	public ConnectionPane() {
+	@SuppressWarnings("unchecked")
+	public ConnectionPane() throws ValueTypeException {
 
 		portTextField = new JFormattedTextField(createFormatter("####"));
 		clientIdTextField = new JFormattedTextField(createFormatter("#"));
-
+		hostTextField = new JTextField();
+		portfolio = (Portfolio) DAOPortfolio.newInstance().getObject();
 		Integer clientId = new Integer(0);
 		Integer port = new Integer(7496);
 		String host = "localhost";
@@ -84,6 +95,25 @@ public class ConnectionPane extends JPanel {
 		hostTextField.setText(host);
 		portTextField.setText(port.toString());
 		clientIdTextField.setText(clientId.toString());
+		DecodeComboBoxEditor portfolioEditorComboBox = new DecodeComboBoxEditor(
+				DAOPortfolio.newInstance().getCodesDecodes());
+		DecodeComboBoxRenderer portfolioTableRenderer = new DecodeComboBoxRenderer();
+		portfolioEditorComboBox.setRenderer(portfolioTableRenderer);
+		if (null != portfolio)
+			portfolioEditorComboBox.setItem(DAOPortfolio.newInstance(portfolio
+					.getName()));
+		portfolioEditorComboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					if (!Decode.NONE.equals(((DAOPortfolio) e.getItem())
+							.getDisplayName())) {
+						portfolio = (Portfolio) ((DAOPortfolio) e.getItem())
+								.getObject();
+					}
+				}
+			}
+		});
+
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
 		this.setLayout(new BorderLayout());
@@ -96,6 +126,9 @@ public class ConnectionPane extends JPanel {
 		JLabel jLabel3 = new JLabel("Client Id:");
 		jLabel3.setHorizontalTextPosition(SwingConstants.RIGHT);
 		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel jLabel4 = new JLabel("Portfolio:");
+		jLabel4.setHorizontalTextPosition(SwingConstants.RIGHT);
+		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		jPanel1.add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(1,
@@ -104,6 +137,9 @@ public class ConnectionPane extends JPanel {
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 		jPanel1.add(jLabel3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+						1, 0, 0), 20, 5));
+		jPanel1.add(jLabel4, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 
@@ -116,6 +152,9 @@ public class ConnectionPane extends JPanel {
 		jPanel1.add(clientIdTextField, new GridBagConstraints(1, 2, 1, 1, 1.0,
 				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
 				new Insets(0, 0, 0, 43), 196, 0));
+		jPanel1.add(portfolioEditorComboBox, new GridBagConstraints(1, 3, 1, 1,
+				1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 196, 0));
 		this.add(jPanel1);
 	}
 
@@ -135,6 +174,15 @@ public class ConnectionPane extends JPanel {
 	 */
 	public Integer getPort() {
 		return new Integer(portTextField.getText());
+	}
+
+	/**
+	 * Method getPortfolio.
+	 * 
+	 * @return Portfolio
+	 */
+	public Portfolio getPortfolio() {
+		return portfolio;
 	}
 
 	/**

@@ -986,10 +986,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			ConnectionPane connectionPane = new ConnectionPane();
 			TextDialog dialog = new TextDialog(this.getFrame(),
 					"Connect to TWS", true, connectionPane);
-			dialog.getCancelButton().setText("Test");
-			dialog.getOKButton().setText("Live");
+			dialog.getCancelButton().setText("Cancel");
+			dialog.getOKButton().setText("Connect");
 			dialog.setLocationRelativeTo(this);
 			dialog.setVisible(true);
+			/*
+			 * Update the default portfolio.
+			 */
+			m_tradePersistentModel.resetDefaultPortfolio(connectionPane
+					.getPortfolio());
 
 			if (!dialog.getCancel()) {
 				m_brokerModel = (BrokerModel) ClassFactory
@@ -998,6 +1003,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				this.setStatusBarMessage("Please wait while login proceeds",
 						BasePanel.INFORMATION);
+
 				/*
 				 * Controller listens for problems from the TWS interface see
 				 * doError()

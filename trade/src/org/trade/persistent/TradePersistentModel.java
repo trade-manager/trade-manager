@@ -354,12 +354,10 @@ public class TradePersistentModel implements PersistentModel {
 	 *            Portfolio
 	 * @throws PersistentModelException
 	 */
-	public Portfolio resetDefaultPortfolio(Portfolio transientInstance)
+	public void resetDefaultPortfolio(Portfolio transientInstance)
 			throws PersistentModelException {
 		try {
 			m_portfolioHome.resetDefaultPortfolio(transientInstance);
-			return (Portfolio) m_aspectHome.persist(transientInstance);
-
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error setting default portfolio. Please refresh before save.");

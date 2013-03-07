@@ -119,5 +119,6 @@ COMMIT;
 
 
 INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, version) VALUES (1, 'Paper','Paper Account','Paper trading account', 1, 0);
+INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, version) VALUES (2, 'Live','Live Account','Live trading account', 0, 0);
 
 COMMIT;
