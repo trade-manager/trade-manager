@@ -42,6 +42,8 @@ import org.junit.Test;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
+import org.trade.dictionary.valuetype.AccountType;
+import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Portfolio;
@@ -165,6 +167,28 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getContextClassLoader()
 					.getResourceAsStream(
 							"org/trade/broker/request/allocation.xml"));
+			for (Aspect aspect : aspects.getAspect()) {
+				tradePersistentModel.persistPortfolio((Portfolio) aspect);
+			}
+
+		} catch (Exception e) {
+			TestCase.fail("Error :" + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testAllocationRequestNew() {
+
+		try {
+			Aspects aspects = new Aspects();
+			Portfolio portfolio = new Portfolio("pf_eq_daily", "pf_eq_daily");
+			Account account = new Account("DU12345", "DU12345",
+					AccountType.CORPORATION, Currency.USD, false);
+			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
+					account);
+			portfolio.getPortfolioAccounts().add(portfolioAccount);
+			aspects.add(portfolio);
+
 			for (Aspect aspect : aspects.getAspect()) {
 				tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}

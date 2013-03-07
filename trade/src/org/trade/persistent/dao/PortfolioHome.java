@@ -49,6 +49,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
+import org.trade.core.util.CoreUtils;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModelException;
@@ -225,8 +226,9 @@ public class PortfolioHome {
 				entityManager.persist(instance);
 
 			} else {
-				if (!instance.getAllocationMethod().equals(
-						portfolio.getAllocationMethod())) {
+				if (0 != CoreUtils.nullSafeComparator(
+						portfolio.getAllocationMethod(),
+						instance.getAllocationMethod())) {
 					portfolio.setAllocationMethod(instance
 							.getAllocationMethod());
 					portfolio.setUpdateDate(new Date());
@@ -249,6 +251,7 @@ public class PortfolioHome {
 							portfolio.getName(), item.getAccount()
 									.getAccountNumber());
 					if (null == portfolioAccount) {
+						item.setPortfolio(portfolio);
 						portfolio.getPortfolioAccounts().add(item);
 					}
 				}
