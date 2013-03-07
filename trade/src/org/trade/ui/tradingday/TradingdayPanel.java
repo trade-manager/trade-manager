@@ -90,6 +90,7 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
@@ -843,6 +844,12 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			Date updateDate = new Date();
 			for (PortfolioAccount portfolioAccount : portfolio
 					.getPortfolioAccounts()) {
+
+				if (AccountType.INDIVIDUAL.equals(portfolio.getMasterAccount()
+						.getAccountType())) {
+					if (!portfolioAccount.getAccount().getIsDefault())
+						continue;
+				}
 				availableFunds = availableFunds
 						.add((portfolioAccount.getAccount().getAvailableFunds() == null ? new BigDecimal(
 								0) : portfolioAccount.getAccount()
