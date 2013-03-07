@@ -995,6 +995,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			m_tradePersistentModel.resetDefaultPortfolio(connectionPane
 					.getPortfolio());
+			DBTableLookupServiceProvider.clearLookup();
 
 			if (!dialog.getCancel()) {
 				m_brokerModel = (BrokerModel) ClassFactory
