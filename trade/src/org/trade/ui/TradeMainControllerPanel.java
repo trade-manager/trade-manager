@@ -1508,6 +1508,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		getMenu().setEnabledRunStrategy(false);
 		getMenu().setEnabledBrokerData(false);
 		getMenu().setEnabledTestStrategy(false);
+		if (m_brokerModel.isConnected()) {
+			getMenu().setEnabledConnect(false);
+		} else {
+			getMenu().setEnabledConnect(true);
+		}
 		if (tradingdayPanel == newBasePanel) {
 			if (null == brokerDataRequestProgressMonitor
 					|| brokerDataRequestProgressMonitor.isDone()) {
@@ -1662,6 +1667,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (m_brokerModel.isConnected()) {
 				getMenu().setEnabledBrokerData(false);
 				getMenu().setEnabledRunStrategy(false);
+				getMenu().setEnabledConnect(false);
 			} else {
 				getMenu().setEnabledTestStrategy(false);
 			}
@@ -1770,12 +1776,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				getMenu().setEnabledBrokerData(true);
 				getMenu().setEnabledRunStrategy(false);
 				getMenu().setEnabledTestStrategy(true);
+				getMenu().setEnabledConnect(true);
 				this.setStatusBarMessage("Running in simulated mode",
 						BasePanel.INFORMATION);
 			} else {
 				getMenu().setEnabledBrokerData(true);
 				getMenu().setEnabledRunStrategy(true);
 				getMenu().setEnabledTestStrategy(false);
+				getMenu().setEnabledConnect(false);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error running Simulated Mode.",
@@ -1797,8 +1805,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		if (m_brokerModel.isConnected()) {
 			getMenu().setEnabledBrokerData(true);
 			getMenu().setEnabledRunStrategy(true);
+			getMenu().setEnabledConnect(false);
 		} else {
 			getMenu().setEnabledTestStrategy(true);
+			getMenu().setEnabledConnect(true);
 			tradingdayPanel.cleanStrategyWorker();
 		}
 		getMenu().setEnabledSearchDeleteRefreshSave(true);

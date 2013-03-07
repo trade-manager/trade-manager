@@ -301,12 +301,12 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 	}
 
 	/**
-	 * Method setEnabledTestStrategy.
+	 * Method setEnabledConnect.
 	 * 
 	 * @param enabled
 	 *            boolean
 	 */
-	public void setEnabledTestStrategy(boolean enabled) {
+	public void setEnabledConnect(boolean enabled) {
 
 		if (enabled) {
 			connect.setEnabled(enabled);
@@ -315,6 +315,15 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 			connect.setEnabled(enabled);
 			disconnect.setEnabled(true);
 		}
+	}
+
+	/**
+	 * Method setEnabledTestStrategy.
+	 * 
+	 * @param enabled
+	 *            boolean
+	 */
+	public void setEnabledTestStrategy(boolean enabled) {
 		testStrategyMenu.setEnabled(enabled);
 		testStrategyButton.setEnabled(enabled);
 	}
