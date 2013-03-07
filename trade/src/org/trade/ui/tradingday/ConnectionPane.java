@@ -33,7 +33,7 @@
  * -------
  *
  */
-package org.trade.ui.base;
+package org.trade.ui.tradingday;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

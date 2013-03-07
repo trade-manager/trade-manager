@@ -94,13 +94,13 @@ import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorSeries;
 import org.trade.ui.base.BasePanel;
 import org.trade.ui.base.ComponentPrintService;
-import org.trade.ui.base.ConnectionPane;
 import org.trade.ui.base.TabbedAppPanel;
 import org.trade.ui.base.TextDialog;
 import org.trade.ui.configuration.ConfigurationPanel;
 import org.trade.ui.contract.ContractPanel;
 import org.trade.ui.portfolio.PortfolioPanel;
 import org.trade.ui.strategy.StrategyPanel;
+import org.trade.ui.tradingday.ConnectionPane;
 import org.trade.ui.tradingday.TradingdayPanel;
 
 /**
