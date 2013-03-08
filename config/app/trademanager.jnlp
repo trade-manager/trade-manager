@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <!-- TS: 2000-12-27 00:00:01 use timestamp when version.xml is not present before xml content type -->
 <!-- JNLP File for Trade Manager Application 
-<jnlp spec="1.6+" codebase="$$codebase" href="$$name"> 
+<jnlp spec="1.7+" codebase="$$codebase" href="$$name"> 
 --> 
-<jnlp spec="1.6+" > 
+<jnlp spec="1.7+" > 
 <information> 
    	<title>Trade Manager Tool</title> 
    	<vendor>Trade Manager Org.</vendor> 

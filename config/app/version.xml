@@ -10,11 +10,11 @@
    <platform> 
      <pattern> 
        <name>J2RE</name> 
-       <version-id>1.6</version-id> 
+       <version-id>1.7</version-id> 
        <locale>en_US</locale>
        <locale>en</locale>
      </pattern> 
-     <file>j2re-1_6.0-us.jnlp</file> 
-     <product-version-id>1.6.0</product-version-id>
+     <file>j2re-1_7.0-us.jnlp</file> 
+     <product-version-id>1.7.0</product-version-id>
    </platform> 
 </jnlp-versions> 
