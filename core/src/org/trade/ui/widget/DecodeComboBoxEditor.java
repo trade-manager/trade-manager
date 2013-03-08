@@ -55,8 +55,8 @@ import org.trade.core.valuetype.Decode;
  * @version $Id: DecodeComboBoxEditor.java,v 1.2 2001/11/06 17:14:47 simon Exp $
  * @author Simon Allen
  */
-@SuppressWarnings("rawtypes")
-public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
+
+public class DecodeComboBoxEditor extends JComboBox<Decode> implements ComboBoxEditor,
 		ItemListener, FocusListener {
 	/**
 	 * 
@@ -72,8 +72,8 @@ public class DecodeComboBoxEditor extends JComboBox implements ComboBoxEditor,
 	 * @param model
 	 *            Vector<?>
 	 */
-	@SuppressWarnings("unchecked")
-	public DecodeComboBoxEditor(Vector<?> model) {
+
+	public DecodeComboBoxEditor(Vector<Decode> model) {
 		super(model);
 		this.addItemListener(this);
 		this.addFocusListener(this);

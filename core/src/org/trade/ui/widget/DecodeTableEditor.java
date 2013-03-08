@@ -38,6 +38,8 @@ package org.trade.ui.widget;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 
+import org.trade.core.valuetype.Decode;
+
 /**
  */
 public class DecodeTableEditor extends DefaultCellEditor {
@@ -52,8 +54,7 @@ public class DecodeTableEditor extends DefaultCellEditor {
 	 * @param comboBox
 	 *            JComboBox
 	 */
-	public DecodeTableEditor(
-			@SuppressWarnings("rawtypes") final JComboBox comboBox) {
+	public DecodeTableEditor(final JComboBox<Decode> comboBox) {
 		super(comboBox);
 	}
 }

@@ -122,7 +122,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 * @param tradePersistentModel
 	 *            PersistentModel
 	 */
-	@SuppressWarnings("unchecked")
+
 	public PortfolioPanel(BasePanel controller,
 			PersistentModel tradePersistentModel) {
 		try {
@@ -334,13 +334,12 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 *            DAODecodeComboBoxEditor
 	 * @throws ValueTypeException
 	 */
-	@SuppressWarnings("unchecked")
+
 	private void resetPortfolioComboBox(DAODecodeComboBoxEditor editorComboBox)
 			throws ValueTypeException {
 
 		Vector<Decode> codesNew = ((new DAOPortfolio()).getCodesDecodes());
-		@SuppressWarnings("rawtypes")
-		DefaultComboBoxModel model = new DefaultComboBoxModel(codesNew);
+		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(codesNew);
 		editorComboBox.setModel(model);
 		editorComboBox.setItem(DAOPortfolio.newInstance());
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());

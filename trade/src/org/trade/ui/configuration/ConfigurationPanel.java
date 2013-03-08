@@ -119,7 +119,7 @@ public class ConfigurationPanel extends BasePanel {
 	 * @param tradePersistentModel
 	 *            PersistentModel
 	 */
-	@SuppressWarnings("unchecked")
+
 	public ConfigurationPanel(PersistentModel tradePersistentModel) {
 		try {
 			if (null != getMenu())
@@ -267,7 +267,7 @@ public class ConfigurationPanel extends BasePanel {
 			if (selectedRow > -1)
 				m_table.setRowSelectionInterval(selectedRow, selectedRow);
 			this.setStatusBarMessage(
-					"Save in complete. Note for changed to take effect the Tradinday Tab Search must be re-run.",
+					"Save complete. Note for changed to take effect the Tradinday Tab Search must be re-run.",
 					BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error saving item.", ex.getMessage(), ex);
@@ -580,7 +580,6 @@ public class ConfigurationPanel extends BasePanel {
 		 *            IndicatorSeries
 		 * @throws Exception
 		 */
-		@SuppressWarnings("unchecked")
 		public CodeAttributesPanel(Aspects aspects, IndicatorSeries series)
 				throws Exception {
 

@@ -168,7 +168,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @param tradePersistentModel
 	 *            PersistentModel
 	 */
-	@SuppressWarnings("unchecked")
+
 	public ContractPanel(Tradingdays tradingdays, TabbedAppPanel controller,
 			PersistentModel tradePersistentModel) {
 
@@ -1153,7 +1153,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 * @throws Exception
 		 */
 
-		@SuppressWarnings("unchecked")
+
 		public AllocationMethodPanel(final TradeOrder tradeOrder)
 				throws Exception {
 

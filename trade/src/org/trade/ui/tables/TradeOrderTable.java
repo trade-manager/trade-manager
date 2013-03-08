@@ -38,11 +38,13 @@ package org.trade.ui.tables;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.text.MaskFormatter;
 
+import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OCAType;
@@ -78,25 +80,33 @@ public class TradeOrderTable extends Table {
 	 * @throws ValueTypeException
 	 * @throws ParseException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TradeOrderTable(TableModel model) throws ValueTypeException,
 			ParseException {
 		super(model);
 
-		DecodeTableEditor actionEditor = new DecodeTableEditor(new JComboBox(
-				(new Action()).getCodesDecodes()));
-		DecodeTableEditor oCATypeEditor = new DecodeTableEditor(new JComboBox(
-				(new OCAType()).getCodesDecodes()));
+		DecodeTableEditor actionEditor = new DecodeTableEditor(
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new Action()).getCodesDecodes()));
+		DecodeTableEditor oCATypeEditor = new DecodeTableEditor(
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new OCAType()).getCodesDecodes()));
 		DecodeTableEditor orderTypeEditor = new DecodeTableEditor(
-				new JComboBox((new OrderType()).getCodesDecodes()));
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new OrderType()).getCodesDecodes()));
 		DecodeTableEditor overrideConstraintsEditor = new DecodeTableEditor(
-				new JComboBox((new OverrideConstraints()).getCodesDecodes()));
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new OverrideConstraints())
+								.getCodesDecodes()));
 		DecodeTableEditor timeInForceEditor = new DecodeTableEditor(
-				new JComboBox((new TimeInForce()).getCodesDecodes()));
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new TimeInForce()).getCodesDecodes()));
 		DecodeTableEditor triggerMethodEditor = new DecodeTableEditor(
-				new JComboBox((new TriggerMethod()).getCodesDecodes()));
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new TriggerMethod())
+								.getCodesDecodes()));
 		DecodeTableEditor orderStatusEditor = new DecodeTableEditor(
-				new JComboBox((new OrderStatus()).getCodesDecodes()));
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new OrderStatus()).getCodesDecodes()));
 
 		StringEditor eString = new StringEditor(new StringField(
 				new MaskFormatter(OCA_MASK), OCA_VALIDCHARS, null));

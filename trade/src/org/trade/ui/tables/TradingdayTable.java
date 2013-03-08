@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -48,6 +49,7 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.TableRowSorter;
 
+import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.MarketBar;
 import org.trade.ui.base.Table;
@@ -72,11 +74,10 @@ public class TradingdayTable extends Table {
 	 *            TableModel
 	 * @throws ValueTypeException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TradingdayTable(TableModel model) throws ValueTypeException {
 		super(model);
 		DecodeTableEditor marketBarEditor = new DecodeTableEditor(
-				new JComboBox((new MarketBar()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new MarketBar()).getCodesDecodes()));
 		this.setDefaultEditor(MarketBar.class, marketBarEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),

@@ -37,9 +37,11 @@ package org.trade.ui.tables;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.JComboBox;
 
+import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.AllocationMethod;
@@ -70,31 +72,35 @@ public class ConfigurationTable extends Table {
 	 *            TableModel
 	 * @throws ValueTypeException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigurationTable(TableModel model) throws ValueTypeException {
 		super(model);
-		DecodeTableEditor currencyEditor = new DecodeTableEditor(new JComboBox(
-				(new Currency()).getCodesDecodes()));
+		DecodeTableEditor currencyEditor = new DecodeTableEditor(
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new Currency()).getCodesDecodes()));
 		DecodeTableEditor accountTypeEditor = new DecodeTableEditor(
-				new JComboBox((new AccountType()).getCodesDecodes()));
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new AccountType()).getCodesDecodes()));
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
 				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
 				Calendar.MINUTE);
-		DecodeTableEditor dataTypeEditor = new DecodeTableEditor(new JComboBox(
-				(new DataType()).getCodesDecodes()));
+		DecodeTableEditor dataTypeEditor = new DecodeTableEditor(
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new DataType()).getCodesDecodes()));
 		DecodeTableEditor indicatorSeriesEditor = new DecodeTableEditor(
-				new JComboBox((new IndicatorSeries()).getCodesDecodes()));
-		JComboBox strategyManagerComboBox = new JComboBox(
-				(new DAOStrategyManager()).getCodesDecodes());
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new IndicatorSeries())
+								.getCodesDecodes()));
+		JComboBox<Decode> strategyManagerComboBox = new JComboBox<Decode>(
+				(Vector<Decode>) (new DAOStrategyManager()).getCodesDecodes());
 		DecodeTableEditor dAOStrategyManagerEditor = new DecodeTableEditor(
 				strategyManagerComboBox);
-		JComboBox daoAccountComboBox = new JComboBox(
-				(new DAOAccount()).getCodesDecodes());
+		JComboBox<Decode> daoAccountComboBox = new JComboBox<Decode>(
+				(Vector<Decode>) (new DAOAccount()).getCodesDecodes());
 		DecodeTableEditor dAOAccountEditor = new DecodeTableEditor(
 				daoAccountComboBox);
-		JComboBox allocationMethodComboBox = new JComboBox(
-				(new AllocationMethod()).getCodesDecodes());
+		JComboBox<Decode> allocationMethodComboBox = new JComboBox<Decode>(
+				(Vector<Decode>) (new AllocationMethod()).getCodesDecodes());
 		DecodeTableEditor allocationMethodEditor = new DecodeTableEditor(
 				allocationMethodComboBox);
 		this.setDefaultEditor(Currency.class, currencyEditor);

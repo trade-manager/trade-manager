@@ -73,10 +73,9 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 		model.addTableModelListener(this);
 	}
 
-	// By default, Implement TableModel by forwarding all messages
-	// to the model.
 	/**
-	 * Method getValueAt.
+	 * Method getValueAt. By default, Implement TableModel by forwarding all
+	 * messages to the model.
 	 * 
 	 * @param aRow
 	 *            int
@@ -162,12 +161,9 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 		return model.isCellEditable(row, column);
 	}
 
-	//
-	// Implementation of the TableModelListener interface,
-	//
-	// By default forward all events to all the listeners.
 	/**
-	 * Method tableChanged.
+	 * Method tableChanged. Implementation of the TableModelListener interface,
+	 * By default forward all events to all the listeners.
 	 * 
 	 * @param e
 	 *            TableModelEvent

@@ -381,6 +381,7 @@ public class AverageTrueRangeDataset extends AbstractXYDataset implements
 	 * @return A clone. * @throws CloneNotSupportedException if there is a
 	 *         problem.
 	 */
+
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		AverageTrueRangeDataset clone = (AverageTrueRangeDataset) super.clone();

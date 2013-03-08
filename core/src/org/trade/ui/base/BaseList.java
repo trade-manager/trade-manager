@@ -46,8 +46,8 @@ import javax.swing.event.ListSelectionListener;
  * @version $Id: BaseList.java,v 1.4 2001/11/06 22:37:27 simon Exp $
  * @author Simon Allen
  */
-@SuppressWarnings("rawtypes")
-public class BaseList extends JList {
+
+public class BaseList extends JList<Object> {
 	/**
 	 * 
 	 */
@@ -72,7 +72,6 @@ public class BaseList extends JList {
 	 *            Vector<Object>
 	 * @exception * @see
 	 */
-	@SuppressWarnings("unchecked")
 	public BaseList(BasePanel p, String UICode, Vector<Object> items) {
 		super(items);
 

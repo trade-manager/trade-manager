@@ -40,13 +40,14 @@ import java.util.Vector;
 
 import javax.swing.JComboBox;
 
+import org.trade.core.valuetype.Decode;
+
 /**
  * 
  * @version $Id: BaseComboBox.java,v 1.3 2001/11/06 22:37:27 simon Exp $
  * @author Simon Allen
  */
-@SuppressWarnings("rawtypes")
-public class BaseComboBox extends JComboBox {
+public class BaseComboBox extends JComboBox<Decode> {
 	/**
 	 * 
 	 */
@@ -71,8 +72,8 @@ public class BaseComboBox extends JComboBox {
 	 *            Vector<Object>
 	 * @exception * @see
 	 */
-	@SuppressWarnings("unchecked")
-	public BaseComboBox(BasePanel p, String UICode, Vector<Object> items) {
+
+	public BaseComboBox(BasePanel p, String UICode, Vector<Decode> items) {
 		super(items);
 
 		jbInit(p, UICode);

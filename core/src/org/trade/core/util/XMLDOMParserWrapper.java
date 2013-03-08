@@ -677,8 +677,8 @@ public class XMLDOMParserWrapper {
 	 * @param n
 	 *            Node
 	 */
-	@SuppressWarnings("unused")
-	private void echo(Node n) {
+
+	public void echo(Node n) {
 
 		// Indent to the current level before printing anything
 		outputIndentation();

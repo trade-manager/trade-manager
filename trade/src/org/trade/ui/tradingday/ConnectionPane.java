@@ -73,7 +73,7 @@ public class ConnectionPane extends JPanel {
 	private JFormattedTextField clientIdTextField = null;
 	private Portfolio portfolio = null;
 
-	@SuppressWarnings("unchecked")
+
 	public ConnectionPane() throws ValueTypeException {
 
 		portTextField = new JFormattedTextField(createFormatter("####"));

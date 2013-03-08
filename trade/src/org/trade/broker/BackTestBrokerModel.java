@@ -1214,8 +1214,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @param series
 	 *            CandleSeries
 	 */
-	@SuppressWarnings("unused")
-	private void printCandles(CandleSeries series) {
+
+	public void printCandles(CandleSeries series) {
 		for (int i = 0; i < series.getItemCount(); i++) {
 			CandleItem candle = (CandleItem) series.getDataItem(i);
 			_log.debug(" Symbol: " + series.getContract().getSymbol()

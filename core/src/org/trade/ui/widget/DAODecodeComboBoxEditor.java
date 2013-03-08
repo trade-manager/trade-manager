@@ -49,14 +49,15 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 
 import org.trade.core.valuetype.DAODecode;
+import org.trade.core.valuetype.Decode;
 
 /**
  * 
  * @version $Id: DecodeComboBoxEditor.java,v 1.2 2001/11/06 17:14:47 simon Exp $
  * @author Simon Allen
  */
-@SuppressWarnings("rawtypes")
-public class DAODecodeComboBoxEditor extends JComboBox implements
+
+public class DAODecodeComboBoxEditor extends JComboBox<Decode> implements
 		ComboBoxEditor, ItemListener, FocusListener {
 	/**
 	 * 
@@ -72,8 +73,7 @@ public class DAODecodeComboBoxEditor extends JComboBox implements
 	 * @param model
 	 *            Vector<?>
 	 */
-	@SuppressWarnings("unchecked")
-	public DAODecodeComboBoxEditor(Vector<?> model) {
+	public DAODecodeComboBoxEditor(Vector<Decode> model) {
 		super(model);
 		this.addItemListener(this);
 		this.addFocusListener(this);

@@ -171,7 +171,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 * @param strategyWorkers
 	 *            ConcurrentHashMap<String,StrategyRule>
 	 */
-	@SuppressWarnings("unchecked")
+
 	public TradingdayPanel(Tradingdays tradingdays, BasePanel controller,
 			PersistentModel tradePersistentModel) {
 		try {
@@ -352,20 +352,20 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	public void doWindowActivated() {
 		try {
-			@SuppressWarnings({ "rawtypes", "unchecked" })
+
 			DecodeTableEditor portfolioEditor = new DecodeTableEditor(
-					new JComboBox((new DAOPortfolio()).getCodesDecodes()));
+					new JComboBox<Decode>((Vector<Decode>)(new DAOPortfolio()).getCodesDecodes()));
 			m_tradestrategyTable.setDefaultEditor(DAOPortfolio.class,
 					portfolioEditor);
-			@SuppressWarnings({ "rawtypes", "unchecked" })
+
 			DecodeTableEditor strategyEditor = new DecodeTableEditor(
-					new JComboBox((new DAOStrategy()).getCodesDecodes()));
+					new JComboBox<Decode>((Vector<Decode>)(new DAOStrategy()).getCodesDecodes()));
 			m_tradestrategyTable.setDefaultEditor(DAOStrategy.class,
 					strategyEditor);
 
-			@SuppressWarnings({ "rawtypes", "unchecked" })
+
 			DecodeTableEditor strategyManagerEditor = new DecodeTableEditor(
-					new JComboBox((new DAOStrategyManager()).getCodesDecodes()));
+					new JComboBox<Decode>((Vector<Decode>)(new DAOStrategyManager()).getCodesDecodes()));
 			m_tradestrategyTable.setDefaultEditor(DAOStrategyManager.class,
 					strategyManagerEditor);
 
@@ -1226,13 +1226,12 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 *            DAODecodeComboBoxEditor
 	 * @throws ValueTypeException
 	 */
-	@SuppressWarnings("unchecked")
+
 	private void resetStrategyComboBox(DAODecodeComboBoxEditor editorComboBox)
 			throws ValueTypeException {
 
 		Vector<Decode> codesNew = ((new DAOStrategy()).getCodesDecodes());
-		@SuppressWarnings("rawtypes")
-		DefaultComboBoxModel model = new DefaultComboBoxModel(codesNew);
+		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(codesNew);
 		editorComboBox.setModel(model);
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());
 	}
