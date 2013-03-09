@@ -1898,7 +1898,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 * and Aliases.
 			 */
 			for (Account account : m_accountRequests.values()) {
-				if (AccountType.CORPORATION.equals(account.getAccountType()))
+				if (!AccountType.INDIVIDUAL.equals(account.getAccountType()))
 					corporate = true;
 
 				if (account.isDirty()) {

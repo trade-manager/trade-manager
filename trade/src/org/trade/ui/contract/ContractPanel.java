@@ -340,7 +340,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					.findAccountByNumber(instance.getTrade().getTradestrategy()
 							.getPortfolio().getMasterAccount()
 							.getAccountNumber());
-			if (AccountType.CORPORATION.equals(account.getAccountType())) {
+			if (!AccountType.INDIVIDUAL.equals(account.getAccountType())) {
 				AllocationMethodPanel allocationMethodPanel = new AllocationMethodPanel(
 						instance);
 				if (null != allocationMethodPanel) {
