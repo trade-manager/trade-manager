@@ -71,7 +71,6 @@ import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
-import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
@@ -1192,11 +1191,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						masterAccount = account;
 				}
 			}
-			DBTableLookupServiceProvider.clearLookup();
-			DAOPortfolio code = DAOPortfolio.newInstance();
-			Portfolio defaultPortfolio = (Portfolio) code.getObject();
-			defaultPortfolio = m_tradePersistentModel
-					.findPortfolioByName(defaultPortfolio.getName());
+
+			Portfolio defaultPortfolio = m_tradePersistentModel
+					.findPortfolioDefault();
 			boolean containsAccount = false;
 			for (PortfolioAccount item : defaultPortfolio
 					.getPortfolioAccounts()) {
@@ -1272,6 +1269,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 			}
+			DBTableLookupServiceProvider.clearLookup();
 			tradingdayPanel.doWindowActivated();
 			defaultPortfolio = m_tradePersistentModel
 					.findPortfolioByName(defaultPortfolio.getName());
@@ -1304,11 +1302,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Account account = m_tradePersistentModel
 					.findAccountByNumber(accountNumber);
 			Portfolio portfolio = account.getDefaultPortfolio();
-			portfolio = m_tradePersistentModel.findPortfolioById(portfolio
-					.getId());
-			tradingdayPanel.setPortfolioLabel(portfolio);
-			this.setStatusBarMessage("Account: " + accountNumber
-					+ " information updated.", BasePanel.INFORMATION);
+			if (null != portfolio) {
+				portfolio = m_tradePersistentModel.findPortfolioById(portfolio
+						.getId());
+				tradingdayPanel.setPortfolioLabel(portfolio);
+				this.setStatusBarMessage("Account: " + accountNumber
+						+ " information updated.", BasePanel.INFORMATION);
+			}
+
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);

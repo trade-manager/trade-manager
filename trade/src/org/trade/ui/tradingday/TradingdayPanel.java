@@ -354,18 +354,23 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		try {
 
 			DecodeTableEditor portfolioEditor = new DecodeTableEditor(
-					new JComboBox<Decode>((Vector<Decode>)(new DAOPortfolio()).getCodesDecodes()));
+					new JComboBox<Decode>(
+							(Vector<Decode>) (new DAOPortfolio())
+									.getCodesDecodes()));
 			m_tradestrategyTable.setDefaultEditor(DAOPortfolio.class,
 					portfolioEditor);
 
 			DecodeTableEditor strategyEditor = new DecodeTableEditor(
-					new JComboBox<Decode>((Vector<Decode>)(new DAOStrategy()).getCodesDecodes()));
+					new JComboBox<Decode>(
+							(Vector<Decode>) (new DAOStrategy())
+									.getCodesDecodes()));
 			m_tradestrategyTable.setDefaultEditor(DAOStrategy.class,
 					strategyEditor);
 
-
 			DecodeTableEditor strategyManagerEditor = new DecodeTableEditor(
-					new JComboBox<Decode>((Vector<Decode>)(new DAOStrategyManager()).getCodesDecodes()));
+					new JComboBox<Decode>(
+							(Vector<Decode>) (new DAOStrategyManager())
+									.getCodesDecodes()));
 			m_tradestrategyTable.setDefaultEditor(DAOStrategyManager.class,
 					strategyManagerEditor);
 
@@ -1231,7 +1236,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			throws ValueTypeException {
 
 		Vector<Decode> codesNew = ((new DAOStrategy()).getCodesDecodes());
-		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(codesNew);
+		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(
+				codesNew);
 		editorComboBox.setModel(model);
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());
 	}

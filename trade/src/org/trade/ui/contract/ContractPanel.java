@@ -1153,7 +1153,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 * @throws Exception
 		 */
 
-
 		public AllocationMethodPanel(final TradeOrder tradeOrder)
 				throws Exception {
 

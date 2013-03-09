@@ -348,6 +348,16 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method findPortfolioDefault.
+	 * 
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+	public Portfolio findPortfolioDefault() throws PersistentModelException {
+		return m_portfolioHome.findDefault();
+	}
+
+	/**
 	 * Method resetDefaultPortfolio.
 	 * 
 	 * @param transientInstance

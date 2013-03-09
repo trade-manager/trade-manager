@@ -120,6 +120,43 @@ public class PortfolioHome {
 	}
 
 	/**
+	 * Method findDefault.
+	 * 
+	 * @return Portfolio
+	 */
+	public Portfolio findDefault() {
+
+		try {
+			Portfolio portfolio = null;
+			entityManager = EntityManagerHelper.getEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Portfolio> query = builder
+					.createQuery(Portfolio.class);
+			Root<Portfolio> from = query.from(Portfolio.class);
+			query.select(from);
+			List<Portfolio> items = entityManager.createQuery(query)
+					.getResultList();
+			for (Portfolio item : items) {
+
+				if (item.getIsDefault()) {
+					item.getPortfolioAccounts().size();
+					portfolio = item;
+					break;
+				}
+			}
+			entityManager.getTransaction().commit();
+			return portfolio;
+
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
 	 * Method findByName.
 	 * 
 	 * @param name

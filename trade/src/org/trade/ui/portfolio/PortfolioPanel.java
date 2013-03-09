@@ -339,7 +339,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			throws ValueTypeException {
 
 		Vector<Decode> codesNew = ((new DAOPortfolio()).getCodesDecodes());
-		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(codesNew);
+		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(
+				codesNew);
 		editorComboBox.setModel(model);
 		editorComboBox.setItem(DAOPortfolio.newInstance());
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());

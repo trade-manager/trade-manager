@@ -322,6 +322,14 @@ public interface PersistentModel {
 	Portfolio findPortfolioByName(String name) throws PersistentModelException;
 
 	/**
+	 * Method findPortfolioDefault.
+	 * 
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+	Portfolio findPortfolioDefault() throws PersistentModelException;
+
+	/**
 	 * Method resetDefaultPortfolio.
 	 * 
 	 * @param transientInstance

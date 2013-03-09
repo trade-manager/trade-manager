@@ -73,7 +73,6 @@ public class ConnectionPane extends JPanel {
 	private JFormattedTextField clientIdTextField = null;
 	private Portfolio portfolio = null;
 
-
 	public ConnectionPane() throws ValueTypeException {
 
 		portTextField = new JFormattedTextField(createFormatter("####"));

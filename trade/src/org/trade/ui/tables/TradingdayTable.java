@@ -77,7 +77,8 @@ public class TradingdayTable extends Table {
 	public TradingdayTable(TableModel model) throws ValueTypeException {
 		super(model);
 		DecodeTableEditor marketBarEditor = new DecodeTableEditor(
-				new JComboBox<Decode>((Vector<Decode>) (new MarketBar()).getCodesDecodes()));
+				new JComboBox<Decode>(
+						(Vector<Decode>) (new MarketBar()).getCodesDecodes()));
 		this.setDefaultEditor(MarketBar.class, marketBarEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
