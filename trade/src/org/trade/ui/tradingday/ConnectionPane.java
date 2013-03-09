@@ -201,12 +201,11 @@ public class ConnectionPane extends JPanel {
 	 * @return MaskFormatter
 	 */
 	private MaskFormatter createFormatter(String s) {
-		MaskFormatter formatter = null;
 		try {
-			formatter = new MaskFormatter(s);
+			return new MaskFormatter(s);
 		} catch (ParseException exc) {
 			_log.error("Error creating formatter: " + exc.getMessage());
 		}
-		return formatter;
+		return null;
 	}
 }
