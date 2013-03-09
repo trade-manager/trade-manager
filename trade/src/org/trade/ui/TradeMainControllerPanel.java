@@ -63,7 +63,6 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerChangeListener;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
-import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
@@ -1174,16 +1173,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		scanLine.useDelimiter("\\,");
 
 		try {
-			Account masterAccount = null;
 
+			/*
+			 * The first account in is deemed the master account if there is
+			 * only one managed account. Accounts are just place holders and are
+			 * only meaningful if the account type is INDICVIDUAL. For the
+			 * default portfolio we subscribe to account updates to all
+			 * accounts.
+			 */
+
+			int tokens = accountNumbers.replaceAll("[^,]", "").length();
+
+			Account masterAccount = null;
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
 				if (accountNumber.length() > 0) {
 					Account account = m_tradePersistentModel
 							.findAccountByNumber(accountNumber);
 					if (null == account) {
-						account = new Account(accountNumber, accountNumber,
-								AccountType.INDIVIDUAL, Currency.USD, false);
+						if (tokens == 0) {
+							account = new Account(accountNumber, accountNumber,
+									AccountType.INDIVIDUAL, Currency.USD, false);
+						} else {
+							account = new Account(accountNumber, accountNumber,
+									AccountType.CORPORATION, Currency.USD,
+									false);
+						}
 						account = (Account) m_tradePersistentModel
 								.persistAspect(account);
 					}
@@ -1205,55 +1220,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 
 			if (!containsAccount) {
-				if (null == defaultPortfolio) {
-					int result = JOptionPane.showConfirmDialog(this.getFrame(),
-							"Do you want to create a Portfolio for  account: "
-									+ masterAccount.getAccountNumber(),
-							"Information", JOptionPane.YES_NO_OPTION);
-					if (result == JOptionPane.YES_OPTION) {
-						Portfolio portfolio = new Portfolio();
-						portfolio.setName(masterAccount.getName());
-						portfolio.setAlias(masterAccount.getAlias());
-						PortfolioAccount portfolioAccount = new PortfolioAccount(
-								portfolio, masterAccount);
-						masterAccount.getPortfolioAccounts().add(
-								portfolioAccount);
-						masterAccount = (Account) m_tradePersistentModel
-								.persistAspect(masterAccount);
-					}
-
-				} else {
-					Aspects portfolios = m_tradePersistentModel
-							.findAspectsByClassName(Portfolio.class.getName());
-					if (portfolios.getAspect().size() == 1) {
-						PortfolioAccount portfolioAccount = new PortfolioAccount(
-								defaultPortfolio, masterAccount);
-						masterAccount.getPortfolioAccounts().add(
-								portfolioAccount);
-						masterAccount = (Account) m_tradePersistentModel
-								.persistAspect(masterAccount);
-					} else {
-						int result = JOptionPane.showConfirmDialog(
-								this.getFrame(),
-								"Do you want to add this account: "
-										+ masterAccount.getAccountNumber()
-										+ " to the default Portfolio?",
-								"Information", JOptionPane.YES_NO_OPTION);
-						if (result == JOptionPane.YES_OPTION) {
-							PortfolioAccount portfolioAccount = new PortfolioAccount(
-									defaultPortfolio, masterAccount);
-							masterAccount.getPortfolioAccounts().add(
-									portfolioAccount);
-							masterAccount = (Account) m_tradePersistentModel
-									.persistAspect(masterAccount);
-						}
-					}
+				if (defaultPortfolio.getPortfolioAccounts().isEmpty()) {
+					PortfolioAccount portfolioAccount = new PortfolioAccount(
+							defaultPortfolio, masterAccount);
+					masterAccount.getPortfolioAccounts().add(portfolioAccount);
+					masterAccount.setIsDefault(true);
+					masterAccount = (Account) m_tradePersistentModel
+							.persistAspect(masterAccount);
 				}
 			}
 			if (!masterAccount.getIsDefault()) {
-				Aspects accounts = m_tradePersistentModel
-						.findAspectsByClassName(Account.class.getName());
-				if (accounts.getAspect().size() == 1) {
+				if (tokens == 0) {
 					m_tradePersistentModel.resetDefaultAccount(
 							defaultPortfolio, masterAccount);
 				} else {
