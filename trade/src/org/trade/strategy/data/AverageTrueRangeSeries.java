@@ -288,7 +288,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
-		if (getLength() != null && getLength() > 0) {
+		if (getLength() == null || getLength() < 1) {
 			throw new IllegalArgumentException(
 					"ATR period must be greater than 0.");
 		}

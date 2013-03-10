@@ -321,8 +321,9 @@ public class MovingAverageSeries extends IndicatorSeries {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
-		if (getLength() != null && getLength() > 0) {
-			throw new IllegalArgumentException("MA period must be positive.");
+		if (getLength() == null || getLength() < 1) {
+			throw new IllegalArgumentException(
+					"MA period must be greater than zero.");
 		}
 
 		if (skip == 0) {

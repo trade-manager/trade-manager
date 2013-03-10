@@ -1045,10 +1045,13 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		if (isStrategyWorkerRunning(key)) {
 			killStrategyWorker(key);
 		}
-		key = tradestrategy.getStrategy().getStrategyManager().getClassName()
-				+ tradestrategy.getIdTradeStrategy();
-		if (isStrategyWorkerRunning(key)) {
-			killStrategyWorker(key);
+		if (null != tradestrategy.getStrategy().getStrategyManager()) {
+			key = tradestrategy.getStrategy().getStrategyManager()
+					.getClassName()
+					+ tradestrategy.getIdTradeStrategy();
+			if (isStrategyWorkerRunning(key)) {
+				killStrategyWorker(key);
+			}
 		}
 	}
 
