@@ -287,8 +287,8 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
-		if (getLength() < Double.MIN_VALUE) {
-			throw new IllegalArgumentException("period must be positive.");
+		if (getLength() != null && getLength() > 0) {
+			throw new IllegalArgumentException("CCI period must be positive.");
 		}
 
 		if (skip == 0) {
