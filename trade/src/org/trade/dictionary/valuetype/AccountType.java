@@ -45,7 +45,7 @@ public class AccountType extends Decode {
 	public static final String DECODE = "ACCOUNT_TYPE";
 
 	public AccountType() {
-		super(DECODE);
+		super(DECODE, true);
 	}
 
 	/**
