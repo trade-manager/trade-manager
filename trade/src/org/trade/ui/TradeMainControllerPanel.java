@@ -304,7 +304,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					"Please save before running strategy ...\n",
 					BasePanel.WARNING);
 		} else {
-			contractPanel.doCloseAll();
 			runStrategy(m_tradingdays, true);
 		}
 	}
@@ -1617,6 +1616,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 			getMenu().setEnabledSearchDeleteRefreshSave(false);
 			tradingdayPanel.cleanStrategyWorker();
+			contractPanel.doCloseAll();
 			/*
 			 * Now run a thread that gets and saves historical data from IB TWS.
 			 */
