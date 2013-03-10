@@ -1172,6 +1172,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		try {
 			Account masterAccount = null;
+
+			int tokens = accountNumbers.replaceAll("[^,]", "").length();
+
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
 				if (accountNumber.length() > 0) {
@@ -1201,7 +1204,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 
 			if (!containsAccount) {
-				if (defaultPortfolio.getPortfolioAccounts().isEmpty()) {
+				if (defaultPortfolio.getPortfolioAccounts().isEmpty()
+						&& tokens == 0) {
 					PortfolioAccount portfolioAccount = new PortfolioAccount(
 							defaultPortfolio, masterAccount);
 					defaultPortfolio.getPortfolioAccounts().add(
