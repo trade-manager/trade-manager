@@ -257,9 +257,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	/**
 	 * Method onReqFinancialAccount.
 	 * 
+	 * @param requestType
+	 *            Integer Values are EClientSocket.GROUPS,
+	 *            EClientSocket.PROFILES, EClientSocket.ALIASES
 	 * @see org.trade.broker.onReqFinancialAccount()
 	 */
-	public void onReqFinancialAccount() throws BrokerModelException {
+	public void onReqFinancialAccount(Integer requestType)
+			throws BrokerModelException {
 	}
 
 	/**
@@ -972,21 +976,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		String symbol = "N/A";
 		BrokerModelException brokerModelException = null;
 
-		if (m_historyDataRequests.containsKey(id)) {
-			symbol = m_historyDataRequests.get(id).getSymbol();
-			synchronized (m_historyDataRequests) {
-				m_historyDataRequests.remove(id);
-				m_historyDataRequests.notifyAll();
-			}
-		}
-		if (m_realTimeBarsRequests.containsKey(id)) {
-			symbol = m_realTimeBarsRequests.get(id).getSymbol();
-			synchronized (m_realTimeBarsRequests) {
-				m_realTimeBarsRequests.remove(id);
-				m_realTimeBarsRequests.notifyAll();
-			}
-		}
-
 		/*
 		 * Error code 162 (Historical data request pacing violation)and 366 (No
 		 * historical data query found for ticker id) are error code for no
@@ -1015,6 +1004,20 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		} else {
 			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
 					+ " Code: " + code + " Msg: " + msg);
+			if (m_historyDataRequests.containsKey(id)) {
+				symbol = m_historyDataRequests.get(id).getSymbol();
+				synchronized (m_historyDataRequests) {
+					m_historyDataRequests.remove(id);
+					m_historyDataRequests.notifyAll();
+				}
+			}
+			if (m_realTimeBarsRequests.containsKey(id)) {
+				symbol = m_realTimeBarsRequests.get(id).getSymbol();
+				synchronized (m_realTimeBarsRequests) {
+					m_realTimeBarsRequests.remove(id);
+					m_realTimeBarsRequests.notifyAll();
+				}
+			}
 			brokerModelException = new BrokerModelException(1, code, "Req Id: "
 					+ id + " Error Code: " + code + " Symbol: " + symbol + " "
 					+ msg);

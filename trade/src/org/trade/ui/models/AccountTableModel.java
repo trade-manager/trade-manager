@@ -40,7 +40,6 @@ import java.util.Vector;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Money;
-import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.dao.Account;
@@ -60,7 +59,6 @@ public class AccountTableModel extends TableModel {
 	private static final String ACCT_NUMBER = "Acct #*";
 	private static final String ACCT_TYPE = "Type*";
 	private static final String ACCT_ALIAS = "Alias";
-	private static final String IS_DEFAULT = "Default";
 	private static final String CURRENCY = "Currency*";
 	private static final String AVAILABLE_FUNDS = "Availble Funds";
 	private static final String BUYING_POWER = " Buying Power";
@@ -71,8 +69,7 @@ public class AccountTableModel extends TableModel {
 	private static final String LAST_UPDATED = "  Last Update  ";
 
 	private static final String[] columnHeaderToolTip = { null, null,
-			"Use Corp for FA accounts", null,
-			"The account that is subscribed to", null, null, null, null, null,
+			"Use Corp for FA accounts", null, null, null, null, null, null,
 			null, null, null };
 
 	private Portfolio m_data = null;
@@ -81,20 +78,19 @@ public class AccountTableModel extends TableModel {
 		super(columnHeaderToolTip);
 		// Get the column names and cache them.
 		// Then we can close the connection.
-		columnNames = new String[13];
+		columnNames = new String[12];
 		columnNames[0] = NAME;
 		columnNames[1] = ACCT_NUMBER;
 		columnNames[2] = ACCT_TYPE;
 		columnNames[3] = ACCT_ALIAS;
-		columnNames[4] = IS_DEFAULT;
-		columnNames[5] = CURRENCY;
-		columnNames[6] = AVAILABLE_FUNDS;
-		columnNames[7] = BUYING_POWER;
-		columnNames[8] = CASH_BALANCE;
-		columnNames[9] = GROSS_POSITION_VALUE;
-		columnNames[10] = REALIZED_PL;
-		columnNames[11] = UNREALIZED_PL;
-		columnNames[12] = LAST_UPDATED;
+		columnNames[4] = CURRENCY;
+		columnNames[5] = AVAILABLE_FUNDS;
+		columnNames[6] = BUYING_POWER;
+		columnNames[7] = CASH_BALANCE;
+		columnNames[8] = GROSS_POSITION_VALUE;
+		columnNames[9] = REALIZED_PL;
+		columnNames[10] = UNREALIZED_PL;
+		columnNames[11] = LAST_UPDATED;
 	}
 
 	/**
@@ -162,45 +158,40 @@ public class AccountTableModel extends TableModel {
 			break;
 		}
 		case 4: {
-			element.getAccount().setIsDefault(
-					new Boolean(((YesNo) value).getCode()));
-			break;
-		}
-		case 5: {
 			element.getAccount().setCurrency(((Currency) value).getCode());
 			break;
 		}
-		case 6: {
+		case 5: {
 			element.getAccount().setAvailableFunds(
 					((Money) value).getBigDecimalValue());
 			break;
 		}
-		case 7: {
+		case 6: {
 			element.getAccount().setBuyingPower(
 					((Money) value).getBigDecimalValue());
 			break;
 		}
-		case 8: {
+		case 7: {
 			element.getAccount().setCashBalance(
 					((Money) value).getBigDecimalValue());
 			break;
 		}
-		case 9: {
+		case 8: {
 			element.getAccount().setGrossPositionValue(
 					((Money) value).getBigDecimalValue());
 			break;
 		}
-		case 10: {
+		case 9: {
 			element.getAccount().setRealizedPnL(
 					((Money) value).getBigDecimalValue());
 			break;
 		}
-		case 11: {
+		case 10: {
 			element.getAccount().setUnrealizedPnL(
 					((Money) value).getBigDecimalValue());
 			break;
 		}
-		case 12: {
+		case 11: {
 			element.getAccount().setUpdateDate(((Date) value).getDate());
 			break;
 		}
@@ -235,7 +226,6 @@ public class AccountTableModel extends TableModel {
 	public void addRow() {
 		final Account account = new Account();
 		account.setCurrency(Currency.USD);
-		account.setAccountType(AccountType.INDIVIDUAL);
 		final PortfolioAccount element = new PortfolioAccount(getData(),
 				account);
 		getData().getPortfolioAccounts().add(element);
@@ -264,8 +254,6 @@ public class AccountTableModel extends TableModel {
 					.getAccountType()));
 		}
 		newRow.addElement(element.getAccount().getAlias());
-		newRow.addElement(YesNo
-				.newInstance(element.getAccount().getIsDefault()));
 		newRow.addElement(Currency.newInstance(element.getAccount()
 				.getCurrency()));
 		if (null == element.getAccount().getAvailableFunds()) {

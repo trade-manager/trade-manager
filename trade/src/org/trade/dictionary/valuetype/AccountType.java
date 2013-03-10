@@ -43,8 +43,6 @@ public class AccountType extends Decode {
 
 	private static final long serialVersionUID = -5381026427696898592L;
 	public static final String DECODE = "ACCOUNT_TYPE";
-	public static final String CORPORATION = "CORPORATION";
-	public static final String INDIVIDUAL = "INDIVIDUAL";
 
 	public AccountType() {
 		super(DECODE);

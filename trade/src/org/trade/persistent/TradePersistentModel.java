@@ -46,7 +46,6 @@ import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -637,30 +636,6 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method resetDefaultAccount.
-	 * 
-	 * @param account
-	 *            Account
-	 * @param portfolio
-	 *            Portfolio
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#resetDefaultAccount(Account)
-	 */
-	public void resetDefaultAccount(Portfolio portfolio, Account account)
-			throws PersistentModelException {
-
-		try {
-			m_accountHome.resetDefaultAccount(portfolio, account);
-		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error setting default account. Please refresh before save.");
-		} catch (Exception e) {
-			throw new PersistentModelException("Error saving Trade Account: "
-					+ account.getAccountNumber() + "\n Msg: " + e.getMessage());
-		}
-	}
-
-	/**
 	 * Method persistCandleSeries.
 	 * 
 	 * @param candleSeries
@@ -1214,7 +1189,6 @@ public class TradePersistentModel implements PersistentModel {
 				m_aspectHome.persist(account);
 				return account;
 			} else {
-				instance.setAccountType(AccountType.CORPORATION);
 				instance.setCurrency(Currency.USD);
 				instance.setName(instance.getAccountNumber());
 				instance.setUpdateDate(new Date());

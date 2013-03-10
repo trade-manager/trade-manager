@@ -92,10 +92,9 @@ SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS account (
   idAccount INT NOT NULL AUTO_INCREMENT ,
   accountNumber VARCHAR(20) NOT NULL ,
-  accountType VARCHAR(20) NOT NULL ,
+  accountType VARCHAR(20) NULL ,
   name VARCHAR(45) NOT NULL ,
   alias VARCHAR(45) NULL ,
-  isDefault TINYINT(1)  NOT NULL ,
   availableFunds DECIMAL(10,2) NULL ,
   buyingPower DECIMAL(10,2) NULL ,
   cashBalance DECIMAL(10,2) NULL ,

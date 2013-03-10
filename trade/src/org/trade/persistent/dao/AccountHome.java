@@ -35,16 +35,12 @@
  */
 package org.trade.persistent.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
@@ -110,55 +106,6 @@ public class AccountHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
-			EntityManagerHelper.rollback();
-			throw re;
-		} finally {
-			EntityManagerHelper.close();
-		}
-	}
-
-	/**
-	 * Method resetDefaultAccount.
-	 * 
-	 * @param defaultAccount
-	 *            Account
-	 * 
-	 * @param portfolio
-	 *            Portfolio
-	 */
-	public void resetDefaultAccount(Portfolio portfolio, Account defaultAccount) {
-
-		try {
-			entityManager = EntityManagerHelper.getEntityManager();
-			entityManager.getTransaction().begin();
-			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<PortfolioAccount> query = builder
-					.createQuery(PortfolioAccount.class);
-			Root<PortfolioAccount> from = query.from(PortfolioAccount.class);
-			query.select(from);
-			List<Predicate> predicates = new ArrayList<Predicate>();
-			Join<PortfolioAccount, Portfolio> portfolios = from
-					.join("portfolio");
-			Predicate predicate = builder.equal(portfolios.get("idPortfolio"),
-					portfolio.getIdPortfolio());
-			predicates.add(predicate);
-			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<PortfolioAccount> typedQuery = entityManager
-					.createQuery(query);
-			List<PortfolioAccount> items = typedQuery.getResultList();
-
-			for (PortfolioAccount item : items) {
-				if (defaultAccount.getIdAccount().equals(
-						item.getAccount().getIdAccount())) {
-					item.getAccount().setIsDefault(true);
-
-				} else {
-					item.getAccount().setIsDefault(false);
-				}
-				entityManager.persist(item);
-			}
-			entityManager.getTransaction().commit();
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();
 			throw re;

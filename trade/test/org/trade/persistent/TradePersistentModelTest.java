@@ -52,7 +52,6 @@ import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
@@ -68,7 +67,6 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Trade;
@@ -537,44 +535,6 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testResetDefaultAccount() {
-
-		try {
-
-			Account account = new Account("Test1", "DU12366",
-					AccountType.INDIVIDUAL, Currency.USD, true);
-			Portfolio portfolio = this.tradestrategy.getPortfolio();
-			portfolio = this.tradePersistentModel.findPortfolioByName(portfolio
-					.getName());
-			Account defaultAccount = portfolio.getMasterAccount();
-			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
-					account);
-			portfolio.getPortfolioAccounts().add(portfolioAccount);
-			portfolio = (Portfolio) this.tradePersistentModel
-					.persistAspect(portfolio);
-			account = this.tradePersistentModel.findAccountByNumber(account
-					.getAccountNumber());
-			this.tradePersistentModel.resetDefaultAccount(
-					this.tradestrategy.getPortfolio(), account);
-			account = this.tradePersistentModel.findAccountByNumber(account
-					.getAccountNumber());
-			TestCase.assertTrue(account.getIsDefault());
-			defaultAccount = this.tradePersistentModel
-					.findAccountByNumber(defaultAccount.getAccountNumber());
-			this.tradePersistentModel.resetDefaultAccount(
-					this.tradestrategy.getPortfolio(), defaultAccount);
-			defaultAccount = this.tradePersistentModel
-					.findAccountByNumber(defaultAccount.getAccountNumber());
-			TestCase.assertTrue(defaultAccount.getIsDefault());
-			this.tradePersistentModel.removeAspect(account);
-
-		} catch (Exception e) {
-			TestCase.fail("Error testResetDefaultTradeAccount Msg: "
-					+ e.getMessage());
-		}
-	}
-
-	@Test
 	public void testPersistTradeOrder() {
 
 		try {
@@ -760,7 +720,7 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			Account result = this.tradePersistentModel
 					.findAccountByNumber(this.tradestrategy.getPortfolio()
-							.getMasterAccount().getAccountNumber());
+							.getIndividualAccount().getAccountNumber());
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradeAccountByNumber Msg: "

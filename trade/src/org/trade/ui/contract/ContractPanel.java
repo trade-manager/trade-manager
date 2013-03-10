@@ -84,7 +84,6 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.DAOGroup;
 import org.trade.dictionary.valuetype.DAOProfile;
@@ -94,7 +93,6 @@ import org.trade.dictionary.valuetype.Tier;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
-import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
@@ -336,16 +334,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 	public void doProperties(TradeOrder instance) {
 		try {
-			Account account = m_tradePersistentModel
-					.findAccountByNumber(instance.getTrade().getTradestrategy()
-							.getPortfolio().getMasterAccount()
-							.getAccountNumber());
-			if (!AccountType.INDIVIDUAL.equals(account.getAccountType())) {
+
+			if (null == instance.getTrade().getTradestrategy().getPortfolio()
+					.getIndividualAccount()) {
 				AllocationMethodPanel allocationMethodPanel = new AllocationMethodPanel(
 						instance);
 				if (null != allocationMethodPanel) {
 					TextDialog dialog = new TextDialog(this.getFrame(),
-							"Indicator Properties", true, allocationMethodPanel);
+							"FA Account Properties", true,
+							allocationMethodPanel);
 					dialog.setLocationRelativeTo(this);
 					dialog.setVisible(true);
 					if (!dialog.getCancel()) {
@@ -360,7 +357,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							} else {
 								instance.setAccountNumber(instance.getTrade()
 										.getTradestrategy().getPortfolio()
-										.getMasterAccount().getAccountNumber());
+										.getIndividualAccount()
+										.getAccountNumber());
 							}
 						}
 					}

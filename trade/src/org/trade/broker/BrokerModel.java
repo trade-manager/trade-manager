@@ -153,11 +153,15 @@ public interface BrokerModel {
 	void onCancelAccountUpdates(String accountNumber);
 
 	/**
+	 * 
 	 * Method onReqFinancialAccount.
 	 * 
+	 * @param requestType
+	 *            Integer Values are EClientSocket.GROUPS,
+	 *            EClientSocket.PROFILES, EClientSocket.ALIASES
 	 * @throws BrokerModelException
 	 */
-	void onReqFinancialAccount() throws BrokerModelException;
+	void onReqFinancialAccount(Integer requestType) throws BrokerModelException;
 
 	/**
 	 * Method onReqReplaceFinancialAccount.

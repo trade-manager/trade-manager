@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.util.TradingCalendar;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
@@ -207,8 +206,7 @@ public class TradestrategyTest extends TestCase {
 		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 				.getObject();
 		portfolio = portfolioHome.findByName(portfolio.getName());
-		Account account = new Account("Test", "T123456",
-				AccountType.INDIVIDUAL, Currency.USD, true);
+		Account account = new Account("Test", "T123456", Currency.USD);
 		account.setAvailableFunds(new BigDecimal(25000));
 		account.setBuyingPower(new BigDecimal(100000));
 		account.setCashBalance(new BigDecimal(25000));
@@ -280,7 +278,7 @@ public class TradestrategyTest extends TestCase {
 			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 					.getObject();
 			portfolio = portfolioHome.findByName(portfolio.getName());
-			Account account = portfolio.getMasterAccount();
+			Account account = portfolio.getIndividualAccount();
 			if (null != account) {
 				aspectHome.remove(account);
 			}

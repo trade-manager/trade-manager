@@ -95,18 +95,6 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method resetDefaultAccount.
-	 * 
-	 * @param account
-	 *            Account
-	 * @param portfolio
-	 *            Portfolio
-	 * @throws PersistentModelException
-	 */
-	void resetDefaultAccount(Portfolio portfolio, Account account)
-			throws PersistentModelException;
-
-	/**
 	 * Method persistTradeOrder.
 	 * 
 	 * @param transientInstance

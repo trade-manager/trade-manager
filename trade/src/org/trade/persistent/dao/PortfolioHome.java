@@ -50,7 +50,6 @@ import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.core.util.CoreUtils;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModelException;
 
@@ -250,8 +249,6 @@ public class PortfolioHome {
 					Account account = findByAccountNumber(item.getAccount()
 							.getAccountNumber());
 					if (null == account) {
-						item.getAccount().setAccountType(
-								AccountType.CORPORATION);
 						item.getAccount().setCurrency(Currency.USD);
 						item.getAccount().setName(
 								item.getAccount().getAccountNumber());
@@ -275,8 +272,6 @@ public class PortfolioHome {
 					Account account = findByAccountNumber(item.getAccount()
 							.getAccountNumber());
 					if (null == account) {
-						item.getAccount().setAccountType(
-								AccountType.CORPORATION);
 						item.getAccount().setCurrency(Currency.USD);
 						item.getAccount().setName(
 								item.getAccount().getAccountNumber());

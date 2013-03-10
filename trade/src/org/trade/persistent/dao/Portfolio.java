@@ -215,45 +215,6 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getMasterAccount.
-	 * 
-	 * @return Account
-	 */
-	@Transient
-	public Account getMasterAccount() {
-		for (PortfolioAccount item : this.portfolioAccounts) {
-			if (item.getAccount().getIsDefault()) {
-				return item.getAccount();
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Method setMasterAccountNumber.
-	 * 
-	 * @param masterAccountNumber
-	 *            String
-	 */
-	public void setMasterAccountNumber(Account account) {
-		boolean set = false;
-		for (PortfolioAccount item : this.portfolioAccounts) {
-			if (item.getAccount().getAccountNumber()
-					.equals(account.getAccountNumber())) {
-				item.getAccount().setIsDefault(true);
-				set = true;
-			} else {
-				item.getAccount().setIsDefault(false);
-			}
-		}
-		if (!set) {
-			account.setIsDefault(true);
-			PortfolioAccount pa = new PortfolioAccount(this, account);
-			this.portfolioAccounts.add(pa);
-		}
-	}
-
-	/**
 	 * Method getUpdateDate.
 	 * 
 	 * @return Date
@@ -333,6 +294,19 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setPortfolioAccounts(List<PortfolioAccount> portfolioAccounts) {
 		this.portfolioAccounts = portfolioAccounts;
+	}
+
+	/**
+	 * Method getIndividualAccount.
+	 * 
+	 * @return account
+	 */
+	@Transient
+	public Account getIndividualAccount() {
+		if (this.getPortfolioAccounts().size() == 1) {
+			return this.getPortfolioAccounts().get(0).getAccount();
+		}
+		return null;
 	}
 
 	/**

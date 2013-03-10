@@ -479,10 +479,10 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onSubscribeAccountUpdates(true, tradestrategy
-					.getPortfolio().getMasterAccount().getAccountNumber());
+					.getPortfolio().getIndividualAccount().getAccountNumber());
 			TestCase.assertFalse(m_brokerModel
 					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getMasterAccount().getAccountNumber()));
+							.getIndividualAccount().getAccountNumber()));
 
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnSubscribeAccountUpdates Msg: "
@@ -495,12 +495,12 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onSubscribeAccountUpdates(true, tradestrategy
-					.getPortfolio().getMasterAccount().getAccountNumber());
+					.getPortfolio().getIndividualAccount().getAccountNumber());
 			m_brokerModel.onCancelAccountUpdates(tradestrategy.getPortfolio()
-					.getMasterAccount().getAccountNumber());
+					.getIndividualAccount().getAccountNumber());
 			TestCase.assertFalse(m_brokerModel
 					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getMasterAccount().getAccountNumber()));
+							.getIndividualAccount().getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnCancelAccountUpdates Msg: "
 					+ ex.getMessage());
@@ -514,7 +514,7 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onReqManagedAccount();
 			TestCase.assertFalse(m_brokerModel
 					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getMasterAccount().getAccountNumber()));
+							.getIndividualAccount().getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnReqManagedAccount Msg: "
 					+ ex.getMessage());
@@ -598,10 +598,10 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 			m_brokerModel.onCancelAccountUpdates(tradestrategy.getPortfolio()
-					.getMasterAccount().getAccountNumber());
+					.getIndividualAccount().getAccountNumber());
 			TestCase.assertFalse(m_brokerModel
 					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getMasterAccount().getAccountNumber()));
+							.getIndividualAccount().getAccountNumber()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
 					+ ex.getMessage());

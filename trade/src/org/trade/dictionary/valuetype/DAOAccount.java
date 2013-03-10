@@ -35,12 +35,7 @@
  */
 package org.trade.dictionary.valuetype;
 
-import java.util.Iterator;
-
 import org.trade.core.valuetype.DAODecode;
-import org.trade.core.valuetype.Decode;
-import org.trade.core.valuetype.ValueTypeException;
-import org.trade.persistent.dao.Account;
 
 /**
  */
@@ -75,24 +70,9 @@ public class DAOAccount extends DAODecode {
 	 * @return DAOAccount
 	 */
 	public static DAOAccount newInstance() {
-
-		try {
-			final DAOAccount returnInstance = new DAOAccount();
-			DAOAccount code = null;
-			for (Iterator<Decode> iterCodes = returnInstance.getCodesDecodes()
-					.iterator(); iterCodes.hasNext();) {
-				code = (DAOAccount) iterCodes.next();
-				Account account = (Account) code.getObject();
-				if (account.getIsDefault())
-					return code;
-			}
-			if (null == code) {
-				code = returnInstance;
-			}
-			return code;
-		} catch (ValueTypeException e) {
-			return null;
-		}
+		final DAOAccount returnInstance = new DAOAccount();
+		returnInstance.setDefaultCode();
+		return returnInstance;
 	}
 
 	/**

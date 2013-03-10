@@ -42,7 +42,6 @@ import org.junit.Test;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Account;
@@ -182,8 +181,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 		try {
 			Aspects aspects = new Aspects();
 			Portfolio portfolio = new Portfolio("pf_eq_daily", "pf_eq_daily");
-			Account account = new Account("DU12345", "DU12345",
-					AccountType.CORPORATION, Currency.USD, false);
+			Account account = new Account("DU12345", "DU12345", Currency.USD);
 			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
 					account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);

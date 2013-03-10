@@ -61,7 +61,6 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -248,28 +247,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	/**
 	 * Method onReqFinancialAccount.
 	 * 
+	 * @param requestType
+	 *            Integer Values are EClientSocket.GROUPS,
+	 *            EClientSocket.PROFILES, EClientSocket.ALIASES
 	 * @see org.trade.broker.onReqFinancialAccount()
 	 */
-	public void onReqFinancialAccount() throws BrokerModelException {
+	public void onReqFinancialAccount(Integer requestType)
+			throws BrokerModelException {
 		try {
 			if (m_client.isConnected()) {
-				/*
-				 * Delete all the FinancialAccount/AllocationAccount and
-				 * re-populate via the xml.
-				 * 
-				 * TODO check to see it this method is call only one on login or
-				 * is it called for every account. If so this needs to be
-				 * changed so that we only call this method once.
-				 */
-				Aspects items = m_tradePersistentModel
-						.findAspectsByClassName(PortfolioAccount.class
-								.getName());
-				for (Aspect aspect : items.getAspect()) {
-					m_tradePersistentModel.removeAspect(aspect);
-				}
-				m_client.requestFA(EClientSocket.GROUPS);
-				m_client.requestFA(EClientSocket.PROFILES);
-				m_client.requestFA(EClientSocket.ALIASES);
+				m_client.requestFA(requestType);
 			} else {
 				throw new BrokerModelException(0, 3010,
 						"Not conected Financial Account data cannot be retrieved");
@@ -1349,42 +1336,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		String symbol = "N/A";
 		BrokerModelException brokerModelException = null;
 
-		if (m_historyDataRequests.containsKey(id)) {
-			symbol = m_historyDataRequests.get(id).getSymbol();
-			synchronized (m_historyDataRequests) {
-				m_historyDataRequests.remove(id);
-				m_historyDataRequests.notifyAll();
-			}
-		}
-		if (m_realTimeBarsRequests.containsKey(id)) {
-			symbol = m_realTimeBarsRequests.get(id).getSymbol();
-			synchronized (m_realTimeBarsRequests) {
-				m_realTimeBarsRequests.remove(id);
-				m_realTimeBarsRequests.notifyAll();
-			}
-		}
-		if (m_marketDataRequests.containsKey(id)) {
-			symbol = m_marketDataRequests.get(id).getSymbol();
-			synchronized (m_marketDataRequests) {
-				m_marketDataRequests.remove(id);
-				m_marketDataRequests.notifyAll();
-			}
-		}
-		if (m_contractRequests.containsKey(id)) {
-			symbol = m_contractRequests.get(id).getSymbol();
-			synchronized (m_contractRequests) {
-				m_contractRequests.remove(id);
-				m_contractRequests.notifyAll();
-			}
-		}
-
 		/*
 		 * Error code 162 (Historical data request pacing violation)and 366 (No
 		 * historical data query found for ticker id) are error code for no
 		 * market or historical data found.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
-				|| (code == 366) || (code == 162)) {
+				|| (code == 366) || (code == 162) || (code == 321)) {
 			if (((code > 1999) && (code < 3000))) {
 				_log.info("BrokerModel Req Id: " + id + " Code: " + code
 						+ " Msg: " + msg);
@@ -1395,6 +1353,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						+ " Msg: " + msg);
 				brokerModelException = new BrokerModelException(2, code,
 						"Order Id: " + id + " Code: " + code + " " + msg);
+			} else if (code == 321) {
+				_log.info("BrokerModel Req Id: " + id + " Code: " + code
+						+ " Msg: " + msg);
+				return;
 			} else {
 				_log.warn("BrokerModel symbol: " + symbol + " Req Id: " + id
 						+ " Code: " + code + " Msg: " + msg);
@@ -1406,6 +1368,35 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		} else {
 			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
 					+ " Code: " + code + " Msg: " + msg);
+			if (m_historyDataRequests.containsKey(id)) {
+				symbol = m_historyDataRequests.get(id).getSymbol();
+				synchronized (m_historyDataRequests) {
+					m_historyDataRequests.remove(id);
+					m_historyDataRequests.notifyAll();
+				}
+			}
+			if (m_realTimeBarsRequests.containsKey(id)) {
+				symbol = m_realTimeBarsRequests.get(id).getSymbol();
+				synchronized (m_realTimeBarsRequests) {
+					m_realTimeBarsRequests.remove(id);
+					m_realTimeBarsRequests.notifyAll();
+				}
+			}
+			if (m_marketDataRequests.containsKey(id)) {
+				symbol = m_marketDataRequests.get(id).getSymbol();
+				synchronized (m_marketDataRequests) {
+					m_marketDataRequests.remove(id);
+					m_marketDataRequests.notifyAll();
+				}
+			}
+			if (m_contractRequests.containsKey(id)) {
+				symbol = m_contractRequests.get(id).getSymbol();
+				synchronized (m_contractRequests) {
+					m_contractRequests.remove(id);
+					m_contractRequests.notifyAll();
+				}
+			}
+
 			brokerModelException = new BrokerModelException(1, code, "Req Id: "
 					+ id + " Error Code: " + code + " Symbol: " + symbol + " "
 					+ msg);
@@ -1890,26 +1881,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void accountDownloadEnd(String accountNumber) {
 		_log.info("accountDownloadEnd: " + accountNumber);
 		try {
-			boolean allDone = true;
-			boolean corporate = false;
-			/*
-			 * If all accounts are clean i.e downloaded and saved and at least
-			 * one account is a co-oporate then we get the FA Groups, Profiles
-			 * and Aliases.
-			 */
-			for (Account account : m_accountRequests.values()) {
-				if (!AccountType.INDIVIDUAL.equals(account.getAccountType()))
-					corporate = true;
-
-				if (account.isDirty()) {
-					allDone = false;
-					break;
-				}
-			}
-
-			if (allDone && corporate) {
-				onReqFinancialAccount();
-			}
+			onReqFinancialAccount(EClientSocket.ALIASES);
 
 		} catch (Exception ex) {
 			error(0,
@@ -2116,6 +2088,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					Account account = (Account) aspect;
 					m_tradePersistentModel.persistAccount(account);
 				}
+				/*
+				 * Delete all the FinancialAccount/AllocationAccount and
+				 * re-populate via the xml.
+				 * 
+				 * TODO check to see it this method is call only one on login or
+				 * is it called for every account. If so this needs to be
+				 * changed so that we only call this method once.
+				 */
+				Aspects items = m_tradePersistentModel
+						.findAspectsByClassName(PortfolioAccount.class
+								.getName());
+				for (Aspect aspect : items.getAspect()) {
+					m_tradePersistentModel.removeAspect(aspect);
+				}
+				this.onReqFinancialAccount(EClientSocket.GROUPS);
 				break;
 			}
 			case EClientSocket.PROFILES: {
@@ -2134,6 +2121,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				for (Aspect aspect : aspects.getAspect()) {
 					m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 				}
+				this.onReqFinancialAccount(EClientSocket.PROFILES);
 				break;
 			}
 			default: {

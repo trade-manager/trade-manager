@@ -68,7 +68,6 @@ import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
-import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModel;
@@ -1173,17 +1172,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		scanLine.useDelimiter("\\,");
 
 		try {
-
-			/*
-			 * The first account in is deemed the master account if there is
-			 * only one managed account. Accounts are just place holders and are
-			 * only meaningful if the account type is INDICVIDUAL. For the
-			 * default portfolio we subscribe to account updates to all
-			 * accounts.
-			 */
-
-			int tokens = accountNumbers.replaceAll("[^,]", "").length();
-
 			Account masterAccount = null;
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
@@ -1191,14 +1179,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					Account account = m_tradePersistentModel
 							.findAccountByNumber(accountNumber);
 					if (null == account) {
-						if (tokens == 0) {
-							account = new Account(accountNumber, accountNumber,
-									AccountType.INDIVIDUAL, Currency.USD, false);
-						} else {
-							account = new Account(accountNumber, accountNumber,
-									AccountType.CORPORATION, Currency.USD,
-									false);
-						}
+						account = new Account(accountNumber, accountNumber,
+								Currency.USD);
 						account = (Account) m_tradePersistentModel
 								.persistAspect(account);
 					}
@@ -1223,29 +1205,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				if (defaultPortfolio.getPortfolioAccounts().isEmpty()) {
 					PortfolioAccount portfolioAccount = new PortfolioAccount(
 							defaultPortfolio, masterAccount);
-					masterAccount.getPortfolioAccounts().add(portfolioAccount);
-					masterAccount.setIsDefault(true);
-					masterAccount = (Account) m_tradePersistentModel
-							.persistAspect(masterAccount);
+					defaultPortfolio.getPortfolioAccounts().add(
+							portfolioAccount);
+					defaultPortfolio = (Portfolio) m_tradePersistentModel
+							.persistPortfolio(defaultPortfolio);
 				}
 			}
-			if (!masterAccount.getIsDefault()) {
-				if (tokens == 0) {
-					m_tradePersistentModel.resetDefaultAccount(
-							defaultPortfolio, masterAccount);
-				} else {
-					int result = JOptionPane.showConfirmDialog(
-							this.getFrame(),
-							"Do you want to make account: "
-									+ masterAccount.getAccountNumber()
-									+ " the default account?", "Information",
-							JOptionPane.YES_NO_OPTION);
-					if (result == JOptionPane.YES_OPTION) {
-						m_tradePersistentModel.resetDefaultAccount(
-								defaultPortfolio, masterAccount);
-					}
-				}
-			}
+
 			DBTableLookupServiceProvider.clearLookup();
 			tradingdayPanel.doWindowActivated();
 			defaultPortfolio = m_tradePersistentModel

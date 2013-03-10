@@ -88,7 +88,6 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	private BigDecimal realizedPnL = new BigDecimal(0);
 	private BigDecimal unrealizedPnL = new BigDecimal(0);
 	private Date updateDate;
-	private Boolean isDefault = new Boolean(false);
 	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
 			0);
 
@@ -108,13 +107,10 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 * @param isDefault
 	 *            Boolean
 	 */
-	public Account(String name, String accountNumber, String accountType,
-			String currency, Boolean isDefault) {
+	public Account(String name, String accountNumber, String currency) {
 		this.accountNumber = accountNumber;
-		this.accountType = accountType;
 		this.name = name;
 		this.currency = currency;
-		this.isDefault = isDefault;
 	}
 
 	/**
@@ -147,7 +143,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 			BigDecimal availableFunds, BigDecimal buyingPower,
 			BigDecimal cashBalance, String currency,
 			BigDecimal grossPositionValue, BigDecimal realizedPnL,
-			BigDecimal unrealizedPnL, Boolean isDefault) {
+			BigDecimal unrealizedPnL) {
 		this.accountNumber = accountNumber;
 		this.accountType = accountType;
 		this.name = name;
@@ -158,7 +154,6 @@ public class Account extends Aspect implements Serializable, Cloneable {
 		this.grossPositionValue = grossPositionValue;
 		this.realizedPnL = realizedPnL;
 		this.unrealizedPnL = unrealizedPnL;
-		this.isDefault = isDefault;
 	}
 
 	/**
@@ -228,7 +223,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "accountType", nullable = false, length = 20)
+	@Column(name = "accountType", length = 20)
 	public String getAccountType() {
 		return this.accountType;
 	}
@@ -281,26 +276,6 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setCurrency(String currency) {
 		this.currency = currency;
-	}
-
-	/**
-	 * Method getIsDefault.
-	 * 
-	 * @return Boolean
-	 */
-	@Column(name = "isDefault", nullable = false)
-	public Boolean getIsDefault() {
-		return this.isDefault;
-	}
-
-	/**
-	 * Method setIsDefault.
-	 * 
-	 * @param isDefault
-	 *            Boolean
-	 */
-	public void setIsDefault(Boolean isDefault) {
-		this.isDefault = isDefault;
 	}
 
 	/**

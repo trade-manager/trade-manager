@@ -653,9 +653,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 				tradeOrder.setFAPercent(FAPercent);
 			} else {
 				if (null != getTradestrategy().getPortfolio()
-						.getMasterAccount()) {
+						.getIndividualAccount()) {
 					tradeOrder.setAccountNumber(getTradestrategy()
-							.getPortfolio().getMasterAccount()
+							.getPortfolio().getIndividualAccount()
 							.getAccountNumber());
 				}
 			}
@@ -794,11 +794,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 		 */
 		if (null != entrylimit.getPercentOfMargin()
 				&& entrylimit.getPercentOfMargin().doubleValue() > 0) {
-			if ((quantity * entryPrice.doubleValue()) > this.getAccount()
-					.getBuyingPower().multiply(entrylimit.getPercentOfMargin())
-					.doubleValue()) {
-				quantity = (int) ((int) this.getAccount().getBuyingPower()
-						.doubleValue()
+			if ((quantity * entryPrice.doubleValue()) > this
+					.getIndividualAccount().getBuyingPower()
+					.multiply(entrylimit.getPercentOfMargin()).doubleValue()) {
+				quantity = (int) ((int) this.getIndividualAccount()
+						.getBuyingPower().doubleValue()
 						* entrylimit.getPercentOfMargin().doubleValue() / entryPrice
 						.getBigDecimalValue().doubleValue());
 			}
@@ -832,9 +832,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 				tradeOrder.setFAPercent(FAPercent);
 			} else {
 				if (null != getTradestrategy().getPortfolio()
-						.getMasterAccount()) {
+						.getIndividualAccount()) {
 					tradeOrder.setAccountNumber(getTradestrategy()
-							.getPortfolio().getMasterAccount()
+							.getPortfolio().getIndividualAccount()
 							.getAccountNumber());
 				}
 			}
@@ -951,15 +951,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setOcaType(2);
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
-		if (null != getTradestrategy().getPortfolio().getMasterAccount()) {
+		if (null != getTradestrategy().getPortfolio().getIndividualAccount()) {
 			orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
-					.getMasterAccount().getAccountNumber());
+					.getIndividualAccount().getAccountNumber());
 
 		} else {
 			// TODO for AccountType.CORPORATE accounts provide the group/proflie
 		}
-		orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
-				.getMasterAccount().getAccountNumber());
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
 		this.getTrade().addTradeOrder(orderTarget);
@@ -975,9 +973,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setOcaType(2);
 		orderStop.setTransmit(stopTransmit);
 		orderStop.setOcaGroupName(ocaID);
-		if (null != getTradestrategy().getPortfolio().getMasterAccount()) {
+		if (null != getTradestrategy().getPortfolio().getIndividualAccount()) {
 			orderStop.setAccountNumber(getTradestrategy().getPortfolio()
-					.getMasterAccount().getAccountNumber());
+					.getIndividualAccount().getAccountNumber());
 
 		} else {
 			// TODO for AccountType.CORPORATE accounts provide the group/proflie
@@ -1359,15 +1357,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method getAccount. Return a refreshed trade account note this is updated
-	 * when connected to TWS every time the account values change.
+	 * Method getIndividualAccount. Return a refreshed trade account note this
+	 * is updated when connected to TWS every time the account values change.
 	 * 
 	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	public Account getAccount() throws PersistentModelException {
+	public Account getIndividualAccount() throws PersistentModelException {
 		return this.tradePersistentModel.findAccountByNumber(getTradestrategy()
-				.getPortfolio().getMasterAccount().getAccountNumber());
+				.getPortfolio().getIndividualAccount().getAccountNumber());
 	}
 
 	/**
