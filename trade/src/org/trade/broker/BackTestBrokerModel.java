@@ -257,13 +257,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	/**
 	 * Method onReqFinancialAccount.
 	 * 
-	 * @param requestType
-	 *            Integer Values are EClientSocket.GROUPS,
-	 *            EClientSocket.PROFILES, EClientSocket.ALIASES
 	 * @see org.trade.broker.onReqFinancialAccount()
 	 */
-	public void onReqFinancialAccount(Integer requestType)
-			throws BrokerModelException {
+	public void onReqFinancialAccount() throws BrokerModelException {
 	}
 
 	/**

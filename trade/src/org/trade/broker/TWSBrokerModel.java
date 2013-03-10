@@ -247,16 +247,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	/**
 	 * Method onReqFinancialAccount.
 	 * 
-	 * @param requestType
-	 *            Integer Values are EClientSocket.GROUPS,
-	 *            EClientSocket.PROFILES, EClientSocket.ALIASES
 	 * @see org.trade.broker.onReqFinancialAccount()
 	 */
-	public void onReqFinancialAccount(Integer requestType)
-			throws BrokerModelException {
+	public void onReqFinancialAccount() throws BrokerModelException {
 		try {
 			if (m_client.isConnected()) {
-				m_client.requestFA(requestType);
+				m_client.requestFA(EClientSocket.ALIASES);
 			} else {
 				throw new BrokerModelException(0, 3010,
 						"Not conected Financial Account data cannot be retrieved");
@@ -1881,7 +1877,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void accountDownloadEnd(String accountNumber) {
 		_log.info("accountDownloadEnd: " + accountNumber);
 		try {
-			onReqFinancialAccount(EClientSocket.ALIASES);
+			onReqFinancialAccount();
 
 		} catch (Exception ex) {
 			error(0,
@@ -2102,7 +2098,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				for (Aspect aspect : items.getAspect()) {
 					m_tradePersistentModel.removeAspect(aspect);
 				}
-				this.onReqFinancialAccount(EClientSocket.GROUPS);
+				m_client.requestFA(EClientSocket.GROUPS);
 				break;
 			}
 			case EClientSocket.PROFILES: {
@@ -2121,7 +2117,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				for (Aspect aspect : aspects.getAspect()) {
 					m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 				}
-				this.onReqFinancialAccount(EClientSocket.PROFILES);
+				m_client.requestFA(EClientSocket.PROFILES);
 				break;
 			}
 			default: {

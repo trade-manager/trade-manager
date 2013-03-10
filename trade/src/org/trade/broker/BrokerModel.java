@@ -156,12 +156,9 @@ public interface BrokerModel {
 	 * 
 	 * Method onReqFinancialAccount.
 	 * 
-	 * @param requestType
-	 *            Integer Values are EClientSocket.GROUPS,
-	 *            EClientSocket.PROFILES, EClientSocket.ALIASES
 	 * @throws BrokerModelException
 	 */
-	void onReqFinancialAccount(Integer requestType) throws BrokerModelException;
+	void onReqFinancialAccount() throws BrokerModelException;
 
 	/**
 	 * Method onReqReplaceFinancialAccount.
