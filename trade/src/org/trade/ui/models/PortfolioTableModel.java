@@ -43,7 +43,10 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.AllocationMethod;
+import org.trade.dictionary.valuetype.DAOAccount;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PortfolioAccount;
 
 /**
  */
@@ -57,10 +60,11 @@ public class PortfolioTableModel extends AspectTableModel {
 	private static final String PORTFOLIO_ALIAS = "Alias";
 	private static final String DESCRIPTION = "Description";
 	private static final String ALLOCATION_METHOD = "Allocation Method";
+	private static final String MASTER_ACCT_NUMBER = "Add Acct #*";
 	private static final String IS_DEFAULT = "Default";
 
 	private static final String[] columnHeaderToolTip = { null, null, null,
-			null };
+			"The account that is subscribed to", null };
 
 	private Aspects m_data = null;
 
@@ -70,12 +74,13 @@ public class PortfolioTableModel extends AspectTableModel {
 		 * Get the column names and cache them. Then we can close the
 		 * connection.
 		 */
-		columnNames = new String[5];
+		columnNames = new String[6];
 		columnNames[0] = NAME;
 		columnNames[1] = PORTFOLIO_ALIAS;
 		columnNames[2] = DESCRIPTION;
 		columnNames[3] = ALLOCATION_METHOD;
-		columnNames[4] = IS_DEFAULT;
+		columnNames[4] = MASTER_ACCT_NUMBER;
+		columnNames[5] = IS_DEFAULT;
 	}
 
 	/**
@@ -139,6 +144,21 @@ public class PortfolioTableModel extends AspectTableModel {
 			break;
 		}
 		case 4: {
+			Account account = (Account) ((DAOAccount) value).getObject();
+			boolean exists = false;
+			for (PortfolioAccount item : element.getPortfolioAccounts()) {
+				if (account.getAccountNumber().equals(
+						item.getAccount().getAccountNumber()))
+					exists = true;
+			}
+			if (!exists) {
+				PortfolioAccount portfolioAccount = new PortfolioAccount(
+						element, account);
+				element.getPortfolioAccounts().add(portfolioAccount);
+			}
+			break;
+		}
+		case 5: {
 			element.setIsDefault(new Boolean(((YesNo) value).getCode()));
 			break;
 		}
@@ -200,6 +220,7 @@ public class PortfolioTableModel extends AspectTableModel {
 			newRow.addElement(AllocationMethod.newInstance(element
 					.getAllocationMethod()));
 		}
+		newRow.addElement(DAOAccount.newInstance(Decode.NONE));
 		newRow.addElement(YesNo.newInstance(element.getIsDefault()));
 	}
 }
