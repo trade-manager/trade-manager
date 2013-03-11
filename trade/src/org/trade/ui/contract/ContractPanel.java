@@ -738,13 +738,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		return chartPanel;
 	}
 
-	/*
-	 * For any child indicators that are candle based create a Tradestrategy
-	 * that will get the data. If this tradestrategy already exist share this
-	 * with any other tradestrategy that requires this.
-	 */
 	/**
-	 * Method populateIndicatorCandleSeries.
+	 * Method populateIndicatorCandleSeries. For any child indicators that are
+	 * candle based create a Tradestrategy that will get the data. If this
+	 * tradestrategy already exist share this with any other tradestrategy that
+	 * requires this.
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
