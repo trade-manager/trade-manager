@@ -216,7 +216,7 @@ public class StrategyData extends Worker {
 
 	protected void done() {
 		// Free some memory!!
-		this.clearBaseCandleSeries();
+		// this.clearBaseCandleSeries();
 	}
 
 	/**
