@@ -756,7 +756,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			Date startDate, Date endDate) throws PersistentModelException {
 
 		CandleDataset candleDataset = (CandleDataset) tradestrategy
-				.getDatasetContainer().getIndicators(
+				.getDatasetContainer().getIndicatorByType(
 						IndicatorSeries.CandleSeries);
 		if (null != candleDataset) {
 			for (int seriesIndex = 0; seriesIndex < candleDataset

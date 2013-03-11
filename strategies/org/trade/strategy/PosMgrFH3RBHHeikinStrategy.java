@@ -297,7 +297,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		Money newStop = getTargetPrice();
 
 		HeikinAshiDataset dataset = (HeikinAshiDataset) getTradestrategy()
-				.getDatasetContainer().getIndicators(
+				.getDatasetContainer().getIndicatorByType(
 						IndicatorSeries.HeikinAshiSeries);
 		if (null == dataset) {
 			throw new StrategyRuleException(1, 110,

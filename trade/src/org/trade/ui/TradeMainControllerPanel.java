@@ -2159,7 +2159,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 				CandleDataset candleDataset = (CandleDataset) tradestrategy
-						.getDatasetContainer().getIndicators(
+						.getDatasetContainer().getIndicatorByType(
 								IndicatorSeries.CandleSeries);
 
 				if (null != candleDataset) {

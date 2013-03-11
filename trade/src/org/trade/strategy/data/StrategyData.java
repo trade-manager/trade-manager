@@ -94,7 +94,7 @@ public class StrategyData extends Worker {
 				series.setKey(series.getName());
 				series.createSeries(candleDataset, 0);
 				IndicatorDataset indicatorDataset = this
-						.getIndicators(indicator.getType());
+						.getIndicatorByType(indicator.getType());
 				if (null == indicatorDataset) {
 					/*
 					 * Data-set and Series names should have the same name with
@@ -381,7 +381,7 @@ public class StrategyData extends Worker {
 	 *            String
 	 * @return IndicatorDataset
 	 */
-	public IndicatorDataset getIndicators(String type) {
+	public IndicatorDataset getIndicatorByType(String type) {
 		for (int index = 0; index < indicators.size(); index++) {
 			IndicatorDataset series = indicators.get(index);
 			if (series.getType(0).equals(type)) {

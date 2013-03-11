@@ -348,18 +348,19 @@ public class BrokerModelTest extends TestCase {
 					.getDatasetContainer().getCandleDataset().getSeries(0);
 			IndicatorSeries sma1Series = this.tradestrategy
 					.getDatasetContainer()
-					.getIndicators(IndicatorSeries.MovingAverageSeries)
+					.getIndicatorByType(IndicatorSeries.MovingAverageSeries)
 					.getSeries(0);
 			IndicatorSeries sma2Series = this.tradestrategy
 					.getDatasetContainer()
-					.getIndicators(IndicatorSeries.MovingAverageSeries)
+					.getIndicatorByType(IndicatorSeries.MovingAverageSeries)
 					.getSeries(1);
 			IndicatorSeries vwapSeries = this.tradestrategy
 					.getDatasetContainer()
-					.getIndicators(IndicatorSeries.VwapSeries).getSeries(0);
+					.getIndicatorByType(IndicatorSeries.VwapSeries)
+					.getSeries(0);
 			IndicatorSeries heikinAshiSeries = this.tradestrategy
 					.getDatasetContainer()
-					.getIndicators(IndicatorSeries.HeikinAshiSeries)
+					.getIndicatorByType(IndicatorSeries.HeikinAshiSeries)
 					.getSeries(0);
 
 			for (int i = 0; i < candleseries.getItemCount(); i++) {

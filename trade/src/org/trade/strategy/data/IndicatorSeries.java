@@ -78,15 +78,18 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 
 	private static final long serialVersionUID = -4985280367851073683L;
 
+	/*
+	 * These names must match the names of the classes for that series.
+	 */
 	public static final String MovingAverageSeries = "MovingAverageSeries";
 	public static final String PivotSeries = "PivotSeries";
 	public static final String HeikinAshiSeries = "HeikinAshiSeries";
 	public static final String VwapSeries = "VwapSeries";
 	public static final String VolumeSeries = "VolumeSeries";
 	public static final String CandleSeries = "CandleSeries";
-	public static final String AverageTrueRangeSeries = "ATRSeries";
-	public static final String RelativeStrengthIndexSeries = "RSISeries";
-	public static final String CommodityChannelIndexSeries = "CCISeries";
+	public static final String AverageTrueRangeSeries = "AverageTrueRangeSeries";
+	public static final String RelativeStrengthIndexSeries = "RelativeStrengthIndexSeries";
+	public static final String CommodityChannelIndexSeries = "CommodityChannelIndexSeries";
 	public static final String BollingerBandsSeries = "BollingerBandsSeries";
 
 	private Integer idIndicatorSeries;
