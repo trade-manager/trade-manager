@@ -87,7 +87,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	public static final String AverageTrueRangeSeries = "ATRSeries";
 	public static final String RelativeStrengthIndexSeries = "RSISeries";
 	public static final String CommodityChannelIndexSeries = "CCISeries";
-	public static final String BollingerBandsIndexSeries = "BollingerBandsSeries";
+	public static final String BollingerBandsSeries = "BollingerBandsSeries";
 
 	private Integer idIndicatorSeries;
 	private String name;
