@@ -669,6 +669,20 @@ public class TradingCalendar {
 	}
 
 	/**
+	 * Is the date equal to zero
+	 * 
+	 * @param date
+	 *            Date
+	 * @return boolean
+	 * @exception * @see
+	 */
+	public static boolean isDayLightSavings(Date date) {
+		synchronized (CALENDAR_NY) {
+			return CALENDAR_NY.getTimeZone().inDaylightTime(date);
+		}
+	}
+
+	/**
 	 * Method parseHolidayIntegerCSVString.
 	 * 
 	 * @param csvString

@@ -110,15 +110,26 @@ public class BollingerBandsDataset extends AbstractXYDataset implements
 	 * 
 	 * @param series
 	 *            the series (<code>null</code> not permitted).
+	 * @throws CloneNotSupportedException
 	 * @see org.trade.strategy.data.IndicatorDataset#addSeries(IndicatorSeries)
 	 */
 	public void addSeries(IndicatorSeries series) {
 		if (series == null) {
 			throw new IllegalArgumentException("Null 'series' argument.");
 		}
-		this.data.add(series);
-		series.addChangeListener(this);
-		fireDatasetChanged();
+		try {
+			((BollingerBandsSeries) series).setIsUpper(true);
+			this.data.add(series);
+			BollingerBandsSeries lowerSeries = (BollingerBandsSeries) series
+					.clone();
+			((BollingerBandsSeries) lowerSeries).setIsUpper(false);
+			this.data.add(lowerSeries);
+			series.addChangeListener(this);
+			fireDatasetChanged();
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalArgumentException(
+					"BollingerBandsSeries clone failed.");
+		}
 	}
 
 	/**

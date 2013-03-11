@@ -49,7 +49,6 @@ import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.bollingerbands.BollingerBandsItem;
 import org.trade.strategy.data.candle.CandleItem;
 
-
 /**
  * A list of (RegularTimePeriod, open, high, low, close) data items.
  * 
@@ -71,13 +70,13 @@ public class BollingerBandsSeries extends IndicatorSeries {
 
 	private BigDecimal numberOfSTD;
 	private Integer length;
+	private boolean isUpper;
 	/*
 	 * Vales used to calculate MA's. These need to be reset when the series is
 	 * cleared.
 	 */
 	private double sum = 0.0;
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
-	private LinkedList<Long> volValues = new LinkedList<Long>();
 
 	/**
 	 * Creates a new empty series. By default, items added to the series will be
@@ -152,7 +151,6 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	public Object clone() throws CloneNotSupportedException {
 		BollingerBandsSeries clone = (BollingerBandsSeries) super.clone();
 		clone.yyValues = new LinkedList<Double>();
-		clone.volValues = new LinkedList<Long>();
 		return clone;
 	}
 
@@ -289,6 +287,26 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getIsUpper.
+	 * 
+	 * @return boolean
+	 */
+	@Transient
+	public boolean getIsUpper() {
+		return this.isUpper;
+	}
+
+	/**
+	 * Method setLength.
+	 * 
+	 * @param isUpper
+	 *            boolean
+	 */
+	public void setIsUpper(boolean isUpper) {
+		this.isUpper = isUpper;
+	}
+
+	/**
 	 * Method createSeries.
 	 * 
 	 * @param source
@@ -326,10 +344,14 @@ public class BollingerBandsSeries extends IndicatorSeries {
 					"MA period must be greater than zero.");
 		}
 
+		if (getNumberOfSTD() == null || getNumberOfSTD().doubleValue() < 1) {
+			throw new IllegalArgumentException(
+					"Number of STD's must be greater than zero.");
+		}
+
 		if (skip == 0) {
 			sum = 0.0;
 			this.yyValues.clear();
-			this.volValues.clear();
 		}
 		if (source.getItemCount() > skip) {
 
@@ -355,8 +377,6 @@ public class BollingerBandsSeries extends IndicatorSeries {
 						sum = sum - this.yyValues.getLast() + yy.doubleValue();
 						this.yyValues.removeLast();
 						this.yyValues.addFirst(yy.doubleValue());
-						this.volValues.removeLast();
-						this.volValues.addFirst(candleItem.getVolume());
 					} else {
 						sum = sum - this.yyValues.getFirst() + yy.doubleValue();
 						this.yyValues.removeFirst();
@@ -365,12 +385,11 @@ public class BollingerBandsSeries extends IndicatorSeries {
 				} else {
 					sum = sum + yy.doubleValue();
 					this.yyValues.addFirst(yy.doubleValue());
-					this.volValues.addFirst(candleItem.getVolume());
 				}
 
 				if (this.yyValues.size() == getLength()) {
 					double ma = calculateBBands(this.getNumberOfSTD(),
-							this.yyValues, this.volValues, sum);
+							this.yyValues, sum);
 					if (index < 0) {
 						BollingerBandsItem dataItem = new BollingerBandsItem(
 								candleItem.getPeriod(), new BigDecimal(ma));
@@ -401,7 +420,23 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 * @return double
 	 */
 	private double calculateBBands(BigDecimal numberOfSTD,
-			LinkedList<Double> yyValues, LinkedList<Long> volValues, Double sum) {
-		return sum / getLength();
+			LinkedList<Double> yyValues, Double sum) {
+
+		if (this.isUpper) {
+			return ((sum / this.getLength()) + (standardDeviation(yyValues, sum) * this
+					.getNumberOfSTD().doubleValue()));
+		} else {
+			return ((sum / this.getLength()) - (standardDeviation(yyValues, sum) * this
+					.getNumberOfSTD().doubleValue()));
+		}
+	}
+
+	public double standardDeviation(LinkedList<Double> a, Double sum) {
+
+		double sumTotal = 0;
+		double mean = sum / (a.size() * 1.0);
+		for (Double i : a)
+			sumTotal += Math.pow((i - mean), 2);
+		return Math.sqrt(sumTotal / (a.size() - 1)); // sample
 	}
 }
