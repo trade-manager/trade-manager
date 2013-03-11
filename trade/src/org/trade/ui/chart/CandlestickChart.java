@@ -334,9 +334,24 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 		int axixIndex = 0;
 		int datasetIndex = 0;
-		for (int i = 0; i < datasetContainer.getIndicators().size(); i++) {
-			IndicatorDataset indicator = datasetContainer.getIndicators()
-					.get(i);
+
+		/*
+		 * Change the List of indicators so that the candle dataset is the first
+		 * one in the list. The main chart must be plotted first.
+		 */
+		List<IndicatorDataset> indicators = new ArrayList<IndicatorDataset>(0);
+		for (IndicatorDataset item : datasetContainer.getIndicators()) {
+			if (IndicatorSeries.CandleSeries.equals(item.getType(0))) {
+				indicators.add(item);
+			}
+		}
+		for (IndicatorDataset item : datasetContainer.getIndicators()) {
+			if (!IndicatorSeries.CandleSeries.equals(item.getType(0))) {
+				indicators.add(item);
+			}
+		}
+		for (int i = 0; i < indicators.size(); i++) {
+			IndicatorDataset indicator = indicators.get(i);
 			if (indicator.getDisplaySeries(0)) {
 
 				if (indicator.getSubChart(0)) {
