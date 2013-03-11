@@ -33,58 +33,58 @@
  * -------
  *
  */
-package org.trade.strategy.data.movingaverage;
+package org.trade.strategy.data.bollingerbands;
 
 // Generated Feb 21, 2011 12:43:33 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 
 /**
- * MovingAverage
+ * BollingerBands
  * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
 
-public class MovingAverage implements java.io.Serializable {
+public class BollingerBands implements java.io.Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7644763985378994305L;
 
-	private BigDecimal movingAverage;
+	private BigDecimal bollingerBands;
 
-	public MovingAverage() {
+	public BollingerBands() {
 	}
 
 	/**
-	 * Constructor for MovingAverage.
+	 * Constructor for BollingerBands.
 	 * 
 	 * @param movingAverage
 	 *            BigDecimal
 	 */
-	public MovingAverage(BigDecimal movingAverage) {
-		this.movingAverage = movingAverage;
+	public BollingerBands(BigDecimal bollingerBands) {
+		this.bollingerBands = bollingerBands;
 	}
 
 	/**
-	 * Method getMovingAverage.
+	 * Method getBollingerBands.
 	 * 
 	 * @return BigDecimal
 	 */
-	public BigDecimal getMovingAverage() {
-		return this.movingAverage;
+	public BigDecimal getBollingerBands() {
+		return this.bollingerBands;
 	}
 
 	/**
-	 * Method setMovingAverage.
+	 * Method setBollingerBands.
 	 * 
-	 * @param movingAverage
+	 * @param bollingerBands
 	 *            BigDecimal
 	 */
-	public void setMovingAverage(BigDecimal movingAverage) {
-		this.movingAverage = movingAverage;
+	public void setBollingerBands(BigDecimal bollingerBands) {
+		this.bollingerBands = bollingerBands;
 	}
 
 }

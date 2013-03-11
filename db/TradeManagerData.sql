@@ -38,6 +38,7 @@ INSERT INTO codetype (idCodeType, name, description, version) VALUES(3,'Candle',
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(4,'AverageTrueRange','Average True Range',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(5,'RelativeStrengthIndex','Relative Strength Index',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(6,'CommodityChannelIndex','Commodity Channel Index',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(7,'BollingerBands','Bollinger Bands',0);
 
 COMMIT;
 
@@ -53,6 +54,8 @@ INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, cla
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(10,'Length','The length of the Average True Range','14','java.lang.Integer',null, 4,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(11,'Length','The length of the Relative Strength Index','14','java.lang.Integer',null, 5,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(12,'Length','The length of the Commodity Channel Index','20','java.lang.Integer',null, 6,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(13,'Length','The length of the Moving Average','20','java.lang.Integer',null,7,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(14,'NumberOfSTD','Number of STDs','2.0','java.math.BigDecimal', null,7,0) ;
 
 COMMIT;
 

@@ -33,58 +33,43 @@
  * -------
  *
  */
-package org.trade.strategy.data.movingaverage;
+package org.trade.strategy.data.bollingerbands;
 
-// Generated Feb 21, 2011 12:43:33 PM by Hibernate Tools 3.4.0.CR1
-
-import java.math.BigDecimal;
+import org.jfree.data.xy.XYDataset;
 
 /**
- * MovingAverage
+ * An interface that defines data in the form of (x, high, low, open, close)
+ * tuples.
  * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-
-public class MovingAverage implements java.io.Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7644763985378994305L;
-
-	private BigDecimal movingAverage;
-
-	public MovingAverage() {
-	}
+public interface IBollingerBandsDataset extends XYDataset {
 
 	/**
-	 * Constructor for MovingAverage.
+	 * Returns the BollingerBands for an item within a series.
 	 * 
-	 * @param movingAverage
-	 *            BigDecimal
+	 * @param series
+	 *            the series index.
+	 * @param item
+	 *            the item index.
+	 * 
+	 * 
+	 * @return The BollingerBands.
 	 */
-	public MovingAverage(BigDecimal movingAverage) {
-		this.movingAverage = movingAverage;
-	}
+	public double getBollingerBandsValue(int series, int item);
 
 	/**
-	 * Method getMovingAverage.
+	 * Returns the BollingerBands for an item within a series.
 	 * 
-	 * @return BigDecimal
-	 */
-	public BigDecimal getMovingAverage() {
-		return this.movingAverage;
-	}
-
-	/**
-	 * Method setMovingAverage.
+	 * @param series
+	 *            the series index.
+	 * @param item
+	 *            the item index.
 	 * 
-	 * @param movingAverage
-	 *            BigDecimal
+	 * 
+	 * @return The BollingerBands.
 	 */
-	public void setMovingAverage(BigDecimal movingAverage) {
-		this.movingAverage = movingAverage;
-	}
+	public Number getBollingerBands(int series, int item);
 
 }
