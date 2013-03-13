@@ -1461,6 +1461,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						// if ((value > candle.getHigh() || value < candle
 						// .getLow())) {
 						// candle.setClose(value);
+						// candle.setLastUpdateDate(new Date());
 						// datasetContainer
 						// .getBaseCandleSeries()
 						// .fireSeriesChanged();
@@ -1523,6 +1524,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				// .getBaseCandleSeries()
 				// .getItemCount() - 1);
 				// candle.setVolume(value * 100);
+				// candle.setLastUpdateDate(new Date());
 				// datasetContainer.getBaseCandleSeries()
 				// .fireSeriesChanged();
 				// _log.info("TickSize  Symbol: "
@@ -1639,6 +1641,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 															.getHigh() || price < candle
 															.getLow())) {
 												candle.setClose(price);
+												candle.setLastUpdateDate(new Date());
 												datasetContainer
 														.getBaseCandleSeries()
 														.fireSeriesChanged();
