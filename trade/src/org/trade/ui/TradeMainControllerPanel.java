@@ -1171,9 +1171,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		scanLine.useDelimiter("\\,");
 
 		try {
-			Account masterAccount = null;
 
 			int tokens = accountNumbers.replaceAll("[^,]", "").length();
+
+			Portfolio defaultPortfolio = m_tradePersistentModel
+					.findPortfolioDefault();
 
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
@@ -1183,35 +1185,31 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					if (null == account) {
 						account = new Account(accountNumber, accountNumber,
 								Currency.USD);
-						account = (Account) m_tradePersistentModel
-								.persistAspect(account);
+						if (defaultPortfolio.getPortfolioAccounts().isEmpty()
+								&& tokens == 0) {
+							PortfolioAccount portfolioAccount = new PortfolioAccount(
+									defaultPortfolio, account);
+							defaultPortfolio.getPortfolioAccounts().add(
+									portfolioAccount);
+							defaultPortfolio = (Portfolio) m_tradePersistentModel
+									.persistPortfolio(defaultPortfolio);
+							defaultPortfolio
+									.setName(account.getAccountNumber());
+							defaultPortfolio = (Portfolio) m_tradePersistentModel
+									.persistAspect(defaultPortfolio);
+
+						} else {
+							Portfolio portfolio = new Portfolio(
+									account.getAccountNumber(),
+									account.getAccountNumber());
+							PortfolioAccount portfolioAccount = new PortfolioAccount(
+									portfolio, account);
+							portfolio.getPortfolioAccounts().add(
+									portfolioAccount);
+							portfolio = (Portfolio) m_tradePersistentModel
+									.persistPortfolio(portfolio);
+						}
 					}
-					if (null == masterAccount)
-						masterAccount = account;
-				}
-			}
-
-			Portfolio defaultPortfolio = m_tradePersistentModel
-					.findPortfolioDefault();
-			boolean containsAccount = false;
-			for (PortfolioAccount item : defaultPortfolio
-					.getPortfolioAccounts()) {
-				if (item.getAccount().getAccountNumber()
-						.equals(masterAccount.getAccountNumber())) {
-					containsAccount = true;
-					break;
-				}
-			}
-
-			if (!containsAccount) {
-				if (defaultPortfolio.getPortfolioAccounts().isEmpty()
-						&& tokens == 0) {
-					PortfolioAccount portfolioAccount = new PortfolioAccount(
-							defaultPortfolio, masterAccount);
-					defaultPortfolio.getPortfolioAccounts().add(
-							portfolioAccount);
-					defaultPortfolio = (Portfolio) m_tradePersistentModel
-							.persistPortfolio(defaultPortfolio);
 				}
 			}
 
@@ -1225,9 +1223,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						.getAccountNumber());
 			}
 
-			this.setStatusBarMessage("Connected to IB Account: "
-					+ masterAccount.getAccountNumber()
-					+ " and subscribed to updates.", BasePanel.INFORMATION);
+			this.setStatusBarMessage(
+					"Connected to IB and subscribed to updates for default portfolio: "
+							+ defaultPortfolio.getName(), BasePanel.INFORMATION);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not retreive account data Msg: ",
 					ex.getMessage(), ex);
