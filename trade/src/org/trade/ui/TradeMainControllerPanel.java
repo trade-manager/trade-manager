@@ -1212,6 +1212,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									portfolioAccount);
 							portfolio = (Portfolio) m_tradePersistentModel
 									.persistPortfolio(portfolio);
+							if (tokens == 0) {
+								/*
+								 * Update the default portfolio.
+								 */
+								m_tradePersistentModel
+										.resetDefaultPortfolio(portfolio);
+							}
 						}
 					}
 				}
