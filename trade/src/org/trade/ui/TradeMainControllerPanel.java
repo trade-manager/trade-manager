@@ -1220,6 +1220,24 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 										.resetDefaultPortfolio(portfolio);
 							}
 						}
+					} else {
+						if (defaultPortfolio.getPortfolioAccounts().isEmpty()
+								&& tokens == 0) {
+							PortfolioAccount portfolioAccount = new PortfolioAccount(
+									defaultPortfolio, account);
+							defaultPortfolio.getPortfolioAccounts().add(
+									portfolioAccount);
+							defaultPortfolio = (Portfolio) m_tradePersistentModel
+									.persistPortfolio(defaultPortfolio);
+							/*
+							 * Update the account (key) to the current account
+							 * only when the default Portfolio has no accounts.
+							 */
+							defaultPortfolio
+									.setName(account.getAccountNumber());
+							defaultPortfolio = (Portfolio) m_tradePersistentModel
+									.persistAspect(defaultPortfolio);
+						}
 					}
 				}
 			}
