@@ -1193,6 +1193,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									portfolioAccount);
 							defaultPortfolio = (Portfolio) m_tradePersistentModel
 									.persistPortfolio(defaultPortfolio);
+							/*
+							 * Update the account (key) to the current account
+							 * only when the default Portfolio has no accounts.
+							 */
 							defaultPortfolio
 									.setName(account.getAccountNumber());
 							defaultPortfolio = (Portfolio) m_tradePersistentModel
