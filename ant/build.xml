@@ -114,16 +114,16 @@
 			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
 	</target>
-	<target name="deleteTradeOrdersData" depends="initialise" description="Clears the database of TradeOrders for testing.">
+	<target name="deleteTradeOrderData" depends="initialise" description="Delete the database of TradeOrders for testing.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/ClearTradeOrdersData.sql" />
+			<transaction src="../db/DeleteTradeOrderData.sql" />
 		</sql>
 	</target>
-	<target name="deleteAccountsRulesData" depends="initialise" description="Clears the database of Accounts and Rules for testing.">
+	<target name="deleteAccountRuleData" depends="initialise" description="Delete the database of Accounts and Rules for testing.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/ClearAccountsRulesData.sql" />
+			<transaction src="../db/DeleteAccountRuleData.sql" />
 		</sql>
 	</target>
 	<target name="all" depends="compile" description="Compiles and package in jar files all the Trade Manager related code.">
