@@ -76,7 +76,7 @@ public class TradeOrderTableModel extends TableModel {
 	private static final String FILLED_DATE = "Trade Time";
 	private static final String FILLED_QTY = "Filled Qty";
 	private static final String STOP_PRICE = "Stop Price";
-	private static final String PROPERTIES = "FA Props";
+	private static final String PROPERTIES = "Alloc Props";
 
 	private static final String[] columnHeaderToolTip = { null,
 			"System generated key", "Buy/Sell/Short", null, null, null,
