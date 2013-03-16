@@ -396,9 +396,9 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 							candleItem.getPeriod(), new BigDecimal(currentRSI));
 					this.add(dataItem, false);
 				} else {
-					RelativeStrengthIndexItem currDataItem = (RelativeStrengthIndexItem) this
-							.getDataItem(this.indexOf(candleItem.getPeriod()));
-					currDataItem.setRelativeStrengthIndex(currentRSI);
+					RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
+							.getDataItem(index);
+					dataItem.setRelativeStrengthIndex(currentRSI);
 				}
 			}
 		}

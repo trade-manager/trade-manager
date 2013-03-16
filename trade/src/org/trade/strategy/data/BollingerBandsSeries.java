@@ -396,10 +396,9 @@ public class BollingerBandsSeries extends IndicatorSeries {
 						this.add(dataItem, false);
 
 					} else {
-						BollingerBandsItem currDataItem = (BollingerBandsItem) this
-								.getDataItem(this.indexOf(candleItem
-										.getPeriod()));
-						currDataItem.setBollingerBands(ma);
+						BollingerBandsItem dataItem = (BollingerBandsItem) this
+								.getDataItem(index);
+						dataItem.setBollingerBands(ma);
 					}
 				}
 			}

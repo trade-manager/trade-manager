@@ -285,11 +285,12 @@ public class HeikinAshiSeries extends IndicatorSeries {
 				dataItem = new HeikinAshiItem(source.getContract(),
 						candleItem.getPeriod(), xOpen, xHigh, xLow, xClose,
 						candleItem.getLastUpdateDate());
-				if (this.indexOf(dataItem.getPeriod()) < 0) {
+				int index = this.indexOf(dataItem.getPeriod());
+				if (index < 0) {
 					this.add(dataItem, false);
 				} else {
 					HeikinAshiItem currDataItem = (HeikinAshiItem) this
-							.getDataItem(this.indexOf(dataItem.getPeriod()));
+							.getDataItem(index);
 					currDataItem.setOpen(dataItem.getOpen());
 					currDataItem.setHigh(dataItem.getHigh());
 					currDataItem.setLow(dataItem.getLow());

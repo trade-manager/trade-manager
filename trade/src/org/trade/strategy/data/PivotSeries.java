@@ -343,11 +343,6 @@ public class PivotSeries extends IndicatorSeries {
 	 * values form a V shape. No pivot can be within 5 bars of another pivot.
 	 * 
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @param source
 	 *            CandleSeries
 	 * @param skip

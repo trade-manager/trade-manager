@@ -251,17 +251,17 @@ public class VolumeSeries extends IndicatorSeries {
 				 * add the new periods values. Otherwise we just update the last
 				 * value in the set.
 				 */
-				if (this.indexOf(candleItem.getPeriod()) < 0) {
+				int index = this.indexOf(candleItem.getPeriod());
+				if (index < 0) {
 					VolumeItem dataItem = new VolumeItem(
 							candleItem.getPeriod(), new Long(
 									candleItem.getVolume()),
 							candleItem.getSide());
 					this.add(dataItem, true);
 				} else {
-					VolumeItem currDataItem = (VolumeItem) this
-							.getDataItem(this.indexOf(candleItem.getPeriod()));
-					currDataItem.setVolume(candleItem.getVolume());
-					currDataItem.setSide(candleItem.getSide());
+					VolumeItem dataItem = (VolumeItem) this.getDataItem(index);
+					dataItem.setVolume(candleItem.getVolume());
+					dataItem.setSide(candleItem.getSide());
 				}
 			}
 		}

@@ -341,9 +341,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 					this.add(dataItem, false);
 
 				} else {
-					AverageTrueRangeItem currDataItem = (AverageTrueRangeItem) this
-							.getDataItem(this.indexOf(candleItem.getPeriod()));
-					currDataItem.setAverageTrueRange(currATR);
+					AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
+							.getDataItem(index);
+					dataItem.setAverageTrueRange(currATR);
 				}
 			}
 		}

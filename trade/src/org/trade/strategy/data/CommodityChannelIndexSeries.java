@@ -341,10 +341,9 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 						this.add(dataItem, false);
 
 					} else {
-						CommodityChannelIndexItem currDataItem = (CommodityChannelIndexItem) this
-								.getDataItem(this.indexOf(candleItem
-										.getPeriod()));
-						currDataItem.setCommodityChannelIndex(cci);
+						CommodityChannelIndexItem dataItem = (CommodityChannelIndexItem) this
+								.getDataItem(index);
+						dataItem.setCommodityChannelIndex(cci);
 					}
 				}
 			}

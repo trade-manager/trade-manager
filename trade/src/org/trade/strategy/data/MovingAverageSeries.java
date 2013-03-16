@@ -378,10 +378,9 @@ public class MovingAverageSeries extends IndicatorSeries {
 						this.add(dataItem, false);
 
 					} else {
-						MovingAverageItem currDataItem = (MovingAverageItem) this
-								.getDataItem(this.indexOf(candleItem
-										.getPeriod()));
-						currDataItem.setMovingAverage(ma);
+						MovingAverageItem dataItem = (MovingAverageItem) this
+								.getDataItem(index);
+						dataItem.setMovingAverage(ma);
 					}
 				}
 			}

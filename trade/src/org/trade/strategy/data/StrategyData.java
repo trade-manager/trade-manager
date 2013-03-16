@@ -121,7 +121,7 @@ public class StrategyData extends Worker {
 		}
 	}
 
-	/*
+	/**
 	 * The main process thread. This will run until it is either canceled or is
 	 * done.
 	 * 
@@ -131,10 +131,7 @@ public class StrategyData extends Worker {
 	 */
 
 	protected Void doInBackground() {
-		/*
-		 * We initialize here to keep this instances as part of this worker
-		 * thread
-		 */
+
 		try {
 
 			this.seriesChanged = false;
@@ -232,7 +229,9 @@ public class StrategyData extends Worker {
 		 */
 		synchronized (getBaseCandleSeries()) {
 			clearChartDatasets();
-			this.getCandleDataset().getSeries(0).setBarSize(newPeriod);
+			for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
+				this.getCandleDataset().getSeries(i).setBarSize(newPeriod);
+			}
 			for (int i = 0; i < getBaseCandleSeries().getItemCount(); i++) {
 				CandleItem candle = (CandleItem) getBaseCandleSeries()
 						.getDataItem(i);

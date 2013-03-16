@@ -219,14 +219,14 @@ public class VwapSeries extends IndicatorSeries {
 				 * add the new periods values. Otherwise we just update the last
 				 * value in the set.
 				 */
-				if (this.indexOf(candleItem.getPeriod()) < 0) {
+				int index = this.indexOf(candleItem.getPeriod());
+				if (index < 0) {
 					VwapItem dataItem = new VwapItem(candleItem.getPeriod(),
 							new BigDecimal(candleItem.getVwap()));
 					this.add(dataItem, false);
 				} else {
-					VwapItem currDataItem = (VwapItem) this.getDataItem(this
-							.indexOf(candleItem.getPeriod()));
-					currDataItem.setVwapPrice(candleItem.getVwap());
+					VwapItem dataItem = (VwapItem) this.getDataItem(index);
+					dataItem.setVwapPrice(candleItem.getVwap());
 				}
 			}
 		}
