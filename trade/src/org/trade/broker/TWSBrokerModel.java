@@ -2350,7 +2350,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				synchronized (contract) {
 					Collections.sort(contract.getTradestrategies(),
 							Tradestrategy.TRADINGDAY_CONTRACT);
-					Integer prevBarSize = null;
 					for (Tradestrategy tradestrategy : contract
 							.getTradestrategies()) {
 						StrategyData datasetContainer = tradestrategy
@@ -2375,13 +2374,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								CandleItem candleItem = (CandleItem) datasetContainer
 										.getBaseCandleSeries().getDataItem(
 												dataItemIndex);
-								if (!candleItem.getCandle().getBarSize()
-										.equals(prevBarSize)) {
-									m_tradePersistentModel
-											.persistCandleItem(candleItem);
-									prevBarSize = candleItem.getCandle()
-											.getBarSize();
-								}
+								m_tradePersistentModel
+										.persistCandleItem(candleItem);
 							}
 						}
 					}

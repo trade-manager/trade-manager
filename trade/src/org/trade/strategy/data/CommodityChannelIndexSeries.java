@@ -45,6 +45,8 @@ import javax.persistence.Transient;
 
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.cci.CommodityChannelIndexItem;
@@ -64,6 +66,9 @@ import org.trade.strategy.data.cci.CommodityChannelIndexItem;
 public class CommodityChannelIndexSeries extends IndicatorSeries {
 
 	private static final long serialVersionUID = 20183087035446657L;
+
+	private final static Logger _log = LoggerFactory
+			.getLogger(CommodityChannelIndexSeries.class);
 
 	public static final String LENGTH = "Length";
 
@@ -335,6 +340,8 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 				if (this.typicalPriceValues.size() == getLength()) {
 					double cci = calculateCCI(sumTypicalPrice,
 							typicalPriceValues);
+					_log.info("Period: " + candleItem.getPeriod() + " cci: "
+							+ cci + " index: " + index);
 					if (index < 0) {
 						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
 								candleItem.getPeriod(), new BigDecimal(cci));
