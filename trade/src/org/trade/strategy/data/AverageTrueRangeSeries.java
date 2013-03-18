@@ -73,7 +73,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 * series is cleared.
 	 */
 	private double sum = 0.0;
-	private double currATR = Double.MAX_VALUE;
+	private double currATR = -1;
 	private double prevATR = 0;
 	private double prevTR = 0;
 
@@ -157,7 +157,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	public void clear() {
 		super.clear();
 		sum = 0.0;
-		currATR = Double.MAX_VALUE;
+		currATR = -1;
 		prevATR = 0;
 		prevTR = 0;
 	}
