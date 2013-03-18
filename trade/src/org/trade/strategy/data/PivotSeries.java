@@ -179,7 +179,7 @@ public class PivotSeries extends IndicatorSeries {
 	 */
 	public void add(RegularTimePeriod period, BigDecimal pivotPrice,
 			String pivotSide) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			PivotItem item0 = (PivotItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -199,7 +199,7 @@ public class PivotSeries extends IndicatorSeries {
 	 *            PivotItem
 	 */
 	public void add(PivotItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			PivotItem item0 = (PivotItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -328,10 +328,8 @@ public class PivotSeries extends IndicatorSeries {
 		}
 
 		for (int i = 0; i < candleDataset.getSeries(seriesIndex).getItemCount(); i++) {
-
-			this.updateSeries(candleDataset.getSeries(seriesIndex), i);
+			this.updateSeries(candleDataset.getSeries(seriesIndex), i, true);
 		}
-
 	}
 
 	/**
@@ -347,10 +345,12 @@ public class PivotSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 * @throws ValueTypeException
 	 */
 
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");

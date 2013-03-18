@@ -153,7 +153,7 @@ public class VolumeSeries extends IndicatorSeries {
 	 *            boolean
 	 */
 	public void add(RegularTimePeriod period, Long volume, boolean side) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			VolumeItem item0 = (VolumeItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -173,7 +173,7 @@ public class VolumeSeries extends IndicatorSeries {
 	 *            VolumeItem
 	 */
 	public void add(VolumeItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			VolumeItem item0 = (VolumeItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -221,8 +221,7 @@ public class VolumeSeries extends IndicatorSeries {
 		if (candleDataset.getSeries(seriesIndex) == null) {
 			throw new IllegalArgumentException("Null source (XYDataset).");
 		}
-
-		this.updateSeries(candleDataset.getSeries(seriesIndex), 0);
+		this.updateSeries(candleDataset.getSeries(seriesIndex), 0, true);
 
 	}
 
@@ -233,8 +232,10 @@ public class VolumeSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
@@ -251,15 +252,15 @@ public class VolumeSeries extends IndicatorSeries {
 				 * add the new periods values. Otherwise we just update the last
 				 * value in the set.
 				 */
-				int index = this.indexOf(candleItem.getPeriod());
-				if (index < 0) {
+				if (newBar) {
 					VolumeItem dataItem = new VolumeItem(
 							candleItem.getPeriod(), new Long(
 									candleItem.getVolume()),
 							candleItem.getSide());
 					this.add(dataItem, true);
 				} else {
-					VolumeItem dataItem = (VolumeItem) this.getDataItem(index);
+					VolumeItem dataItem = (VolumeItem) this.getDataItem(this
+							.getItemCount() - 1);
 					dataItem.setVolume(candleItem.getVolume());
 					dataItem.setSide(candleItem.getSide());
 				}

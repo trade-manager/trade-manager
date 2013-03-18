@@ -43,10 +43,9 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.cci.CommodityChannelIndexItem;
@@ -66,9 +65,6 @@ import org.trade.strategy.data.cci.CommodityChannelIndexItem;
 public class CommodityChannelIndexSeries extends IndicatorSeries {
 
 	private static final long serialVersionUID = 20183087035446657L;
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(CommodityChannelIndexSeries.class);
 
 	public static final String LENGTH = "Length";
 
@@ -153,6 +149,17 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Removes all data items from the series and, unless the series is already
+	 * empty, sends a {@link SeriesChangeEvent} to all registered listeners.
+	 * Clears down and resets all the local calculated fields.
+	 */
+	public void clear() {
+		super.clear();
+		sumTypicalPrice = 0;
+		typicalPriceValues.clear();
+	}
+
+	/**
 	 * Returns the time period for the specified item.
 	 * 
 	 * @param index
@@ -175,7 +182,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 *            the movingAverage.
 	 */
 	public void add(RegularTimePeriod period, BigDecimal cciAverage) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this
 					.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
@@ -196,7 +203,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 *            MovingAverageItem
 	 */
 	public void add(CommodityChannelIndexItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this
 					.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
@@ -274,7 +281,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 		}
 
 		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
-			this.updateSeries(source.getSeries(seriesIndex), i);
+			this.updateSeries(source.getSeries(seriesIndex), i, true);
 		}
 
 	}
@@ -286,8 +293,10 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
@@ -297,15 +306,10 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 					"CCI period must be  greater than zero.");
 		}
 
-		if (skip == 0) {
-			sumTypicalPrice = 0;
-			typicalPriceValues.clear();
-		}
 		if (source.getItemCount() > skip) {
 
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			int index = this.indexOf(candleItem.getPeriod());
 			// work out the average for the earlier values...
 			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
 					.getLow()) / 3;
@@ -315,13 +319,11 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 					 * If the item does not exist in the series then this is a
 					 * new time period and so we need to remove the last in the
 					 * set and add the new periods values. Otherwise we just
-					 * update the last value in the set.
+					 * update the last value in the set. Sum is just used for
+					 * performance save having to sum the last set of values
+					 * each time.
 					 */
-					if (index < 0) {
-						/*
-						 * sum is just used for performance save having to sum
-						 * the last set of values each time.
-						 */
+					if (newBar) {
 						sumTypicalPrice = sumTypicalPrice
 								- typicalPriceValues.getLast() + typicalPrice;
 						typicalPriceValues.removeLast();
@@ -333,23 +335,30 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 						typicalPriceValues.addFirst(typicalPrice);
 					}
 				} else {
-					sumTypicalPrice = sumTypicalPrice + typicalPrice;
-					typicalPriceValues.addFirst(typicalPrice);
+					if (newBar) {
+						sumTypicalPrice = sumTypicalPrice + typicalPrice;
+						typicalPriceValues.addFirst(typicalPrice);
+					} else {
+						sumTypicalPrice = sumTypicalPrice + typicalPrice
+								- typicalPriceValues.getFirst();
+						typicalPriceValues.removeFirst();
+						typicalPriceValues.addFirst(typicalPrice);
+					}
 				}
 
 				if (this.typicalPriceValues.size() == getLength()) {
 					double cci = calculateCCI(sumTypicalPrice,
 							typicalPriceValues);
-					_log.info("Period: " + candleItem.getPeriod() + " cci: "
-							+ cci + " index: " + index);
-					if (index < 0) {
+					// _log.info("Period: " + candleItem.getPeriod() + " CCI: "
+					// + cci + " newBar" + newBar);
+					if (newBar) {
 						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
 								candleItem.getPeriod(), new BigDecimal(cci));
 						this.add(dataItem, false);
 
 					} else {
 						CommodityChannelIndexItem dataItem = (CommodityChannelIndexItem) this
-								.getDataItem(index);
+								.getDataItem(this.getItemCount() - 1);
 						dataItem.setCommodityChannelIndex(cci);
 					}
 				}

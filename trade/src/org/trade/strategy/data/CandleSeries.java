@@ -409,7 +409,7 @@ public class CandleSeries extends IndicatorSeries {
 			RegularTimePeriod period, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			Date lastUpdateDate) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			CandleItem item0 = (CandleItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -429,7 +429,7 @@ public class CandleSeries extends IndicatorSeries {
 	 *            boolean
 	 */
 	public void add(CandleItem candleItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			CandleItem item0 = (CandleItem) this.getDataItem(0);
 			if (!candleItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -488,7 +488,7 @@ public class CandleSeries extends IndicatorSeries {
 	 * 
 	 * @return completedCandle the last completed candle or -1 if still building
 	 */
-	int buildCandle(Date time, double open, double high, double low,
+	boolean buildCandle(Date time, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			int rollupInterval) {
 
@@ -555,9 +555,9 @@ public class CandleSeries extends IndicatorSeries {
 					low, close, volume, (this.getVwap() == 0 ? close
 							: this.getVwap()), tradeCount, time);
 			this.add(candle, false);
-			index = this.indexOf(start);
+			return true;
 		}
-		return index;
+		return false;
 	}
 
 	/**
@@ -693,10 +693,12 @@ public class CandleSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 * @throws ValueTypeException
 	 */
 
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");

@@ -2366,15 +2366,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								.getTradingday().getOpen(), tradestrategy
 								.getTradingday().getClose(), date)) {
 
-							int dataItemIndex = datasetContainer.buildCandle(
-									date, open, high, low, close, volume, vwap,
-									tradeCount,
+							datasetContainer.buildCandle(date, open, high, low,
+									close, volume, vwap, tradeCount,
 									(tradestrategy.getBarSize() / 5));
-
-							if (dataItemIndex > -1) {
+							if (!datasetContainer.getBaseCandleSeries()
+									.isEmpty()) {
 								CandleItem candleItem = (CandleItem) datasetContainer
 										.getBaseCandleSeries().getDataItem(
-												dataItemIndex);
+												datasetContainer
+														.getBaseCandleSeries()
+														.getItemCount() - 1);
 								if (!candleItem.getCandle().getBarSize()
 										.equals(prevBarSize)) {
 									m_tradePersistentModel

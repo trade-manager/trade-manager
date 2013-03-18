@@ -42,6 +42,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
@@ -154,6 +155,23 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Removes all data items from the series and, unless the series is already
+	 * empty, sends a {@link SeriesChangeEvent} to all registered listeners.
+	 * Clears down and resets all the local calculated fields.
+	 */
+	public void clear() {
+		super.clear();
+		posSumCloseDiff = 0;
+		negSumCloseDiff = 0;
+		preDiffCloseValue = 0;
+		avgLossRSI = 0;
+		avgGainRSI = 0;
+		prevAvgLossRSI = 0;
+		prevAvgGainRSI = 0;
+		currentRSI = Double.MAX_VALUE;
+	}
+
+	/**
 	 * Returns the time period for the specified item.
 	 * 
 	 * @param index
@@ -179,7 +197,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 *            BigDecimal
 	 */
 	public void add(RegularTimePeriod period, BigDecimal relativeStrengthIndex) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this
 					.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
@@ -200,7 +218,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 *            the notify listeners.
 	 */
 	public void add(RelativeStrengthIndexItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this
 					.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
@@ -278,9 +296,8 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 		}
 
 		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
-			this.updateSeries(source.getSeries(seriesIndex), i);
+			this.updateSeries(source.getSeries(seriesIndex), i, true);
 		}
-
 	}
 
 	/**
@@ -290,8 +307,10 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
@@ -301,20 +320,10 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 					"RSI period must be  greater than zero.");
 		}
 
-		if (skip == 0) {
-			posSumCloseDiff = 0;
-			negSumCloseDiff = 0;
-			avgGainRSI = 0;
-			avgLossRSI = 0;
-			prevAvgLossRSI = 0;
-			prevAvgGainRSI = 0;
-			currentRSI = Double.MAX_VALUE;
-		}
 		if (source.getItemCount() > skip) {
 
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			int index = this.indexOf(candleItem.getPeriod());
 			double diffCloseValue = 0;
 			if (source.getItemCount() > 1) {
 				CandleItem prevCandleItem = (CandleItem) source
@@ -326,14 +335,12 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 				 * If the item does not exist in the series then this is a new
 				 * time period and so we need to remove the last in the set and
 				 * add the new periods values. Otherwise we just update the last
-				 * value in the set.
+				 * value in the set. Sum is just used for performance save
+				 * having to sum the last set of values each time.
 				 */
 
-				if (index < 0) {
-					/*
-					 * sum is just used for performance save having to sum the
-					 * last set of values each time.
-					 */
+				if (newBar) {
+
 					if (diffCloseValue > 0) {
 						posSumCloseDiff = posSumCloseDiff
 								+ Math.abs(diffCloseValue);
@@ -391,13 +398,13 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 					currentRSI = 100 - (100 / (1 + (avgGainRSI / avgLossRSI)));
 				}
 
-				if (index < 0) {
+				if (newBar) {
 					RelativeStrengthIndexItem dataItem = new RelativeStrengthIndexItem(
 							candleItem.getPeriod(), new BigDecimal(currentRSI));
 					this.add(dataItem, false);
 				} else {
 					RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
-							.getDataItem(index);
+							.getDataItem(this.getItemCount() - 1);
 					dataItem.setRelativeStrengthIndex(currentRSI);
 				}
 			}

@@ -121,7 +121,7 @@ public class StrategyData extends Worker {
 		}
 	}
 
-	/**
+	/*
 	 * The main process thread. This will run until it is either canceled or is
 	 * done.
 	 * 
@@ -131,7 +131,10 @@ public class StrategyData extends Worker {
 	 */
 
 	protected Void doInBackground() {
-
+		/*
+		 * We initialize here to keep this instances as part of this worker
+		 * thread
+		 */
 		try {
 
 			this.seriesChanged = false;
@@ -141,8 +144,8 @@ public class StrategyData extends Worker {
 				 * current candle.
 				 */
 				synchronized (lockStrategyWorker) {
-					while ((!this.seriesChanged && this.lastBaseCandleProcessed == this.currentBaseCandleCount)
-							|| this.currentBaseCandleCount == -1) {
+					while ((!this.seriesChanged && currentBaseCandleCount == lastBaseCandleProcessed)
+							|| this.getBaseCandleSeries().isEmpty()) {
 						lockStrategyWorker.wait();
 					}
 					this.seriesChanged = false;
@@ -150,19 +153,19 @@ public class StrategyData extends Worker {
 
 				if (!this.isCancelled()) {
 
-					if (this.currentBaseCandleCount > -1) {
+					if (!this.getBaseCandleSeries().isEmpty()) {
 
 						/*
 						 * Another candle has been added. Add the new candle to
 						 * the base series in the dataset.
 						 */
-						if (this.currentBaseCandleCount > this.lastBaseCandleProcessed) {
+						if (currentBaseCandleCount > lastBaseCandleProcessed) {
 							this.lastBaseCandleProcessed++;
 						}
 
 						CandleItem candle = (CandleItem) this
 								.getBaseCandleSeries().getDataItem(
-										this.lastBaseCandleProcessed);
+										lastBaseCandleProcessed);
 						synchronized (this.getBaseCandleSeries()) {
 							this.getBaseCandleSeries().updatePercentChanged(
 									candle);
@@ -229,9 +232,7 @@ public class StrategyData extends Worker {
 		 */
 		synchronized (getBaseCandleSeries()) {
 			clearChartDatasets();
-			for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
-				this.getCandleDataset().getSeries(i).setBarSize(newPeriod);
-			}
+			this.getCandleDataset().getSeries(0).setBarSize(newPeriod);
 			for (int i = 0; i < getBaseCandleSeries().getItemCount(); i++) {
 				CandleItem candle = (CandleItem) getBaseCandleSeries()
 						.getDataItem(i);
@@ -261,15 +262,15 @@ public class StrategyData extends Worker {
 	 *            int
 	 * @param rollupInterval
 	 *            int
-	 * @return int
+	 * @return boolean
 	 */
-	public int buildCandle(Date time, double open, double high, double low,
+	public boolean buildCandle(Date time, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			int rollupInterval) {
 
-		this.currentBaseCandleCount = this.getBaseCandleSeries().buildCandle(
-				time, open, high, low, close, volume, vwap, tradeCount,
-				rollupInterval);
+		boolean newBar = this.getBaseCandleSeries().buildCandle(time, open,
+				high, low, close, volume, vwap, tradeCount, rollupInterval);
+		this.currentBaseCandleCount = this.getBaseCandleSeries().getItemCount() - 1;
 		/*
 		 * If thread Indicators the updates to all indicators and the subsequent
 		 * firing of base series changed is performed via the worker thread.
@@ -307,7 +308,7 @@ public class StrategyData extends Worker {
 				this.getBaseCandleSeries().fireSeriesChanged();
 			}
 		}
-		return this.currentBaseCandleCount;
+		return newBar;
 	}
 
 	/**
@@ -325,7 +326,7 @@ public class StrategyData extends Worker {
 			CandleSeries series = getCandleDataset().getSeries(i);
 			synchronized (series) {
 
-				series.buildCandle(candle.getLastUpdateDate(),
+				boolean newBar = series.buildCandle(candle.getLastUpdateDate(),
 						candle.getOpen(), candle.getHigh(), candle.getLow(),
 						candle.getClose(), candle.getVolume(),
 						candle.getVwap(), candle.getCount(),
@@ -338,7 +339,7 @@ public class StrategyData extends Worker {
 					 */
 					if (!IndicatorSeries.CandleSeries.equals(indicator
 							.getType(0))) {
-						indicator.updateDataset(getCandleDataset(), i);
+						indicator.updateDataset(getCandleDataset(), i, newBar);
 					}
 				}
 				series.fireSeriesChanged();

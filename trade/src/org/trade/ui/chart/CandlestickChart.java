@@ -306,7 +306,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		Date startDate = tradingday.getOpen();
 		Date endDate = tradingday.getClose();
 
-		if (datasetContainer.getCandleDataset().getSeries(0).getItemCount() > 0) {
+		if (!datasetContainer.getCandleDataset().getSeries(0).isEmpty()) {
 			startDate = ((CandleItem) datasetContainer.getCandleDataset()
 					.getSeries(0).getDataItem(0)).getPeriod().getStart();
 			startDate = TradingCalendar.getSpecificTime(tradingday.getOpen(),

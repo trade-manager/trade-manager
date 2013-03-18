@@ -120,7 +120,7 @@ public class VwapSeries extends IndicatorSeries {
 	 *            BigDecimal
 	 */
 	public void add(RegularTimePeriod period, BigDecimal vwapPrice) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			VwapItem item0 = (VwapItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -140,7 +140,7 @@ public class VwapSeries extends IndicatorSeries {
 	 *            VwapItem
 	 */
 	public void add(VwapItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			VwapItem item0 = (VwapItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -190,7 +190,7 @@ public class VwapSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (XYDataset).");
 		}
 
-		this.updateSeries(candleDataset.getSeries(seriesIndex), 0);
+		this.updateSeries(candleDataset.getSeries(seriesIndex), 0, true);
 
 	}
 
@@ -201,8 +201,10 @@ public class VwapSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
@@ -219,13 +221,13 @@ public class VwapSeries extends IndicatorSeries {
 				 * add the new periods values. Otherwise we just update the last
 				 * value in the set.
 				 */
-				int index = this.indexOf(candleItem.getPeriod());
-				if (index < 0) {
+				if (newBar) {
 					VwapItem dataItem = new VwapItem(candleItem.getPeriod(),
 							new BigDecimal(candleItem.getVwap()));
 					this.add(dataItem, false);
 				} else {
-					VwapItem dataItem = (VwapItem) this.getDataItem(index);
+					VwapItem dataItem = (VwapItem) this.getDataItem(this
+							.getItemCount() - 1);
 					dataItem.setVwapPrice(candleItem.getVwap());
 				}
 			}

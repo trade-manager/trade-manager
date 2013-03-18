@@ -391,10 +391,13 @@ public class VwapDataset extends AbstractXYDataset implements IVwapDataset,
 	 *            CandleDataset
 	 * @param seriesIndex
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex) {
+	public void updateDataset(CandleDataset source, int seriesIndex,
+			boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
@@ -403,7 +406,7 @@ public class VwapDataset extends AbstractXYDataset implements IVwapDataset,
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			VwapSeries series = this.getSeries(i);
 			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1);
+					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 
 		}
 	}

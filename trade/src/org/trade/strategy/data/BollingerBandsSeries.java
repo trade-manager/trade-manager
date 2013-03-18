@@ -43,6 +43,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
@@ -155,6 +156,17 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Removes all data items from the series and, unless the series is already
+	 * empty, sends a {@link SeriesChangeEvent} to all registered listeners.
+	 * Clears down and resets all the local calculated fields.
+	 */
+	public void clear() {
+		super.clear();
+		sum = 0.0;
+		yyValues.clear();
+	}
+
+	/**
 	 * Returns the time period for the specified item.
 	 * 
 	 * @param index
@@ -177,7 +189,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 *            the bollingerBands.
 	 */
 	public void add(RegularTimePeriod period, BigDecimal bollingerBands) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			BollingerBandsItem item0 = (BollingerBandsItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -197,7 +209,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 *            BollingerBandsItem
 	 */
 	public void add(BollingerBandsItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			BollingerBandsItem item0 = (BollingerBandsItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -321,7 +333,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 		}
 
 		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
-			this.updateSeries(source.getSeries(seriesIndex), i);
+			this.updateSeries(source.getSeries(seriesIndex), i, true);
 		}
 
 	}
@@ -333,8 +345,10 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
@@ -349,15 +363,11 @@ public class BollingerBandsSeries extends IndicatorSeries {
 					"Number of STD's must be greater than zero.");
 		}
 
-		if (skip == 0) {
-			sum = 0.0;
-			this.yyValues.clear();
-		}
 		if (source.getItemCount() > skip) {
 
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			int index = this.indexOf(candleItem.getPeriod());
+
 			// work out the average for the earlier values...
 			Number yy = candleItem.getY();
 
@@ -367,37 +377,42 @@ public class BollingerBandsSeries extends IndicatorSeries {
 					 * If the item does not exist in the series then this is a
 					 * new time period and so we need to remove the last in the
 					 * set and add the new periods values. Otherwise we just
-					 * update the last value in the set.
+					 * update the last value in the set. Sum is just used for
+					 * performance save having to sum the last set of values
+					 * each time.
 					 */
-					if (index < 0) {
-						/*
-						 * sum is just used for performance save having to sum
-						 * the last set of values each time.
-						 */
+					if (newBar) {
 						sum = sum - this.yyValues.getLast() + yy.doubleValue();
 						this.yyValues.removeLast();
 						this.yyValues.addFirst(yy.doubleValue());
+
 					} else {
 						sum = sum - this.yyValues.getFirst() + yy.doubleValue();
 						this.yyValues.removeFirst();
 						this.yyValues.addFirst(yy.doubleValue());
 					}
 				} else {
-					sum = sum + yy.doubleValue();
-					this.yyValues.addFirst(yy.doubleValue());
+					if (newBar) {
+						sum = sum + yy.doubleValue();
+						this.yyValues.addFirst(yy.doubleValue());
+					} else {
+						sum = sum + yy.doubleValue() - this.yyValues.getFirst();
+						this.yyValues.removeFirst();
+						this.yyValues.addFirst(yy.doubleValue());
+					}
 				}
 
 				if (this.yyValues.size() == getLength()) {
 					double ma = calculateBBands(this.getNumberOfSTD(),
 							this.yyValues, sum);
-					if (index < 0) {
+					if (newBar) {
 						BollingerBandsItem dataItem = new BollingerBandsItem(
 								candleItem.getPeriod(), new BigDecimal(ma));
 						this.add(dataItem, false);
 
 					} else {
 						BollingerBandsItem dataItem = (BollingerBandsItem) this
-								.getDataItem(index);
+								.getDataItem(this.getItemCount() - 1);
 						dataItem.setBollingerBands(ma);
 					}
 				}

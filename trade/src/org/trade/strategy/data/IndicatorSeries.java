@@ -505,8 +505,11 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public abstract void updateSeries(CandleSeries source, int skip);
+	public abstract void updateSeries(CandleSeries source, int skip,
+			boolean newBar);
 
 	/**
 	 * Method createSeries.

@@ -400,10 +400,13 @@ public class CommodityChannelIndexDataset extends AbstractXYDataset implements
 	 *            CandleDataset
 	 * @param seriesIndex
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex) {
+	public void updateDataset(CandleDataset source, int seriesIndex,
+			boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
@@ -411,7 +414,7 @@ public class CommodityChannelIndexDataset extends AbstractXYDataset implements
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			CommodityChannelIndexSeries series = this.getSeries(x);
 			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1);
+					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 		}
 	}
 

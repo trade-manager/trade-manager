@@ -134,7 +134,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 */
 	public void add(Contract contract, RegularTimePeriod period, double open,
 			double high, double low, double close, Date lastUpdateDate) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			HeikinAshiItem item0 = (HeikinAshiItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -155,7 +155,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 *            HeikinAshiItem
 	 */
 	public void add(HeikinAshiItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			HeikinAshiItem item0 = (HeikinAshiItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -205,7 +205,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
-		this.updateSeries(source.getSeries(seriesIndex), 0);
+		this.updateSeries(source.getSeries(seriesIndex), 0, true);
 	}
 
 	/**
@@ -226,8 +226,10 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");

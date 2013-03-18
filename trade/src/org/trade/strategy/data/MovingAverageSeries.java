@@ -43,6 +43,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.dictionary.valuetype.CalculationType;
@@ -158,6 +159,19 @@ public class MovingAverageSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Removes all data items from the series and, unless the series is already
+	 * empty, sends a {@link SeriesChangeEvent} to all registered listeners.
+	 * Clears down and resets all the local calculated fields.
+	 */
+	public void clear() {
+		super.clear();
+		sum = 0.0;
+		multiplyer = 0;
+		yyValues.clear();
+		volValues.clear();
+	}
+
+	/**
 	 * Returns the time period for the specified item.
 	 * 
 	 * @param index
@@ -180,7 +194,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 *            the movingAverage.
 	 */
 	public void add(RegularTimePeriod period, BigDecimal movingAverage) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			MovingAverageItem item0 = (MovingAverageItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -200,7 +214,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 *            MovingAverageItem
 	 */
 	public void add(MovingAverageItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			MovingAverageItem item0 = (MovingAverageItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
@@ -303,7 +317,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 		}
 
 		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
-			this.updateSeries(source.getSeries(seriesIndex), i);
+			this.updateSeries(source.getSeries(seriesIndex), i, true);
 		}
 
 	}
@@ -315,8 +329,10 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
@@ -326,17 +342,10 @@ public class MovingAverageSeries extends IndicatorSeries {
 					"MA period must be greater than zero.");
 		}
 
-		if (skip == 0) {
-			sum = 0.0;
-			multiplyer = 0;
-			this.yyValues.clear();
-			this.volValues.clear();
-		}
 		if (source.getItemCount() > skip) {
 
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			int index = this.indexOf(candleItem.getPeriod());
 			// work out the average for the earlier values...
 			Number yy = candleItem.getY();
 
@@ -346,13 +355,11 @@ public class MovingAverageSeries extends IndicatorSeries {
 					 * If the item does not exist in the series then this is a
 					 * new time period and so we need to remove the last in the
 					 * set and add the new periods values. Otherwise we just
-					 * update the last value in the set.
+					 * update the last value in the set. Sum is just used for
+					 * performance save having to sum the last set of values
+					 * each time.
 					 */
-					if (index < 0) {
-						/*
-						 * sum is just used for performance save having to sum
-						 * the last set of values each time.
-						 */
+					if (newBar) {
 						sum = sum - this.yyValues.getLast() + yy.doubleValue();
 						this.yyValues.removeLast();
 						this.yyValues.addFirst(yy.doubleValue());
@@ -364,22 +371,30 @@ public class MovingAverageSeries extends IndicatorSeries {
 						this.yyValues.addFirst(yy.doubleValue());
 					}
 				} else {
-					sum = sum + yy.doubleValue();
-					this.yyValues.addFirst(yy.doubleValue());
-					this.volValues.addFirst(candleItem.getVolume());
+					if (newBar) {
+						sum = sum + yy.doubleValue();
+						this.yyValues.addFirst(yy.doubleValue());
+						this.volValues.addFirst(candleItem.getVolume());
+					} else {
+						sum = sum + yy.doubleValue() - this.yyValues.getFirst();
+						this.yyValues.removeFirst();
+						this.yyValues.addFirst(yy.doubleValue());
+						this.volValues.removeFirst();
+						this.volValues.addFirst(candleItem.getVolume());
+					}
 				}
 
 				if (this.yyValues.size() == getLength()) {
 					double ma = calculateMA(this.getMAType(), this.yyValues,
 							this.volValues, sum);
-					if (index < 0) {
+					if (newBar) {
 						MovingAverageItem dataItem = new MovingAverageItem(
 								candleItem.getPeriod(), new BigDecimal(ma));
 						this.add(dataItem, false);
 
 					} else {
 						MovingAverageItem dataItem = (MovingAverageItem) this
-								.getDataItem(index);
+								.getDataItem(this.getItemCount() - 1);
 						dataItem.setMovingAverage(ma);
 					}
 				}

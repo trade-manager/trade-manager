@@ -238,15 +238,14 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				 * other activities.
 				 */
 				ruleComplete.set(0);
-				int candleIndex = this.tradestrategy.getDatasetContainer()
-						.buildCandle(candle.getStartPeriod(),
-								candle.getOpen().doubleValue(),
-								candle.getHigh().doubleValue(),
-								candle.getLow().doubleValue(),
-								candle.getClose().doubleValue(),
-								candle.getVolume(),
-								candle.getVwap().doubleValue(),
-								candle.getTradeCount(), 1);
+				this.tradestrategy.getDatasetContainer().buildCandle(
+						candle.getStartPeriod(),
+						candle.getOpen().doubleValue(),
+						candle.getHigh().doubleValue(),
+						candle.getLow().doubleValue(),
+						candle.getClose().doubleValue(), candle.getVolume(),
+						candle.getVwap().doubleValue(), candle.getTradeCount(),
+						1);
 				/*
 				 * Wait for the candle to be processed by the strategy.
 				 */
@@ -305,10 +304,16 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 */
 					openTrade = this.tradePersistentModel
 							.findTradeById(openTrade.getIdTrade());
-					if (candleIndex > -1) {
+					if (!this.tradestrategy.getDatasetContainer()
+							.getBaseCandleSeries().isEmpty()) {
 						CandleItem candleItem = (CandleItem) this.tradestrategy
-								.getDatasetContainer().getBaseCandleSeries()
-								.getDataItem(candleIndex);
+								.getDatasetContainer()
+								.getBaseCandleSeries()
+								.getDataItem(
+										this.tradestrategy
+												.getDatasetContainer()
+												.getBaseCandleSeries()
+												.getItemCount() - 1);
 						if (!candleItem.isSide(openTrade.getSide())) {
 							filledOrdersOpenPosition(
 									this.tradestrategy.getContract(),

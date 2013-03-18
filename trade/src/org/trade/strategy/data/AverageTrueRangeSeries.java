@@ -42,6 +42,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
@@ -149,6 +150,19 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Removes all data items from the series and, unless the series is already
+	 * empty, sends a {@link SeriesChangeEvent} to all registered listeners.
+	 * Clears down and resets all the local calculated fields.
+	 */
+	public void clear() {
+		super.clear();
+		sum = 0.0;
+		currATR = Double.MAX_VALUE;
+		prevATR = 0;
+		prevTR = 0;
+	}
+
+	/**
 	 * Returns the time period for the specified item.
 	 * 
 	 * @param index
@@ -171,7 +185,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 *            the AverageTrueRange.
 	 */
 	public void add(RegularTimePeriod period, BigDecimal averageTrueRange) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			AverageTrueRangeItem item0 = (AverageTrueRangeItem) this
 					.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
@@ -191,7 +205,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 *            the notify listeners.
 	 */
 	public void add(AverageTrueRangeItem dataItem, boolean notify) {
-		if (getItemCount() > 0) {
+		if (!this.isEmpty()) {
 			AverageTrueRangeItem item0 = (AverageTrueRangeItem) this
 					.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
@@ -270,7 +284,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 		}
 
 		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
-			this.updateSeries(source.getSeries(seriesIndex), i);
+			this.updateSeries(source.getSeries(seriesIndex), i, true);
 		}
 
 	}
@@ -282,8 +296,10 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 *            CandleSeries
 	 * @param skip
 	 *            int
+	 * @param newBar
+	 *            boolean
 	 */
-	public void updateSeries(CandleSeries source, int skip) {
+	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
@@ -293,17 +309,10 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 					"ATR period must be greater than 0.");
 		}
 
-		if (skip == 0) {
-			sum = 0.0;
-			currATR = -1;
-			prevATR = 0;
-			prevTR = 0;
-		}
 		if (source.getItemCount() > skip) {
 
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			int index = this.indexOf(candleItem.getPeriod());
 			double highLessLow = candleItem.getHigh() - candleItem.getLow();
 			double absHighLessPrevClose = 0;
 			double absLowLessPrevClose = 0;
@@ -318,7 +327,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 			double tR = Math.max(highLessLow,
 					Math.max(absHighLessPrevClose, absLowLessPrevClose));
 
-			if (index < 0) {
+			if (newBar) {
 				sum = sum + tR;
 				prevTR = tR;
 				prevATR = currATR;
@@ -335,14 +344,14 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 					currATR = ((prevATR * (getLength() - 1)) + tR)
 							/ getLength();
 				}
-				if (index < 0) {
+				if (newBar) {
 					AverageTrueRangeItem dataItem = new AverageTrueRangeItem(
 							candleItem.getPeriod(), new BigDecimal(currATR));
 					this.add(dataItem, false);
 
 				} else {
 					AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
-							.getDataItem(index);
+							.getDataItem(this.getItemCount() - 1);
 					dataItem.setAverageTrueRange(currATR);
 				}
 			}
