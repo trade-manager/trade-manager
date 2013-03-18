@@ -480,4 +480,21 @@ public class StrategyData extends Worker {
 			}
 		}
 	}
+
+	public void printDatasets() {
+
+		this.getBaseCandleSeries().printSeries();
+
+		for (int i = 0; i < this.getCandleDataset().getSeriesCount(); i++) {
+			IndicatorSeries series = this.getCandleDataset().getSeries(i);
+			series.printSeries();
+		}
+
+		for (IndicatorDataset indicatorDataset : this.getIndicators()) {
+			for (int i = 0; i < indicatorDataset.getSeriesCount(); i++) {
+				IndicatorSeries series = indicatorDataset.getSeries(i);
+				series.printSeries();
+			}
+		}
+	}
 }

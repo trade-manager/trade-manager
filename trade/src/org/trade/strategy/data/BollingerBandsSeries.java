@@ -453,4 +453,18 @@ public class BollingerBandsSeries extends IndicatorSeries {
 			sumTotal += Math.pow((i - mean), 2);
 		return Math.sqrt(sumTotal / (a.size() - 1)); // sample
 	}
+
+	/**
+	 * Method printSeries.
+	 * 
+	 */
+	public void printSeries() {
+		for (int i = 0; i < this.getItemCount(); i++) {
+			BollingerBandsItem dataItem = (BollingerBandsItem) this
+					.getDataItem(i);
+			_log.info("Type: " + this.getType() + " Time: "
+					+ dataItem.getPeriod().getStart() + " BollingerBand: "
+					+ dataItem.getBollingerBands());
+		}
+	}
 }

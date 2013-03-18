@@ -2453,23 +2453,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
-	 * Method printCandles.
-	 * 
-	 * @param series
-	 *            CandleSeries
-	 */
-	public void printCandles(CandleSeries series) {
-		for (int i = 0; i < series.getItemCount(); i++) {
-			CandleItem candle = (CandleItem) series.getDataItem(i);
-			_log.debug(" symbol: " + series.getContract().getSymbol()
-					+ " Time: " + candle.getPeriod().getStart() + " Open: "
-					+ candle.getOpen() + " Close: " + candle.getClose()
-					+ " High: " + candle.getHigh() + " Low: " + candle.getLow()
-					+ " Volume: " + candle.getVolume());
-		}
-	}
-
-	/**
 	 * Method getIBContract.
 	 * 
 	 * @param contract

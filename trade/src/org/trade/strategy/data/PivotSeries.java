@@ -551,6 +551,19 @@ public class PivotSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method printSeries.
+	 */
+	public void printSeries() {
+		for (int i = 0; i < this.getItemCount(); i++) {
+			PivotItem dataItem = (PivotItem) this.getDataItem(i);
+			_log.info("Type: " + this.getType() + " Time: "
+					+ dataItem.getPeriod().getStart() + " Pivot: "
+					+ dataItem.getPivotPrice() + " Side: "
+					+ dataItem.getPivotSide());
+		}
+	}
+
+	/**
 	 * Method clone.
 	 * 
 	 * @return Object

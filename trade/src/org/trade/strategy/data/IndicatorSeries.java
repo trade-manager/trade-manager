@@ -62,6 +62,8 @@ import javax.persistence.Transient;
 
 import org.jfree.data.ComparableObjectItem;
 import org.jfree.data.ComparableObjectSeries;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.core.factory.ClassFactory;
 import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Strategy;
@@ -77,6 +79,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 		Cloneable, Serializable {
 
 	private static final long serialVersionUID = -4985280367851073683L;
+
+	protected final static Logger _log = LoggerFactory
+			.getLogger(CandleSeries.class);
 
 	/*
 	 * These names must match the names of the classes for that series.
@@ -520,4 +525,11 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 *            int
 	 */
 	public abstract void createSeries(CandleDataset source, int seriesIndex);
+
+	/**
+	 * Method printSeries.
+	 * 
+	 */
+
+	public abstract void printSeries();
 }

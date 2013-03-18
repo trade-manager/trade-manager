@@ -235,6 +235,19 @@ public class VwapSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method printSeries.
+	 * 
+	 */
+	public void printSeries() {
+		for (int i = 0; i < this.getItemCount(); i++) {
+			VwapItem dataItem = (VwapItem) this.getDataItem(i);
+			_log.info("Type: " + this.getType() + " Time: "
+					+ dataItem.getPeriod().getStart() + " Vwap: "
+					+ dataItem.getVwapPrice());
+		}
+	}
+
+	/**
 	 * Method clone.
 	 * 
 	 * @return Object

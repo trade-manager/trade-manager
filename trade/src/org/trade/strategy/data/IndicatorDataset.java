@@ -142,4 +142,11 @@ public interface IndicatorDataset {
 	 */
 	void setSeries(int index, IndicatorSeries series);
 
+	/**
+	 * Returns the number of series in the collection.
+	 * 
+	 * 
+	 * @return The series count.
+	 */
+	int getSeriesCount();
 }

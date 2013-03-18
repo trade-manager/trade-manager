@@ -287,6 +287,19 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method printSeries.
+	 */
+	public void printSeries() {
+		for (int i = 0; i < this.getItemCount(); i++) {
+			CommodityChannelIndexItem dataItem = (CommodityChannelIndexItem) this
+					.getDataItem(i);
+			_log.info("Type: " + this.getType() + " Time: "
+					+ dataItem.getPeriod().getStart() + " CCI: "
+					+ dataItem.getCommodityChannelIndex());
+		}
+	}
+
+	/**
 	 * Method updateSeries.
 	 * 
 	 * @param source

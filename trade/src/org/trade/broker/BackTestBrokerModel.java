@@ -64,7 +64,6 @@ import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.strategy.data.CandleSeries;
-import org.trade.strategy.data.candle.CandleItem;
 
 import com.ib.client.ContractDetails;
 
@@ -1198,24 +1197,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	public synchronized void realtimeBar(int reqId, long time, double open,
 			double high, double low, double close, long volume, double vwap,
 			int tradeCount) {
-	}
-
-	/**
-	 * Method printCandles.
-	 * 
-	 * @param series
-	 *            CandleSeries
-	 */
-
-	public void printCandles(CandleSeries series) {
-		for (int i = 0; i < series.getItemCount(); i++) {
-			CandleItem candle = (CandleItem) series.getDataItem(i);
-			_log.debug(" Symbol: " + series.getContract().getSymbol()
-					+ " Time: " + candle.getPeriod().getStart() + " Open: "
-					+ candle.getOpen() + " Close: " + candle.getClose()
-					+ " High: " + candle.getHigh() + " Low: " + candle.getLow()
-					+ " Volume: " + candle.getVolume());
-		}
 	}
 
 	/**

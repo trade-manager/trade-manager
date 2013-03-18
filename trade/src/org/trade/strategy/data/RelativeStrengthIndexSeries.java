@@ -410,4 +410,18 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 			}
 		}
 	}
+
+	/**
+	 * Method printSeries.
+	 * 
+	 */
+	public void printSeries() {
+		for (int i = 0; i < this.getItemCount(); i++) {
+			RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
+					.getDataItem(i);
+			_log.info("Type: " + this.getType() + " Time: "
+					+ dataItem.getPeriod().getStart() + " RSI: "
+					+ dataItem.getRelativeStrengthIndex());
+		}
+	}
 }

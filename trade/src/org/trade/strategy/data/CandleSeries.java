@@ -47,8 +47,6 @@ import org.jfree.data.ComparableObjectItem;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Percent;
 import org.trade.core.valuetype.ValueTypeException;
@@ -73,9 +71,6 @@ import org.trade.strategy.data.candle.CandlePeriod;
 public class CandleSeries extends IndicatorSeries {
 
 	private static final long serialVersionUID = 20183087035446657L;
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(CandleSeries.class);
 
 	public static final String SYMBOL = "Symbol";
 	public static final String CURRENCY = "Currency";
@@ -939,9 +934,23 @@ public class CandleSeries extends IndicatorSeries {
 	 * @param seriesIndex
 	 *            int
 	 */
-	@Override
-	public void createSeries(CandleDataset source, int seriesIndex) {
-		// TODO Auto-generated method stub
 
+	public void createSeries(CandleDataset source, int seriesIndex) {
+
+	}
+
+	/**
+	 * Method printSeries.
+	 * 
+	 */
+	public void printSeries() {
+		for (int i = 0; i < this.getItemCount(); i++) {
+			CandleItem dataItem = (CandleItem) this.getDataItem(i);
+			_log.info("Type: " + this.getType() + " Time: "
+					+ dataItem.getPeriod().getStart() + " Open: "
+					+ dataItem.getOpen() + " Close: " + dataItem.getClose()
+					+ " High: " + dataItem.getHigh() + " Low: "
+					+ dataItem.getLow() + " Volume: " + dataItem.getVolume());
+		}
 	}
 }
