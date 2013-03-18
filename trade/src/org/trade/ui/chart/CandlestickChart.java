@@ -402,6 +402,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 						final NumberAxis axis2 = new NumberAxis(
 								((CandleSeries) indicator.getSeries(0))
 										.getSymbol());
+						axis2.setAutoRange(true);
 						axis2.setAutoRangeIncludesZero(false);
 						pricePlot.setRangeAxis(datasetIndex, axis2);
 						pricePlot.setRangeAxisLocation(i + 1,

@@ -323,36 +323,37 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 						- prevCandleItem.getClose());
 				absLowLessPrevClose = Math.abs(candleItem.getLow()
 						- prevCandleItem.getClose());
-			}
-			double tR = Math.max(highLessLow,
-					Math.max(absHighLessPrevClose, absLowLessPrevClose));
 
-			if (newBar) {
-				sum = sum + tR;
-				prevTR = tR;
-				prevATR = currATR;
+				double tR = Math.max(highLessLow,
+						Math.max(absHighLessPrevClose, absLowLessPrevClose));
 
-			} else {
-				sum = sum - prevTR + tR;
-			}
-
-			if (skip >= getLength()) {
-
-				if (currATR == -1) {
-					currATR = sum / getLength();
-				} else {
-					currATR = ((prevATR * (getLength() - 1)) + tR)
-							/ getLength();
-				}
 				if (newBar) {
-					AverageTrueRangeItem dataItem = new AverageTrueRangeItem(
-							candleItem.getPeriod(), new BigDecimal(currATR));
-					this.add(dataItem, false);
+					sum = sum + tR;
+					prevTR = tR;
+					prevATR = currATR;
 
 				} else {
-					AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
-							.getDataItem(this.getItemCount() - 1);
-					dataItem.setAverageTrueRange(currATR);
+					sum = sum - prevTR + tR;
+				}
+
+				if (skip >= getLength()) {
+
+					if (currATR == -1) {
+						currATR = sum / getLength();
+					} else {
+						currATR = ((prevATR * (getLength() - 1)) + tR)
+								/ getLength();
+					}
+					if (newBar) {
+						AverageTrueRangeItem dataItem = new AverageTrueRangeItem(
+								candleItem.getPeriod(), new BigDecimal(currATR));
+						this.add(dataItem, false);
+
+					} else {
+						AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
+								.getDataItem(this.getItemCount() - 1);
+						dataItem.setAverageTrueRange(currATR);
+					}
 				}
 			}
 		}
