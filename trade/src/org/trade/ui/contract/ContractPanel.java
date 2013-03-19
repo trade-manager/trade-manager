@@ -246,7 +246,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jToolBar.add(jPanel6);
 
 			m_strategyLabel = new JEditorPane("text/rtf", "");
-			setStrategyLabel(null);
 			m_strategyLabel.setAutoscrolls(false);
 			m_strategyLabel.setEditable(false);
 			m_tradeLabel = new JEditorPane("text/rtf", "");
@@ -309,8 +308,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
 			this.reFreshTab();
-			enableChartButtons(null);
-
 		} catch (Exception ex) {
 			this.setErrorMessage("Error During Initialization.",
 					ex.getMessage(), ex);
@@ -566,9 +563,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							new TabbedCloseButton(m_jTabbedPaneContract, this));
 				}
 				m_jTabbedPaneContract.setSelectedIndex(currentTabIndex);
-				enableChartButtons(tradestrategy);
-			} else {
-				enableChartButtons(null);
 			}
 			this.reFreshTab();
 		} catch (PersistentModelException ex) {
@@ -603,14 +597,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			if (evt.getSource() instanceof JTabbedPane) {
 				JTabbedPane selectedTab = (JTabbedPane) evt.getSource();
 				if (selectedTab.isShowing()) {
-					ChartPanel currentTab = (ChartPanel) selectedTab
-							.getSelectedComponent();
 					this.reFreshTab();
-					if (null != currentTab) {
-						enableChartButtons(currentTab.getTradestrategy());
-					} else {
-						enableChartButtons(null);
-					}
 				}
 			}
 		} catch (Exception ex) {
@@ -629,15 +616,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		try {
 			this.connected = connected;
 			this.reFreshTab();
-			if (m_jTabbedPaneContract.getTabCount() > 0) {
-				ChartPanel chart = (ChartPanel) m_jTabbedPaneContract
-						.getSelectedComponent();
-				if (null != chart) {
-					enableChartButtons(chart.getTradestrategy());
-					return;
-				}
-			}
-			enableChartButtons(null);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error setting connection.", ex.getMessage(),
@@ -897,8 +875,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					.getSelectedComponent();
 			if (null == currentTab) {
 				m_tradeOrderModel.setData(new Tradestrategy());
-
 			} else {
+				/*
+				 * Refresh the Tradestrategy this will get the latest orders.
+				 */
 				tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(currentTab.getTradestrategy()
 								.getIdTradeStrategy());
@@ -909,6 +889,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy
 						.getBarSize()));
 			}
+			/*
+			 * Refresh the header label above the chart and buttons.
+			 */
+			setStrategyLabel(tradestrategy);
+			enableChartButtons(tradestrategy);
+
 			double profitLoss = 0;
 			double commision = 0;
 			String symbol = "";
@@ -1028,8 +1014,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					false, null);
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error setting Tradestrategy Label.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error refreshing Tab.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1050,7 +1035,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		m_tradeOrderTable.enablePopupMenu(false);
 		periodEditorComboBox.setEnabled(false);
 		refreshButton.setEnabled(false);
-		setStrategyLabel(tradestrategy);
 		brokerDataButton.setTransferObject(tradestrategy);
 		cancelStrategiesButton.setTransferObject(tradestrategy);
 		refreshButton.setTransferObject(tradestrategy);
