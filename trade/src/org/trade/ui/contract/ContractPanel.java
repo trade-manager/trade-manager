@@ -252,7 +252,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradeLabel = new JEditorPane("text/rtf", "");
 			m_tradeLabel.setAutoscrolls(false);
 			m_tradeLabel.setEditable(false);
-			this.setTradeLabel(null, null);
 
 			JPanel jPanel12 = new JPanel(new BorderLayout());
 			jPanel12.add(m_strategyLabel, null);
@@ -309,6 +308,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			mainSplitPane.setResizeWeight(0.15d);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
+			this.reFreshTab();
 			enableChartButtons(null);
 
 		} catch (Exception ex) {
@@ -500,15 +500,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							if (null != currentTab) {
 								if (currentTab.getTradestrategy().equals(
 										refreshedTradestrategy)) {
-									m_tradeOrderModel
-											.setData(refreshedTradestrategy);
-									RowSorter<?> rsDetail = m_tradeOrderTable
-											.getRowSorter();
-									rsDetail.setSortKeys(null);
-									currentTab
-											.setTradestrategy(refreshedTradestrategy);
-									setTradeLabel(refreshedTradestrategy,
-											currentTab.getCandlestickChart());
+									reFreshTab();
 								}
 							}
 						}
@@ -578,6 +570,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			} else {
 				enableChartButtons(null);
 			}
+			this.reFreshTab();
 		} catch (PersistentModelException ex) {
 			setErrorMessage("Error refreshing Tradestrategy.", ex.getMessage(),
 					ex);
@@ -598,7 +591,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	}
 
 	/**
-	 * Method stateChanged.
+	 * Method stateChanged. Different tab selected.
 	 * 
 	 * @param evt
 	 *            ChangeEvent
@@ -612,6 +605,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				if (selectedTab.isShowing()) {
 					ChartPanel currentTab = (ChartPanel) selectedTab
 							.getSelectedComponent();
+					this.reFreshTab();
 					if (null != currentTab) {
 						enableChartButtons(currentTab.getTradestrategy());
 					} else {
@@ -634,6 +628,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	public void setConnected(Boolean connected) {
 		try {
 			this.connected = connected;
+			this.reFreshTab();
 			if (m_jTabbedPaneContract.getTabCount() > 0) {
 				ChartPanel chart = (ChartPanel) m_jTabbedPaneContract
 						.getSelectedComponent();
@@ -891,17 +886,29 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	}
 
 	/**
-	 * Method setTradeLabel.
+	 * Method reFreshTab.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @param candlestickChart
-	 *            CandlestickChart
 	 * @throws BadLocationException
 	 */
-	private void setTradeLabel(Tradestrategy tradestrategy,
-			CandlestickChart candlestickChart) {
+	private void reFreshTab() {
 		try {
+			Tradestrategy tradestrategy = null;
+			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
+					.getSelectedComponent();
+			if (null == currentTab) {
+				m_tradeOrderModel.setData(new Tradestrategy());
+
+			} else {
+				tradestrategy = m_tradePersistentModel
+						.findTradestrategyById(currentTab.getTradestrategy()
+								.getIdTradeStrategy());
+				currentTab.setTradestrategy(tradestrategy);
+				m_tradeOrderModel.setData(tradestrategy);
+				RowSorter<?> rsDetail = m_tradeOrderTable.getRowSorter();
+				rsDetail.setSortKeys(null);
+				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy
+						.getBarSize()));
+			}
 			double profitLoss = 0;
 			double commision = 0;
 			String symbol = "";
@@ -962,10 +969,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 													.getFilledQuantity();
 								}
 							}
-							candlestickChart.addBuySellTradeArrow(
-									order.getAction(),
-									new Money(order.getAverageFilledPrice()),
-									order.getFilledDate(), quantity);
+							currentTab.getCandlestickChart()
+									.addBuySellTradeArrow(
+											order.getAction(),
+											new Money(order
+													.getAverageFilledPrice()),
+											order.getFilledDate(), quantity);
 						}
 						prevTradeOrder = order;
 					}
@@ -1027,11 +1036,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	/**
 	 * Method enableChartButtons.
 	 * 
-	 * @param transferObject
+	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @throws Exception
 	 */
-	private void enableChartButtons(Tradestrategy transferObject)
+	private void enableChartButtons(Tradestrategy tradestrategy)
 			throws Exception {
 		propertiesButton.setEnabled(false);
 		executeButton.setEnabled(false);
@@ -1041,15 +1050,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		m_tradeOrderTable.enablePopupMenu(false);
 		periodEditorComboBox.setEnabled(false);
 		refreshButton.setEnabled(false);
-		setStrategyLabel(transferObject);
-		brokerDataButton.setTransferObject(transferObject);
-		cancelStrategiesButton.setTransferObject(transferObject);
-		refreshButton.setTransferObject(transferObject);
+		setStrategyLabel(tradestrategy);
+		brokerDataButton.setTransferObject(tradestrategy);
+		cancelStrategiesButton.setTransferObject(tradestrategy);
+		refreshButton.setTransferObject(tradestrategy);
 
-		if (null == transferObject) {
-			m_tradeOrderModel.setData(new Tradestrategy());
-			setTradeLabel(null, null);
-		} else {
+		if (null != tradestrategy) {
 			propertiesButton.setEnabled(true);
 			cancelStrategiesButton.setEnabled(true);
 			brokerDataButton.setEnabled(true);
@@ -1060,15 +1066,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				cancelButton.setEnabled(true);
 				m_tradeOrderTable.enablePopupMenu(true);
 			}
-			Tradestrategy refreshTradestrategy = m_tradePersistentModel
-					.findTradestrategyById(transferObject);
-			m_tradeOrderModel.setData(refreshTradestrategy);
-			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
-					.getSelectedComponent();
-			setTradeLabel(refreshTradestrategy,
-					currentTab.getCandlestickChart());
-			periodEditorComboBox.setItem(BarSize.newInstance(transferObject
-					.getBarSize()));
 		}
 	}
 
