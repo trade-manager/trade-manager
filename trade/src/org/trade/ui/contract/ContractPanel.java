@@ -489,21 +489,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					try {
 						getFrame().setCursor(
 								Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-						if (null != tradestrategy.getIdTradeStrategy()) {
-							Tradestrategy refreshedTradestrategy = m_tradePersistentModel
-									.findTradestrategyById(tradestrategy);
-							ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
-									.getSelectedComponent();
-							if (null != currentTab) {
-								if (currentTab.getTradestrategy().equals(
-										refreshedTradestrategy)) {
-									reFreshTab();
-								}
+						ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
+								.getSelectedComponent();
+						if (null != currentTab) {
+							if (currentTab.getTradestrategy().equals(
+									tradestrategy)) {
+								reFreshTab();
 							}
 						}
-					} catch (PersistentModelException ex) {
-						setErrorMessage("Error saving Trade Strategies.",
-								ex.getMessage(), ex);
 					} finally {
 						getFrame().setCursor(Cursor.getDefaultCursor());
 					}
@@ -523,15 +516,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            TreeSelectionEvent
 	 * @see javax.swing.event.TreeSelectionListener#valueChanged(TreeSelectionEvent)
 	 */
-	public void valueChanged(TreeSelectionEvent e) {
-
-		/*
-		 * Returns the last path element of the selection.This method is useful
-		 * only when the selection model allows a single selection.
-		 */
+	public void valueChanged(TreeSelectionEvent evt) {
 
 		try {
-			TreePath path = e.getNewLeadSelectionPath();
+			/*
+			 * Returns the last path element of the selection.This method is
+			 * useful only when the selection model allows a single selection.
+			 */
+			TreePath path = evt.getNewLeadSelectionPath();
 			if (null == path) {
 				// Nothing is selected.
 				return;
@@ -592,17 +584,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
 	 */
 	public void stateChanged(ChangeEvent evt) {
-		try {
-			// When a different tab is selected set the index
-			if (evt.getSource() instanceof JTabbedPane) {
-				JTabbedPane selectedTab = (JTabbedPane) evt.getSource();
-				if (selectedTab.isShowing()) {
-					this.reFreshTab();
-				}
+		// When a different tab is selected set the index
+		if (evt.getSource() instanceof JTabbedPane) {
+			JTabbedPane selectedTab = (JTabbedPane) evt.getSource();
+			if (selectedTab.isShowing()) {
+				this.reFreshTab();
 			}
-		} catch (Exception ex) {
-			this.setErrorMessage("Error changing chart timeframe.",
-					ex.getMessage(), ex);
 		}
 	}
 
@@ -613,14 +600,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            Boolean
 	 */
 	public void setConnected(Boolean connected) {
-		try {
-			this.connected = connected;
-			this.reFreshTab();
-
-		} catch (Exception ex) {
-			this.setErrorMessage("Error setting connection.", ex.getMessage(),
-					ex);
-		}
+		this.connected = connected;
+		this.reFreshTab();
 	}
 
 	/**
