@@ -359,7 +359,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 					}
 				}
 
-				if (this.typicalPriceValues.size() == getLength()) {
+				if (skip >= getLength()) {
 					double cci = calculateCCI(sumTypicalPrice,
 							typicalPriceValues);
 					// _log.info("Period: " + candleItem.getPeriod() + " CCI: "
