@@ -861,8 +861,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				 * Refresh the Tradestrategy this will get the latest orders.
 				 */
 				tradestrategy = m_tradePersistentModel
-						.findTradestrategyById(currentTab.getTradestrategy()
-								.getIdTradeStrategy());
+						.findTradestrategyById(currentTab.getTradestrategy());
 				currentTab.setTradestrategy(tradestrategy);
 				m_tradeOrderModel.setData(tradestrategy);
 				RowSorter<?> rsDetail = m_tradeOrderTable.getRowSorter();
