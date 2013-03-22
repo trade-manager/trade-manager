@@ -627,8 +627,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						.getBarSize()) > -1) {
 					currentTab.getTradestrategy().getDatasetContainer()
 							.changeCandleSeriesPeriod(newPeriod);
-					currentTab.getTradestrategy().getDatasetContainer()
-							.printDatasets();
+					// currentTab.getTradestrategy().getDatasetContainer()
+					// .printDatasets();
 					this.clearStatusBarMessage();
 				} else {
 					this.setStatusBarMessage(
