@@ -1158,8 +1158,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	/**
 	 * This method is fired from an event in the Broker Model. The managed
 	 * accounts for this connection. Note each instance of TWS is connected to
-	 * one master account only. The list of accounts is parsed. This first
-	 * account is considered the master and will me made the default on request.
+	 * one master account only unless you are a Financial Adviser. The list of
+	 * accounts is parsed.
 	 * 
 	 * @param accountNumber
 	 *            String csv list of managed accounts.
@@ -1182,61 +1182,47 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				if (accountNumber.length() > 0) {
 					Account account = m_tradePersistentModel
 							.findAccountByNumber(accountNumber);
+
 					if (null == account) {
 						account = new Account(accountNumber, accountNumber,
 								Currency.USD);
-						if (defaultPortfolio.getPortfolioAccounts().isEmpty()
-								&& tokens == 0) {
-							PortfolioAccount portfolioAccount = new PortfolioAccount(
-									defaultPortfolio, account);
-							defaultPortfolio.getPortfolioAccounts().add(
-									portfolioAccount);
-							defaultPortfolio = (Portfolio) m_tradePersistentModel
-									.persistPortfolio(defaultPortfolio);
-							/*
-							 * Update the account (key) to the current account
-							 * only when the default Portfolio has no accounts.
-							 */
-							defaultPortfolio
-									.setName(account.getAccountNumber());
-							defaultPortfolio = (Portfolio) m_tradePersistentModel
-									.persistAspect(defaultPortfolio);
+					}
+					/*
+					 * If there is only one account in the incoming string and
+					 * the default portfolio has no accounts add this account to
+					 * the default portfolio.
+					 */
+					if (defaultPortfolio.getPortfolioAccounts().isEmpty()
+							&& tokens == 0) {
+						PortfolioAccount portfolioAccount = new PortfolioAccount(
+								defaultPortfolio, account);
+						defaultPortfolio.getPortfolioAccounts().add(
+								portfolioAccount);
+						defaultPortfolio = (Portfolio) m_tradePersistentModel
+								.persistPortfolio(defaultPortfolio);
+						/*
+						 * Update the account (key) to the current account only
+						 * when the default Portfolio has no accounts.
+						 */
+						defaultPortfolio.setName(account.getAccountNumber());
+						defaultPortfolio = (Portfolio) m_tradePersistentModel
+								.persistAspect(defaultPortfolio);
 
-						} else {
-							Portfolio portfolio = new Portfolio(
-									account.getAccountNumber(),
-									account.getAccountNumber());
-							PortfolioAccount portfolioAccount = new PortfolioAccount(
-									portfolio, account);
-							portfolio.getPortfolioAccounts().add(
-									portfolioAccount);
-							portfolio = (Portfolio) m_tradePersistentModel
-									.persistPortfolio(portfolio);
-							if (tokens == 0) {
-								/*
-								 * Update the default portfolio.
-								 */
-								m_tradePersistentModel
-										.resetDefaultPortfolio(portfolio);
-							}
-						}
 					} else {
-						if (defaultPortfolio.getPortfolioAccounts().isEmpty()
-								&& tokens == 0) {
-							PortfolioAccount portfolioAccount = new PortfolioAccount(
-									defaultPortfolio, account);
-							defaultPortfolio.getPortfolioAccounts().add(
-									portfolioAccount);
-							defaultPortfolio = (Portfolio) m_tradePersistentModel
-									.persistPortfolio(defaultPortfolio);
+						Portfolio portfolio = new Portfolio(
+								account.getAccountNumber(),
+								account.getAccountNumber());
+						PortfolioAccount portfolioAccount = new PortfolioAccount(
+								portfolio, account);
+						portfolio.getPortfolioAccounts().add(portfolioAccount);
+						portfolio = (Portfolio) m_tradePersistentModel
+								.persistPortfolio(portfolio);
+						if (tokens == 0) {
 							/*
-							 * Update the account (key) to the current account
-							 * only when the default Portfolio has no accounts.
+							 * Update the default portfolio.
 							 */
-							defaultPortfolio
-									.setName(account.getAccountNumber());
-							defaultPortfolio = (Portfolio) m_tradePersistentModel
-									.persistAspect(defaultPortfolio);
+							m_tradePersistentModel
+									.resetDefaultPortfolio(portfolio);
 						}
 					}
 				}
