@@ -1879,15 +1879,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void accountDownloadEnd(String accountNumber) {
 		_log.info("accountDownloadEnd: " + accountNumber);
-		try {
-			onReqFinancialAccount();
-
-		} catch (Exception ex) {
-			error(0,
-					3315,
-					"Errors removing FinancialAccount/AllocationAccount: "
-							+ ex.getMessage());
-		}
 	}
 
 	/**
@@ -2063,6 +2054,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void managedAccounts(String accountNumbers) {
 		_log.info("Managed accounts: " + accountNumbers);
 		this.fireManagedAccountsUpdated(accountNumbers);
+		/*
+		 * Call FA Accounts to see if we are Financial Advisor.
+		 */
+		try {
+			onReqFinancialAccount();
+
+		} catch (Exception ex) {
+			error(0,
+					3315,
+					"Errors removing FinancialAccount/AllocationAccount: "
+							+ ex.getMessage());
+		}
 	}
 
 	/**
