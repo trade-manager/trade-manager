@@ -100,8 +100,7 @@ public interface BrokerModel {
 	 *            Integer
 	 * @throws BrokerModelException
 	 */
-	void onConnect(String host, Integer port, Integer clientId)
-			throws BrokerModelException;
+	void onConnect(String host, Integer port, Integer clientId);
 
 	/**
 	 * Method isConnected.
@@ -115,7 +114,7 @@ public interface BrokerModel {
 	 * 
 	 * @throws BrokerModelException
 	 */
-	void disconnect() throws BrokerModelException;
+	void disconnect();
 
 	/**
 	 * Method getNextRequestId.
@@ -158,7 +157,7 @@ public interface BrokerModel {
 	 * 
 	 * @throws BrokerModelException
 	 */
-	void onReqFinancialAccount() throws BrokerModelException;
+	void onReqFinancialAccount();
 
 	/**
 	 * Method onReqReplaceFinancialAccount.

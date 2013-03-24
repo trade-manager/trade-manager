@@ -196,8 +196,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onConnect(String, Integer, Integer)
 	 */
-	public void onConnect(String host, Integer port, Integer clientId)
-			throws BrokerModelException {
+	public void onConnect(String host, Integer port, Integer clientId) {
 		this.m_clientId = clientId;
 		m_client.eConnect(host, port, clientId);
 		openOrders.clear();
@@ -210,7 +209,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#disconnect()
 	 */
-	public void disconnect() throws BrokerModelException {
+	public void disconnect() {
 		onCancelAllRealtimeData();
 		if (m_client.isConnected()) {
 			for (String accountNumber : m_accountRequests.keySet()) {
@@ -249,7 +248,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 * @see org.trade.broker.onReqFinancialAccount()
 	 */
-	public void onReqFinancialAccount() throws BrokerModelException {
+	public void onReqFinancialAccount() {
 		try {
 			if (m_client.isConnected()) {
 				m_client.requestFA(EClientSocket.ALIASES);
@@ -2052,19 +2051,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#managedAccounts(String)
 	 */
 	public void managedAccounts(String accountNumbers) {
-		_log.info("Managed accounts: " + accountNumbers);
-		this.fireManagedAccountsUpdated(accountNumbers);
-		/*
-		 * Call FA Accounts to see if we are Financial Advisor.
-		 */
 		try {
-			onReqFinancialAccount();
+			_log.info("Managed accounts: " + accountNumbers);
+			this.fireManagedAccountsUpdated(accountNumbers);
 
 		} catch (Exception ex) {
-			error(0,
-					3315,
-					"Errors removing FinancialAccount/AllocationAccount: "
-							+ ex.getMessage());
+			error(0, 3315,
+					"Error updating Managed Accounts: " + ex.getMessage());
+		} finally {
+			/*
+			 * Call FA Accounts to see if we are Financial Advisor.
+			 */
+			onReqFinancialAccount();
 		}
 	}
 

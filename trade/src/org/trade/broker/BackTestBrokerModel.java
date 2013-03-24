@@ -153,8 +153,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onConnect(String, Integer, Integer)
 	 */
-	public void onConnect(String host, Integer port, Integer clientId)
-			throws BrokerModelException {
+	public void onConnect(String host, Integer port, Integer clientId) {
 
 	}
 
@@ -176,7 +175,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#disconnect()
 	 */
-	public void disconnect() throws BrokerModelException {
+	public void disconnect() {
 		if (isConnected()) {
 			onCancelAllRealtimeData();
 		}
@@ -258,7 +257,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * 
 	 * @see org.trade.broker.onReqFinancialAccount()
 	 */
-	public void onReqFinancialAccount() throws BrokerModelException {
+	public void onReqFinancialAccount() {
 	}
 
 	/**

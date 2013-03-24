@@ -1104,7 +1104,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				contractPanel.setConnected(false);
 				simulatedMode(true);
 			}
-		} catch (BrokerModelException ex) {
+		} catch (Exception ex) {
 			this.setErrorMessage("Could Not Disconnect From TWS",
 					ex.getMessage(), ex);
 		}
