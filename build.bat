@@ -42,9 +42,13 @@ rem Clean all the data from the DB and reload the default data
 
 rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanDB
 
-rem Clean all the orders from the DB and reload the default data
+rem Delete all the orders from the database.
 
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanTradeOrdersDB
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
+
+rem Delete the accounts and rules from the database. These will reload on login.
+
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteAccountRuleData
 
 pause
 
