@@ -63,13 +63,13 @@ import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
+import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
@@ -1854,15 +1854,19 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			_log.info("updateAccountTime:" + timeStamp);
 			for (String accountNumber : m_accountRequests.keySet()) {
 				Account account = m_accountRequests.get(accountNumber);
-				/*
-				 * Don't use the incoming time stamp as this does not show
-				 * seconds just HH:mm format.
-				 */
-				account.setUpdateDate(new Date());
-				account = (Account) m_tradePersistentModel.persistAspect(
-						account, true);
-				m_accountRequests.replace(accountNumber, account);
-				this.fireUpdateAccountTime(accountNumber);
+				synchronized (account) {
+					/*
+					 * Don't use the incoming time stamp as this does not show
+					 * seconds just HH:mm format.
+					 */
+					if (account.isDirty()) {
+						account.setUpdateDate(new Date());
+						account = (Account) m_tradePersistentModel
+								.persistAspect(account, true);
+						m_accountRequests.replace(accountNumber, account);
+						this.fireUpdateAccountTime(accountNumber);
+					}
+				}
 			}
 		} catch (Exception ex) {
 			error(0, 3310, "Errors updating Trade Account: " + ex.getMessage());
@@ -2085,22 +2089,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
-					Account account = (Account) aspect;
-					m_tradePersistentModel.persistAccount(account);
-				}
-				/*
-				 * Delete all the FinancialAccount/AllocationAccount and
-				 * re-populate via the xml.
-				 * 
-				 * TODO check to see it this method is call only one on login or
-				 * is it called for every account. If so this needs to be
-				 * changed so that we only call this method once.
-				 */
-				Aspects items = m_tradePersistentModel
-						.findAspectsByClassName(PortfolioAccount.class
-								.getName());
-				for (Aspect aspect : items.getAspect()) {
-					m_tradePersistentModel.removeAspect(aspect);
+					Account item = (Account) aspect;
+					Account account = m_tradePersistentModel
+							.findAccountByNumber(item.getAccountNumber());
+					if (null == account) {
+						account = new Account(item.getAccountNumber(),
+								item.getAccountNumber(), Currency.USD);
+					}
+					account.setAlias(item.getAlias());
+					account.setUpdateDate(new Date());
+					m_tradePersistentModel.persistAspect(account);
 				}
 				m_client.requestFA(EClientSocket.GROUPS);
 				break;

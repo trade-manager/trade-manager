@@ -179,16 +179,6 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method persistAccount.
-	 * 
-	 * @param instance
-	 *            Account
-	 * @return Account
-	 * @throws PersistentModelException
-	 */
-	Account persistAccount(Account instance) throws PersistentModelException;
-
-	/**
 	 * Method persistPortfolio.
 	 * 
 	 * @param instance

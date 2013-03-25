@@ -1,0 +1,18 @@
+<ListOfAllocationProfiles>
+	<AllocationProfile>
+		<name>risktakers</name>
+		<type>2</type>
+		<ListOfAllocations varName="listOfAllocations">
+			<Allocation>
+				<acct>DU105949</acct>
+				<amount>50.0</amount>
+				<posEff>O</posEff>
+			</Allocation>
+			<Allocation>
+				<acct>DU105950</acct>
+				<amount>20.0</amount>
+				<posEff>O</posEff>
+			</Allocation>
+		</ListOfAllocations>
+	</AllocationProfile>
+</ListOfAllocationProfiles>

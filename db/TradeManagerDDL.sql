@@ -119,7 +119,6 @@ DROP TABLE IF EXISTS portfolioaccount ;
 SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS portfolioaccount (
   idPortfolioAccount INT NOT NULL AUTO_INCREMENT ,
-  updateDate DATETIME NULL ,
   version INT NULL,
   idPortfolio INT NOT NULL ,
   idAccount INT NOT NULL ,

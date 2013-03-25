@@ -1,0 +1,17 @@
+<ListOfGroups>
+	<Group>
+		<name>myGroupOfOne</name>
+		<ListOfAccts varName="list">
+			<String>DU105949</String>
+		</ListOfAccts>
+		<defaultMethod>AvailableEquity</defaultMethod>
+	</Group>
+	<Group>
+		<name>myGroupOfTwo</name>
+		<ListOfAccts varName="list">
+			<String>DU105949</String>
+			<String>DU105950</String>
+		</ListOfAccts>
+		<defaultMethod>AvailableEquity</defaultMethod>
+	</Group>
+</ListOfGroups>

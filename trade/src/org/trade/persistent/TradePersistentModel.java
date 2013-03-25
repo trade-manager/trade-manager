@@ -47,7 +47,6 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
-import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
@@ -1169,36 +1168,6 @@ public class TradePersistentModel implements PersistentModel {
 			throw new PersistentModelException("Aspect not found for Id: "
 					+ transientInstance.getId());
 		return instance;
-	}
-
-	/**
-	 * Method persistAccounts.
-	 * 
-	 * @param instance
-	 *            Account
-	 * @return Account
-	 * @throws PersistentModelException
-	 */
-	public Account persistAccount(Account instance)
-			throws PersistentModelException {
-		try {
-			Account account = m_accountHome.findByAccountNumber(instance
-					.getAccountNumber());
-			if (null != account) {
-				account.setAlias(instance.getAlias());
-				m_aspectHome.persist(account);
-				return account;
-			} else {
-				instance.setCurrency(Currency.USD);
-				instance.setName(instance.getAccountNumber());
-				instance.setUpdateDate(new Date());
-				m_aspectHome.persist(instance);
-			}
-			return instance;
-		} catch (Exception ex) {
-			throw new PersistentModelException("Error saving Accounts: "
-					+ ex.getMessage());
-		}
 	}
 
 	/**

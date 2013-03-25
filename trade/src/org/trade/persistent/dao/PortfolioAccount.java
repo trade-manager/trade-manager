@@ -37,7 +37,7 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.util.Date;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,8 +48,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
@@ -64,7 +62,6 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 
 	private Portfolio portfolio;
 	private Account account;
-	private Date updateDate;
 
 	public PortfolioAccount() {
 	}
@@ -138,27 +135,6 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 */
 	public void setAccount(Account account) {
 		this.account = account;
-	}
-
-	/**
-	 * Method getUpdateDate.
-	 * 
-	 * @return Date
-	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updateDate", nullable = true, length = 19)
-	public Date getUpdateDate() {
-		return this.updateDate;
-	}
-
-	/**
-	 * Method setUpdateDate.
-	 * 
-	 * @param updateDate
-	 *            Date
-	 */
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
 	}
 
 	/**
