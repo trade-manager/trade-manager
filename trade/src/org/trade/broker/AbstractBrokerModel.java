@@ -217,6 +217,22 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	}
 
 	/**
+	 * Notifies all registered listeners that the brokerManagerModel has
+	 * received all FA Accounts information.
+	 * 
+	 * 
+	 * @see #addChangeListener(BrokerChangeListener)
+	 */
+	protected void fireFAAccountsCompleted() {
+		Object[] listeners = this.listenerList.getListenerList();
+		for (int i = listeners.length - 2; i >= 0; i -= 2) {
+			if (listeners[i] == BrokerChangeListener.class) {
+				((BrokerChangeListener) listeners[i + 1]).fAAccountsCompleted();
+			}
+		}
+	}
+
+	/**
 	 * Notifies all registered listeners that the brokerManagerModel received an
 	 * update to an account.
 	 * 

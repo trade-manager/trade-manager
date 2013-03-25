@@ -86,6 +86,13 @@ public interface BrokerChangeListener extends EventListener {
 	public void managedAccountsUpdated(String accountNumber);
 
 	/**
+	 * Method fAAccountsCompleted. Notifies all registered listeners that the
+	 * brokerManagerModel has received all FA Accounts information.
+	 * 
+	 */
+	public void fAAccountsCompleted();
+
+	/**
 	 * Method updateAccountTime.
 	 * 
 	 * @param accountNumber

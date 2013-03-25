@@ -159,6 +159,14 @@ public class PortfolioTableModel extends AspectTableModel {
 			break;
 		}
 		case 5: {
+			for (Aspect item : getData().getAspect()) {
+				Portfolio portfolio = (Portfolio) item;
+				if (!portfolio.getName().equals(element.getName())
+						&& portfolio.getIsDefault()) {
+					portfolio.setIsDefault(false);
+					portfolio.setDirty(true);
+				}
+			}
 			element.setIsDefault(new Boolean(((YesNo) value).getCode()));
 			break;
 		}

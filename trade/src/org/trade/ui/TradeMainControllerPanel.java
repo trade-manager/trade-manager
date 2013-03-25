@@ -1276,6 +1276,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	}
 
 	/**
+	 * Method fAAccountsCompleted. The brokerManagerModel has received all FA
+	 * Accounts information.
+	 * 
+	 */
+	public void fAAccountsCompleted() {
+		DBTableLookupServiceProvider.clearLookup();
+	}
+
+	/**
 	 * This method retrieves all the details about a contract.
 	 * 
 	 */

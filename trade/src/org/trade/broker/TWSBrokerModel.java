@@ -2110,6 +2110,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				for (Aspect aspect : aspects.getAspect()) {
 					m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 				}
+				this.fireFAAccountsCompleted();
 				break;
 			}
 			case EClientSocket.GROUPS: {
