@@ -460,8 +460,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return List<PortfolioAccounts>
 	 */
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {
-			CascadeType.REFRESH, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, orphanRemoval = true, cascade = { CascadeType.REFRESH })
 	public List<PortfolioAccount> getPortfolioAccounts() {
 		return this.portfolioAccounts;
 	}
