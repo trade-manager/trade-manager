@@ -28,6 +28,6 @@ echo Path=%PATH%
 echo ClassPath=%CLASSPATH%
 echo Market Timezone=%TIMEZONE%
 
-java -Xmn200M -Xms500M -Xmx500M -classpath "%CLASSPATH%" -Duser.timezone=%TIMEZONE% -Dlog4j.configuration=file:"config.properties" org.trade.ui.TradeAppMain
+java -Xmn128M -Xms768M -Xmx768M -classpath "%CLASSPATH%" -Duser.timezone=%TIMEZONE% -Dlog4j.configuration=file:"config.properties" org.trade.ui.TradeAppMain
 
 
