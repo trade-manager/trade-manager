@@ -134,7 +134,7 @@
 	            <equals arg1="n" arg2="${do.delete}"/> 
 	      </condition> 
 	      <fail if="do.abort">Build aborted by user.</fail> 
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath>
 				<fileset dir="${lib}">
 					<include name="mysql-connector-java-5.1.18.jar" />

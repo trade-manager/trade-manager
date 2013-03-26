@@ -91,37 +91,37 @@
 		<zip destfile="${name}.zip" basedir="${base}" excludes="reports/**, .classpath, .project, .git/**, .gitignore, config.properties, *.log*" />
 	</target>
 	<target name="createTables" depends="initialise">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/TradeManagerDDL.sql" />
 		</sql>
 	</target>
 	<target name="createDB" depends="createUser" description="Creates the database and inserts default data">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="createUser" depends="createTables">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}" delimiter="//">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" delimiter="//">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/DropCreateUserProc.sql" />
 		</sql>
 	</target>
 	<target name="resetDBData" depends="initialise" description="Deletes all data in the database and sets up default data.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="deleteTradeOrderData" depends="initialise" description="Delete the database of TradeOrders for testing.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/DeleteTradeOrderData.sql" />
 		</sql>
 	</target>
 	<target name="deleteAccountRuleData" depends="initialise" description="Delete the database of Accounts and Rules for testing.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user}" password="${sql.password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/DeleteAccountRuleData.sql" />
 		</sql>
