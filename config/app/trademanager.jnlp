@@ -24,12 +24,12 @@
 	<jar href="jcommon-1.0.17.jar" />
 	<jar href="swt.jar" />
 	<jar href="c3p0-0.9.1.jar" />
-	<jar href="hibernate-c3p0-4.1.7.Final.jar" />
+	<jar href="hibernate-c3p0-4.2.0.Final.jar" />
 	<jar href="javassist-3.15.0.GA.jar" />
 	<jar href="dom4j-1.6.1.jar" />
 	<jar href="hibernate-commons-annotations-4.0.1.Final.jar" />
-	<jar href="hibernate-core-4.1.7.Final.jar" />
-	<jar href="hibernate-entitymanager-4.1.7.Final.jar" />
+	<jar href="hibernate-core-4.2.0.Final.jar" />
+	<jar href="hibernate-entitymanager-4.2.0.Final.jar" />
 	<jar href="hibernate-jpa-2.0-api-1.0.1.Final.jar" />
 	<jar href="hibernate-validator-4.2.0.Final.jar" />
 	<jar href="ejb-api-3.0.jar" />

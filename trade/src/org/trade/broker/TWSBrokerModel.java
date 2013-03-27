@@ -126,8 +126,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private Integer backfillUseRTH = 1;
 	private String backfillWhatToShow;
 	private Integer backfillOffsetDays = 0;
-	// private final static String ALL_GENERIC_TICK_TAGS = "221,233";
-	private final static String ALL_GENERIC_TICK_TAGS = "233";
+	private String genericTicklist = "233";
+
 	private static final String AVAILABLE_FUNDS = "AvailableFunds";
 	private static final String ACCOUNTTYPE = "AccountType";
 	private static final String BUYING_POWER = "BuyingPower";
@@ -155,6 +155,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					.getPropAsString("trade.backfill.whatToShow");
 			backfillOffsetDays = ConfigProperties
 					.getPropAsInt("trade.backfill.offsetDays");
+			genericTicklist = ConfigProperties
+					.getPropAsString("trade.marketdata.genericTicklist");
 			Date date = new Date();
 			reqId = new AtomicInteger((int) (date.getTime() / 1000d));
 
@@ -466,7 +468,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.put(contract.getIdContract(), contract);
 					m_client.reqMktData(contract.getIdContract(),
 							TWSBrokerModel.getIBContract(contract),
-							ALL_GENERIC_TICK_TAGS, false);
+							genericTicklist, false);
 				}
 
 			} else {
