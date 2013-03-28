@@ -37,8 +37,6 @@ package org.trade.core.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +52,7 @@ import javax.swing.text.SimpleAttributeSet;
 import org.trade.core.dao.Aspect;
 import org.trade.core.properties.CollectionUtilities;
 import org.trade.core.valuetype.Decode;
+
 /**
  */
 public class CoreUtils {
@@ -146,13 +145,9 @@ public class CoreUtils {
 						returnValue = "null";
 					}
 					if (decodeConvertion
-							&& returnValue
-									.getClass()
-									.getSuperclass()
-									.getName()
+							&& returnValue.getClass().getSuperclass().getName()
 									.equals(Decode.class.getName())) {
-						returnValue = ((Decode) returnValue)
-								.getCode();
+						returnValue = ((Decode) returnValue).getCode();
 					}
 					attributeList.put(
 							methodName.substring(3, methodName.length()),
@@ -427,7 +422,7 @@ public class CoreUtils {
 		}
 		return one.compareTo(two);
 	}
-	
+
 	/**
 	 * Method isNumeric.
 	 * 
@@ -435,11 +430,7 @@ public class CoreUtils {
 	 *            String to check
 	 * @return boolean
 	 */
-	public static boolean isNumeric(String number)
-	{
-	  NumberFormat formatter = NumberFormat.getInstance();
-	  ParsePosition pos = new ParsePosition(0);
-	  formatter.parse(number, pos);
-	  return number.length() == pos.getIndex();
+	public static boolean isNumeric(String number) {
+		return number.matches("-?\\d+(\\.\\d+)?");
 	}
 }
