@@ -26,6 +26,11 @@ rem Target=cleanTradeOrdersDB  cleans the database of TradeOrders for back testi
 echo Path=%PATH%
 echo ClassPath=%CLASSPATH%
 
+rem If the config.properties does not exit in the app dir copy it from the config dir.
+if not exist config.properties (
+copy config\config.properties .
+echo Using default config.properties from /config dir.)
+
 rem Build and compile the trademanager application
 
 java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml all
