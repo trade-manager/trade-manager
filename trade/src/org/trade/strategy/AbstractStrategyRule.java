@@ -524,6 +524,27 @@ public abstract class AbstractStrategyRule extends Worker implements
 				tradeOrder.setIsOpenPosition(false);
 				tradeOrder.setTransmit(transmit);
 				tradeOrder.setStatus(OrderStatus.UNSUBMIT);
+				/*
+				 * If the portfolio is an individual account use the account
+				 * number. If the portfolio has an allocation method assume its
+				 * a group and populate the group otherwise assume its a
+				 * profile.
+				 */
+				if (null != getTradestrategy().getPortfolio()
+						.getIndividualAccount()) {
+					tradeOrder.setAccountNumber(getTradestrategy()
+							.getPortfolio().getIndividualAccount()
+							.getAccountNumber());
+				} else {
+					if (null != this.getTradestrategy().getPortfolio()
+							.getAllocationMethod()) {
+						tradeOrder.setFAGroup(this.getTradestrategy()
+								.getPortfolio().getName());
+					} else {
+						tradeOrder.setFAProfile(this.getTradestrategy()
+								.getPortfolio().getName());
+					}
+				}
 				tradeOrder = getBrokerManager().onPlaceOrder(
 						getTradestrategy().getContract(), tradeOrder);
 			}
@@ -1124,9 +1145,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		// Add a penny to the stop
 		Money stopPrice = new Money(openPosition.getAverageFilledPrice()
 				.doubleValue() + riskAmount);
-
 		return stopPrice;
-
 	}
 
 	/**
