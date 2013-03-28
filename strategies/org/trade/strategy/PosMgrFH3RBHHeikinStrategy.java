@@ -154,7 +154,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				 * quantity is > 0 also check to see if we already have this
 				 * position covered.
 				 */
-				if (getTrade().getIsOpen() && !this.isPositionConvered()) {
+				if (getTrade().getIsOpen() && !this.isPositionCovered()) {
 					/*
 					 * Position has been opened and not covered submit the
 					 * target and stop orders for the open quantity. Two targets

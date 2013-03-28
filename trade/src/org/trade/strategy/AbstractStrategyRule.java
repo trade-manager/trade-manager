@@ -404,7 +404,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * testing that the strategy is running.
 						 */
 						if (null != this.trade) {
-							if (isPositionConvered()) {
+							if (isPositionCovered()) {
 								this.firePositionCovered(this.tradestrategy);
 							}
 						}
@@ -412,7 +412,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						listeningCandles = true;
 					} else {
 						if (null != this.trade) {
-							if (isPositionConvered()) {
+							if (isPositionCovered()) {
 								this.firePositionCovered(this.tradestrategy);
 							}
 						}
@@ -897,7 +897,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return boolean
 	 * @throws StrategyRuleException
 	 */
-	public boolean isPositionConvered() throws StrategyRuleException {
+	public boolean isPositionCovered() throws StrategyRuleException {
 
 		try {
 			int openQuantity = 0;

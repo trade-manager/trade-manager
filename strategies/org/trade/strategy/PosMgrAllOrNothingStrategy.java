@@ -139,7 +139,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 				 * position covered.
 				 */
 
-				if (getTrade().getIsOpen() && !this.isPositionConvered()) {
+				if (getTrade().getIsOpen() && !this.isPositionCovered()) {
 
 					/*
 					 * Position has been opened and not covered submit the

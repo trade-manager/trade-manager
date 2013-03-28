@@ -514,7 +514,7 @@ public class AbstractStrategyTest extends TestCase {
 						+ order.getLimitPrice() + " Stop Price: "
 						+ order.getStopPrice());
 			}
-			TestCase.assertNotNull(this.strategyProxy.isPositionConvered());
+			TestCase.assertNotNull(this.strategyProxy.isPositionCovered());
 			entryLimit.setPercentOfMargin(new BigDecimal(0));
 			tradePersistentModel.persistAspect(entryLimit);
 
@@ -543,7 +543,7 @@ public class AbstractStrategyTest extends TestCase {
 	public void testIsTradeConvered() {
 		try {
 			createOpenPosition(new Money(100), false);
-			TestCase.assertFalse(this.strategyProxy.isPositionConvered());
+			TestCase.assertFalse(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsTradeConvered Msg:" + ex.getMessage());
 		}
@@ -616,7 +616,7 @@ public class AbstractStrategyTest extends TestCase {
 			pokeStrategyRuleTest();
 			this.strategyProxy.moveStopOCAPrice(new Money(this.strategyProxy
 					.getTrade().getAveragePrice()), true);
-			TestCase.assertTrue(this.strategyProxy.isPositionConvered());
+			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testMoveStopOCAPrice Msg:" + ex.getMessage());
 		}
