@@ -18,6 +18,12 @@ LOCALCLASSPATH="$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/tools.jar:ant/lib/*"
 echo "PATH=$PATH"
 echo "CLASSPATH=$LOCALCLASSPATH"
 
+if ! [ -f config.properties ];
+then
+cp config/config.properties .
+echo "Using default config.properties from /config dir."
+fi
+
 # Build and compile the trademanager application
 
 java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml all
