@@ -91,6 +91,7 @@ public class CandleItem extends ComparableObjectItem {
 			Date lastUpdateDate) {
 		super(period, new Candle(contract, tradingday, period, open, high, low,
 				close, volume, vwap, count, lastUpdateDate));
+		this.setLastUpdateDate(lastUpdateDate);
 	}
 
 	/**

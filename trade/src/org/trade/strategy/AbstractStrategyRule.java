@@ -526,10 +526,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 				tradeOrder.setTransmit(transmit);
 				tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 				/*
-				 * If the portfolio is an individual account use the account
-				 * number. If the portfolio has an allocation method assume its
-				 * a group and populate the group otherwise assume its a
-				 * profile.
+				 * If the portfolio has an individual account use the account
+				 * number. If the portfolio has an allocation method and that
+				 * allocation method is an integer then assume its a profile
+				 * otherwise it must be a group. Note this only applied for TWS
+				 * Broker. TODO figure out a better implementation.
 				 */
 				if (null != getTradestrategy().getPortfolio()
 						.getIndividualAccount()) {
