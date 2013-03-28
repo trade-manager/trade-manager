@@ -37,6 +37,8 @@ package org.trade.core.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -424,5 +426,20 @@ public class CoreUtils {
 			return 0;
 		}
 		return one.compareTo(two);
+	}
+	
+	/**
+	 * Method isNumeric.
+	 * 
+	 * @param str
+	 *            String to check
+	 * @return boolean
+	 */
+	public static boolean isNumeric(String number)
+	{
+	  NumberFormat formatter = NumberFormat.getInstance();
+	  ParsePosition pos = new ParsePosition(0);
+	  formatter.parse(number, pos);
+	  return number.length() == pos.getIndex();
 	}
 }

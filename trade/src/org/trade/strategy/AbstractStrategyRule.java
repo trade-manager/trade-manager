@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
@@ -538,11 +539,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 				} else {
 					if (null != this.getTradestrategy().getPortfolio()
 							.getAllocationMethod()) {
-						tradeOrder.setFAGroup(this.getTradestrategy()
-								.getPortfolio().getName());
-					} else {
-						tradeOrder.setFAProfile(this.getTradestrategy()
-								.getPortfolio().getName());
+						if (CoreUtils.isNumeric(this.getTradestrategy()
+								.getPortfolio().getAllocationMethod())) {
+							tradeOrder.setFAProfile(this.getTradestrategy()
+									.getPortfolio().getName());
+						} else {
+							tradeOrder.setFAGroup(this.getTradestrategy()
+									.getPortfolio().getName());
+						}
 					}
 				}
 				tradeOrder = getBrokerManager().onPlaceOrder(
