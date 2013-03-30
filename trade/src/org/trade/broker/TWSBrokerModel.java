@@ -127,6 +127,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private String backfillWhatToShow;
 	private Integer backfillOffsetDays = 0;
 	private String genericTicklist = "233";
+	private Integer backTestBarSize = 0;
 
 	private static final String AVAILABLE_FUNDS = "AvailableFunds";
 	private static final String ACCOUNTTYPE = "AccountType";
@@ -157,6 +158,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					.getPropAsInt("trade.backfill.offsetDays");
 			genericTicklist = ConfigProperties
 					.getPropAsString("trade.marketdata.genericTicklist");
+			backTestBarSize = ConfigProperties
+					.getPropAsInt("trade.backtest.barSize");
 			Date date = new Date();
 			reqId = new AtomicInteger((int) (date.getTime() / 1000d));
 
@@ -2213,6 +2216,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * Check to see if the trading day is today and this
 					 * strategy is selected to trade and that the market is open
 					 */
+					Date tradingDay = null;
+
 					for (Tradestrategy item : contract.getTradestrategies()) {
 						this.fireHistoricalDataComplete(item);
 						if (item.getTradingday().getClose().after(new Date())) {
@@ -2223,6 +2228,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						} else {
 							item.getDatasetContainer().cancel();
 						}
+						tradingDay = item.getTradingday().getClose();
+					}
+
+					if (backTestBarSize > 0
+							&& !this.isRealtimeBarsRunning(contract)) {
+						onBrokerData(contract, tradingDay, 1, backTestBarSize);
 					}
 
 				} else {
