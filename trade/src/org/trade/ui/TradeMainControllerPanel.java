@@ -1827,6 +1827,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private int grandTotal = 0;
 		private long startTime = 0;
 		private long lastSubmittedTime = 0;
+		private Integer backTestBarSize = 0;
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -1835,11 +1836,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 *            BrokerModel
 		 * @param tradingdays
 		 *            Tradingdays
+		 * @throws IOException
 		 */
 		public BrokerDataRequestProgressMonitor(BrokerModel brokerManagerModel,
-				Tradingdays tradingdays) {
+				Tradingdays tradingdays) throws IOException {
 			this.brokerManagerModel = brokerManagerModel;
 			this.tradingdays = tradingdays;
+			backTestBarSize = ConfigProperties
+					.getPropAsInt("trade.backtest.barSize");
 		}
 
 		/**
@@ -2219,6 +2223,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						}
 					}
 				}
+			}
+			/*
+			 * If we are getting data for back testing and the backTestBarSize
+			 * is set. Then get the candles for the tradestrategy tradingday
+			 * with the new bar size setting. The backTestBroker will use these
+			 * candles to build up the candle on the Tradestrategy/BarSize.
+			 */
+			if (backTestBarSize > 0
+					&& this.brokerManagerModel.isBrokerDataOnly()) {
+
 			}
 			return totalSumbitted;
 		}
