@@ -216,6 +216,16 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				 * chartdats that are not the traing day as these will be
 				 * different barSize to the backTestBarSize.
 				 */
+				Date endDate = TradingCalendar.getSpecificTime(tradestrategy
+						.getTradingday().getClose(), TradingCalendar
+						.getMostRecentTradingDay(tradestrategy.getTradingday()
+								.getClose()));
+				endDate = TradingCalendar.addBusinessDays(endDate, -1);
+				Date startDate = TradingCalendar.addDays(endDate,
+						(-1 * (tradestrategy.getChartDays() - 1)));
+				startDate = TradingCalendar.getMostRecentTradingDay(startDate);
+				startDate = TradingCalendar.getSpecificTime(tradestrategy
+						.getTradingday().getOpen(), startDate);
 				candles = tradePersistentModel
 						.findCandlesByContractDateRangeBarSize(
 								this.tradestrategy.getContract()
@@ -223,6 +233,18 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 										.getTradingday().getOpen(),
 								this.tradestrategy.getTradingday().getOpen(),
 								backTestBarSize);
+
+				List<Candle> candlesTradingday = tradePersistentModel
+						.findCandlesByContractDateRangeBarSize(
+								this.tradestrategy.getContract()
+										.getIdContract(), this.tradestrategy
+										.getTradingday().getOpen(),
+								this.tradestrategy.getTradingday().getOpen(),
+								backTestBarSize);
+				for (Candle candle : candlesTradingday) {
+					candles.add(candle);
+				}
+
 			} else {
 				candles = tradePersistentModel
 						.findCandlesByContractDateRangeBarSize(
@@ -258,97 +280,105 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				 * another thread and so this thread tends to be blocked by
 				 * other activities.
 				 */
-				ruleComplete.set(0);
-				this.tradestrategy.getDatasetContainer().buildCandle(
-						candle.getStartPeriod(),
-						candle.getOpen().doubleValue(),
-						candle.getHigh().doubleValue(),
-						candle.getLow().doubleValue(),
-						candle.getClose().doubleValue(), candle.getVolume(),
-						candle.getVwap().doubleValue(), candle.getTradeCount(),
-						1);
-				/*
-				 * Wait for the candle to be processed by the strategy.
-				 */
-				synchronized (lockBackTestWorker) {
-					/*
-					 * Wait for the rule to be completed by the strategy. note
-					 * this worker is listening to the strategy worker.
-					 */
-					while ((strategiesRunning.get() > 0)
-							&& (ruleComplete.get() < 1)) {
-						lockBackTestWorker.wait();
-					}
-				}
+				if (TradingCalendar.isMarketHours(this.tradestrategy
+						.getTradingday().getOpen(), this.tradestrategy
+						.getTradingday().getClose(), candle.getStartPeriod())
+						&& TradingCalendar.sameDay(this.tradestrategy
+								.getTradingday().getOpen(), candle
+								.getStartPeriod())) {
 
-				if (null == openTrade) {
-					openTrade = this.tradePersistentModel
-							.findOpenTradeByTradestrategyId(this.tradestrategy
-									.getIdTradeStrategy());
-				} else {
-					openTrade = this.tradePersistentModel
-							.findTradeById(openTrade.getIdTrade());
-				}
-
-				/*
-				 * The new candle may create an order so this call fills it and
-				 * return whether this is opening a position.
-				 */
-				if (filledOrdersOpenPosition(this.tradestrategy.getContract(),
-						openTrade, candle)) {
+					ruleComplete.set(0);
+					this.tradestrategy.getDatasetContainer().buildCandle(
+							candle.getStartPeriod(),
+							candle.getOpen().doubleValue(),
+							candle.getHigh().doubleValue(),
+							candle.getLow().doubleValue(),
+							candle.getClose().doubleValue(),
+							candle.getVolume(), candle.getVwap().doubleValue(),
+							candle.getTradeCount(), 1);
 					/*
-					 * Need to recall fillOrders as this is a new open position
-					 * and an OCA order may now be ready to be filled this
-					 * happens when we have an engulfing bar. Only need to wait
-					 * if this is a new open position. This gives time for the
-					 * PositionManagerStrategy to start and create the OCA
-					 * order. so we wait to see if those new orders need to be
-					 * filled.
+					 * Wait for the candle to be processed by the strategy.
 					 */
 					synchronized (lockBackTestWorker) {
 						/*
-						 * Wait for the strategy to create the OCA order.
+						 * Wait for the rule to be completed by the strategy.
+						 * note this worker is listening to the strategy worker.
 						 */
+						while ((strategiesRunning.get() > 0)
+								&& (ruleComplete.get() < 1)) {
+							lockBackTestWorker.wait();
+						}
+					}
 
-						while (!positionCovered.get()) {
-							lockBackTestWorker.wait();
-						}
+					if (null == openTrade) {
+						openTrade = this.tradePersistentModel
+								.findOpenTradeByTradestrategyId(this.tradestrategy
+										.getIdTradeStrategy());
+					} else {
+						openTrade = this.tradePersistentModel
+								.findTradeById(openTrade.getIdTrade());
 					}
+
 					/*
-					 * Check to see if the strategy needs to update the OCA
-					 * orders if the current bar requires the stop to be moved.
-					 * This check is only done if the current candle is against
-					 * the bar. i.e. we assume if we had a candle that
-					 * encompassed the entry and stop and is in the direction of
-					 * the trade that we weren't stopped out on the entry
-					 * candle.
+					 * The new candle may create an order so this call fills it
+					 * and return whether this is opening a position.
 					 */
-					openTrade = this.tradePersistentModel
-							.findTradeById(openTrade.getIdTrade());
-					if (!this.tradestrategy.getDatasetContainer()
-							.getBaseCandleSeries().isEmpty()) {
-						CandleItem candleItem = (CandleItem) this.tradestrategy
-								.getDatasetContainer()
-								.getBaseCandleSeries()
-								.getDataItem(
-										this.tradestrategy
-												.getDatasetContainer()
-												.getBaseCandleSeries()
-												.getItemCount() - 1);
-						if (!candleItem.isSide(openTrade.getSide())) {
-							filledOrdersOpenPosition(
-									this.tradestrategy.getContract(),
-									openTrade, candle);
+					if (filledOrdersOpenPosition(
+							this.tradestrategy.getContract(), openTrade, candle)) {
+						/*
+						 * Need to recall fillOrders as this is a new open
+						 * position and an OCA order may now be ready to be
+						 * filled this happens when we have an engulfing bar.
+						 * Only need to wait if this is a new open position.
+						 * This gives time for the PositionManagerStrategy to
+						 * start and create the OCA order. so we wait to see if
+						 * those new orders need to be filled.
+						 */
+						synchronized (lockBackTestWorker) {
+							/*
+							 * Wait for the strategy to create the OCA order.
+							 */
+
+							while (!positionCovered.get()) {
+								lockBackTestWorker.wait();
+							}
 						}
-					}
-					positionCovered.set(false);
-					/*
-					 * We now have an open position so we wait for the strategy
-					 * that got us into this position to close.
-					 */
-					synchronized (lockBackTestWorker) {
-						while (strategiesRunning.get() > 1) {
-							lockBackTestWorker.wait();
+						/*
+						 * Check to see if the strategy needs to update the OCA
+						 * orders if the current bar requires the stop to be
+						 * moved. This check is only done if the current candle
+						 * is against the bar. i.e. we assume if we had a candle
+						 * that encompassed the entry and stop and is in the
+						 * direction of the trade that we weren't stopped out on
+						 * the entry candle.
+						 */
+						openTrade = this.tradePersistentModel
+								.findTradeById(openTrade.getIdTrade());
+						if (!this.tradestrategy.getDatasetContainer()
+								.getBaseCandleSeries().isEmpty()) {
+							CandleItem candleItem = (CandleItem) this.tradestrategy
+									.getDatasetContainer()
+									.getBaseCandleSeries()
+									.getDataItem(
+											this.tradestrategy
+													.getDatasetContainer()
+													.getBaseCandleSeries()
+													.getItemCount() - 1);
+							if (!candleItem.isSide(openTrade.getSide())) {
+								filledOrdersOpenPosition(
+										this.tradestrategy.getContract(),
+										openTrade, candle);
+							}
+						}
+						positionCovered.set(false);
+						/*
+						 * We now have an open position so we wait for the
+						 * strategy that got us into this position to close.
+						 */
+						synchronized (lockBackTestWorker) {
+							while (strategiesRunning.get() > 1) {
+								lockBackTestWorker.wait();
+							}
 						}
 					}
 				}
