@@ -2230,9 +2230,65 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * with the new bar size setting. The backTestBroker will use these
 			 * candles to build up the candle on the Tradestrategy/BarSize.
 			 */
+			prevContract = null;
+			prevBarSize = null;
+			prevChartDays = null;
 			if (backTestBarSize > 0
 					&& this.brokerManagerModel.isBrokerDataOnly()) {
+				for (Tradestrategy item : tradingday.getTradestrategies()) {
+					if (!TradingCalendar.isMarketHours(item.getTradingday()
+							.getOpen(), item.getTradingday().getClose(),
+							new Date())) {
 
+						Tradestrategy tradestrategy = (Tradestrategy) item
+								.clone();
+						tradestrategy.setBarSize(backTestBarSize);
+						tradestrategy.setChartDays(1);
+
+						if (null == prevContract) {
+							prevContract = tradestrategy.getContract();
+							prevBarSize = tradestrategy.getBarSize();
+							prevChartDays = tradestrategy.getChartDays();
+							m_indicatorTradestrategy.put(
+									tradestrategy.getIdTradeStrategy(),
+									tradestrategy);
+						}
+						/*
+						 * Refresh the data set container as these may have
+						 * changed.
+						 */
+						tradestrategy.setDatasetContainer(null);
+
+						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
+
+							/*
+							 * Fire all the requests to TWS to get chart data
+							 * After data has been retrieved save the data Only
+							 * allow a maximum of 60 requests in a 10min period
+							 * to avoid TWS pacing errors
+							 */
+
+							if (!prevContract.equals(tradestrategy
+									.getContract())) {
+								totalSumbitted = submitBrokerRequest(
+										prevContract, tradingday.getClose(),
+										prevBarSize, prevChartDays,
+										totalSumbitted);
+								prevContract = tradestrategy.getContract();
+								prevBarSize = tradestrategy.getBarSize();
+								prevChartDays = tradestrategy.getChartDays();
+								m_indicatorTradestrategy.put(
+										tradestrategy.getIdTradeStrategy(),
+										tradestrategy);
+							}
+						}
+					}
+				}
+				if (null != prevContract) {
+					totalSumbitted = submitBrokerRequest(prevContract,
+							tradingday.getClose(), prevBarSize, prevChartDays,
+							totalSumbitted);
+				}
 			}
 			return totalSumbitted;
 		}

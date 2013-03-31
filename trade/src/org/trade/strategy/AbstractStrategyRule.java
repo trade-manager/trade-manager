@@ -884,7 +884,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		if (null != order) {
 			if (!order.getIsFilled()
 					&& !OrderStatus.CANCELLED.equals(order.getStatus())
-					&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
+					&& !OrderStatus.INACTIVE.equals(order.getStatus())
+					&& !OrderStatus.UNSUBMIT.equals(order.getStatus())) {
 				getBrokerManager().onCancelOrder(order);
 			}
 		}
