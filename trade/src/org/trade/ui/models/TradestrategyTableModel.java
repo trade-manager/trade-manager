@@ -459,6 +459,12 @@ public class TradestrategyTableModel extends TableModel {
 		String secType = ((SECType) this.getValueAt(selectedRow, 16)).getCode();
 
 		for (final Tradestrategy element : getData().getTradestrategies()) {
+			if (null != barSize && barSize == 1) {
+				int daySeconds = (int) ((element.getTradingday().getClose()
+						.getTime() - element.getTradingday().getOpen()
+						.getTime()) / 1000);
+				barSize = daySeconds * barSize;
+			}
 			if ((CoreUtils.nullSafeComparator(
 					element.getContract().getSymbol(), symbol) == 0 && null == symbol)
 					|| (CoreUtils.nullSafeComparator(element.getContract()

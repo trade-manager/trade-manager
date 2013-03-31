@@ -1898,6 +1898,50 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						}
 					}
 				}
+
+				/*
+				 * If we are getting data for back testing and the
+				 * backTestBarSize is set. Then get the candles for the
+				 * tradestrategy tradingday with the new bar size setting. The
+				 * backTestBroker will use these candles to build up the candle
+				 * on the Tradestrategy/BarSize.
+				 */
+				if (backTestBarSize > 0
+						&& this.brokerManagerModel.isBrokerDataOnly()) {
+					for (Date date : keys) {
+						Tradingday itemTradingday = this.tradingdays
+								.getTradingdays().get(date);
+
+						if (!TradingCalendar.isMarketHours(
+								itemTradingday.getOpen(),
+								itemTradingday.getClose(), new Date())) {
+							if (itemTradingday.getTradestrategies().isEmpty())
+								continue;
+							Tradingday tradingday = (Tradingday) itemTradingday
+									.clone();
+							for (Tradestrategy itemTradestrategy : itemTradingday
+									.getTradestrategies()) {
+
+								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
+										.clone();
+								tradestrategy.setBarSize(backTestBarSize);
+								tradestrategy.setChartDays(1);
+								tradestrategy.setIdTradeStrategy(m_brokerModel
+										.getNextRequestId());
+								tradingday.addTradestrategy(tradestrategy);
+							}
+							totalSumbitted = processTradingday(
+									getTradingdayToProcess(tradingday,
+											runningContractRequests),
+									totalSumbitted);
+						}
+					}
+				}
+
+				/*
+				 * Finish reprocessing any that have not yet been processed.
+				 */
+
 				while (!runningContractRequests.isEmpty()) {
 					for (Integer idTradeingday : runningContractRequests
 							.keySet()) {
@@ -2222,72 +2266,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							}
 						}
 					}
-				}
-			}
-			/*
-			 * If we are getting data for back testing and the backTestBarSize
-			 * is set. Then get the candles for the tradestrategy tradingday
-			 * with the new bar size setting. The backTestBroker will use these
-			 * candles to build up the candle on the Tradestrategy/BarSize.
-			 */
-			prevContract = null;
-			prevBarSize = null;
-			prevChartDays = null;
-			if (backTestBarSize > 0
-					&& this.brokerManagerModel.isBrokerDataOnly()) {
-				for (Tradestrategy item : tradingday.getTradestrategies()) {
-					if (!TradingCalendar.isMarketHours(item.getTradingday()
-							.getOpen(), item.getTradingday().getClose(),
-							new Date())) {
-
-						Tradestrategy tradestrategy = (Tradestrategy) item
-								.clone();
-						tradestrategy.setBarSize(backTestBarSize);
-						tradestrategy.setChartDays(1);
-
-						if (null == prevContract) {
-							prevContract = tradestrategy.getContract();
-							prevBarSize = tradestrategy.getBarSize();
-							prevChartDays = tradestrategy.getChartDays();
-							m_indicatorTradestrategy.put(
-									tradestrategy.getIdTradeStrategy(),
-									tradestrategy);
-						}
-						/*
-						 * Refresh the data set container as these may have
-						 * changed.
-						 */
-						tradestrategy.setDatasetContainer(null);
-
-						if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
-
-							/*
-							 * Fire all the requests to TWS to get chart data
-							 * After data has been retrieved save the data Only
-							 * allow a maximum of 60 requests in a 10min period
-							 * to avoid TWS pacing errors
-							 */
-
-							if (!prevContract.equals(tradestrategy
-									.getContract())) {
-								totalSumbitted = submitBrokerRequest(
-										prevContract, tradingday.getClose(),
-										prevBarSize, prevChartDays,
-										totalSumbitted);
-								prevContract = tradestrategy.getContract();
-								prevBarSize = tradestrategy.getBarSize();
-								prevChartDays = tradestrategy.getChartDays();
-								m_indicatorTradestrategy.put(
-										tradestrategy.getIdTradeStrategy(),
-										tradestrategy);
-							}
-						}
-					}
-				}
-				if (null != prevContract) {
-					totalSumbitted = submitBrokerRequest(prevContract,
-							tradingday.getClose(), prevBarSize, prevChartDays,
-							totalSumbitted);
 				}
 			}
 			return totalSumbitted;
