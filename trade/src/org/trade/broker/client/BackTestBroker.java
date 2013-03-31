@@ -50,6 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
@@ -94,6 +95,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	private AtomicBoolean positionCovered = new AtomicBoolean(false);
 	private final Object lockBackTestWorker = new Object();
 	private long execId = new Date().getTime();
+	private Integer backTestBarSize = 0;
 
 	/**
 	 * Constructor for BackTestBroker.
@@ -115,6 +117,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					.getPropAsString("trade.tws.timezone")));
 			m_sdf.setTimeZone(localTimeZone);
 			m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
+			backTestBarSize = ConfigProperties
+					.getPropAsInt("trade.backtest.barSize");
 		} catch (IOException ex) {
 			throw new IllegalArgumentException(
 					"Error initializing BackTestBroker Msg: " + ex.getMessage());
@@ -205,13 +209,30 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					.findTradestrategyById(this.idTradestrategy);
 			this.datasetContainer.clearBaseCandleSeries();
 			this.tradestrategy.setDatasetContainer(this.datasetContainer);
+			List<Candle> candles = null;
+			if (backTestBarSize > 0) {
+				/*
+				 * TODO We need to add logic to pull the candles for the
+				 * chartdats that are not the traing day as these will be
+				 * different barSize to the backTestBarSize.
+				 */
+				candles = tradePersistentModel
+						.findCandlesByContractDateRangeBarSize(
+								this.tradestrategy.getContract()
+										.getIdContract(), this.tradestrategy
+										.getTradingday().getOpen(),
+								this.tradestrategy.getTradingday().getOpen(),
+								backTestBarSize);
+			} else {
+				candles = tradePersistentModel
+						.findCandlesByContractDateRangeBarSize(
+								this.tradestrategy.getContract()
+										.getIdContract(), this.tradestrategy
+										.getTradingday().getOpen(),
+								this.tradestrategy.getTradingday().getOpen(),
+								this.tradestrategy.getBarSize());
+			}
 
-			List<Candle> candles = tradePersistentModel
-					.findCandlesByContractDateRangeBarSize(this.tradestrategy
-							.getContract().getIdContract(), this.tradestrategy
-							.getTradingday().getOpen(), this.tradestrategy
-							.getTradingday().getOpen(), this.tradestrategy
-							.getBarSize());
 			/*
 			 * Populate any child datasets.
 			 */
