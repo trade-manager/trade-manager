@@ -1921,14 +1921,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									.clone();
 							for (Tradestrategy itemTradestrategy : itemTradingday
 									.getTradestrategies()) {
-
-								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
-										.clone();
-								tradestrategy.setBarSize(backTestBarSize);
-								tradestrategy.setChartDays(1);
-								tradestrategy.setIdTradeStrategy(m_brokerModel
-										.getNextRequestId());
-								tradingday.addTradestrategy(tradestrategy);
+								if (backTestBarSize < itemTradestrategy
+										.getBarSize()) {
+									Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
+											.clone();
+									tradestrategy.setBarSize(backTestBarSize);
+									tradestrategy.setChartDays(1);
+									tradestrategy
+											.setIdTradeStrategy(m_brokerModel
+													.getNextRequestId());
+									tradingday.addTradestrategy(tradestrategy);
+								}
 							}
 							totalSumbitted = processTradingday(
 									getTradingdayToProcess(tradingday,
