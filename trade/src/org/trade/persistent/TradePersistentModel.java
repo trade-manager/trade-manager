@@ -454,7 +454,8 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 
 		try {
-
+			transientInstance.setStatus(null);
+			m_aspectHome.persist(transientInstance);
 			for (Trade trade : transientInstance.getTrades()) {
 				/*
 				 * Get the latest version of the trade to delete.
@@ -464,10 +465,7 @@ public class TradePersistentModel implements PersistentModel {
 					m_aspectHome.remove(instance);
 				}
 			}
-			transientInstance.setStatus(null);
 			transientInstance.getTrades().clear();
-			m_aspectHome.persist(transientInstance);
-
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error removing Tradestrategy Trades. Please refresh before remove.");
