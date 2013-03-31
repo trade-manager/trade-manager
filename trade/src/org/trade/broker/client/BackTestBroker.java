@@ -210,29 +210,29 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			this.datasetContainer.clearBaseCandleSeries();
 			this.tradestrategy.setDatasetContainer(this.datasetContainer);
 			List<Candle> candles = null;
+			Date endDate = TradingCalendar.getSpecificTime(tradestrategy
+					.getTradingday().getClose(), TradingCalendar
+					.getMostRecentTradingDay(tradestrategy.getTradingday()
+							.getClose()));
+			Date startDate = TradingCalendar.addDays(endDate,
+					(-1 * (tradestrategy.getChartDays() - 1)));
+			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
+			startDate = TradingCalendar.getSpecificTime(tradestrategy
+					.getTradingday().getOpen(), startDate);
 			if (backTestBarSize > 0) {
 				/*
 				 * TODO We need to add logic to pull the candles for the
 				 * chartdats that are not the traing day as these will be
 				 * different barSize to the backTestBarSize.
 				 */
-				Date endDate = TradingCalendar.getSpecificTime(tradestrategy
-						.getTradingday().getClose(), TradingCalendar
-						.getMostRecentTradingDay(tradestrategy.getTradingday()
-								.getClose()));
+
 				endDate = TradingCalendar.addBusinessDays(endDate, -1);
-				Date startDate = TradingCalendar.addDays(endDate,
-						(-1 * (tradestrategy.getChartDays() - 1)));
-				startDate = TradingCalendar.getMostRecentTradingDay(startDate);
-				startDate = TradingCalendar.getSpecificTime(tradestrategy
-						.getTradingday().getOpen(), startDate);
+
 				candles = tradePersistentModel
 						.findCandlesByContractDateRangeBarSize(
 								this.tradestrategy.getContract()
-										.getIdContract(), this.tradestrategy
-										.getTradingday().getOpen(),
-								this.tradestrategy.getTradingday().getOpen(),
-								backTestBarSize);
+										.getIdContract(), startDate, endDate,
+								this.tradestrategy.getBarSize());
 
 				List<Candle> candlesTradingday = tradePersistentModel
 						.findCandlesByContractDateRangeBarSize(
@@ -244,14 +244,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				for (Candle candle : candlesTradingday) {
 					candles.add(candle);
 				}
-
 			} else {
 				candles = tradePersistentModel
 						.findCandlesByContractDateRangeBarSize(
 								this.tradestrategy.getContract()
-										.getIdContract(), this.tradestrategy
-										.getTradingday().getOpen(),
-								this.tradestrategy.getTradingday().getOpen(),
+										.getIdContract(), startDate, endDate,
 								this.tradestrategy.getBarSize());
 			}
 
