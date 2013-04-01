@@ -102,41 +102,24 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 						.getDataItem(getCurrentCandleCount());
 				Date startPeriod = currentCandleItem.getPeriod().getStart();
 
-				/*
-				 * Trade is open kill this Strategy as its job is done.
-				 */
-				if (this.isPositionOpen() || this.isPositionCancelled()) {
-					_log.info("Strategy complete open position filled symbol: "
-							+ getSymbol() + " startPeriod: " + startPeriod);
+				// _log.info(getTradestrategy().getStrategy().getClassName()
+				// + " symbol: " + getSymbol() + " startPeriod: "
+				// + startPeriod);
+
+				// Is it the the 9:35 candle?
+				if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 9, 35)) && newBar) {
+
+				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))) {
+
+				} else if (startPeriod.after(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))) {
+					_log.info("Rule after 10:30:00 bar, close the "
+							+ getTradestrategy().getStrategy().getClassName()
+							+ " Symbol: " + getSymbol());
+					// Kill this process we are done!
 					this.cancel();
-					return;
-				}
-				/*
-				 * Only manage trades when the market is open and the candle is
-				 * for this Tradestrategies trading day.
-				 */
-				if (isDuringTradingday(startPeriod)) {
-
-					// _log.info(getTradestrategy().getStrategy().getClassName()
-					// + " symbol: " + getSymbol() + " startPeriod: "
-					// + startPeriod);
-
-					// Is it the the 9:35 candle?
-					if (startPeriod.equals(TradingCalendar.getSpecificTime(
-							startPeriod, 9, 35)) && newBar) {
-
-					} else if (startPeriod.equals(TradingCalendar
-							.getSpecificTime(startPeriod, 10, 30))) {
-
-					} else if (startPeriod.after(TradingCalendar
-							.getSpecificTime(startPeriod, 10, 30))) {
-						_log.info("Rule after 10:30:00 bar, close the "
-								+ getTradestrategy().getStrategy()
-										.getClassName() + " Symbol: "
-								+ getSymbol());
-						// Kill this process we are done!
-						this.cancel();
-					}
 				}
 			}
 

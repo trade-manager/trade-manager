@@ -117,150 +117,138 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			/*
 			 * Get the current candle
 			 */
-			CandleItem currentCandle = (CandleItem) candleSeries
-					.getDataItem(getCurrentCandleCount());
+			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
 			/*
-			 * Only manage trades when the market is open and the candle is for
-			 * the Tradestrategies trading day.
+			 * _log.info("PositionManagerStrategy symbol: " + getSymbol() +
+			 * " startPeriod: " + startPeriod + " Close Price: " +
+			 * currentCandle.getClose() + " Vwap: " + currentCandle.getVwap());
 			 */
-			if (isDuringTradingday(startPeriod)) {
-				/*
-				 * _log.info("PositionManagerStrategy symbol: " + getSymbol() +
-				 * " startPeriod: " + startPeriod + " Close Price: " +
-				 * currentCandle.getClose() + " Vwap: " +
-				 * currentCandle.getVwap());
-				 */
 
-				/*
-				 * Get the current open trade. If no trade is open this Strategy
-				 * will be closed down.
-				 */
+			/*
+			 * Get the current open trade. If no trade is open this Strategy
+			 * will be closed down.
+			 */
 
-				if (!getTrade().getIsOpen()) {
-					_log.info("No open position so Cancel Strategy Mgr Symbol: "
-							+ getSymbol() + " Time:" + startPeriod);
-					this.cancel();
-					return;
-				}
+			if (!getTrade().getIsOpen()) {
+				_log.info("No open position so Cancel Strategy Mgr Symbol: "
+						+ getSymbol() + " Time:" + startPeriod);
+				this.cancel();
+				return;
+			}
 
+			/*
+			 * If all trades are closed shut down the position manager
+			 * 
+			 * Note this strategy is run as soon as we enter a position.
+			 * 
+			 * Check to see if the open position is filled and the open quantity
+			 * is > 0 also check to see if we already have this position
+			 * covered.
+			 */
+			if (getTrade().getIsOpen() && !this.isPositionCovered()) {
 				/*
-				 * If all trades are closed shut down the position manager
+				 * Position has been opened and not covered submit the target
+				 * and stop orders for the open quantity. Two targets at 4R and
+				 * 7R Stop and 2X actual stop this will be managed to 1R below
 				 * 
-				 * Note this strategy is run as soon as we enter a position.
-				 * 
-				 * Check to see if the open position is filled and the open
-				 * quantity is > 0 also check to see if we already have this
-				 * position covered.
+				 * Make the stop -2R and manage to the Vwap MA of the opening
+				 * bar.
 				 */
-				if (getTrade().getIsOpen() && !this.isPositionCovered()) {
-					/*
-					 * Position has been opened and not covered submit the
-					 * target and stop orders for the open quantity. Two targets
-					 * at 4R and 7R Stop and 2X actual stop this will be managed
-					 * to 1R below
-					 * 
-					 * Make the stop -2R and manage to the Vwap MA of the
-					 * opening bar.
-					 */
-					Money targetOnePrice = createStopAndTargetOrder(
-							getOpenPositionOrder(), 2, 4, 50, true);
-					setTargetPrice(targetOnePrice);
-					createStopAndTargetOrder(getOpenPositionOrder(), 2, 7, 50,
-							true);
-					_log.info("Open position submit Stop/Tgt orders created Symbol: "
-							+ getSymbol() + " Time:" + startPeriod);
+				Money targetOnePrice = createStopAndTargetOrder(
+						getOpenPositionOrder(), 2, 4, 50, true);
+				setTargetPrice(targetOnePrice);
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 7, 50, true);
+				_log.info("Open position submit Stop/Tgt orders created Symbol: "
+						+ getSymbol() + " Time:" + startPeriod);
 
-				}
+			}
 
-				/*
-				 * Manage the stop orders if the current bars Vwap crosses the
-				 * Vwap of the first 5min bar then move the stop price (
-				 * currently -2R) to the average fill price i.e. break even.
-				 * This allows for tails that break the 5min high/low between
-				 * 9:40 thru 10:30.
-				 */
+			/*
+			 * Manage the stop orders if the current bars Vwap crosses the Vwap
+			 * of the first 5min bar then move the stop price ( currently -2R)
+			 * to the average fill price i.e. break even. This allows for tails
+			 * that break the 5min high/low between 9:40 thru 10:30.
+			 */
 
-				if (startPeriod.before(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))
-						&& startPeriod.after(TradingCalendar.getSpecificTime(
-								startPeriod, 9, 35))) {
+			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
+					10, 30))
+					&& startPeriod.after(TradingCalendar.getSpecificTime(
+							startPeriod, 9, 35))) {
 
-					CandleItem firstCandle = this.getCandle(TradingCalendar
-							.getSpecificTime(this.getTradestrategy()
-									.getTradingday().getOpen(), startPeriod));
+				CandleItem firstCandle = this.getCandle(TradingCalendar
+						.getSpecificTime(this.getTradestrategy()
+								.getTradingday().getOpen(), startPeriod));
 
-					if (Side.BOT.equals(getTrade().getSide())) {
-						if (currentCandle.getVwap() < firstCandle.getVwap()) {
-							Money stopPrice = addPennyAndRoundStop(getTrade()
-									.getOpenPosition().getAverageFilledPrice()
-									.doubleValue(), getTrade().getSide(),
-									Action.SELL, 0.01);
-							moveStopOCAPrice(stopPrice, true);
-							_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
-									+ getSymbol() + " Time:" + startPeriod
-									+ " Price: " + stopPrice);
-						}
-					} else {
-
-						if (currentCandle.getVwap() > firstCandle.getVwap()) {
-							Money stopPrice = addPennyAndRoundStop(getTrade()
-									.getOpenPosition().getAverageFilledPrice()
-									.doubleValue(), getTrade().getSide(),
-									Action.BUY, 0.01);
-							moveStopOCAPrice(stopPrice, true);
-							_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
-									+ getSymbol() + " Time:" + startPeriod
-									+ " Price: " + stopPrice);
-						}
+				if (Side.BOT.equals(getTrade().getSide())) {
+					if (currentCandle.getVwap() < firstCandle.getVwap()) {
+						Money stopPrice = addPennyAndRoundStop(getTrade()
+								.getOpenPosition().getAverageFilledPrice()
+								.doubleValue(), getTrade().getSide(),
+								Action.SELL, 0.01);
+						moveStopOCAPrice(stopPrice, true);
+						_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
+								+ getSymbol() + " Time:" + startPeriod
+								+ " Price: " + stopPrice);
 					}
-				}
+				} else {
 
-				/*
-				 * At 10:30 Move stop order to b.e. i.e. the average fill price
-				 * of the open order.
-				 */
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30)) && newBar) {
-
-					_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
-							+ " Time: " + startPeriod);
-					String action = Action.SELL;
-					if (getTrade().getSide().equals(Side.SLD)) {
-						action = Action.BUY;
+					if (currentCandle.getVwap() > firstCandle.getVwap()) {
+						Money stopPrice = addPennyAndRoundStop(getTrade()
+								.getOpenPosition().getAverageFilledPrice()
+								.doubleValue(), getTrade().getSide(),
+								Action.BUY, 0.01);
+						moveStopOCAPrice(stopPrice, true);
+						_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
+								+ getSymbol() + " Time:" + startPeriod
+								+ " Price: " + stopPrice);
 					}
-					moveStopOCAPrice(
-							addPennyAndRoundStop(getOpenPositionOrder()
-									.getAverageFilledPrice().doubleValue(),
-									getTrade().getSide(), action, 0.01), true);
-				}
-
-				/*
-				 * We have sold the first half of the position try to trail BH
-				 * on Heikin-Ashi above target 1 with a two bar trail.
-				 */
-				if ((null != getTargetPrice()) && newBar) {
-					if (setHiekinAshiTrail(getTrade(), 2)) {
-						_log.info("PositionManagerStrategy HiekinAshiTrail: "
-								+ getSymbol() + " Trail Price: "
-								+ getTargetPrice() + " Time: " + startPeriod);
-						moveStopOCAPrice(getTargetPrice(), true);
-					}
-				}
-				/*
-				 * Close any opened positions with a market order at the end of
-				 * the day.
-				 */
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 15, 55))) {
-					closeAllOpenPositions();
-					_log.info("PositionManagerStrategy 15:55:00 done: "
-							+ getSymbol() + " Time: " + startPeriod);
-					this.cancel();
 				}
 			}
 
+			/*
+			 * At 10:30 Move stop order to b.e. i.e. the average fill price of
+			 * the open order.
+			 */
+			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
+					10, 30)) && newBar) {
+
+				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
+						+ " Time: " + startPeriod);
+				String action = Action.SELL;
+				if (getTrade().getSide().equals(Side.SLD)) {
+					action = Action.BUY;
+				}
+				moveStopOCAPrice(
+						addPennyAndRoundStop(getOpenPositionOrder()
+								.getAverageFilledPrice().doubleValue(),
+								getTrade().getSide(), action, 0.01), true);
+			}
+
+			/*
+			 * We have sold the first half of the position try to trail BH on
+			 * Heikin-Ashi above target 1 with a two bar trail.
+			 */
+			if ((null != getTargetPrice()) && newBar) {
+				if (setHiekinAshiTrail(getTrade(), 2)) {
+					_log.info("PositionManagerStrategy HiekinAshiTrail: "
+							+ getSymbol() + " Trail Price: " + getTargetPrice()
+							+ " Time: " + startPeriod);
+					moveStopOCAPrice(getTargetPrice(), true);
+				}
+			}
+			/*
+			 * Close any opened positions with a market order at the end of the
+			 * day.
+			 */
+			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
+					15, 55))) {
+				closeAllOpenPositions();
+				_log.info("PositionManagerStrategy 15:55:00 done: "
+						+ getSymbol() + " Time: " + startPeriod);
+				this.cancel();
+			}
 		} catch (Exception ex) {
 			_log.error("Error Position Manager exception: " + ex.getMessage(),
 					ex);

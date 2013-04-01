@@ -106,8 +106,7 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 		try {
 			if (getCurrentCandleCount() > 0) {
 				// Get the current candle
-				CandleItem currentCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount());
+				CandleItem currentCandleItem = this.getCurrentCandle();
 				Date startPeriod = currentCandleItem.getPeriod().getStart();
 
 				/*
@@ -119,77 +118,52 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 					this.cancel();
 					return;
 				}
+
+				// _log.info(getTradestrategy().getStrategy().getClassName()
+				// + " symbol: " + getSymbol() +
+				// " startPeriod: " + startPeriod);
+
+				CandleItem prevCandleItem = (CandleItem) candleSeries
+						.getDataItem(getCurrentCandleCount() - 1);
 				/*
-				 * Only open trades when the market is open and the candle is
-				 * for the Tradestrategies trading day.
+				 * Is it the the 9:35 candle? and we have not created an open
+				 * position trade.
 				 */
-				if (isDuringTradingday(startPeriod)) {
+				if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 9, 35)) && newBar) {
 
-					// _log.info(getTradestrategy().getStrategy().getClassName()
-					// + " symbol: " + getSymbol() +
-					// " startPeriod: " + startPeriod);
-
-					CandleItem prevCandleItem = (CandleItem) candleSeries
-							.getDataItem(getCurrentCandleCount() - 1);
 					/*
-					 * Is it the the 9:35 candle? and we have not created an
-					 * open position trade.
+					 * Is the candle in the direction of the Tradestrategy side
+					 * i.e. a long play should have a green 5min candle
 					 */
-					if (startPeriod.equals(TradingCalendar.getSpecificTime(
-							startPeriod, 9, 35)) && newBar) {
+					if (prevCandleItem.isSide(getTradestrategy().getSide())) {
 
-						/*
-						 * Is the candle in the direction of the Tradestrategy
-						 * side i.e. a long play should have a green 5min candle
-						 */
-						if (prevCandleItem.isSide(getTradestrategy().getSide())) {
-
-							if ((Side.BOT.equals(getTradestrategy().getSide()) && prevCandleItem
-									.getVwap() < currentCandleItem.getVwap())
-									|| (Side.SLD.equals(getTradestrategy()
-											.getSide()) && prevCandleItem
-											.getVwap() > currentCandleItem
-											.getVwap())) {
-								/*
-								 * Based on the prev bar create the stop, entry
-								 * price using the 9:35 5min bar high/low.
-								 */
-								Money price = new Money(
-										prevCandleItem.getHigh());
-								Money priceStop = new Money(
-										prevCandleItem.getLow());
-								String action = Action.BUY;
-								if (Side.SLD.equals(getTradestrategy()
-										.getSide())) {
-									price = new Money(prevCandleItem.getLow());
-									priceStop = new Money(
-											prevCandleItem.getHigh());
-									action = Action.SELL;
-								}
-
-								/*
-								 * Create an open position order.
-								 */
-								createRiskOpenPosition(action, price,
-										priceStop, true, null, null, null, null);
-
-							} else {
-								_log.info("Rule Vwap 5 min Side Gap bar. Vwap not in direction of side. Symbol: "
-										+ getSymbol() + " Time: " + startPeriod);
-
-								if (Side.SLD.equals(getTradestrategy()
-										.getSide())) {
-									this.updateTradestrategyStatus(TradestrategyStatus.GB);
-								} else {
-									this.updateTradestrategyStatus(TradestrategyStatus.RB);
-								}
-
-								// Cancel this process we are done!
-								this.cancel();
+						if ((Side.BOT.equals(getTradestrategy().getSide()) && prevCandleItem
+								.getVwap() < currentCandleItem.getVwap())
+								|| (Side.SLD.equals(getTradestrategy()
+										.getSide()) && prevCandleItem.getVwap() > currentCandleItem
+										.getVwap())) {
+							/*
+							 * Based on the prev bar create the stop, entry
+							 * price using the 9:35 5min bar high/low.
+							 */
+							Money price = new Money(prevCandleItem.getHigh());
+							Money priceStop = new Money(prevCandleItem.getLow());
+							String action = Action.BUY;
+							if (Side.SLD.equals(getTradestrategy().getSide())) {
+								price = new Money(prevCandleItem.getLow());
+								priceStop = new Money(prevCandleItem.getHigh());
+								action = Action.SELL;
 							}
 
+							/*
+							 * Create an open position order.
+							 */
+							createRiskOpenPosition(action, price, priceStop,
+									true, null, null, null, null);
+
 						} else {
-							_log.info("Rule 5 min Red/Green bar opposite to trade direction. Symbol: "
+							_log.info("Rule Vwap 5 min Side Gap bar. Vwap not in direction of side. Symbol: "
 									+ getSymbol() + " Time: " + startPeriod);
 
 							if (Side.SLD.equals(getTradestrategy().getSide())) {
@@ -201,22 +175,35 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 							// Cancel this process we are done!
 							this.cancel();
 						}
-					} else if (startPeriod.equals(TradingCalendar
-							.getSpecificTime(startPeriod, 10, 30))
-							|| startPeriod.after(TradingCalendar
-									.getSpecificTime(startPeriod, 10, 30))) {
 
-						if (!this.isPositionOpen()
-								&& !TradestrategyStatus.CANCELLED
-										.equals(getTradestrategy().getStatus())) {
-							this.updateTradestrategyStatus(TradestrategyStatus.TO);
-							cancelOrder(this.getOpenPositionOrder());
-							// No trade we timed out
-							_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
+					} else {
+						_log.info("Rule 5 min Red/Green bar opposite to trade direction. Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+
+						if (Side.SLD.equals(getTradestrategy().getSide())) {
+							this.updateTradestrategyStatus(TradestrategyStatus.GB);
+						} else {
+							this.updateTradestrategyStatus(TradestrategyStatus.RB);
 						}
+
+						// Cancel this process we are done!
 						this.cancel();
 					}
+				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))
+						|| startPeriod.after(TradingCalendar.getSpecificTime(
+								startPeriod, 10, 30))) {
+
+					if (!this.isPositionOpen()
+							&& !TradestrategyStatus.CANCELLED
+									.equals(getTradestrategy().getStatus())) {
+						this.updateTradestrategyStatus(TradestrategyStatus.TO);
+						cancelOrder(this.getOpenPositionOrder());
+						// No trade we timed out
+						_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+					}
+					this.cancel();
 				}
 			}
 

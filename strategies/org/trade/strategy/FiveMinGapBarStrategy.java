@@ -113,8 +113,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 		try {
 			if (getCurrentCandleCount() > 0) {
 				// Get the current candle
-				CandleItem currentCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount());
+				CandleItem currentCandleItem = this.getCurrentCandle();
 				Date startPeriod = currentCandleItem.getPeriod().getStart();
 
 				/*
@@ -126,88 +125,81 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					this.cancel();
 					return;
 				}
+
+				// _log.info(getTradestrategy().getStrategy().getClassName()
+				// + " symbol: " + getSymbol() + " startPeriod: "
+				// + startPeriod);
+
+				CandleItem prevCandleItem = (CandleItem) candleSeries
+						.getDataItem(getCurrentCandleCount() - 1);
+
 				/*
-				 * Only manage trades when the market is open and the candle is
-				 * for the Tradestrategies trading day.
+				 * Is it the the 9:35 candle? and we have not created an open
+				 * position trade.
 				 */
-				if (isDuringTradingday(startPeriod)) {
+				if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 9, 35)) && newBar) {
+					Side side = Side.newInstance(Side.SLD);
+					if (prevCandleItem.isSide(Side.BOT)) {
+						side = Side.newInstance(Side.BOT);
+					}
+					Money price = new Money(prevCandleItem.getHigh());
+					Money priceStop = new Money(prevCandleItem.getLow());
+					String action = Action.BUY;
+					if (side.equalsCode(Side.SLD)) {
+						price = new Money(prevCandleItem.getLow());
+						priceStop = new Money(prevCandleItem.getHigh());
+						action = Action.SELL;
+					}
 
-					// _log.info(getTradestrategy().getStrategy().getClassName()
-					// + " symbol: " + getSymbol() + " startPeriod: "
-					// + startPeriod);
+					Money priceClose = new Money(prevCandleItem.getClose());
+					Entrylimit entrylimit = getEntryLimit()
+							.getValue(priceClose);
 
-					CandleItem prevCandleItem = (CandleItem) candleSeries
-							.getDataItem(getCurrentCandleCount() - 1);
+					double highLowRange = Math.abs(prevCandleItem.getHigh()
+							- prevCandleItem.getLow());
+					// double openCloseRange = Math.abs(prevCandleItem
+					// .getOpen() - prevCandleItem.getClose());
 
-					/*
-					 * Is it the the 9:35 candle? and we have not created an
-					 * open position trade.
-					 */
-					if (startPeriod.equals(TradingCalendar.getSpecificTime(
-							startPeriod, 9, 35)) && newBar) {
-						Side side = Side.newInstance(Side.SLD);
-						if (prevCandleItem.isSide(Side.BOT)) {
-							side = Side.newInstance(Side.BOT);
-						}
-						Money price = new Money(prevCandleItem.getHigh());
-						Money priceStop = new Money(prevCandleItem.getLow());
-						String action = Action.BUY;
-						if (side.equalsCode(Side.SLD)) {
-							price = new Money(prevCandleItem.getLow());
-							priceStop = new Money(prevCandleItem.getHigh());
-							action = Action.SELL;
-						}
+					priceStop = new Money(prevCandleItem.getOpen());
 
-						Money priceClose = new Money(prevCandleItem.getClose());
-						Entrylimit entrylimit = getEntryLimit().getValue(
-								priceClose);
+					// If the candle less than the entry limit %
+					if (((highLowRange) / prevCandleItem.getClose()) < entrylimit
+							.getPercentOfPrice().doubleValue()) {
+						// TODO add the tails as a % of the body.
+						_log.info(" We have a trade!!  Symbol: " + getSymbol()
+								+ " Time: " + startPeriod);
+						/*
+						 * Create an open position.
+						 */
+						createRiskOpenPosition(action, price, priceStop, true,
+								null, null, null, null);
 
-						double highLowRange = Math.abs(prevCandleItem.getHigh()
-								- prevCandleItem.getLow());
-						// double openCloseRange = Math.abs(prevCandleItem
-						// .getOpen() - prevCandleItem.getClose());
-
-						priceStop = new Money(prevCandleItem.getOpen());
-
-						// If the candle less than the entry limit %
-						if (((highLowRange) / prevCandleItem.getClose()) < entrylimit
-								.getPercentOfPrice().doubleValue()) {
-							// TODO add the tails as a % of the body.
-							_log.info(" We have a trade!!  Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-							/*
-							 * Create an open position.
-							 */
-							createRiskOpenPosition(action, price, priceStop,
-									true, null, null, null, null);
-
-						} else {
-							_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-							updateTradestrategyStatus(TradestrategyStatus.PERCENT);
-							// Kill this process we are done!
-							this.cancel();
-						}
-
-					} else if (startPeriod.equals(TradingCalendar
-							.getSpecificTime(startPeriod, 10, 30))
-							|| startPeriod.after(TradingCalendar
-									.getSpecificTime(startPeriod, 10, 30))) {
-
-						if (!this.isPositionOpen()
-								&& !TradestrategyStatus.CANCELLED
-										.equals(getTradestrategy().getStatus())) {
-							updateTradestrategyStatus(TradestrategyStatus.TO);
-							cancelOrder(this.getOpenPositionOrder());
-							// No trade we timed out
-							_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-						}
+					} else {
+						_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+						updateTradestrategyStatus(TradestrategyStatus.PERCENT);
+						// Kill this process we are done!
 						this.cancel();
 					}
+
+				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))
+						|| startPeriod.after(TradingCalendar.getSpecificTime(
+								startPeriod, 10, 30))) {
+
+					if (!this.isPositionOpen()
+							&& !TradestrategyStatus.CANCELLED
+									.equals(getTradestrategy().getStatus())) {
+						updateTradestrategyStatus(TradestrategyStatus.TO);
+						cancelOrder(this.getOpenPositionOrder());
+						// No trade we timed out
+						_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+					}
+					this.cancel();
 				}
 			}
-
 		} catch (Exception ex) {
 			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
 			error(1, 10, "Error  runRule exception: " + ex.getMessage());

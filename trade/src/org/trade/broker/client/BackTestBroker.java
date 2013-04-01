@@ -220,11 +220,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			startDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getOpen(), startDate);
 			if (backTestBarSize > 0) {
-				/*
-				 * TODO We need to add logic to pull the candles for the
-				 * chartdats that are not the traing day as these will be
-				 * different barSize to the backTestBarSize.
-				 */
 
 				endDate = TradingCalendar.addBusinessDays(endDate, -1);
 

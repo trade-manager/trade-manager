@@ -352,6 +352,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					}
 					CandleSeries candleSeries = this.tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
+
 					if ((candleSeries.getItemCount() - 1) > currentCandleCount) {
 
 						/*
@@ -363,7 +364,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * Only manage trades when the market is open and the
 						 * candle is for the Tradestrategies trading day.
 						 */
-						runStrategy(candleSeries, true);
+						if (this.isDuringTradingday(getCurrentCandle()
+								.getPeriod().getStart()))
+							runStrategy(candleSeries, true);
 
 					} else if (currentCandleCount == (candleSeries
 							.getItemCount() - 1)) {
@@ -373,7 +376,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 */
 						if (currentCandleCount > -1) {
 							// Fire rules
-							runStrategy(candleSeries, false);
+							if (this.isDuringTradingday(getCurrentCandle()
+									.getPeriod().getStart()))
+								runStrategy(candleSeries, false);
 						}
 					} else if (currentCandleCount < (candleSeries
 							.getItemCount() - 1)) {
@@ -1308,6 +1313,22 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public int getCurrentCandleCount() {
 		return currentCandleCount;
+	}
+
+	/**
+	 * Method getCurrentCandle.
+	 * 
+	 * @return CandleItem
+	 */
+	public CandleItem getCurrentCandle() {
+		CandleItem currentCandleItem = null;
+		if (getCurrentCandleCount() > -1) {
+			CandleSeries candleSeries = this.getTradestrategy()
+					.getDatasetContainer().getBaseCandleSeries();
+			currentCandleItem = (CandleItem) candleSeries
+					.getDataItem(getCurrentCandleCount());
+		}
+		return currentCandleItem;
 	}
 
 	/**

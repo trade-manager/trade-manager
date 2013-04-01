@@ -104,85 +104,76 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			/*
 			 * Get the current candle
 			 */
-			CandleItem currentCandle = (CandleItem) candleSeries
-					.getDataItem(getCurrentCandleCount());
+			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
 			/*
-			 * Only manage trades when the market is open and the candle is for
-			 * the Tradestrategies trading day.
+			 * _log.info("PositionManagerStrategy symbol: " + getSymbol() +
+			 * " startPeriod: " + startPeriod + " Close Price: " +
+			 * currentCandle.getClose() + " Vwap: " + currentCandle.getVwap());
 			 */
-			if (isDuringTradingday(startPeriod)) {
-				/*
-				 * _log.info("PositionManagerStrategy symbol: " + getSymbol() +
-				 * " startPeriod: " + startPeriod + " Close Price: " +
-				 * currentCandle.getClose() + " Vwap: " +
-				 * currentCandle.getVwap());
-				 */
 
-				/*
-				 * Get the current open trade. If no trade is open this Strategy
-				 * will be closed down.
-				 */
+			/*
+			 * Get the current open trade. If no trade is open this Strategy
+			 * will be closed down.
+			 */
 
-				if (!getTrade().getIsOpen()) {
-					_log.info("No open position so Cancel Strategy Mgr Symbol: "
-							+ getSymbol() + " Time:" + startPeriod);
-					this.cancel();
-					return;
-				}
-
-				/*
-				 * If all trades are closed shut down the position manager
-				 * 
-				 * Note this strategy is run as soon as we enter a position.
-				 * 
-				 * Check to see if the open position is filled and the open
-				 * quantity is > 0 also check to see if we already have this
-				 * position covered.
-				 */
-				if (getTrade().getIsOpen() && !this.isPositionCovered()) {
-					/*
-					 * Position has been opened and not covered submit the
-					 * target and stop orders for the open quantity.
-					 */
-
-					Money targetOnePrice = createStopAndTargetOrder(
-							getOpenPositionOrder(), 1, 6, 100, true);
-					setTargetPrice(targetOnePrice);
-					_log.info("Open position submit Stop/Tgt orders created Symbol: "
-							+ getSymbol() + " Time:" + startPeriod);
-
-				}
-
-				/*
-				 * Trail the whole position at the low of the previous 5min bar.
-				 */
-				if ((null != getTargetPrice())
-						&& newBar
-						&& startPeriod.after(TradingCalendar.getSpecificTime(
-								startPeriod, 9, 40))) {
-
-					if (set5MinBarTrail(getTrade(), 1)) {
-						_log.info("PositionManagerStrategy 5min Candle: "
-								+ getSymbol() + " Trail Price: "
-								+ getTargetPrice() + " Time: " + startPeriod);
-						moveStopOCAPrice(getTargetPrice(), true);
-					}
-				}
-				/*
-				 * Close any opened positions with a market order at the end of
-				 * the day.
-				 */
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 15, 55))) {
-					closeAllOpenPositions();
-					_log.info("PositionManagerStrategy 15:55:00 done: "
-							+ getSymbol() + " Time: " + startPeriod);
-					this.cancel();
-				}
+			if (!getTrade().getIsOpen()) {
+				_log.info("No open position so Cancel Strategy Mgr Symbol: "
+						+ getSymbol() + " Time:" + startPeriod);
+				this.cancel();
+				return;
 			}
 
+			/*
+			 * If all trades are closed shut down the position manager
+			 * 
+			 * Note this strategy is run as soon as we enter a position.
+			 * 
+			 * Check to see if the open position is filled and the open quantity
+			 * is > 0 also check to see if we already have this position
+			 * covered.
+			 */
+			if (getTrade().getIsOpen() && !this.isPositionCovered()) {
+				/*
+				 * Position has been opened and not covered submit the target
+				 * and stop orders for the open quantity.
+				 */
+
+				Money targetOnePrice = createStopAndTargetOrder(
+						getOpenPositionOrder(), 1, 6, 100, true);
+				setTargetPrice(targetOnePrice);
+				_log.info("Open position submit Stop/Tgt orders created Symbol: "
+						+ getSymbol() + " Time:" + startPeriod);
+
+			}
+
+			/*
+			 * Trail the whole position at the low of the previous 5min bar.
+			 */
+			if ((null != getTargetPrice())
+					&& newBar
+					&& startPeriod.after(TradingCalendar.getSpecificTime(
+							startPeriod, 9, 40))) {
+
+				if (set5MinBarTrail(getTrade(), 1)) {
+					_log.info("PositionManagerStrategy 5min Candle: "
+							+ getSymbol() + " Trail Price: " + getTargetPrice()
+							+ " Time: " + startPeriod);
+					moveStopOCAPrice(getTargetPrice(), true);
+				}
+			}
+			/*
+			 * Close any opened positions with a market order at the end of the
+			 * day.
+			 */
+			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
+					15, 55))) {
+				closeAllOpenPositions();
+				_log.info("PositionManagerStrategy 15:55:00 done: "
+						+ getSymbol() + " Time: " + startPeriod);
+				this.cancel();
+			}
 		} catch (Exception ex) {
 			_log.error("Error Position Manager exception: " + ex.getMessage(),
 					ex);

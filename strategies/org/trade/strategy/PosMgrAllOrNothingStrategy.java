@@ -106,125 +106,115 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 		try {
 
 			/* Get the current candle */
-			CandleItem currentCandle = (CandleItem) candleSeries
-					.getDataItem(getCurrentCandleCount());
+			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
+			// _log.info("PositionManagerStrategy symbol: " +
+			// getSymbol()
+			// + " startPeriod: " + startPeriod);
+
 			/*
-			 * Only manage trades when the market is open and the candle is for
-			 * the Tradestrategies trading day.
+			 * Get the current open trade. If no trade is open this Strategy
+			 * will be closed down.
 			 */
-			if (isDuringTradingday(startPeriod)) {
 
-				// _log.info("PositionManagerStrategy symbol: " +
-				// getSymbol()
-				// + " startPeriod: " + startPeriod);
+			if (!getTrade().getIsOpen()) {
+				this.cancel();
+				return;
+			}
+			/*
+			 * If all trades are closed shut down the position manager
+			 * 
+			 * Note this strategy is run as soon as we enter a position.
+			 * 
+			 * Check to see if the open position is filled and the open quantity
+			 * is > 0 also check to see if we already have this position
+			 * covered.
+			 */
+
+			if (getTrade().getIsOpen() && !this.isPositionCovered()) {
 
 				/*
-				 * Get the current open trade. If no trade is open this Strategy
-				 * will be closed down.
+				 * Position has been opened and not covered submit the target
+				 * and stop orders for the open quantity. One target at 3R.
 				 */
 
-				if (!getTrade().getIsOpen()) {
-					this.cancel();
-					return;
-				}
-				/*
-				 * If all trades are closed shut down the position manager
-				 * 
-				 * Note this strategy is run as soon as we enter a position.
-				 * 
-				 * Check to see if the open position is filled and the open
-				 * quantity is > 0 also check to see if we already have this
-				 * position covered.
-				 */
+				_log.info("Open position submit Stop/Tgt orders Symbol: "
+						+ getSymbol() + " Time:" + startPeriod);
+				Money targetPrice = createStopAndTargetOrder(
+						getOpenPositionOrder(), 1, 3, 100, false);
+				setTargetPrice(targetPrice);
+			}
+			/*
+			 * Manage the stop orders if the close/open of this bar breaks the
+			 * stop price transmit the stop order this allows for tails that
+			 * break the 5min low before 10:30am
+			 */
 
-				if (getTrade().getIsOpen() && !this.isPositionCovered()) {
+			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
+					10, 30))) {
 
-					/*
-					 * Position has been opened and not covered submit the
-					 * target and stop orders for the open quantity. One target
-					 * at 3R.
-					 */
-
-					_log.info("Open position submit Stop/Tgt orders Symbol: "
-							+ getSymbol() + " Time:" + startPeriod);
-					Money targetPrice = createStopAndTargetOrder(
-							getOpenPositionOrder(), 1, 3, 100, false);
-					setTargetPrice(targetPrice);
-				}
-				/*
-				 * Manage the stop orders if the close/open of this bar breaks
-				 * the stop price transmit the stop order this allows for tails
-				 * that break the 5min low before 10:30am
-				 */
-
-				if (startPeriod.before(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
-
-					if (Side.BOT.equals(getTrade().getSide())) {
-						if (currentCandle.getVwap() < getOpenPositionOrder()
-								.getStopPrice().doubleValue()) {
-							Money stopPrice = addPennyAndRoundStop(
-									getOpenPositionOrder().getStopPrice()
-											.doubleValue(), getTrade()
-											.getSide(), Action.SELL, 0.01);
-							moveStopOCAPrice(stopPrice, true);
-							_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
-									+ getSymbol()
-									+ " Time:"
-									+ startPeriod
-									+ " Price: " + stopPrice);
-						}
-					} else {
-
-						if (currentCandle.getVwap() > getOpenPositionOrder()
-								.getStopPrice().doubleValue()) {
-							Money stopPrice = addPennyAndRoundStop(
-									getOpenPositionOrder().getStopPrice()
-											.doubleValue(), getTrade()
-											.getSide(), Action.BUY, 0.01);
-							moveStopOCAPrice(stopPrice, true);
-							_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
-									+ getSymbol()
-									+ " Time:"
-									+ startPeriod
-									+ " Price: " + stopPrice);
-						}
+				if (Side.BOT.equals(getTrade().getSide())) {
+					if (currentCandle.getVwap() < getOpenPositionOrder()
+							.getStopPrice().doubleValue()) {
+						Money stopPrice = addPennyAndRoundStop(
+								getOpenPositionOrder().getStopPrice()
+										.doubleValue(), getTrade().getSide(),
+								Action.SELL, 0.01);
+						moveStopOCAPrice(stopPrice, true);
+						_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
+								+ getSymbol()
+								+ " Time:"
+								+ startPeriod
+								+ " Price: " + stopPrice);
 					}
-				}
+				} else {
 
-				/*
-				 * 10:30 Move stop order to b.e.
-				 */
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
-
-					_log.info("Rule move stop to b.e.. Symbol:" + getSymbol()
-							+ " Time: " + startPeriod);
-					String action = Action.SELL;
-					if (getTrade().getSide().equals(Side.SLD)) {
-						action = Action.BUY;
+					if (currentCandle.getVwap() > getOpenPositionOrder()
+							.getStopPrice().doubleValue()) {
+						Money stopPrice = addPennyAndRoundStop(
+								getOpenPositionOrder().getStopPrice()
+										.doubleValue(), getTrade().getSide(),
+								Action.BUY, 0.01);
+						moveStopOCAPrice(stopPrice, true);
+						_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
+								+ getSymbol()
+								+ " Time:"
+								+ startPeriod
+								+ " Price: " + stopPrice);
 					}
-					moveStopOCAPrice(
-
-							addPennyAndRoundStop(getOpenPositionOrder()
-									.getAverageFilledPrice().doubleValue(),
-									getTrade().getSide(), action, 0.01), true);
-				}
-				/*
-				 * Close any opened positions with a market order at the end of
-				 * the day.
-				 */
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 15, 55))) {
-					closeAllOpenPositions();
-					_log.info("PositionManagerStrategy 15:55:00 done: "
-							+ getSymbol() + " Time: " + startPeriod);
-					this.cancel();
 				}
 			}
 
+			/*
+			 * 10:30 Move stop order to b.e.
+			 */
+			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
+					10, 30))) {
+
+				_log.info("Rule move stop to b.e.. Symbol:" + getSymbol()
+						+ " Time: " + startPeriod);
+				String action = Action.SELL;
+				if (getTrade().getSide().equals(Side.SLD)) {
+					action = Action.BUY;
+				}
+				moveStopOCAPrice(
+
+						addPennyAndRoundStop(getOpenPositionOrder()
+								.getAverageFilledPrice().doubleValue(),
+								getTrade().getSide(), action, 0.01), true);
+			}
+			/*
+			 * Close any opened positions with a market order at the end of the
+			 * day.
+			 */
+			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
+					15, 55))) {
+				closeAllOpenPositions();
+				_log.info("PositionManagerStrategy 15:55:00 done: "
+						+ getSymbol() + " Time: " + startPeriod);
+				this.cancel();
+			}
 		} catch (Exception ex) {
 			_log.error("Error Position Manager exception: " + ex.getMessage(),
 					ex);
