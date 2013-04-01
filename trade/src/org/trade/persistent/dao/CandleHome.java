@@ -183,6 +183,11 @@ public class CandleHome {
 				Predicate predicate = builder.lessThanOrEqualTo(end, endPeriod);
 				predicates.add(predicate);
 			}
+			if (null != barSize) {
+				Predicate predicate = builder.equal(from.get("barSize"),
+						barSize);
+				predicates.add(predicate);
+			}
 			query.where(predicates.toArray(new Predicate[] {}));
 			TypedQuery<Candle> typedQuery = entityManager.createQuery(query);
 			List<Candle> items = typedQuery.getResultList();
@@ -246,8 +251,7 @@ public class CandleHome {
 				predicates.add(predicateEndDate);
 			}
 			if (null != barSize) {
-				Expression<Integer> expBarSize = from.get("barSize");
-				Predicate predicate = builder.greaterThanOrEqualTo(expBarSize,
+				Predicate predicate = builder.equal(from.get("barSize"),
 						barSize);
 				predicates.add(predicate);
 			}
@@ -335,6 +339,11 @@ public class CandleHome {
 			if (null != endPeriod) {
 				Predicate predicate = builder.equal(from.get("endPeriod"),
 						endPeriod);
+				predicates.add(predicate);
+			}
+			if (null != barSize) {
+				Predicate predicate = builder.equal(from.get("barSize"),
+						barSize);
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));
