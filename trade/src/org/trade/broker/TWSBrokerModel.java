@@ -2195,40 +2195,47 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Contract contract = m_historyDataRequests.get(reqId);
 
 				if (dateString.contains("finished-")) {
-					// _log.info("HistoricalData complete: "
-					// + tradestrategy.getContract().getSymbol());
 
-					/*
-					 * The last one has arrived the reqId is the
-					 * tradeStrategyId. Remove this from the processing vector.
-					 */
+					synchronized (contract) {
+						Tradestrategy tradestrategy = contract
+								.getTradestrategies().get(0);
+						CandleSeries candleSeries = tradestrategy
+								.getDatasetContainer().getBaseCandleSeries();
+						m_tradePersistentModel
+								.persistCandleSeries(candleSeries);
 
-					synchronized (m_historyDataRequests) {
-						m_historyDataRequests.remove(reqId);
-						m_historyDataRequests.notifyAll();
-						_log.info("Historical data complete for: " + reqId);
-					}
+						_log.info("HistoricalData complete: "
+								+ contract.getSymbol() + " candles to saved: "
+								+ candleSeries.getItemCount());
+						/*
+						 * The last one has arrived the reqId is the
+						 * tradeStrategyId. Remove this from the processing
+						 * vector.
+						 */
+						synchronized (m_historyDataRequests) {
+							m_historyDataRequests.remove(reqId);
+							m_historyDataRequests.notifyAll();
+							_log.info("Historical data complete for: " + reqId);
+						}
 
-					Tradestrategy tradestrategy = contract.getTradestrategies()
-							.get(0);
-					CandleSeries candleSeries = tradestrategy
-							.getDatasetContainer().getBaseCandleSeries();
-					m_tradePersistentModel.persistCandleSeries(candleSeries);
+						/*
+						 * Fire HistoricalDataComplete this will start any
+						 * strategies. If today is a trading day then start real
+						 * time bars. If not cancel the indicator thread on the
+						 * dataset container.
+						 */
 
-					/*
-					 * Check to see if the trading day is today and this
-					 * strategy is selected to trade and that the market is open
-					 */
-
-					for (Tradestrategy item : contract.getTradestrategies()) {
-						this.fireHistoricalDataComplete(item);
-						if (item.getTradingday().getClose().after(new Date())) {
-							if (!this.isRealtimeBarsRunning(contract)) {
-								this.onReqRealTimeBars(contract, item
-										.getStrategy().getMarketData());
+						for (Tradestrategy item : contract.getTradestrategies()) {
+							this.fireHistoricalDataComplete(item);
+							if (item.getTradingday().getClose()
+									.after(new Date())) {
+								if (!this.isRealtimeBarsRunning(contract)) {
+									this.onReqRealTimeBars(contract, item
+											.getStrategy().getMarketData());
+								}
+							} else {
+								item.getDatasetContainer().cancel();
 							}
-						} else {
-							item.getDatasetContainer().cancel();
 						}
 					}
 
