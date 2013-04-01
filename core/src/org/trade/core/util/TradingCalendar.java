@@ -961,12 +961,18 @@ public class TradingCalendar {
 	 * @return boolean
 	 */
 	public static boolean isMarketHours(Date openDate, Date closeDate, Date date) {
-		int diffDays = TradingCalendar.daysDiff(openDate, closeDate);
-		if (TradingCalendar.between(date, TradingCalendar.getSpecificTime(
-				openDate, date), TradingCalendar.addBusinessDays(
-				TradingCalendar.getSpecificTime(closeDate, date), diffDays))) {
-			return true;
+
+		if (isTradingDay(date)) {
+			int diffDays = TradingCalendar.daysDiff(openDate, closeDate);
+			if (TradingCalendar
+					.between(date, TradingCalendar.getSpecificTime(openDate,
+							date), TradingCalendar.addBusinessDays(
+							TradingCalendar.getSpecificTime(closeDate, date),
+							diffDays))) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 

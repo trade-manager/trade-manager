@@ -108,17 +108,30 @@ public class TradingCalendarTest extends TestCase {
 	@Test
 	public void testIsMarketHours() {
 
+	//	TradingCalendar.getFormattedDate("20130401 09:30", "yyyyMMdd HH:mm");
 		Date openDate = TradingCalendar.getBusinessDayStart(new Date());
 		Date closeDate = TradingCalendar.getBusinessDayEnd(new Date());
-		_log.info("Busday openDate: " + openDate);
-		_log.info("Busday closeDate: " + closeDate);
-		Date date = TradingCalendar.addDays(new Date(), -1);
+		Date date = TradingCalendar.addBusinessDays(new Date(), -1);
 		date = TradingCalendar.getSpecificTime(date, 9, 30);
-		_log.info("date: " + date);
+		_log.info("Business day openDate: " + openDate
+				+ " Business day closeDate: " + closeDate + " Date: " + date);
 		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate,
 				date));
 		date = TradingCalendar.getSpecificTime(date, 16, 00);
-		_log.info("date: " + date);
+		_log.info("Business day openDate: " + openDate
+				+ " Business day closeDate: " + closeDate + " Date: " + date);
+		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate,
+				date));
+		
+		date = TradingCalendar.getSpecificTime(date, 15, 00);
+		_log.info("Business day openDate: " + openDate
+				+ " Business day closeDate: " + closeDate + " Date: " + date);
+		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate,
+				date));
+		
+		date = TradingCalendar.getSpecificTime(date, 17, 00);
+		_log.info("Business day openDate: " + openDate
+				+ " Business day closeDate: " + closeDate + " Date: " + date);
 		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate,
 				date));
 	}
