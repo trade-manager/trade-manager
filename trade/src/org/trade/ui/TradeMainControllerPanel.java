@@ -1911,9 +1911,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					for (Date date : keys) {
 						Tradingday itemTradingday = this.tradingdays
 								.getTradingdays().get(date);
-						if (!TradingCalendar.isMarketHours(
+						Date today = new Date();
+						if (!(TradingCalendar.isMarketHours(
 								itemTradingday.getOpen(),
-								itemTradingday.getClose(), new Date())) {
+								itemTradingday.getClose(), today) && TradingCalendar
+								.sameDay(itemTradingday.getOpen(), today))) {
 							if (itemTradingday.getTradestrategies().isEmpty())
 								continue;
 							Tradingday tradingday = (Tradingday) itemTradingday
