@@ -381,7 +381,8 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 				if (currentRSI == Double.MAX_VALUE) {
 					avgGainRSI = posSumCloseDiff / getLength();
 					avgLossRSI = negSumCloseDiff / getLength();
-					currentRSI = 100 - (100 / (1 + (avgGainRSI / avgLossRSI)));
+					currentRSI = 100 - (100 / (1 + (avgGainRSI / (avgLossRSI == 0 ? 1
+							: avgLossRSI))));
 				} else {
 					if (preDiffCloseValue > 0) {
 						avgGainRSI = (((prevAvgGainRSI * (getLength() - 1)) + Math
@@ -395,7 +396,8 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + Math
 								.abs(preDiffCloseValue))) / getLength();
 					}
-					currentRSI = 100 - (100 / (1 + (avgGainRSI / avgLossRSI)));
+					currentRSI = 100 - (100 / (1 + (avgGainRSI / (avgLossRSI == 0 ? 1
+							: avgLossRSI))));
 				}
 
 				if (newBar) {
