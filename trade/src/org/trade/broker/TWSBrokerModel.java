@@ -2195,47 +2195,41 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Contract contract = m_historyDataRequests.get(reqId);
 
 				if (dateString.contains("finished-")) {
+					Tradestrategy tradestrategy = contract.getTradestrategies()
+							.get(0);
+					CandleSeries candleSeries = tradestrategy
+							.getDatasetContainer().getBaseCandleSeries();
+					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
-					synchronized (contract) {
-						Tradestrategy tradestrategy = contract
-								.getTradestrategies().get(0);
-						CandleSeries candleSeries = tradestrategy
-								.getDatasetContainer().getBaseCandleSeries();
-						m_tradePersistentModel
-								.persistCandleSeries(candleSeries);
+					_log.info("HistoricalData complete: "
+							+ contract.getSymbol() + " candles to saved: "
+							+ candleSeries.getItemCount());
+					/*
+					 * The last one has arrived the reqId is the
+					 * tradeStrategyId. Remove this from the processing vector.
+					 */
+					synchronized (m_historyDataRequests) {
+						m_historyDataRequests.remove(reqId);
+						m_historyDataRequests.notifyAll();
+						_log.info("Historical data complete for: " + reqId);
+					}
 
-						_log.info("HistoricalData complete: "
-								+ contract.getSymbol() + " candles to saved: "
-								+ candleSeries.getItemCount());
-						/*
-						 * The last one has arrived the reqId is the
-						 * tradeStrategyId. Remove this from the processing
-						 * vector.
-						 */
-						synchronized (m_historyDataRequests) {
-							m_historyDataRequests.remove(reqId);
-							m_historyDataRequests.notifyAll();
-							_log.info("Historical data complete for: " + reqId);
-						}
+					/*
+					 * Fire HistoricalDataComplete this will start any
+					 * strategies. If today is a trading day then start real
+					 * time bars. If not cancel the indicator thread on the
+					 * dataset container.
+					 */
 
-						/*
-						 * Fire HistoricalDataComplete this will start any
-						 * strategies. If today is a trading day then start real
-						 * time bars. If not cancel the indicator thread on the
-						 * dataset container.
-						 */
-
-						for (Tradestrategy item : contract.getTradestrategies()) {
-							this.fireHistoricalDataComplete(item);
-							if (item.getTradingday().getClose()
-									.after(new Date())) {
-								if (!this.isRealtimeBarsRunning(contract)) {
-									this.onReqRealTimeBars(contract, item
-											.getStrategy().getMarketData());
-								}
-							} else {
-								item.getDatasetContainer().cancel();
+					for (Tradestrategy item : contract.getTradestrategies()) {
+						this.fireHistoricalDataComplete(item);
+						if (item.getTradingday().getClose().after(new Date())) {
+							if (!this.isRealtimeBarsRunning(contract)) {
+								this.onReqRealTimeBars(contract, item
+										.getStrategy().getMarketData());
 							}
+						} else {
+							item.getDatasetContainer().cancel();
 						}
 					}
 
