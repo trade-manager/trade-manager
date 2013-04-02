@@ -234,7 +234,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 								this.tradestrategy.getContract()
 										.getIdContract(), this.tradestrategy
 										.getTradingday().getOpen(),
-								this.tradestrategy.getTradingday().getClose(),
+								this.tradestrategy.getTradingday().getOpen(),
 								backTestBarSize);
 
 				if (candlesTradingday.isEmpty()) {
@@ -244,7 +244,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 											.getIdContract(),
 									this.tradestrategy.getTradingday()
 											.getOpen(), this.tradestrategy
-											.getTradingday().getClose(),
+											.getTradingday().getOpen(),
 									this.tradestrategy.getBarSize());
 				}
 				for (Candle candle : candlesTradingday) {
