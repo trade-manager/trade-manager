@@ -35,7 +35,6 @@
  */
 package org.trade.core.valuetype;
 
-
 import junit.framework.TestCase;
 
 import org.junit.Test;
