@@ -1344,11 +1344,35 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void error(int id, int code, String msg) {
 		String symbol = "N/A";
 		BrokerModelException brokerModelException = null;
+		if (m_contractRequests.containsKey(id)) {
+			symbol = m_contractRequests.get(id).getSymbol();
+			synchronized (m_contractRequests) {
+				m_contractRequests.remove(id);
+				m_contractRequests.notifyAll();
+			}
+		}
+		if (m_historyDataRequests.containsKey(id)) {
+			symbol = m_historyDataRequests.get(id).getSymbol();
+			synchronized (m_historyDataRequests) {
+				m_historyDataRequests.remove(id);
+				m_historyDataRequests.notifyAll();
+			}
+		}
+		if (m_realTimeBarsRequests.containsKey(id)) {
+			symbol = m_realTimeBarsRequests.get(id).getSymbol();
+		}
+		if (m_marketDataRequests.containsKey(id)) {
+			symbol = m_marketDataRequests.get(id).getSymbol();
+		}
 
 		/*
 		 * Error code 162 (Historical data request pacing violation)and 366 (No
 		 * historical data query found for ticker id) are error code for no
 		 * market or historical data found.
+		 * 
+		 * Error code 202,Order rejected 201 Order cancelled
+		 * 
+		 * Error code 321 Server error when validating an API client request.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
 				|| (code == 366) || (code == 162) || (code == 321)) {
@@ -1375,36 +1399,20 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 
 		} else {
-			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
-					+ " Code: " + code + " Msg: " + msg);
-			if (m_historyDataRequests.containsKey(id)) {
-				symbol = m_historyDataRequests.get(id).getSymbol();
-				synchronized (m_historyDataRequests) {
-					m_historyDataRequests.remove(id);
-					m_historyDataRequests.notifyAll();
-				}
-			}
 			if (m_realTimeBarsRequests.containsKey(id)) {
-				symbol = m_realTimeBarsRequests.get(id).getSymbol();
 				synchronized (m_realTimeBarsRequests) {
 					m_realTimeBarsRequests.remove(id);
 					m_realTimeBarsRequests.notifyAll();
 				}
 			}
 			if (m_marketDataRequests.containsKey(id)) {
-				symbol = m_marketDataRequests.get(id).getSymbol();
 				synchronized (m_marketDataRequests) {
 					m_marketDataRequests.remove(id);
 					m_marketDataRequests.notifyAll();
 				}
 			}
-			if (m_contractRequests.containsKey(id)) {
-				symbol = m_contractRequests.get(id).getSymbol();
-				synchronized (m_contractRequests) {
-					m_contractRequests.remove(id);
-					m_contractRequests.notifyAll();
-				}
-			}
+			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
+					+ " Code: " + code + " Msg: " + msg);
 
 			brokerModelException = new BrokerModelException(1, code, "Req Id: "
 					+ id + " Error Code: " + code + " Symbol: " + symbol + " "
@@ -2201,6 +2209,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Contract contract = m_historyDataRequests.get(reqId);
 
 				if (dateString.contains("finished-")) {
+
 					Tradestrategy tradestrategy = contract.getTradestrategies()
 							.get(0);
 					CandleSeries candleSeries = tradestrategy
@@ -2210,6 +2219,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					_log.info("HistoricalData complete: "
 							+ contract.getSymbol() + " candles to saved: "
 							+ candleSeries.getItemCount());
+
 					/*
 					 * The last one has arrived the reqId is the
 					 * tradeStrategyId. Remove this from the processing vector.
@@ -2258,6 +2268,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 					for (Tradestrategy tradestrategy : contract
 							.getTradestrategies()) {
+
 						/*
 						 * For daily bars set the time to the open time.
 						 */

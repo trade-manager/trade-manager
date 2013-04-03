@@ -488,11 +488,11 @@ public class CandleSeries extends IndicatorSeries {
 			int rollupInterval) {
 
 		int index = this.indexOf(time);
-//		_log.info("Symbol :" + this.getSymbol() + " Bar Time: " + time
-//				+ " Index: " + index + " open: " + open + " high: " + high
-//				+ " low: " + low + " close: " + close + " volume: " + volume
-//				+ " vwap: " + vwap + " tradeCount: " + tradeCount
-//				+ " rollupInterval: " + rollupInterval);
+		// _log.info("Symbol :" + this.getSymbol() + " Bar Time: " + time
+		// + " Index: " + index + " open: " + open + " high: " + high
+		// + " low: " + low + " close: " + close + " volume: " + volume
+		// + " vwap: " + vwap + " tradeCount: " + tradeCount
+		// + " rollupInterval: " + rollupInterval);
 
 		this.setCalcVwap(rollupInterval, volume, vwap);
 		CandleItem candle = null;

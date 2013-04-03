@@ -969,14 +969,35 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	public void error(int id, int code, String msg) {
 		String symbol = "N/A";
 		BrokerModelException brokerModelException = null;
+		if (m_contractRequests.containsKey(id)) {
+			symbol = m_contractRequests.get(id).getSymbol();
+			synchronized (m_contractRequests) {
+				m_contractRequests.remove(id);
+				m_contractRequests.notifyAll();
+			}
+		}
+		if (m_historyDataRequests.containsKey(id)) {
+			symbol = m_historyDataRequests.get(id).getSymbol();
+			synchronized (m_historyDataRequests) {
+				m_historyDataRequests.remove(id);
+				m_historyDataRequests.notifyAll();
+			}
+		}
+		if (m_realTimeBarsRequests.containsKey(id)) {
+			symbol = m_realTimeBarsRequests.get(id).getSymbol();
+		}
 
 		/*
 		 * Error code 162 (Historical data request pacing violation)and 366 (No
 		 * historical data query found for ticker id) are error code for no
 		 * market or historical data found.
+		 * 
+		 * Error code 202,Order rejected 201 Order cancelled
+		 * 
+		 * Error code 321 Server error when validating an API client request.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
-				|| (code == 366) || (code == 162)) {
+				|| (code == 366) || (code == 162) || (code == 321)) {
 			if (((code > 1999) && (code < 3000))) {
 				_log.info("BrokerModel Req Id: " + id + " Code: " + code
 						+ " Msg: " + msg);
@@ -987,6 +1008,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						+ " Msg: " + msg);
 				brokerModelException = new BrokerModelException(2, code,
 						"Order Id: " + id + " Code: " + code + " " + msg);
+			} else if (code == 321) {
+				_log.info("BrokerModel Req Id: " + id + " Code: " + code
+						+ " Msg: " + msg);
+				return;
 			} else {
 				_log.warn("BrokerModel symbol: " + symbol + " Req Id: " + id
 						+ " Code: " + code + " Msg: " + msg);
@@ -996,22 +1021,16 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			}
 
 		} else {
-			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
-					+ " Code: " + code + " Msg: " + msg);
-			if (m_historyDataRequests.containsKey(id)) {
-				symbol = m_historyDataRequests.get(id).getSymbol();
-				synchronized (m_historyDataRequests) {
-					m_historyDataRequests.remove(id);
-					m_historyDataRequests.notifyAll();
-				}
-			}
 			if (m_realTimeBarsRequests.containsKey(id)) {
-				symbol = m_realTimeBarsRequests.get(id).getSymbol();
 				synchronized (m_realTimeBarsRequests) {
 					m_realTimeBarsRequests.remove(id);
 					m_realTimeBarsRequests.notifyAll();
 				}
 			}
+
+			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
+					+ " Code: " + code + " Msg: " + msg);
+
 			brokerModelException = new BrokerModelException(1, code, "Req Id: "
 					+ id + " Error Code: " + code + " Symbol: " + symbol + " "
 					+ msg);
