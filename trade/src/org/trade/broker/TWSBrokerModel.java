@@ -580,6 +580,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
 								.addBusinessDays(endDate, backfillOffsetDays)));
+				/*
+				 * TODO For some reason TWS has stopped recognizing EDT.
+				 */
+				if (TradingCalendar.inDaylightTime(endDate)) {
+					endDate = TradingCalendar.addHours(endDate, 1);
+				}
 				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 				String endDateTime = m_sdfGMT.format(endDate);
 

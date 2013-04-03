@@ -35,8 +35,10 @@
  */
 package org.trade.core.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.TestCase;
@@ -106,9 +108,24 @@ public class TradingCalendarTest extends TestCase {
 	}
 
 	@Test
+	public void testGetGMTSpecificTime() {
+
+		SimpleDateFormat m_sdfGMT = new SimpleDateFormat("yyyyMMdd HH:mm:ss z");
+		Date endDate = TradingCalendar.getBusinessDayEnd(new Date());
+		_log.info("busdayStartDate: " + endDate);
+		if (TradingCalendar.inDaylightTime(endDate)) {
+			endDate = TradingCalendar.addHours(endDate, 1);
+		}
+		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
+		String setDate = m_sdfGMT.format(endDate);
+		_log.info("setDate: " + setDate);
+
+	}
+
+	@Test
 	public void testIsMarketHours() {
 
-	//	TradingCalendar.getFormattedDate("20130401 09:30", "yyyyMMdd HH:mm");
+		// TradingCalendar.getFormattedDate("20130401 09:30", "yyyyMMdd HH:mm");
 		Date openDate = TradingCalendar.getBusinessDayStart(new Date());
 		Date closeDate = TradingCalendar.getBusinessDayEnd(new Date());
 		Date date = TradingCalendar.addBusinessDays(new Date(), -1);
@@ -122,13 +139,13 @@ public class TradingCalendarTest extends TestCase {
 				+ " Business day closeDate: " + closeDate + " Date: " + date);
 		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate,
 				date));
-		
+
 		date = TradingCalendar.getSpecificTime(date, 15, 00);
 		_log.info("Business day openDate: " + openDate
 				+ " Business day closeDate: " + closeDate + " Date: " + date);
 		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate,
 				date));
-		
+
 		date = TradingCalendar.getSpecificTime(date, 17, 00);
 		_log.info("Business day openDate: " + openDate
 				+ " Business day closeDate: " + closeDate + " Date: " + date);
