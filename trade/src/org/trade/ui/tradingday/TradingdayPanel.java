@@ -758,12 +758,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					tradingday = m_tradingdayModel.getData().getTradingday(
 							openDate.getDate(), closeDate.getDate());
 				}
-				if (null == tradingday) {
-					this.setStatusBarMessage(
-							"Please select or add a Tradingday.",
-							BasePanel.WARNING);
-					return;
-				}
 
 				m_tradingdays.populateDataFromFile(fileName, tradingday);
 				m_tradingdayModel.setData(m_tradingdays);
@@ -785,6 +779,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				}
 			}
 			this.clearStatusBarMessage();
+		} catch (PersistentModelException ex1) {
+			this.setErrorMessage("Exception while reading csv file.",
+					ex1.getMessage(), ex1);
 		} catch (Exception ex) {
 			this.setErrorMessage("Exception while reading csv file.",
 					ex.getMessage(), ex);

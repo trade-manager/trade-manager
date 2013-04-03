@@ -2229,7 +2229,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					synchronized (m_historyDataRequests) {
 						m_historyDataRequests.remove(reqId);
 						m_historyDataRequests.notifyAll();
-						_log.info("Historical data complete for: " + reqId);
+						_log.info("Historical data complete for: " + reqId
+								+ " Symbol: " + contract.getSymbol());
 					}
 
 					/*

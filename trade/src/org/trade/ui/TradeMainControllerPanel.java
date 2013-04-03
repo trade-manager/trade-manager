@@ -1984,6 +1984,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				publish(message);
 			} catch (InterruptedException ex) {
 				// Do nothing
+				setProgress(0);
 			} catch (Exception ex) {
 				_log.error("Error getting history data.", ex.getMessage());
 				setErrorMessage("Error getting history data.", ex.getMessage(),
@@ -2009,7 +2010,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Integer barSize, Integer chartDays, int totalSumbitted)
 				throws InterruptedException, BrokerModelException {
 
-			if (m_brokerModel.isHistoricalDataRunning(contract)) {
+			if (m_brokerModel.isHistoricalDataRunning(contract)
+					|| this.isCancelled()) {
 				return totalSumbitted;
 			}
 			_log.info("submitBrokerRequest: " + contract.getSymbol()
@@ -2019,8 +2021,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			hasSubmittedInSeconds(totalSumbitted, requestsPerPeriod);
 			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
 
-			// _log.info("Total: " + this.grandTotal + " totalSumbitted: "
-			// + totalSumbitted);
+			_log.info("Total: " + this.grandTotal + " totalSumbitted: "
+					+ totalSumbitted);
 			/*
 			 * Need to slow things down as limit is 60 including real time bars
 			 * requests. When connected to TWS. Note only TWSManager return true

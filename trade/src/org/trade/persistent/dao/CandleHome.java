@@ -49,6 +49,8 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.candle.CandleItem;
@@ -58,6 +60,8 @@ import org.trade.strategy.data.candle.CandleItem;
 @Stateless
 public class CandleHome {
 
+	private final static Logger _log = LoggerFactory
+			.getLogger(CandleHome.class);
 	private EntityManager entityManager = null;
 
 	public CandleHome() {
@@ -73,10 +77,11 @@ public class CandleHome {
 	 */
 	public synchronized void persistCandleSeries(CandleSeries candleSeries)
 			throws Exception {
-
+		Candle transientInstance = null;
 		try {
 			if (candleSeries.isEmpty())
 				return;
+
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingday tradingday = null;
@@ -86,6 +91,12 @@ public class CandleHome {
 
 				CandleItem candleItem = (CandleItem) candleSeries
 						.getDataItem(i);
+				if (null != candleItem.getCandle().getIdCandle()) {
+					_log.error("Count: " + i + " Symbol: "
+							+ candleSeries.getSymbol() + "candleid: "
+							+ transientInstance.getIdCandle() + " open: "
+							+ transientInstance.getStartPeriod());
+				}
 
 				if (!candleItem.getCandle().getTradingday().equals(tradingday)) {
 
@@ -121,7 +132,7 @@ public class CandleHome {
 					}
 				}
 
-				Candle transientInstance = candleItem.getCandle();
+				transientInstance = candleItem.getCandle();
 				transientInstance.setTradingday(tradingday);
 				transientInstance.setContract(contract);
 				entityManager.persist(transientInstance);

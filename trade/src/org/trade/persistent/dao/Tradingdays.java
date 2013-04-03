@@ -371,6 +371,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					}
 
 					if (null == tradestrategy.getTradingday()) {
+						if (null == tradingday) {
+							throw new PersistentModelException(
+									"Please select a Tradingday");
+						}
 						tradestrategy.setTradingday(tradingday);
 						tradingday.addTradestrategy(tradestrategy);
 					} else {
