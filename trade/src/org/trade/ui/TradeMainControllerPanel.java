@@ -1828,6 +1828,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private long startTime = 0;
 		private long lastSubmittedTime = 0;
 		private Integer backTestBarSize = 0;
+		/*
+		 * Number of requests to be submitted every few seconds. TWS has a limit
+		 * of 6 per 2 seconds.
+		 */
+
+		private double requestsPerPeriod = 2.8;
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -1944,7 +1950,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 
 				/*
-				 * Finish reprocessing any that have not yet been processed.
+				 * Finish re-processing any that have not yet been processed.
 				 */
 
 				while (!runningContractRequests.isEmpty()) {
@@ -2010,7 +2016,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					+ " endDate: " + endDate);
 
 			totalSumbitted++;
-			hasSubmittedInSeconds(totalSumbitted, 2.5);
+			hasSubmittedInSeconds(totalSumbitted, requestsPerPeriod);
 			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
 
 			// _log.info("Total: " + this.grandTotal + " totalSumbitted: "
@@ -2172,22 +2178,22 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				throws BrokerModelException, InterruptedException,
 				CloneNotSupportedException, PersistentModelException {
 
-			Contract prevContract = null;
-			Integer prevBarSize = null;
-			Integer prevChartDays = null;
 			/*
 			 * Remove those that are not running as these do not need to be
 			 * shared.
 			 */
 			for (Tradestrategy tradestrategy : m_indicatorTradestrategy
 					.values()) {
-				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)
-						&& !m_brokerModel
-								.isHistoricalDataRunning(tradestrategy)) {
+				if (!(m_brokerModel.isRealtimeBarsRunning(tradestrategy) && m_brokerModel
+						.isHistoricalDataRunning(tradestrategy))) {
 					m_indicatorTradestrategy.remove(tradestrategy
 							.getIdTradeStrategy());
 				}
 			}
+
+			Contract prevContract = null;
+			Integer prevBarSize = null;
+			Integer prevChartDays = null;
 
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 
@@ -2295,6 +2301,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				ConcurrentHashMap<Integer, Tradingday> runningContractRequests)
 				throws CloneNotSupportedException {
 
+			if (tradingday.getTradestrategies().isEmpty())
+				return tradingday;
+
 			Collections.sort(tradingday.getTradestrategies(),
 					Tradestrategy.TRADINGDAY_CONTRACT);
 
@@ -2305,7 +2314,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						.getIdTradingDay());
 			} else {
 				reProcessTradingday = (Tradingday) tradingday.clone();
-
 			}
 			Tradingday toProcessTradingday = (Tradingday) tradingday.clone();
 			Contract currContract = null;

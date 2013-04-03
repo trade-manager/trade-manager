@@ -112,13 +112,13 @@ public class TradingCalendarTest extends TestCase {
 
 		SimpleDateFormat m_sdfGMT = new SimpleDateFormat("yyyyMMdd HH:mm:ss z");
 		Date endDate = TradingCalendar.getBusinessDayEnd(new Date());
-		_log.info("busdayStartDate: " + endDate);
+		_log.info("BusinessDayEnd: " + endDate);
 		if (TradingCalendar.inDaylightTime(endDate)) {
 			endDate = TradingCalendar.addHours(endDate, 1);
 		}
 		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String setDate = m_sdfGMT.format(endDate);
-		_log.info("setDate: " + setDate);
+		_log.info("BusinessDayEnd GMT: " + setDate);
 
 	}
 

@@ -488,6 +488,8 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 		Tradingday tradingday = (Tradingday) super.clone();
 		List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
 		tradingday.setTradestrategies(tradestrategies);
+		List<Candle> candles = new ArrayList<Candle>(0);
+		tradingday.setCandles(candles);
 		return tradingday;
 	}
 

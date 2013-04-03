@@ -1372,7 +1372,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 * 
 		 * Error code 202,Order rejected 201 Order cancelled
 		 * 
-		 * Error code 321 Server error when validating an API client request.
+		 * Error code 321 Error validating request:-'jd' : cause - FA data
+		 * operations ignored for non FA customers.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
 				|| (code == 366) || (code == 162) || (code == 321)) {
@@ -1794,7 +1795,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void updatePortfolio(com.ib.client.Contract contract, int position,
 			double marketPrice, double marketValue, double averageCost,
 			double unrealizedPNL, double realizedPNL, String accountNumber) {
-		_log.info("updatePortfolio Account#: " + accountNumber + " contract:"
+		_log.debug("updatePortfolio Account#: " + accountNumber + " contract:"
 				+ contract.m_symbol + " position:" + position + " marketPrice:"
 				+ marketPrice + " marketValue:" + marketValue + " averageCost:"
 				+ averageCost + " unrealizedPNL:" + unrealizedPNL
@@ -1820,8 +1821,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 		synchronized (key) {
 
-			_log.info("updateAccountValue Account#: " + accountNumber + " Key:"
-					+ key + " Value:" + value + " Currency:" + currency);
+			_log.debug("updateAccountValue Account#: " + accountNumber
+					+ " Key:" + key + " Value:" + value + " Currency:"
+					+ currency);
 			if (m_accountRequests.containsKey(accountNumber)) {
 				Account account = m_accountRequests.get(accountNumber);
 				if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
@@ -2244,8 +2246,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								this.onReqRealTimeBars(contract, item
 										.getStrategy().getMarketData());
 							}
-						} else {
-							item.getDatasetContainer().cancel();
 						}
 					}
 

@@ -994,7 +994,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		 * 
 		 * Error code 202,Order rejected 201 Order cancelled
 		 * 
-		 * Error code 321 Server error when validating an API client request.
+		 * Error code 321 Error validating request:-'jd' : cause - FA data
+		 * operations ignored for non FA customers.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
 				|| (code == 366) || (code == 162) || (code == 321)) {
