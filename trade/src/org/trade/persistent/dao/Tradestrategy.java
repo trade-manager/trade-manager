@@ -512,7 +512,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 			this.getTradingday().setDirty(dirty);
 	}
 
-	public static final Comparator<Tradestrategy> DATE_ORDER = new Comparator<Tradestrategy>() {
+	public static final Comparator<Tradestrategy> DATE_ORDER_ASC = new Comparator<Tradestrategy>() {
 		public int compare(Tradestrategy o1, Tradestrategy o2) {
 			m_ascending = true;
 			int returnVal = 0;

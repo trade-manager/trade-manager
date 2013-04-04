@@ -497,8 +497,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 							.getClose())) {
 						this.add(tradestrategy.getTradingday());
 					}
-					Collections.sort(tradestrategy.getTradingday()
-							.getTradestrategies(), Tradestrategy.DATE_ORDER);
+					Collections
+							.sort(tradestrategy.getTradingday()
+									.getTradestrategies(),
+									Tradestrategy.DATE_ORDER_ASC);
 				}
 			}
 

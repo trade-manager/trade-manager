@@ -103,6 +103,8 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 		Collections.sort(tradingdays.getTradingdays(),
 				Tradingday.DATE_ORDER_DESC);
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
+			Collections.sort(tradingday.getTradestrategies(),
+					Tradestrategy.DATE_ORDER_ASC);
 			addTradingday(tradingday);
 		}
 	}
