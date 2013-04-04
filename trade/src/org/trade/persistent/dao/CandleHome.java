@@ -96,6 +96,7 @@ public class CandleHome {
 							+ candleSeries.getSymbol() + "candleid: "
 							+ candleItem.getCandle().getIdCandle() + " open: "
 							+ candleItem.getCandle().getStartPeriod());
+					continue;
 				}
 
 				if (!candleItem.getCandle().getTradingday().equals(tradingday)) {
