@@ -2217,7 +2217,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 
-					_log.info("HistoricalData complete Req Id: " + reqId
+					_log.warn("HistoricalData complete Req Id: " + reqId
 							+ " Symbol: " + contract.getSymbol()
 							+ " Tradingday: "
 							+ tradestrategy.getTradingday().getOpen()

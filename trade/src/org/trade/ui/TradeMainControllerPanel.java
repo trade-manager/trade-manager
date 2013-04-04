@@ -1830,7 +1830,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * of 6 per 2 seconds.
 		 */
 
-		private double requestsPerPeriod = 2.8;
+		private double requestsPerPeriod = 2.5;
+		private int historicalDataSize = -1;
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -1881,19 +1882,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									runningContractRequests), totalSumbitted);
 					/*
 					 * Every reSumbittedAt value submitted contracts try to run
-					 * any that could not be run due to a conflict.
+					 * any that could not be run due to a conflict. Run then in
+					 * asc date order value.
 					 */
 					if (totalSumbitted > reSumbittedAt) {
 						reSumbittedAt = totalSumbitted + reSumbittedAt;
-						for (Integer idTradeingday : runningContractRequests
-								.keySet()) {
-							Tradingday reProcessTradingday = runningContractRequests
-									.get(idTradeingday);
-							totalSumbitted = processTradingday(
-									getTradingdayToProcess(reProcessTradingday,
-											runningContractRequests),
-									totalSumbitted);
-						}
+						totalSumbitted = reProcessTradingdays(
+								runningContractRequests, totalSumbitted);
 					}
 				}
 				/*
@@ -1942,20 +1937,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 
 				/*
-				 * Finish re-processing any that have not yet been processed.
+				 * Every reSumbittedAt value submitted contracts try to run any
+				 * that could not be run due to a conflict. Run then in asc date
+				 * order value.
 				 */
 
-				while (!runningContractRequests.isEmpty()) {
-					for (Integer idTradeingday : runningContractRequests
-							.keySet()) {
-						Tradingday reProcessTradingday = runningContractRequests
-								.get(idTradeingday);
-						totalSumbitted = processTradingday(
-								getTradingdayToProcess(reProcessTradingday,
-										runningContractRequests),
-								totalSumbitted);
-					}
-				}
+				totalSumbitted = reProcessTradingdays(runningContractRequests,
+						totalSumbitted);
 
 				synchronized (this.brokerManagerModel.getHistoricalData()) {
 					while ((this.brokerManagerModel.getHistoricalData().size() > 0)
@@ -1977,7 +1965,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			} catch (InterruptedException ex) {
 				// Do nothing
-
 				_log.error("doInBackground interupted Msg: ", ex.getMessage());
 			} catch (Exception ex) {
 				setErrorMessage("Error getting history data.", ex.getMessage(),
@@ -2073,6 +2060,50 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				this.lastSubmittedTime = System.currentTimeMillis();
 			}
+		}
+
+		/**
+		 * Method reProcessTradingdays. Every reSumbittedAt value submitted
+		 * contracts try to run any that could not be run due to a conflict. Run
+		 * then in asc date order value.
+		 * 
+		 * @param runningContractRequests
+		 *            ConcurrentHashMap<Integer, Tradingday>
+		 * @param totalSumbitted
+		 *            int
+		 * @return int
+		 * @throws Exception
+		 */
+
+		private int reProcessTradingdays(
+				ConcurrentHashMap<Integer, Tradingday> runningContractRequests,
+				int totalSumbitted) throws Exception {
+
+			synchronized (this.brokerManagerModel.getHistoricalData()) {
+				while ((this.brokerManagerModel.getHistoricalData().size() != historicalDataSize)
+						&& !this.isCancelled()
+						&& !runningContractRequests.isEmpty()) {
+					for (Tradingday item : tradingdays.getTradingdays()) {
+						for (Integer idTradeingday : runningContractRequests
+								.keySet()) {
+							Tradingday reProcessTradingday = runningContractRequests
+									.get(idTradeingday);
+							if (item.equals(reProcessTradingday)) {
+								totalSumbitted = processTradingday(
+										getTradingdayToProcess(
+												reProcessTradingday,
+												runningContractRequests),
+										totalSumbitted);
+								break;
+							}
+						}
+					}
+					historicalDataSize = this.brokerManagerModel
+							.getHistoricalData().size();
+					this.brokerManagerModel.getHistoricalData().wait();
+				}
+			}
+			return totalSumbitted;
 		}
 
 		/**

@@ -78,7 +78,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.table.TableRowSorter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -575,7 +574,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			rsDetail.setSortKeys(null);
 			RowSorter<?> rsSummary = m_tradestrategyTable.getRowSorter();
 			rsSummary.setSortKeys(null);
-			((TableRowSorter<?>) m_tradingdayTable.getRowSorter()).sort();
 			if (m_tradingdays.getTradingdays().size() > 0) {
 				m_tradingdayTable.setRowSelectionInterval(0, 0);
 
