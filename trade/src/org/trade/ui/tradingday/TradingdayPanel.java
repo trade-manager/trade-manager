@@ -70,7 +70,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -572,10 +571,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				}
 			}
 			m_tradingdayModel.setData(m_tradingdays);
-			List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
-			sortKeys.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));
 			RowSorter<?> rsDetail = m_tradingdayTable.getRowSorter();
-			rsDetail.setSortKeys(sortKeys);
+			rsDetail.setSortKeys(null);
 			RowSorter<?> rsSummary = m_tradestrategyTable.getRowSorter();
 			rsSummary.setSortKeys(null);
 			((TableRowSorter<?>) m_tradingdayTable.getRowSorter()).sort();

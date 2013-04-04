@@ -35,6 +35,7 @@
  */
 package org.trade.ui.models;
 
+import java.util.Collections;
 import java.util.Vector;
 
 import org.trade.core.util.TradingCalendar;
@@ -138,7 +139,7 @@ public class TradingdayTableModel extends TableModel {
 	 *            Tradingdays
 	 */
 	public void setData(Tradingdays data) {
-
+		Collections.sort(data.getTradingdays(), Tradingday.DATE_ORDER_DESC);
 		this.m_data = data;
 		this.clearAll();
 		if (!getData().getTradingdays().isEmpty()) {

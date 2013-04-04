@@ -357,14 +357,25 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 		this.candles.add(candle);
 	}
 
-	public static final Comparator<Tradingday> DATE_ORDER = new Comparator<Tradingday>() {
+	public static final Comparator<Tradingday> DATE_ORDER_ASC = new Comparator<Tradingday>() {
+		public int compare(Tradingday o1, Tradingday o2) {
+			int returnVal = 0;
+			m_ascending = true;
+			returnVal = CoreUtils
+					.nullSafeComparator(o1.getOpen(), o2.getOpen());
+			if (m_ascending.equals(Boolean.FALSE)) {
+				returnVal = returnVal * -1;
+			}
+			return returnVal;
+		}
+	};
+
+	public static final Comparator<Tradingday> DATE_ORDER_DESC = new Comparator<Tradingday>() {
 		public int compare(Tradingday o1, Tradingday o2) {
 			int returnVal = 0;
 			m_ascending = false;
-
 			returnVal = CoreUtils
 					.nullSafeComparator(o1.getOpen(), o2.getOpen());
-
 			if (m_ascending.equals(Boolean.FALSE)) {
 				returnVal = returnVal * -1;
 			}

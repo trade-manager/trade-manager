@@ -42,6 +42,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.ListIterator;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -2215,20 +2216,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
-					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
 					_log.info("HistoricalData complete Req Id: " + reqId
 							+ " Symbol: " + contract.getSymbol()
+							+ " Tradingday: "
+							+ tradestrategy.getTradingday().getOpen()
 							+ " candles to saved: "
 							+ candleSeries.getItemCount());
-					/*
-					 * The last one has arrived the reqId is the
-					 * tradeStrategyId. Remove this from the processing vector.
-					 */
-					synchronized (m_historyDataRequests) {
-						m_historyDataRequests.remove(reqId);
-						m_historyDataRequests.notifyAll();
-					}
+
+					m_tradePersistentModel.persistCandleSeries(candleSeries);
+
 					/*
 					 * Fire HistoricalDataComplete this will start any
 					 * strategies. If today is a trading day then start real
@@ -2236,13 +2233,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * dataset container.
 					 */
 
-					for (Tradestrategy item : contract.getTradestrategies()) {
+					for (ListIterator<Tradestrategy> iterItem = contract
+							.getTradestrategies().listIterator(); iterItem
+							.hasNext();) {
+						Tradestrategy item = iterItem.next();
 						this.fireHistoricalDataComplete(item);
 						if (item.getTradingday().getClose().after(new Date())) {
 							if (!this.isRealtimeBarsRunning(contract)) {
 								this.onReqRealTimeBars(contract, item
 										.getStrategy().getMarketData());
 							}
+						} else {
+							iterItem.remove();
+						}
+					}
+
+					/*
+					 * The last one has arrived the reqId is the
+					 * tradeStrategyId. Remove this from the processing vector.
+					 */
+					if (contract.getTradestrategies().isEmpty()) {
+						synchronized (m_historyDataRequests) {
+							m_historyDataRequests.remove(reqId);
+							m_historyDataRequests.notifyAll();
 						}
 					}
 

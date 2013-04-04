@@ -100,7 +100,8 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 		m_nodeMap.put(m_root, m_root.getRoot());
 
-		Collections.sort(tradingdays.getTradingdays(), Tradingday.DATE_ORDER);
+		Collections.sort(tradingdays.getTradingdays(),
+				Tradingday.DATE_ORDER_DESC);
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
 			addTradingday(tradingday);
 		}
