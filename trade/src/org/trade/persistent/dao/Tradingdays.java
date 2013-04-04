@@ -38,12 +38,12 @@ package org.trade.persistent.dao;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.lookup.DBTableLookupServiceProvider;
@@ -64,8 +64,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3388042483785305102L;
-	private ConcurrentHashMap<Date, Tradingday> tradingdays = new ConcurrentHashMap<Date, Tradingday>(
-			0);
+	// private ConcurrentHashMap<Date, Tradingday> tradingdays = new
+	// ConcurrentHashMap<Date, Tradingday>(
+	// 0);
+	private List<Tradingday> tradingdays = Collections
+			.synchronizedList(new ArrayList<Tradingday>(0));
 
 	public Tradingdays() {
 	}
@@ -91,7 +94,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	public Tradingdays(Integer idTradingdays, List<Tradingday> tradingdays) {
 		this.id = idTradingdays;
 		for (Tradingday instance : tradingdays) {
-			this.tradingdays.put(instance.getOpen(), instance);
+			this.tradingdays.add(instance);
 		}
 	}
 
@@ -121,7 +124,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            Tradingday
 	 */
 	public void add(Tradingday tradingday) {
-		this.tradingdays.put(tradingday.getOpen(), tradingday);
+		this.tradingdays.add(tradingday);
 	}
 
 	/**
@@ -131,7 +134,39 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            Tradingday
 	 */
 	public void remove(Tradingday tradingday) {
-		this.tradingdays.remove(tradingday.getOpen());
+		synchronized (this.tradingdays) {
+			for (ListIterator<Tradingday> itemIter = this.tradingdays
+					.listIterator(); itemIter.hasNext();) {
+				Tradingday item = itemIter.next();
+				if (item.equals(tradingday)) {
+					itemIter.remove();
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Method remove.
+	 * 
+	 * @param open
+	 *            Date
+	 * 
+	 * @param close
+	 *            Date
+	 */
+	public void remove(Date open, Date close) {
+		synchronized (this.tradingdays) {
+			for (ListIterator<Tradingday> itemIter = this.tradingdays
+					.listIterator(); itemIter.hasNext();) {
+				Tradingday item = itemIter.next();
+				if (item.getOpen().compareTo(open) == 0
+						&& item.getClose().compareTo(close) == 0) {
+					itemIter.remove();
+					break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -139,7 +174,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return ConcurrentHashMap<Date,Tradingday>
 	 */
-	public ConcurrentHashMap<Date, Tradingday> getTradingdays() {
+	public List<Tradingday> getTradingdays() {
 		return this.tradingdays;
 	}
 
@@ -149,8 +184,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @param tradingdays
 	 *            ConcurrentHashMap<Date,Tradingday>
 	 */
-	public void setTradingdays(ConcurrentHashMap<Date, Tradingday> tradingdays) {
-		this.tradingdays = tradingdays;
+	public void setTradingdays(List<Tradingday> tradingdays) {
+		this.tradingdays = Collections.synchronizedList(tradingdays);
 	}
 
 	/**
@@ -163,12 +198,34 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @return Tradingday
 	 */
 	public Tradingday getTradingday(Date open, Date close) {
-		for (Tradingday tradingday : this.tradingdays.values()) {
-			if (tradingday.getOpen().compareTo(open) == 0
-					&& tradingday.getClose().compareTo(close) == 0)
-				return tradingday;
+		synchronized (this.tradingdays) {
+			for (Tradingday tradingday : this.tradingdays) {
+				if (tradingday.getOpen().compareTo(open) == 0
+						&& tradingday.getClose().compareTo(close) == 0)
+					return tradingday;
+			}
 		}
 		return null;
+	}
+
+	/**
+	 * Method containsTradingday.
+	 * 
+	 * @param open
+	 *            Date
+	 * @param close
+	 *            Date
+	 * @return boolean
+	 */
+	public boolean containsTradingday(Date open, Date close) {
+		synchronized (this.tradingdays) {
+			for (Tradingday tradingday : this.tradingdays) {
+				if (tradingday.getOpen().compareTo(open) == 0
+						&& tradingday.getClose().compareTo(close) == 0)
+					return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -177,9 +234,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @return boolean
 	 */
 	public boolean isDirty() {
-		for (Tradingday tradingday : getTradingdays().values()) {
-			if (tradingday.isDirty())
-				return true;
+		synchronized (this.tradingdays) {
+			for (Tradingday tradingday : this.tradingdays) {
+				if (tradingday.isDirty())
+					return true;
+			}
 		}
 		return false;
 	}
@@ -193,12 +252,14 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 */
 	public Contract getContract(String symbol) {
 		Contract contract = null;
-
-		for (Tradingday tradingday : getTradingdays().values()) {
-			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-				if (tradestrategy.getContract().getSymbol().equals(symbol)) {
-					contract = tradestrategy.getContract();
-					break;
+		synchronized (this.tradingdays) {
+			for (Tradingday tradingday : this.tradingdays) {
+				for (Tradestrategy tradestrategy : tradingday
+						.getTradestrategies()) {
+					if (tradestrategy.getContract().getSymbol().equals(symbol)) {
+						contract = tradestrategy.getContract();
+						break;
+					}
 				}
 			}
 		}
@@ -213,10 +274,14 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy getTradestrategy(Integer idTradestrategy) {
-		for (Tradingday tradingday : getTradingdays().values()) {
-			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-				if (tradestrategy.getIdTradeStrategy().equals(idTradestrategy)) {
-					return tradestrategy;
+		synchronized (this.tradingdays) {
+			for (Tradingday tradingday : this.tradingdays) {
+				for (Tradestrategy tradestrategy : tradingday
+						.getTradestrategies()) {
+					if (tradestrategy.getIdTradeStrategy().equals(
+							idTradestrategy)) {
+						return tradestrategy;
+					}
 				}
 			}
 		}
@@ -230,9 +295,16 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            Tradingday
 	 */
 	public void replaceTradingday(Date date, Tradingday newTradingday) {
-		if (this.tradingdays.containsKey(date))
-			this.tradingdays.remove(date);
-		this.tradingdays.put(newTradingday.getOpen(), newTradingday);
+		synchronized (this.tradingdays) {
+			for (ListIterator<Tradingday> itemIter = this.tradingdays
+					.listIterator(); itemIter.hasNext();) {
+				Tradingday item = itemIter.next();
+				if (item.equals(newTradingday)) {
+					itemIter.set(newTradingday);
+					break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -242,12 +314,15 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            Tradestrategy
 	 */
 	public void replaceTradestrategy(Tradestrategy newTradestrategy) {
-		for (Tradingday tradingday : getTradingdays().values()) {
-			for (ListIterator<Tradestrategy> itemIter = tradingday
-					.getTradestrategies().listIterator(); itemIter.hasNext();) {
-				Tradestrategy tradestrategy = itemIter.next();
-				if (tradestrategy.equals(newTradestrategy)) {
-					itemIter.set(newTradestrategy);
+		synchronized (this.tradingdays) {
+			for (Tradingday tradingday : this.tradingdays) {
+				for (ListIterator<Tradestrategy> itemIter = tradingday
+						.getTradestrategies().listIterator(); itemIter
+						.hasNext();) {
+					Tradestrategy tradestrategy = itemIter.next();
+					if (tradestrategy.equals(newTradestrategy)) {
+						itemIter.set(newTradestrategy);
+					}
 				}
 			}
 		}
@@ -261,9 +336,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @return boolean
 	 */
 	public static boolean hasTradestrategies(Tradingdays tradingdays) {
-		for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
-			if (!tradingday.getTradestrategies().isEmpty()) {
-				return true;
+		synchronized (tradingdays.getTradingdays()) {
+			for (Tradingday tradingday : tradingdays.getTradingdays()) {
+				if (!tradingday.getTradestrategies().isEmpty()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -415,8 +492,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					tradestrategy.setStrategy(strategy);
 					tradestrategy.setPortfolio(portfolio);
 
-					if (!this.getTradingdays().containsKey(
-							tradestrategy.getTradingday().getOpen())) {
+					if (!this.containsTradingday(tradestrategy.getTradingday()
+							.getOpen(), tradestrategy.getTradingday()
+							.getClose())) {
 						this.add(tradestrategy.getTradingday());
 					}
 					Collections.sort(tradestrategy.getTradingday()

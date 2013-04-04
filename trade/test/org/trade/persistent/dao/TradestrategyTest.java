@@ -104,7 +104,7 @@ public class TradestrategyTest extends TestCase {
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Tradingdays tradingdays = tradingdayHome
 					.findTradingdaysByDateRange(open, open);
-			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
 					tradestrategy.setStatus(TradestrategyStatus.OPEN);
@@ -140,7 +140,7 @@ public class TradestrategyTest extends TestCase {
 			String fileName = "db/GappersToDay10Test.csv";
 			tradingdays.populateDataFromFile(fileName, instance);
 			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());
-			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
@@ -170,7 +170,7 @@ public class TradestrategyTest extends TestCase {
 
 			tradingdays.populateDataFromFile(fileName, instance);
 			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());
-			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {

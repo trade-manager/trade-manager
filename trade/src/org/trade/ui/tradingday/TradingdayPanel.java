@@ -212,7 +212,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));
 			m_tradestrategyModel = new TradestrategyTableModel();
 			Tradingday tradingday = null;
-			for (Tradingday instance : m_tradingdays.getTradingdays().values()) {
+			for (Tradingday instance : m_tradingdays.getTradingdays()) {
 				tradingday = instance;
 				break;
 			}
@@ -477,7 +477,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 								Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 						boolean dirty = false;
 						for (Tradingday tradingday : m_tradingdays
-								.getTradingdays().values()) {
+								.getTradingdays()) {
 							if (tradingday.getClose().before(
 									tradingday.getOpen())
 									|| tradingday.getClose().equals(
@@ -567,8 +567,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 										DATEFORMAT), BasePanel.INFORMATION);
 
 			} else {
-				for (Tradingday tradingday : tradingdays.getTradingdays()
-						.values()) {
+				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 					m_tradingdays.add(tradingday);
 				}
 			}
@@ -611,8 +610,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			 * positions. If they do kill the strategy worker before deleting
 			 * trades.
 			 */
-			for (Tradingday tradingday : m_tradingdays.getTradingdays()
-					.values()) {
+			for (Tradingday tradingday : m_tradingdays.getTradingdays()) {
 				if (Tradingdays.hasTrades(tradingday)) {
 					JOptionPane
 							.showMessageDialog(
@@ -1101,7 +1099,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		 * Check to see if any of the selected trading days has open positions.
 		 * If they do kill the strategy worker before deleting trades.
 		 */
-		for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+		for (Tradingday tradingday : tradingdays.getTradingdays()) {
 			if (Tradingdays.hasOpenTrades(tradingday)) {
 				int result = JOptionPane
 						.showConfirmDialog(
@@ -1401,8 +1399,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				getProgressBar().setMaximum(100);
 				setProgress(0);
 				String message = null;
-				for (Tradingday tradingday : tradingdays.getTradingdays()
-						.values()) {
+				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 					this.tradeManagerModel.removeTradingdayTrades(tradingday);
 					totalComplete++;
 					int percent = (int) (((double) (totalComplete) / grandtotal) * 100d);
@@ -1438,7 +1435,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		}
 
 		public void done() {
-			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				doRefresh(tradingday);
 			}
 			String message = "Completed delete of Trade Order data total days processed: "
@@ -1499,8 +1496,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				String message = null;
 				this.toStrategy = this.tradeManagerModel
 						.findStrategyById(this.toStrategy.getIdStrategy());
-				for (Tradingday tradingday : tradingdays.getTradingdays()
-						.values()) {
+				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 					this.tradeManagerModel.reassignStrategy(this.fromStrategy,
 							this.toStrategy, tradingday);
 
@@ -1537,7 +1533,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		}
 
 		public void done() {
-			for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				doRefresh(tradingday);
 			}
 			String message = "Complete re-assign of Strategies total days processed: "

@@ -45,7 +45,6 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -1291,8 +1290,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doProperties() {
 		try {
-			for (Tradingday tradingday : m_tradingdays.getTradingdays()
-					.values()) {
+			for (Tradingday tradingday : m_tradingdays.getTradingdays()) {
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
 					m_brokerModel
@@ -1540,8 +1538,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						return;
 					}
 				}
-				for (Tradingday tradingday : tradingdays.getTradingdays()
-						.values()) {
+				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 					if (tradingdayPanel.isStrategyWorkerRunning(tradingday)) {
 						this.setStatusBarMessage(
 								"Strategies already running please wait or cancel ...",
@@ -1769,7 +1766,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	private void refreshTradingdays(Tradingdays tradingdays) {
 
-		for (Tradingday tradingday : tradingdays.getTradingdays().values()) {
+		for (Tradingday tradingday : tradingdays.getTradingdays()) {
 			tradingdayPanel.doRefresh(tradingday);
 		}
 		if (m_brokerModel.isConnected()) {
@@ -1860,10 +1857,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		public Void doInBackground() {
 
 			try {
-				ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
+				Tradingdays runningContractRequests = new Tradingdays();
 				this.grandTotal = 0;
-				for (Tradingday tradingday : this.tradingdays.getTradingdays()
-						.values()) {
+				for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
 					this.grandTotal = this.grandTotal
 							+ tradingday.getTradestrategies().size();
 				}
@@ -1875,12 +1871,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				getProgressBar().setMaximum(100);
 				setProgress(0);
 				String message = null;
-				List<Date> keys = new ArrayList<Date>(this.tradingdays
-						.getTradingdays().keySet());
-				Collections.sort(keys);
-				for (Date date : keys) {
-					Tradingday tradingday = this.tradingdays.getTradingdays()
-							.get(date);
+				Collections.sort(tradingdays.getTradingdays(),
+						Tradingday.DATE_ORDER);
+				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 
 					if (tradingday.getTradestrategies().isEmpty())
 						continue;
@@ -1894,14 +1887,22 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					 */
 					if (totalSumbitted > reSumbittedAt) {
 						reSumbittedAt = totalSumbitted + reSumbittedAt;
-						for (Integer idTradeingday : runningContractRequests
-								.keySet()) {
-							Tradingday reProcessTradingday = runningContractRequests
-									.get(idTradeingday);
-							totalSumbitted = processTradingday(
-									getTradingdayToProcess(reProcessTradingday,
-											runningContractRequests),
-									totalSumbitted);
+						Collections.sort(
+								runningContractRequests.getTradingdays(),
+								Tradingday.DATE_ORDER);
+						for (Tradingday item : runningContractRequests
+								.getTradingdays()) {
+							if (runningContractRequests.containsTradingday(
+									item.getOpen(), item.getClose())) {
+								Tradingday reProcessTradingday = runningContractRequests
+										.getTradingday(item.getOpen(),
+												item.getClose());
+								totalSumbitted = processTradingday(
+										getTradingdayToProcess(
+												reProcessTradingday,
+												runningContractRequests),
+										totalSumbitted);
+							}
 						}
 					}
 				}
@@ -1915,9 +1916,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 */
 				if (backTestBarSize > 0
 						&& this.brokerManagerModel.isBrokerDataOnly()) {
-					for (Date date : keys) {
-						Tradingday itemTradingday = this.tradingdays
-								.getTradingdays().get(date);
+					Collections.sort(tradingdays.getTradingdays(),
+							Tradingday.DATE_ORDER);
+					for (Tradingday itemTradingday : tradingdays
+							.getTradingdays()) {
 						Date today = new Date();
 						if (!(TradingCalendar.isMarketHours(
 								itemTradingday.getOpen(),
@@ -1954,15 +1956,21 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 * Finish re-processing any that have not yet been processed.
 				 */
 
-				while (!runningContractRequests.isEmpty()) {
-					for (Integer idTradeingday : runningContractRequests
-							.keySet()) {
-						Tradingday reProcessTradingday = runningContractRequests
-								.get(idTradeingday);
-						totalSumbitted = processTradingday(
-								getTradingdayToProcess(reProcessTradingday,
-										runningContractRequests),
-								totalSumbitted);
+				while (!runningContractRequests.getTradingdays().isEmpty()) {
+					Collections.sort(runningContractRequests.getTradingdays(),
+							Tradingday.DATE_ORDER);
+					for (Tradingday item : runningContractRequests
+							.getTradingdays()) {
+						if (runningContractRequests.containsTradingday(
+								item.getOpen(), item.getClose())) {
+							Tradingday reProcessTradingday = runningContractRequests
+									.getTradingday(item.getOpen(),
+											item.getClose());
+							totalSumbitted = processTradingday(
+									getTradingdayToProcess(reProcessTradingday,
+											runningContractRequests),
+									totalSumbitted);
+						}
 					}
 				}
 
@@ -2299,7 +2307,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 
 		private Tradingday getTradingdayToProcess(Tradingday tradingday,
-				ConcurrentHashMap<Integer, Tradingday> runningContractRequests)
+				Tradingdays runningContractRequests)
 				throws CloneNotSupportedException {
 
 			if (tradingday.getTradestrategies().isEmpty())
@@ -2309,10 +2317,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					Tradestrategy.TRADINGDAY_CONTRACT);
 
 			Tradingday reProcessTradingday = null;
-			if (runningContractRequests.containsKey(tradingday
-					.getIdTradingDay())) {
-				reProcessTradingday = runningContractRequests.get(tradingday
-						.getIdTradingDay());
+			if (runningContractRequests.containsTradingday(
+					tradingday.getOpen(), tradingday.getClose())) {
+
+				reProcessTradingday = runningContractRequests.getTradingday(
+						tradingday.getOpen(), tradingday.getClose());
 			} else {
 				reProcessTradingday = (Tradingday) tradingday.clone();
 			}
@@ -2346,13 +2355,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					reProcessTradingday.removeTradestrategy(tradestrategy);
 			}
 			if (reProcessTradingday.getTradestrategies().isEmpty()) {
-				runningContractRequests.remove(reProcessTradingday
-						.getIdTradingDay());
+				runningContractRequests.getTradingdays().remove(
+						reProcessTradingday.getIdTradingDay());
 			}
 			if (!reProcessTradingday.getTradestrategies().isEmpty()) {
-				runningContractRequests.put(
-						reProcessTradingday.getIdTradingDay(),
-						reProcessTradingday);
+				runningContractRequests.add(reProcessTradingday);
 			}
 			return toProcessTradingday;
 		}

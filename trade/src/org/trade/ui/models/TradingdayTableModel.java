@@ -142,7 +142,7 @@ public class TradingdayTableModel extends TableModel {
 		this.m_data = data;
 		this.clearAll();
 		if (!getData().getTradingdays().isEmpty()) {
-			for (Tradingday element : getData().getTradingdays().values()) {
+			for (Tradingday element : getData().getTradingdays()) {
 				Vector<Object> newRow = new Vector<Object>();
 				getNewRow(newRow, element);
 				rows.add(newRow);
@@ -229,8 +229,8 @@ public class TradingdayTableModel extends TableModel {
 		switch (column) {
 		case 0: {
 			element.setOpen(((Date) value).getDate());
-			getData().getTradingdays().remove(openDate.getDate());
-			getData().getTradingdays().put(((Date) value).getDate(), element);
+			getData().remove(openDate.getDate(), closeDate.getDate());
+			getData().add(element);
 			break;
 		}
 		case 1: {
@@ -264,7 +264,9 @@ public class TradingdayTableModel extends TableModel {
 	public void deleteRow(int selectedRow) {
 
 		Date open = (Date) this.getValueAt(selectedRow, 0);
-		Tradingday element = getData().getTradingdays().get(open.getDate());
+		Date close = (Date) this.getValueAt(selectedRow, 1);
+		Tradingday element = getData().getTradingday(open.getDate(),
+				close.getDate());
 		if (!element.getTradestrategies().isEmpty())
 			element.getTradestrategies().clear();
 		getData().remove(element);
@@ -280,8 +282,9 @@ public class TradingdayTableModel extends TableModel {
 		if (!TradingCalendar.isTradingDay(date)) {
 			date = TradingCalendar.getNextTradingDay(date);
 		}
-		while (getData().getTradingdays().containsKey(
-				TradingCalendar.getBusinessDayStart(date))) {
+		while (getData().containsTradingday(
+				TradingCalendar.getBusinessDayStart(date),
+				TradingCalendar.getBusinessDayEnd(date))) {
 			date = TradingCalendar.getNextTradingDay(date);
 		}
 		Tradingday element = Tradingday.newInstance(date);

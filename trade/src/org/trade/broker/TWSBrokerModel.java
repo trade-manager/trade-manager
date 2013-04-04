@@ -2209,14 +2209,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Contract contract = m_historyDataRequests.get(reqId);
 
 				if (dateString.contains("finished-")) {
-					/*
-					 * The last one has arrived the reqId is the
-					 * tradeStrategyId. Remove this from the processing vector.
-					 */
-					synchronized (m_historyDataRequests) {
-						m_historyDataRequests.remove(reqId);
-						m_historyDataRequests.notifyAll();
-					}
+
 					Tradestrategy tradestrategy = contract.getTradestrategies()
 							.get(0);
 
@@ -2228,7 +2221,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							+ " Symbol: " + contract.getSymbol()
 							+ " candles to saved: "
 							+ candleSeries.getItemCount());
-
+					/*
+					 * The last one has arrived the reqId is the
+					 * tradeStrategyId. Remove this from the processing vector.
+					 */
+					synchronized (m_historyDataRequests) {
+						m_historyDataRequests.remove(reqId);
+						m_historyDataRequests.notifyAll();
+					}
 					/*
 					 * Fire HistoricalDataComplete this will start any
 					 * strategies. If today is a trading day then start real

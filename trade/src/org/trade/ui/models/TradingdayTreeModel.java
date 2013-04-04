@@ -36,12 +36,8 @@
 package org.trade.ui.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.ListIterator;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -104,13 +100,9 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 		m_nodeMap.put(m_root, m_root.getRoot());
 
-		List<Date> openDates = new ArrayList<Date>(tradingdays.getTradingdays()
-				.keySet());
-		Collections.sort(openDates);
-		ListIterator<Date> iter = openDates.listIterator(openDates.size());
-		while (iter.hasPrevious()) {
-			Date openDate = iter.previous();
-			addTradingday(tradingdays.getTradingdays().get(openDate));
+		Collections.sort(tradingdays.getTradingdays(), Tradingday.DATE_ORDER);
+		for (Tradingday tradingday : tradingdays.getTradingdays()) {
+			addTradingday(tradingday);
 		}
 	}
 
