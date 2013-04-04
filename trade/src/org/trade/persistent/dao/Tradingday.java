@@ -368,7 +368,6 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 			if (m_ascending.equals(Boolean.FALSE)) {
 				returnVal = returnVal * -1;
 			}
-
 			return returnVal;
 		}
 	};

@@ -94,8 +94,8 @@ public class CandleHome {
 				if (null != candleItem.getCandle().getIdCandle()) {
 					_log.error("Count: " + i + " Symbol: "
 							+ candleSeries.getSymbol() + "candleid: "
-							+ transientInstance.getIdCandle() + " open: "
-							+ transientInstance.getStartPeriod());
+							+ candleItem.getCandle().getIdCandle() + " open: "
+							+ candleItem.getCandle().getStartPeriod());
 				}
 
 				if (!candleItem.getCandle().getTradingday().equals(tradingday)) {

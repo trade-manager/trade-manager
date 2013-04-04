@@ -1881,6 +1881,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				for (Date date : keys) {
 					Tradingday tradingday = this.tradingdays.getTradingdays()
 							.get(date);
+
 					if (tradingday.getTradestrategies().isEmpty())
 						continue;
 
@@ -1974,7 +1975,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						this.brokerManagerModel.getHistoricalData().wait();
 					}
 				}
-				setProgress(100);
 				message = "Completed Historical data total contracts processed: "
 						+ totalSumbitted
 						+ " in : "
@@ -1984,13 +1984,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				publish(message);
 			} catch (InterruptedException ex) {
 				// Do nothing
-				setProgress(0);
+				_log.error("doInBackground interupted Msg: ", ex.getMessage());
 			} catch (Exception ex) {
 				_log.error("Error getting history data.", ex.getMessage());
 				setErrorMessage("Error getting history data.", ex.getMessage(),
 						ex);
 			} finally {
-
+				setProgress(100);
 			}
 			return null;
 		}
@@ -2265,7 +2265,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 										indicatorTradestrategy
 												.getIdTradeStrategy(),
 										indicatorTradestrategy);
-
 								this.grandTotal++;
 								indicatorTradestrategy.getContract()
 										.addTradestrategy(

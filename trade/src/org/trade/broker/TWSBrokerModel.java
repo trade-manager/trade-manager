@@ -600,9 +600,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							- TradingCalendar.daysDiff(endDate, new Date());
 				}
 
-				_log.info("onBrokerData Symbol: " + contract.getSymbol()
-						+ " end Time: " + endDateTime + " Period length: "
-						+ chartDays + " Bar size: " + barSize + " WhatToShow: "
+				_log.info("onBrokerData Req Id: " + contract.getIdContract()
+						+ " Symbol: " + contract.getSymbol() + " end Time: "
+						+ endDateTime + " Period length: " + chartDays
+						+ " Bar size: " + barSize + " WhatToShow: "
 						+ backfillWhatToShow + " Regular Trading Hrs: "
 						+ backfillUseRTH + " Date format: "
 						+ backfillDateFormat);
@@ -1965,9 +1966,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					TWSBrokerModel.logContractDetails(contractDetails);
 					if (TWSBrokerModel.populateContract(contractDetails,
 							transientInstance)) {
-						Contract contract = m_tradePersistentModel
+						m_tradePersistentModel
 								.persistContract(transientInstance);
-						m_contractRequests.replace(reqId, contract);
+						m_contractRequests.remove(reqId);
 					}
 				} else {
 					error(reqId, 3220, "Contract details not found for reqId: "
@@ -2000,9 +2001,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#contractDetailsEnd(int)
 	 */
 	public void contractDetailsEnd(int reqId) {
-		synchronized (m_contractRequests) {
-			m_contractRequests.remove(reqId);
-		}
 	}
 
 	/**
@@ -2211,17 +2209,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Contract contract = m_historyDataRequests.get(reqId);
 
 				if (dateString.contains("finished-")) {
-
-					Tradestrategy tradestrategy = contract.getTradestrategies()
-							.get(0);
-					CandleSeries candleSeries = tradestrategy
-							.getDatasetContainer().getBaseCandleSeries();
-					m_tradePersistentModel.persistCandleSeries(candleSeries);
-
-					_log.info("HistoricalData complete: "
-							+ contract.getSymbol() + " candles to saved: "
-							+ candleSeries.getItemCount());
-
 					/*
 					 * The last one has arrived the reqId is the
 					 * tradeStrategyId. Remove this from the processing vector.
@@ -2229,9 +2216,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					synchronized (m_historyDataRequests) {
 						m_historyDataRequests.remove(reqId);
 						m_historyDataRequests.notifyAll();
-						_log.info("Historical data complete for: " + reqId
-								+ " Symbol: " + contract.getSymbol());
 					}
+					Tradestrategy tradestrategy = contract.getTradestrategies()
+							.get(0);
+
+					CandleSeries candleSeries = tradestrategy
+							.getDatasetContainer().getBaseCandleSeries();
+					m_tradePersistentModel.persistCandleSeries(candleSeries);
+
+					_log.info("HistoricalData complete Req Id: " + reqId
+							+ " Symbol: " + contract.getSymbol()
+							+ " candles to saved: "
+							+ candleSeries.getItemCount());
 
 					/*
 					 * Fire HistoricalDataComplete this will start any
