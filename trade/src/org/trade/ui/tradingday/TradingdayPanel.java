@@ -665,7 +665,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				Tradingday instance = m_tradePersistentModel
 						.findTradingdayById(tradingday.getIdTradingDay());
 				instance.populateDatasetContainer(tradingday);
-				m_tradingdays.replaceTradingday(tradingday.getOpen(), instance);
+				m_tradingdays.replaceTradingday(instance);
 				int selectedRow = m_tradingdayTable.getSelectedRow();
 				m_tradingdayModel.setData(m_tradingdays);
 				if (selectedRow > -1) {

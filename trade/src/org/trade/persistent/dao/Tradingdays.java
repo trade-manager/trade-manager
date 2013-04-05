@@ -217,11 +217,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            Date
 	 * @return boolean
 	 */
-	public boolean containsTradingday(Date open, Date close) {
+	public boolean containsTradingday(Tradingday tradingday) {
 		synchronized (this.tradingdays) {
-			for (Tradingday tradingday : this.tradingdays) {
-				if (tradingday.getOpen().compareTo(open) == 0
-						&& tradingday.getClose().compareTo(close) == 0)
+			for (Tradingday item : this.tradingdays) {
+				if (item.equals(tradingday))
 					return true;
 			}
 		}
@@ -294,7 +293,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @param newTradingday
 	 *            Tradingday
 	 */
-	public void replaceTradingday(Date date, Tradingday newTradingday) {
+	public void replaceTradingday(Tradingday newTradingday) {
 		synchronized (this.tradingdays) {
 			for (ListIterator<Tradingday> itemIter = this.tradingdays
 					.listIterator(); itemIter.hasNext();) {
@@ -492,9 +491,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					tradestrategy.setStrategy(strategy);
 					tradestrategy.setPortfolio(portfolio);
 
-					if (!this.containsTradingday(tradestrategy.getTradingday()
-							.getOpen(), tradestrategy.getTradingday()
-							.getClose())) {
+					if (!this.containsTradingday(tradestrategy.getTradingday())) {
 						this.add(tradestrategy.getTradingday());
 					}
 					Collections

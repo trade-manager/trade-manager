@@ -1766,6 +1766,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	private void refreshTradingdays(Tradingdays tradingdays) {
 
+		Collections.sort(tradingdays.getTradingdays(),
+				Tradingday.DATE_ORDER_DESC);
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
 			tradingdayPanel.doRefresh(tradingday);
 		}

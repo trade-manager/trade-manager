@@ -283,16 +283,18 @@ public class TradingdayTableModel extends TableModel {
 		if (!TradingCalendar.isTradingDay(date)) {
 			date = TradingCalendar.getNextTradingDay(date);
 		}
-		while (getData().containsTradingday(
+		Tradingday tradingday = new Tradingday(
 				TradingCalendar.getBusinessDayStart(date),
-				TradingCalendar.getBusinessDayEnd(date))) {
+				TradingCalendar.getBusinessDayEnd(date));
+		while (getData().containsTradingday(tradingday)) {
 			date = TradingCalendar.getNextTradingDay(date);
+			tradingday = new Tradingday(
+					TradingCalendar.getBusinessDayStart(date),
+					TradingCalendar.getBusinessDayEnd(date));
 		}
-		Tradingday element = Tradingday.newInstance(date);
-		getData().add(element);
-
+		getData().add(tradingday);
 		Vector<Object> newRow = new Vector<Object>();
-		getNewRow(newRow, element);
+		getNewRow(newRow, tradingday);
 		rows.add(newRow);
 		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 	}

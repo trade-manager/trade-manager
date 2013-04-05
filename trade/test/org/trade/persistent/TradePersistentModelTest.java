@@ -1276,7 +1276,7 @@ public class TradePersistentModelTest extends TestCase {
 			Tradingday instance2 = tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
-			tradingdays.replaceTradingday(instance1.getOpen(), instance2);
+			tradingdays.replaceTradingday(instance2);
 			int selectedRow = tradingdayTable.getSelectedRow();
 			tradingdayModel.setData(tradingdays);
 			if (selectedRow > -1) {
