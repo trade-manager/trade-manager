@@ -1832,7 +1832,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * of 6 per 2 seconds.
 		 */
 
-		private double requestsPerPeriod = 10;
+		private double requestsPerPeriod = 2;
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -1857,7 +1857,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @return Void
 		 */
 		public Void doInBackground() {
-
+			String message = null;
+			int totalSumbitted = 0;
+			int reSumbittedAt = 20;
 			try {
 				ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 				this.grandTotal = 0;
@@ -1867,12 +1869,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				this.startTime = System.currentTimeMillis();
 				this.lastSubmittedTime = startTime;
-				int totalSumbitted = 0;
-				int reSumbittedAt = 20;
 				// Initialize the progress bar
 				getProgressBar().setMaximum(100);
 				setProgress(0);
-				String message = null;
+
 				Collections.sort(tradingdays.getTradingdays(),
 						Tradingday.DATE_ORDER_ASC);
 
@@ -1946,24 +1946,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				totalSumbitted = reProcessTradingdays(runningContractRequests,
 						totalSumbitted);
 
-				synchronized (this.brokerManagerModel.getHistoricalData()) {
-					while ((this.brokerManagerModel.getHistoricalData().size() > 0)
-							&& !this.isCancelled()) {
-						int percent = (int) (((double) (this.grandTotal - this.brokerManagerModel
-								.getHistoricalData().size()) / this.grandTotal) * 100d);
-						setProgress(percent);
-						this.brokerManagerModel.getHistoricalData().wait();
-					}
-				}
-
-				message = "Completed Historical data total contracts processed: "
-						+ totalSumbitted
-						+ " in : "
-						+ ((System.currentTimeMillis() - this.startTime) / 1000)
-						+ " Seconds.";
-				_log.info(message);
-				publish(message);
-
 			} catch (InterruptedException ex) {
 				// Do nothing
 				_log.error("doInBackground interupted Msg: ", ex.getMessage());
@@ -1972,7 +1954,31 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				setErrorMessage("Error getting history data.", ex.getMessage(),
 						ex);
 			} finally {
+				synchronized (this.brokerManagerModel.getHistoricalData()) {
+					while ((this.brokerManagerModel.getHistoricalData().size() > 0)
+							&& !this.isCancelled()) {
+						int percent = (int) (((double) (this.grandTotal - this.brokerManagerModel
+								.getHistoricalData().size()) / this.grandTotal) * 100d);
+						setProgress(percent);
+						try {
+							this.brokerManagerModel.getHistoricalData().wait();
+						} catch (InterruptedException ex) {
+							// Do nothing
+							_log.error(
+									"doInBackground finally interupted Msg: ",
+									ex.getMessage());
+						}
+					}
+				}
 				setProgress(100);
+				message = "Completed Historical data total contracts processed: "
+						+ totalSumbitted
+						+ " in : "
+						+ ((System.currentTimeMillis() - this.startTime) / 1000)
+						+ " Seconds.";
+				_log.info(message);
+				publish(message);
+
 			}
 			return null;
 		}
@@ -2052,9 +2058,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private void hasSubmittedInSeconds(int totalSumbitted)
 				throws InterruptedException {
 			long currentTime = System.currentTimeMillis();
+
 			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 					&& m_brokerModel.isConnected() && !this.isCancelled()) {
-				if ((currentTime - this.lastSubmittedTime) < requestsPerPeriod) {
+				if ((currentTime - this.lastSubmittedTime) < (1000 * requestsPerPeriod)) {
 					_log.info("hasSubmittedInSeconds Sleep "
 							+ requestsPerPeriod + " seconds totalSumbitted: "
 							+ totalSumbitted + " lastSubmittedTime: "
