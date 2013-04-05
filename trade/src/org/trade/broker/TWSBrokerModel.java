@@ -2279,12 +2279,19 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									tradestrategy.getTradingday().getOpen(),
 									date);
 						}
-
-						if (TradingCalendar.isMarketHours(tradestrategy
-								.getTradingday().getOpen(), tradestrategy
-								.getTradingday().getClose(), date)) {
-							if (tradestrategy.getTradingday().getClose()
-									.after(date)) {
+						if (tradestrategy.getTradingday().getClose()
+								.after(date)) {
+							if (backfillUseRTH == 1) {
+								if (TradingCalendar.isMarketHours(tradestrategy
+										.getTradingday().getOpen(),
+										tradestrategy.getTradingday()
+												.getClose(), date)) {
+									tradestrategy.getDatasetContainer()
+											.buildCandle(date, open, high, low,
+													close, volume, vwap,
+													tradeCount, 1);
+								}
+							} else {
 								tradestrategy.getDatasetContainer()
 										.buildCandle(date, open, high, low,
 												close, volume, vwap,
