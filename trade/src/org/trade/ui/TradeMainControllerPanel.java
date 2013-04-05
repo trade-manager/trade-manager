@@ -2079,6 +2079,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				ConcurrentHashMap<Integer, Tradingday> runningContractRequests,
 				int totalSumbitted) throws Exception {
 
+			int submitted = -1;
+
 			while (!this.isCancelled() && !runningContractRequests.isEmpty()) {
 
 				for (Tradingday item : tradingdays.getTradingdays()) {
@@ -2087,7 +2089,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						Tradingday reProcessTradingday = runningContractRequests
 								.get(idTradeingday);
 						if (item.equals(reProcessTradingday)) {
-							totalSumbitted = processTradingday(
+							submitted = processTradingday(
 									getTradingdayToProcess(reProcessTradingday,
 											runningContractRequests),
 									totalSumbitted);
@@ -2095,11 +2097,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						}
 					}
 				}
-				synchronized (this.brokerManagerModel.getHistoricalData()) {
-					while (this.brokerManagerModel.getHistoricalData().size() > 0) {
-						this.brokerManagerModel.getHistoricalData().wait();
+				/*
+				 * If nothing submitted wait for all the processes to finish.
+				 */
+				if (submitted == totalSumbitted) {
+					synchronized (this.brokerManagerModel.getHistoricalData()) {
+						while (this.brokerManagerModel.getHistoricalData()
+								.size() > 0) {
+							this.brokerManagerModel.getHistoricalData().wait();
+						}
 					}
 				}
+				if (submitted > totalSumbitted)
+					totalSumbitted = submitted;
 			}
 			return totalSumbitted;
 		}
