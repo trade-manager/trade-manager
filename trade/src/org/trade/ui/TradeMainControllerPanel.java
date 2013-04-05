@@ -1906,11 +1906,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					for (Tradingday itemTradingday : tradingdays
 							.getTradingdays()) {
 						Date today = new Date();
-						if (!TradingCalendar.isMarketHours(
+						if (!(TradingCalendar.isMarketHours(
 								itemTradingday.getOpen(),
-								itemTradingday.getClose(), today)
-								&& !TradingCalendar.sameDay(
-										itemTradingday.getOpen(), today)) {
+								itemTradingday.getClose(), today) && TradingCalendar
+								.sameDay(itemTradingday.getOpen(), today))) {
 							if (itemTradingday.getTradestrategies().isEmpty())
 								continue;
 							Tradingday tradingday = (Tradingday) itemTradingday
@@ -1969,6 +1968,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				// Do nothing
 				_log.error("doInBackground interupted Msg: ", ex.getMessage());
 			} catch (Exception ex) {
+				_log.error("Error getting history data Msg: ", ex.getMessage());
 				setErrorMessage("Error getting history data.", ex.getMessage(),
 						ex);
 			} finally {
@@ -2190,7 +2190,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 				indicatorTradestrategy = new Tradestrategy(contract,
-						tradestrategy.getTradingday(), new Strategy(),
+						tradestrategy.getTradingday(),
+						new Strategy("Indicator"),
 						tradestrategy.getPortfolio(), new BigDecimal(0), null,
 						null, false, tradestrategy.getChartDays(),
 						tradestrategy.getBarSize());
@@ -2231,11 +2232,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							.getIdTradeStrategy());
 				}
 			}
-
 			Contract prevContract = null;
 			Integer prevBarSize = null;
 			Integer prevChartDays = null;
-
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 
 				if (null == prevContract) {
@@ -2346,7 +2345,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			Collections.sort(tradingday.getTradestrategies(),
 					Tradestrategy.TRADINGDAY_CONTRACT);
-
 			Tradingday reProcessTradingday = null;
 			if (runningContractRequests.containsKey(tradingday
 					.getIdTradingDay())) {
@@ -2359,6 +2357,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Contract currContract = null;
 			Integer currBarSize = null;
 			Integer currChartDays = null;
+
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 				if (m_brokerModel.isHistoricalDataRunning(tradestrategy
 						.getContract())) {
@@ -2379,6 +2378,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 			}
+
 			for (Tradestrategy tradestrategy : toProcessTradingday
 					.getTradestrategies()) {
 				if (reProcessTradingday.existTradestrategy(tradestrategy))
