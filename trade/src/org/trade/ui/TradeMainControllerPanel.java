@@ -1832,7 +1832,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * of 6 per 2 seconds.
 		 */
 
-		private double requestsPerPeriod = 2.5;
+		private double requestsPerPeriod = 10;
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -2000,7 +2000,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					+ " endDate: " + endDate);
 
 			totalSumbitted++;
-			hasSubmittedInSeconds(totalSumbitted, requestsPerPeriod);
+			hasSubmittedInSeconds(totalSumbitted);
 			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
 
 			_log.info("Total: " + this.grandTotal + " totalSumbitted: "
@@ -2012,8 +2012,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			if (((Math.floor(totalSumbitted / 58d) == (totalSumbitted / 58d)) && (totalSumbitted > 0))
 					&& m_brokerModel.isConnected()) {
-
-				// 10min - time elapsed
 				int waitTime = 0;
 				while ((waitTime < 601000) && !this.isCancelled()) {
 					String message = "Please wait "
@@ -2051,16 +2049,20 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 *            int
 		 * @throws InterruptedException
 		 */
-		private void hasSubmittedInSeconds(int totalSumbitted, double seconds)
+		private void hasSubmittedInSeconds(int totalSumbitted)
 				throws InterruptedException {
+			long currentTime = System.currentTimeMillis();
 			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
-					&& m_brokerModel.isConnected()) {
-				if (System.currentTimeMillis() - this.lastSubmittedTime < (2000)) {
-					_log.info("hasSubmittedInSeconds Sleep " + seconds
-							+ " seconds : " + totalSumbitted);
-					Thread.sleep((long) (seconds * 1000));
+					&& m_brokerModel.isConnected() && !this.isCancelled()) {
+				if ((currentTime - this.lastSubmittedTime) < requestsPerPeriod) {
+					_log.info("hasSubmittedInSeconds Sleep "
+							+ requestsPerPeriod + " seconds totalSumbitted: "
+							+ totalSumbitted + " lastSubmittedTime: "
+							+ new Date(this.lastSubmittedTime)
+							+ " Current Time:" + new Date(currentTime));
+					Thread.sleep((long) (requestsPerPeriod * 1000));
 				}
-				this.lastSubmittedTime = System.currentTimeMillis();
+				this.lastSubmittedTime = currentTime;
 			}
 		}
 
@@ -2108,6 +2110,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					if (submitted == totalSumbitted) {
 						while (this.brokerManagerModel.getHistoricalData()
 								.size() > 0 && !this.isCancelled()) {
+							_log.info("reProcessTradingdays Wait HistoricalDataSize: "
+									+ this.brokerManagerModel
+											.getHistoricalData().size());
 							this.brokerManagerModel.getHistoricalData().wait();
 						}
 					}

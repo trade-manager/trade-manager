@@ -2211,7 +2211,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				if (dateString.contains("finished-")) {
 
 					Tradestrategy tradestrategy = contract.getTradestrategies()
-							.get(0);
+							.get(contract.getTradestrategies().size() - 1);
 
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
@@ -2221,7 +2221,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							+ " Tradingday: "
 							+ tradestrategy.getTradingday().getOpen()
 							+ " candles to saved: "
-							+ candleSeries.getItemCount());
+							+ candleSeries.getItemCount()
+							+ " Contract Tradestrategies size:: "
+							+ contract.getTradestrategies().size());
 
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
@@ -2281,9 +2283,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						if (TradingCalendar.isMarketHours(tradestrategy
 								.getTradingday().getOpen(), tradestrategy
 								.getTradingday().getClose(), date)) {
-							tradestrategy.getDatasetContainer().buildCandle(
-									date, open, high, low, close, volume, vwap,
-									tradeCount, 1);
+							if (tradestrategy.getTradingday().getClose()
+									.after(date)) {
+								tradestrategy.getDatasetContainer()
+										.buildCandle(date, open, high, low,
+												close, volume, vwap,
+												tradeCount, 1);
+							}
 						}
 					}
 				}

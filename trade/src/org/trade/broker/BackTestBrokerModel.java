@@ -1121,15 +1121,19 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					 * tradeStrategyId. Remove this from the processing vector.
 					 */
 					Tradestrategy tradestrategy = contract.getTradestrategies()
-							.get(0);
+							.get(contract.getTradestrategies().size() - 1);
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
 					_log.info("HistoricalData complete Req Id: " + reqId
 							+ " Symbol: " + contract.getSymbol()
+							+ " Tradingday: "
+							+ tradestrategy.getTradingday().getOpen()
 							+ " candles to saved: "
-							+ candleSeries.getItemCount());
+							+ candleSeries.getItemCount()
+							+ " Contract Tradestrategies size:: "
+							+ contract.getTradestrategies().size());
 
 					/*
 					 * Check to see if the trading day is today and this
@@ -1182,9 +1186,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						if (TradingCalendar.isMarketHours(tradestrategy
 								.getTradingday().getOpen(), tradestrategy
 								.getTradingday().getClose(), date)) {
-							tradestrategy.getDatasetContainer().buildCandle(
-									date, open, high, low, close, volume, vwap,
-									tradeCount, 1);
+							if (tradestrategy.getTradingday().getClose()
+									.after(date)) {
+								tradestrategy.getDatasetContainer()
+										.buildCandle(date, open, high, low,
+												close, volume, vwap,
+												tradeCount, 1);
+							}
 						}
 					}
 				}
