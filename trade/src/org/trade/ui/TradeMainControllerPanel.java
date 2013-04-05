@@ -2099,12 +2099,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 				/*
 				 * If nothing submitted wait for all the processes to finish.
+				 * Usually means we are submitting identical contracts.
 				 */
 
 				synchronized (this.brokerManagerModel.getHistoricalData()) {
 					if (submitted == totalSumbitted) {
 						while (this.brokerManagerModel.getHistoricalData()
-								.size() > 0) {
+								.size() > 0 && !this.isCancelled()) {
 							this.brokerManagerModel.getHistoricalData().wait();
 						}
 					}
