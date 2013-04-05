@@ -92,11 +92,17 @@ public class CandleHome {
 				CandleItem candleItem = (CandleItem) candleSeries
 						.getDataItem(i);
 				if (null != candleItem.getCandle().getIdCandle()) {
-					_log.error("Count: " + i + " Symbol: "
-							+ candleSeries.getSymbol() + "candleid: "
-							+ candleItem.getCandle().getIdCandle() + " open: "
-							+ candleItem.getCandle().getStartPeriod());
-					continue;
+					Candle instance = entityManager.find(Candle.class,
+							candleItem.getCandle().getIdCandle());
+					if (instance.equals(candleItem.getCandle())) {
+						continue;
+					} else {
+						_log.error("Count: " + i + " Symbol: "
+								+ candleSeries.getSymbol() + "candleid: "
+								+ candleItem.getCandle().getIdCandle()
+								+ " open: "
+								+ candleItem.getCandle().getStartPeriod());
+					}
 				}
 
 				if (!candleItem.getCandle().getTradingday().equals(tradingday)) {

@@ -42,7 +42,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
-import java.util.ListIterator;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -2227,35 +2226,26 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
 					/*
-					 * Fire HistoricalDataComplete this will start any
-					 * strategies. If today is a trading day then start real
-					 * time bars. If not cancel the indicator thread on the
-					 * dataset container.
+					 * The last one has arrived the reqId is the
+					 * tradeStrategyId. Remove this from the processing vector.
 					 */
 
-					for (ListIterator<Tradestrategy> iterItem = contract
-							.getTradestrategies().listIterator(); iterItem
-							.hasNext();) {
-						Tradestrategy item = iterItem.next();
+					synchronized (m_historyDataRequests) {
+						m_historyDataRequests.remove(reqId);
+						m_historyDataRequests.notifyAll();
+					}
+
+					/*
+					 * Check to see if the trading day is today and this
+					 * strategy is selected to trade and that the market is open
+					 */
+					for (Tradestrategy item : contract.getTradestrategies()) {
 						this.fireHistoricalDataComplete(item);
 						if (item.getTradingday().getClose().after(new Date())) {
 							if (!this.isRealtimeBarsRunning(contract)) {
 								this.onReqRealTimeBars(contract, item
 										.getStrategy().getMarketData());
 							}
-						} else {
-							iterItem.remove();
-						}
-					}
-
-					/*
-					 * The last one has arrived the reqId is the
-					 * tradeStrategyId. Remove this from the processing vector.
-					 */
-					if (contract.getTradestrategies().isEmpty()) {
-						synchronized (m_historyDataRequests) {
-							m_historyDataRequests.remove(reqId);
-							m_historyDataRequests.notifyAll();
 						}
 					}
 

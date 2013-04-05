@@ -585,4 +585,40 @@ public class Candle extends Aspect implements java.io.Serializable {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
+
+	/**
+	 * Method equals.
+	 * 
+	 * @param objectToCompare
+	 *            Object
+	 * @return boolean
+	 */
+	public boolean equals(Object objectToCompare) {
+
+		if (super.equals(objectToCompare))
+			return true;
+
+		if (objectToCompare instanceof Candle) {
+			Candle candle = (Candle) objectToCompare;
+			if (this.getTradingday().equals(candle.getTradingday())) {
+				if (this.getContract().equals(candle.getContract())) {
+					if (this.getStartPeriod().equals(candle.getStartPeriod())) {
+						if (this.getEndPeriod().equals(candle.getEndPeriod())) {
+							if (this.getHigh().equals(candle.getHigh())) {
+								if (this.getLow().equals(candle.getLow())) {
+									if (this.getOpen().equals(candle.getOpen())) {
+										if (this.getClose().equals(
+												candle.getClose())) {
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
