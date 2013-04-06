@@ -1888,7 +1888,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					 */
 					if (totalSumbitted > reSumbittedAt) {
 						reSumbittedAt = totalSumbitted + reSumbittedAt;
-						totalSumbitted = reProcessTradingdays(
+						totalSumbitted = reProcessTradingdays(tradingdays,
 								runningContractRequests, totalSumbitted);
 					}
 				}
@@ -1943,8 +1943,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 * order value.
 				 */
 
-				totalSumbitted = reProcessTradingdays(runningContractRequests,
-						totalSumbitted);
+				totalSumbitted = reProcessTradingdays(tradingdays,
+						runningContractRequests, totalSumbitted);
 
 			} catch (InterruptedException ex) {
 				// Do nothing
@@ -2086,7 +2086,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @throws Exception
 		 */
 
-		private int reProcessTradingdays(
+		private int reProcessTradingdays(Tradingdays tradingdays,
 				ConcurrentHashMap<Integer, Tradingday> runningContractRequests,
 				int totalSumbitted) throws Exception {
 
