@@ -56,6 +56,8 @@ import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
+import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.Tradingdays;
@@ -63,6 +65,7 @@ import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorSeries;
 import org.trade.ui.TradeAppLoadConfig;
+import org.trade.ui.base.BasePanel;
 
 /**
  * Some tests for the {@link DataUtilities} class.
@@ -70,7 +73,8 @@ import org.trade.ui.TradeAppLoadConfig;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class TWSBrokerModelTest extends TestCase {
+public class TWSBrokerModelTest extends TestCase implements
+		BrokerChangeListener {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TWSBrokerModelTest.class);
@@ -103,6 +107,8 @@ public class TWSBrokerModelTest extends TestCase {
 							this);
 			this.m_brokerModel = (BrokerModel) ClassFactory
 					.getServiceForInterface(_broker, this);
+			m_brokerModel.addMessageListener(this);
+
 			clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
 			port = new Integer(
 					ConfigProperties.getPropAsString("trade.tws.port"));
@@ -164,7 +170,6 @@ public class TWSBrokerModelTest extends TestCase {
 		} catch (Exception e) {
 			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
 		} finally {
-
 			deleteData();
 		}
 	}
@@ -173,7 +178,7 @@ public class TWSBrokerModelTest extends TestCase {
 	public void testOnBrokerDataMarch2013() {
 		Tradingdays tradingdays = new Tradingdays();
 		try {
-			if (!this.m_brokerModel.isConnected()) {
+			if (this.m_brokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/GappersMarch2013Test.csv";
 				Date tradingDay = new Date();
@@ -338,7 +343,7 @@ public class TWSBrokerModelTest extends TestCase {
 						+ " minutes as there are more than 60 data requests.";
 				waitTime = waitTime + 1000;
 				Thread.sleep(1000);
-				_log.error(message);
+				_log.info(message);
 			}
 		}
 
@@ -355,7 +360,7 @@ public class TWSBrokerModelTest extends TestCase {
 
 		int percent = (int) (((double) (totalSumbitted - this.m_brokerModel
 				.getHistoricalData().size()) / this.grandTotal) * 100d);
-		_log.error("Percent complete: " + percent);
+		_log.info("Percent complete: " + percent);
 		return totalSumbitted;
 	}
 
@@ -446,7 +451,7 @@ public class TWSBrokerModelTest extends TestCase {
 		if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 				&& m_brokerModel.isConnected()) {
 			if ((currentTime - this.lastSubmittedTime) < (1000 * requestsPerPeriod)) {
-				_log.error("hasSubmittedInSeconds Sleep " + requestsPerPeriod
+				_log.info("hasSubmittedInSeconds Sleep " + requestsPerPeriod
 						+ " seconds totalSumbitted: " + totalSumbitted
 						+ " lastSubmittedTime: "
 						+ new Date(this.lastSubmittedTime) + " Current Time:"
@@ -545,7 +550,7 @@ public class TWSBrokerModelTest extends TestCase {
 				while ((this.m_brokerModel.getHistoricalData().size() > 0)) {
 					int percent = (int) (((double) (this.grandTotal - this.m_brokerModel
 							.getHistoricalData().size()) / this.grandTotal) * 100d);
-					_log.error("Percent complete: " + percent);
+					_log.info("Percent complete: " + percent);
 					try {
 						this.m_brokerModel.getHistoricalData().wait();
 					} catch (InterruptedException ex) {
@@ -559,7 +564,7 @@ public class TWSBrokerModelTest extends TestCase {
 					+ totalSumbitted + " in : "
 					+ ((System.currentTimeMillis() - startTime) / 1000)
 					+ " Seconds.";
-			_log.error(message);
+			_log.info(message);
 		}
 	}
 
@@ -719,5 +724,140 @@ public class TWSBrokerModelTest extends TestCase {
 		} catch (Exception e) {
 			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
 		}
+	}
+
+	public void connectionOpened() {
+
+	}
+
+	public void connectionClosed() {
+
+	}
+
+	/**
+	 * Method executionDetailsEnd.
+	 * 
+	 * @param execDetails
+	 *            ConcurrentHashMap<Integer,TradeOrder>
+	 */
+	public void executionDetailsEnd(
+			ConcurrentHashMap<Integer, TradeOrder> execDetails) {
+
+	}
+
+	/**
+	 * Method historicalDataComplete.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void historicalDataComplete(Tradestrategy tradestrategy) {
+
+		try {
+			_log.error("Candles saved: "
+					+ m_tradePersistentModel.findCandleCount(tradestrategy
+							.getTradingday().getIdTradingDay(), tradestrategy
+							.getContract().getIdContract()));
+		} catch (PersistentModelException ex) {
+			_log.error("Error historicalDataComplete Msg: " + ex.getMessage());
+		}
+	}
+
+	/**
+	 * Method managedAccountsUpdated.
+	 * 
+	 * @param accountNumber
+	 *            String
+	 */
+	public void managedAccountsUpdated(String accountNumber) {
+
+	}
+
+	/**
+	 * Method fAAccountsCompleted. Notifies all registered listeners that the
+	 * brokerManagerModel has received all FA Accounts information.
+	 * 
+	 */
+	public void fAAccountsCompleted() {
+
+	}
+
+	/**
+	 * Method updateAccountTime.
+	 * 
+	 * @param accountNumber
+	 *            String
+	 */
+	public void updateAccountTime(String accountNumber) {
+
+	}
+
+	/**
+	 * Method brokerError.
+	 * 
+	 * @param brokerError
+	 *            BrokerModelException
+	 */
+	public void brokerError(BrokerModelException ex) {
+		if (ex.getErrorId() == 1) {
+			_log.error("Error: " + ex.getErrorCode(), ex.getMessage(), ex);
+		} else if (ex.getErrorId() == 2) {
+			_log.warn("Warning: " + ex.getMessage(), BasePanel.WARNING);
+		} else if (ex.getErrorId() == 3) {
+			_log.info("Information: " + ex.getMessage(), BasePanel.INFORMATION);
+		} else {
+			_log.error("Unknown Error Id Code: " + ex.getErrorCode(),
+					ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 * Method tradeOrderFilled.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	public void tradeOrderFilled(TradeOrder tradeOrder) {
+
+	}
+
+	/**
+	 * Method tradeOrderCancelled.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	public void tradeOrderCancelled(TradeOrder tradeOrder) {
+
+	}
+
+	/**
+	 * Method tradeOrderStatusChanged.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	public void tradeOrderStatusChanged(TradeOrder tradeOrder) {
+
+	}
+
+	/**
+	 * Method positionClosed.
+	 * 
+	 * @param trade
+	 *            Trade
+	 */
+	public void positionClosed(Trade trade) {
+
+	}
+
+	/**
+	 * Method openOrderEnd.
+	 * 
+	 * @param openOrders
+	 *            ConcurrentHashMap<Integer,TradeOrder>
+	 */
+	public void openOrderEnd(ConcurrentHashMap<Integer, TradeOrder> openOrders) {
+
 	}
 }
