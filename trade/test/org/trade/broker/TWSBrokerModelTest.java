@@ -136,7 +136,6 @@ public class TWSBrokerModelTest extends TestCase {
 	 */
 	protected void tearDown() throws Exception {
 		this.m_brokerModel.disconnect();
-		deleteData();
 	}
 
 	@Test
@@ -155,7 +154,9 @@ public class TWSBrokerModelTest extends TestCase {
 
 				tradingdays.populateDataFromFile(fileName, tradingday);
 
-				m_tradePersistentModel.persistTradingday(tradingday);
+				for (Tradingday item : tradingdays.getTradingdays()) {
+					m_tradePersistentModel.persistTradingday(item);
+				}
 
 				runTradingDaysBrokerRequest(tradingdays);
 
@@ -164,6 +165,7 @@ public class TWSBrokerModelTest extends TestCase {
 			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
 		} finally {
 
+			deleteData();
 		}
 	}
 
@@ -171,7 +173,7 @@ public class TWSBrokerModelTest extends TestCase {
 	public void testOnBrokerDataMarch2013() {
 		Tradingdays tradingdays = new Tradingdays();
 		try {
-			if (this.m_brokerModel.isConnected()) {
+			if (!this.m_brokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/GappersMarch2013Test.csv";
 				Date tradingDay = new Date();
@@ -183,15 +185,15 @@ public class TWSBrokerModelTest extends TestCase {
 
 				tradingdays.populateDataFromFile(fileName, tradingday);
 
-				m_tradePersistentModel.persistTradingday(tradingday);
-
+				for (Tradingday item : tradingdays.getTradingdays()) {
+					m_tradePersistentModel.persistTradingday(item);
+				}
 				runTradingDaysBrokerRequest(tradingdays);
-
 			}
 		} catch (Exception e) {
 			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
 		} finally {
-
+			deleteData();
 		}
 	}
 
@@ -687,29 +689,35 @@ public class TWSBrokerModelTest extends TestCase {
 		return totalSumbitted;
 	}
 
-	private void deleteData() throws PersistentModelException {
-		Aspects candles = m_tradePersistentModel
-				.findAspectsByClassName(Candle.class.getName());
-		for (Aspect item : candles.getAspect()) {
-			m_tradePersistentModel.removeAspect(item);
-		}
+	private void deleteData() {
 
-		Aspects tradestrategies = m_tradePersistentModel
-				.findAspectsByClassName(Tradestrategy.class.getName());
-		for (Aspect item : tradestrategies.getAspect()) {
-			m_tradePersistentModel.removeAspect(item);
-		}
+		try {
 
-		Aspects contracts = m_tradePersistentModel
-				.findAspectsByClassName(Contract.class.getName());
-		for (Aspect item : contracts.getAspect()) {
-			m_tradePersistentModel.removeAspect(item);
-		}
+			Aspects candles = m_tradePersistentModel
+					.findAspectsByClassName(Candle.class.getName());
+			for (Aspect item : candles.getAspect()) {
+				m_tradePersistentModel.removeAspect(item);
+			}
 
-		Aspects tradingdays = m_tradePersistentModel
-				.findAspectsByClassName(Tradingday.class.getName());
-		for (Aspect item : tradingdays.getAspect()) {
-			m_tradePersistentModel.removeAspect(item);
+			Aspects tradestrategies = m_tradePersistentModel
+					.findAspectsByClassName(Tradestrategy.class.getName());
+			for (Aspect item : tradestrategies.getAspect()) {
+				m_tradePersistentModel.removeAspect(item);
+			}
+
+			Aspects contracts = m_tradePersistentModel
+					.findAspectsByClassName(Contract.class.getName());
+			for (Aspect item : contracts.getAspect()) {
+				m_tradePersistentModel.removeAspect(item);
+			}
+
+			Aspects tradingdays = m_tradePersistentModel
+					.findAspectsByClassName(Tradingday.class.getName());
+			for (Aspect item : tradingdays.getAspect()) {
+				m_tradePersistentModel.removeAspect(item);
+			}
+		} catch (Exception e) {
+			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
 		}
 	}
 }
