@@ -202,7 +202,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	@Test
-	public void testOneSymbolMarch2013OnBrokerData() {
+	public void testOneSymbolTwoMths2013OnBrokerData() {
 		Tradingdays tradingdays = new Tradingdays();
 		try {
 			if (this.brokerManagerModel.isConnected()) {
@@ -216,10 +216,13 @@ public class TWSBrokerModelTest extends TestCase implements
 						TradingCalendar.getBusinessDayEnd(tradingDay));
 
 				tradingdays.populateDataFromFile(fileName, tradingday);
-				
+				/*
+				 * Set the chart days to one day so no over lap.
+				 */
 				for (Tradingday item : tradingdays.getTradingdays()) {
-					for(Tradestrategy tradestrategy: item.getTradestrategies()){
-						tradestrategy.setChartDays(1);						
+					for (Tradestrategy tradestrategy : item
+							.getTradestrategies()) {
+						tradestrategy.setChartDays(1);
 					}
 				}
 
@@ -590,7 +593,6 @@ public class TWSBrokerModelTest extends TestCase implements
 		return indicatorTradestrategy;
 	}
 
-
 	/**
 	 * Method hasSubmittedInSeconds. Make sure no more than six requests every 2
 	 * seconds.
@@ -617,16 +619,14 @@ public class TWSBrokerModelTest extends TestCase implements
 	private void hasSubmittedInSeconds(int totalSumbitted)
 			throws InterruptedException {
 		long currentTime = System.currentTimeMillis();
-
-		if (((Math.floor(totalSumbitted / 5d) == (totalSumbitted / 5d)) && (totalSumbitted > 0))
+		int waitTime = 11;
+		_log.info("hasSubmittedInSeconds 6 in: "
+				+ ((currentTime - this.last6SubmittedTime) / 1000d));
+		if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 				&& this.brokerManagerModel.isConnected()) {
-			while ((currentTime - this.last6SubmittedTime) < (2500)) {
-				_log.info("hasSubmittedInSeconds Sleep "
-						+ new Date((currentTime - this.last6SubmittedTime))
-						+ " seconds totalSumbitted: " + totalSumbitted
-						+ " lastSubmittedTime: "
-						+ new Date(this.last6SubmittedTime) + " Current Time:"
-						+ new Date(currentTime));
+			while ((currentTime - this.last6SubmittedTime) < (waitTime * 1000)) {
+				_log.info("hasSubmittedInSeconds will sumbit in: "
+						+ (waitTime - ((currentTime - this.last6SubmittedTime) / 1000d)));
 				Thread.sleep(1000);
 				currentTime = System.currentTimeMillis();
 			}

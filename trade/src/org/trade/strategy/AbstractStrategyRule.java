@@ -643,7 +643,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		 * If no trade exists create the trade and set the side based on the
 		 * action.
 		 */
-		if (null == this.getTrade()) {
+		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
 			/*
 			 * Set the side based on the action for the first order.
 			 */
@@ -784,7 +784,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		 * If no trade exists create the trade and set the side based on the
 		 * action.
 		 */
-		if (null == this.getTrade()) {
+		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
 			/*
 			 * Set the side based on the action for the first order.
 			 */
@@ -961,12 +961,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
+	 * @throws StrategyRuleException 
 	 */
 	public Money createStopAndTargetOrder(Money stopPrice, Money targetPrice,
 			int quantity, boolean stopTransmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException {
+			BrokerModelException, PersistentModelException, StrategyRuleException {
 
 		Date createDate = new Date();
+		
+		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
+			throw new StrategyRuleException(1, 80,
+					"Error trade is not open");
+		}
 
 		String action = Action.BUY;
 		if (Side.BOT.equals(trade.getSide())) {
@@ -1048,13 +1054,19 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
+	 * @throws StrategyRuleException 
 	 */
 	public Money createStopAndTargetOrder(TradeOrder openPosition,
 			int stopRiskUnits, int targetRiskUnits, int percentQty,
 			boolean stopTransmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException {
+			BrokerModelException, PersistentModelException, StrategyRuleException {
 
 		Date createDate = new Date();
+		
+		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
+			throw new StrategyRuleException(1, 80,
+					"Error trade is not open");
+		}
 
 		/*
 		 * Risk amount is based of the average filled price and actual stop
