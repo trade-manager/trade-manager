@@ -145,7 +145,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	@Test
-	public void testOnBrokerDataOneSymbol() {
+	public void testOneSymbolOnBrokerData() {
 		Tradingdays tradingdays = new Tradingdays();
 		try {
 			if (this.m_brokerModel.isConnected()) {
@@ -165,17 +165,17 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 
 				runTradingDaysBrokerRequest(tradingdays);
-
 			}
-		} catch (Exception e) {
-			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
+		} catch (Exception ex) {
+			TestCase.fail("Error testOneSymbolOnBrokerData Msg: "
+					+ ex.getMessage());
 		} finally {
 			deleteData();
 		}
 	}
 
 	@Test
-	public void testOnBrokerDataMarch2013() {
+	public void testMarch2013OnBrokerData() {
 		Tradingdays tradingdays = new Tradingdays();
 		try {
 			if (this.m_brokerModel.isConnected()) {
@@ -195,8 +195,9 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 				runTradingDaysBrokerRequest(tradingdays);
 			}
-		} catch (Exception e) {
-			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
+		} catch (Exception ex) {
+			TestCase.fail("Error testMarch2013OnBrokerData Msg: "
+					+ ex.getMessage());
 		} finally {
 			deleteData();
 		}
@@ -722,7 +723,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				m_tradePersistentModel.removeAspect(item);
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
+			TestCase.fail("Error deleteData Msg: " + e.getMessage());
 		}
 	}
 
@@ -754,7 +755,9 @@ public class TWSBrokerModelTest extends TestCase implements
 	public void historicalDataComplete(Tradestrategy tradestrategy) {
 
 		try {
-			_log.error("Candles saved: "
+			_log.info("Symbol: "
+					+ tradestrategy.getContract().getSymbol()
+					+ " Candles  saved: "
 					+ m_tradePersistentModel.findCandleCount(tradestrategy
 							.getTradingday().getIdTradingDay(), tradestrategy
 							.getContract().getIdContract()));
