@@ -145,12 +145,12 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	@Test
-	public void testOneSymbolOnBrokerData() {
+	public void testOneSymbolTodayOnBrokerData() {
 		Tradingdays tradingdays = new Tradingdays();
 		try {
 			if (this.m_brokerModel.isConnected()) {
 
-				String fileName = "trade/test/org/trade/broker/OneSymbol.csv";
+				String fileName = "trade/test/org/trade/broker/OneSymbolToday.csv";
 				Date tradingDay = new Date();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
@@ -180,7 +180,7 @@ public class TWSBrokerModelTest extends TestCase implements
 		try {
 			if (this.m_brokerModel.isConnected()) {
 
-				String fileName = "trade/test/org/trade/broker/GappersMarch2013Test.csv";
+				String fileName = "trade/test/org/trade/broker/GappersMarch2013.csv";
 				Date tradingDay = new Date();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
@@ -193,10 +193,42 @@ public class TWSBrokerModelTest extends TestCase implements
 				for (Tradingday item : tradingdays.getTradingdays()) {
 					m_tradePersistentModel.persistTradingday(item);
 				}
+
 				runTradingDaysBrokerRequest(tradingdays);
 			}
 		} catch (Exception ex) {
 			TestCase.fail("Error testMarch2013OnBrokerData Msg: "
+					+ ex.getMessage());
+		} finally {
+			deleteData();
+		}
+	}
+	
+	@Test
+	public void testOneSymbolMarch2013OnBrokerData() {
+		Tradingdays tradingdays = new Tradingdays();
+		try {
+			if (this.m_brokerModel.isConnected()) {
+
+				requestsPerPeriod = 15;
+				String fileName = "trade/test/org/trade/broker/OneSymbolMarch2013Test.csv";
+				Date tradingDay = new Date();
+				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
+
+				Tradingday tradingday = new Tradingday(
+						TradingCalendar.getBusinessDayStart(tradingDay),
+						TradingCalendar.getBusinessDayEnd(tradingDay));
+
+				tradingdays.populateDataFromFile(fileName, tradingday);
+
+				for (Tradingday item : tradingdays.getTradingdays()) {
+					m_tradePersistentModel.persistTradingday(item);
+				}
+
+				runTradingDaysBrokerRequest(tradingdays);
+			}
+		} catch (Exception ex) {
+			TestCase.fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
 					+ ex.getMessage());
 		} finally {
 			deleteData();

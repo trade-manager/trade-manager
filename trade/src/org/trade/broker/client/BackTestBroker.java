@@ -511,7 +511,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				}
 			}
 		}
-
 		return openPosition;
 	}
 
@@ -711,7 +710,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					candleDataset.setSeries(seriesIndex, childSeries);
 				}
 			}
-
 		}
 	}
 }
