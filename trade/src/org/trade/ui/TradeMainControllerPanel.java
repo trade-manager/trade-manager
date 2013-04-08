@@ -143,7 +143,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private BrokerModel m_brokerModel = null;
 	private PersistentModel m_tradePersistentModel = null;
 	private BrokerDataRequestProgressMonitor brokerDataRequestProgressMonitor = null;
-	private static final ConcurrentHashMap<Integer, Tradestrategy> m_indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
+	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
 
 	private TradingdayPanel tradingdayPanel = null;
 	private ContractPanel contractPanel = null;
@@ -1096,7 +1096,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					brokerDataRequestProgressMonitor.cancel(true);
 				}
 				m_brokerModel.disconnect();
-				m_indicatorTradestrategy.clear();
+				_indicatorTradestrategy.clear();
 				refreshTradingdays(m_tradingdays);
 			} else {
 				tradingdayPanel.setConnected(false);
@@ -1345,7 +1345,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			brokerDataRequestProgressMonitor.cancel(true);
 		}
 		tradingdayPanel.killAllStrategyWorker();
-		m_indicatorTradestrategy.clear();
+		_indicatorTradestrategy.clear();
 		refreshTradingdays(m_tradingdays);
 		this.setStatusBarMessage(
 				"Strategies and live data have been cancelled.",
@@ -1644,7 +1644,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * Now run a thread that gets and saves historical data from IB TWS.
 			 */
 			brokerDataRequestProgressMonitor = new BrokerDataRequestProgressMonitor(
-					m_brokerModel, tradingdays);
+					m_brokerModel, m_tradePersistentModel, tradingdays);
 			brokerDataRequestProgressMonitor
 					.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent evt) {
@@ -1822,17 +1822,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			SwingWorker<Void, String> {
 
 		private BrokerModel brokerManagerModel;
+		private PersistentModel tradePersistentModel = null;
 		private Tradingdays tradingdays = null;
 		private int grandTotal = 0;
 		private long startTime = 0;
-		private long lastSubmittedTime = 0;
+		private long last6SubmittedTime = 0;
 		private Integer backTestBarSize = 0;
-		/*
-		 * Number of requests to be submitted every few seconds. TWS has a limit
-		 * of 6 per 2 seconds.
-		 */
-
-		private double requestsPerPeriod = 2;
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -1844,8 +1839,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @throws IOException
 		 */
 		public BrokerDataRequestProgressMonitor(BrokerModel brokerManagerModel,
-				Tradingdays tradingdays) throws IOException {
+				PersistentModel tradePersistentModel, Tradingdays tradingdays)
+				throws IOException {
 			this.brokerManagerModel = brokerManagerModel;
+			this.tradePersistentModel = tradePersistentModel;
 			this.tradingdays = tradingdays;
 			backTestBarSize = ConfigProperties
 					.getPropAsInt("trade.backtest.barSize");
@@ -1860,15 +1857,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			String message = null;
 			int totalSumbitted = 0;
 			int reSumbittedAt = 20;
+			ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
+			this.grandTotal = 0;
+
 			try {
-				ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
-				this.grandTotal = 0;
+
 				for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
-					this.grandTotal = this.grandTotal
+					this.grandTotal = this.getGrandTotal()
 							+ tradingday.getTradestrategies().size();
 				}
 				this.startTime = System.currentTimeMillis();
-				this.lastSubmittedTime = startTime;
+				this.last6SubmittedTime = startTime;
 				// Initialize the progress bar
 				getProgressBar().setMaximum(100);
 				setProgress(0);
@@ -1923,7 +1922,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									tradestrategy.setBarSize(backTestBarSize);
 									tradestrategy.setChartDays(1);
 									tradestrategy
-											.setIdTradeStrategy(m_brokerModel
+											.setIdTradeStrategy(this.brokerManagerModel
 													.getNextRequestId());
 									tradingday.addTradestrategy(tradestrategy);
 									this.grandTotal++;
@@ -1957,8 +1956,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				synchronized (this.brokerManagerModel.getHistoricalData()) {
 					while ((this.brokerManagerModel.getHistoricalData().size() > 0)
 							&& !this.isCancelled()) {
-						int percent = (int) (((double) (this.grandTotal - this.brokerManagerModel
-								.getHistoricalData().size()) / this.grandTotal) * 100d);
+						int percent = (int) (((double) (getGrandTotal() - this.brokerManagerModel
+								.getHistoricalData().size()) / getGrandTotal()) * 100d);
 						setProgress(percent);
 						try {
 							this.brokerManagerModel.getHistoricalData().wait();
@@ -1998,7 +1997,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Integer barSize, Integer chartDays, int totalSumbitted)
 				throws InterruptedException, BrokerModelException {
 
-			if (m_brokerModel.isHistoricalDataRunning(contract)
+			if (this.brokerManagerModel.isHistoricalDataRunning(contract)
 					|| this.isCancelled()) {
 				return totalSumbitted;
 			}
@@ -2007,9 +2006,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			totalSumbitted++;
 			hasSubmittedInSeconds(totalSumbitted);
-			m_brokerModel.onBrokerData(contract, endDate, barSize, chartDays);
+			this.brokerManagerModel.onBrokerData(contract, endDate, barSize,
+					chartDays);
 
-			_log.info("Total: " + this.grandTotal + " totalSumbitted: "
+			_log.info("Total: " + getGrandTotal() + " totalSumbitted: "
 					+ totalSumbitted);
 			/*
 			 * Need to slow things down as limit is 60 including real time bars
@@ -2017,7 +2017,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * for connected.
 			 */
 			if (((Math.floor(totalSumbitted / 58d) == (totalSumbitted / 58d)) && (totalSumbitted > 0))
-					&& m_brokerModel.isConnected()) {
+					&& this.brokerManagerModel.isConnected()) {
 				int waitTime = 0;
 				while ((waitTime < 601000) && !this.isCancelled()) {
 					String message = "Please wait "
@@ -2042,14 +2042,29 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 
 			int percent = (int) (((double) (totalSumbitted - this.brokerManagerModel
-					.getHistoricalData().size()) / this.grandTotal) * 100d);
+					.getHistoricalData().size()) / getGrandTotal()) * 100d);
 			setProgress(percent);
 			return totalSumbitted;
 		}
 
 		/**
-		 * Method hasSubmittedInSeconds. Make sure no more than six requests
-		 * every 2 seconds.
+		 * Method hasSubmittedInSeconds. Make sure no more than six requests every 2
+		 * seconds.
+		 * 
+		 * 162 - Historical Market Data Service error message: Historical data
+		 * request pacing violation
+		 * 
+		 * The following conditions can cause a pacing violation:
+		 * 
+		 * · Making identical historical data requests within 15 seconds;
+		 * 
+		 * · Making six or more historical data requests for the same Contract,
+		 * Exchange and Tick Type within two seconds.
+		 * 
+		 * Also, observe the following limitation when requesting historical data:
+		 * 
+		 * · Do not make more than 60 historical data requests in any ten-minute
+		 * period.
 		 * 
 		 * @param totalSumbitted
 		 *            int
@@ -2059,17 +2074,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				throws InterruptedException {
 			long currentTime = System.currentTimeMillis();
 
-			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
-					&& m_brokerModel.isConnected() && !this.isCancelled()) {
-				if ((currentTime - this.lastSubmittedTime) < (1000 * requestsPerPeriod)) {
+			if (((Math.floor(totalSumbitted / 5d) == (totalSumbitted / 5d)) && (totalSumbitted > 0))
+					&& this.brokerManagerModel.isConnected()) {
+				while ((currentTime - this.last6SubmittedTime) < (3000)) {
 					_log.info("hasSubmittedInSeconds Sleep "
-							+ requestsPerPeriod + " seconds totalSumbitted: "
-							+ totalSumbitted + " lastSubmittedTime: "
-							+ new Date(this.lastSubmittedTime)
-							+ " Current Time:" + new Date(currentTime));
-					Thread.sleep((long) (requestsPerPeriod * 1000));
+							+ new Date((currentTime - this.last6SubmittedTime))
+							+ " seconds totalSumbitted: " + totalSumbitted
+							+ " lastSubmittedTime: "
+							+ new Date(this.last6SubmittedTime) + " Current Time:"
+							+ new Date(currentTime));
+					Thread.sleep(1000);
+					currentTime = System.currentTimeMillis();
 				}
-				this.lastSubmittedTime = currentTime;
+				this.last6SubmittedTime = currentTime;
 			}
 		}
 
@@ -2145,7 +2162,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		public void done() {
 			refreshTradingdays(this.tradingdays);
 			String message = "Completed Historical data total contracts processed: "
-					+ grandTotal
+					+ this.getGrandTotal()
 					+ " in : "
 					+ ((System.currentTimeMillis() - this.startTime) / 1000)
 					+ " Seconds.";
@@ -2173,7 +2190,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				CloneNotSupportedException {
 
 			Tradestrategy indicatorTradestrategy = null;
-			for (Tradestrategy indicator : m_indicatorTradestrategy.values()) {
+			for (Tradestrategy indicator : _indicatorTradestrategy.values()) {
 				if (indicator.getContract().equals(series.getContract())
 						&& indicator.getTradingday().equals(
 								tradestrategy.getTradingday())
@@ -2190,14 +2207,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (null == indicatorTradestrategy) {
 				Contract contract = series.getContract();
 				if (null == series.getContract().getIdContract()) {
-					contract = m_tradePersistentModel.findContractByUniqueKey(
-							series.getContract().getSecType(), series
-									.getContract().getSymbol(), series
-									.getContract().getExchange(), series
-									.getContract().getCurrency(), series
-									.getContract().getExpiry());
+					contract = this.tradePersistentModel
+							.findContractByUniqueKey(series.getContract()
+									.getSecType(), series.getContract()
+									.getSymbol(), series.getContract()
+									.getExchange(), series.getContract()
+									.getCurrency(), series.getContract()
+									.getExpiry());
 					if (null == contract) {
-						contract = (Contract) m_tradePersistentModel
+						contract = (Contract) this.tradePersistentModel
 								.persistAspect(series.getContract());
 					}
 				}
@@ -2207,8 +2225,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						tradestrategy.getPortfolio(), new BigDecimal(0), null,
 						null, false, tradestrategy.getChartDays(),
 						tradestrategy.getBarSize());
-				indicatorTradestrategy.setIdTradeStrategy(m_brokerModel
-						.getNextRequestId());
+				indicatorTradestrategy
+						.setIdTradeStrategy(this.brokerManagerModel
+								.getNextRequestId());
 				indicatorTradestrategy.setDirty(false);
 			}
 
@@ -2235,12 +2254,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * Remove those that are not running as these do not need to be
 			 * shared.
 			 */
-			for (Tradestrategy tradestrategy : m_indicatorTradestrategy
-					.values()) {
-				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)
-						&& !m_brokerModel
+			for (Tradestrategy tradestrategy : _indicatorTradestrategy.values()) {
+				if (!this.brokerManagerModel
+						.isRealtimeBarsRunning(tradestrategy)
+						&& !this.brokerManagerModel
 								.isHistoricalDataRunning(tradestrategy)) {
-					m_indicatorTradestrategy.remove(tradestrategy
+					_indicatorTradestrategy.remove(tradestrategy
 							.getIdTradeStrategy());
 				}
 			}
@@ -2253,7 +2272,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					prevContract = tradestrategy.getContract();
 					prevBarSize = tradestrategy.getBarSize();
 					prevChartDays = tradestrategy.getChartDays();
-					m_indicatorTradestrategy.put(
+					_indicatorTradestrategy.put(
 							tradestrategy.getIdTradeStrategy(), tradestrategy);
 				}
 				/*
@@ -2261,7 +2280,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 */
 				tradestrategy.setDatasetContainer(null);
 
-				if (!m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
+				if (!this.brokerManagerModel
+						.isRealtimeBarsRunning(tradestrategy)) {
 
 					/*
 					 * Fire all the requests to TWS to get chart data After data
@@ -2276,7 +2296,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						prevContract = tradestrategy.getContract();
 						prevBarSize = tradestrategy.getBarSize();
 						prevChartDays = tradestrategy.getChartDays();
-						m_indicatorTradestrategy.put(
+						_indicatorTradestrategy.put(
 								tradestrategy.getIdTradeStrategy(),
 								tradestrategy);
 					}
@@ -2306,12 +2326,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						candleDataset.setSeries(seriesIndex,
 								indicatorTradestrategy.getDatasetContainer()
 										.getBaseCandleSeries());
-						if (!m_indicatorTradestrategy
+						if (!_indicatorTradestrategy
 								.containsKey(indicatorTradestrategy
 										.getIdTradeStrategy())) {
-							if (m_brokerModel.isConnected()
-									|| m_brokerModel.isBrokerDataOnly()) {
-								m_indicatorTradestrategy.put(
+							if (this.brokerManagerModel.isConnected()
+									|| this.brokerManagerModel
+											.isBrokerDataOnly()) {
+								_indicatorTradestrategy.put(
 										indicatorTradestrategy
 												.getIdTradeStrategy(),
 										indicatorTradestrategy);
@@ -2331,6 +2352,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 			return totalSumbitted;
+		}
+
+		/**
+		 * Method getGrandTotal.
+		 * 
+		 * @return int
+		 */
+		private int getGrandTotal() {
+			return this.grandTotal;
 		}
 
 		/**
@@ -2371,8 +2401,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			Integer currChartDays = null;
 
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-				if (m_brokerModel.isHistoricalDataRunning(tradestrategy
-						.getContract())) {
+				if (this.brokerManagerModel
+						.isHistoricalDataRunning(tradestrategy.getContract())) {
 					if (!reProcessTradingday.existTradestrategy(tradestrategy))
 						reProcessTradingday.addTradestrategy(tradestrategy);
 				} else {
