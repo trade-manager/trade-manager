@@ -850,7 +850,7 @@ public class TradePersistentModel implements PersistentModel {
 				Money filledValue = new Money(totalFilledValue);
 				trade.setTotalValue(filledValue.getBigDecimalValue());
 				BigDecimal avgFillPrice = new BigDecimal(totalFilledValue
-						/ (totalFilledQuantity / 2));
+						/ (totalFilledQuantity / 2d));
 				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 				trade.setAveragePrice(avgFillPrice);
 				trade.setTotalCommission(comms.getBigDecimalValue());
