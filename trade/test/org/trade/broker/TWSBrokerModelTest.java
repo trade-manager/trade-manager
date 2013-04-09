@@ -219,12 +219,12 @@ public class TWSBrokerModelTest extends TestCase implements
 				/*
 				 * Set the chart days to one day so no over lap.
 				 */
-				for (Tradingday item : tradingdays.getTradingdays()) {
-					for (Tradestrategy tradestrategy : item
-							.getTradestrategies()) {
-						tradestrategy.setChartDays(1);
-					}
-				}
+//				for (Tradingday item : tradingdays.getTradingdays()) {
+//					for (Tradestrategy tradestrategy : item
+//							.getTradestrategies()) {
+//						tradestrategy.setChartDays(1);
+//					}
+//				}
 
 				for (Tradingday item : tradingdays.getTradingdays()) {
 					m_tradePersistentModel.persistTradingday(item);
@@ -619,7 +619,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	private void hasSubmittedInSeconds(int totalSumbitted)
 			throws InterruptedException {
 		long currentTime = System.currentTimeMillis();
-		int waitTime = 11;
+		int waitTime = 5;
 		_log.info("hasSubmittedInSeconds 6 in: "
 				+ ((currentTime - this.last6SubmittedTime) / 1000d));
 		if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
