@@ -1563,4 +1563,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 		return price;
 	}
+	
+	/**
+	 * Method tradeOrderFilled.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	public void tradeOrderFilled(TradeOrder tradeOrder){
+		
+	}
 }

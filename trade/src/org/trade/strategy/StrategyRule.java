@@ -35,6 +35,7 @@
  */
 package org.trade.strategy;
 
+import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 
 /**
@@ -115,4 +116,11 @@ public interface StrategyRule {
 	 */
 	void removeMessageListener(StrategyChangeListener listener);
 
+	/**
+	 * Method tradeOrderFilled.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	void tradeOrderFilled(TradeOrder tradeOrder);
 }

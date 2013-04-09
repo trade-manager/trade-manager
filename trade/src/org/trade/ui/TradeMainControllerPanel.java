@@ -633,6 +633,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.getStrategyManager().getClassName(),
 								tradestrategy);
 					}
+				} else {
+					String key = tradestrategy.getStrategy().getClassName()
+							+ tradestrategy.getIdTradeStrategy();
+					StrategyRule strategy = tradingdayPanel
+							.getStrategyWorker(key);
+					strategy.tradeOrderFilled(tradeOrder);
 				}
 			}
 		} catch (Exception ex) {
@@ -2048,8 +2054,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 
 		/**
-		 * Method hasSubmittedInSeconds. Make sure no more than six requests every 2
-		 * seconds.
+		 * Method hasSubmittedInSeconds. Make sure no more than six requests
+		 * every 2 seconds.
 		 * 
 		 * 162 - Historical Market Data Service error message: Historical data
 		 * request pacing violation
@@ -2061,7 +2067,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * · Making six or more historical data requests for the same Contract,
 		 * Exchange and Tick Type within two seconds.
 		 * 
-		 * Also, observe the following limitation when requesting historical data:
+		 * Also, observe the following limitation when requesting historical
+		 * data:
 		 * 
 		 * · Do not make more than 60 historical data requests in any ten-minute
 		 * period.

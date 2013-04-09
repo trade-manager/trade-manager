@@ -1021,7 +1021,20 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_strategyWorkers.remove(key);
 		}
 	}
-
+	/**
+	 * Method getStrategyWorker.
+	 * 
+	 * @param key
+	 *            String
+	 * @param strategy
+	 *            StrategyRule
+	 */
+	public StrategyRule getStrategyWorker(String key) {
+		if (m_strategyWorkers.containsKey(key)) {
+			return m_strategyWorkers.get(key);
+		}
+		return null;
+	}
 	/**
 	 * Method killAllStrategyWorkersForTradestrategy.
 	 * 
