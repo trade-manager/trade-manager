@@ -1021,6 +1021,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			m_strategyWorkers.remove(key);
 		}
 	}
+
 	/**
 	 * Method getStrategyWorker.
 	 * 
@@ -1035,6 +1036,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		}
 		return null;
 	}
+
 	/**
 	 * Method killAllStrategyWorkersForTradestrategy.
 	 * 

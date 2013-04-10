@@ -279,6 +279,16 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
+	 * Method findOpenTradeByContractId.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return Trade
+	 * @throws PersistentModelException
+	 */
+	Trade findOpenTradeByContractId(Integer id) throws PersistentModelException;
+
+	/**
 	 * Method findPortfolioById.
 	 * 
 	 * @param id

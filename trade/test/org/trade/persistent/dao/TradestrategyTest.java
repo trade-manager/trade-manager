@@ -308,12 +308,11 @@ public class TradestrategyTest extends TestCase {
 		tradestrategy = tradestrategyHome.findById(tradestrategy
 				.getIdTradeStrategy());
 		if (null != tradestrategy) {
+			tradestrategy.setStatus(null);
+			aspectHome.persist(tradestrategy);
 			for (Trade trade : tradestrategy.getTrades()) {
 				aspectHome.remove(trade);
 			}
-			tradestrategy.setStatus(null);
-			tradestrategy.getTrades().clear();
-			aspectHome.persist(tradestrategy);
 		}
 		return tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
 	}

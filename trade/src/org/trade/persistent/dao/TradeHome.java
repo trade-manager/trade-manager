@@ -127,36 +127,93 @@ public class TradeHome {
 			CriteriaQuery<Trade> query = builder.createQuery(Trade.class);
 			Root<Trade> from = query.from(Trade.class);
 			query.select(from);
-			List<Predicate> predicates = new ArrayList<Predicate>();
-			if (null != id) {
-				Join<Trade, Tradestrategy> tradestrategy = from
-						.join("tradestrategy");
-				Predicate predicate = builder.equal(
-						tradestrategy.get("idTradeStrategy"), id);
-				predicates.add(predicate);
-			}
-			query.where(predicates.toArray(new Predicate[] {}));
+
+			Join<Trade, Tradestrategy> tradestrategy = from
+					.join("tradestrategy");
+			Predicate tradestrategyId = builder.equal(
+					tradestrategy.get("idTradeStrategy"), id);
+
+			Predicate isOpenTrue = builder.equal(from.get("isOpen"),
+					new Boolean("true"));
+
+			Predicate isOpenFalse = builder.equal(from.get("isOpen"),
+					new Boolean("false"));
+			Predicate totalQuantityNull = builder.isNull(from
+					.get("totalQuantity"));
+
+			Predicate predicate1 = builder.and(isOpenFalse, totalQuantityNull);
+			Predicate predicate2 = builder.or(isOpenTrue, predicate1);
+
+			query.where(builder.and(tradestrategyId, predicate2));
+
 			TypedQuery<Trade> typedQuery = entityManager.createQuery(query);
 			List<Trade> items = typedQuery.getResultList();
-			Trade openTrade = null;
 			for (Trade trade : items) {
-				if (trade.getIsOpen()) {
-					openTrade = trade;
-					openTrade.getTradeOrders().size();
-					break;
-				}
-			}
-			if (null == openTrade) {
-				for (Trade trade : items) {
-					if (null == trade.getTotalQuantity() && !trade.getIsOpen()) {
-						openTrade = trade;
-						openTrade.getTradeOrders().size();
-						break;
-					}
-				}
+				trade.getTradeOrders().size();
 			}
 			entityManager.getTransaction().commit();
-			return openTrade;
+			if (items.size() > 0) {
+				return (Trade) items.get(0);
+			}
+			return null;
+
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
+	 * Method findOpenTradeByContractId.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return Trade
+	 */
+	public Trade findOpenTradeByContractId(Integer id) {
+
+		try {
+			entityManager = EntityManagerHelper.getEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Trade> query = builder.createQuery(Trade.class);
+			Root<Trade> from = query.from(Trade.class);
+			query.select(from);
+
+			Join<Trade, Tradestrategy> tradestrategy = from
+					.join("tradestrategy");
+
+			Join<Tradestrategy, Contract> contract = tradestrategy
+					.join("contract");
+
+			Predicate contractId = builder
+					.equal(contract.get("idContract"), id);
+
+			Predicate isOpenTrue = builder.equal(from.get("isOpen"),
+					new Boolean("true"));
+
+			Predicate isOpenFalse = builder.equal(from.get("isOpen"),
+					new Boolean("false"));
+			Predicate totalQuantityNull = builder.isNull(from
+					.get("totalQuantity"));
+
+			Predicate predicate1 = builder.and(isOpenFalse, totalQuantityNull);
+			Predicate predicate2 = builder.or(isOpenTrue, predicate1);
+
+			query.where(builder.and(contractId, predicate2));
+
+			TypedQuery<Trade> typedQuery = entityManager.createQuery(query);
+			List<Trade> items = typedQuery.getResultList();
+			for (Trade trade : items) {
+				trade.getTradeOrders().size();
+			}
+			entityManager.getTransaction().commit();
+			if (items.size() > 0) {
+				return (Trade) items.get(0);
+			}
+			return null;
 
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();

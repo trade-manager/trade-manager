@@ -312,7 +312,26 @@ public class TradePersistentModel implements PersistentModel {
 	 */
 	public Trade findOpenTradeByTradestrategyId(Integer id)
 			throws PersistentModelException {
+		if (null == id)
+			throw new PersistentModelException(
+					"Tradestrategy id cannot be null");
 		return m_tradeHome.findOpenTradeByTradestrategyId(id);
+	}
+
+	/**
+	 * Method findOpenTradeByContractId.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return Trade
+	 * @throws PersistentModelException
+	 * @see org.trade.persistent.PersistentModel#findOpenTradeByContractId(Integer)
+	 */
+	public Trade findOpenTradeByContractId(Integer id)
+			throws PersistentModelException {
+		if (null == id)
+			throw new PersistentModelException("Contract id cannot be null");
+		return m_tradeHome.findOpenTradeByContractId(id);
 	}
 
 	/**

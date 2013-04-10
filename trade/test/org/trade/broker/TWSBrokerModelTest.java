@@ -219,12 +219,12 @@ public class TWSBrokerModelTest extends TestCase implements
 				/*
 				 * Set the chart days to one day so no over lap.
 				 */
-//				for (Tradingday item : tradingdays.getTradingdays()) {
-//					for (Tradestrategy tradestrategy : item
-//							.getTradestrategies()) {
-//						tradestrategy.setChartDays(1);
-//					}
-//				}
+				// for (Tradingday item : tradingdays.getTradingdays()) {
+				// for (Tradestrategy tradestrategy : item
+				// .getTradestrategies()) {
+				// tradestrategy.setChartDays(1);
+				// }
+				// }
 
 				for (Tradingday item : tradingdays.getTradingdays()) {
 					m_tradePersistentModel.persistTradingday(item);

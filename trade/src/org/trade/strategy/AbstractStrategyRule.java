@@ -961,17 +961,17 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
-	 * @throws StrategyRuleException 
+	 * @throws StrategyRuleException
 	 */
 	public Money createStopAndTargetOrder(Money stopPrice, Money targetPrice,
 			int quantity, boolean stopTransmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException, StrategyRuleException {
+			BrokerModelException, PersistentModelException,
+			StrategyRuleException {
 
 		Date createDate = new Date();
-		
+
 		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
-			throw new StrategyRuleException(1, 80,
-					"Error trade is not open");
+			throw new StrategyRuleException(1, 80, "Error trade is not open");
 		}
 
 		String action = Action.BUY;
@@ -1054,18 +1054,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
-	 * @throws StrategyRuleException 
+	 * @throws StrategyRuleException
 	 */
 	public Money createStopAndTargetOrder(TradeOrder openPosition,
 			int stopRiskUnits, int targetRiskUnits, int percentQty,
 			boolean stopTransmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException, StrategyRuleException {
+			BrokerModelException, PersistentModelException,
+			StrategyRuleException {
 
 		Date createDate = new Date();
-		
+
 		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
-			throw new StrategyRuleException(1, 80,
-					"Error trade is not open");
+			throw new StrategyRuleException(1, 80, "Error trade is not open");
 		}
 
 		/*
@@ -1563,14 +1563,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 		return price;
 	}
-	
+
 	/**
 	 * Method tradeOrderFilled.
 	 * 
 	 * @param tradeOrder
 	 *            TradeOrder
 	 */
-	public void tradeOrderFilled(TradeOrder tradeOrder){
-		
+	public void tradeOrderFilled(TradeOrder tradeOrder) {
+
 	}
 }

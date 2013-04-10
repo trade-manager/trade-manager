@@ -850,6 +850,36 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
+	public void testFindOpenTradeByContractId() {
+
+		try {
+			this.tradestrategy = TradestrategyTest
+					.removeTrades(this.tradestrategy);
+			Trade trade = new Trade(this.tradestrategy, Side.BOT);
+			trade.setIsOpen(true);
+			tradePersistentModel.persistTrade(trade);
+			Trade result = this.tradePersistentModel
+					.findOpenTradeByContractId(this.tradestrategy.getContract()
+							.getIdContract());
+			TestCase.assertNotNull(result);
+
+			this.tradestrategy = TradestrategyTest
+					.removeTrades(this.tradestrategy);
+			Trade trade1 = new Trade(this.tradestrategy, Side.BOT);
+			trade1.setIsOpen(false);
+			tradePersistentModel.persistTrade(trade1);
+			Trade result1 = this.tradePersistentModel
+					.findOpenTradeByContractId(this.tradestrategy.getContract()
+							.getIdContract());
+			TestCase.assertNotNull(result1);
+
+		} catch (Exception e) {
+			TestCase.fail("Error testFindOpenTradeByContractId Msg: "
+					+ e.getMessage());
+		}
+	}
+
+	@Test
 	public void testFindTradesByTradestrategyId() {
 
 		try {
