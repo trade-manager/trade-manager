@@ -47,6 +47,7 @@ public class StrategyPanelTest extends TestCase {
 	private final static Logger _log = LoggerFactory
 			.getLogger(StrategyPanelTest.class);
 
+	private String symbol = "TEST";
 	private PersistentModel tradePersistentModel = null;
 	private Tradestrategy tradestrategy = null;
 	private String m_templateName = null;
@@ -70,7 +71,7 @@ public class StrategyPanelTest extends TestCase {
 			this.tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
-			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 			TestCase.assertNotNull(this.tradestrategy);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
@@ -103,7 +104,7 @@ public class StrategyPanelTest extends TestCase {
 	protected void tearDown() throws Exception {
 		File dir = new File(m_tmpDir);
 		StrategyPanel.deleteDir(dir);
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test

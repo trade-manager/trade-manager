@@ -69,6 +69,7 @@ public class TradeOrderTest extends TestCase {
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradeOrderTest.class);
 
+	private String symbol = "TEST";
 	private PersistentModel tradePersistentModel = null;
 	private TradeOrderHome tradeOrderHome = null;
 	private Tradestrategy tradestrategy = null;
@@ -85,7 +86,7 @@ public class TradeOrderTest extends TestCase {
 		tradeOrderHome = new TradeOrderHome();
 		this.tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
-		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 		TestCase.assertNotNull(this.tradestrategy);
 	}
 
@@ -95,7 +96,7 @@ public class TradeOrderTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test

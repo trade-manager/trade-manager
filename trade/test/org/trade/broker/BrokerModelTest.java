@@ -57,8 +57,6 @@ import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
-import org.trade.strategy.AbstractStrategyTest;
-import org.trade.strategy.AbstractStrategyTest.StrategyRuleTest;
 import org.trade.strategy.data.IndicatorSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -77,6 +75,7 @@ public class BrokerModelTest extends TestCase {
 	private final static Logger _log = LoggerFactory
 			.getLogger(BrokerModelTest.class);
 
+	private String symbol = "TEST";
 	private BrokerModel m_brokerModel;
 	private Integer clientId;
 	private BigDecimal price = new BigDecimal(108.85);
@@ -100,7 +99,7 @@ public class BrokerModelTest extends TestCase {
 					ConfigProperties.getPropAsString("trade.tws.port"));
 			ConfigProperties.getPropAsString("trade.tws.host");
 			m_brokerModel.onConnect(host, port, clientId);
-			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 			TestCase.assertNotNull(this.tradestrategy);
 			// try {
 			// do {
@@ -124,7 +123,7 @@ public class BrokerModelTest extends TestCase {
 	 */
 	protected void tearDown() throws Exception {
 		m_brokerModel.disconnect();
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test
@@ -282,48 +281,6 @@ public class BrokerModelTest extends TestCase {
 
 		} catch (Exception e) {
 			TestCase.fail("Error testSubmitComboOrder Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testSubmitBuyAndComboOrderViaStrategy() {
-
-		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-
-			AbstractStrategyTest abstractStrategyTest = new AbstractStrategyTest();
-			StrategyRuleTest strategyProxy = abstractStrategyTest.new StrategyRuleTest(
-					m_brokerModel, this.tradestrategy.getDatasetContainer(),
-					this.tradestrategy.getIdTradeStrategy());
-			strategyProxy.execute();
-			try {
-				do {
-					Thread.sleep(1000);
-				} while (!strategyProxy.isWaiting());
-			} catch (InterruptedException e) {
-				_log.info(" Thread interupt: " + e.getMessage());
-			}
-			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
-					Action.BUY, new Money(price),
-					new Money(price.subtract(new BigDecimal(1.0))), false,
-					null, null, null, null);
-			TestCase.assertNotNull(openOrder);
-			openOrder.setAverageFilledPrice(price);
-			openOrder.setFilledQuantity(openOrder.getQuantity());
-
-			Money targetPrice = strategyProxy.createStopAndTargetOrder(
-					openOrder, 1, 3, 50, false);
-			_log.info("Target price: " + targetPrice);
-			strategyProxy.createStopAndTargetOrder(openOrder, 1, 6, 50, false);
-			strategyProxy.moveStopOCAPrice(
-					new Money(price.subtract(new BigDecimal(0.85))), true);
-
-			strategyProxy.cancel();
-
-		} catch (Exception e) {
-			TestCase.fail("Error testSubmitBuyAndComboOrderViaStrategy Msg: "
-					+ e.getMessage());
 		}
 	}
 

@@ -13,6 +13,8 @@ public class CandleSeriesTest extends TestCase {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandleSeriesTest.class);
+
+	private String symbol = "TEST";
 	private Tradestrategy tradestrategy = null;
 
 	/**
@@ -23,7 +25,7 @@ public class CandleSeriesTest extends TestCase {
 	protected void setUp() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
-			this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 			TestCase.assertNotNull(this.tradestrategy);
 		} catch (Exception e) {
 			TestCase.fail("Error on setup " + e.getMessage());
@@ -36,7 +38,7 @@ public class CandleSeriesTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test

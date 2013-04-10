@@ -62,6 +62,8 @@ public class TradestrategyTest extends TestCase {
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradestrategyTest.class);
 
+	private String symbol = "TEST";
+
 	/**
 	 * Method setUp.
 	 * 
@@ -77,7 +79,7 @@ public class TradestrategyTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test
@@ -85,7 +87,7 @@ public class TradestrategyTest extends TestCase {
 
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
-					.getTestTradestrategy();
+					.getTestTradestrategy(symbol);
 			TestCase.assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
@@ -193,8 +195,8 @@ public class TradestrategyTest extends TestCase {
 	 * @return Tradestrategy
 	 * @throws Exception
 	 */
-	public static Tradestrategy getTestTradestrategy() throws Exception {
-		String symbol = "TEST";
+	public static Tradestrategy getTestTradestrategy(String symbol)
+			throws Exception {
 		ContractHome contractHome = new ContractHome();
 		PortfolioHome portfolioHome = new PortfolioHome();
 
@@ -206,14 +208,16 @@ public class TradestrategyTest extends TestCase {
 		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 				.getObject();
 		portfolio = portfolioHome.findByName(portfolio.getName());
-		Account account = new Account("Test", "T123456", Currency.USD);
-		account.setAvailableFunds(new BigDecimal(25000));
-		account.setBuyingPower(new BigDecimal(100000));
-		account.setCashBalance(new BigDecimal(25000));
-		PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
-				account);
-		portfolio.getPortfolioAccounts().add(portfolioAccount);
-		portfolio = (Portfolio) aspectHome.persist(portfolio);
+		if (portfolio.getPortfolioAccounts().isEmpty()) {
+			Account account = new Account("Test", "T123456", Currency.USD);
+			account.setAvailableFunds(new BigDecimal(25000));
+			account.setBuyingPower(new BigDecimal(100000));
+			account.setCashBalance(new BigDecimal(25000));
+			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
+					account);
+			portfolio.getPortfolioAccounts().add(portfolioAccount);
+			portfolio = (Portfolio) aspectHome.persist(portfolio);
+		}
 		Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 				.getMostRecentTradingDay(new Date()));
 
@@ -262,8 +266,7 @@ public class TradestrategyTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public static void removeTestTradestrategy() throws Exception {
-		String symbol = "TEST";
+	public static void removeTestTradestrategy(String symbol) throws Exception {
 		ContractHome contractHome = new ContractHome();
 		PortfolioHome portfolioHome = new PortfolioHome();
 		TradestrategyHome tradestrategyHome = new TradestrategyHome();

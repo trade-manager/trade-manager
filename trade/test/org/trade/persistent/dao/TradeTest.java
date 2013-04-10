@@ -50,6 +50,7 @@ public class TradeTest extends TestCase {
 
 	private final static Logger _log = LoggerFactory.getLogger(TradeTest.class);
 
+	private String symbol = "TEST";
 	private TradeHome tradeHome = null;
 	private AspectHome aspectHome = null;
 	private Tradestrategy tradestrategy = null;
@@ -63,7 +64,7 @@ public class TradeTest extends TestCase {
 		TradeAppLoadConfig.loadAppProperties();
 		tradeHome = new TradeHome();
 		aspectHome = new AspectHome();
-		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 		TestCase.assertNotNull(this.tradestrategy);
 	}
 
@@ -73,7 +74,7 @@ public class TradeTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test

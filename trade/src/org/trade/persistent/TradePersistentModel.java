@@ -962,7 +962,6 @@ public class TradePersistentModel implements PersistentModel {
 				tradeOrder.setFilledQuantity(filledQuantity);
 				tradeOrder.setFilledDate(filledDate);
 			}
-
 			return persistTradeOrder(tradeOrder);
 
 		} catch (OptimisticLockException ex1) {

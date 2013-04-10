@@ -101,6 +101,7 @@ public class TradePersistentModelTest extends TestCase {
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradePersistentModelTest.class);
 
+	private String symbol = "TEST";
 	private PersistentModel tradePersistentModel = null;
 	private Tradestrategy tradestrategy = null;
 	private Integer clientId = null;
@@ -115,7 +116,7 @@ public class TradePersistentModelTest extends TestCase {
 		clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
 		this.tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
-		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 		TestCase.assertNotNull(this.tradestrategy);
 	}
 
@@ -125,7 +126,7 @@ public class TradePersistentModelTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test
@@ -872,6 +873,35 @@ public class TradePersistentModelTest extends TestCase {
 					.findOpenTradeByContractId(this.tradestrategy.getContract()
 							.getIdContract());
 			TestCase.assertNotNull(result1);
+
+		} catch (Exception e) {
+			TestCase.fail("Error testFindOpenTradeByContractId Msg: "
+					+ e.getMessage());
+		}
+	}
+
+	@Test
+	public void testReassignOpenTradeByContractId() {
+
+		try {
+			this.tradestrategy = TradestrategyTest
+					.removeTrades(this.tradestrategy);
+			Trade trade = new Trade(this.tradestrategy, Side.BOT);
+			trade.setIsOpen(true);
+			tradePersistentModel.persistTrade(trade);
+			Trade result = this.tradePersistentModel
+					.findOpenTradeByContractId(this.tradestrategy.getContract()
+							.getIdContract());
+			TestCase.assertNotNull(result);
+			Tradestrategy tradestrategy = TradestrategyTest
+					.getTestTradestrategy("TEST1");
+			result.setTradestrategy(tradestrategy);
+			tradePersistentModel.persistTrade(result);
+			Trade result1 = this.tradePersistentModel
+					.findOpenTradeByContractId(tradestrategy.getContract()
+							.getIdContract());
+			TestCase.assertNotNull(result1);
+			TradestrategyTest.removeTestTradestrategy("TEST1");
 
 		} catch (Exception e) {
 			TestCase.fail("Error testFindOpenTradeByContractId Msg: "

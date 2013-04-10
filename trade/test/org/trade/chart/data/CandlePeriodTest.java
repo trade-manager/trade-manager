@@ -66,6 +66,7 @@ public class CandlePeriodTest extends TestCase {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandlePeriodTest.class);
+	private String symbol = "TEST";
 	private PersistentModel tradePersistentModel = null;
 	private Tradestrategy tradestrategy = null;
 
@@ -78,7 +79,7 @@ public class CandlePeriodTest extends TestCase {
 		TradeAppLoadConfig.loadAppProperties();
 		tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
-		this.tradestrategy = TradestrategyTest.getTestTradestrategy();
+		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 		TestCase.assertNotNull(this.tradestrategy);
 	}
 
@@ -88,7 +89,7 @@ public class CandlePeriodTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy();
+		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
 	@Test

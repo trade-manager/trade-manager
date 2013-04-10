@@ -109,7 +109,7 @@ public class TWSBrokerModelTest extends TestCase implements
 			clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
 			port = new Integer(
 					ConfigProperties.getPropAsString("trade.tws.port"));
-			host = ConfigProperties.getPropAsString("trade.tws.host");
+			// host = ConfigProperties.getPropAsString("trade.tws.host");
 			this.brokerManagerModel.onConnect(host, port, clientId);
 			backTestBarSize = ConfigProperties
 					.getPropAsInt("trade.backtest.barSize");
