@@ -587,12 +587,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
+	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createOrder(String action, String orderType,
 			Money limitPrice, Money auxPrice, int quantity,
 			String ocaGroupName, boolean roundPrice, boolean transmit)
 			throws ValueTypeException, BrokerModelException,
-			PersistentModelException {
+			PersistentModelException, StrategyRuleException {
 		return createOrder(action, orderType, limitPrice, auxPrice, quantity,
 				ocaGroupName, TriggerMethod.DEFAULT, OverrideConstraints.YES,
 				TimeInForce.DAY, roundPrice, transmit, null, null, null, null);
@@ -631,6 +632,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
+	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createOrder(String action, String orderType,
 			Money limitPrice, Money auxPrice, int quantity,
@@ -647,9 +649,23 @@ public abstract class AbstractStrategyRule extends Worker implements
 			/*
 			 * Set the side based on the action for the first order.
 			 */
-			this.trade = new Trade(getTradestrategy(),
-					(Action.BUY.equals(action) ? Side.BOT : Side.SLD));
-			getTradestrategy().addTrade(this.trade);
+			Trade openTrade = tradePersistentModel
+					.findOpenTradeByContractId(getTradestrategy().getContract()
+							.getIdContract());
+			if (null == openTrade) {
+				this.trade = new Trade(getTradestrategy(),
+						(Action.BUY.equals(action) ? Side.BOT : Side.SLD));
+				getTradestrategy().addTrade(this.trade);
+			} else {
+				/*
+				 * TODO Need to update schema to hang Trade of Contract not
+				 * Tradestrategy then link the trade to Tradingday with the
+				 * relationship closed on
+				 */
+				openTrade.setTradestrategy(getTradestrategy());
+				this.trade = this.tradePersistentModel.persistTrade(openTrade);
+				getTradestrategy().addTrade(this.trade);
+			}
 		}
 
 		if (roundPrice) {
@@ -773,6 +789,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
+	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createRiskOpenPosition(String action, Money entryPrice,
 			Money stopPrice, boolean transmit, String FAProfile,
@@ -780,17 +797,21 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throws ValueTypeException, BrokerModelException,
 			PersistentModelException {
 
-		/*
-		 * If no trade exists create the trade and set the side based on the
-		 * action.
-		 */
 		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
 			/*
 			 * Set the side based on the action for the first order.
 			 */
-			this.trade = new Trade(getTradestrategy(),
-					(Action.BUY.equals(action) ? Side.BOT : Side.SLD));
-			getTradestrategy().addTrade(this.trade);
+			Trade openTrade = tradePersistentModel
+					.findOpenTradeByContractId(getTradestrategy().getContract()
+							.getIdContract());
+			if (null == openTrade) {
+				this.trade = new Trade(getTradestrategy(),
+						(Action.BUY.equals(action) ? Side.BOT : Side.SLD));
+				getTradestrategy().addTrade(this.trade);
+			} else {
+				openTrade.setTradestrategy(getTradestrategy());
+				this.trade = this.tradePersistentModel.persistTrade(openTrade);
+			}
 		}
 
 		if (!this.getTrade().getTradeOrders().isEmpty())
@@ -1309,8 +1330,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public boolean isPositionCancelled() {
 		if (null != getTrade()) {
 			if (!getTrade().getIsOpen()) {
-				if (OrderStatus.CANCELLED.equals(getTrade().getOpenPosition()
-						.getStatus())) {
+				if (OrderStatus.CANCELLED.equals(getTrade()
+						.getOpenPositionOrder().getStatus())) {
 					return true;
 				}
 			}
@@ -1468,7 +1489,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public TradeOrder getOpenPositionOrder() {
 		if (null != getTrade()) {
-			return getTrade().getOpenPosition();
+			return getTrade().getOpenPositionOrder();
 		}
 		return null;
 	}
@@ -1480,6 +1501,22 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public boolean isThereOpenPositionOrder() {
 		if (null != getOpenPositionOrder())
+			return true;
+		return false;
+	}
+
+	/**
+	 * Method isThereOpenPositionOrder.
+	 * 
+	 * @return boolean
+	 * @throws PersistentModelException
+	 */
+	public boolean isThereOpenPositionByContract()
+			throws PersistentModelException {
+		Trade openTrade = tradePersistentModel
+				.findOpenTradeByContractId(getTradestrategy().getContract()
+						.getIdContract());
+		if (null != openTrade)
 			return true;
 		return false;
 	}

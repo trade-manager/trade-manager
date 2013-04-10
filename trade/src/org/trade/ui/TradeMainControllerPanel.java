@@ -921,7 +921,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					boolean isOpen = false;
 					for (Trade trade : tradestrategy.getTrades()) {
 						if (trade.getIsOpen()
-								&& trade.getOpenPosition().getIsFilled()) {
+								&& trade.getOpenPositionOrder().getIsFilled()) {
 							isOpen = true;
 							int result = JOptionPane.showConfirmDialog(this
 									.getFrame(), "Position is open for: "

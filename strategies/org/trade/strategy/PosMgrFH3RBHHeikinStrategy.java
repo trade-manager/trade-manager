@@ -184,7 +184,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				if (Side.BOT.equals(getTrade().getSide())) {
 					if (currentCandle.getVwap() < firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(getTrade()
-								.getOpenPosition().getAverageFilledPrice()
+								.getOpenPositionOrder().getAverageFilledPrice()
 								.doubleValue(), getTrade().getSide(),
 								Action.SELL, 0.01);
 						moveStopOCAPrice(stopPrice, true);
@@ -196,7 +196,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 					if (currentCandle.getVwap() > firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(getTrade()
-								.getOpenPosition().getAverageFilledPrice()
+								.getOpenPositionOrder().getAverageFilledPrice()
 								.doubleValue(), getTrade().getSide(),
 								Action.BUY, 0.01);
 						moveStopOCAPrice(stopPrice, true);
