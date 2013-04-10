@@ -190,19 +190,10 @@ public class TradeHome {
 
 			Predicate contractId = builder
 					.equal(contract.get("idContract"), id);
-
 			Predicate isOpenTrue = builder.equal(from.get("isOpen"),
 					new Boolean("true"));
 
-			Predicate isOpenFalse = builder.equal(from.get("isOpen"),
-					new Boolean("false"));
-			Predicate totalQuantityNull = builder.isNull(from
-					.get("totalQuantity"));
-
-			Predicate predicate1 = builder.and(isOpenFalse, totalQuantityNull);
-			Predicate predicate2 = builder.or(isOpenTrue, predicate1);
-
-			query.where(builder.and(contractId, predicate2));
+			query.where(builder.and(contractId, isOpenTrue));
 
 			TypedQuery<Trade> typedQuery = entityManager.createQuery(query);
 			List<Trade> items = typedQuery.getResultList();
