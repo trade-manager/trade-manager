@@ -662,6 +662,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 				 * Tradestrategy then link the trade to Tradingday with the
 				 * relationship closed on
 				 */
+
+				_log.warn("A position is already open Trade Id: "
+						+ openTrade.getIdTrade() + " isOpen: "
+						+ openTrade.getIsOpen() + " totalQty: "
+						+ openTrade.getTotalQuantity()
+						+ " this will be used to trade.");
+
 				openTrade.setTradestrategy(getTradestrategy());
 				this.trade = this.tradePersistentModel.persistTrade(openTrade);
 				this.trade = this.tradePersistentModel.findTradeById(this.trade
@@ -816,6 +823,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 				 * Tradestrategy then link the trade to Tradingday with the
 				 * relationship closed on
 				 */
+				_log.warn("A position is already open Trade Id: "
+						+ openTrade.getIdTrade() + " isOpen: "
+						+ openTrade.getIsOpen() + " totalQty: "
+						+ openTrade.getTotalQuantity()
+						+ " this will be used to trade.");
 				openTrade.setTradestrategy(getTradestrategy());
 				this.trade = this.tradePersistentModel.persistTrade(openTrade);
 				this.trade = this.tradePersistentModel.findTradeById(this.trade
