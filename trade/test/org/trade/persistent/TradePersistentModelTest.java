@@ -863,6 +863,13 @@ public class TradePersistentModelTest extends TestCase {
 					.findOpenTradeByContractId(this.tradestrategy.getContract()
 							.getIdContract());
 			TestCase.assertNotNull(result);
+
+			trade.setIsOpen(false);
+			tradePersistentModel.persistTrade(trade);
+			result = this.tradePersistentModel
+					.findOpenTradeByContractId(this.tradestrategy.getContract()
+							.getIdContract());
+			TestCase.assertNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindOpenTradeByContractId Msg: "
 					+ e.getMessage());
