@@ -664,6 +664,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 				 */
 				openTrade.setTradestrategy(getTradestrategy());
 				this.trade = this.tradePersistentModel.persistTrade(openTrade);
+				this.trade = this.tradePersistentModel.findTradeById(this.trade
+						.getIdTrade());
 				getTradestrategy().addTrade(this.trade);
 			}
 		}
@@ -809,8 +811,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 						(Action.BUY.equals(action) ? Side.BOT : Side.SLD));
 				getTradestrategy().addTrade(this.trade);
 			} else {
+				/*
+				 * TODO Need to update schema to hang Trade of Contract not
+				 * Tradestrategy then link the trade to Tradingday with the
+				 * relationship closed on
+				 */
 				openTrade.setTradestrategy(getTradestrategy());
 				this.trade = this.tradePersistentModel.persistTrade(openTrade);
+				this.trade = this.tradePersistentModel.findTradeById(this.trade
+						.getIdTrade());
+				getTradestrategy().addTrade(this.trade);
 			}
 		}
 
