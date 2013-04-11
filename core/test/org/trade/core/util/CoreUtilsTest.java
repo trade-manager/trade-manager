@@ -36,7 +36,6 @@
 package org.trade.core.util;
 
 import java.math.BigDecimal;
-
 import junit.framework.TestCase;
 
 import org.junit.Test;
@@ -53,6 +52,8 @@ public class CoreUtilsTest extends TestCase {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CoreUtilsTest.class);
+
+	private static final int SCALE = 5;
 
 	/**
 	 * Method setUp.
@@ -102,5 +103,15 @@ public class CoreUtilsTest extends TestCase {
 			_log.error("Error creating class: " + ex.getMessage(), ex);
 			fail("Error creating class: " + ex.getCause().getMessage());
 		}
+	}
+
+	@Test
+	public void testBigDecimalRounding() {
+		BigDecimal avgFillPrice = new BigDecimal("35.34567897").setScale(SCALE,
+				BigDecimal.ROUND_HALF_EVEN);
+		TestCase.assertEquals(new BigDecimal("35.34568"), avgFillPrice);
+		avgFillPrice = new BigDecimal("35.34567344").setScale(SCALE,
+				BigDecimal.ROUND_HALF_EVEN);
+		TestCase.assertEquals(new BigDecimal("35.34567"), avgFillPrice);
 	}
 }

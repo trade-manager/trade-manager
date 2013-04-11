@@ -869,8 +869,8 @@ public class TradePersistentModel implements PersistentModel {
 				Money filledValue = new Money(totalFilledValue);
 				trade.setTotalValue(filledValue.getBigDecimalValue());
 				BigDecimal avgFillPrice = new BigDecimal(totalFilledValue
-						/ (totalFilledQuantity / 2d));
-				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+						/ (totalFilledQuantity / 2d)).setScale(SCALE,
+						BigDecimal.ROUND_HALF_EVEN);
 				trade.setAveragePrice(avgFillPrice);
 				trade.setTotalCommission(comms.getBigDecimalValue());
 				trade.setProfitLoss(filledValue.getBigDecimalValue());
@@ -947,7 +947,7 @@ public class TradePersistentModel implements PersistentModel {
 
 				filledQuantity = filledQuantity + tradeOrderfill.getQuantity();
 				filledValue = filledValue
-						+ (tradeOrderfill.getAveragePrice().doubleValue() * tradeOrderfill
+						+ (tradeOrderfill.getPrice().doubleValue() * tradeOrderfill
 								.getQuantity());
 				filledDate = tradeOrderfill.getTime();
 			}
@@ -955,9 +955,10 @@ public class TradePersistentModel implements PersistentModel {
 			if (filledQuantity > 0) {
 				if (filledQuantity == tradeOrder.getQuantity())
 					tradeOrder.setIsFilled(true);
+
 				BigDecimal avgFillPrice = new BigDecimal(filledValue
-						/ filledQuantity);
-				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+						/ filledQuantity).setScale(SCALE,
+						BigDecimal.ROUND_HALF_EVEN);
 				tradeOrder.setAverageFilledPrice(avgFillPrice);
 				tradeOrder.setFilledQuantity(filledQuantity);
 				tradeOrder.setFilledDate(filledDate);
