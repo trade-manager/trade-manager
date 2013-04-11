@@ -230,8 +230,6 @@ public class TradingdayTableModel extends TableModel {
 		switch (column) {
 		case 0: {
 			element.setOpen(((Date) value).getDate());
-			getData().remove(openDate.getDate(), closeDate.getDate());
-			getData().add(element);
 			break;
 		}
 		case 1: {
