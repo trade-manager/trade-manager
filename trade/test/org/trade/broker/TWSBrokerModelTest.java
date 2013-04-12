@@ -879,6 +879,10 @@ public class TWSBrokerModelTest extends TestCase implements
 	 *            BrokerModelException
 	 */
 	public void brokerError(BrokerModelException ex) {
+		if (502 == ex.getErrorCode()) {
+			_log.info("TWS is not running test will not be run");
+			return;
+		}
 		if (ex.getErrorId() == 1) {
 			_log.error("Error: " + ex.getErrorCode(), ex.getMessage(), ex);
 		} else if (ex.getErrorId() == 2) {
