@@ -145,7 +145,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private BrokerDataRequestProgressMonitor brokerDataRequestProgressMonitor = null;
 	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
 
-	private int reconnectAttemps = 0;
 	private TradingdayPanel tradingdayPanel = null;
 	private ContractPanel contractPanel = null;
 	private ConfigurationPanel configurationPanel = null;
@@ -1118,7 +1117,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		try {
 
-			this.reconnectAttemps = 0;
 			tradingdayPanel.setConnected(true);
 			contractPanel.setConnected(true);
 			simulatedMode(false);
@@ -1157,11 +1155,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 
 			if (forced) {
-				Integer reconnectCount = ConfigProperties
-						.getPropAsInt("trade.tws.reconnectCount");
-				if (this.reconnectAttemps < reconnectCount
-						|| !m_brokerModel.isConnected()) {
-					reconnectAttemps++;
+				if (!m_brokerModel.isConnected()) {
 					doConnect();
 				}
 			} else {
