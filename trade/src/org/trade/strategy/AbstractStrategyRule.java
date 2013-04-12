@@ -513,7 +513,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void closePosition(boolean transmit) throws ValueTypeException,
 			BrokerModelException, PersistentModelException {
 
-		if (this.getTrade().getIsOpen()) {
+		if (this.isPositionOpen()) {
 
 			int cumQuantityOpen = Math.abs(this.getTrade().getOpenQuantity());
 
@@ -951,7 +951,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		try {
 			int openQuantity = 0;
-			if (this.getTrade().getIsOpen()) {
+			if (this.isPositionOpen()) {
 				// Find the open position orders
 				for (TradeOrder order : this.getTrade().getTradeOrders()) {
 					if (!order.getIsOpenPosition() && !order.getIsFilled()
@@ -1013,7 +1013,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		Date createDate = new Date();
 
-		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
+		if (this.isPositionOpen()) {
 			throw new StrategyRuleException(1, 80, "Error trade is not open");
 		}
 
@@ -1107,7 +1107,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		Date createDate = new Date();
 
-		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
+		if (this.isPositionOpen()) {
 			throw new StrategyRuleException(1, 80, "Error trade is not open");
 		}
 
@@ -1225,7 +1225,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		_log.info("Strategy  closeAllOpenPositions symbol: " + symbol);
 		try {
 			cancelAllOrders();
-			if (this.getTrade().getIsOpen()) {
+			if (this.isPositionOpen()) {
 				closePosition(true);
 			}
 		} catch (Exception ex) {
@@ -1250,7 +1250,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		_log.info("Strategy  moveStopOCAPrice symbol: " + symbol
 				+ " Stop Price: " + stopPrice);
 		try {
-			if (this.getTrade().getIsOpen()) {
+			if (this.isPositionOpen()) {
 				// Cancel the tgt and stop orders i.e. OCA
 				for (TradeOrder tradeOrder : this.getTrade().getTradeOrders()) {
 					if (!tradeOrder.getIsOpenPosition()
@@ -1294,7 +1294,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		_log.info("Strategy  cancelAllPositions symbol: " + symbol);
 		try {
-			if (getTrade().getIsOpen()) {
+			if (this.isPositionOpen()) {
 				for (TradeOrder order : trade.getTradeOrders()) {
 					cancelOrder(order);
 				}
