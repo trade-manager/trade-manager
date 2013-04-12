@@ -165,7 +165,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	public void connectionClosed() {
 
 		onCancelAllRealtimeData();
-		this.fireConnectionClosed();
+		this.fireConnectionClosed(true);
 		error(0, 1101, "Error Connection was closed! ");
 	}
 
@@ -175,7 +175,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#disconnect()
 	 */
-	public void disconnect() {
+	public void onDisconnect() {
 		if (isConnected()) {
 			onCancelAllRealtimeData();
 		}
@@ -992,10 +992,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		 * historical data query found for ticker id) are error code for no
 		 * market or historical data found.
 		 * 
-		 * Error code 202,Order rejected 201 Order cancelled
+		 * Error code 202, Order rejected 201 Order cancelled
 		 * 
 		 * Error code 321 Error validating request:-'jd' : cause - FA data
 		 * operations ignored for non FA customers.
+		 * 
+		 * Error code 502, Couldn't connect to TWS. Confirm that API is enabled
+		 * in TWS via the Configure>API menu command.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
 				|| (code == 366) || (code == 162) || (code == 321)) {
@@ -1028,7 +1031,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					m_realTimeBarsRequests.notifyAll();
 				}
 			}
-
+			/*
+			 * Error code 502, Couldn't connect to TWS. Confirm that API is
+			 * enabled in TWS via the Configure>API menu command.
+			 */
+			if (code == 502)
+				this.fireConnectionClosed(false);
 			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
 					+ " Code: " + code + " Msg: " + msg);
 

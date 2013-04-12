@@ -145,6 +145,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private BrokerDataRequestProgressMonitor brokerDataRequestProgressMonitor = null;
 	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
 
+	private int reconnectAttemps = 0;
 	private TradingdayPanel tradingdayPanel = null;
 	private ContractPanel contractPanel = null;
 	private ConfigurationPanel configurationPanel = null;
@@ -1013,15 +1014,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				m_brokerModel.addMessageListener(this);
 				m_brokerModel.onConnect(connectionPane.getHost(),
 						connectionPane.getPort(), connectionPane.getClientId());
-				if (m_brokerModel.isConnected()) {
-					simulatedMode(false);
-					this.setStatusBarMessage("Running live.",
-							BasePanel.INFORMATION);
-				} else {
-					tradingdayPanel.setConnected(false);
-					contractPanel.setConnected(false);
-					simulatedMode(true);
-				}
 			} else {
 				this.setStatusBarMessage("Running in test.",
 						BasePanel.INFORMATION);
@@ -1101,7 +1093,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						&& !brokerDataRequestProgressMonitor.isDone()) {
 					brokerDataRequestProgressMonitor.cancel(true);
 				}
-				m_brokerModel.disconnect();
+				m_brokerModel.onDisconnect();
 				_indicatorTradestrategy.clear();
 				refreshTradingdays(m_tradingdays);
 			} else {
@@ -1126,6 +1118,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		try {
 
+			this.reconnectAttemps = 0;
 			tradingdayPanel.setConnected(true);
 			contractPanel.setConnected(true);
 			simulatedMode(false);
@@ -1143,6 +1136,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding excecutions.", ex.getMessage(),
 					ex);
+		} finally {
+			this.setStatusBarMessage("Running live.", BasePanel.INFORMATION);
 		}
 	}
 
@@ -1152,12 +1147,35 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * 
 	 * @see org.trade.broker.BrokerChangeListener#connectionClosed()
 	 */
-	public void connectionClosed() {
-		tradingdayPanel.setConnected(false);
-		contractPanel.setConnected(false);
-		simulatedMode(true);
-		this.setStatusBarMessage("Connected to Broker was closed.",
-				BasePanel.WARNING);
+	public void connectionClosed(boolean forced) {
+
+		try {
+
+			/*
+			 * If the connection was lost to TWS and it was not a doDisconnect()
+			 * i.e. it was forced. Try to reconnect.
+			 */
+
+			if (forced) {
+				Integer reconnectCount = ConfigProperties
+						.getPropAsInt("trade.tws.reconnectCount");
+				if (this.reconnectAttemps < reconnectCount
+						|| !m_brokerModel.isConnected()) {
+					reconnectAttemps++;
+					doConnect();
+				}
+			} else {
+				tradingdayPanel.setConnected(false);
+				contractPanel.setConnected(false);
+				simulatedMode(true);
+				this.setStatusBarMessage("Connected to Broker was closed.",
+						BasePanel.WARNING);
+			}
+
+		} catch (Exception ex) {
+			this.setErrorMessage("Error finding connection closed.",
+					ex.getMessage(), ex);
+		}
 	}
 
 	/**

@@ -122,7 +122,7 @@ public class BrokerModelTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		m_brokerModel.disconnect();
+		m_brokerModel.onDisconnect();
 		TradestrategyTest.removeTestTradestrategy(symbol);
 	}
 
@@ -410,7 +410,7 @@ public class BrokerModelTest extends TestCase {
 	public void testDisconnect() {
 
 		try {
-			m_brokerModel.disconnect();
+			m_brokerModel.onDisconnect();
 			if (_broker.equals(BrokerModel._brokerTest)) {
 				TestCase.assertFalse(m_brokerModel.isConnected());
 			} else {

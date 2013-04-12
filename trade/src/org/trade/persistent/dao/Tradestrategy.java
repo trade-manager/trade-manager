@@ -633,7 +633,6 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 */
 	@Transient
 	public Trade getOpenTrade() {
-
 		for (Trade trade : this.getTrades()) {
 			if (trade.getIsOpen()) {
 				return trade;

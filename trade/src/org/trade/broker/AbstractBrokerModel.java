@@ -149,11 +149,12 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * 
 	 * @see #addChangeListener(BrokerChangeListener)
 	 */
-	protected void fireConnectionClosed() {
+	protected void fireConnectionClosed(boolean forced) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1]).connectionClosed();
+				((BrokerChangeListener) listeners[i + 1])
+						.connectionClosed(forced);
 			}
 		}
 	}

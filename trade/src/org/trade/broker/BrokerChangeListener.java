@@ -58,7 +58,7 @@ public interface BrokerChangeListener extends EventListener {
 
 	public void connectionOpened();
 
-	public void connectionClosed();
+	public void connectionClosed(boolean forced);
 
 	/**
 	 * Method executionDetailsEnd.

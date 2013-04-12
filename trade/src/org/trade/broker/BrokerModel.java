@@ -114,7 +114,7 @@ public interface BrokerModel {
 	 * 
 	 * @throws BrokerModelException
 	 */
-	void disconnect();
+	void onDisconnect();
 
 	/**
 	 * Method getNextRequestId.

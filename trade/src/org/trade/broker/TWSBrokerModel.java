@@ -217,7 +217,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#disconnect()
 	 */
-	public void disconnect() {
+	public void onDisconnect() {
 		onCancelAllRealtimeData();
 		if (m_client.isConnected()) {
 			for (String accountNumber : m_accountRequests.keySet()) {
@@ -225,7 +225,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 			m_client.eDisconnect();
 		}
-		this.fireConnectionClosed();
+		this.fireConnectionClosed(false);
 	}
 
 	/**
@@ -234,10 +234,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.AnyWrapper#connectionClosed()
 	 */
 	public void connectionClosed() {
-
 		onCancelAllRealtimeData();
-		this.fireConnectionClosed();
-		error(0, 1101, "Error Connection was closed! ");
+		this.fireConnectionClosed(true);
 	}
 
 	/**
@@ -1371,7 +1369,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 * historical data query found for ticker id) are error code for no
 		 * market or historical data found.
 		 * 
-		 * Error code 202,Order rejected 201 Order cancelled
+		 * Error code 202, Order rejected 201 Order cancelled
 		 * 
 		 * Error code 321 Error validating request:-'jd' : cause - FA data
 		 * operations ignored for non FA customers.
@@ -1413,6 +1411,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					m_marketDataRequests.notifyAll();
 				}
 			}
+
+			/*
+			 * Error code 502, Couldn't connect to TWS. Confirm that API is
+			 * enabled in TWS via the Configure>API menu command.
+			 */
+			if (code == 502)
+				this.fireConnectionClosed(false);
 			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
 					+ " Code: " + code + " Msg: " + msg);
 

@@ -143,7 +143,7 @@ public class AbstractStrategyTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		m_brokerModel.disconnect();
+		m_brokerModel.onDisconnect();
 		strategyProxy.cancel();
 		TradestrategyTest.removeTestTradestrategy(symbol);
 	}

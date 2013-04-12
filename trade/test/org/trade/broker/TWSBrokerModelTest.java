@@ -138,7 +138,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		this.brokerManagerModel.disconnect();
+		this.brokerManagerModel.onDisconnect();
 	}
 
 	@Test
@@ -808,7 +808,7 @@ public class TWSBrokerModelTest extends TestCase implements
 		_log.info("Connection opened");
 	}
 
-	public void connectionClosed() {
+	public void connectionClosed(boolean forced) {
 		_log.info("Connection closed");
 	}
 
