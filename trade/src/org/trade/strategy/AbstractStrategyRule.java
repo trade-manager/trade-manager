@@ -645,18 +645,20 @@ public abstract class AbstractStrategyRule extends Worker implements
 		 * If no trade exists create the trade and set the side based on the
 		 * action.
 		 */
-		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
+		if (!isPositionOpen()) {
 			/*
 			 * Set the side based on the action for the first order.
 			 */
 			Trade openTrade = tradePersistentModel
 					.findOpenTradeByContractId(getTradestrategy().getContract()
 							.getIdContract());
+
 			if (null == openTrade) {
 				this.trade = new Trade(getTradestrategy(),
 						(Action.BUY.equals(action) ? Side.BOT : Side.SLD));
 				getTradestrategy().addTrade(this.trade);
 			} else {
+
 				/*
 				 * TODO Need to update schema to hang Trade of Contract not
 				 * Tradestrategy then link the trade to Tradingday with the
@@ -806,28 +808,32 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throws ValueTypeException, BrokerModelException,
 			PersistentModelException {
 
-		if (null == this.getTrade() || !this.getTrade().getIsOpen()) {
+		if (!isPositionOpen()) {
 			/*
 			 * Set the side based on the action for the first order.
 			 */
 			Trade openTrade = tradePersistentModel
 					.findOpenTradeByContractId(getTradestrategy().getContract()
 							.getIdContract());
+
 			if (null == openTrade) {
 				this.trade = new Trade(getTradestrategy(),
 						(Action.BUY.equals(action) ? Side.BOT : Side.SLD));
 				getTradestrategy().addTrade(this.trade);
 			} else {
+
 				/*
 				 * TODO Need to update schema to hang Trade of Contract not
 				 * Tradestrategy then link the trade to Tradingday with the
 				 * relationship closed on
 				 */
+
 				_log.warn("A position is already open Trade Id: "
 						+ openTrade.getIdTrade() + " isOpen: "
 						+ openTrade.getIsOpen() + " totalQty: "
 						+ openTrade.getTotalQuantity()
 						+ " this will be used to trade.");
+
 				openTrade.setTradestrategy(getTradestrategy());
 				this.trade = this.tradePersistentModel.persistTrade(openTrade);
 				this.trade = this.tradePersistentModel.findTradeById(this.trade
