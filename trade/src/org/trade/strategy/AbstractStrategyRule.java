@@ -1013,7 +1013,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		Date createDate = new Date();
 
-		if (this.isPositionOpen()) {
+		if (!this.isPositionOpen()) {
 			throw new StrategyRuleException(1, 80, "Error trade is not open");
 		}
 
@@ -1107,7 +1107,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		Date createDate = new Date();
 
-		if (this.isPositionOpen()) {
+		if (!this.isPositionOpen()) {
 			throw new StrategyRuleException(1, 80, "Error trade is not open");
 		}
 
@@ -1337,7 +1337,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return boolean
 	 */
 	public boolean isPositionOpen() {
-
 		if (null != getTrade()) {
 			return getTrade().getIsOpen();
 		}
