@@ -259,18 +259,10 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		}
 	}
 
-	/*
-	 * This method is used to trail on Heikin-Ashi bars. Note trail is on the
-	 * low/high of the bar and assumes the bar are in the direction of the trade
-	 * i.e. side.
-	 * 
-	 * @param trade The trade that has the open position.
-	 * 
-	 * @param bars The number of bars to trail on.
-	 */
-
 	/**
-	 * Method setHiekinAshiTrail.
+	 * Method setHiekinAshiTrail. * This method is used to trail on Heikin-Ashi
+	 * bars. Note trail is on the low/high of the bar and assumes the bar are in
+	 * the direction of the trade i.e. side.
 	 * 
 	 * @param trade
 	 *            Trade
