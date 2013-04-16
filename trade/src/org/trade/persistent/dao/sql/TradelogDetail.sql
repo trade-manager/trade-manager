@@ -41,7 +41,7 @@ tradeorder.filledDate as filledDate,
 ((IF( tradeorder.action = 'BUY',  1 , -1)) *tradeorder.quantity) as quantity,
 tradeorder.averageFilledPrice as averageFilledPrice,
 IFNULL(tradeorder.commission,0)  as commission,
-tradeposition.profitLoss as profitLoss
+tradeposition.totalNetValue as profitLoss
 FROM 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract

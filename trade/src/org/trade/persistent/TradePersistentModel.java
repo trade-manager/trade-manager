@@ -804,6 +804,7 @@ public class TradePersistentModel implements PersistentModel {
 						.getIdTradeStrategy();
 			}
 			TradePosition tradePosition = null;
+			Tradestrategy tradestrategy = null;
 			/*
 			 * If the filled qty is > 0 and we have no TradePosition then create
 			 * one.
@@ -812,8 +813,7 @@ public class TradePersistentModel implements PersistentModel {
 			if (null == tradeOrder.getTradePosition()) {
 				if (CoreUtils.nullSafeComparator(
 						tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
-					Tradestrategy tradestrategy = this
-							.findTradestrategyById(tradestrategyId);
+					tradestrategy = this.findTradestrategyById(tradestrategyId);
 
 					tradePosition = this
 							.findOpenTradePositionByContractId(tradestrategy
@@ -821,11 +821,16 @@ public class TradePersistentModel implements PersistentModel {
 					if (null == tradePosition) {
 						tradePosition = new TradePosition(
 								tradestrategy.getContract(),
-								tradeOrder.getUpdateDate());
+								tradeOrder.getUpdateDate(),
+								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
+										: Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = (TradePosition) this
 								.persistAspect(tradePosition);
+					} else {
+						if (!tradePosition.containsTradeOrder(tradeOrder))
+							tradePosition.addTradeOrder(tradeOrder);
 					}
 					tradeOrder.setTradePosition(tradePosition);
 				} else {
@@ -839,6 +844,7 @@ public class TradePersistentModel implements PersistentModel {
 			} else {
 				tradePosition = this.findTradePositionById(tradeOrder
 						.getTradePosition().getIdTradePosition());
+				tradeOrder.setTradePosition(tradePosition);
 			}
 
 			boolean allOrdersCancelled = true;
@@ -902,8 +908,10 @@ public class TradePersistentModel implements PersistentModel {
 					tradePosition.setSide(Side.SLD);
 
 				tradePosition.setIsOpen(true);
-				if ((totalBuyQuantity - totalSellQuantity) == 0)
+				if ((totalBuyQuantity - totalSellQuantity) == 0) {
+					tradePosition.setPositionCloseDate(new Date());
 					tradePosition.setIsOpen(false);
+				}
 
 				tradePosition.setTotalBuyQuantity(totalBuyQuantity);
 				tradePosition.setTotalBuyValue((new BigDecimal(totalBuyValue))
@@ -912,31 +920,41 @@ public class TradePersistentModel implements PersistentModel {
 				tradePosition
 						.setTotalSellValue((new BigDecimal(totalSellValue))
 								.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN));
+				tradePosition.setTotalNetValue((new BigDecimal(totalSellValue
+						- totalBuyValue)).setScale(SCALE,
+						BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalCommission(comms.getBigDecimalValue());
+				// Partial fills case.
+				if (null == tradestrategy)
+					tradestrategy = this.findTradestrategyById(tradestrategyId);
 
-				if (!tradePosition.getIsOpen()) {
-					Tradestrategy tradestrategy = this
-							.findTradestrategyById(tradestrategyId);
+				if (tradePosition.getIsOpen()
+						&& !TradestrategyStatus.OPEN.equals(tradestrategy
+								.getStatus())) {
 					tradestrategy.setStatus(TradestrategyStatus.OPEN);
 					this.persistTradestrategy(tradestrategy);
-				} else {
-					Tradestrategy tradestrategy = this
-							.findTradestrategyById(tradestrategyId);
+				}
+				if (!tradePosition.getIsOpen()
+						&& !TradestrategyStatus.CLOSED.equals(tradestrategy
+								.getStatus())) {
 					tradestrategy.setStatus(TradestrategyStatus.CLOSED);
-					tradePosition.setPositionCloseDate(new Date());
 					this.persistTradestrategy(tradestrategy);
 				}
+
 				tradePosition.setUpdateDate(new Date());
 				tradePosition = (TradePosition) this
 						.persistAspect(tradePosition);
 
 			} else {
 				if (allOrdersCancelled) {
-					Tradestrategy tradestrategy = this
-							.findTradestrategyById(tradestrategyId);
-					if (null == tradestrategy.getStatus()) {
-						tradestrategy.setStatus(TradestrategyStatus.CANCELLED);
-						this.persistTradestrategy(tradestrategy);
+					tradestrategy = this.findTradestrategyById(tradestrategyId);
+					if (!TradestrategyStatus.CANCELLED.equals(tradestrategy
+							.getStatus())) {
+						if (null == tradestrategy.getStatus()) {
+							tradestrategy
+									.setStatus(TradestrategyStatus.CANCELLED);
+							this.persistTradestrategy(tradestrategy);
+						}
 					}
 				}
 				/*
@@ -992,8 +1010,6 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 			if (filledQuantity > 0) {
-				if (filledQuantity == tradeOrder.getQuantity())
-					tradeOrder.setIsFilled(true);
 				BigDecimal avgFillPrice = new BigDecimal(filledValue
 						/ filledQuantity);
 				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);

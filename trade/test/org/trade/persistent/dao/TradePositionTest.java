@@ -43,6 +43,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.AspectHome;
+import org.trade.dictionary.valuetype.Side;
 import org.trade.ui.TradeAppLoadConfig;
 
 /**
@@ -87,7 +88,7 @@ public class TradePositionTest extends TestCase {
 					.removeTradeOrders(this.tradestrategy);
 
 			TradePosition instance = new TradePosition(
-					this.tradestrategy.getContract(), new Date());
+					this.tradestrategy.getContract(), new Date(), Side.BOT);
 			instance.setIsOpen(true);
 			TradePosition tradePosition = (TradePosition) aspectHome
 					.persist(instance);

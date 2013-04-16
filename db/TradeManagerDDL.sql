@@ -254,7 +254,7 @@ CREATE  TABLE IF NOT EXISTS tradeposition (
   totalBuyValue DECIMAL(10,2) NULL ,
   totalSellQuantity INT NULL ,
   totalSellValue DECIMAL(10,2) NULL ,
-  totalNet DECIMAL(10,2) NULL ,
+  totalNetValue DECIMAL(10,2) NULL ,
   updateDate DATETIME NULL ,
   version INT NULL,
   idContract INT NOT NULL ,

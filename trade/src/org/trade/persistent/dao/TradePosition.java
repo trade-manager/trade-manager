@@ -99,10 +99,15 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * 
 	 * @param contract
 	 *            Contract
+	 * @param positionOpenDate
+	 *            Date
+	 * @param side
+	 *            String
 	 */
-	public TradePosition(Contract contract, Date positionOpenDate) {
+	public TradePosition(Contract contract, Date positionOpenDate, String side) {
 		this.contract = contract;
 		this.positionOpenDate = positionOpenDate;
+		this.side = side;
 	}
 
 	/**
@@ -502,6 +507,23 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Method containsTradeOrder.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 * @return boolean
+	 */
+	@Transient
+	public boolean containsTradeOrder(TradeOrder tradeOrder) {
+		for (TradeOrder item : this.getTradeOrders()) {
+			if (item.getOrderKey().equals(tradeOrder.getOrderKey())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
