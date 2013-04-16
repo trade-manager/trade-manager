@@ -95,6 +95,39 @@ public class TradestrategyHome {
 	}
 
 	/**
+	 * Method findPositionOrdersById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return PositionOrders
+	 */
+	public synchronized PositionOrders findPositionOrdersById(Integer id) {
+
+		try {
+			entityManager = EntityManagerHelper.getEntityManager();
+			entityManager.getTransaction().begin();
+			PositionOrders instance = entityManager.find(PositionOrders.class,
+					id);
+			if (null != instance) {
+				for (TradePosition tradePosition : instance.getContract()
+						.getTradePositions()) {
+					if (tradePosition.getIsOpen()) {
+						instance.setOpenTradePosition(tradePosition);
+						break;
+					}
+				}
+			}
+			entityManager.getTransaction().commit();
+			return instance;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
 	 * Method findByTradeId.
 	 * 
 	 * @param idTrade

@@ -64,6 +64,7 @@ import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Entrylimit;
+import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
@@ -97,7 +98,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	private DAOEntryLimit entryLimits = new DAOEntryLimit();
 	private StrategyData datasetContainer = null;
 	private Tradestrategy tradestrategy = null;
-	private TradePosition tradePosition = null;
+	private PositionOrders positionOrders = null;
 	private Integer idTradestrategy = null;
 	private String symbol = null;
 	private Money targetPrice = null;
@@ -338,12 +339,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 				if (!this.isCancelled()) {
 					/*
-					 * Refresh the orders in the tradestrategy as these may have
-					 * been filled via another thread
+					 * Refresh the orders in the positionOrders as these may
+					 * have been filled via another thread. This gets the
+					 * Orders/OpenPosition and Contract
 					 */
 
-					this.tradestrategy = this.tradePersistentModel
-							.findTradestrategyById(this.tradestrategy);
+					this.positionOrders = this.tradePersistentModel
+							.findPositionOrdersById(this.tradestrategy
+									.getIdTradeStrategy());
 
 					CandleSeries candleSeries = this.tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
@@ -403,7 +406,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * Tell the worker if listening. Note only for back
 						 * testing that the strategy is running.
 						 */
-						if (null != this.tradePosition) {
+						if (null != this.positionOrders.getOpenTradePosition()) {
 							if (isPositionCovered()) {
 								this.firePositionCovered(this.tradestrategy);
 							}
@@ -411,7 +414,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						this.fireStrategyStarted(this.tradestrategy);
 						listeningCandles = true;
 					} else {
-						if (null != this.tradePosition) {
+						if (null != this.positionOrders.getOpenTradePosition()) {
 							if (isPositionCovered()) {
 								this.firePositionCovered(this.tradestrategy);
 							}
@@ -682,8 +685,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 			}
 		}
-		return getBrokerManager().onPlaceOrder(
+		tradeOrder = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), tradeOrder);
+		this.getPositionOrders().addTradeOrder(tradeOrder);
+		return tradeOrder;
 	}
 
 	/**
@@ -721,28 +726,31 @@ public abstract class AbstractStrategyRule extends Worker implements
 		TradeOrder tradeOrder = tradePersistentModel
 				.findTradeOrderByKey(orderKey);
 		if (roundPrice) {
+			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
+			if (null != this.getTradePosition()) {
+				side = this.getTradePosition().getSide();
+			}
 			if (OrderType.LMT.equals(orderType)) {
 				if (roundPrice) {
 					limitPrice = addPennyAndRoundStop(limitPrice.doubleValue(),
-							this.getTradePosition().getSide(), action, 0.01);
+							side, action, 0.01);
 				}
 			} else if (OrderType.STPLMT.equals(orderType)) {
 				Money diffPrice = limitPrice.subtract(auxPrice);
-				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), this
-						.getTradePosition().getSide(), action, 0.01);
+				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
+						action, 0.01);
 				limitPrice = diffPrice.isNegative() ? auxPrice
 						.subtract(diffPrice) : auxPrice.add(diffPrice);
 			} else {
-				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), this
-						.getTradePosition().getSide(), action, 0.01);
+				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
+						action, 0.01);
 			}
 		}
 		tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
 		tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
 		tradeOrder.setTransmit(transmit);
-		tradeOrder = getBrokerManager().onPlaceOrder(
+		return getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), tradeOrder);
-		return tradeOrder;
 	}
 
 	/**
@@ -841,8 +849,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 			}
 		}
-		return getBrokerManager().onPlaceOrder(
+		tradeOrder = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), tradeOrder);
+		this.getPositionOrders().addTradeOrder(tradeOrder);
+		return tradeOrder;
 	}
 
 	/**
@@ -878,7 +888,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			int openQuantity = 0;
 			if (this.isThereOpenPosition()) {
 				// Find the open position orders
-				for (TradeOrder order : this.getTradePosition()
+				for (TradeOrder order : this.getPositionOrders()
 						.getTradeOrders()) {
 					if (!order.getIsOpenPosition() && !order.getIsFilled()
 							&& !OrderStatus.CANCELLED.equals(order.getStatus())
@@ -959,17 +969,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setOcaType(2);
 		orderTarget.setTransmit(true);
 		orderTarget.setOcaGroupName(ocaID);
-		if (null != getTradestrategy().getPortfolio().getIndividualAccount()) {
-			orderTarget.setAccountNumber(getTradestrategy().getPortfolio()
-					.getIndividualAccount().getAccountNumber());
 
-		} else {
-			// TODO for AccountType.CORPORATE accounts provide the group/proflie
-		}
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
-		this.getTradePosition().addTradeOrder(orderTarget);
-
+		this.getPositionOrders().addTradeOrder(orderTarget);
 		/*
 		 * Note the last order submitted in TWS on OCA order is the only one
 		 * that can be updated
@@ -990,7 +993,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
-		this.getTradePosition().addTradeOrder(orderStop);
+		this.getPositionOrders().addTradeOrder(orderStop);
 		return targetPrice;
 	}
 
@@ -1091,7 +1094,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderTarget.setFAPercent(openPosition.getFAPercent());
 		orderTarget = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderTarget);
-		this.getTradePosition().addTradeOrder(orderTarget);
+		this.getPositionOrders().addTradeOrder(orderTarget);
 		/*
 		 * Note the last order submitted in TWS on OCA order is the only one
 		 * that can be updated
@@ -1110,7 +1113,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		orderStop.setFAPercent(openPosition.getFAPercent());
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
-		this.getTradePosition().addTradeOrder(orderStop);
+		this.getPositionOrders().addTradeOrder(orderStop);
 		return targetPrice;
 	}
 
@@ -1261,23 +1264,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method isPositionCancelled.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isPositionCancelled() {
-		if (null != getTradePosition()) {
-			if (!getTradePosition().getIsOpen()) {
-				if (OrderStatus.CANCELLED.equals(getTradePosition()
-						.getOpenPositionOrder().getStatus())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Method getCurrentCandleCount.
 	 * 
 	 * @return int
@@ -1374,6 +1360,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
+	 * Method getPositionOrders.
+	 * 
+	 * @return PositionOrders
+	 */
+	public PositionOrders getPositionOrders() {
+		return this.positionOrders;
+	}
+
+	/**
 	 * Method getIndividualAccount. Return a refreshed trade account note this
 	 * is updated when connected to TWS every time the account values change.
 	 * 
@@ -1386,14 +1381,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method isThereUnfilledOpenPositionOrder.
+	 * Method isThereUnfilledOrders.
 	 * 
 	 * @return boolean
 	 */
 
-	public boolean isThereUnfilledOpenPositionOrder() {
-		for (TradeOrder tradeOrder : this.getTradestrategy().getTradeOrders()) {
-			if (tradeOrder.getIsOpenPosition() && !tradeOrder.getIsFilled())
+	public boolean isThereUnfilledOrders() {
+		for (TradeOrder tradeOrder : getPositionOrders().getTradeOrders()) {
+			if (!tradeOrder.getIsFilled())
 				return true;
 		}
 		return false;
@@ -1417,9 +1412,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return TradePosition
 	 */
 	public TradePosition getTradePosition() {
-		return this.tradePersistentModel
-				.findOpenTradePositionByContractId(this.tradestrategy
-						.getContract().getIdContract());
+		return getPositionOrders().getOpenTradePosition();
 	}
 
 	/**
@@ -1440,7 +1433,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 */
 	public TradeOrder getOpenPositionOrder() {
-		for (TradeOrder tradeOrder : this.getTradestrategy().getTradeOrders()) {
+		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
 			if (tradeOrder.getIsOpenPosition())
 				return tradeOrder;
 		}

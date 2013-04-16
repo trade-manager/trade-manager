@@ -187,7 +187,7 @@ public class TradePersistentModelTest extends TestCase {
 							.getContract().getIdContract());
 			if (null == tradePosition) {
 				tradePosition = new TradePosition(
-						this.tradestrategy.getContract(), Side.BOT, new Date());
+						this.tradestrategy.getContract(), new Date());
 				tradePosition.setIsOpen(true);
 				this.tradePersistentModel.persistAspect(tradePosition);
 				tradePosition = this.tradePersistentModel
@@ -638,13 +638,22 @@ public class TradePersistentModelTest extends TestCase {
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrderfill(tradeOrderSell);
 			TestCase.assertFalse(result.getTradePosition().getIsOpen());
+
 			TestCase.assertEquals((new Money(4000.00)).getBigDecimalValue(),
-					result.getTradePosition().getProfitLoss());
+					result.getTradePosition().getTotalNetValue());
+
+			double totalPriceMade = (result.getTradePosition()
+					.getTotalSellValue().doubleValue() / result
+					.getTradePosition().getTotalSellQuantity().doubleValue())
+					- (result.getTradePosition().getTotalBuyValue()
+							.doubleValue() / result.getTradePosition()
+							.getTotalBuyQuantity().doubleValue());
 			TestCase.assertEquals((new Money(4.00)).getBigDecimalValue(),
-					(new Money(result.getTradePosition().getAveragePrice()))
-							.getBigDecimalValue());
-			TestCase.assertEquals(new Integer(2000), result.getTradePosition()
-					.getTotalQuantity());
+					(new Money(totalPriceMade)).getBigDecimalValue());
+			TestCase.assertEquals(new Integer(1000), result.getTradePosition()
+					.getTotalBuyQuantity());
+			TestCase.assertEquals(new Integer(1000), result.getTradePosition()
+					.getTotalSellQuantity());
 			TestCase.assertEquals(new Integer(0), result.getTradePosition()
 					.getOpenQuantity());
 
@@ -660,7 +669,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradestrategy = TradestrategyTest
 					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
-					this.tradestrategy.getContract(), Side.BOT, new Date());
+					this.tradestrategy.getContract(), new Date());
 			TradePosition result = this.tradePersistentModel
 					.persistTradePosition(tradePosition);
 			TestCase.assertNotNull(result.getId());
@@ -831,8 +840,7 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			TradePosition tradePosition = new TradePosition(
-					this.tradestrategy.getContract(),
-					this.tradestrategy.getSide(), new Date());
+					this.tradestrategy.getContract(), new Date());
 			TradePosition resultTrade = this.tradePersistentModel
 					.persistTradePosition(tradePosition);
 			TradePosition result = this.tradePersistentModel
@@ -850,7 +858,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradestrategy = TradestrategyTest
 					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
-					this.tradestrategy.getContract(), Side.BOT, new Date());
+					this.tradestrategy.getContract(), new Date());
 			tradePosition.setIsOpen(true);
 			tradePersistentModel.persistTradePosition(tradePosition);
 			TradePosition result = this.tradePersistentModel
@@ -877,8 +885,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradestrategy = TradestrategyTest
 					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
-					this.tradestrategy.getContract(),
-					this.tradestrategy.getSide(), new Date());
+					this.tradestrategy.getContract(), new Date());
 			this.tradePersistentModel.persistTradePosition(tradePosition);
 			Tradingday result = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
@@ -898,8 +905,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradestrategy = TradestrategyTest
 					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
-					this.tradestrategy.getContract(),
-					this.tradestrategy.getSide(), new Date());
+					this.tradestrategy.getContract(), new Date());
 			this.tradePersistentModel.persistTradePosition(tradePosition);
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy

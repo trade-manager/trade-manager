@@ -18,6 +18,7 @@
 		<class>org.trade.persistent.dao.Strategy</class>
 		<class>org.trade.persistent.dao.Tradestrategy</class>
 		<class>org.trade.persistent.dao.TradestrategyId</class>
+		<class>org.trade.persistent.dao.PositionOrders</class>
 		<class>org.trade.persistent.dao.TradePosition</class>
 		<class>org.trade.persistent.dao.TradeOrder</class>
 		<class>org.trade.persistent.dao.TradeOrderfill</class>

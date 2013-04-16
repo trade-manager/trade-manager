@@ -65,6 +65,7 @@ public class TradestrategyTest extends TestCase {
 			.getLogger(TradestrategyTest.class);
 
 	private String symbol = "TEST";
+	private TradestrategyHome tradestrategyHome = null;
 
 	/**
 	 * Method setUp.
@@ -73,6 +74,7 @@ public class TradestrategyTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		TradeAppLoadConfig.loadAppProperties();
+		tradestrategyHome = new TradestrategyHome();
 	}
 
 	/**
@@ -85,14 +87,40 @@ public class TradestrategyTest extends TestCase {
 	}
 
 	@Test
-	public void testAddTradestrategy() {
-
+	public void testFindPositionOrdersById() {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
 			TestCase.assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
+
+			PositionOrders positionOrders = tradestrategyHome
+					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
+			TestCase.assertNotNull(tradestrategy);
+			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
+					+ positionOrders.getIdTradeStrategy() + "found.");
+
+		} catch (Exception e) {
+			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testAddTradestrategy() {
+
+		try {
+
+			Tradestrategy tradestrategy = TradestrategyTest
+					.getTestTradestrategy(symbol);
+			TestCase.assertNotNull(tradestrategy);
+			_log.info("testTradingdaysSave IdTradeStrategy:"
+					+ tradestrategy.getIdTradeStrategy());
+			tradestrategy = tradestrategyHome.findById(tradestrategy
+					.getIdTradeStrategy());
+			TestCase.assertNotNull(tradestrategy);
+			_log.info("testTradingdaysSave IdTradeStrategy:"
+					+ tradestrategy.getIdTradeStrategy() + "found.");
 
 		} catch (Exception e) {
 			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());

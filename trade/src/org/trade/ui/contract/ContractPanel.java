@@ -896,10 +896,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 				if (null != tradestrategy.getOpenTradePosition()) {
 					if (null != tradestrategy.getOpenTradePosition()
-							.getProfitLoss()) {
+							.getTotalNetValue()) {
 						profitLoss = profitLoss
 								+ tradestrategy.getOpenTradePosition()
-										.getProfitLoss().doubleValue();
+										.getTotalNetValue().doubleValue();
 					}
 					if (null != tradestrategy.getOpenTradePosition()
 							.getTotalCommission()) {

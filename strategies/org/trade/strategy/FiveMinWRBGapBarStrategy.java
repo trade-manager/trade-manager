@@ -127,7 +127,7 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 				/*
 				 * Trade is open kill this Strategy as its job is done.
 				 */
-				if (this.isThereOpenPosition() || this.isPositionCancelled()) {
+				if (this.isThereOpenPosition()) {
 					_log.info("FiveMinWRBGapBarStrategy complete open position filled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					this.cancel();

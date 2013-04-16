@@ -77,16 +77,17 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 715993951200025530L;
 	private Contract contract;
+	private Integer openQuantity = new Integer(0);
 	private Date positionOpenDate;
 	private Date positionCloseDate;
-	private BigDecimal averagePrice;
 	private Boolean isOpen = new Boolean(false);
-	private Integer openQuantity = new Integer(0);
 	private String side;
-	private BigDecimal profitLoss;
 	private BigDecimal totalCommission;
-	private Integer totalQuantity;
-	private BigDecimal totalValue;
+	private Integer totalBuyQuantity;
+	private BigDecimal totalBuyValue;
+	private Integer totalSellQuantity;
+	private BigDecimal totalSellValue;
+	private BigDecimal totalNetValue;
 	private Date updateDate;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 
@@ -98,12 +99,9 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * 
 	 * @param contract
 	 *            Contract
-	 * @param side
-	 *            String
 	 */
-	public TradePosition(Contract contract, String side, Date positionOpenDate) {
+	public TradePosition(Contract contract, Date positionOpenDate) {
 		this.contract = contract;
-		this.side = side;
 		this.positionOpenDate = positionOpenDate;
 	}
 
@@ -112,38 +110,44 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * 
 	 * @param contract
 	 *            Contract
-	 * @param averagePrice
-	 *            BigDecimal
+	 * @param positionOpenDate
+	 *            Date
+	 * @param positionCloseDate
+	 *            Date
 	 * @param openQuantity
 	 *            Integer
-	 * @param profitLoss
-	 *            BigDecimal
 	 * @param side
 	 *            String
-	 * @param totalCommission
-	 *            BigDecimal
-	 * @param totalQuantity
+	 * @param totalBuyQuantity
 	 *            Integer
-	 * @param totalValue
+	 * @param totalBuyValue
+	 *            BigDecimal
+	 * @param totalSellQuantity
+	 *            Integer
+	 * @param totalSellValue
+	 *            BigDecimal
+	 * @param totalNetValue
 	 *            BigDecimal
 	 * @param tradeOrders
 	 *            List<TradeOrder>
 	 */
 	public TradePosition(Contract contract, Date positionOpenDate,
-			Date positionCloseDate, BigDecimal averagePrice,
-			Integer openQuantity, BigDecimal profitLoss, String side,
-			BigDecimal totalCommission, Integer totalQuantity,
-			BigDecimal totalValue, List<TradeOrder> tradeOrders) {
+			Date positionCloseDate, Integer openQuantity, String side,
+			BigDecimal totalCommission, Integer totalBuyQuantity,
+			BigDecimal totalBuyValue, Integer totalSellQuantity,
+			BigDecimal totalSellValue, BigDecimal totalNetValue,
+			List<TradeOrder> tradeOrders) {
 		this.contract = contract;
 		this.positionOpenDate = positionOpenDate;
 		this.positionCloseDate = positionCloseDate;
-		this.averagePrice = averagePrice;
 		this.openQuantity = openQuantity;
 		this.side = side;
-		this.profitLoss = profitLoss;
 		this.totalCommission = totalCommission;
-		this.totalQuantity = totalQuantity;
-		this.totalValue = totalValue;
+		this.totalBuyQuantity = totalBuyQuantity;
+		this.totalBuyValue = totalBuyValue;
+		this.totalSellQuantity = totalSellQuantity;
+		this.totalSellValue = totalSellValue;
+		this.totalNetValue = totalNetValue;
 		this.tradeOrders = tradeOrders;
 	}
 
@@ -233,26 +237,6 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getAveragePrice.
-	 * 
-	 * @return BigDecimal
-	 */
-	@Column(name = "averagePrice", precision = 11)
-	public BigDecimal getAveragePrice() {
-		return this.averagePrice;
-	}
-
-	/**
-	 * Method setAveragePrice.
-	 * 
-	 * @param averagePrice
-	 *            BigDecimal
-	 */
-	public void setAveragePrice(BigDecimal averagePrice) {
-		this.averagePrice = averagePrice;
-	}
-
-	/**
 	 * Method getIsOpen.
 	 * 
 	 * @return Boolean
@@ -290,26 +274,6 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 	public void setOpenQuantity(Integer openQuantity) {
 		this.openQuantity = openQuantity;
-	}
-
-	/**
-	 * Method getProfitLoss.
-	 * 
-	 * @return BigDecimal
-	 */
-	@Column(name = "profitLoss", precision = 10)
-	public BigDecimal getProfitLoss() {
-		return this.profitLoss;
-	}
-
-	/**
-	 * Method setProfitLoss.
-	 * 
-	 * @param profitLoss
-	 *            BigDecimal
-	 */
-	public void setProfitLoss(BigDecimal profitLoss) {
-		this.profitLoss = profitLoss;
 	}
 
 	/**
@@ -353,43 +317,103 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getTotalQuantity.
+	 * Method getTotalBuyQuantity.
 	 * 
 	 * @return Integer
 	 */
-	@Column(name = "totalQuantity")
-	public Integer getTotalQuantity() {
-		return this.totalQuantity;
+	@Column(name = "totalBuyQuantity")
+	public Integer getTotalBuyQuantity() {
+		return this.totalBuyQuantity;
 	}
 
 	/**
-	 * Method setTotalQuantity.
+	 * Method setTotalBuyQuantity.
 	 * 
-	 * @param totalQuantity
+	 * @param totalBuyQuantity
 	 *            Integer
 	 */
-	public void setTotalQuantity(Integer totalQuantity) {
-		this.totalQuantity = totalQuantity;
+	public void setTotalBuyQuantity(Integer totalBuyQuantity) {
+		this.totalBuyQuantity = totalBuyQuantity;
 	}
 
 	/**
-	 * Method getTotalValue.
+	 * Method getTotalSellQuantity.
+	 * 
+	 * @return Integer
+	 */
+	@Column(name = "totalSellQuantity")
+	public Integer getTotalSellQuantity() {
+		return this.totalSellQuantity;
+	}
+
+	/**
+	 * Method setTotalSellQuantity.
+	 * 
+	 * @param totalSellQuantity
+	 *            Integer
+	 */
+	public void setTotalSellQuantity(Integer totalSellQuantity) {
+		this.totalSellQuantity = totalSellQuantity;
+	}
+
+	/**
+	 * Method getTotalBuyValue.
 	 * 
 	 * @return BigDecimal
 	 */
-	@Column(name = "totalValue", precision = 10)
-	public BigDecimal getTotalValue() {
-		return this.totalValue;
+	@Column(name = "totalBuyValue", precision = 10)
+	public BigDecimal getTotalBuyValue() {
+		return this.totalBuyValue;
 	}
 
 	/**
-	 * Method setTotalValue.
+	 * Method setTotalBuyValue.
 	 * 
-	 * @param totalValue
+	 * @param totalBuyValue
 	 *            BigDecimal
 	 */
-	public void setTotalValue(BigDecimal totalValue) {
-		this.totalValue = totalValue;
+	public void setTotalBuyValue(BigDecimal totalBuyValue) {
+		this.totalBuyValue = totalBuyValue;
+	}
+
+	/**
+	 * Method getTotalSellValue.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "totalSellValue", precision = 10)
+	public BigDecimal getTotalSellValue() {
+		return this.totalSellValue;
+	}
+
+	/**
+	 * Method setTotalSellValue.
+	 * 
+	 * @param totalSellValue
+	 *            BigDecimal
+	 */
+	public void setTotalSellValue(BigDecimal totalSellValue) {
+		this.totalSellValue = totalSellValue;
+	}
+
+	/**
+	 * Method getTotalNetValue.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "totalNetValue", precision = 10)
+	public BigDecimal getTotalNetValue() {
+		return this.totalNetValue;
+	}
+
+	/**
+	 * Method setTotalNetValue.
+	 * 
+	 * @param totalNetValue
+	 *            BigDecimal
+	 */
+	public void setTotalNetValue(BigDecimal totalNetValue) {
+		this.totalNetValue = totalNetValue;
 	}
 
 	/**
@@ -489,13 +513,14 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 		return "TradePosition Id: " + this.getIdTradePosition() + " Version: "
 				+ this.getVersion() + " positionOpenDate: "
 				+ this.getPositionOpenDate() + " positionCloseDate: "
-				+ this.getPositionCloseDate() + " Avg Fill Price: "
-				+ new Money(this.getAveragePrice()) + " isOpen: "
-				+ this.getIsOpen() + " Open Qty: " + this.getOpenQuantity()
-				+ " Total qty: " + this.getTotalQuantity() + " P/L: "
-				+ new Money(this.getProfitLoss()) + " Total Value: "
-				+ new Money(this.getTotalValue()) + " Total Comm: "
-				+ new Money(this.getTotalCommission()) + " Side: "
-				+ this.getSide() + " updateDate: " + this.getUpdateDate();
+				+ this.getPositionCloseDate() + " isOpen: " + this.getIsOpen()
+				+ " Side: " + this.getSide() + " Open Qty: "
+				+ this.getOpenQuantity() + " Total Buy qty: "
+				+ this.getTotalBuyQuantity() + " Total Buy Value: "
+				+ new Money(this.getTotalBuyValue()) + " Total Sell qty: "
+				+ this.getTotalSellQuantity() + " Total Sell Value: "
+				+ new Money(this.getTotalSellValue()) + " Total Comm: "
+				+ new Money(this.getTotalCommission()) + " updateDate: "
+				+ this.getUpdateDate();
 	}
 }

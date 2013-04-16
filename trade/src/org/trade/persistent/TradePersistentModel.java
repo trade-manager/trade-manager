@@ -56,6 +56,7 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioHome;
+import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
 import org.trade.persistent.dao.Strategy;
@@ -264,6 +265,27 @@ public class TradePersistentModel implements PersistentModel {
 							+ tradestrategy.getIdTradeStrategy());
 
 		instance.setDatasetContainer(tradestrategy.getDatasetContainer());
+		return instance;
+	}
+
+	/**
+	 * Method findTradestrategyById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * 
+	 * @return PositionOrders
+	 * @throws PersistentModelException
+	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
+	 */
+	public PositionOrders findPositionOrdersById(Integer id)
+			throws PersistentModelException {
+
+		PositionOrders instance = m_tradestrategyHome
+				.findPositionOrdersById(id);
+		if (null == instance)
+			throw new PersistentModelException(
+					"Tradestrategy not found for id: " + id);
 		return instance;
 	}
 
@@ -799,8 +821,7 @@ public class TradePersistentModel implements PersistentModel {
 					if (null == tradePosition) {
 						tradePosition = new TradePosition(
 								tradestrategy.getContract(),
-								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
-										: Side.SLD), tradeOrder.getUpdateDate());
+								tradeOrder.getUpdateDate());
 						tradeOrder.setIsOpenPosition(true);
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = (TradePosition) this
@@ -821,10 +842,11 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 			boolean allOrdersCancelled = true;
-			int totalOpenQuantity = 0;
-			int totalFilledQuantity = 0;
+			int totalBuyQuantity = 0;
+			int totalSellQuantity = 0;
 			double totalCommission = 0;
-			double totalFilledValue = 0;
+			double totalBuyValue = 0;
+			double totalSellValue = 0;
 
 			for (TradeOrder order : tradePosition.getTradeOrders()) {
 
@@ -841,18 +863,19 @@ public class TradePersistentModel implements PersistentModel {
 				}
 
 				if (null != order.getFilledQuantity()) {
-					int buySellMultiplier = 1;
+
 					if (Action.BUY.equals(order.getAction())) {
-						buySellMultiplier = -1;
-					}
-					totalFilledQuantity = totalFilledQuantity
-							+ order.getFilledQuantity();
-					totalOpenQuantity = totalOpenQuantity
-							+ (order.getFilledQuantity() * buySellMultiplier);
-					if (null != order.getAverageFilledPrice()) {
-						totalFilledValue = totalFilledValue
-								+ (order.getAverageFilledPrice().doubleValue()
-										* order.getFilledQuantity() * buySellMultiplier);
+						totalBuyQuantity = totalBuyQuantity
+								+ order.getFilledQuantity();
+						totalBuyValue = totalBuyValue
+								+ (order.getAverageFilledPrice().doubleValue() * order
+										.getFilledQuantity().doubleValue());
+					} else {
+						totalSellQuantity = totalSellQuantity
+								+ order.getFilledQuantity();
+						totalSellValue = totalSellValue
+								+ (order.getAverageFilledPrice().doubleValue() * order
+										.getFilledQuantity().doubleValue());
 					}
 					if (null != order.getCommission()) {
 						totalCommission = totalCommission
@@ -865,36 +888,40 @@ public class TradePersistentModel implements PersistentModel {
 			 * values.
 			 */
 			Money comms = new Money(totalCommission);
-			if ((totalFilledQuantity > 0 && CoreUtils.nullSafeComparator(
-					totalFilledQuantity, tradePosition.getTotalQuantity()) != 0)) {
-				tradePosition.setTotalQuantity(totalFilledQuantity);
-				tradePosition.setOpenQuantity(totalOpenQuantity);
-				Money filledValue = new Money(totalFilledValue);
-				tradePosition.setTotalValue(filledValue.getBigDecimalValue());
-				BigDecimal avgFillPrice = new BigDecimal(totalFilledValue
-						/ (totalFilledQuantity / 2d));
-				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
-				tradePosition.setAveragePrice(avgFillPrice);
+			if (CoreUtils.nullSafeComparator(new Integer(totalBuyQuantity
+					- totalSellQuantity), tradePosition.getOpenQuantity()) != 0) {
+				tradePosition
+						.setOpenQuantity((totalBuyQuantity - totalSellQuantity));
+
+				if ((totalBuyQuantity - totalSellQuantity) > 0)
+					tradePosition.setSide(Side.BOT);
+				if ((totalBuyQuantity - totalSellQuantity) < 0)
+					tradePosition.setSide(Side.SLD);
+
+				tradePosition.setIsOpen(true);
+				if ((totalBuyQuantity - totalSellQuantity) == 0)
+					tradePosition.setIsOpen(false);
+
+				tradePosition.setTotalBuyQuantity(totalBuyQuantity);
+				tradePosition.setTotalBuyValue((new BigDecimal(totalBuyValue))
+						.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN));
+				tradePosition.setTotalSellQuantity(totalSellQuantity);
+				tradePosition
+						.setTotalSellValue((new BigDecimal(totalSellValue))
+								.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalCommission(comms.getBigDecimalValue());
-				tradePosition.setProfitLoss(filledValue.getBigDecimalValue());
 
 				if (!tradePosition.getIsOpen()) {
-					if (totalOpenQuantity != 0) {
-						tradePosition.setIsOpen(true);
-						Tradestrategy tradestrategy = this
-								.findTradestrategyById(tradestrategyId);
-						tradestrategy.setStatus(TradestrategyStatus.OPEN);
-						this.persistTradestrategy(tradestrategy);
-					}
+					Tradestrategy tradestrategy = this
+							.findTradestrategyById(tradestrategyId);
+					tradestrategy.setStatus(TradestrategyStatus.OPEN);
+					this.persistTradestrategy(tradestrategy);
 				} else {
-					if (totalOpenQuantity == 0) {
-						tradePosition.setIsOpen(false);
-						Tradestrategy tradestrategy = this
-								.findTradestrategyById(tradestrategyId);
-						tradestrategy.setStatus(TradestrategyStatus.CLOSED);
-						tradePosition.setPositionCloseDate(new Date());
-						this.persistTradestrategy(tradestrategy);
-					}
+					Tradestrategy tradestrategy = this
+							.findTradestrategyById(tradestrategyId);
+					tradestrategy.setStatus(TradestrategyStatus.CLOSED);
+					tradePosition.setPositionCloseDate(new Date());
+					this.persistTradestrategy(tradestrategy);
 				}
 				tradePosition.setUpdateDate(new Date());
 				tradePosition = (TradePosition) this
