@@ -127,7 +127,7 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 				/*
 				 * Trade is open kill this Strategy as its job is done.
 				 */
-				if (this.isPositionOpen() || this.isPositionCancelled()) {
+				if (this.isThereOpenPosition() || this.isPositionCancelled()) {
 					_log.info("FiveMinWRBGapBarStrategy complete open position filled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					this.cancel();
@@ -226,7 +226,7 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 						|| startPeriod.after(TradingCalendar.getSpecificTime(
 								startPeriod, 10, 30))) {
 
-					if (!this.isPositionOpen()
+					if (!this.isThereOpenPosition()
 							&& !TradestrategyStatus.CANCELLED
 									.equals(getTradestrategy().getStatus())) {
 						this.updateTradestrategyStatus(TradestrategyStatus.TO);

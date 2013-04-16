@@ -311,10 +311,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findOpenTradePositionByContractId(Integer)
 	 */
-	public TradePosition findOpenTradePositionByContractId(Integer id)
-			throws PersistentModelException {
-		if (null == id)
-			throw new PersistentModelException("Contract id cannot be null");
+	public TradePosition findOpenTradePositionByContractId(Integer id) {
 		return m_tradePositionHome.findOpenTradePositionByContractId(id);
 	}
 
@@ -812,7 +809,7 @@ public class TradePersistentModel implements PersistentModel {
 					tradeOrder.setTradePosition(tradePosition);
 				} else {
 					/*
-					 * If the order has not been filled and it has not
+					 * If the order has not been filled and it has no
 					 * TradePosition this is the first order that has just been
 					 * update.
 					 */

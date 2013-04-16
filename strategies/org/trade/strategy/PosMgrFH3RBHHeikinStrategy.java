@@ -245,7 +245,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 */
 			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
 					15, 55))) {
-				closeAllOpenPositions();
+				closeOpenPosition();
 				_log.info("PositionManagerStrategy 15:55:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);
 				this.cancel();

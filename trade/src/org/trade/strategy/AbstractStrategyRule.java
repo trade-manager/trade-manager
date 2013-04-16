@@ -342,15 +342,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 					 * been filled via another thread
 					 */
 
-					if (null == this.getTradePosition()) {
-						this.tradePosition = this.tradePersistentModel
-								.findOpenTradePositionByContractId(this.tradestrategy
-										.getContract().getIdContract());
-					} else {
-						this.tradePosition = this.tradePersistentModel
-								.findTradePositionById(this.tradePosition
-										.getIdTradePosition());
-					}
+					this.tradestrategy = this.tradePersistentModel
+							.findTradestrategyById(this.tradestrategy);
+
 					CandleSeries candleSeries = this.tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 
@@ -514,7 +508,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void closePosition(boolean transmit) throws ValueTypeException,
 			BrokerModelException, PersistentModelException {
 
-		if (this.isPositionOpen()) {
+		if (this.isThereOpenPosition()) {
 
 			int cumQuantityOpen = Math.abs(this.getTradePosition()
 					.getOpenQuantity());
@@ -776,15 +770,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throws ValueTypeException, BrokerModelException,
 			PersistentModelException {
 
-		if (!this.getTradePosition().getTradeOrders().isEmpty())
-			throw new BrokerModelException(1, 51,
-					"Cannot create open position for TradePosition Id: "
-							+ this.getTradePosition().getIdTradePosition()
-							+ " as position alreads has orders.");
-
-		if (this.isPositionOpen())
+		if (this.isThereOpenPosition())
 			throw new BrokerModelException(1, 52,
-					"Cannot create open position for TradePosition Id: "
+					"Cannot create position for TradePosition Id: "
 							+ this.getTradePosition().getIdTradePosition()
 							+ " as position is already open.");
 
@@ -870,8 +858,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		if (null != order) {
 			if (!order.getIsFilled()
 					&& !OrderStatus.CANCELLED.equals(order.getStatus())
-					&& !OrderStatus.INACTIVE.equals(order.getStatus())
-					&& !OrderStatus.UNSUBMIT.equals(order.getStatus())) {
+					&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
 				getBrokerManager().onCancelOrder(order);
 			}
 		}
@@ -889,7 +876,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		try {
 			int openQuantity = 0;
-			if (this.isPositionOpen()) {
+			if (this.isThereOpenPosition()) {
 				// Find the open position orders
 				for (TradeOrder order : this.getTradePosition()
 						.getTradeOrders()) {
@@ -953,8 +940,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		Date createDate = new Date();
 
-		if (!this.isPositionOpen()) {
-			throw new StrategyRuleException(1, 80, "Error trade is not open");
+		if (!this.isThereOpenPosition()) {
+			throw new StrategyRuleException(1, 80, "Error position is not open");
 		}
 
 		String action = Action.BUY;
@@ -1047,8 +1034,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		Date createDate = new Date();
 
-		if (!this.isPositionOpen()) {
-			throw new StrategyRuleException(1, 80, "Error trade is not open");
+		if (!this.isThereOpenPosition()) {
+			throw new StrategyRuleException(1, 80, "Error position is not open");
 		}
 
 		/*
@@ -1156,17 +1143,17 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method closeAllOpenPositions. This method will close all open order
-	 * positions for the Trade.
+	 * Method closeOpenPosition. This method will close all open order positions
+	 * for the Trade.
 	 * 
 	 * @throws StrategyRuleException
 	 */
-	public void closeAllOpenPositions() throws StrategyRuleException {
+	public void closeOpenPosition() throws StrategyRuleException {
 
 		_log.info("Strategy  closeAllOpenPositions symbol: " + symbol);
 		try {
 			cancelAllOrders();
-			if (this.isPositionOpen()) {
+			if (this.isThereOpenPosition()) {
 				closePosition(true);
 			}
 		} catch (Exception ex) {
@@ -1191,7 +1178,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		_log.info("Strategy  moveStopOCAPrice symbol: " + symbol
 				+ " Stop Price: " + stopPrice);
 		try {
-			if (this.isPositionOpen()) {
+			if (this.isThereOpenPosition()) {
 				// Cancel the tgt and stop orders i.e. OCA
 				for (TradeOrder tradeOrder : this.getTradePosition()
 						.getTradeOrders()) {
@@ -1236,7 +1223,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		_log.info("Strategy  cancelAllPositions symbol: " + symbol);
 		try {
-			if (this.isPositionOpen()) {
+			if (this.isThereOpenPosition()) {
 				for (TradeOrder order : getTradePosition().getTradeOrders()) {
 					cancelOrder(order);
 				}
@@ -1271,18 +1258,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 			roundPrice = roundPrice(price - dollars, action);
 		}
 		return new Money(roundPrice);
-	}
-
-	/**
-	 * Method isPositionOpen.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isPositionOpen() {
-		if (null != getTradePosition()) {
-			return getTradePosition().getIsOpen();
-		}
-		return false;
 	}
 
 	/**
@@ -1411,12 +1386,40 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
+	 * Method isThereUnfilledOpenPositionOrder.
+	 * 
+	 * @return boolean
+	 */
+
+	public boolean isThereUnfilledOpenPositionOrder() {
+		for (TradeOrder tradeOrder : this.getTradestrategy().getTradeOrders()) {
+			if (tradeOrder.getIsOpenPosition() && !tradeOrder.getIsFilled())
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Method isThereOpenPosition.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isThereOpenPosition() {
+		if (null != getTradePosition()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Method getTradePosition.
 	 * 
 	 * @return TradePosition
 	 */
 	public TradePosition getTradePosition() {
-		return this.tradePosition;
+		return this.tradePersistentModel
+				.findOpenTradePositionByContractId(this.tradestrategy
+						.getContract().getIdContract());
 	}
 
 	/**
@@ -1429,59 +1432,19 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * The open position is initially created in createSubmitOpenPosition this
-	 * is called from the Strategy that has rules to enter a position.
-	 * Strategies that manage positions also need access to the openPosition
-	 * order so here we populated this from the trade.
+	 * Method getOpenPositionOrder. The open position order is the first order
+	 * that opened the trade position.
 	 * <p>
-	 * <blockquote>
-	 * 
-	 * <pre>
-	 * State isOpen = false and ProfitLoss is null when created not filled.
-	 * State isOpen = true when position is open and filled. State isOpen =
-	 * false and ProfitLoss not null when closed.
-	 * 
-	 * @return openPostion The TradeOrder that open this trade position. null
-	 * return means no open position.
-	 */
-
-	/**
-	 * Method getOpenPositionOrder.
 	 * 
 	 * @return TradeOrder
+	 * 
 	 */
 	public TradeOrder getOpenPositionOrder() {
-		if (null != getTradePosition()) {
-			return getTradePosition().getOpenPositionOrder();
+		for (TradeOrder tradeOrder : this.getTradestrategy().getTradeOrders()) {
+			if (tradeOrder.getIsOpenPosition())
+				return tradeOrder;
 		}
 		return null;
-	}
-
-	/**
-	 * Method isThereOpenPositionOrder.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isThereOpenPositionOrder() {
-		if (null != getOpenPositionOrder())
-			return true;
-		return false;
-	}
-
-	/**
-	 * Method isThereOpenPositionOrder.
-	 * 
-	 * @return boolean
-	 * @throws PersistentModelException
-	 */
-	public boolean isThereOpenPositionByContract()
-			throws PersistentModelException {
-		TradePosition openTrade = tradePersistentModel
-				.findOpenTradePositionByContractId(getTradestrategy()
-						.getContract().getIdContract());
-		if (null != openTrade)
-			return true;
-		return false;
 	}
 
 	/**
@@ -1571,6 +1534,5 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            TradeOrder
 	 */
 	public void tradeOrderFilled(TradeOrder tradeOrder) {
-
 	}
 }

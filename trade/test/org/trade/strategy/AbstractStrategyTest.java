@@ -399,7 +399,7 @@ public class AbstractStrategyTest extends TestCase {
 		try {
 			createOpenPosition(new Money(100), false);
 			this.strategyProxy.closePosition(true);
-			TestCase.assertFalse(this.strategyProxy.isPositionOpen());
+			TestCase.assertFalse(this.strategyProxy.isThereOpenPosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testClosePosition Msg:" + ex.getMessage());
 		}
@@ -530,12 +530,19 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testCancelOrder() {
 		try {
-			createOpenPosition(new Money(100), false);
-			this.strategyProxy.cancelOrder(this.strategyProxy
-					.getOpenPositionOrder());
+			this.tradestrategy = TradestrategyTest
+					.removeTradeOrders(this.tradestrategy);
+
+			Money price = new Money(37.99);
+			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
+					Action.BUY, price, price.subtract(new Money(0.2)), true,
+					null, null, null, null);
 			pokeStrategyRuleTest();
-			TestCase.assertEquals(OrderStatus.CANCELLED, this.strategyProxy
-					.getOpenPositionOrder().getStatus());
+			this.strategyProxy.cancelOrder(openOrder);
+			pokeStrategyRuleTest();
+			openOrder = tradePersistentModel.findTradeOrderByKey(openOrder
+					.getOrderKey());
+			TestCase.assertEquals(OrderStatus.CANCELLED, openOrder.getStatus());
 
 		} catch (Exception ex) {
 			TestCase.fail("Error testCancelOrder Msg:" + ex.getMessage());
@@ -592,11 +599,11 @@ public class AbstractStrategyTest extends TestCase {
 	}
 
 	@Test
-	public void testCloseAllOpenPositions() {
+	public void testCloseOpenPosition() {
 		try {
 			createOpenPosition(new Money(100), true);
-			this.strategyProxy.closeAllOpenPositions();
-			TestCase.assertNotNull(this.strategyProxy.isPositionOpen());
+			this.strategyProxy.closeOpenPosition();
+			TestCase.assertNotNull(this.strategyProxy.isThereOpenPosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testCloseAllOpenPositions Msg:"
 					+ ex.getMessage());
@@ -630,7 +637,7 @@ public class AbstractStrategyTest extends TestCase {
 		try {
 			createOpenPosition(new Money(100), false);
 			this.strategyProxy.cancelAllOrders();
-			TestCase.assertFalse(this.strategyProxy.isPositionOpen());
+			TestCase.assertFalse(this.strategyProxy.isThereOpenPosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testCancelAllOrders Msg:" + ex.getMessage());
 		}
@@ -640,7 +647,7 @@ public class AbstractStrategyTest extends TestCase {
 	public void testIsTradeOpen() {
 		try {
 			createOpenPosition(new Money(100), true);
-			TestCase.assertTrue(this.strategyProxy.isPositionOpen());
+			TestCase.assertTrue(this.strategyProxy.isThereOpenPosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsTradeOpen Msg:" + ex.getMessage());
 		}
@@ -759,7 +766,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetOpenPositionOrder() {
 		try {
-			createOpenPosition(new Money(100), false);
+			createOpenPosition(new Money(100), true);
 			TestCase.assertNotNull(this.strategyProxy.getOpenPositionOrder());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetOpenPosition Msg:" + ex.getMessage());
@@ -767,10 +774,11 @@ public class AbstractStrategyTest extends TestCase {
 	}
 
 	@Test
-	public void testIsThereOpenPosition() {
+	public void testIsThereUnfilledOpenPositionOrder() {
 		try {
 			createOpenPosition(new Money(100), false);
-			TestCase.assertTrue(this.strategyProxy.isThereOpenPositionOrder());
+			TestCase.assertTrue(this.strategyProxy
+					.isThereUnfilledOpenPositionOrder());
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsThereOpenPosition Msg:"
 					+ ex.getMessage());
@@ -817,28 +825,28 @@ public class AbstractStrategyTest extends TestCase {
 			tradePersistentModel.removeTradestrategyTradeOrders(strategyProxy
 					.getTradestrategy());
 		}
-		TradeOrder openOrder = this.strategyProxy.createOrder(Action.BUY,
+		TradeOrder tradeOrder = this.strategyProxy.createOrder(Action.BUY,
 				OrderType.STPLMT, price, price.subtract(new Money(0.2)), 1000,
 				null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
 				TimeInForce.DAY, true, true, null, null, null, null);
 
 		if (fillOpenPosition) {
-			String side = (Action.BUY.equals(openOrder.getAction()) ? Side.BOT
+			String side = (Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
 					: Side.SLD);
 
-			TestCase.assertNotNull(openOrder);
+			TestCase.assertNotNull(tradeOrder);
 			TradeOrderfill execution = new TradeOrderfill();
-			execution.setTradeOrder(openOrder);
+			execution.setTradeOrder(tradeOrder);
 			execution.setTime(new Date());
 			execution.setExchange(this.tradestrategy.getContract()
 					.getExchange());
 			execution.setSide(side);
-			execution.setQuantity(openOrder.getQuantity());
+			execution.setQuantity(tradeOrder.getQuantity());
 			execution.setAveragePrice((new Money(100.02)).getBigDecimalValue());
 			execution.setPrice((new Money(100.02)).getBigDecimalValue());
-			execution.setCumulativeQuantity(openOrder.getQuantity());
+			execution.setCumulativeQuantity(tradeOrder.getQuantity());
 			((BackTestBrokerModel) m_brokerModel).execDetails(
-					openOrder.getOrderKey(), this.tradestrategy.getContract(),
+					tradeOrder.getOrderKey(), this.tradestrategy.getContract(),
 					execution);
 			this.pokeStrategyRuleTest();
 			TestCase.assertNotNull(strategyProxy.getOpenPositionOrder());
@@ -846,8 +854,8 @@ public class AbstractStrategyTest extends TestCase {
 		} else {
 
 			((BackTestBrokerModel) m_brokerModel).orderStatus(
-					openOrder.getOrderKey(), OrderStatus.SUBMITTED, 0, 0, 0, 0,
-					0, 0, openOrder.getClientId(), openOrder.getWhyHeld());
+					tradeOrder.getOrderKey(), OrderStatus.SUBMITTED, 0, 0, 0,
+					0, 0, 0, tradeOrder.getClientId(), tradeOrder.getWhyHeld());
 
 		}
 	}
@@ -929,7 +937,8 @@ public class AbstractStrategyTest extends TestCase {
 					/*
 					 * Trade is open kill this Strategy as its job is done.
 					 */
-					if (this.isPositionOpen() || this.isPositionCancelled()) {
+					if (this.isThereOpenPosition()
+							|| this.isPositionCancelled()) {
 						_log.info("Strategy complete open position filled symbol: "
 								+ getSymbol() + " startPeriod: " + startPeriod);
 						this.cancel();

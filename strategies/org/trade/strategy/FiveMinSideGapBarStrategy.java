@@ -125,7 +125,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 				/*
 				 * Trade is open kill this Strategy as its job is done.
 				 */
-				if (this.isPositionOpen() || this.isPositionCancelled()) {
+				if (this.isThereOpenPosition() || this.isPositionCancelled()) {
 					_log.info("FiveMinSideGapBarStrategy complete open position filled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					this.cancel();
@@ -139,9 +139,11 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 				CandleItem prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
 
-				// If the 5min low is broken cancel orders as
-				// trade no longer valid.
-				if (null != this.getTradePosition()) {
+				/*
+				 * If the 5min low is broken cancel orders as trade no longer
+				 * valid.
+				 */
+				if (this.isThereOpenPosition()) {
 					CandleItem openCandle = this.getCandle(this
 							.getTradestrategy().getTradingday().getOpen());
 					if (!this.getOpenPositionOrder().getIsFilled()) {
@@ -232,7 +234,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 						|| startPeriod.after(TradingCalendar.getSpecificTime(
 								startPeriod, 10, 30))) {
 
-					if (!this.isPositionOpen()
+					if (!this.isThereOpenPosition()
 							&& !TradestrategyStatus.CANCELLED
 									.equals(getTradestrategy().getStatus())) {
 						this.updateTradestrategyStatus(TradestrategyStatus.TO);
