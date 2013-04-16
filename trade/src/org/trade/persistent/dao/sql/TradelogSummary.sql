@@ -55,15 +55,15 @@ IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * trade
 IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	AS lossAmount,
 (IF((tradestrategy.riskAmount/2) <= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
 (IF((-1*tradestrategy.riskAmount/2) >= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
-IF(IFNULL(trade.idTrade,0),1, 0) AS tradeCount,
+IF(IFNULL(tradeposition.idTradePosition,0),1, 0) AS tradeCount,
 0 AS tradestrategyCount
 FROM 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
-left outer join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
-left outer join tradeorder on trade.idTrade = tradeorder.idTrade
+left outer join tradeorder on tradestrategy.idTradestrategy = tradeorder.idTradestrategy
+left outer join tradeposition on tradeorder.idTradePosition = tradeposition.idTradePosition
 where tradeorder.isFilled =1
 and tradingday.open between :start and :end
 and portfolio.idPortfolio = :idPortfolio
@@ -91,7 +91,7 @@ tradingday left outer join tradestrategy on tradingday.idTradingday = tradestrat
 left outer join contract on tradestrategy.idContract = contract.idContract
 left outer join strategy on tradestrategy.idStrategy = strategy.idStrategy
 left outer join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
-where tradingday.open between :start and :end
+where  tradingday.open between :start and :end
 and (portfolio.idPortfolio = :idPortfolio or portfolio.idPortfolio is null)
 group by
 period,
@@ -134,15 +134,15 @@ IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * trade
 IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	AS lossAmount,
 (IF((tradestrategy.riskAmount/2) <= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
 (IF((-1*tradestrategy.riskAmount/2) >= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
-IF(IFNULL(trade.idTrade,0),1, 0) AS tradeCount,
+IF(IFNULL(tradeposition.idTradePosition,0),1, 0) AS tradeCount,
 0 AS tradestrategyCount
 FROM 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
-left outer join trade on tradestrategy.idTradestrategy = trade.idTradestrategy
-left outer join tradeorder on trade.idTrade = tradeorder.idTrade
+left outer join tradeorder on tradestrategy.idTradestrategy = tradeorder.idTradestrategy
+left outer join tradeposition on tradeorder.idTradePosition = tradeposition.idTradePosition
 where tradeorder.isFilled =1
 and tradingday.open between :start and :end
 and portfolio.idPortfolio = :idPortfolio

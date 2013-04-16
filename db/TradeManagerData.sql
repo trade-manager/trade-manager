@@ -4,7 +4,7 @@ USE ${sql.database};
 
 DELETE FROM tradeorderfill WHERE idTradeOrderFill >='0';
 DELETE FROM tradeorder WHERE idTradeOrder>='0';
-DELETE FROM trade WHERE idTrade >='0';
+DELETE FROM tradeposition WHERE idTradePosition >='0';
 DELETE FROM candle WHERE idCandle >='0';
 DELETE FROM tradestrategy WHERE idTradestrategy >='0';
 DELETE FROM rule WHERE idRule >='0';

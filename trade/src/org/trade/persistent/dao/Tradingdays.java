@@ -346,15 +346,15 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method hasTrades.
+	 * Method hasTradeOrders.
 	 * 
 	 * @param tradingday
 	 *            Tradingday
 	 * @return boolean
 	 */
-	public static boolean hasTrades(Tradingday tradingday) {
+	public static boolean hasTradeOrders(Tradingday tradingday) {
 		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-			if (!tradestrategy.getTrades().isEmpty()) {
+			if (!tradestrategy.getTradeOrders().isEmpty()) {
 				return true;
 			}
 		}
@@ -370,8 +370,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 */
 	public static boolean hasOpenTrades(Tradingday tradingday) {
 		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-			for (Trade trades : tradestrategy.getTrades()) {
-				if (trades.getIsOpen()) {
+			for (TradeOrder tradeOrder : tradestrategy.getTradeOrders()) {
+				if (tradeOrder.getTradePosition().getIsOpen()) {
 					return true;
 				}
 			}

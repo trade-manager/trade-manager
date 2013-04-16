@@ -43,6 +43,7 @@ import org.jfree.data.DataUtilities;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.trade.core.dao.AspectHome;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.MarketBar;
 import org.trade.ui.TradeAppLoadConfig;
@@ -85,6 +86,7 @@ public class TradingdayTest extends TestCase {
 			_log.debug("Adding Tradingday");
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
+			AspectHome aspectHome = new AspectHome();
 			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 					.getMostRecentTradingDay(new Date()));
 			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
@@ -96,6 +98,8 @@ public class TradingdayTest extends TestCase {
 			_log.info("Tradingday added Id = "
 					+ transientInstance.getIdTradingDay());
 			TestCase.assertNotNull(transientInstance.getIdTradingDay());
+			aspectHome.remove(transientInstance);
+
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}
@@ -111,6 +115,7 @@ public class TradingdayTest extends TestCase {
 			_log.debug("Updating Tradingday");
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
+			AspectHome aspectHome = new AspectHome();
 			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 					.getMostRecentTradingDay(new Date()));
 			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
@@ -124,6 +129,7 @@ public class TradingdayTest extends TestCase {
 			_log.info("Tradingday Update Id = "
 					+ transientInstance.getIdTradingDay());
 			TestCase.assertNotNull(transientInstance.getIdTradingDay());
+			aspectHome.remove(transientInstance);
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}

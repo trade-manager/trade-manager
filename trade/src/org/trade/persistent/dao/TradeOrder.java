@@ -80,7 +80,9 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		Cloneable {
 
 	private static final long serialVersionUID = -832064631322873796L;
-	private Trade trade;
+	private TradePosition tradePosition;
+	private Tradestrategy tradestrategy;
+	private TradestrategyId tradestrategyId;
 	private String action;
 	private String accountNumber;
 	private BigDecimal averageFilledPrice;
@@ -128,8 +130,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	/**
 	 * Constructor for TradeOrder.
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @param action
 	 *            String
 	 * @param orderType
@@ -143,10 +145,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param createDate
 	 *            Date
 	 */
-	public TradeOrder(Trade trade, String action, String orderType,
-			Integer quantity, BigDecimal auxPrice, BigDecimal limitPrice,
-			Date createDate) {
-		this(trade, action, createDate, orderType, quantity, auxPrice,
+	public TradeOrder(Tradestrategy tradestrategy, String action,
+			String orderType, Integer quantity, BigDecimal auxPrice,
+			BigDecimal limitPrice, Date createDate) {
+		this(tradestrategy, action, createDate, orderType, quantity, auxPrice,
 				limitPrice, OverrideConstraints.YES, TimeInForce.DAY,
 				TriggerMethod.DEFAULT);
 	}
@@ -154,8 +156,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	/**
 	 * Constructor for TradeOrder.
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @param action
 	 *            String
 	 * @param createDate
@@ -175,11 +177,12 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param triggerMethod
 	 *            Integer
 	 */
-	public TradeOrder(Trade trade, String action, Date createDate,
-			String orderType, Integer quantity, BigDecimal auxPrice,
-			BigDecimal limitPrice, Integer overrideConstraints,
-			String timeInForce, Integer triggerMethod) {
-		this.trade = trade;
+	public TradeOrder(Tradestrategy tradestrategy, String action,
+			Date createDate, String orderType, Integer quantity,
+			BigDecimal auxPrice, BigDecimal limitPrice,
+			Integer overrideConstraints, String timeInForce,
+			Integer triggerMethod) {
+		this.tradestrategy = tradestrategy;
 		this.action = action;
 		this.auxPrice = auxPrice;
 		this.createDate = createDate;
@@ -266,7 +269,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param tradeOrderfills
 	 *            List<TradeOrderfill>
 	 */
-	public TradeOrder(Trade trade, String action,
+	public TradeOrder(TradePosition tradePosition, String action,
 			BigDecimal averageFilledPrice, Boolean allOrNothing,
 			BigDecimal auxPrice, Integer clientId, BigDecimal commission,
 			Date createDate, Integer displayQuantity, Date filledDate,
@@ -279,7 +282,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			BigDecimal stopPrice, Boolean transmit, Integer triggerMethod,
 			String warningMessage, String whyHeld, Date updateDate,
 			List<TradeOrderfill> tradeOrderfills) {
-		this.trade = trade;
+		this.tradePosition = tradePosition;
 		this.action = action;
 		this.allOrNothing = allOrNothing;
 		this.auxPrice = auxPrice;
@@ -339,24 +342,66 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	}
 
 	/**
-	 * Method getTrade.
+	 * Method getTradePosition.
 	 * 
-	 * @return Trade
+	 * @return TradePosition
 	 */
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH })
-	@JoinColumn(name = "idTrade", insertable = true, updatable = true, nullable = false)
-	public Trade getTrade() {
-		return this.trade;
+	@JoinColumn(name = "idTradePosition", insertable = true, updatable = true, nullable = true)
+	public TradePosition getTradePosition() {
+		return this.tradePosition;
 	}
 
 	/**
-	 * Method setTrade.
+	 * Method setTradePosition.
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradePosition
+	 *            TradePosition
 	 */
-	public void setTrade(Trade trade) {
-		this.trade = trade;
+	public void setTradePosition(TradePosition tradePosition) {
+		this.tradePosition = tradePosition;
+	}
+
+	/**
+	 * Method getTradestrategy.
+	 * 
+	 * @return Tradestrategy
+	 */
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH })
+	@JoinColumn(name = "idTradeStrategy", insertable = true, updatable = true, nullable = false)
+	public Tradestrategy getTradestrategy() {
+		return this.tradestrategy;
+	}
+
+	/**
+	 * Method setTradestrategy.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void setTradestrategy(Tradestrategy tradestrategy) {
+		this.tradestrategy = tradestrategy;
+	}
+
+	/**
+	 * Method getTradestrategyId.
+	 * 
+	 * @return tradestrategyId
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "idTradeStrategy", insertable = false, updatable = false, nullable = false)
+	public TradestrategyId getTradestrategyId() {
+		return this.tradestrategyId;
+	}
+
+	/**
+	 * Method setTradestrategyId.
+	 * 
+	 * @param tradestrategyId
+	 *            TradestrategyId
+	 */
+	public void setTradestrategyId(TradestrategyId tradestrategyId) {
+		this.tradestrategyId = tradestrategyId;
 	}
 
 	/**
@@ -1364,7 +1409,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 				+ new Money(this.getLimitPrice()) + " Open Position: "
 				+ this.getIsOpenPosition() + " Filled: " + this.getIsFilled()
 				+ " Filled Qty: " + this.getFilledQuantity() + " Trade Id: "
-				+ this.getTrade().getIdTrade() + " Trade Version: "
-				+ this.getTrade().getVersion();
+				+ this.getTradePosition().getIdTradePosition()
+				+ " Trade Version: " + this.getTradePosition().getVersion();
 	}
 }

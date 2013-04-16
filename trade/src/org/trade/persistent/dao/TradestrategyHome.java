@@ -81,9 +81,7 @@ public class TradestrategyHome {
 						.getIndicatorSeries()) {
 					indicatorSeries.getCodeValues().size();
 				}
-				for (Trade trade : instance.getTrades()) {
-					trade.getTradeOrders().size();
-				}
+				instance.getTradeOrders().size();
 				instance.getPortfolio().getPortfolioAccounts().size();
 			}
 			entityManager.getTransaction().commit();
@@ -103,13 +101,14 @@ public class TradestrategyHome {
 	 *            Integer
 	 * @return Tradestrategy
 	 */
-	public synchronized Tradestrategy findByTradeId(Integer idTrade) {
+	public synchronized Tradestrategy findByTradeOrderId(Integer idTradeOrder) {
 
 		try {
 			Tradestrategy tradestrategy = null;
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			Trade instance = entityManager.find(Trade.class, idTrade);
+			TradeOrder instance = entityManager.find(TradeOrder.class,
+					idTradeOrder);
 			if (null != instance) {
 				tradestrategy = instance.getTradestrategy();
 				tradestrategy.getContract();
@@ -146,10 +145,8 @@ public class TradestrategyHome {
 					.getResultList();
 			for (Tradestrategy tradestrategy : items) {
 				tradestrategy.getTradingday().getCandles().size();
-				for (Trade trade : tradestrategy.getTrades()) {
-					for (TradeOrder tradeOrder : trade.getTradeOrders()) {
-						tradeOrder.getTradeOrderfills().size();
-					}
+				for (TradeOrder tradeOrder : tradestrategy.getTradeOrders()) {
+					tradeOrder.getTradeOrderfills().size();
 				}
 			}
 			entityManager.getTransaction().commit();

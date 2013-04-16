@@ -69,7 +69,7 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -182,18 +182,19 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 
-			Trade trade = this.tradePersistentModel
-					.findOpenTradeByTradestrategyId(this.tradestrategy
-							.getIdTradeStrategy());
-			if (null == trade) {
-				trade = new Trade(this.tradestrategy, Side.BOT);
-				trade.setIsOpen(true);
-				this.tradePersistentModel.persistAspect(trade);
-				trade = this.tradePersistentModel
-						.findOpenTradeByTradestrategyId(this.tradestrategy
-								.getIdTradeStrategy());
+			TradePosition tradePosition = this.tradePersistentModel
+					.findOpenTradePositionByContractId(this.tradestrategy
+							.getContract().getIdContract());
+			if (null == tradePosition) {
+				tradePosition = new TradePosition(
+						this.tradestrategy.getContract(), Side.BOT, new Date());
+				tradePosition.setIsOpen(true);
+				this.tradePersistentModel.persistAspect(tradePosition);
+				tradePosition = this.tradePersistentModel
+						.findOpenTradePositionByContractId(this.tradestrategy
+								.getContract().getIdContract());
 			}
-			TestCase.assertNotNull(trade);
+			TestCase.assertNotNull(tradePosition);
 
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradeByTradestrategyId Msg: "
@@ -206,15 +207,12 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 			String side = this.tradestrategy.getSide();
 			String action = Action.BUY;
 			if (side.equals(Side.SLD)) {
 				action = Action.SELL;
 			}
-
-			Trade trade = new Trade(this.tradestrategy, side);
-			this.tradestrategy.addTrade(trade);
 
 			/*
 			 * Create an order for the trade.
@@ -224,10 +222,10 @@ public class TradePersistentModelTest extends TestCase {
 			double stop = 0.20;
 			BigDecimal price = new BigDecimal(20);
 			int quantity = (int) ((int) risk / stop);
-			Date createDate = TradingCalendar.addMinutes(trade
-					.getTradestrategy().getTradingday().getOpen(), 5);
-			TradeOrder tradeOrder = new TradeOrder(trade, Action.BUY,
-					OrderType.STPLMT, quantity, price,
+			Date createDate = TradingCalendar.addMinutes(this.tradestrategy
+					.getTradingday().getOpen(), 5);
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
+					Action.BUY, OrderType.STPLMT, quantity, price,
 					price.add(new BigDecimal(4)), createDate);
 
 			tradeOrder.setIsOpenPosition(true);
@@ -305,8 +303,9 @@ public class TradePersistentModelTest extends TestCase {
 			Tradestrategy tradestrategyStpTgt = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			Trade openTrade = tradestrategyStpTgt.getOpenTrade();
-			TestCase.assertNotNull("No open trade", openTrade);
+			TradePosition openTradePosition = tradestrategyStpTgt
+					.getOpenTradePosition();
+			TestCase.assertNotNull("No open trade", openTradePosition);
 
 			int buySellMultiplier = 1;
 			if (action.equals(Action.BUY)) {
@@ -317,8 +316,8 @@ public class TradePersistentModelTest extends TestCase {
 				buySellMultiplier = -1;
 			}
 
-			TradeOrder tradeOrderTgt1 = new TradeOrder(openTrade, action,
-					OrderType.LMT, quantity / 2, null,
+			TradeOrder tradeOrderTgt1 = new TradeOrder(this.tradestrategy,
+					action, OrderType.LMT, quantity / 2, null,
 					price.add(new BigDecimal((stop * 3) * buySellMultiplier)),
 					createDate);
 
@@ -334,8 +333,8 @@ public class TradePersistentModelTest extends TestCase {
 			tradeOrderTgt1 = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderTgt1);
 
-			TradeOrder tradeOrderTgt2 = new TradeOrder(openTrade, action,
-					OrderType.LMT, quantity / 2, null,
+			TradeOrder tradeOrderTgt2 = new TradeOrder(this.tradestrategy,
+					action, OrderType.LMT, quantity / 2, null,
 					price.add(new BigDecimal((stop * 4) * buySellMultiplier)),
 					createDate);
 			tradeOrderTgt2.setClientId(clientId);
@@ -350,9 +349,10 @@ public class TradePersistentModelTest extends TestCase {
 			tradeOrderTgt2 = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderTgt2);
 
-			TradeOrder tradeOrderStp1 = new TradeOrder(openTrade, action,
-					OrderType.STP, quantity / 2, price.add(new BigDecimal(stop
-							* buySellMultiplier * -1)), null, createDate);
+			TradeOrder tradeOrderStp1 = new TradeOrder(this.tradestrategy,
+					action, OrderType.STP, quantity / 2,
+					price.add(new BigDecimal(stop * buySellMultiplier * -1)),
+					null, createDate);
 
 			tradeOrderStp1.setClientId(clientId);
 			tradeOrderStp1.setOrderKey((new BigDecimal(
@@ -366,9 +366,10 @@ public class TradePersistentModelTest extends TestCase {
 			tradeOrderStp1 = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderStp1);
 
-			TradeOrder tradeOrderStp2 = new TradeOrder(openTrade, action,
-					OrderType.STP, quantity / 2, price.add(new BigDecimal(stop
-							* buySellMultiplier * -1)), null, createDate);
+			TradeOrder tradeOrderStp2 = new TradeOrder(this.tradestrategy,
+					action, OrderType.STP, quantity / 2,
+					price.add(new BigDecimal(stop * buySellMultiplier * -1)),
+					null, createDate);
 
 			tradeOrderStp2.setClientId(clientId);
 			tradeOrderStp2.setOrderKey((new BigDecimal(
@@ -385,7 +386,10 @@ public class TradePersistentModelTest extends TestCase {
 			/*
 			 * Update Stop/target orders to Submitted.
 			 */
-			for (TradeOrder tradeOrderOca : openTrade.getTradeOrders()) {
+			openTradePosition = this.tradePersistentModel
+					.findOpenTradePositionByContractId(this.tradestrategy
+							.getContract().getIdContract());
+			for (TradeOrder tradeOrderOca : openTradePosition.getTradeOrders()) {
 				TradeOrder tradeOrderOcaUnsubmit = this.tradePersistentModel
 						.findTradeOrderByKey(tradeOrderOca.getOrderKey());
 				if (tradeOrderOcaUnsubmit.getStatus().equals(
@@ -400,7 +404,10 @@ public class TradePersistentModelTest extends TestCase {
 			/*
 			 * Fill the stop orders.
 			 */
-			for (TradeOrder tradeOrderOca : openTrade.getTradeOrders()) {
+			openTradePosition = this.tradePersistentModel
+					.findOpenTradePositionByContractId(this.tradestrategy
+							.getContract().getIdContract());
+			for (TradeOrder tradeOrderOca : openTradePosition.getTradeOrders()) {
 				TradeOrder tradeOrderOcaSubmit = this.tradePersistentModel
 						.findTradeOrderByKey(tradeOrderOca.getOrderKey());
 				if (OrderStatus.SUBMITTED.equals(tradeOrderOcaSubmit
@@ -409,8 +416,8 @@ public class TradePersistentModelTest extends TestCase {
 					if (OrderType.STP
 							.equals(tradeOrderOcaSubmit.getOrderType())) {
 						Execution executionOCA = new Execution();
-						executionOCA.m_side = tradeOrderOcaSubmit.getTrade()
-								.getSide();
+						executionOCA.m_side = tradeOrderOcaSubmit
+								.getTradePosition().getSide();
 						executionOCA.m_time = TradingCalendar
 								.getFormattedDate(new Date());
 						executionOCA.m_exchange = "ISLAND";
@@ -446,7 +453,11 @@ public class TradePersistentModelTest extends TestCase {
 			/*
 			 * Update Stop/target orders status to filled and cancelled.
 			 */
-			for (TradeOrder tradeOrderOca : openTrade.getTradeOrders()) {
+			openTradePosition = this.tradePersistentModel
+					.findOpenTradePositionByContractId(this.tradestrategy
+							.getContract().getIdContract());
+
+			for (TradeOrder tradeOrderOca : openTradePosition.getTradeOrders()) {
 				TradeOrder tradeOrderOcaSubmit = this.tradePersistentModel
 						.findTradeOrderByKey(tradeOrderOca.getOrderKey());
 				if (tradeOrderOcaSubmit.getStatus().equals(
@@ -466,9 +477,10 @@ public class TradePersistentModelTest extends TestCase {
 					tradeOrderOcaSubmit = this.tradePersistentModel
 							.persistTradeOrder(tradeOrderOcaSubmit);
 
-					if (!trade.getIsOpen()) {
-						_log.info("Trade closed: "
-								+ tradeOrderOcaSubmit.getTrade().getIdTrade());
+					if (!openTradePosition.getIsOpen()) {
+						_log.info("TradePosition closed: "
+								+ tradeOrderOcaSubmit.getTradePosition()
+										.getIdTradePosition());
 					}
 				}
 			}
@@ -484,7 +496,7 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 			this.tradePersistentModel.persistTradingday(this.tradestrategy
 					.getTradingday());
 			TestCase.assertNotNull(this.tradestrategy.getTradingday()
@@ -499,7 +511,7 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 			Tradestrategy result = this.tradePersistentModel
 					.persistTradestrategy(this.tradestrategy);
 			TestCase.assertNotNull(result.getId());
@@ -540,10 +552,9 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
-			TradeOrder tradeOrder = new TradeOrder(trade, Action.BUY,
-					OrderType.MKT, 1000, null, null, new Date());
+					.removeTradeOrders(this.tradestrategy);
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
+					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());
 			TradeOrder result = this.tradePersistentModel
@@ -560,12 +571,10 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
+					.removeTradeOrders(this.tradestrategy);
 			BigDecimal price = new BigDecimal(100.00);
-			TradeOrder tradeOrderBuy = new TradeOrder(trade, Action.BUY,
-					OrderType.STPLMT, 1000, price,
+			TradeOrder tradeOrderBuy = new TradeOrder(this.tradestrategy,
+					Action.BUY, OrderType.STPLMT, 1000, price,
 					price.add(new BigDecimal(2)), new Date());
 			tradeOrderBuy
 					.setOrderKey((new BigDecimal((Math.random() * 1000000)))
@@ -596,10 +605,9 @@ public class TradePersistentModelTest extends TestCase {
 			tradeOrderBuy = this.tradePersistentModel
 					.persistTradeOrderfill(tradeOrderBuy);
 
-			TradeOrder tradeOrderSell = new TradeOrder(
-					tradeOrderBuy.getTrade(), Action.SELL, OrderType.LMT,
-					tradeOrderBuy.getQuantity(), null, new BigDecimal(105.00),
-					new Date());
+			TradeOrder tradeOrderSell = new TradeOrder(this.tradestrategy,
+					Action.SELL, OrderType.LMT, tradeOrderBuy.getQuantity(),
+					null, new BigDecimal(105.00), new Date());
 			tradeOrderSell.setOrderKey((new BigDecimal(
 					(Math.random() * 1000000))).intValue());
 			tradeOrderSell = this.tradePersistentModel
@@ -629,15 +637,15 @@ public class TradePersistentModelTest extends TestCase {
 
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrderfill(tradeOrderSell);
-			TestCase.assertFalse(result.getTrade().getIsOpen());
+			TestCase.assertFalse(result.getTradePosition().getIsOpen());
 			TestCase.assertEquals((new Money(4000.00)).getBigDecimalValue(),
-					result.getTrade().getProfitLoss());
+					result.getTradePosition().getProfitLoss());
 			TestCase.assertEquals((new Money(4.00)).getBigDecimalValue(),
-					(new Money(result.getTrade().getAveragePrice()))
+					(new Money(result.getTradePosition().getAveragePrice()))
 							.getBigDecimalValue());
-			TestCase.assertEquals(new Integer(2000), result.getTrade()
+			TestCase.assertEquals(new Integer(2000), result.getTradePosition()
 					.getTotalQuantity());
-			TestCase.assertEquals(new Integer(0), result.getTrade()
+			TestCase.assertEquals(new Integer(0), result.getTradePosition()
 					.getOpenQuantity());
 
 		} catch (Exception e) {
@@ -650,9 +658,11 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
-			Trade result = this.tradePersistentModel.persistTrade(trade);
+					.removeTradeOrders(this.tradestrategy);
+			TradePosition tradePosition = new TradePosition(
+					this.tradestrategy.getContract(), Side.BOT, new Date());
+			TradePosition result = this.tradePersistentModel
+					.persistTradePosition(tradePosition);
 			TestCase.assertNotNull(result.getId());
 		} catch (Exception e) {
 			TestCase.fail("Error testPersistTrade Msg: " + e.getMessage());
@@ -817,14 +827,16 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testFindTradeById() {
+	public void testFindTradePositionById() {
 
 		try {
-			Trade trade = new Trade(this.tradestrategy,
-					this.tradestrategy.getSide());
-			Trade resultTrade = this.tradePersistentModel.persistTrade(trade);
-			Trade result = this.tradePersistentModel.findTradeById(resultTrade
-					.getIdTrade());
+			TradePosition tradePosition = new TradePosition(
+					this.tradestrategy.getContract(),
+					this.tradestrategy.getSide(), new Date());
+			TradePosition resultTrade = this.tradePersistentModel
+					.persistTradePosition(tradePosition);
+			TradePosition result = this.tradePersistentModel
+					.findTradePositionById(resultTrade.getIdTradePosition());
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradeById Msg: " + e.getMessage());
@@ -832,43 +844,25 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testFindOpenTradeByTradestrategyId() {
+	public void testFindOpenTradePositionByContractId() {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
-			trade.setIsOpen(true);
-			tradePersistentModel.persistTrade(trade);
-			Trade result = this.tradePersistentModel
-					.findOpenTradeByTradestrategyId(this.tradestrategy
-							.getIdTradeStrategy());
-			TestCase.assertNotNull(result);
-		} catch (Exception e) {
-			TestCase.fail("Error testFindOpenTradeByTradestrategyId Msg: "
-					+ e.getMessage());
-		}
-	}
-
-	@Test
-	public void testFindOpenTradeByContractId() {
-
-		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
-			trade.setIsOpen(true);
-			tradePersistentModel.persistTrade(trade);
-			Trade result = this.tradePersistentModel
-					.findOpenTradeByContractId(this.tradestrategy.getContract()
-							.getIdContract());
+					.removeTradeOrders(this.tradestrategy);
+			TradePosition tradePosition = new TradePosition(
+					this.tradestrategy.getContract(), Side.BOT, new Date());
+			tradePosition.setIsOpen(true);
+			tradePersistentModel.persistTradePosition(tradePosition);
+			TradePosition result = this.tradePersistentModel
+					.findOpenTradePositionByContractId(this.tradestrategy
+							.getContract().getIdContract());
 			TestCase.assertNotNull(result);
 
-			trade.setIsOpen(false);
-			tradePersistentModel.persistTrade(trade);
+			tradePosition.setIsOpen(false);
+			tradePersistentModel.persistTradePosition(tradePosition);
 			result = this.tradePersistentModel
-					.findOpenTradeByContractId(this.tradestrategy.getContract()
-							.getIdContract());
+					.findOpenTradePositionByContractId(this.tradestrategy
+							.getContract().getIdContract());
 			TestCase.assertNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindOpenTradeByContractId Msg: "
@@ -877,62 +871,20 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testReassignOpenTradeByContractId() {
+	public void testRemoveTradingdayTradeOrders() {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
-			trade.setIsOpen(true);
-			tradePersistentModel.persistTrade(trade);
-			Trade result = this.tradePersistentModel
-					.findOpenTradeByContractId(this.tradestrategy.getContract()
-							.getIdContract());
-			TestCase.assertNotNull(result);
-			Tradestrategy tradestrategy = TradestrategyTest
-					.getTestTradestrategy("TEST1");
-			result.setTradestrategy(tradestrategy);
-			tradePersistentModel.persistTrade(result);
-			Trade result1 = this.tradePersistentModel
-					.findOpenTradeByContractId(tradestrategy.getContract()
-							.getIdContract());
-			TestCase.assertNotNull(result1);
-			TradestrategyTest.removeTestTradestrategy("TEST1");
-
-		} catch (Exception e) {
-			TestCase.fail("Error testFindOpenTradeByContractId Msg: "
-					+ e.getMessage());
-		}
-	}
-
-	@Test
-	public void testFindTradesByTradestrategyId() {
-
-		try {
-			List<Trade> result = this.tradePersistentModel
-					.findTradesByTradestrategyId(this.tradestrategy
-							.getIdTradeStrategy());
-			TestCase.assertNotNull(result);
-		} catch (Exception e) {
-			TestCase.fail("Error testFindTradesByTradestrategyId Msg: "
-					+ e.getMessage());
-		}
-	}
-
-	@Test
-	public void testRemoveTradingdayTrades() {
-
-		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy,
-					this.tradestrategy.getSide());
-			this.tradePersistentModel.persistTrade(trade);
+					.removeTradeOrders(this.tradestrategy);
+			TradePosition tradePosition = new TradePosition(
+					this.tradestrategy.getContract(),
+					this.tradestrategy.getSide(), new Date());
+			this.tradePersistentModel.persistTradePosition(tradePosition);
 			Tradingday result = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
 			TestCase.assertNotNull(result);
-			this.tradePersistentModel.removeTradingdayTrades(result);
+			this.tradePersistentModel.removeTradingdayTradeOrders(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testRemoveTradingdayTrades Msg: "
 					+ e.getMessage());
@@ -940,19 +892,20 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testRemoveTradestrategyTrades() {
+	public void testRemoveTradestrategyTradeOrders() {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy,
-					this.tradestrategy.getSide());
-			this.tradePersistentModel.persistTrade(trade);
+					.removeTradeOrders(this.tradestrategy);
+			TradePosition tradePosition = new TradePosition(
+					this.tradestrategy.getContract(),
+					this.tradestrategy.getSide(), new Date());
+			this.tradePersistentModel.persistTradePosition(tradePosition);
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
 			TestCase.assertNotNull(result);
-			this.tradePersistentModel.removeTradestrategyTrades(result);
+			this.tradePersistentModel.removeTradestrategyTradeOrders(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testRemoveTradestrategyTrades Msg: "
 					+ e.getMessage());
@@ -964,11 +917,10 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
+					.removeTradeOrders(this.tradestrategy);
 			BigDecimal price = new BigDecimal(100.00);
-			TradeOrder tradeOrder = new TradeOrder(trade, Action.BUY,
-					OrderType.STPLMT, 1000, price,
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
+					Action.BUY, OrderType.STPLMT, 1000, price,
 					price.add(new BigDecimal(4)), new Date());
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());
@@ -988,11 +940,10 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			Trade trade = new Trade(this.tradestrategy, Side.BOT);
+					.removeTradeOrders(this.tradestrategy);
 			BigDecimal price = new BigDecimal(100.00);
-			TradeOrder tradeOrder = new TradeOrder(trade, Action.BUY,
-					OrderType.STPLMT, 1000, price,
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
+					Action.BUY, OrderType.STPLMT, 1000, price,
 					price.add(new BigDecimal(4)), new Date());
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());

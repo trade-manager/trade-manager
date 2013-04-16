@@ -85,7 +85,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private String side;
 	private BigDecimal riskAmount;
 	private Boolean trade = new Boolean(false);
-	private List<Trade> trades = new ArrayList<Trade>(0);
+	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 	private StrategyData datasetContainer = null;
 	private TradestrategyStatus tradestrategyStatus = new TradestrategyStatus();
 
@@ -422,43 +422,44 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getTrades.
+	 * Method getTradeOrders.
 	 * 
 	 * @return List<Trade>
 	 */
 	@OneToMany(mappedBy = "tradestrategy", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH })
-	public List<Trade> getTrades() {
-		return this.trades;
+	public List<TradeOrder> getTradeOrders() {
+		return this.tradeOrders;
 	}
 
 	/**
-	 * Method setTrades.
+	 * Method setTradeOrders.
 	 * 
-	 * @param trades
-	 *            List<Trade>
+	 * @param tradeOrders
+	 *            List<TradeOrder>
 	 */
-	public void setTrades(List<Trade> trades) {
-		this.trades = trades;
+	public void setTradeOrders(List<TradeOrder> tradeOrders) {
+		this.tradeOrders = tradeOrders;
 	}
 
 	/**
-	 * Method addTrade.
+	 * Method addTradeOrder.
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradeOrder
+	 *            TradeOrder
 	 */
-	public void addTrade(Trade trade) {
+	public void addTradeOrder(TradeOrder tradeOrder) {
 		int index = 0;
-		for (Trade currTrade : this.trades) {
-			if (currTrade.getIdTrade().equals(trade.getIdTrade())) {
-				index = this.trades.indexOf(currTrade);
+		for (TradeOrder currTradeOrder : this.tradeOrders) {
+			if (currTradeOrder.getIdTradeOrder().equals(
+					tradeOrder.getIdTradeOrder())) {
+				index = this.tradeOrders.indexOf(currTradeOrder);
 				break;
 			}
 		}
 		if (index > 0)
-			this.trades.remove(index);
+			this.tradeOrders.remove(index);
 
-		this.trades.add(trade);
+		this.tradeOrders.add(tradeOrder);
 	}
 
 	/**
@@ -619,23 +620,17 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		return false;
 	}
 
-	/*
-
-	 */
 	/**
-	 * Method getOpenTrade. Each trade position should have at least one open
-	 * trade if no trades are open close this strategy manager as it has nothing
-	 * to do.
+	 * Method getOpenTradePosition.
 	 * 
-	 * @return Trade The open trade. Null mean no open position so close the
-	 *         Strategy.
+	 * @return TradePosition The open trade.
 	 * 
 	 */
 	@Transient
-	public Trade getOpenTrade() {
-		for (Trade trade : this.getTrades()) {
-			if (trade.getIsOpen()) {
-				return trade;
+	public TradePosition getOpenTradePosition() {
+		for (TradeOrder tradeOrder : this.getTradeOrders()) {
+			if (tradeOrder.getTradePosition().getIsOpen()) {
+				return tradeOrder.getTradePosition();
 			}
 		}
 		return null;
@@ -658,8 +653,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		tradestrategy.setPortfolio(portfolio);
 		Strategy strategy = (Strategy) this.getStrategy().clone();
 		tradestrategy.setStrategy(strategy);
-		List<Trade> trade = new ArrayList<Trade>(0);
-		tradestrategy.setTrades(trade);
+		List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
+		tradestrategy.setTradeOrders(tradeOrders);
 		return tradestrategy;
 	}
 

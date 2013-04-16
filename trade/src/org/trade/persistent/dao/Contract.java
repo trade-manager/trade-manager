@@ -96,6 +96,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	private String tradingClass;
 	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
 			0);
+	private List<TradePosition> tradePositions = new ArrayList<TradePosition>(0);
 	private List<Candle> candles = new ArrayList<Candle>(0);
 
 	public Contract() {
@@ -667,6 +668,26 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
+	 * Method getTradePositions.
+	 * 
+	 * @return List<TradePosition>
+	 */
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	public List<TradePosition> getTradePositions() {
+		return this.tradePositions;
+	}
+
+	/**
+	 * Method setTradePositions.
+	 * 
+	 * @param tradePositions
+	 *            List<TradePosition>
+	 */
+	public void setTradePositions(List<TradePosition> tradePositions) {
+		this.tradePositions = tradePositions;
+	}
+
+	/**
 	 * Method getCandles.
 	 * 
 	 * @return List<Candle>
@@ -685,6 +706,27 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setCandles(List<Candle> candles) {
 		this.candles = candles;
+	}
+
+	/**
+	 * Method addTradePosition.
+	 * 
+	 * @param tradePosition
+	 *            TradePosition
+	 */
+	public void addTradePosition(TradePosition tradePosition) {
+		int index = 0;
+		for (TradePosition currTradePosition : this.tradePositions) {
+			if (currTradePosition.getIdTradePosition().equals(
+					tradePosition.getIdTradePosition())) {
+				index = this.tradePositions.indexOf(currTradePosition);
+				break;
+			}
+		}
+		if (index > 0)
+			this.tradePositions.remove(index);
+
+		this.tradePositions.add(tradePosition);
 	}
 
 	/**
@@ -725,6 +767,8 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 		Contract contract = (Contract) super.clone();
 		List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
 		contract.setTradestrategies(tradestrategies);
+		List<TradePosition> tradePositions = new ArrayList<TradePosition>(0);
+		contract.setTradePositions(tradePositions);
 		return contract;
 	}
 

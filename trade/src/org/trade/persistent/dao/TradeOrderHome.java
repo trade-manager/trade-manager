@@ -77,12 +77,16 @@ public class TradeOrderHome {
 			entityManager.getTransaction().begin();
 			transientInstance.setUpdateDate(new Date());
 			if (null == transientInstance.getIdTradeOrder()) {
-				if (null != transientInstance.getTrade().getIdTrade()) {
-					entityManager.find(Trade.class, transientInstance
-							.getTrade().getIdTrade());
-					Trade instance = entityManager.merge(transientInstance
-							.getTrade());
-					transientInstance.setTrade(instance);
+				if (null != transientInstance.getTradePosition()) {
+					if (null != transientInstance.getTradePosition()
+							.getIdTradePosition()) {
+						entityManager.find(TradePosition.class,
+								transientInstance.getTradePosition()
+										.getIdTradePosition());
+						TradePosition instance = entityManager
+								.merge(transientInstance.getTradePosition());
+						transientInstance.setTradePosition(instance);
+					}
 				}
 				entityManager.persist(transientInstance);
 				entityManager.getTransaction().commit();

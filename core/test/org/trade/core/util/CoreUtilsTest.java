@@ -98,6 +98,15 @@ public class CoreUtilsTest extends TestCase {
 
 			returnVal = CoreUtils.nullSafeComparator(null, 1);
 			TestCase.assertEquals(-1, returnVal);
+			
+			returnVal = CoreUtils.nullSafeComparator(null, new Integer(0) );
+			TestCase.assertEquals(-1, returnVal);
+			
+			returnVal = CoreUtils.nullSafeComparator(new Integer(0), new Integer(0));
+			TestCase.assertEquals(0, returnVal);
+			
+			returnVal = CoreUtils.nullSafeComparator(new Integer(1), new Integer(0));
+			TestCase.assertEquals(1, returnVal);
 
 		} catch (Exception ex) {
 			_log.error("Error creating class: " + ex.getMessage(), ex);

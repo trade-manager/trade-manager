@@ -35,6 +35,8 @@
  */
 package org.trade.persistent.dao;
 
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
@@ -46,12 +48,13 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  */
-public class TradeTest extends TestCase {
+public class TradePositionTest extends TestCase {
 
-	private final static Logger _log = LoggerFactory.getLogger(TradeTest.class);
+	private final static Logger _log = LoggerFactory
+			.getLogger(TradePositionTest.class);
 
 	private String symbol = "TEST";
-	private TradeHome tradeHome = null;
+	private TradePositionHome tradePositionHome = null;
 	private AspectHome aspectHome = null;
 	private Tradestrategy tradestrategy = null;
 
@@ -62,7 +65,7 @@ public class TradeTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		TradeAppLoadConfig.loadAppProperties();
-		tradeHome = new TradeHome();
+		tradePositionHome = new TradePositionHome();
 		aspectHome = new AspectHome();
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 		TestCase.assertNotNull(this.tradestrategy);
@@ -78,38 +81,42 @@ public class TradeTest extends TestCase {
 	}
 
 	@Test
-	public void testAddTrade() {
+	public void testAddTradePosition() {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 
-			Trade instance = new Trade(this.tradestrategy, Side.BOT);
-			this.tradestrategy.addTrade(instance);
-			for (Trade trade : this.tradestrategy.getTrades()) {
-				trade = (Trade) aspectHome.persist(trade);
-				TestCase.assertNotNull(trade.getIdTrade());
-				_log.info("testAddTrade IdTradeStrategy: "
-						+ this.tradestrategy.getIdTradeStrategy() + "IdTrade: "
-						+ trade.getIdTrade());
-			}
+			TradePosition instance = new TradePosition(
+					this.tradestrategy.getContract(), Side.BOT, new Date());
+			instance.setIsOpen(true);
+			TradePosition tradePosition = (TradePosition) aspectHome
+					.persist(instance);
+
+			TestCase.assertNotNull(tradePosition.getIdTradePosition());
+			_log.info("testAddTradePosition IdTradeStrategy: "
+					+ this.tradestrategy.getIdTradeStrategy()
+					+ "IdTradePosition: " + tradePosition.getIdTradePosition());
+
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}
 	}
 
 	@Test
-	public void testDeleteTrade() {
+	public void testDeleteTradePosition() {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
-			testAddTrade();
-			for (Trade trade : this.tradestrategy.getTrades()) {
-				tradeHome.remove(trade);
-				_log.info("testDeleteTrade IdTradeStrategy: "
-						+ tradestrategy.getIdTradeStrategy());
-			}
+					.removeTradeOrders(this.tradestrategy);
+			testAddTradePosition();
+			TradePosition instance = tradePositionHome
+					.findOpenTradePositionByContractId(this.tradestrategy
+							.getContract().getIdContract());
+			tradePositionHome.remove(instance);
+			_log.info("testDeleteTradePosition IdTradeStrategy: "
+					+ tradestrategy.getIdTradeStrategy());
+
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}

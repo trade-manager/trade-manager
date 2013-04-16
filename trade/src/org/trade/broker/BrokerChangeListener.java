@@ -38,7 +38,7 @@ package org.trade.broker;
 import java.util.EventListener;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 
@@ -135,10 +135,10 @@ public interface BrokerChangeListener extends EventListener {
 	/**
 	 * Method positionClosed.
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradePosition
+	 *            TradePosition
 	 */
-	public void positionClosed(Trade trade);
+	public void positionClosed(TradePosition tradePosition);
 
 	/**
 	 * Method openOrderEnd.

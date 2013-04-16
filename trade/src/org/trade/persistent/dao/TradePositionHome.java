@@ -35,8 +35,6 @@
  */
 package org.trade.persistent.dao;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -44,93 +42,42 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
-import org.trade.core.util.TradingCalendar;
 
 /**
  */
 @Stateless
-public class ContractHome {
+public class TradePositionHome {
 
 	private EntityManager entityManager = null;
 
-	public ContractHome() {
+	public TradePositionHome() {
 
 	}
 
 	/**
-	 * Method findByUniqueKey.
+	 * Method remove.
 	 * 
-	 * @param SECType
-	 *            String
-	 * @param symbol
-	 *            String
-	 * @param exchange
-	 *            String
-	 * @param currency
-	 *            String
-	 * @param expiryDate
-	 *            Date
-	 * @return Contract
+	 * @param transientInstance
+	 *            TradePosition
 	 */
-	public Contract findByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, Date expiryDate) {
+	public void remove(TradePosition transientInstance) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Contract> query = builder.createQuery(Contract.class);
-			Root<Contract> from = query.from(Contract.class);
-			query.select(from);
-			List<Predicate> predicates = new ArrayList<Predicate>();
-
-			if (null != SECType) {
-				Predicate predicate = builder.equal(from.get("secType"),
-						SECType);
-				predicates.add(predicate);
+			TradePosition tradePosition = entityManager
+					.find(TradePosition.class,
+							transientInstance.getIdTradePosition());
+			if (null != tradePosition) {
+				entityManager.remove(tradePosition);
 			}
-			if (null != symbol) {
-				Predicate predicate = builder.equal(from.get("symbol"), symbol);
-				predicates.add(predicate);
-			}
-			if (null != exchange) {
-				Predicate predicate = builder.equal(from.get("exchange"),
-						exchange);
-				predicates.add(predicate);
-			}
-			if (null != currency) {
-				Predicate predicate = builder.equal(from.get("currency"),
-						currency);
-				predicates.add(predicate);
-			}
-			if (null != expiryDate) {
-
-				Integer yearExpiry = TradingCalendar.getYear(expiryDate);
-				Expression<Integer> year = builder.function("year",
-						Integer.class, from.get("expiry"));
-				Predicate predicateYear = builder.equal(year, yearExpiry);
-				predicates.add(predicateYear);
-
-				Integer monthExpiry = TradingCalendar.getMonth(expiryDate);
-				Expression<Integer> month = builder.function("month",
-						Integer.class, from.get("expiry"));
-				Predicate predicateMonth = builder.equal(month, new Integer(
-						1 + monthExpiry.intValue()));
-				predicates.add(predicateMonth);
-			}
-			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<Contract> typedQuery = entityManager.createQuery(query);
-			List<Contract> items = typedQuery.getResultList();
 			entityManager.getTransaction().commit();
-			if (items.size() > 0) {
-				return items.get(0);
-			}
-			return null;
+
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();
 			throw re;
@@ -144,19 +91,65 @@ public class ContractHome {
 	 * 
 	 * @param id
 	 *            Integer
-	 * @return Contract
+	 * @return TradePosition
 	 */
-	public Contract findById(Integer id) {
+	public TradePosition findById(Integer id) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			Contract instance = entityManager.find(Contract.class, id);
-			if (null != instance) {
-				instance.getTradePositions().size();
-			}
+			TradePosition instance = entityManager
+					.find(TradePosition.class, id);
+			if (null != instance)
+				instance.getTradeOrders().size();
 			entityManager.getTransaction().commit();
 			return instance;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
+	 * Method findOpenTradePositionByContractId.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return TradePosition
+	 */
+	public TradePosition findOpenTradePositionByContractId(Integer id) {
+
+		try {
+			entityManager = EntityManagerHelper.getEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<TradePosition> query = builder
+					.createQuery(TradePosition.class);
+			Root<TradePosition> from = query.from(TradePosition.class);
+			query.select(from);
+
+			Join<TradePosition, Contract> contract = from.join("contract");
+			Predicate contractId = builder
+					.equal(contract.get("idContract"), id);
+
+			Predicate isOpenTrue = builder.equal(from.get("isOpen"),
+					new Boolean("true"));
+			query.where(builder.and(contractId, isOpenTrue));
+
+			TypedQuery<TradePosition> typedQuery = entityManager
+					.createQuery(query);
+			List<TradePosition> items = typedQuery.getResultList();
+			for (TradePosition tradePosition : items) {
+				tradePosition.getTradeOrders().size();
+			}
+			entityManager.getTransaction().commit();
+			if (items.size() > 0) {
+				return (TradePosition) items.get(0);
+			}
+			return null;
+
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();
 			throw re;

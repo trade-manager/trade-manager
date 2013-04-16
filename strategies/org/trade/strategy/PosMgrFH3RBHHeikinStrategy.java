@@ -44,7 +44,7 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Side;
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.HeikinAshiDataset;
 import org.trade.strategy.data.HeikinAshiSeries;
@@ -131,7 +131,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * will be closed down.
 			 */
 
-			if (!getTrade().getIsOpen()) {
+			if (!getTradePosition().getIsOpen()) {
 				_log.info("No open position so Cancel Strategy Mgr Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 				this.cancel();
@@ -147,7 +147,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * is > 0 also check to see if we already have this position
 			 * covered.
 			 */
-			if (getTrade().getIsOpen() && !this.isPositionCovered()) {
+			if (getTradePosition().getIsOpen() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
 				 * and stop orders for the open quantity. Two targets at 4R and
@@ -181,12 +181,12 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 						.getSpecificTime(this.getTradestrategy()
 								.getTradingday().getOpen(), startPeriod));
 
-				if (Side.BOT.equals(getTrade().getSide())) {
+				if (Side.BOT.equals(getTradePosition().getSide())) {
 					if (currentCandle.getVwap() < firstCandle.getVwap()) {
-						Money stopPrice = addPennyAndRoundStop(getTrade()
-								.getOpenPositionOrder().getAverageFilledPrice()
-								.doubleValue(), getTrade().getSide(),
-								Action.SELL, 0.01);
+						Money stopPrice = addPennyAndRoundStop(
+								getTradePosition().getOpenPositionOrder()
+										.getAverageFilledPrice().doubleValue(),
+								getTradePosition().getSide(), Action.SELL, 0.01);
 						moveStopOCAPrice(stopPrice, true);
 						_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
 								+ getSymbol() + " Time:" + startPeriod
@@ -195,10 +195,10 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				} else {
 
 					if (currentCandle.getVwap() > firstCandle.getVwap()) {
-						Money stopPrice = addPennyAndRoundStop(getTrade()
-								.getOpenPositionOrder().getAverageFilledPrice()
-								.doubleValue(), getTrade().getSide(),
-								Action.BUY, 0.01);
+						Money stopPrice = addPennyAndRoundStop(
+								getTradePosition().getOpenPositionOrder()
+										.getAverageFilledPrice().doubleValue(),
+								getTradePosition().getSide(), Action.BUY, 0.01);
 						moveStopOCAPrice(stopPrice, true);
 						_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
 								+ getSymbol() + " Time:" + startPeriod
@@ -217,13 +217,14 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
 						+ " Time: " + startPeriod);
 				String action = Action.SELL;
-				if (getTrade().getSide().equals(Side.SLD)) {
+				if (getTradePosition().getSide().equals(Side.SLD)) {
 					action = Action.BUY;
 				}
 				moveStopOCAPrice(
 						addPennyAndRoundStop(getOpenPositionOrder()
 								.getAverageFilledPrice().doubleValue(),
-								getTrade().getSide(), action, 0.01), true);
+								getTradePosition().getSide(), action, 0.01),
+						true);
 			}
 
 			/*
@@ -231,7 +232,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Heikin-Ashi above target 1 with a two bar trail.
 			 */
 			if ((null != getTargetPrice()) && newBar) {
-				if (setHiekinAshiTrail(getTrade(), 2)) {
+				if (setHiekinAshiTrail(getTradePosition(), 2)) {
 					_log.info("PositionManagerStrategy HiekinAshiTrail: "
 							+ getSymbol() + " Trail Price: " + getTargetPrice()
 							+ " Time: " + startPeriod);
@@ -264,14 +265,14 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	 * bars. Note trail is on the low/high of the bar and assumes the bar are in
 	 * the direction of the trade i.e. side.
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradePosition
+	 *            TradePosition
 	 * @param bars
 	 *            int
 	 * @return boolean
 	 * @throws StrategyRuleException
 	 */
-	public boolean setHiekinAshiTrail(Trade trade, int bars)
+	public boolean setHiekinAshiTrail(TradePosition tradePosition, int bars)
 			throws StrategyRuleException {
 		boolean trail = false;
 		Money newStop = getTargetPrice();
@@ -293,7 +294,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 					HeikinAshiItem candle = (HeikinAshiItem) series
 							.getDataItem(i);
 					trail = false;
-					if (Side.BOT.equals(trade.getSide())) {
+					if (Side.BOT.equals(tradePosition.getSide())) {
 						if ((candle.getLow() > newStop.doubleValue())
 								&& (candle.getOpen() < candle.getClose())) {
 							newStop = new Money(candle.getLow());

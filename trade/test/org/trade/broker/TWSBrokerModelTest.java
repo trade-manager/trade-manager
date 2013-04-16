@@ -56,7 +56,7 @@ import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
@@ -931,7 +931,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	 * @param trade
 	 *            Trade
 	 */
-	public void positionClosed(Trade trade) {
+	public void positionClosed(TradePosition trade) {
 
 	}
 

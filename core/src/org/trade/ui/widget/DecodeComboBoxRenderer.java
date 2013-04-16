@@ -42,6 +42,7 @@ import java.awt.Insets;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.border.EmptyBorder;
+
 /**
  */
 public class DecodeComboBoxRenderer extends DefaultListCellRenderer {

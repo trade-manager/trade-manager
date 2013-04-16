@@ -41,6 +41,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -53,6 +54,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -66,15 +69,16 @@ import org.trade.core.valuetype.Money;
  * @version $Revision: 1.0 $
  */
 @Entity
-@Table(name = "trade")
-public class Trade extends Aspect implements java.io.Serializable {
+@Table(name = "tradeposition")
+public class TradePosition extends Aspect implements java.io.Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 715993951200025530L;
-	private Tradestrategy tradestrategy;
-	private TradestrategyId tradestrategyId;
+	private Contract contract;
+	private Date positionOpenDate;
+	private Date positionCloseDate;
 	private BigDecimal averagePrice;
 	private Boolean isOpen = new Boolean(false);
 	private Integer openQuantity = new Integer(0);
@@ -83,29 +87,31 @@ public class Trade extends Aspect implements java.io.Serializable {
 	private BigDecimal totalCommission;
 	private Integer totalQuantity;
 	private BigDecimal totalValue;
+	private Date updateDate;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 
-	public Trade() {
+	public TradePosition() {
 	}
 
 	/**
-	 * Constructor for Trade.
+	 * Constructor for TradePosition.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
+	 * @param contract
+	 *            Contract
 	 * @param side
 	 *            String
 	 */
-	public Trade(Tradestrategy tradestrategy, String side) {
-		this.tradestrategy = tradestrategy;
+	public TradePosition(Contract contract, String side, Date positionOpenDate) {
+		this.contract = contract;
 		this.side = side;
+		this.positionOpenDate = positionOpenDate;
 	}
 
 	/**
-	 * Constructor for Trade.
+	 * Constructor for TradePosition.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
+	 * @param contract
+	 *            Contract
 	 * @param averagePrice
 	 *            BigDecimal
 	 * @param openQuantity
@@ -123,11 +129,14 @@ public class Trade extends Aspect implements java.io.Serializable {
 	 * @param tradeOrders
 	 *            List<TradeOrder>
 	 */
-	public Trade(Tradestrategy tradestrategy, BigDecimal averagePrice,
+	public TradePosition(Contract contract, Date positionOpenDate,
+			Date positionCloseDate, BigDecimal averagePrice,
 			Integer openQuantity, BigDecimal profitLoss, String side,
 			BigDecimal totalCommission, Integer totalQuantity,
 			BigDecimal totalValue, List<TradeOrder> tradeOrders) {
-		this.tradestrategy = tradestrategy;
+		this.contract = contract;
+		this.positionOpenDate = positionOpenDate;
+		this.positionCloseDate = positionCloseDate;
 		this.averagePrice = averagePrice;
 		this.openQuantity = openQuantity;
 		this.side = side;
@@ -139,67 +148,88 @@ public class Trade extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getIdTrade.
+	 * Method getIdTradePosition.
 	 * 
 	 * @return Integer
 	 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "idTrade", unique = true, nullable = false)
-	public Integer getIdTrade() {
+	@Column(name = "idTradePosition", unique = true, nullable = false)
+	public Integer getIdTradePosition() {
 		return this.id;
 	}
 
 	/**
-	 * Method setIdTrade.
+	 * Method setIdTradePosition.
 	 * 
-	 * @param idTrade
+	 * @param idTradePosition
 	 *            Integer
 	 */
-	public void setIdTrade(Integer idTrade) {
-		this.id = idTrade;
+	public void setIdTradePosition(Integer idTradePosition) {
+		this.id = idTradePosition;
 	}
 
 	/**
-	 * Method getTradestrategy.
+	 * Method getContract.
 	 * 
-	 * @return Tradestrategy
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idTradeStrategy", insertable = true, updatable = true, nullable = false)
-	public Tradestrategy getTradestrategy() {
-		return this.tradestrategy;
-	}
-
-	/**
-	 * Method setTradestrategy.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 */
-	public void setTradestrategy(Tradestrategy tradestrategy) {
-		this.tradestrategy = tradestrategy;
-	}
-
-	/**
-	 * Method getTradestrategyId.
-	 * 
-	 * @return TradestrategyId
+	 * @return Contract
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "idTradeStrategy", insertable = false, updatable = false, nullable = false)
-	public TradestrategyId getTradestrategyId() {
-		return this.tradestrategyId;
+	@JoinColumn(name = "idContract", insertable = true, updatable = true, nullable = false)
+	public Contract getContract() {
+		return this.contract;
 	}
 
 	/**
-	 * Method setTradestrategyId.
+	 * Method setContract.
 	 * 
-	 * @param tradestrategyId
-	 *            TradestrategyId
+	 * @param contract
+	 *            Contract
 	 */
-	public void setTradestrategyId(TradestrategyId tradestrategyId) {
-		this.tradestrategyId = tradestrategyId;
+	public void setContract(Contract contract) {
+		this.contract = contract;
+	}
+
+	/**
+	 * Method getPositionOpenDate.
+	 * 
+	 * @return Date
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "positionOpenDate", nullable = false, length = 19)
+	public Date getPositionOpenDate() {
+		return this.positionOpenDate;
+	}
+
+	/**
+	 * Method setPositionOpenDate.
+	 * 
+	 * @param positionOpenDate
+	 *            Date
+	 */
+	public void setPositionOpenDate(Date positionOpenDate) {
+		this.positionOpenDate = positionOpenDate;
+	}
+
+	/**
+	 * Method getPositionCloseDate.
+	 * 
+	 * @return Date
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "positionCloseDate", nullable = true, length = 19)
+	public Date getPositionCloseDate() {
+		return this.positionCloseDate;
+	}
+
+	/**
+	 * Method setPositionCloseDate.
+	 * 
+	 * @param positionCloseDate
+	 *            Date
+	 */
+	public void setPositionCloseDate(Date positionCloseDate) {
+		this.positionCloseDate = positionCloseDate;
 	}
 
 	/**
@@ -363,6 +393,27 @@ public class Trade extends Aspect implements java.io.Serializable {
 	}
 
 	/**
+	 * Method getUpdateDate.
+	 * 
+	 * @return Date
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updateDate", nullable = true, length = 19)
+	public Date getUpdateDate() {
+		return this.updateDate;
+	}
+
+	/**
+	 * Method setUpdateDate.
+	 * 
+	 * @param updateDate
+	 *            Date
+	 */
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	/**
 	 * Method getVersion.
 	 * 
 	 * @return Integer
@@ -388,7 +439,7 @@ public class Trade extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return List<TradeOrder>
 	 */
-	@OneToMany(mappedBy = "trade", fetch = FetchType.LAZY, cascade = {
+	@OneToMany(mappedBy = "tradePosition", fetch = FetchType.LAZY, cascade = {
 			CascadeType.REFRESH, CascadeType.REMOVE })
 	public List<TradeOrder> getTradeOrders() {
 		return this.tradeOrders;
@@ -435,14 +486,16 @@ public class Trade extends Aspect implements java.io.Serializable {
 	 * @return String
 	 */
 	public String toString() {
-		return "Trade Id: " + this.getIdTrade() + " Version: "
-				+ this.getVersion() + " Avg Fill Price: "
+		return "TradePosition Id: " + this.getIdTradePosition() + " Version: "
+				+ this.getVersion() + " positionOpenDate: "
+				+ this.getPositionOpenDate() + " positionCloseDate: "
+				+ this.getPositionCloseDate() + " Avg Fill Price: "
 				+ new Money(this.getAveragePrice()) + " isOpen: "
 				+ this.getIsOpen() + " Open Qty: " + this.getOpenQuantity()
 				+ " Total qty: " + this.getTotalQuantity() + " P/L: "
 				+ new Money(this.getProfitLoss()) + " Total Value: "
 				+ new Money(this.getTotalValue()) + " Total Comm: "
 				+ new Money(this.getTotalCommission()) + " Side: "
-				+ this.getSide();
+				+ this.getSide() + " updateDate: " + this.getUpdateDate();
 	}
 }

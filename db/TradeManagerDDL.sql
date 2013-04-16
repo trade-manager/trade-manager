@@ -237,28 +237,32 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- Table Trade
+-- Table TradePosition
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS trade ;
+DROP TABLE IF EXISTS tradeposition ;
 
 SHOW WARNINGS;
-CREATE  TABLE IF NOT EXISTS trade (
-  idTrade INT NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS tradeposition (
+  idTradePosition INT NOT NULL AUTO_INCREMENT ,
   averagePrice DECIMAL(11,3) NULL ,
   isOpen TINYINT(1)  NOT NULL ,
+  positionOpenDate DATETIME NOT NULL ,
+  positionCloseDate DATETIME NULL ,
   openQuantity INT NULL ,
   profitLoss DECIMAL(10,2) NULL ,
   side VARCHAR(3) NOT NULL ,
   totalCommission DECIMAL(10,2) NULL ,
   totalQuantity INT NULL ,
   totalValue DECIMAL(10,2) NULL ,
+  updateDate DATETIME NULL ,
   version INT NULL,
-  idTradeStrategy INT NOT NULL ,
-  PRIMARY KEY (idTrade) ,
-  INDEX trade_TradeStrategy_idx (idTradeStrategy ASC) ,
-  CONSTRAINT trade_TradeStrategy_fk
-    FOREIGN KEY (idTradeStrategy )
-    REFERENCES tradestrategy (idTradeStrategy )
+  idContract INT NOT NULL ,
+  PRIMARY KEY (idTradePosition) ,
+  INDEX tradePosition_Contract_idx (idContract ASC) ,
+  INDEX tradePosition_ContractIdIsOpen_idx (idContract ASC, isOpen ASC) ,
+  CONSTRAINT tradePosition_Contract_fk
+    FOREIGN KEY (idContract )
+    REFERENCES contract (idContract )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -313,13 +317,20 @@ CREATE  TABLE IF NOT EXISTS tradeorder (
   warningMessage VARCHAR(200) NULL ,
   whyHeld VARCHAR(45) NULL ,
   version INT NULL,
-  idTrade INT NOT NULL ,
+  idTradestrategy INT NOT NULL ,
+  idTradePosition INT NULL ,
   PRIMARY KEY (idTradeOrder) ,
-  INDEX tradeOrder_Trade_idx (idTrade ASC) ,
+  INDEX tradeOrder_Tradestrategy_idx (idTradestrategy ASC) ,
+  INDEX tradeOrder_TradePosition_idx (idTradePosition ASC) ,
   UNIQUE INDEX tradeorderKey_uq (orderKey ASC) ,
-  CONSTRAINT tradeOrder_Trade_fk
-    FOREIGN KEY (idTrade )
-    REFERENCES trade (idTrade )
+  CONSTRAINT tradeOrder_Tradestrategy_fk
+    FOREIGN KEY (idTradestrategy )
+    REFERENCES tradestrategy (idTradestrategy )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT tradeOrder_TradePosition_fk
+    FOREIGN KEY (idTradePosition )
+    REFERENCES tradeposition (idTradePosition )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

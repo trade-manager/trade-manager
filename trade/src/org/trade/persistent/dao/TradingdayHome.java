@@ -101,7 +101,7 @@ public class TradingdayHome {
 			for (Tradestrategy tradestrategy : detachedInstance
 					.getTradestrategies()) {
 				// If it has trades do nothing
-				if (tradestrategy.getTrades().isEmpty()
+				if (tradestrategy.getTradeOrders().isEmpty()
 						&& tradestrategy.isDirty()) {
 					entityManager.getTransaction().begin();
 
@@ -163,7 +163,7 @@ public class TradingdayHome {
 					}
 				}
 				if (!exists) {
-					if (tradestrategy.getTrades().isEmpty()) {
+					if (tradestrategy.getTradeOrders().isEmpty()) {
 						entityManager.remove(tradestrategy);
 					} else {
 						throw new Exception(
@@ -206,9 +206,7 @@ public class TradingdayHome {
 				for (Tradestrategy tradestrategy : instance
 						.getTradestrategies()) {
 					tradestrategy.getStrategy().getIndicatorSeries().size();
-					for (Trade trade : tradestrategy.getTrades()) {
-						trade.getTradeOrders().size();
-					}
+					tradestrategy.getTradeOrders().size();
 				}
 			}
 			entityManager.getTransaction().commit();
@@ -263,7 +261,7 @@ public class TradingdayHome {
 				tradingdays.add(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
-					tradestrategy.getTrades().size();
+					tradestrategy.getTradeOrders().size();
 					tradestrategy.getPortfolio().getPortfolioAccounts().size();
 					for (IndicatorSeries indicatorSeries : tradestrategy
 							.getStrategy().getIndicatorSeries()) {
@@ -308,7 +306,7 @@ public class TradingdayHome {
 			for (Tradingday tradingday : items) {
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
-					tradestrategy.getTrades().size();
+					tradestrategy.getTradeOrders().size();
 					tradestrategy.getStrategy().getIndicatorSeries().size();
 				}
 			}

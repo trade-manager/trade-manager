@@ -97,7 +97,6 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingdays;
@@ -332,7 +331,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	public void doProperties(TradeOrder instance) {
 		try {
 
-			if (null == instance.getTrade().getTradestrategy().getPortfolio()
+			if (null == instance.getTradestrategy().getPortfolio()
 					.getIndividualAccount()) {
 				AllocationMethodPanel allocationMethodPanel = new AllocationMethodPanel(
 						instance);
@@ -352,7 +351,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							if (null != instance.getFAGroup()) {
 								instance.setAccountNumber(null);
 							} else {
-								instance.setAccountNumber(instance.getTrade()
+								instance.setAccountNumber(instance
 										.getTradestrategy().getPortfolio()
 										.getIndividualAccount()
 										.getAccountNumber());
@@ -782,16 +781,16 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							.getLeadSelectionIndex());
 
 					int i = 0;
-					for (Trade trade : m_tradeOrderModel.getData().getTrades()) {
-						for (TradeOrder tradeOrder : trade.getTradeOrders()) {
-							if (i == row) {
-								cancelButton.setTransferObject(tradeOrder);
-								executeButton.setTransferObject(tradeOrder);
-								propertiesButton.setTransferObject(tradeOrder);
-								break;
-							}
-							i++;
+
+					for (TradeOrder tradeOrder : m_tradeOrderModel.getData()
+							.getTradeOrders()) {
+						if (i == row) {
+							cancelButton.setTransferObject(tradeOrder);
+							executeButton.setTransferObject(tradeOrder);
+							propertiesButton.setTransferObject(tradeOrder);
+							break;
 						}
+						i++;
 					}
 				}
 			}
@@ -894,54 +893,51 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				risk = currencyFormater
 						.format((tradestrategy.getRiskAmount() == null ? 0
 								: tradestrategy.getRiskAmount().doubleValue()));
-				for (Trade trade : tradestrategy.getTrades()) {
-					if (!trade.getIsOpen()) {
 
-						if (null != trade.getProfitLoss()) {
-							profitLoss = profitLoss
-									+ trade.getProfitLoss().doubleValue();
-						}
-						if (null != trade.getTotalCommission()) {
-							commision = commision
-									+ trade.getTotalCommission().doubleValue();
-						}
+				if (null != tradestrategy.getOpenTradePosition()) {
+					if (null != tradestrategy.getOpenTradePosition()
+							.getProfitLoss()) {
+						profitLoss = profitLoss
+								+ tradestrategy.getOpenTradePosition()
+										.getProfitLoss().doubleValue();
 					}
-					profitLoss = profitLoss - commision;
-					// Collections.sort(trade.getTradeOrders(), new
-					// TradeOrder());
-					TradeOrder prevTradeOrder = null;
+					if (null != tradestrategy.getOpenTradePosition()
+							.getTotalCommission()) {
+						commision = commision
+								+ tradestrategy.getOpenTradePosition()
+										.getTotalCommission().doubleValue();
+					}
+				}
+				profitLoss = profitLoss - commision;
+				// Collections.sort(trade.getTradeOrders(), new
+				// TradeOrder());
+				TradeOrder prevTradeOrder = null;
 
-					/*
-					 * Sum up orders that are filled and at the same time add
-					 * the fill price. This happens when orders stop out as
-					 * there are multiple stop orders for a position with
-					 * multiple targets.
-					 */
-					for (TradeOrder order : trade.getTradeOrders()) {
-						Integer quantity = order.getFilledQuantity();
-						if (order.getIsFilled()) {
-							if (null != prevTradeOrder) {
-								if (prevTradeOrder.getIsFilled()
-										&& prevTradeOrder.getFilledDate()
-												.equals(order.getFilledDate())
-										&& prevTradeOrder
-												.getAverageFilledPrice()
-												.equals(order
-														.getAverageFilledPrice())) {
-									quantity = quantity
-											+ prevTradeOrder
-													.getFilledQuantity();
-								}
+				/*
+				 * Sum up orders that are filled and at the same time add the
+				 * fill price. This happens when orders stop out as there are
+				 * multiple stop orders for a position with multiple targets.
+				 */
+				for (TradeOrder order : tradestrategy.getTradeOrders()) {
+					Integer quantity = order.getFilledQuantity();
+					if (order.getIsFilled()) {
+						if (null != prevTradeOrder) {
+							if (prevTradeOrder.getIsFilled()
+									&& prevTradeOrder.getFilledDate().equals(
+											order.getFilledDate())
+									&& prevTradeOrder.getAverageFilledPrice()
+											.equals(order
+													.getAverageFilledPrice())) {
+								quantity = quantity
+										+ prevTradeOrder.getFilledQuantity();
 							}
-							currentTab.getCandlestickChart()
-									.addBuySellTradeArrow(
-											order.getAction(),
-											new Money(order
-													.getAverageFilledPrice()),
-											order.getFilledDate(), quantity);
 						}
-						prevTradeOrder = order;
+						currentTab.getCandlestickChart().addBuySellTradeArrow(
+								order.getAction(),
+								new Money(order.getAverageFilledPrice()),
+								order.getFilledDate(), quantity);
 					}
+					prevTradeOrder = order;
 				}
 			}
 

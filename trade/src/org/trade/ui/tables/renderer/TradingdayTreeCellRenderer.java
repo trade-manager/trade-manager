@@ -42,7 +42,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.trade.dictionary.valuetype.Side;
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.ui.models.TradingdayTreeModel;
 
@@ -93,9 +93,10 @@ public class TradingdayTreeCellRenderer extends DefaultTreeCellRenderer {
 		if (node != null) {
 			if ((node instanceof Tradestrategy) /* leaf */) {
 				Tradestrategy tradestrategy = (Tradestrategy) node;
-				if (!tradestrategy.getTrades().isEmpty()) {
-					Trade trade = tradestrategy.getTrades().get(0);
-					if (Side.BOT.equals(trade.getSide())) {
+				if (!tradestrategy.getTradeOrders().isEmpty()) {
+					TradePosition tradePosition = tradestrategy
+							.getTradeOrders().get(0).getTradePosition();
+					if (Side.BOT.equals(tradePosition.getSide())) {
 						comp.setForeground(Color.GREEN);
 					} else {
 						comp.setForeground(Color.RED);

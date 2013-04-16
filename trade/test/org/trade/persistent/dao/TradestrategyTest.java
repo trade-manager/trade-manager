@@ -43,7 +43,9 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
+import org.trade.core.dao.Aspects;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
@@ -150,7 +152,9 @@ public class TradestrategyTest extends TestCase {
 							+ tradestrategy.getIdTradeStrategy());
 					aspectHome.remove(tradestrategy);
 					aspectHome.remove(tradestrategy.getContract());
+
 				}
+				aspectHome.remove(tradingday);
 			}
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
@@ -182,6 +186,7 @@ public class TradestrategyTest extends TestCase {
 					aspectHome.remove(tradestrategy);
 					aspectHome.remove(tradestrategy.getContract());
 				}
+				aspectHome.remove(tradingday);
 			}
 
 		} catch (Exception e) {
@@ -235,11 +240,16 @@ public class TradestrategyTest extends TestCase {
 			if (null != tradestrategy) {
 				tradestrategy = tradestrategyHome.findById(tradestrategy
 						.getIdTradeStrategy());
-				for (Trade trade : tradestrategy.getTrades()) {
-					aspectHome.remove(trade);
+
+				for (TradeOrder tradeOrder : tradestrategy.getTradeOrders()) {
+					aspectHome.remove(tradeOrder);
+				}
+				for (TradePosition tradePosition : tradestrategy.getContract()
+						.getTradePositions()) {
+					aspectHome.remove(tradePosition);
 				}
 				tradestrategy.setStatus(null);
-				tradestrategy.getTrades().clear();
+				tradestrategy.getTradeOrders().clear();
 				tradestrategy = (Tradestrategy) aspectHome
 						.persist(tradestrategy);
 				return tradestrategy;
@@ -267,55 +277,55 @@ public class TradestrategyTest extends TestCase {
 	 * @throws Exception
 	 */
 	public static void removeTestTradestrategy(String symbol) throws Exception {
-		ContractHome contractHome = new ContractHome();
-		PortfolioHome portfolioHome = new PortfolioHome();
-		TradestrategyHome tradestrategyHome = new TradestrategyHome();
 		AspectHome aspectHome = new AspectHome();
-		Contract contract = contractHome.findByUniqueKey(SECType.STOCK, symbol,
-				Exchange.SMART, Currency.USD, null);
-		if (null != contract) {
-			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
-			Strategy strategy = (Strategy) DAOStrategy.newInstance()
-					.getObject();
-			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
-					.getObject();
-			portfolio = portfolioHome.findByName(portfolio.getName());
-			Account account = portfolio.getIndividualAccount();
-			if (null != account) {
-				aspectHome.remove(account);
-			}
-			Tradestrategy tradestrategy = tradestrategyHome
-					.findTradestrategyByUniqueKeys(open, strategy.getName(),
-							contract.getIdContract(), portfolio.getName());
-			if (null != tradestrategy) {
-				aspectHome.remove(tradestrategy);
-				aspectHome.remove(tradestrategy.getContract());
-				aspectHome.remove(tradestrategy.getTradingday());
-			}
+		Aspects portfolioAccounts = aspectHome
+				.findByClassName(PortfolioAccount.class.getName());
+		for (Aspect aspect : portfolioAccounts.getAspect()) {
+			aspectHome.remove(aspect);
+		}
+		Aspects accounts = aspectHome.findByClassName(Account.class.getName());
+		for (Aspect aspect : accounts.getAspect()) {
+			aspectHome.remove(aspect);
+		}
+		Aspects tradestrategies = aspectHome
+				.findByClassName(Tradestrategy.class.getName());
+		for (Aspect aspect : tradestrategies.getAspect()) {
+			aspectHome.remove(aspect);
+		}
+		Aspects contracts = aspectHome
+				.findByClassName(Contract.class.getName());
+		for (Aspect aspect : contracts.getAspect()) {
+			aspectHome.remove(aspect);
+		}
+		Aspects tradingdays = aspectHome.findByClassName(Tradingday.class
+				.getName());
+		for (Aspect aspect : tradingdays.getAspect()) {
+			aspectHome.remove(aspect);
 		}
 	}
 
 	/**
-	 * Method removeTrades.
+	 * Method removeTradeOrders.
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @return Tradestrategy
 	 * @throws Exception
 	 */
-	public static Tradestrategy removeTrades(Tradestrategy tradestrategy)
+	public static Tradestrategy removeTradeOrders(Tradestrategy tradestrategy)
 			throws Exception {
-		TradestrategyHome tradestrategyHome = new TradestrategyHome();
 		AspectHome aspectHome = new AspectHome();
-		tradestrategy = tradestrategyHome.findById(tradestrategy
-				.getIdTradeStrategy());
-		if (null != tradestrategy) {
-			tradestrategy.setStatus(null);
-			aspectHome.persist(tradestrategy);
-			for (Trade trade : tradestrategy.getTrades()) {
-				aspectHome.remove(trade);
-			}
+		TradestrategyHome tradestrategyHome = new TradestrategyHome();
+		Aspects tradeOrders = aspectHome.findByClassName(TradeOrder.class
+				.getName());
+		for (Aspect aspect : tradeOrders.getAspect()) {
+			aspectHome.remove(aspect);
+		}
+
+		Aspects tradePositions = aspectHome.findByClassName(TradePosition.class
+				.getName());
+		for (Aspect aspect : tradePositions.getAspect()) {
+			aspectHome.remove(aspect);
 		}
 		return tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
 	}

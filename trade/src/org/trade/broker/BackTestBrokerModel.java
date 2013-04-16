@@ -826,9 +826,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					// Let the controller know an order was filled
 					this.fireTradeOrderFilled(transientInstance);
 
-					if (!transientInstance.getTrade().getIsOpen()) {
+					if (!transientInstance.getTradePosition().getIsOpen()) {
 						// Let the controller know a position was closed
-						this.firePositionClosed(transientInstance.getTrade());
+						this.firePositionClosed(transientInstance
+								.getTradePosition());
 					}
 				} else {
 					_log.info("Open order state changed. Status:"

@@ -606,7 +606,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			 * trades.
 			 */
 			for (Tradingday tradingday : m_tradingdays.getTradingdays()) {
-				if (Tradingdays.hasTrades(tradingday)) {
+				if (Tradingdays.hasTradeOrders(tradingday)) {
 					JOptionPane
 							.showMessageDialog(
 									this.getFrame(),
@@ -1410,7 +1410,8 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				setProgress(0);
 				String message = null;
 				for (Tradingday tradingday : tradingdays.getTradingdays()) {
-					this.tradeManagerModel.removeTradingdayTrades(tradingday);
+					this.tradeManagerModel
+							.removeTradingdayTradeOrders(tradingday);
 					totalComplete++;
 					int percent = (int) (((double) (totalComplete) / grandtotal) * 100d);
 					setProgress(percent);

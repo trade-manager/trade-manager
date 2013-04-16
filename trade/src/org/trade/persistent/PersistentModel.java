@@ -45,7 +45,7 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -117,14 +117,15 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method persistTrade.
+	 * Method persistTradePosition.
 	 * 
 	 * @param transientInstance
-	 *            Trade
-	 * @return Trade
+	 *            TradePosition
+	 * @return TradePosition
 	 * @throws PersistentModelException
 	 */
-	Trade persistTrade(Trade transientInstance) throws PersistentModelException;
+	TradePosition persistTradePosition(TradePosition transientInstance)
+			throws PersistentModelException;
 
 	/**
 	 * Method persistCandleSeries.
@@ -258,35 +259,26 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method findTradeById.
+	 * Method findTradePositionById.
 	 * 
-	 * @param idTrade
+	 * @param idTradePosition
 	 *            Integer
-	 * @return Trade
+	 * @return TradePosition
 	 * @throws PersistentModelException
 	 */
-	Trade findTradeById(Integer idTrade) throws PersistentModelException;
-
-	/**
-	 * Method findOpenTradeByTradestrategyId.
-	 * 
-	 * @param id
-	 *            Integer
-	 * @return Trade
-	 * @throws PersistentModelException
-	 */
-	Trade findOpenTradeByTradestrategyId(Integer id)
+	TradePosition findTradePositionById(Integer idTrade)
 			throws PersistentModelException;
 
 	/**
-	 * Method findOpenTradeByContractId.
+	 * Method findOpenTradePositionByContractId.
 	 * 
 	 * @param id
 	 *            Integer
-	 * @return Trade
+	 * @return TradePosition
 	 * @throws PersistentModelException
 	 */
-	Trade findOpenTradeByContractId(Integer id) throws PersistentModelException;
+	TradePosition findOpenTradePositionByContractId(Integer id)
+			throws PersistentModelException;
 
 	/**
 	 * Method findPortfolioById.
@@ -328,34 +320,23 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method findTradesByTradestrategyId.
-	 * 
-	 * @param id
-	 *            Integer
-	 * @return List<Trade>
-	 * @throws PersistentModelException
-	 */
-	List<Trade> findTradesByTradestrategyId(Integer id)
-			throws PersistentModelException;
-
-	/**
-	 * Method removeTradingdayTrades.
+	 * Method removeTradingdayTradeOrders.
 	 * 
 	 * @param transientInstance
 	 *            Tradingday
 	 * @throws PersistentModelException
 	 */
-	void removeTradingdayTrades(Tradingday transientInstance)
+	void removeTradingdayTradeOrders(Tradingday transientInstance)
 			throws PersistentModelException;
 
 	/**
-	 * Method removeTradestrategyTrades.
+	 * Method removeTradestrategyTradeOrders.
 	 * 
 	 * @param transientInstance
 	 *            Tradestrategy
 	 * @throws PersistentModelException
 	 */
-	void removeTradestrategyTrades(Tradestrategy transientInstance)
+	void removeTradestrategyTradeOrders(Tradestrategy transientInstance)
 			throws PersistentModelException;
 
 	/**

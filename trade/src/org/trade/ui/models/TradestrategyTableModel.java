@@ -196,7 +196,7 @@ public class TradestrategyTableModel extends TableModel {
 
 		Tradestrategy element = getData().getTradestrategies().get(row);
 		if (null != element) {
-			if (!element.getTrades().isEmpty()) {
+			if (!element.getTradeOrders().isEmpty()) {
 				return false;
 			}
 		}

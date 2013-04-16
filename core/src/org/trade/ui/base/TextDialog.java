@@ -180,7 +180,7 @@ public class TextDialog extends JDialog {
 	public boolean getCancel() {
 		return m_cancel;
 	}
-	
+
 	/**
 	 * Method getOKButton.
 	 * 
@@ -189,7 +189,7 @@ public class TextDialog extends JDialog {
 	public JButton getOKButton() {
 		return buttonOk;
 	}
-	
+
 	/**
 	 * Method getCancelButton.
 	 * 

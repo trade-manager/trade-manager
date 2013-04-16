@@ -56,8 +56,8 @@ import org.trade.core.valuetype.Decode;
  * @author Simon Allen
  */
 
-public class DecodeComboBoxEditor extends JComboBox<Decode> implements ComboBoxEditor,
-		ItemListener, FocusListener {
+public class DecodeComboBoxEditor extends JComboBox<Decode> implements
+		ComboBoxEditor, ItemListener, FocusListener {
 	/**
 	 * 
 	 */

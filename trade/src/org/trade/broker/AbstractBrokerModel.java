@@ -49,7 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.event.EventListenerList;
 
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 
@@ -314,15 +314,16 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 * a trade position.
 	 * 
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradePosition
+	 *            TradePosition
 	 * @see #addChangeListener(BrokerChangeListener)
 	 */
-	protected void firePositionClosed(Trade trade) {
+	protected void firePositionClosed(TradePosition tradePosition) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1]).positionClosed(trade);
+				((BrokerChangeListener) listeners[i + 1])
+						.positionClosed(tradePosition);
 			}
 		}
 	}

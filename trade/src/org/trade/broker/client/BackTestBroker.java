@@ -60,7 +60,7 @@ import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
@@ -266,7 +266,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					.getTradingday().getOpen(), this.tradestrategy
 					.getTradingday().getOpen());
 
-			Trade openTrade = null;
+			TradePosition openTradePosition = null;
 
 			/*
 			 * Wait for the strategy to start.
@@ -309,13 +309,14 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					}
 				}
 
-				if (null == openTrade) {
-					openTrade = this.tradePersistentModel
-							.findOpenTradeByTradestrategyId(this.tradestrategy
-									.getIdTradeStrategy());
+				if (null == openTradePosition) {
+					openTradePosition = this.tradePersistentModel
+							.findOpenTradePositionByContractId(this.tradestrategy
+									.getContract().getIdContract());
 				} else {
-					openTrade = this.tradePersistentModel
-							.findTradeById(openTrade.getIdTrade());
+					openTradePosition = this.tradePersistentModel
+							.findTradePositionById(openTradePosition
+									.getIdTradePosition());
 				}
 
 				/*
@@ -323,7 +324,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				 * return whether this is opening a position.
 				 */
 				if (filledOrdersOpenPosition(this.tradestrategy.getContract(),
-						openTrade, candle)) {
+						openTradePosition, candle)) {
 					/*
 					 * Need to recall fillOrders as this is a new open position
 					 * and an OCA order may now be ready to be filled this
@@ -351,8 +352,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 * the trade that we weren't stopped out on the entry
 					 * candle.
 					 */
-					openTrade = this.tradePersistentModel
-							.findTradeById(openTrade.getIdTrade());
+					openTradePosition = this.tradePersistentModel
+							.findTradePositionById(openTradePosition
+									.getIdTradePosition());
 					if (!this.tradestrategy.getDatasetContainer()
 							.getBaseCandleSeries().isEmpty()) {
 						CandleItem candleItem = (CandleItem) this.tradestrategy
@@ -363,10 +365,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 												.getDatasetContainer()
 												.getBaseCandleSeries()
 												.getItemCount() - 1);
-						if (!candleItem.isSide(openTrade.getSide())) {
+						if (!candleItem.isSide(openTradePosition.getSide())) {
 							filledOrdersOpenPosition(
 									this.tradestrategy.getContract(),
-									openTrade, candle);
+									openTradePosition, candle);
 						}
 					}
 					positionCovered.set(false);
@@ -380,10 +382,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						}
 					}
 				}
-				if (strategiesRunning.get() == 0 && null == openTrade)
+				if (strategiesRunning.get() == 0 && null == openTradePosition)
 					break;
 
-				if (strategiesRunning.get() == 0 && !openTrade.getIsOpen())
+				if (strategiesRunning.get() == 0
+						&& !openTradePosition.getIsOpen())
 					break;
 			}
 			candles.clear();
@@ -421,15 +424,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 * @return boolean
 	 * @throws Exception
 	 */
-	private boolean filledOrdersOpenPosition(Contract contract, Trade trade,
-			Candle candle) throws Exception {
+	private boolean filledOrdersOpenPosition(Contract contract,
+			TradePosition tradePosition, Candle candle) throws Exception {
 
 		boolean openPosition = false;
-		if (null == trade) {
+		if (null == tradePosition) {
 			return openPosition;
 		}
 
-		for (TradeOrder order : trade.getTradeOrders()) {
+		for (TradeOrder order : tradePosition.getTradeOrders()) {
 			if (OrderStatus.UNSUBMIT.equals(order.getStatus())) {
 				/*
 				 * Can't use the com.ib.client.OrderState as constructor is no
@@ -446,7 +449,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				order.setStatus(OrderStatus.SUBMITTED);
 			}
 		}
-		for (TradeOrder order : trade.getTradeOrders()) {
+		for (TradeOrder order : tradePosition.getTradeOrders()) {
 			if (OrderStatus.SUBMITTED.equals(order.getStatus())
 					&& order.getTransmit()) {
 
@@ -458,7 +461,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 								candle.getStartPeriod());
 					} else {
 
-						for (TradeOrder orderOCA : trade.getTradeOrders()) {
+						for (TradeOrder orderOCA : tradePosition
+								.getTradeOrders()) {
 
 							if (order.getOcaGroupName().equals(
 									orderOCA.getOcaGroupName())

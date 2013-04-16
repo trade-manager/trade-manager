@@ -37,7 +37,6 @@ package org.trade.persistent.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -104,26 +103,22 @@ public class TradeOrderTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 			String side = this.tradestrategy.getSide();
 			String action = Action.BUY;
 			if (Side.SLD.equals(side)) {
 				action = Action.SELL;
 			}
 
-			Trade trade = new Trade(this.tradestrategy, side);
-			trade = (Trade) this.tradePersistentModel.persistAspect(trade);
-			this.tradestrategy.addTrade(trade);
-
 			double risk = this.tradestrategy.getRiskAmount().doubleValue();
 
 			double stop = 0.20;
 			BigDecimal price = new BigDecimal(20);
 			int quantity = (int) ((int) risk / stop);
-			Date createDate = TradingCalendar.addMinutes(trade
-					.getTradestrategy().getTradingday().getOpen(), 5);
+			Date createDate = TradingCalendar.addMinutes(this.tradestrategy
+					.getTradingday().getOpen(), 5);
 
-			TradeOrder tradeOrder = new TradeOrder(trade, action,
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, action,
 					OrderType.STPLMT, quantity, price,
 					price.add(new BigDecimal(0.004)), new Date());
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
@@ -134,12 +129,9 @@ public class TradeOrderTest extends TestCase {
 			tradeOrder.setStatus("SUBMITTED");
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
 			TestCase.assertNotNull(tradeOrder);
-			_log.info("IdTrade: " + trade.getIdTrade() + " IdOrder: "
-					+ tradeOrder.getIdTradeOrder());
-			tradeOrder.getTrade().setOpenQuantity(tradeOrder.getQuantity());
-			tradeOrder = tradeOrderHome.persist(tradeOrder);
+			_log.info("IdOrder: " + tradeOrder.getIdTradeOrder());
 
-			TradeOrder tradeOrder1 = new TradeOrder(tradeOrder.getTrade(),
+			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STP, quantity,
 					price.subtract(new BigDecimal(1)), null, createDate);
 
@@ -149,8 +141,6 @@ public class TradeOrderTest extends TestCase {
 			tradeOrder1.setClientId(clientId);
 			tradeOrder1.setTransmit(true);
 			tradeOrder1.setStatus("SUBMITTED");
-			tradeOrder.getTrade().setOpenQuantity(
-					tradeOrder.getTrade().getOpenQuantity() + quantity);
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 			assertNotNull(tradeOrder1);
 
@@ -164,26 +154,22 @@ public class TradeOrderTest extends TestCase {
 
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 			String side = this.tradestrategy.getSide();
 			String action = Action.BUY;
 			if (Side.SLD.equals(side)) {
 				action = Action.SELL;
 			}
 
-			Trade trade = new Trade(this.tradestrategy, side);
-			trade = (Trade) this.tradePersistentModel.persistAspect(trade);
-			this.tradestrategy.addTrade(trade);
-
 			double risk = this.tradestrategy.getRiskAmount().doubleValue();
 
 			double stop = 0.20;
 			BigDecimal price = new BigDecimal(20);
 			int quantity = (int) ((int) risk / stop);
-			Date createDate = TradingCalendar.addMinutes(trade
-					.getTradestrategy().getTradingday().getOpen(), 5);
+			Date createDate = TradingCalendar.addMinutes(this.tradestrategy
+					.getTradingday().getOpen(), 5);
 
-			TradeOrder tradeOrder1 = new TradeOrder(trade, action,
+			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, action,
 					OrderType.STPLMT, quantity, price, price, createDate);
 			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());
@@ -202,7 +188,7 @@ public class TradeOrderTest extends TestCase {
 				buySellMultiplier = -1;
 			}
 
-			TradeOrder tradeOrder2 = new TradeOrder(trade, action,
+			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy, action,
 					OrderType.LMT, quantity / 2, null,
 					price.add(new BigDecimal((stop * 3) * buySellMultiplier)),
 					createDate);
@@ -217,7 +203,7 @@ public class TradeOrderTest extends TestCase {
 			tradeOrder2.setStatus("SUBMITTED");
 			tradeOrder2 = tradeOrderHome.persist(tradeOrder2);
 
-			TradeOrder tradeOrder3 = new TradeOrder(trade, action,
+			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy, action,
 					OrderType.LMT, quantity / 2, null,
 					price.add(new BigDecimal((stop * 4) * buySellMultiplier)),
 					createDate);
@@ -232,7 +218,7 @@ public class TradeOrderTest extends TestCase {
 			tradeOrder3.setStatus("SUBMITTED");
 			tradeOrder3 = tradeOrderHome.persist(tradeOrder3);
 
-			TradeOrder tradeOrder4 = new TradeOrder(trade, action,
+			TradeOrder tradeOrder4 = new TradeOrder(this.tradestrategy, action,
 					OrderType.STP, quantity, price.add(new BigDecimal(stop
 							* buySellMultiplier * -1)), null, createDate);
 			tradeOrder4.setLimitPrice(new BigDecimal(0));
@@ -248,8 +234,7 @@ public class TradeOrderTest extends TestCase {
 			tradeOrder4.setStatus("SUBMITTED");
 			tradeOrder4 = tradeOrderHome.persist(tradeOrder4);
 
-			_log.info("IdTrade: " + trade.getIdTrade() + " IdOrder: "
-					+ tradeOrder1.getIdTradeOrder());
+			_log.info("IdOrder: " + tradeOrder1.getIdTradeOrder());
 
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
@@ -262,127 +247,118 @@ public class TradeOrderTest extends TestCase {
 		try {
 
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 			testAddTradeOrder();
-			TradeHome tradeHome = new TradeHome();
-			List<Trade> trades = tradeHome
-					.findByTradestrategyId(this.tradestrategy
-							.getIdTradeStrategy());
+
 			boolean stopped = true;
 			int minute = 25;
-			for (Trade trade : trades) {
-				trade = tradeHome.findById(trade.getIdTrade());
-				for (TradeOrder tradeOrder : trade.getTradeOrders()) {
 
-					tradeOrder = tradeOrderHome.findTradeOrderByKey(tradeOrder
-							.getOrderKey());
-					minute = minute + 3;
-					Date filledDate = TradingCalendar.addMinutes(
-							this.tradestrategy.getTradingday().getOpen(),
-							minute);
-					if (tradeOrder.getIsOpenPosition()) {
+			for (TradeOrder tradeOrder : this.tradestrategy.getTradeOrders()) {
 
-						TradeOrderfill orderfill = new TradeOrderfill(
-								tradeOrder, tradeOrder.getLimitPrice(),
-								tradeOrder.getQuantity() / 2, "ISLAND", "1234",
-								tradeOrder.getLimitPrice(),
-								tradeOrder.getQuantity() / 2,
-								this.tradestrategy.getSide(), filledDate);
+				tradeOrder = tradeOrderHome.findTradeOrderByKey(tradeOrder
+						.getOrderKey());
+				minute = minute + 3;
+				Date filledDate = TradingCalendar.addMinutes(this.tradestrategy
+						.getTradingday().getOpen(), minute);
+				if (tradeOrder.getIsOpenPosition()) {
 
-						tradeOrder.addTradeOrderfill(orderfill);
+					TradeOrderfill orderfill = new TradeOrderfill(tradeOrder,
+							tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2, "ISLAND", "1234",
+							tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2,
+							this.tradestrategy.getSide(), filledDate);
 
-						TradeOrderfill orderfill1 = new TradeOrderfill(
-								tradeOrder, tradeOrder.getLimitPrice(),
-								tradeOrder.getQuantity() / 2, "ISLAND",
-								"12345", tradeOrder.getLimitPrice(),
-								tradeOrder.getQuantity() / 2,
-								this.tradestrategy.getSide(),
-								TradingCalendar.addMinutes(filledDate, 3));
-						tradeOrder.addTradeOrderfill(orderfill1);
-						tradeOrder.setIsFilled(true);
-						tradeOrder.setFilledQuantity(tradeOrder.getQuantity());
-						tradeOrder.setStatus("FILLED");
-						tradeOrder.setFilledDate(TradingCalendar.addMinutes(
-								filledDate, 3));
-						tradeOrder.setAverageFilledPrice(tradeOrder
-								.getLimitPrice());
-						tradeOrder.setCommission(new BigDecimal(tradeOrder
-								.getQuantity() * 0.005));
+					tradeOrder.addTradeOrderfill(orderfill);
 
-					} else {
-						if (stopped) {
-							if (OrderType.STP.equals(tradeOrder.getOrderType())) {
+					TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrder,
+							tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2, "ISLAND", "12345",
+							tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2,
+							this.tradestrategy.getSide(),
+							TradingCalendar.addMinutes(filledDate, 3));
+					tradeOrder.addTradeOrderfill(orderfill1);
+					tradeOrder.setIsFilled(true);
+					tradeOrder.setFilledQuantity(tradeOrder.getQuantity());
+					tradeOrder.setStatus("FILLED");
+					tradeOrder.setFilledDate(TradingCalendar.addMinutes(
+							filledDate, 3));
+					tradeOrder
+							.setAverageFilledPrice(tradeOrder.getLimitPrice());
+					tradeOrder.setCommission(new BigDecimal(tradeOrder
+							.getQuantity() * 0.005));
 
-								TradeOrderfill orderfill = new TradeOrderfill(
-										tradeOrder, tradeOrder.getAuxPrice(),
-										tradeOrder.getQuantity(), "ISLAND",
-										"12345", tradeOrder.getAuxPrice(),
-										tradeOrder.getQuantity(),
-										this.tradestrategy.getSide(),
-										TradingCalendar.addMinutes(filledDate,
-												5));
-								tradeOrder.addTradeOrderfill(orderfill);
-								tradeOrder.setIsFilled(true);
-								tradeOrder.setStatus(OrderStatus.FILLED);
-								tradeOrder.setAverageFilledPrice(tradeOrder
-										.getAuxPrice());
-								tradeOrder.setFilledDate(TradingCalendar
-										.addMinutes(filledDate, 5));
-								tradeOrder.setCommission(new BigDecimal(
-										tradeOrder.getQuantity() * 0.005));
-								tradeOrder.setFilledQuantity(tradeOrder
-										.getQuantity());
+				} else {
+					if (stopped) {
+						if (OrderType.STP.equals(tradeOrder.getOrderType())) {
 
-							} else {
-								tradeOrder.setStatus(OrderStatus.CANCELLED);
-							}
+							TradeOrderfill orderfill = new TradeOrderfill(
+									tradeOrder, tradeOrder.getAuxPrice(),
+									tradeOrder.getQuantity(), "ISLAND",
+									"12345", tradeOrder.getAuxPrice(),
+									tradeOrder.getQuantity(),
+									this.tradestrategy.getSide(),
+									TradingCalendar.addMinutes(filledDate, 5));
+							tradeOrder.addTradeOrderfill(orderfill);
+							tradeOrder.setIsFilled(true);
+							tradeOrder.setStatus(OrderStatus.FILLED);
+							tradeOrder.setAverageFilledPrice(tradeOrder
+									.getAuxPrice());
+							tradeOrder.setFilledDate(TradingCalendar
+									.addMinutes(filledDate, 5));
+							tradeOrder.setCommission(new BigDecimal(tradeOrder
+									.getQuantity() * 0.005));
+							tradeOrder.setFilledQuantity(tradeOrder
+									.getQuantity());
+
 						} else {
-							if (OrderType.LMT.equals(tradeOrder.getOrderType())) {
+							tradeOrder.setStatus(OrderStatus.CANCELLED);
+						}
+					} else {
+						if (OrderType.LMT.equals(tradeOrder.getOrderType())) {
 
-								TradeOrderfill orderfill = new TradeOrderfill(
-										tradeOrder, tradeOrder.getLimitPrice(),
-										tradeOrder.getQuantity() / 2, "ISLAND",
-										"12345", tradeOrder.getLimitPrice(),
-										tradeOrder.getQuantity() / 2,
-										this.tradestrategy.getSide(),
-										TradingCalendar.addMinutes(filledDate,
-												5));
-								tradeOrder.addTradeOrderfill(orderfill);
-								TradeOrderfill orderfill1 = new TradeOrderfill(
-										tradeOrder, tradeOrder.getLimitPrice(),
-										tradeOrder.getQuantity() / 2, "ISLAND",
-										"12345", tradeOrder.getLimitPrice(),
-										tradeOrder.getQuantity() / 2,
-										this.tradestrategy.getSide(),
-										TradingCalendar.addMinutes(filledDate,
-												6));
-								orderfill1.setTradeOrder(tradeOrder);
-								tradeOrder.addTradeOrderfill(orderfill1);
-								tradeOrder.setIsFilled(true);
-								tradeOrder.setStatus(OrderStatus.FILLED);
-								tradeOrder.setFilledQuantity(tradeOrder
-										.getQuantity());
-								tradeOrder.setFilledDate(TradingCalendar
-										.addMinutes(filledDate, 15));
-								tradeOrder.setAverageFilledPrice(tradeOrder
-										.getLimitPrice());
-								tradeOrder.setCommission(new BigDecimal(
-										tradeOrder.getQuantity() * 0.005));
+							TradeOrderfill orderfill = new TradeOrderfill(
+									tradeOrder, tradeOrder.getLimitPrice(),
+									tradeOrder.getQuantity() / 2, "ISLAND",
+									"12345", tradeOrder.getLimitPrice(),
+									tradeOrder.getQuantity() / 2,
+									this.tradestrategy.getSide(),
+									TradingCalendar.addMinutes(filledDate, 5));
+							tradeOrder.addTradeOrderfill(orderfill);
+							TradeOrderfill orderfill1 = new TradeOrderfill(
+									tradeOrder, tradeOrder.getLimitPrice(),
+									tradeOrder.getQuantity() / 2, "ISLAND",
+									"12345", tradeOrder.getLimitPrice(),
+									tradeOrder.getQuantity() / 2,
+									this.tradestrategy.getSide(),
+									TradingCalendar.addMinutes(filledDate, 6));
+							orderfill1.setTradeOrder(tradeOrder);
+							tradeOrder.addTradeOrderfill(orderfill1);
+							tradeOrder.setIsFilled(true);
+							tradeOrder.setStatus(OrderStatus.FILLED);
+							tradeOrder.setFilledQuantity(tradeOrder
+									.getQuantity());
+							tradeOrder.setFilledDate(TradingCalendar
+									.addMinutes(filledDate, 15));
+							tradeOrder.setAverageFilledPrice(tradeOrder
+									.getLimitPrice());
+							tradeOrder.setCommission(new BigDecimal(tradeOrder
+									.getQuantity() * 0.005));
 
-							} else {
-								tradeOrder.setStatus(OrderStatus.CANCELLED);
-							}
+						} else {
+							tradeOrder.setStatus(OrderStatus.CANCELLED);
 						}
 					}
-
-					tradeOrder = tradeOrderHome.persist(tradeOrder);
-					_log.info("IdOrder: " + tradeOrder.getIdTradeOrder()
-							+ " Action:" + tradeOrder.getAction()
-							+ " OrderType:" + tradeOrder.getOrderType()
-							+ " Status:" + tradeOrder.getStatus()
-							+ " filledDate:" + filledDate);
 				}
+
+				tradeOrder = tradeOrderHome.persist(tradeOrder);
+				_log.info("IdOrder: " + tradeOrder.getIdTradeOrder()
+						+ " Action:" + tradeOrder.getAction() + " OrderType:"
+						+ tradeOrder.getOrderType() + " Status:"
+						+ tradeOrder.getStatus() + " filledDate:" + filledDate);
 			}
+
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());
 		}
@@ -392,34 +368,20 @@ public class TradeOrderTest extends TestCase {
 	public void testAddDetachedTradeOrder() {
 		try {
 			this.tradestrategy = TradestrategyTest
-					.removeTrades(this.tradestrategy);
+					.removeTradeOrders(this.tradestrategy);
 			String side = this.tradestrategy.getSide();
 			String action = Action.BUY;
 			if (Side.SLD.equals(side)) {
 				action = Action.SELL;
 			}
-			Trade trade = new Trade(this.tradestrategy,
-					this.tradestrategy.getSide());
-			trade = (Trade) this.tradePersistentModel.persistAspect(trade);
-			this.tradestrategy.addTrade(trade);
 
-			_log.info("testAddTrade IdTradeStrategy: "
-					+ this.tradestrategy.getIdTradeStrategy() + "IdTrade: "
-					+ trade.getIdTrade());
-
-			trade.setIsOpen(false);
-
-			TradeOrder tradeOrder = new TradeOrder(trade, action,
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, action,
 					OrderType.STPLMT, 100, new BigDecimal(20.20),
 					new BigDecimal(20.23), new Date());
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());
 			// Save new order with detached trade
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
-			tradeOrder.setStatus(OrderStatus.FILLED);
-			// Update an order with a detached trade and order
-			tradeOrder = tradeOrderHome.persist(tradeOrder);
-
 			Execution execution = new Execution();
 			execution.m_side = side;
 			execution.m_time = TradingCalendar.getFormattedDate(new Date());
@@ -441,7 +403,7 @@ public class TradeOrderTest extends TestCase {
 			} else {
 				action = Action.BUY;
 			}
-			TradeOrder tradeOrder1 = new TradeOrder(trade, action,
+			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, action,
 					OrderType.LMT, 300, null, new BigDecimal(23.41), new Date());
 			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());
@@ -461,17 +423,6 @@ public class TradeOrderTest extends TestCase {
 			orderfill1.setTradeOrder(tradeOrder1);
 			tradeOrder1.addTradeOrderfill(orderfill1);
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
-
-			TradeHome tradeHome = new TradeHome();
-			List<Trade> trades = tradeHome
-					.findByTradestrategyId(this.tradestrategy
-							.getIdTradeStrategy());
-			for (Trade instance : trades) {
-				_log.info("testAddTrade IdTradeStrategy: "
-						+ this.tradestrategy.getIdTradeStrategy() + "IdTrade: "
-						+ instance.getIdTrade());
-
-			}
 
 		} catch (Exception ex) {
 			TestCase.fail("Error adding row " + ex.getMessage());

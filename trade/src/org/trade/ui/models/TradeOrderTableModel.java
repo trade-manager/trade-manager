@@ -51,7 +51,6 @@ import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Entrylimit;
-import org.trade.persistent.dao.Trade;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.ui.base.TableModel;
@@ -220,13 +219,11 @@ public class TradeOrderTableModel extends TableModel {
 	public void setData(Tradestrategy data) {
 		this.m_data = data;
 		this.clearAll();
-		if (!getData().getTrades().isEmpty()) {
-			for (final Trade element : getData().getTrades()) {
-				for (final TradeOrder tradeOrder : element.getTradeOrders()) {
-					final Vector<Object> newRow = new Vector<Object>();
-					getNewRow(newRow, tradeOrder);
-					rows.add(newRow);
-				}
+		if (!getData().getTradeOrders().isEmpty()) {
+			for (final TradeOrder tradeOrder : getData().getTradeOrders()) {
+				final Vector<Object> newRow = new Vector<Object>();
+				getNewRow(newRow, tradeOrder);
+				rows.add(newRow);
 			}
 			fireTableDataChanged();
 		}
@@ -247,20 +244,16 @@ public class TradeOrderTableModel extends TableModel {
 		TradeOrder element = null;
 
 		int i = 0;
-		for (final Trade trade : getData().getTrades()) {
-			for (final TradeOrder tradeOrder : trade.getTradeOrders()) {
-				if (i == row) {
-					element = tradeOrder;
-					break;
-				}
-				i++;
+		for (final TradeOrder tradeOrder : getData().getTradeOrders()) {
+			if (i == row) {
+				element = tradeOrder;
+				break;
 			}
+			i++;
 		}
-
 		switch (column) {
 		case 0: {
-			element.getTrade().getTradestrategy().getContract()
-					.setSymbol((String) value);
+			element.getTradestrategy().getContract().setSymbol((String) value);
 			break;
 		}
 		case 1: {
@@ -345,16 +338,14 @@ public class TradeOrderTableModel extends TableModel {
 
 		Integer orderKey = ((Quantity) this.getValueAt(selectedRow, 1))
 				.getIntegerValue();
-		for (final Trade trade : getData().getTrades()) {
-			for (final TradeOrder tradeOrder : trade.getTradeOrders()) {
-				if (CoreUtils.nullSafeComparator(tradeOrder.getOrderKey(),
-						orderKey) == 0) {
-					trade.getTradeOrders().remove(tradeOrder);
-					final Vector<Object> currRow = rows.get(selectedRow);
-					rows.remove(currRow);
-					this.fireTableRowsDeleted(selectedRow, selectedRow);
-					break;
-				}
+		for (final TradeOrder tradeOrder : getData().getTradeOrders()) {
+			if (CoreUtils
+					.nullSafeComparator(tradeOrder.getOrderKey(), orderKey) == 0) {
+				getData().getTradeOrders().remove(tradeOrder);
+				final Vector<Object> currRow = rows.get(selectedRow);
+				rows.remove(currRow);
+				this.fireTableRowsDeleted(selectedRow, selectedRow);
+				break;
 			}
 		}
 	}
@@ -366,9 +357,7 @@ public class TradeOrderTableModel extends TableModel {
 	 *            TradeOrder
 	 */
 	public void addRow(TradeOrder element) {
-
-		element.getTrade().addTradeOrder(element);
-		getData().addTrade(element.getTrade());
+		getData().addTradeOrder(element);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);
@@ -399,16 +388,6 @@ public class TradeOrderTableModel extends TableModel {
 		final int quantlty = (int) ((int) risk / stop);
 		final Date createDate = new Date(new java.util.Date());
 
-		Trade trade = null;
-		boolean openPosition = false;
-		if (null != tradestrategy.getOpenTrade()) {
-			trade = tradestrategy.getOpenTrade();
-		} else {
-			trade = new Trade(tradestrategy, tradestrategy.getSide());
-			tradestrategy.getTrades().add(trade);
-			openPosition = true;
-		}
-
 		int buySellMultiplier = 1;
 
 		if (action.equals(Action.BUY)) {
@@ -420,15 +399,16 @@ public class TradeOrderTableModel extends TableModel {
 		}
 		final Entrylimit entrylimit = DAOEntryLimit.newInstance().getValue(
 				price);
-		final TradeOrder tradeOrder = new TradeOrder(trade, action,
+		final TradeOrder tradeOrder = new TradeOrder(tradestrategy, action,
 				OrderType.STPLMT, quantlty, price.getBigDecimalValue(), price
 						.add(new Money(entrylimit.getLimitAmount()
 								.doubleValue() * buySellMultiplier))
 						.getBigDecimalValue(), createDate.getDate());
-		tradeOrder.setIsOpenPosition(openPosition);
+		if (null == tradestrategy.getOpenTradePosition())
+			tradeOrder.setIsOpenPosition(true);
 		tradeOrder.setOcaGroupName("");
 		tradeOrder.setStatus(OrderStatus.newInstance().getCode());
-		trade.addTradeOrder(tradeOrder);
+		tradestrategy.addTradeOrder(tradeOrder);
 
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, tradeOrder);
@@ -449,8 +429,7 @@ public class TradeOrderTableModel extends TableModel {
 	 */
 	public void getNewRow(Vector<Object> newRow, TradeOrder element) {
 
-		newRow.addElement(element.getTrade().getTradestrategy().getContract()
-				.getSymbol());
+		newRow.addElement(element.getTradestrategy().getContract().getSymbol());
 		newRow.addElement(new Quantity(element.getOrderKey()));
 		if (null == element.getAction()) {
 			newRow.addElement(new Action());

@@ -141,7 +141,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 
 				// If the 5min low is broken cancel orders as
 				// trade no longer valid.
-				if (null != this.getTrade()) {
+				if (null != this.getTradePosition()) {
 					CandleItem openCandle = this.getCandle(this
 							.getTradestrategy().getTradingday().getOpen());
 					if (!this.getOpenPositionOrder().getIsFilled()) {

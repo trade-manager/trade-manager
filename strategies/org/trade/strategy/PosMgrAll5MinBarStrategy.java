@@ -43,7 +43,7 @@ import org.trade.broker.BrokerModel;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Side;
-import org.trade.persistent.dao.Trade;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
@@ -118,7 +118,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 * will be closed down.
 			 */
 
-			if (!getTrade().getIsOpen()) {
+			if (!getTradePosition().getIsOpen()) {
 				_log.info("No open position so Cancel Strategy Mgr Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 				this.cancel();
@@ -134,7 +134,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 * is > 0 also check to see if we already have this position
 			 * covered.
 			 */
-			if (getTrade().getIsOpen() && !this.isPositionCovered()) {
+			if (getTradePosition().getIsOpen() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
 				 * and stop orders for the open quantity.
@@ -156,7 +156,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 					&& startPeriod.after(TradingCalendar.getSpecificTime(
 							startPeriod, 9, 40))) {
 
-				if (set5MinBarTrail(getTrade(), 1)) {
+				if (set5MinBarTrail(getTradePosition(), 1)) {
 					_log.info("PositionManagerStrategy 5min Candle: "
 							+ getSymbol() + " Trail Price: " + getTargetPrice()
 							+ " Time: " + startPeriod);
@@ -181,27 +181,19 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 		}
 	}
 
-	/*
-	 * This method is used to trail on candle bars. Note trail is on the
-	 * low/high of the bar and assumes the bar are in the direction of the trade
-	 * i.e. side.
-	 * 
-	 * @param trade The trade that has the open position.
-	 * 
-	 * @param bars The number of bars to trail on.
-	 */
-
 	/**
-	 * Method set5MinBarTrail.
+	 * Method set5MinBarTrail. This method is used to trail on candle bars. Note
+	 * trail is on the low/high of the bar and assumes the bar are in the
+	 * direction of the trade i.e. side.
 	 * 
-	 * @param trade
-	 *            Trade
+	 * @param tradePosition
+	 *            TradePosition
 	 * @param bars
 	 *            int
 	 * @return boolean
 	 * @throws StrategyRuleException
 	 */
-	public boolean set5MinBarTrail(Trade trade, int bars)
+	public boolean set5MinBarTrail(TradePosition tradePosition, int bars)
 			throws StrategyRuleException {
 		boolean trail = false;
 		Money newStop = new Money(this.getOpenPositionOrder()
@@ -222,7 +214,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 				for (int i = itemCount; i > (itemCount - bars); i--) {
 					CandleItem candle = (CandleItem) series.getDataItem(i);
 					trail = false;
-					if (Side.BOT.equals(trade.getSide())) {
+					if (Side.BOT.equals(tradePosition.getSide())) {
 						if ((candle.getLow() > newStop.doubleValue())
 								&& (candle.getOpen() < candle.getClose())) {
 							newStop = new Money(candle.getLow());
