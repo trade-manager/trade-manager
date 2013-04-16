@@ -888,8 +888,11 @@ public class TradePersistentModel implements PersistentModel {
 			 * values.
 			 */
 			Money comms = new Money(totalCommission);
-			if (CoreUtils.nullSafeComparator(new Integer(totalBuyQuantity
-					- totalSellQuantity), tradePosition.getOpenQuantity()) != 0) {
+			if (CoreUtils.nullSafeComparator(new Integer(totalBuyQuantity),
+					tradePosition.getTotalBuyQuantity()) != 0
+					|| CoreUtils.nullSafeComparator(new Integer(
+							totalSellQuantity), tradePosition
+							.getTotalSellQuantity()) != 0) {
 				tradePosition
 						.setOpenQuantity((totalBuyQuantity - totalSellQuantity));
 
