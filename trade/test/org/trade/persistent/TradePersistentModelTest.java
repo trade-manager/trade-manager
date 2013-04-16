@@ -566,7 +566,7 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testPersistTradeOrderFilled() {
+	public void testPersistTradeOrderFilledLong() {
 
 		try {
 
@@ -608,6 +608,103 @@ public class TradePersistentModelTest extends TestCase {
 			TradeOrder tradeOrderSell = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.LMT, tradeOrderBuy.getQuantity(),
 					null, new BigDecimal(105.00), new Date());
+			tradeOrderSell.setOrderKey((new BigDecimal(
+					(Math.random() * 1000000))).intValue());
+			tradeOrderSell = this.tradePersistentModel
+					.persistTradeOrder(tradeOrderSell);
+			tradeOrderSell.setStatus(OrderStatus.SUBMITTED);
+			tradeOrderSell = this.tradePersistentModel
+					.persistTradeOrder(tradeOrderSell);
+
+			TradeOrderfill orderfill2 = new TradeOrderfill(tradeOrderSell,
+					tradeOrderSell.getLimitPrice(),
+					tradeOrderSell.getQuantity() / 2, "ISLAND", "2a",
+					tradeOrderSell.getLimitPrice(),
+					tradeOrderSell.getQuantity() / 2,
+					this.tradestrategy.getSide(), new Date());
+			tradeOrderSell.addTradeOrderfill(orderfill2);
+			tradeOrderSell = this.tradePersistentModel
+					.persistTradeOrderfill(tradeOrderSell);
+
+			TradeOrderfill orderfill3 = new TradeOrderfill(tradeOrderSell,
+					tradeOrderSell.getLimitPrice(),
+					tradeOrderSell.getQuantity(), "BATS", "2b",
+					tradeOrderSell.getLimitPrice(),
+					tradeOrderSell.getQuantity() / 2,
+					this.tradestrategy.getSide(), new Date());
+			tradeOrderSell.addTradeOrderfill(orderfill3);
+			tradeOrderSell.setCommission(new BigDecimal(5.0));
+
+			TradeOrder result = this.tradePersistentModel
+					.persistTradeOrderfill(tradeOrderSell);
+			TestCase.assertFalse(result.getTradePosition().getIsOpen());
+
+			TestCase.assertEquals((new Money(4000.00)).getBigDecimalValue(),
+					result.getTradePosition().getTotalNetValue());
+
+			double totalPriceMade = (result.getTradePosition()
+					.getTotalSellValue().doubleValue() / result
+					.getTradePosition().getTotalSellQuantity().doubleValue())
+					- (result.getTradePosition().getTotalBuyValue()
+							.doubleValue() / result.getTradePosition()
+							.getTotalBuyQuantity().doubleValue());
+			TestCase.assertEquals((new Money(4.00)).getBigDecimalValue(),
+					(new Money(totalPriceMade)).getBigDecimalValue());
+			TestCase.assertEquals(new Integer(1000), result.getTradePosition()
+					.getTotalBuyQuantity());
+			TestCase.assertEquals(new Integer(1000), result.getTradePosition()
+					.getTotalSellQuantity());
+			TestCase.assertEquals(new Integer(0), result.getTradePosition()
+					.getOpenQuantity());
+
+		} catch (Exception e) {
+			TestCase.fail("Error testPersistTradeOrder Msg: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testPersistTradeOrderFilledShort() {
+
+		try {
+
+			this.tradestrategy = TradestrategyTest
+					.removeTradeOrders(this.tradestrategy);
+			BigDecimal price = new BigDecimal(100.00);
+			TradeOrder tradeOrderBuy = new TradeOrder(this.tradestrategy,
+					Action.SELL, OrderType.STPLMT, 1000, price,
+					price.subtract(new BigDecimal(2)), new Date());
+			tradeOrderBuy
+					.setOrderKey((new BigDecimal((Math.random() * 1000000)))
+							.intValue());
+			tradeOrderBuy = this.tradePersistentModel
+					.persistTradeOrder(tradeOrderBuy);
+			tradeOrderBuy.setStatus(OrderStatus.SUBMITTED);
+			tradeOrderBuy = this.tradePersistentModel
+					.persistTradeOrder(tradeOrderBuy);
+
+			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy, price,
+					tradeOrderBuy.getQuantity() / 2, "ISLAND", "1a", price,
+					tradeOrderBuy.getQuantity() / 2,
+					this.tradestrategy.getSide(), new Date());
+			tradeOrderBuy.addTradeOrderfill(orderfill);
+
+			tradeOrderBuy = this.tradePersistentModel
+					.persistTradeOrderfill(tradeOrderBuy);
+
+			TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrderBuy,
+					tradeOrderBuy.getLimitPrice(), tradeOrderBuy.getQuantity(),
+					"BATS", "1b", tradeOrderBuy.getLimitPrice(),
+					tradeOrderBuy.getQuantity() / 2,
+					this.tradestrategy.getSide(), new Date());
+			tradeOrderBuy.addTradeOrderfill(orderfill1);
+			tradeOrderBuy.setCommission(new BigDecimal(5.0));
+
+			tradeOrderBuy = this.tradePersistentModel
+					.persistTradeOrderfill(tradeOrderBuy);
+
+			TradeOrder tradeOrderSell = new TradeOrder(this.tradestrategy,
+					Action.BUY, OrderType.LMT, tradeOrderBuy.getQuantity(),
+					null, new BigDecimal(95.00), new Date());
 			tradeOrderSell.setOrderKey((new BigDecimal(
 					(Math.random() * 1000000))).intValue());
 			tradeOrderSell = this.tradePersistentModel
