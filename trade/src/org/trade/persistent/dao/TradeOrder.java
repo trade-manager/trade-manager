@@ -353,6 +353,17 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	}
 
 	/**
+	 * Method hasTradePosition.
+	 * 
+	 * @return boolean
+	 */
+	public boolean hasTradePosition() {
+		if (null == getTradePosition())
+			return false;
+		return true;
+	}
+
+	/**
 	 * Method setTradePosition.
 	 * 
 	 * @param tradePosition

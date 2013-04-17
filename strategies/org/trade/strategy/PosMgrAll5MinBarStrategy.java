@@ -118,7 +118,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 * will be closed down.
 			 */
 
-			if (!getTradePosition().getIsOpen()) {
+			if (!this.isThereOpenPosition()) {
 				_log.info("No open position so Cancel Strategy Mgr Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 				this.cancel();
@@ -134,7 +134,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 * is > 0 also check to see if we already have this position
 			 * covered.
 			 */
-			if (getTradePosition().getIsOpen() && !this.isPositionCovered()) {
+			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
 				 * and stop orders for the open quantity.
@@ -156,7 +156,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 					&& startPeriod.after(TradingCalendar.getSpecificTime(
 							startPeriod, 9, 40))) {
 
-				if (set5MinBarTrail(getTradePosition(), 1)) {
+				if (set5MinBarTrail(getOpenTradePosition(), 1)) {
 					_log.info("PositionManagerStrategy 5min Candle: "
 							+ getSymbol() + " Trail Price: " + getTargetPrice()
 							+ " Time: " + startPeriod);
@@ -167,8 +167,8 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
-					15, 55))) {
+			if (!startPeriod.before(TradingCalendar.getSpecificTime(
+					startPeriod, 15, 55))) {
 				closeOpenPosition();
 				_log.info("PositionManagerStrategy 15:55:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

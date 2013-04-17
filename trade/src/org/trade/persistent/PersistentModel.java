@@ -278,7 +278,7 @@ public interface PersistentModel {
 	 * @return TradePosition
 	 * @throws PersistentModelException
 	 */
-	TradePosition findTradePositionById(Integer idTrade)
+	TradePosition findTradePositionById(Integer idTradePosition)
 			throws PersistentModelException;
 
 	/**

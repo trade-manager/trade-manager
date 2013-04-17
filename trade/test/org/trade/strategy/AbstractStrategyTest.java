@@ -224,7 +224,8 @@ public class AbstractStrategyTest extends TestCase {
 			 * Position has been open submit the target and stop orders.
 			 */
 			if (strategyProxy.isThereOpenPosition()) {
-				if (null != strategyProxy.getTradePosition().getOpenQuantity()) {
+				if (null != strategyProxy.getOpenTradePosition()
+						.getOpenQuantity()) {
 					/*
 					 * Position has been opened submit the target and stop
 					 * orders. Two targets at 3R and 6R
@@ -626,9 +627,9 @@ public class AbstractStrategyTest extends TestCase {
 							.getOpenPositionOrder().getQuantity() / 2, true);
 			TestCase.assertNotNull(price1);
 			pokeStrategyRuleTest();
-			double avgPrice = this.strategyProxy.getTradePosition()
+			double avgPrice = this.strategyProxy.getOpenTradePosition()
 					.getTotalBuyValue().doubleValue()
-					/ this.strategyProxy.getTradePosition()
+					/ this.strategyProxy.getOpenTradePosition()
 							.getTotalBuyQuantity();
 			this.strategyProxy.moveStopOCAPrice(new Money(avgPrice), true);
 			pokeStrategyRuleTest();
@@ -743,7 +744,7 @@ public class AbstractStrategyTest extends TestCase {
 	public void testGetTradePosition() {
 		try {
 			createOpenBuyPosition(new Money(100), true);
-			TestCase.assertNotNull(this.strategyProxy.getTradePosition());
+			TestCase.assertNotNull(this.strategyProxy.getOpenTradePosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetTrade Msg:" + ex.getMessage());
 		}

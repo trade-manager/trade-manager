@@ -121,6 +121,18 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 					// Kill this process we are done!
 					this.cancel();
 				}
+
+				/*
+				 * Close any opened positions with a market order at the end of
+				 * the day.
+				 */
+				if (!startPeriod.before(TradingCalendar.getSpecificTime(
+						startPeriod, 15, 55))) {
+					closeOpenPosition();
+					_log.info("Rule 15:55:00 close all open positions: "
+							+ getSymbol() + " Time: " + startPeriod);
+					this.cancel();
+				}
 			}
 
 		} catch (Exception ex) {

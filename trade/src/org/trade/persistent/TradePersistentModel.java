@@ -469,7 +469,7 @@ public class TradePersistentModel implements PersistentModel {
 				/*
 				 * Get the latest version of the trade to delete.
 				 */
-				if (null == tradePosition)
+				if (null == tradePosition && tradeOrder.hasTradePosition())
 					tradePosition = tradeOrder.getTradePosition();
 				if (null != tradeOrder.getIdTradeOrder()) {
 					Aspect instance = m_aspectHome.findById(tradeOrder);
@@ -810,7 +810,7 @@ public class TradePersistentModel implements PersistentModel {
 			 * one.
 			 */
 
-			if (null == tradeOrder.getTradePosition()) {
+			if (!tradeOrder.hasTradePosition()) {
 				if (CoreUtils.nullSafeComparator(
 						tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
 					positionOrders = this

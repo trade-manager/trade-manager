@@ -143,29 +143,28 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 				 * If the 5min low is broken cancel orders as trade no longer
 				 * valid.
 				 */
-				if (this.isThereOpenPosition()) {
-					CandleItem openCandle = this.getCandle(this
-							.getTradestrategy().getTradingday().getOpen());
-					if (!this.getOpenPositionOrder().getIsFilled()) {
-						if (Side.BOT.equals(getTradestrategy().getSide())) {
-							if (openCandle.getLow() > prevCandleItem.getLow()) {
-								_log.info("Rule 5min low broken. Symbol: "
-										+ getSymbol() + " Time: " + startPeriod);
-								cancelOrder(this.getOpenPositionOrder());
-								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
-								this.cancel();
-								return;
 
-							}
-						} else {
-							if (openCandle.getHigh() < prevCandleItem.getHigh()) {
-								_log.info("Rule 5min high broken. Symbol: "
-										+ getSymbol() + " Time: " + startPeriod);
-								cancelOrder(this.getOpenPositionOrder());
-								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
-								this.cancel();
-								return;
-							}
+				CandleItem openCandle = this.getCandle(this.getTradestrategy()
+						.getTradingday().getOpen());
+				if (!this.getOpenPositionOrder().getIsFilled()) {
+					if (Side.BOT.equals(getTradestrategy().getSide())) {
+						if (openCandle.getLow() > prevCandleItem.getLow()) {
+							_log.info("Rule 5min low broken. Symbol: "
+									+ getSymbol() + " Time: " + startPeriod);
+							cancelOrder(this.getOpenPositionOrder());
+							updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
+							this.cancel();
+							return;
+
+						}
+					} else {
+						if (openCandle.getHigh() < prevCandleItem.getHigh()) {
+							_log.info("Rule 5min high broken. Symbol: "
+									+ getSymbol() + " Time: " + startPeriod);
+							cancelOrder(this.getOpenPositionOrder());
+							updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
+							this.cancel();
+							return;
 						}
 					}
 				}

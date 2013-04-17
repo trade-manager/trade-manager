@@ -59,8 +59,8 @@ import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
@@ -266,7 +266,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					.getTradingday().getOpen(), this.tradestrategy
 					.getTradingday().getOpen());
 
-			TradePosition openTradePosition = null;
+			PositionOrders positionOrders = null;
 
 			/*
 			 * Wait for the strategy to start.
@@ -308,23 +308,16 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						lockBackTestWorker.wait();
 					}
 				}
-
-				if (null == openTradePosition) {
-					openTradePosition = this.tradePersistentModel
-							.findOpenTradePositionByContractId(this.tradestrategy
-									.getContract().getIdContract());
-				} else {
-					openTradePosition = this.tradePersistentModel
-							.findTradePositionById(openTradePosition
-									.getIdTradePosition());
-				}
+				positionOrders = this.tradePersistentModel
+						.findPositionOrdersById(this.idTradestrategy);
 
 				/*
 				 * The new candle may create an order so this call fills it and
 				 * return whether this is opening a position.
 				 */
-				if (filledOrdersOpenPosition(this.tradestrategy.getContract(),
-						openTradePosition, candle)) {
+				if (filledOrders(this.tradestrategy.getContract(),
+						positionOrders, candle)) {
+
 					/*
 					 * Need to recall fillOrders as this is a new open position
 					 * and an OCA order may now be ready to be filled this
@@ -352,25 +345,27 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 * the trade that we weren't stopped out on the entry
 					 * candle.
 					 */
-					openTradePosition = this.tradePersistentModel
-							.findTradePositionById(openTradePosition
-									.getIdTradePosition());
-					if (!this.tradestrategy.getDatasetContainer()
-							.getBaseCandleSeries().isEmpty()) {
-						CandleItem candleItem = (CandleItem) this.tradestrategy
-								.getDatasetContainer()
-								.getBaseCandleSeries()
-								.getDataItem(
-										this.tradestrategy
-												.getDatasetContainer()
-												.getBaseCandleSeries()
-												.getItemCount() - 1);
-						if (!candleItem.isSide(openTradePosition.getSide())) {
-							filledOrdersOpenPosition(
-									this.tradestrategy.getContract(),
-									openTradePosition, candle);
+					positionOrders = this.tradePersistentModel
+							.findPositionOrdersById(this.idTradestrategy);
+					if (positionOrders.hasOpenTradePosition()) {
+						if (!this.tradestrategy.getDatasetContainer()
+								.getBaseCandleSeries().isEmpty()) {
+							CandleItem candleItem = (CandleItem) this.tradestrategy
+									.getDatasetContainer()
+									.getBaseCandleSeries()
+									.getDataItem(
+											this.tradestrategy
+													.getDatasetContainer()
+													.getBaseCandleSeries()
+													.getItemCount() - 1);
+							if (!candleItem.isSide(positionOrders
+									.getOpenTradePosition().getSide())) {
+								filledOrders(this.tradestrategy.getContract(),
+										positionOrders, candle);
+							}
 						}
 					}
+
 					positionCovered.set(false);
 					/*
 					 * We now have an open position so we wait for the strategy
@@ -382,11 +377,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						}
 					}
 				}
-				if (strategiesRunning.get() == 0 && null == openTradePosition)
-					break;
-
-				if (strategiesRunning.get() == 0
-						&& !openTradePosition.getIsOpen())
+				if (strategiesRunning.get() == 0)
 					break;
 			}
 			candles.clear();
@@ -413,7 +404,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	}
 
 	/**
-	 * Method filledOrdersOpenPosition.
+	 * Method filledOrders.
 	 * 
 	 * @param contract
 	 *            Contract
@@ -424,15 +415,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 * @return boolean
 	 * @throws Exception
 	 */
-	private boolean filledOrdersOpenPosition(Contract contract,
-			TradePosition tradePosition, Candle candle) throws Exception {
+	private boolean filledOrders(Contract contract,
+			PositionOrders positionOrders, Candle candle) throws Exception {
 
-		boolean openPosition = false;
-		if (null == tradePosition) {
-			return openPosition;
-		}
-
-		for (TradeOrder order : tradePosition.getTradeOrders()) {
+		boolean orderfilled = false;
+		for (TradeOrder order : positionOrders.getTradeOrders()) {
 			if (OrderStatus.UNSUBMIT.equals(order.getStatus())) {
 				/*
 				 * Can't use the com.ib.client.OrderState as constructor is no
@@ -449,19 +436,21 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				order.setStatus(OrderStatus.SUBMITTED);
 			}
 		}
-		for (TradeOrder order : tradePosition.getTradeOrders()) {
+		for (TradeOrder order : positionOrders.getTradeOrders()) {
 			if (OrderStatus.SUBMITTED.equals(order.getStatus())
 					&& order.getTransmit()) {
 
 				BigDecimal filledPrice = getFilledPrice(order, candle);
 				if (null != filledPrice) {
+					if (!orderfilled)
+						orderfilled = true;
 					// If OCA cancel other side
 					if (null == order.getOcaGroupName()) {
 						createOrderExecution(contract, order, filledPrice,
 								candle.getStartPeriod());
 					} else {
 
-						for (TradeOrder orderOCA : tradePosition
+						for (TradeOrder orderOCA : positionOrders
 								.getTradeOrders()) {
 
 							if (order.getOcaGroupName().equals(
@@ -509,13 +498,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 							}
 						}
 					}
-					if (order.getIsOpenPosition()) {
-						openPosition = true;
-					}
 				}
 			}
 		}
-		return openPosition;
+		return orderfilled;
 	}
 
 	/**
@@ -543,39 +529,34 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			} else {
 				filledPrice = order.getLimitPrice();
 			}
-			if (order.getIsOpenPosition()) {
-				if ((filledPrice.compareTo(candle.getLow()) > -1)
-						&& (filledPrice.compareTo(candle.getHigh()) < 1)) {
-					filled = true;
+
+			if (Action.SELL.equals(order.getAction())) {
+				if (OrderType.STP.equals(order.getOrderType())
+						|| OrderType.STPLMT.equals(order.getOrderType())) {
+					if (candle.getLow().compareTo(filledPrice) < 1) {
+						if (candle.getOpen().compareTo(filledPrice) < 1) {
+							filledPrice = candle.getOpen();
+						}
+						filled = true;
+					}
+				} else if (OrderType.LMT.equals(order.getOrderType())) {
+					if (candle.getHigh().compareTo(filledPrice) > -1) {
+						filled = true;
+					}
 				}
 
 			} else {
-				if (Action.SELL.equals(order.getAction())) {
-					if (OrderType.STP.equals(order.getOrderType())) {
-						if (candle.getLow().compareTo(filledPrice) < 1) {
-							if (candle.getOpen().compareTo(filledPrice) < 1) {
-								filledPrice = candle.getOpen();
-							}
-							filled = true;
+				if (OrderType.STP.equals(order.getOrderType())
+						|| OrderType.STPLMT.equals(order.getOrderType())) {
+					if (candle.getHigh().compareTo(filledPrice) > -1) {
+						if (candle.getOpen().compareTo(filledPrice) > -1) {
+							filledPrice = candle.getOpen();
 						}
-					} else if (OrderType.LMT.equals(order.getOrderType())) {
-						if (candle.getHigh().compareTo(filledPrice) > -1) {
-							filled = true;
-						}
+						filled = true;
 					}
-
-				} else {
-					if (OrderType.STP.equals(order.getOrderType())) {
-						if (candle.getHigh().compareTo(filledPrice) > -1) {
-							if (candle.getOpen().compareTo(filledPrice) > -1) {
-								filledPrice = candle.getOpen();
-							}
-							filled = true;
-						}
-					} else if (OrderType.LMT.equals(order.getOrderType())) {
-						if (candle.getLow().compareTo(filledPrice) < 1) {
-							filled = true;
-						}
+				} else if (OrderType.LMT.equals(order.getOrderType())) {
+					if (candle.getLow().compareTo(filledPrice) < 1) {
+						filled = true;
 					}
 				}
 			}

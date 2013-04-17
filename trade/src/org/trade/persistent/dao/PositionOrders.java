@@ -191,6 +191,17 @@ public class PositionOrders extends Aspect implements Serializable {
 	}
 
 	/**
+	 * Method hasOpenTradePosition.
+	 * 
+	 * @return boolean
+	 */
+	public boolean hasOpenTradePosition() {
+		if (null == getOpenTradePosition())
+			return false;
+		return true;
+	}
+
+	/**
 	 * Method getVersion.
 	 * 
 	 * @return Integer

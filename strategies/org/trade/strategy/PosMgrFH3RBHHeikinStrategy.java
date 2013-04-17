@@ -120,18 +120,17 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
-			/*
-			 * _log.info("PositionManagerStrategy symbol: " + getSymbol() +
-			 * " startPeriod: " + startPeriod + " Close Price: " +
-			 * currentCandle.getClose() + " Vwap: " + currentCandle.getVwap());
-			 */
+			// _log.info("PositionManagerStrategy symbol: " + getSymbol()
+			// + " startPeriod: " + startPeriod + " Close Price: "
+			// + currentCandle.getClose() + " Vwap: "
+			// + currentCandle.getVwap());
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
 			 * will be closed down.
 			 */
 
-			if (!getTradePosition().getIsOpen()) {
+			if (!this.isThereOpenPosition()) {
 				_log.info("No open position so Cancel Strategy Mgr Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 				this.cancel();
@@ -147,7 +146,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * is > 0 also check to see if we already have this position
 			 * covered.
 			 */
-			if (getTradePosition().getIsOpen() && !this.isPositionCovered()) {
+			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
 				 * and stop orders for the open quantity. Two targets at 4R and
@@ -181,12 +180,12 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 						.getSpecificTime(this.getTradestrategy()
 								.getTradingday().getOpen(), startPeriod));
 
-				if (Side.BOT.equals(getTradePosition().getSide())) {
+				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
 					if (currentCandle.getVwap() < firstCandle.getVwap()) {
-						Money stopPrice = addPennyAndRoundStop(
-								getTradePosition().getOpenPositionOrder()
-										.getAverageFilledPrice().doubleValue(),
-								getTradePosition().getSide(), Action.SELL, 0.01);
+						Money stopPrice = addPennyAndRoundStop(this
+								.getOpenPositionOrder().getAverageFilledPrice()
+								.doubleValue(), getOpenTradePosition()
+								.getSide(), Action.SELL, 0.01);
 						moveStopOCAPrice(stopPrice, true);
 						_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
 								+ getSymbol() + " Time:" + startPeriod
@@ -196,9 +195,10 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 					if (currentCandle.getVwap() > firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(
-								getTradePosition().getOpenPositionOrder()
+								getOpenTradePosition().getOpenPositionOrder()
 										.getAverageFilledPrice().doubleValue(),
-								getTradePosition().getSide(), Action.BUY, 0.01);
+								getOpenTradePosition().getSide(), Action.BUY,
+								0.01);
 						moveStopOCAPrice(stopPrice, true);
 						_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
 								+ getSymbol() + " Time:" + startPeriod
@@ -217,13 +217,13 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
 						+ " Time: " + startPeriod);
 				String action = Action.SELL;
-				if (getTradePosition().getSide().equals(Side.SLD)) {
+				if (getOpenTradePosition().getSide().equals(Side.SLD)) {
 					action = Action.BUY;
 				}
 				moveStopOCAPrice(
 						addPennyAndRoundStop(getOpenPositionOrder()
 								.getAverageFilledPrice().doubleValue(),
-								getTradePosition().getSide(), action, 0.01),
+								getOpenTradePosition().getSide(), action, 0.01),
 						true);
 			}
 
@@ -232,7 +232,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Heikin-Ashi above target 1 with a two bar trail.
 			 */
 			if ((null != getTargetPrice()) && newBar) {
-				if (setHiekinAshiTrail(getTradePosition(), 2)) {
+				if (setHiekinAshiTrail(getOpenTradePosition(), 2)) {
 					_log.info("PositionManagerStrategy HiekinAshiTrail: "
 							+ getSymbol() + " Trail Price: " + getTargetPrice()
 							+ " Time: " + startPeriod);
@@ -243,8 +243,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
-					15, 55))) {
+			if (!startPeriod.before(TradingCalendar.getSpecificTime(
+					startPeriod, 15, 55))) {
 				closeOpenPosition();
 				_log.info("PositionManagerStrategy 15:55:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

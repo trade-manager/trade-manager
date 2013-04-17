@@ -183,10 +183,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						this.cancel();
 					}
 
-				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))
-						|| startPeriod.after(TradingCalendar.getSpecificTime(
-								startPeriod, 10, 30))) {
+				} else if (!startPeriod.before(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))) {
 
 					if (!this.isThereOpenPosition()
 							&& !TradestrategyStatus.CANCELLED

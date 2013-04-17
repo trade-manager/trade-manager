@@ -513,14 +513,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		if (this.isThereOpenPosition()) {
 
-			int cumQuantityOpen = Math.abs(this.getTradePosition()
+			int cumQuantityOpen = Math.abs(this.getOpenTradePosition()
 					.getOpenQuantity());
 
 			if (cumQuantityOpen > 0) {
 				Date createDate = new Date();
 
 				String action = Action.BUY;
-				if (Side.BOT.equals(this.getTradePosition().getSide())) {
+				if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
 					action = Action.SELL;
 				}
 				TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
@@ -644,8 +644,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		if (roundPrice) {
 			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
-			if (null != this.getTradePosition()) {
-				side = this.getTradePosition().getSide();
+			if (null != this.getOpenTradePosition()) {
+				side = this.getOpenTradePosition().getSide();
 			}
 			if (OrderType.LMT.equals(orderType)) {
 				if (roundPrice) {
@@ -727,8 +727,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 				.findTradeOrderByKey(orderKey);
 		if (roundPrice) {
 			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
-			if (null != this.getTradePosition()) {
-				side = this.getTradePosition().getSide();
+			if (null != this.getOpenTradePosition()) {
+				side = this.getOpenTradePosition().getSide();
 			}
 			if (OrderType.LMT.equals(orderType)) {
 				if (roundPrice) {
@@ -781,7 +781,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		if (this.isThereOpenPosition())
 			throw new BrokerModelException(1, 52,
 					"Cannot create position for TradePosition Id: "
-							+ this.getTradePosition().getIdTradePosition()
+							+ this.getOpenTradePosition().getIdTradePosition()
 							+ " as position is already open.");
 
 		Date createDate = new Date();
@@ -901,7 +901,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						openQuantity = openQuantity + order.getQuantity();
 					}
 				}
-				if (openQuantity >= Math.abs(this.getTradePosition()
+				if (openQuantity >= Math.abs(this.getOpenTradePosition()
 						.getOpenQuantity())) {
 					return true;
 				}
@@ -955,7 +955,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 
 		String action = Action.BUY;
-		if (Side.BOT.equals(getTradePosition().getSide())) {
+		if (Side.BOT.equals(getOpenTradePosition().getSide())) {
 			action = Action.SELL;
 		}
 
@@ -1058,7 +1058,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		String action = Action.BUY;
 		int buySellMultipliter = 1;
-		if (Side.BOT.equals(getTradePosition().getSide())) {
+		if (Side.BOT.equals(getOpenTradePosition().getSide())) {
 			action = Action.SELL;
 			buySellMultipliter = -1;
 		}
@@ -1067,14 +1067,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 		Money stopPrice = addPennyAndRoundStop(openPosition
 				.getAverageFilledPrice().doubleValue()
 				+ (riskAmount * stopRiskUnits * buySellMultipliter), this
-				.getTradePosition().getSide(), action, 0.01);
+				.getOpenTradePosition().getSide(), action, 0.01);
 
 		Money targetPrice = addPennyAndRoundStop(openPosition
 				.getAverageFilledPrice().doubleValue()
 				+ (riskAmount * targetRiskUnits * buySellMultipliter * -1),
-				this.getTradePosition().getSide(), action, 0.01);
+				this.getOpenTradePosition().getSide(), action, 0.01);
 
-		int quantity = Math.abs(this.getTradePosition().getOpenQuantity()
+		int quantity = Math.abs(this.getOpenTradePosition().getOpenQuantity()
 				* percentQty) / 100;
 
 		String ocaID = new String(Integer.toString((new BigDecimal(Math
@@ -1132,10 +1132,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 			int numberRiskUnits) throws ValueTypeException {
 
 		double riskAmount = (this.getTradestrategy().getRiskAmount()
-				.doubleValue() / this.getTradePosition().getOpenQuantity())
+				.doubleValue() / this.getOpenTradePosition().getOpenQuantity())
 				* numberRiskUnits;
 
-		if (Side.BOT.equals(this.getTradePosition().getSide())) {
+		if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
 			riskAmount = riskAmount * -1;
 		}
 
@@ -1398,18 +1398,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return boolean
 	 */
 	public boolean isThereOpenPosition() {
-		if (null != getTradePosition()) {
+		if (null != getOpenTradePosition()) {
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Method getTradePosition.
+	 * Method getOpenTradePosition.
 	 * 
 	 * @return TradePosition
 	 */
-	public TradePosition getTradePosition() {
+	public TradePosition getOpenTradePosition() {
 		return getPositionOrders().getOpenTradePosition();
 	}
 

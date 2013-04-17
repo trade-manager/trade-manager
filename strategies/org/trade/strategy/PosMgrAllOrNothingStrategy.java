@@ -118,7 +118,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			 * will be closed down.
 			 */
 
-			if (!getTradePosition().getIsOpen()) {
+			if (!this.isThereOpenPosition()) {
 				this.cancel();
 				return;
 			}
@@ -132,7 +132,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			 * covered.
 			 */
 
-			if (getTradePosition().getIsOpen() && !this.isPositionCovered()) {
+			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 
 				/*
 				 * Position has been opened and not covered submit the target
@@ -154,12 +154,12 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
 					10, 30))) {
 
-				if (Side.BOT.equals(getTradePosition().getSide())) {
+				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
 					if (currentCandle.getVwap() < getOpenPositionOrder()
 							.getStopPrice().doubleValue()) {
 						Money stopPrice = addPennyAndRoundStop(
 								getOpenPositionOrder().getStopPrice()
-										.doubleValue(), getTradePosition()
+										.doubleValue(), getOpenTradePosition()
 										.getSide(), Action.SELL, 0.01);
 						moveStopOCAPrice(stopPrice, true);
 						_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
@@ -174,7 +174,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 							.getStopPrice().doubleValue()) {
 						Money stopPrice = addPennyAndRoundStop(
 								getOpenPositionOrder().getStopPrice()
-										.doubleValue(), getTradePosition()
+										.doubleValue(), getOpenTradePosition()
 										.getSide(), Action.BUY, 0.01);
 						moveStopOCAPrice(stopPrice, true);
 						_log.info("Move Stop to b.e. Strategy Mgr cancelled Symbol: "
@@ -195,22 +195,21 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 				_log.info("Rule move stop to b.e.. Symbol:" + getSymbol()
 						+ " Time: " + startPeriod);
 				String action = Action.SELL;
-				if (getTradePosition().getSide().equals(Side.SLD)) {
+				if (getOpenTradePosition().getSide().equals(Side.SLD)) {
 					action = Action.BUY;
 				}
 				moveStopOCAPrice(
-
 						addPennyAndRoundStop(getOpenPositionOrder()
 								.getAverageFilledPrice().doubleValue(),
-								getTradePosition().getSide(), action, 0.01),
+								getOpenTradePosition().getSide(), action, 0.01),
 						true);
 			}
 			/*
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
-					15, 55))) {
+			if (!startPeriod.before(TradingCalendar.getSpecificTime(
+					startPeriod, 15, 55))) {
 				closeOpenPosition();
 				_log.info("PositionManagerStrategy 15:55:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

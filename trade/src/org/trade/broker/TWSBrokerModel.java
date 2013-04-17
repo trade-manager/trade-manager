@@ -1104,7 +1104,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						// Let the controller know an order was filled
 						this.fireTradeOrderFilled(tradeorder);
 
-						if (!tradeorder.getTradePosition().getIsOpen()) {
+						if (tradeorder.hasTradePosition()
+								&& !tradeorder.getTradePosition().getIsOpen()) {
 							// Let the controller know a position was closed
 							this.firePositionClosed(tradeorder
 									.getTradePosition());
@@ -1171,7 +1172,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					// Let the controller know an order was filled
 					this.fireTradeOrderFilled(transientInstance);
 
-					if (!transientInstance.getTradePosition().getIsOpen()) {
+					if (transientInstance.hasTradePosition()
+							&& !transientInstance.getTradePosition()
+									.getIsOpen()) {
 						// Let the controller know a position was closed
 						this.firePositionClosed(transientInstance
 								.getTradePosition());

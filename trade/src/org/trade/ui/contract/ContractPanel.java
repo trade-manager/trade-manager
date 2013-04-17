@@ -872,7 +872,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			setStrategyLabel(tradestrategy);
 			enableChartButtons(tradestrategy);
 
-			double profitLoss = 0;
+			double netValue = 0;
 			double commision = 0;
 			String symbol = "";
 			String side = "";
@@ -897,7 +897,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				if (null != tradestrategy.getOpenTradePosition()) {
 					if (null != tradestrategy.getOpenTradePosition()
 							.getTotalNetValue()) {
-						profitLoss = profitLoss
+						netValue = netValue
 								+ tradestrategy.getOpenTradePosition()
 										.getTotalNetValue().doubleValue();
 					}
@@ -908,7 +908,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 										.getTotalCommission().doubleValue();
 					}
 				}
-				profitLoss = profitLoss - commision;
+				netValue = netValue - commision;
 				// Collections.sort(trade.getTradeOrders(), new
 				// TradeOrder());
 				TradeOrder prevTradeOrder = null;
@@ -966,20 +966,20 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
 					CoreUtils.padLeft(risk, 10), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Profit:",
-					false, bold);
-			if (profitLoss < 0) {
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					" Net Total:", false, bold);
+			if (netValue < 0) {
 				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(profitLoss), 10),
-						false, colorRedAttr);
-			} else if (profitLoss > 0) {
+						.padLeft(currencyFormater.format(netValue), 10), false,
+						colorRedAttr);
+			} else if (netValue > 0) {
 				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(profitLoss), 10),
-						false, colorGreenAttr);
+						.padLeft(currencyFormater.format(netValue), 10), false,
+						colorGreenAttr);
 			} else {
 				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(profitLoss), 10),
-						false, null);
+						.padLeft(currencyFormater.format(netValue), 10), false,
+						null);
 			}
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Comms:",
 					false, bold);
