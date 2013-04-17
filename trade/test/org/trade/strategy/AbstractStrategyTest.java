@@ -203,47 +203,46 @@ public class AbstractStrategyTest extends TestCase {
 			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
 					Action.BUY, price, price.subtract(new Money(0.2)), true,
 					null, null, null, null);
-			openOrder.setAverageFilledPrice(price.getBigDecimalValue());
-			openOrder.setCommission((new Money(1.0)).getBigDecimalValue());
-			openOrder.setFilledDate(new Date());
-			openOrder.setIsFilled(true);
-			openOrder.setFilledQuantity(openOrder.getQuantity());
+
 			TradeOrderfill execution = new TradeOrderfill();
 			execution.setTradeOrder(openOrder);
 			execution.setTime(new Date());
 			execution.setExchange("SMART");
-			execution.setSide("BOT");
+			execution.setSide(Side.BOT);
 			execution.setQuantity(openOrder.getQuantity());
-			execution.setAveragePrice(openOrder.getAverageFilledPrice());
-			execution.setPrice(openOrder.getAverageFilledPrice());
+			execution.setAveragePrice(price.getBigDecimalValue());
+			execution.setPrice(price.getBigDecimalValue());
 			execution.setCumulativeQuantity(openOrder.getQuantity());
-			tradePersistentModel.persistTradePosition(openOrder
-					.getTradePosition());
 
 			((BackTestBrokerModel) m_brokerModel).execDetails(
 					openOrder.getOrderKey(), this.tradestrategy.getContract(),
 					execution);
+			this.pokeStrategyRuleTest();
 
 			TestCase.assertNotNull(strategyProxy.getOpenPositionOrder());
-			// Position has been open
-			// submit the target and stop orders.
-			if (openOrder.getTradePosition().getIsOpen()) {
-				if (null != openOrder.getTradePosition().getOpenQuantity()) {
-					// Position has been opened
-					// submit the target and stop orders.
-					// Two targets at 3R and 6R
+			/*
+			 * Position has been open submit the target and stop orders.
+			 */
+			if (strategyProxy.isThereOpenPosition()) {
+				if (null != strategyProxy.getTradePosition().getOpenQuantity()) {
+					/*
+					 * Position has been opened submit the target and stop
+					 * orders. Two targets at 3R and 6R
+					 */
 					_log.info("Open position submit Stop/Tgt orders Symbol: "
 							+ openOrder.getTradestrategy().getContract()
 									.getSymbol());
 					Money targetPrice = strategyProxy.createStopAndTargetOrder(
-
-					strategyProxy.getOpenPositionOrder(), 1, 3, 50, true);
+							strategyProxy.getOpenPositionOrder(), 1, 3, 50,
+							true);
 					strategyProxy.setTargetPrice(targetPrice);
-					strategyProxy.createStopAndTargetOrder(
 
-					strategyProxy.getOpenPositionOrder(), 1, 6, 50, true);
-					for (TradeOrder newOrder : openOrder.getTradePosition()
-							.getTradeOrders()) {
+					strategyProxy.createStopAndTargetOrder(
+							strategyProxy.getOpenPositionOrder(), 1, 3, 50,
+							true);
+
+					for (TradeOrder newOrder : strategyProxy
+							.getPositionOrders().getTradeOrders()) {
 						if (OrderType.LMT.equals(newOrder.getOrderType())) {
 							assertEquals(targetPrice.doubleValue(), newOrder
 									.getLimitPrice().doubleValue(), 0);
@@ -479,13 +478,12 @@ public class AbstractStrategyTest extends TestCase {
 			entryLimit.setPercentOfMargin(new BigDecimal(0.5));
 			tradePersistentModel.persistAspect(entryLimit);
 
-			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
+			TradeOrder openOrder = this.strategyProxy.createRiskOpenPosition(
 					Action.SELL, new Money(45.75), new Money(46.00), true,
 					null, null, null, null);
-			TestCase.assertNotNull(this.strategyProxy.getOpenPositionOrder());
-			TestCase.assertEquals(400, result.getQuantity(), 0);
 
-			TradeOrder openOrder = this.strategyProxy.getOpenPositionOrder();
+			TestCase.assertEquals(400, openOrder.getQuantity(), 0);
+
 			TradeOrderfill orderFill = new TradeOrderfill(openOrder,
 					new BigDecimal(45.74), openOrder.getQuantity(),
 					this.tradestrategy.getContract().getExchange(), "1234567",
@@ -494,7 +492,10 @@ public class AbstractStrategyTest extends TestCase {
 			openOrder.addTradeOrderfill(orderFill);
 			openOrder.setStatus(OrderStatus.FILLED);
 			tradePersistentModel.persistTradeOrderfill(openOrder);
+
 			pokeStrategyRuleTest();
+
+			TestCase.assertNotNull(this.strategyProxy.getOpenPositionOrder());
 
 			/*
 			 * Position has been opened and not covered submit the target and
@@ -603,7 +604,8 @@ public class AbstractStrategyTest extends TestCase {
 		try {
 			createOpenBuyPosition(new Money(100), true);
 			this.strategyProxy.closeOpenPosition();
-			TestCase.assertNotNull(this.strategyProxy.isThereOpenPosition());
+			this.pokeStrategyRuleTest();
+			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testCloseAllOpenPositions Msg:"
 					+ ex.getMessage());
@@ -629,6 +631,7 @@ public class AbstractStrategyTest extends TestCase {
 					/ this.strategyProxy.getTradePosition()
 							.getTotalBuyQuantity();
 			this.strategyProxy.moveStopOCAPrice(new Money(avgPrice), true);
+			pokeStrategyRuleTest();
 			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testMoveStopOCAPrice Msg:" + ex.getMessage());

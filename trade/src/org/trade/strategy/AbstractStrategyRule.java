@@ -1153,7 +1153,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public void closeOpenPosition() throws StrategyRuleException {
 
-		_log.info("Strategy  closeAllOpenPositions symbol: " + symbol);
+		_log.info("Strategy  closeOpenPosition symbol: " + symbol);
 		try {
 			cancelAllOrders();
 			if (this.isThereOpenPosition()) {
@@ -1183,7 +1183,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		try {
 			if (this.isThereOpenPosition()) {
 				// Cancel the tgt and stop orders i.e. OCA
-				for (TradeOrder tradeOrder : this.getTradePosition()
+				for (TradeOrder tradeOrder : this.getPositionOrders()
 						.getTradeOrders()) {
 					if (!tradeOrder.getIsOpenPosition()
 							&& !tradeOrder.getIsFilled()
@@ -1227,7 +1227,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		_log.info("Strategy  cancelAllPositions symbol: " + symbol);
 		try {
 			if (this.isThereOpenPosition()) {
-				for (TradeOrder order : getTradePosition().getTradeOrders()) {
+				for (TradeOrder order : this.getPositionOrders()
+						.getTradeOrders()) {
 					cancelOrder(order);
 				}
 			}
