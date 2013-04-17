@@ -97,9 +97,20 @@ public class TradestrategyTest extends TestCase {
 
 			PositionOrders positionOrders = tradestrategyHome
 					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
-			TestCase.assertNotNull(tradestrategy);
+			TestCase.assertNotNull(positionOrders);
 			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + "found.");
+			positionOrders.setStatus(TradestrategyStatus.CANCELLED);
+			AspectHome aspectHome = new AspectHome();
+			positionOrders = (PositionOrders) aspectHome
+					.persist(positionOrders);
+			positionOrders = tradestrategyHome
+					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
+			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
+					+ positionOrders.getIdTradeStrategy() + "found Status: "
+					+ positionOrders.getStatus());
+			TestCase.assertEquals(TradestrategyStatus.CANCELLED,
+					positionOrders.getStatus());
 
 		} catch (Exception e) {
 			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());

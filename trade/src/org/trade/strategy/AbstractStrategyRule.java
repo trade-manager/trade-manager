@@ -1326,11 +1326,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public void updateTradestrategyStatus(String status)
 			throws PersistentModelException {
-		Tradestrategy transientInstance = this.tradePersistentModel
-				.findTradestrategyById(getTradestrategy());
-		transientInstance.setStatus(status);
-		this.tradestrategy = this.tradePersistentModel
-				.persistTradestrategy(transientInstance);
+		this.getPositionOrders().setStatus(status);
+		this.tradePersistentModel.persistAspect(this.getPositionOrders());
 	}
 
 	/**

@@ -804,7 +804,7 @@ public class TradePersistentModel implements PersistentModel {
 						.getIdTradeStrategy();
 			}
 			TradePosition tradePosition = null;
-			Tradestrategy tradestrategy = null;
+			PositionOrders positionOrders = null;
 			/*
 			 * If the filled qty is > 0 and we have no TradePosition then create
 			 * one.
@@ -813,18 +813,21 @@ public class TradePersistentModel implements PersistentModel {
 			if (null == tradeOrder.getTradePosition()) {
 				if (CoreUtils.nullSafeComparator(
 						tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
-					tradestrategy = this.findTradestrategyById(tradestrategyId);
+					positionOrders = this
+							.findPositionOrdersById(tradestrategyId);
 
 					tradePosition = this
-							.findOpenTradePositionByContractId(tradestrategy
+							.findOpenTradePositionByContractId(positionOrders
 									.getContract().getIdContract());
 					if (null == tradePosition) {
 						tradePosition = new TradePosition(
-								tradestrategy.getContract(),
+								positionOrders.getContract(),
 								tradeOrder.getUpdateDate(),
 								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
 										: Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
+						positionOrders.setStatus(TradestrategyStatus.OPEN);
+						this.persistAspect(positionOrders);
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = (TradePosition) this
 								.persistAspect(tradePosition);
@@ -925,20 +928,15 @@ public class TradePersistentModel implements PersistentModel {
 						BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalCommission(comms.getBigDecimalValue());
 				// Partial fills case.
-				if (null == tradestrategy)
-					tradestrategy = this.findTradestrategyById(tradestrategyId);
+				if (null == positionOrders)
+					positionOrders = this
+							.findPositionOrdersById(tradestrategyId);
 
-				if (tradePosition.getIsOpen()
-						&& !TradestrategyStatus.OPEN.equals(tradestrategy
-								.getStatus())) {
-					tradestrategy.setStatus(TradestrategyStatus.OPEN);
-					this.persistTradestrategy(tradestrategy);
-				}
 				if (!tradePosition.getIsOpen()
-						&& !TradestrategyStatus.CLOSED.equals(tradestrategy
+						&& !TradestrategyStatus.CLOSED.equals(positionOrders
 								.getStatus())) {
-					tradestrategy.setStatus(TradestrategyStatus.CLOSED);
-					this.persistTradestrategy(tradestrategy);
+					positionOrders.setStatus(TradestrategyStatus.CLOSED);
+					this.persistAspect(positionOrders);
 				}
 
 				tradePosition.setUpdateDate(new Date());
@@ -947,13 +945,15 @@ public class TradePersistentModel implements PersistentModel {
 
 			} else {
 				if (allOrdersCancelled) {
-					tradestrategy = this.findTradestrategyById(tradestrategyId);
-					if (!TradestrategyStatus.CANCELLED.equals(tradestrategy
+					if (null == positionOrders)
+						positionOrders = this
+								.findPositionOrdersById(tradestrategyId);
+					if (!TradestrategyStatus.CANCELLED.equals(positionOrders
 							.getStatus())) {
-						if (null == tradestrategy.getStatus()) {
-							tradestrategy
+						if (null == positionOrders.getStatus()) {
+							positionOrders
 									.setStatus(TradestrategyStatus.CANCELLED);
-							this.persistTradestrategy(tradestrategy);
+							this.persistAspect(positionOrders);
 						}
 					}
 				}

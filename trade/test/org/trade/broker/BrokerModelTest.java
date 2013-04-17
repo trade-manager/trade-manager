@@ -170,10 +170,9 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
 
-			_log.info("IdTradePosition: "
-					+ tradeOrder.getTradePosition().getIdTradePosition()
+			_log.info("IdTradeOrder: " + tradeOrder.getIdTradeOrder()
 					+ " OrderKey: " + tradeOrder.getOrderKey());
-			TestCase.assertNotNull(tradeOrder);
+			TestCase.assertNotNull(tradeOrder.getIdTradeOrder());
 
 		} catch (Exception e) {
 			TestCase.fail("Error testSubmitSellShortOrder Msg: "
@@ -201,7 +200,7 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
-			TestCase.assertNotNull(tradeOrder);
+			TestCase.assertNotNull(tradeOrder.getIdTradeOrder());
 
 			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.LMT, 50,
@@ -216,7 +215,8 @@ public class BrokerModelTest extends TestCase {
 
 			tradeOrder1 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder1);
-			TestCase.assertNotNull(tradeOrder1);
+			TestCase.assertNotNull(tradeOrder1.getIdTradeOrder());
+
 			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STP, 50,
 					price.subtract(new BigDecimal(1.0)), null, new Date());
@@ -228,7 +228,8 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder2.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder2 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder2);
-			TestCase.assertNotNull(tradeOrder2);
+			TestCase.assertNotNull(tradeOrder2.getIdTradeOrder());
+
 			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STP, 50,
 					price.subtract(new BigDecimal(2.0)), null, new Date());
@@ -239,9 +240,8 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder3.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder3 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder3);
-			TestCase.assertNotNull(tradeOrder3);
-			_log.info("IdTradePosition: "
-					+ tradeOrder2.getTradePosition().getIdTradePosition()
+			TestCase.assertNotNull(tradeOrder3.getIdTradeOrder());
+			_log.info("IdTradeOrder: " + tradeOrder3.getIdTradeOrder()
 					+ " OrderKey2: " + tradeOrder2.getOrderKey()
 					+ " OrderKey2 Price: " + tradeOrder2.getLimitPrice()
 					+ " OrderKey3: " + tradeOrder3.getOrderKey()
@@ -256,8 +256,7 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder3.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder3 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder3);
-			_log.info("IdTradePosition: "
-					+ tradeOrder2.getTradePosition().getIdTradePosition()
+			_log.info("IdTradeOrder: " + tradeOrder3.getIdTradeOrder()
 					+ " OrderKey2: " + tradeOrder2.getOrderKey()
 					+ " OrderKey2 Price: " + tradeOrder2.getLimitPrice()
 					+ " OrderKey3: " + tradeOrder3.getOrderKey()
@@ -268,8 +267,7 @@ public class BrokerModelTest extends TestCase {
 			tradeOrder3 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder3);
 
-			_log.info("IdTradePosition: "
-					+ tradeOrder2.getTradePosition().getIdTradePosition()
+			_log.info("IdTradeOrder: " + tradeOrder2.getIdTradeOrder()
 					+ " OrderKey: " + tradeOrder3.getOrderKey());
 			TestCase.assertNotNull(tradeOrder3);
 

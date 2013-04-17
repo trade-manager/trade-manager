@@ -70,6 +70,7 @@ public class PositionOrders extends Aspect implements Serializable {
 	private static final long serialVersionUID = -2181676329258092177L;
 
 	private Contract contract;
+	private String status;
 	private TradePosition tradePosition;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 
@@ -117,6 +118,26 @@ public class PositionOrders extends Aspect implements Serializable {
 	 */
 	public void setContract(Contract contract) {
 		this.contract = contract;
+	}
+
+	/**
+	 * Method getStatus.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "status", length = 20)
+	public String getStatus() {
+		return this.status;
+	}
+
+	/**
+	 * Method setStatus.
+	 * 
+	 * @param status
+	 *            String
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	/**
