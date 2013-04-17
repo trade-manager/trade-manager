@@ -54,6 +54,7 @@ import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
+import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.persistent.PersistentModelException;
 
 /**
@@ -368,10 +369,13 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            Tradingday
 	 * @return boolean
 	 */
-	public static boolean hasOpenTrades(Tradingday tradingday) {
+	public static boolean hasOpenOrders(Tradingday tradingday) {
 		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 			for (TradeOrder tradeOrder : tradestrategy.getTradeOrders()) {
-				if (tradeOrder.getTradePosition().getIsOpen()) {
+				if (!tradeOrder.getIsFilled()
+						&& !OrderStatus.CANCELLED
+								.equals(tradeOrder.getStatus())
+						&& !OrderStatus.INACTIVE.equals(tradeOrder.getStatus())) {
 					return true;
 				}
 			}

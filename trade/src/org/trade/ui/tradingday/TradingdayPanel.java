@@ -1110,14 +1110,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		 * If they do kill the strategy worker before deleting trades.
 		 */
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
-			if (Tradingdays.hasOpenTrades(tradingday)) {
-				int result = JOptionPane
-						.showConfirmDialog(
-								this.getFrame(),
-								"Tradingday: "
-										+ tradingday.getOpen()
-										+ " has open positions. Do you want to continue",
-								"Warning", JOptionPane.YES_NO_OPTION);
+			if (Tradingdays.hasOpenOrders(tradingday)) {
+				int result = JOptionPane.showConfirmDialog(this.getFrame(),
+						"Tradingday: " + tradingday.getOpen()
+								+ " has open orders. Do you want to continue",
+						"Warning", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {

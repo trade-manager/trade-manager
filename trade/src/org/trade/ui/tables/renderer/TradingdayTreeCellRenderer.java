@@ -96,11 +96,14 @@ public class TradingdayTreeCellRenderer extends DefaultTreeCellRenderer {
 				if (!tradestrategy.getTradeOrders().isEmpty()) {
 					TradePosition tradePosition = tradestrategy
 							.getTradeOrders().get(0).getTradePosition();
-					if (Side.BOT.equals(tradePosition.getSide())) {
-						comp.setForeground(Color.GREEN);
-					} else {
-						comp.setForeground(Color.RED);
+					if (null != tradePosition) {
+						if (Side.BOT.equals(tradePosition.getSide())) {
+							comp.setForeground(Color.GREEN);
+						} else {
+							comp.setForeground(Color.RED);
+						}
 					}
+
 					if (selected) {
 						this.setBackgroundSelectionColor(Color.black);
 					}
