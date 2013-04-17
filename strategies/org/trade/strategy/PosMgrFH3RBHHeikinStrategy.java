@@ -194,11 +194,10 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				} else {
 
 					if (currentCandle.getVwap() > firstCandle.getVwap()) {
-						Money stopPrice = addPennyAndRoundStop(
-								getOpenTradePosition().getOpenPositionOrder()
-										.getAverageFilledPrice().doubleValue(),
-								getOpenTradePosition().getSide(), Action.BUY,
-								0.01);
+						Money stopPrice = addPennyAndRoundStop(this
+								.getOpenPositionOrder().getAverageFilledPrice()
+								.doubleValue(), getOpenTradePosition()
+								.getSide(), Action.BUY, 0.01);
 						moveStopOCAPrice(stopPrice, true);
 						_log.info("Move Stop to b.e. Strategy Mgr Symbol: "
 								+ getSymbol() + " Time:" + startPeriod

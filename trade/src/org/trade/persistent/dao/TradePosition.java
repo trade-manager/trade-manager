@@ -495,21 +495,6 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getOpenPositionOrder.
-	 * 
-	 * @return TradeOrder
-	 */
-	@Transient
-	public TradeOrder getOpenPositionOrder() {
-		for (TradeOrder order : this.getTradeOrders()) {
-			if (order.getIsOpenPosition()) {
-				return order;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Method containsTradeOrder.
 	 * 
 	 * @param tradeOrder
