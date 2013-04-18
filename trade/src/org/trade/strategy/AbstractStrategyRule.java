@@ -1229,11 +1229,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		_log.info("Strategy  cancelAllPositions symbol: " + symbol);
 		try {
-			if (this.isThereOpenPosition()) {
-				for (TradeOrder order : this.getPositionOrders()
-						.getTradeOrders()) {
-					cancelOrder(order);
-				}
+			for (TradeOrder order : this.getPositionOrders().getTradeOrders()) {
+				cancelOrder(order);
 			}
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 90,

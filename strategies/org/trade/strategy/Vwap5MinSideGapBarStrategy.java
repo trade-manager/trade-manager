@@ -189,16 +189,14 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 						// Cancel this process we are done!
 						this.cancel();
 					}
-				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))
-						|| startPeriod.after(TradingCalendar.getSpecificTime(
-								startPeriod, 10, 30))) {
+				} else if (!startPeriod.before(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))) {
 
 					if (!this.isThereOpenPosition()
 							&& !TradestrategyStatus.CANCELLED
 									.equals(getTradestrategy().getStatus())) {
 						this.updateTradestrategyStatus(TradestrategyStatus.TO);
-						cancelOrder(this.getOpenPositionOrder());
+						this.cancelAllOrders();
 						// No trade we timed out
 						_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
 								+ getSymbol() + " Time: " + startPeriod);

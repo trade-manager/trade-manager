@@ -381,7 +381,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						}
 					}
 				}
-				if (strategiesRunning.get() == 0)
+				if (strategiesRunning.get() == 0
+						&& !positionOrders.hasOpenTradePosition())
 					break;
 			}
 			candles.clear();

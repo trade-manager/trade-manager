@@ -146,12 +146,12 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 
 				CandleItem openCandle = this.getCandle(this.getTradestrategy()
 						.getTradingday().getOpen());
-				if (!this.getOpenPositionOrder().getIsFilled()) {
+				if (!this.isThereOpenPosition()) {
 					if (Side.BOT.equals(getTradestrategy().getSide())) {
 						if (openCandle.getLow() > prevCandleItem.getLow()) {
 							_log.info("Rule 5min low broken. Symbol: "
 									+ getSymbol() + " Time: " + startPeriod);
-							cancelOrder(this.getOpenPositionOrder());
+							this.cancelAllOrders();
 							updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
 							this.cancel();
 							return;
@@ -161,7 +161,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 						if (openCandle.getHigh() < prevCandleItem.getHigh()) {
 							_log.info("Rule 5min high broken. Symbol: "
 									+ getSymbol() + " Time: " + startPeriod);
-							cancelOrder(this.getOpenPositionOrder());
+							this.cancelAllOrders();
 							updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
 							this.cancel();
 							return;
@@ -228,16 +228,14 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 						// Kill this process we are done!
 						this.cancel();
 					}
-				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))
-						|| startPeriod.after(TradingCalendar.getSpecificTime(
-								startPeriod, 10, 30))) {
+				} else if (!startPeriod.before(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))) {
 
 					if (!this.isThereOpenPosition()
 							&& !TradestrategyStatus.CANCELLED
 									.equals(getTradestrategy().getStatus())) {
 						this.updateTradestrategyStatus(TradestrategyStatus.TO);
-						cancelOrder(this.getOpenPositionOrder());
+						this.cancelAllOrders();
 						// No trade we timed out
 						_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
 								+ getSymbol() + " Time: " + startPeriod);
