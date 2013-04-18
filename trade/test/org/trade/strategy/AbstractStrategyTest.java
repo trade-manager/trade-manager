@@ -217,7 +217,7 @@ public class AbstractStrategyTest extends TestCase {
 			((BackTestBrokerModel) m_brokerModel).execDetails(
 					openOrder.getOrderKey(), this.tradestrategy.getContract(),
 					execution);
-			this.pokeStrategyRuleTest();
+			this.reFreshPositionOrders();
 
 			TestCase.assertNotNull(strategyProxy.getOpenPositionOrder());
 			/*
@@ -494,7 +494,7 @@ public class AbstractStrategyTest extends TestCase {
 			openOrder.setStatus(OrderStatus.FILLED);
 			tradePersistentModel.persistTradeOrderfill(openOrder);
 
-			pokeStrategyRuleTest();
+			reFreshPositionOrders();
 
 			TestCase.assertNotNull(this.strategyProxy.getOpenPositionOrder());
 
@@ -539,9 +539,9 @@ public class AbstractStrategyTest extends TestCase {
 			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
 					Action.BUY, price, price.subtract(new Money(0.2)), true,
 					null, null, null, null);
-			pokeStrategyRuleTest();
+			reFreshPositionOrders();
 			this.strategyProxy.cancelOrder(openOrder);
-			pokeStrategyRuleTest();
+			reFreshPositionOrders();
 			openOrder = tradePersistentModel.findTradeOrderByKey(openOrder
 					.getOrderKey());
 			TestCase.assertEquals(OrderStatus.CANCELLED, openOrder.getStatus());
@@ -605,7 +605,7 @@ public class AbstractStrategyTest extends TestCase {
 		try {
 			createOpenBuyPosition(new Money(100), true);
 			this.strategyProxy.closeOpenPosition();
-			this.pokeStrategyRuleTest();
+			this.reFreshPositionOrders();
 			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testCloseAllOpenPositions Msg:"
@@ -621,18 +621,18 @@ public class AbstractStrategyTest extends TestCase {
 					new Money(99.0), new Money(103.99), this.strategyProxy
 							.getOpenPositionOrder().getQuantity() / 2, true);
 			TestCase.assertNotNull(price);
-			pokeStrategyRuleTest();
+			reFreshPositionOrders();
 			Money price1 = this.strategyProxy.createStopAndTargetOrder(
 					new Money(99.0), new Money(105.99), this.strategyProxy
 							.getOpenPositionOrder().getQuantity() / 2, true);
 			TestCase.assertNotNull(price1);
-			pokeStrategyRuleTest();
+			reFreshPositionOrders();
 			double avgPrice = this.strategyProxy.getOpenTradePosition()
 					.getTotalBuyValue().doubleValue()
 					/ this.strategyProxy.getOpenTradePosition()
 							.getTotalBuyQuantity();
 			this.strategyProxy.moveStopOCAPrice(new Money(avgPrice), true);
-			pokeStrategyRuleTest();
+			reFreshPositionOrders();
 			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testMoveStopOCAPrice Msg:" + ex.getMessage());
@@ -844,7 +844,7 @@ public class AbstractStrategyTest extends TestCase {
 			((BackTestBrokerModel) m_brokerModel).execDetails(
 					tradeOrder.getOrderKey(), this.tradestrategy.getContract(),
 					execution);
-			this.pokeStrategyRuleTest();
+			this.reFreshPositionOrders();
 			TestCase.assertNotNull(strategyProxy.getOpenPositionOrder());
 
 		} else {
@@ -856,21 +856,17 @@ public class AbstractStrategyTest extends TestCase {
 		}
 	}
 
-	private void pokeStrategyRuleTest() {
-		/*
-		 * Fire an event on the BaseCandleSeries this will trigger a refresh of
-		 * the Trade in the StrategyRule. We need to wait until the StrategyRule
-		 * is back in a wait state.
-		 */
-		strategyProxy.getTradestrategy().getDatasetContainer()
-				.getBaseCandleSeries().fireSeriesChanged();
+	private void reFreshPositionOrders() {
 		try {
-			do {
-				Thread.sleep(200);
-			} while (!strategyProxy.isWaiting());
+			/*
+			 * Fire an event on the BaseCandleSeries this will trigger a refresh
+			 * of the Trade in the StrategyRule. We need to wait until the
+			 * StrategyRule is back in a wait state.
+			 */
+			strategyProxy.reFreshPositionOrders();
 
-		} catch (InterruptedException e) {
-			_log.info(" Thread interupt: " + e.getMessage());
+		} catch (Exception e) {
+			_log.info("Error refreshing Position Orders: " + e.getMessage());
 		}
 	}
 

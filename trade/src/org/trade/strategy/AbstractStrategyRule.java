@@ -326,9 +326,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					+ " engine doInBackground Symbol: " + this.symbol
 					+ " idTradestrategy: " + this.idTradestrategy);
 
-			this.positionOrders = this.tradePersistentModel
-					.findPositionOrdersById(this.tradestrategy
-							.getIdTradeStrategy());
+			reFreshPositionOrders();
 
 			do {
 				/*
@@ -389,9 +387,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 							 * may have been filled via another thread. This
 							 * gets the Orders/OpenPosition and Contract
 							 */
-							this.positionOrders = this.tradePersistentModel
-									.findPositionOrdersById(this.tradestrategy
-											.getIdTradeStrategy());
+							reFreshPositionOrders();
 							runStrategy(candleSeries, newCandle);
 						}
 					}
@@ -1364,6 +1360,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public PositionOrders getPositionOrders() {
 		return this.positionOrders;
+	}
+
+	/**
+	 * Method reFreshPositionOrders.
+	 * 
+	 */
+
+	public void reFreshPositionOrders() throws PersistentModelException {
+		this.positionOrders = this.tradePersistentModel
+				.findPositionOrdersById(this.idTradestrategy);
 	}
 
 	/**
