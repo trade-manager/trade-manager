@@ -325,6 +325,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 			_log.info(this.getClass().getName()
 					+ " engine doInBackground Symbol: " + this.symbol
 					+ " idTradestrategy: " + this.idTradestrategy);
+
+			this.positionOrders = this.tradePersistentModel
+					.findPositionOrdersById(this.tradestrategy
+							.getIdTradeStrategy());
+
 			do {
 				/*
 				 * Lock until a candle arrives. First time in we process the
@@ -344,10 +349,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 					 * Orders/OpenPosition and Contract
 					 */
 
-					this.positionOrders = this.tradePersistentModel
-							.findPositionOrdersById(this.tradestrategy
-									.getIdTradeStrategy());
-
 					CandleSeries candleSeries = this.tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 
@@ -362,9 +363,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * Only manage trades when the market is open and the
 						 * candle is for the Tradestrategies trading day.
 						 */
-						if (this.isDuringTradingday(getCurrentCandle()
-								.getPeriod().getStart()))
+						if (!getCurrentCandle()
+								.getPeriod()
+								.getStart()
+								.before(this.tradestrategy.getTradingday()
+										.getOpen())) {
+							this.positionOrders = this.tradePersistentModel
+									.findPositionOrdersById(this.tradestrategy
+											.getIdTradeStrategy());
 							runStrategy(candleSeries, true);
+						}
 
 					} else if (currentCandleCount == (candleSeries
 							.getItemCount() - 1)) {
@@ -374,9 +382,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 */
 						if (currentCandleCount > -1) {
 							// Fire rules
-							if (this.isDuringTradingday(getCurrentCandle()
-									.getPeriod().getStart()))
+							if (!getCurrentCandle()
+									.getPeriod()
+									.getStart()
+									.before(this.tradestrategy.getTradingday()
+											.getOpen())) {
+								this.positionOrders = this.tradePersistentModel
+										.findPositionOrdersById(this.tradestrategy
+												.getIdTradeStrategy());
 								runStrategy(candleSeries, false);
+							}
 						}
 					} else if (currentCandleCount < (candleSeries
 							.getItemCount() - 1)) {

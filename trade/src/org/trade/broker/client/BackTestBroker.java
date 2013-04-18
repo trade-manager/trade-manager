@@ -308,6 +308,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						lockBackTestWorker.wait();
 					}
 				}
+				if (candle.getStartPeriod().before(
+						this.tradestrategy.getTradingday().getOpen()))
+					continue;
+
 				positionOrders = this.tradePersistentModel
 						.findPositionOrdersById(this.idTradestrategy);
 
