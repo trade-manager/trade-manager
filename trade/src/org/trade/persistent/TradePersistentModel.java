@@ -822,7 +822,7 @@ public class TradePersistentModel implements PersistentModel {
 					if (null == tradePosition) {
 						tradePosition = new TradePosition(
 								positionOrders.getContract(),
-								tradeOrder.getUpdateDate(),
+								tradeOrder.getFilledDate(),
 								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
 										: Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
@@ -912,7 +912,8 @@ public class TradePersistentModel implements PersistentModel {
 
 				tradePosition.setIsOpen(true);
 				if ((totalBuyQuantity - totalSellQuantity) == 0) {
-					tradePosition.setPositionCloseDate(new Date());
+					tradePosition.setPositionCloseDate(tradeOrder
+							.getFilledDate());
 					tradePosition.setIsOpen(false);
 				}
 
