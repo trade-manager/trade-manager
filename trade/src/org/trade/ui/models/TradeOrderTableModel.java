@@ -404,8 +404,6 @@ public class TradeOrderTableModel extends TableModel {
 						.add(new Money(entrylimit.getLimitAmount()
 								.doubleValue() * buySellMultiplier))
 						.getBigDecimalValue(), createDate.getDate());
-		if (null == tradestrategy.getOpenTradePosition())
-			tradeOrder.setIsOpenPosition(true);
 		tradeOrder.setOcaGroupName("");
 		tradeOrder.setStatus(OrderStatus.newInstance().getCode());
 		tradestrategy.addTradeOrder(tradeOrder);

@@ -304,8 +304,8 @@ public class TradePersistentModelTest extends TestCase {
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
 			TradePosition openTradePosition = tradestrategyStpTgt
-					.getOpenTradePosition();
-			TestCase.assertNotNull("No open trade", openTradePosition);
+					.getTradePosition();
+			TestCase.assertTrue(openTradePosition.getIsOpen());
 
 			int buySellMultiplier = 1;
 			if (action.equals(Action.BUY)) {

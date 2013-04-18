@@ -621,16 +621,15 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getOpenTradePosition.
+	 * Method getTradePosition.
 	 * 
 	 * @return TradePosition The open trade.
 	 * 
 	 */
 	@Transient
-	public TradePosition getOpenTradePosition() {
+	public TradePosition getTradePosition() {
 		for (TradeOrder tradeOrder : this.getTradeOrders()) {
-			if (null != tradeOrder.getTradePosition()
-					&& tradeOrder.getTradePosition().getIsOpen()) {
+			if (null != tradeOrder.getTradePosition()) {
 				return tradeOrder.getTradePosition();
 			}
 		}

@@ -896,28 +896,33 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 				// Collections.sort(trade.getTradeOrders(), new
 				// TradeOrder());
-				TradeOrder prevTradeOrder = null;
+
+				if (null != tradestrategy.getTradePosition()) {
+					if (null != tradestrategy.getTradePosition()
+							.getTotalNetValue()) {
+						netValue = netValue
+								+ tradestrategy.getTradePosition()
+										.getTotalNetValue().doubleValue();
+					}
+					if (null != tradestrategy.getTradePosition()
+							.getTotalCommission()) {
+						commision = commision
+								+ tradestrategy.getTradePosition()
+										.getTotalCommission().doubleValue();
+					}
+				}
+
+				netValue = netValue - commision;
 
 				/*
 				 * Sum up orders that are filled and at the same time add the
 				 * fill price. This happens when orders stop out as there are
 				 * multiple stop orders for a position with multiple targets.
 				 */
+				TradeOrder prevTradeOrder = null;
+
 				for (TradeOrder order : tradestrategy.getTradeOrders()) {
-					if (null != order.getTradePosition()
-							&& null == prevTradeOrder) {
-						if (null != order.getTradePosition().getTotalNetValue()) {
-							netValue = netValue
-									+ order.getTradePosition()
-											.getTotalNetValue().doubleValue();
-						}
-						if (null != order.getTradePosition()
-								.getTotalCommission()) {
-							commision = commision
-									+ order.getTradePosition()
-											.getTotalCommission().doubleValue();
-						}
-					}
+
 					Integer quantity = order.getFilledQuantity();
 					if (order.getIsFilled()) {
 						if (null != prevTradeOrder) {
@@ -939,8 +944,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					prevTradeOrder = order;
 				}
 			}
-
-			netValue = netValue - commision;
 
 			m_tradeLabel.setText(null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:",

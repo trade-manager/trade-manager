@@ -502,11 +502,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			for (Tradestrategy tradestrategy : todayTradingday
 					.getTradestrategies()) {
-				if (null != tradestrategy.getOpenTradePosition()) {
+				if (null != tradestrategy.getTradePosition()
+						&& tradestrategy.getTradePosition().getIsOpen()) {
 					TradePosition tradePosition = m_tradePersistentModel
 							.findTradePositionById(tradestrategy
-									.getOpenTradePosition()
-									.getIdTradePosition());
+									.getTradePosition().getIdTradePosition());
 					for (TradeOrder todayTradeOrder : tradePosition
 							.getTradeOrders()) {
 						if (!todayTradeOrder.getIsFilled()) {
@@ -519,6 +519,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							}
 						}
 					}
+
 				}
 			}
 		} catch (Exception ex) {
@@ -922,8 +923,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			if (!m_brokerModel.isBrokerDataOnly()) {
 				if (tradestrategy.getTrade()) {
-					if (null != tradestrategy.getOpenTradePosition()
-							&& tradestrategy.getOpenTradePosition().getIsOpen()) {
+					if (null != tradestrategy.getTradePosition()
+							&& tradestrategy.getTradePosition().getIsOpen()) {
 						int result = JOptionPane.showConfirmDialog(this
 								.getFrame(), "Position is open for: "
 								+ tradestrategy.getContract().getSymbol()
