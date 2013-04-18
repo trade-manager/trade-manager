@@ -343,69 +343,57 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 
 				if (!this.isCancelled()) {
-					/*
-					 * Refresh the orders in the positionOrders as these may
-					 * have been filled via another thread. This gets the
-					 * Orders/OpenPosition and Contract
-					 */
 
+					/*
+					 * If candle count > than current we have a new candle
+					 * 
+					 * If equal then we have ab updated candle.
+					 * 
+					 * The currentCandleCount is less than the candle series.
+					 * Then another thread must have cleared the candle series
+					 * so shut down the strategy.
+					 */
 					CandleSeries candleSeries = this.tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 
+					boolean newCandle = false;
 					if ((candleSeries.getItemCount() - 1) > currentCandleCount) {
 
-						/*
-						 * We have a new candle. Note currentCandleCount starts
-						 * at -1
-						 */
 						currentCandleCount = (candleSeries.getItemCount() - 1);
-						/*
-						 * Only manage trades when the market is open and the
-						 * candle is for the Tradestrategies trading day.
-						 */
-						if (!getCurrentCandle()
-								.getPeriod()
-								.getStart()
-								.before(this.tradestrategy.getTradingday()
-										.getOpen())) {
-							this.positionOrders = this.tradePersistentModel
-									.findPositionOrdersById(this.tradestrategy
-											.getIdTradeStrategy());
-							runStrategy(candleSeries, true);
-						}
 
-					} else if (currentCandleCount == (candleSeries
-							.getItemCount() - 1)) {
-						/*
-						 * We have an updated candle. If this strategy listens
-						 * for updates fire the rule.
-						 */
-						if (currentCandleCount > -1) {
-							// Fire rules
-							if (!getCurrentCandle()
-									.getPeriod()
-									.getStart()
-									.before(this.tradestrategy.getTradingday()
-											.getOpen())) {
-								this.positionOrders = this.tradePersistentModel
-										.findPositionOrdersById(this.tradestrategy
-												.getIdTradeStrategy());
-								runStrategy(candleSeries, false);
-							}
-						}
+						newCandle = true;
+
 					} else if (currentCandleCount < (candleSeries
 							.getItemCount() - 1)) {
-						/*
-						 * The currentCandleCount is less than the candle
-						 * series. Then another thread must have cleared the
-						 * candle series so shut down the strategy.
-						 */
+
 						_log.info("Cancelled due to candleSeries clear Symbol: "
 								+ getSymbol()
 								+ " class: "
 								+ this.getClass().getName());
 						this.cancel();
 						break;
+					}
+
+					if (currentCandleCount > -1) {
+						/*
+						 * Check the candle is during the trading range and fire
+						 * the rules.
+						 */
+						if (!getCurrentCandle()
+								.getPeriod()
+								.getStart()
+								.before(this.tradestrategy.getTradingday()
+										.getOpen())) {
+							/*
+							 * Refresh the orders in the positionOrders as these
+							 * may have been filled via another thread. This
+							 * gets the Orders/OpenPosition and Contract
+							 */
+							this.positionOrders = this.tradePersistentModel
+									.findPositionOrdersById(this.tradestrategy
+											.getIdTradeStrategy());
+							runStrategy(candleSeries, newCandle);
+						}
 					}
 					/*
 					 * First time in add a listener for new candle.
