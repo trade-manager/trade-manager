@@ -772,6 +772,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistTradeOrder(TradeOrder)
 	 */
+
 	public synchronized TradeOrder persistTradeOrder(TradeOrder tradeOrder)
 			throws PersistentModelException {
 		try {

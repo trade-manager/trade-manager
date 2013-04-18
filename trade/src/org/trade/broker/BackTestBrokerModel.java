@@ -816,8 +816,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 				if (OrderStatus.FILLED.equals(transientInstance.getStatus())) {
 
-					_log.info("Open order filled Order Key:"
-							+ transientInstance.getOrderKey());
+					_log.info("Order Key: " + transientInstance.getOrderKey()
+							+ " filled.");
 					BackTestBrokerModel.logOrderState(orderState);
 					BackTestBrokerModel.logTradeOrder(order);
 					transientInstance = m_tradePersistentModel
@@ -834,8 +834,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								.getTradePosition());
 					}
 				} else {
-					_log.info("Open order state changed. Status:"
-							+ orderState.m_status);
+					_log.info("Order key: " + transientInstance.getOrderKey()
+							+ " state changed. Status:" + orderState.m_status);
 					BackTestBrokerModel.logOrderState(orderState);
 					BackTestBrokerModel.logTradeOrder(order);
 					transientInstance = m_tradePersistentModel
