@@ -502,28 +502,23 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			for (Tradestrategy tradestrategy : todayTradingday
 					.getTradestrategies()) {
-				if (null != tradestrategy.getTradePosition()
-						&& tradestrategy.getTradePosition().getIsOpen()) {
-					TradePosition tradePosition = m_tradePersistentModel
-							.findTradePositionById(tradestrategy
-									.getTradePosition().getIdTradePosition());
-					for (TradeOrder todayTradeOrder : tradePosition
-							.getTradeOrders()) {
-						if (!todayTradeOrder.getIsFilled()) {
-							if (!openTradeOrders.containsKey(todayTradeOrder
-									.getOrderKey())) {
-								todayTradeOrder
-										.setStatus(OrderStatus.CANCELLED);
-								m_tradePersistentModel
-										.persistTradeOrder(todayTradeOrder);
-							}
+				Tradestrategy instance = m_tradePersistentModel
+						.findTradestrategyById(tradestrategy);
+				for (TradeOrder todayTradeOrder : instance.getTradeOrders()) {
+					if (!todayTradeOrder.getIsFilled()
+							&& OrderStatus.CANCELLED.equals(todayTradeOrder
+									.getStatus())) {
+						if (!openTradeOrders.containsKey(todayTradeOrder
+								.getOrderKey())) {
+							todayTradeOrder.setStatus(OrderStatus.CANCELLED);
+							m_tradePersistentModel
+									.persistTradeOrder(todayTradeOrder);
 						}
 					}
-
 				}
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error starting PositionManagerRule.",
+			this.setErrorMessage("Error reconciling open orders.",
 					ex.getMessage(), ex);
 		}
 	}
