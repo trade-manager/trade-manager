@@ -894,21 +894,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						.format((tradestrategy.getRiskAmount() == null ? 0
 								: tradestrategy.getRiskAmount().doubleValue()));
 
-				if (null != tradestrategy.getOpenTradePosition()) {
-					if (null != tradestrategy.getOpenTradePosition()
-							.getTotalNetValue()) {
-						netValue = netValue
-								+ tradestrategy.getOpenTradePosition()
-										.getTotalNetValue().doubleValue();
-					}
-					if (null != tradestrategy.getOpenTradePosition()
-							.getTotalCommission()) {
-						commision = commision
-								+ tradestrategy.getOpenTradePosition()
-										.getTotalCommission().doubleValue();
-					}
-				}
-				netValue = netValue - commision;
 				// Collections.sort(trade.getTradeOrders(), new
 				// TradeOrder());
 				TradeOrder prevTradeOrder = null;
@@ -919,6 +904,20 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				 * multiple stop orders for a position with multiple targets.
 				 */
 				for (TradeOrder order : tradestrategy.getTradeOrders()) {
+					if (null != order.getTradePosition()
+							&& null == prevTradeOrder) {
+						if (null != order.getTradePosition().getTotalNetValue()) {
+							netValue = netValue
+									+ order.getTradePosition()
+											.getTotalNetValue().doubleValue();
+						}
+						if (null != order.getTradePosition()
+								.getTotalCommission()) {
+							commision = commision
+									+ order.getTradePosition()
+											.getTotalCommission().doubleValue();
+						}
+					}
 					Integer quantity = order.getFilledQuantity();
 					if (order.getIsFilled()) {
 						if (null != prevTradeOrder) {
@@ -940,6 +939,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					prevTradeOrder = order;
 				}
 			}
+
+			netValue = netValue - commision;
 
 			m_tradeLabel.setText(null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:",
