@@ -215,15 +215,19 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
 						+ " Time: " + startPeriod);
-				String action = Action.SELL;
-				if (getOpenTradePosition().getSide().equals(Side.SLD)) {
-					action = Action.BUY;
+				String action = Action.BUY;
+				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+					action = Action.SELL;
 				}
+				double avgPrice = (this.getOpenTradePosition()
+						.getTotalBuyValue().doubleValue() - this
+						.getOpenTradePosition().getTotalSellValue()
+						.doubleValue())
+						/ this.getOpenTradePosition().getOpenQuantity()
+								.doubleValue();
 				moveStopOCAPrice(
-						addPennyAndRoundStop(getOpenPositionOrder()
-								.getAverageFilledPrice().doubleValue(),
-								getOpenTradePosition().getSide(), action, 0.01),
-						true);
+						addPennyAndRoundStop(avgPrice, getOpenTradePosition()
+								.getSide(), action, 0.01), true);
 			}
 
 			/*

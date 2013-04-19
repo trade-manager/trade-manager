@@ -1174,7 +1174,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            boolean
 	 * @throws StrategyRuleException
 	 */
-	public void moveStopOCAPrice(Money stopPrice, boolean stopTransmit)
+	public void moveStopOCAPrice(Money stopPrice, boolean transmit)
 			throws StrategyRuleException {
 
 		_log.info("Strategy  moveStopOCAPrice symbol: " + symbol
@@ -1190,13 +1190,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 									.getStatus())
 							&& !OrderStatus.INACTIVE.equals(tradeOrder
 									.getStatus())) {
-						if (OrderType.STP.equals(tradeOrder.getOrderType())) {
-							if (null != stopPrice) {
-								tradeOrder.setAuxPrice(stopPrice
-										.getBigDecimalValue());
-							}
-							tradeOrder.setStatus(OrderStatus.UNSUBMIT);
-							tradeOrder.setTransmit(stopTransmit);
+						if (OrderType.STP.equals(tradeOrder.getOrderType())
+								&& null != tradeOrder.getOcaGroupName()) {
+							tradeOrder.setAuxPrice(stopPrice
+									.getBigDecimalValue());
+							tradeOrder.setTransmit(transmit);
 							tradeOrder = getBrokerManager().onPlaceOrder(
 									getTradestrategy().getContract(),
 									tradeOrder);
