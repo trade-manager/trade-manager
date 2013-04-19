@@ -224,8 +224,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 					action = Action.BUY;
 					avgPrice = this.getOpenTradePosition().getTotalSellValue()
 							.doubleValue()
-							/ this.getOpenTradePosition().getTotalSellQuantity()
-									.doubleValue());
+							/ this.getOpenTradePosition()
+									.getTotalSellQuantity().doubleValue();
 				}
 				moveStopOCAPrice(
 						addPennyAndRoundStop(avgPrice, getOpenTradePosition()
