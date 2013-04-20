@@ -405,7 +405,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * Tell the worker if listening. Note only for back
 						 * testing that the strategy is running.
 						 */
-						if (null != this.positionOrders.getOpenTradePosition()) {
+						if (isThereOpenPosition()) {
 							if (isPositionCovered()) {
 								this.firePositionCovered(this.tradestrategy);
 							}
@@ -413,7 +413,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						this.fireStrategyStarted(this.tradestrategy);
 						listeningCandles = true;
 					} else {
-						if (null != this.positionOrders.getOpenTradePosition()) {
+						if (isThereOpenPosition()) {
 							if (isPositionCovered()) {
 								this.firePositionCovered(this.tradestrategy);
 							}
@@ -489,7 +489,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @see org.jfree.data.general.SeriesChangeListener#seriesChanged(SeriesChangeEvent)
 	 */
 	public void seriesChanged(SeriesChangeEvent event) {
-
 		synchronized (lockStrategyWorker) {
 			seriesChanged = true;
 			lockStrategyWorker.notifyAll();
@@ -512,10 +511,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		if (this.isThereOpenPosition()) {
 
-			int cumQuantityOpen = Math.abs(this.getOpenTradePosition()
+			int openQuantity = Math.abs(this.getOpenTradePosition()
 					.getOpenQuantity());
 
-			if (cumQuantityOpen > 0) {
+			if (openQuantity > 0) {
 				Date createDate = new Date();
 
 				String action = Action.BUY;
@@ -523,12 +522,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 					action = Action.SELL;
 				}
 				TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
-						action, OrderType.MKT, cumQuantityOpen, null, null,
+						action, OrderType.MKT, openQuantity, null, null,
 						createDate);
-
-				tradeOrder.setIsOpenPosition(false);
 				tradeOrder.setTransmit(transmit);
-				tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 				/*
 				 * If the portfolio has an individual account use the account
 				 * number. If the portfolio has an allocation method and that
@@ -866,8 +862,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void cancelOrder(TradeOrder order) throws BrokerModelException {
 		if (null != order) {
 			if (!order.getIsFilled()
-					&& !OrderStatus.CANCELLED.equals(order.getStatus())
-					&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
+					&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
 				getBrokerManager().onCancelOrder(order);
 			}
 		}
@@ -890,8 +885,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				for (TradeOrder order : this.getPositionOrders()
 						.getTradeOrders()) {
 					if (!order.getIsOpenPosition() && !order.getIsFilled()
-							&& !OrderStatus.CANCELLED.equals(order.getStatus())
-							&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
+							&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
 						/*
 						 * Note that this will give 2X the open amount. But when
 						 * an OCA order is filled the cancel tends to happen
@@ -909,7 +903,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 60,
-					"Error StrategyWorker exception: " + ex.getMessage());
+					"Error StrategyWorker isPositionCovered exception: "
+							+ ex.getMessage());
 		}
 	}
 
@@ -987,8 +982,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 			orderStop.setAccountNumber(getTradestrategy().getPortfolio()
 					.getIndividualAccount().getAccountNumber());
 
-		} else {
-			// TODO for AccountType.CORPORATE accounts provide the group/proflie
 		}
 		orderStop = getBrokerManager().onPlaceOrder(
 				getTradestrategy().getContract(), orderStop);
@@ -1187,8 +1180,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 					if (!tradeOrder.getIsOpenPosition()
 							&& !tradeOrder.getIsFilled()
 							&& !OrderStatus.CANCELLED.equals(tradeOrder
-									.getStatus())
-							&& !OrderStatus.INACTIVE.equals(tradeOrder
 									.getStatus())) {
 						if (OrderType.STP.equals(tradeOrder.getOrderType())
 								&& null != tradeOrder.getOcaGroupName()) {
@@ -1221,14 +1212,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public void cancelAllOrders() throws StrategyRuleException {
 
-		_log.info("Strategy  cancelAllPositions symbol: " + symbol);
+		_log.info("Strategy  cancelAllOrders symbol: " + symbol);
 		try {
 			for (TradeOrder order : this.getPositionOrders().getTradeOrders()) {
 				cancelOrder(order);
 			}
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 90,
-					"Error StrategyWorker exception: " + ex.getMessage());
+					"Error StrategyWorker cancelAllOrders exception: "
+							+ ex.getMessage());
 		}
 	}
 
