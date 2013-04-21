@@ -456,8 +456,6 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 									"Please select a Tradingday");
 						}
 						tradestrategy.setTradingday(tradingday);
-						if (!tradingday.existTradestrategy(tradestrategy))
-							tradingday.addTradestrategy(tradestrategy);
 					} else {
 						Tradingday currTradingday = this.getTradingday(
 								tradestrategy.getTradingday().getOpen(),
@@ -482,14 +480,6 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 										.getTradingday().getMarketGap());
 							}
 							tradestrategy.setTradingday(currTradingday);
-							if (!currTradingday
-									.existTradestrategy(tradestrategy))
-								currTradingday.addTradestrategy(tradestrategy);
-						} else {
-							if (!tradestrategy.getTradingday()
-									.existTradestrategy(tradestrategy))
-								tradestrategy.getTradingday().addTradestrategy(
-										tradestrategy);
 						}
 					}
 					tradestrategy.setRiskAmount(new BigDecimal(riskAmount));
@@ -499,6 +489,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					tradestrategy.setDirty(true);
 					tradestrategy.setStrategy(strategy);
 					tradestrategy.setPortfolio(portfolio);
+					if (!tradestrategy.getTradingday().existTradestrategy(
+							tradestrategy))
+						tradestrategy.getTradingday().addTradestrategy(
+								tradestrategy);
 
 					if (!this.containsTradingday(tradestrategy.getTradingday())) {
 						this.add(tradestrategy.getTradingday());
