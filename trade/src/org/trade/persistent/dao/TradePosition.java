@@ -81,10 +81,10 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * the opening TradeOrder.
 	 * 
 	 * A TradePosition is closed when the total open quantity i.e. buy quantity
-	 * less sell quantity equals zero. At this point the net value represents the
-	 * P/L for the position.
+	 * less sell quantity equals zero. At this point the net value represents
+	 * the P/L for the position.
 	 */
-	
+
 	private static final long serialVersionUID = 715993951200025530L;
 	private Contract contract;
 	private Integer openQuantity = new Integer(0);

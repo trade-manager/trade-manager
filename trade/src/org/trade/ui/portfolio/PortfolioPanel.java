@@ -99,7 +99,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private static final long serialVersionUID = 98016024273398947L;
 
 	private PersistentModel m_tradePersistentModel = null;
-	private TradelogReport m_tradelogReport = null;
+	private TradelogReport m_tradelogReport = new TradelogReport();
 	private String m_csvDefaultDir = null;
 	private Table m_tableTradelogSummary = null;
 	private TradelogSummaryTableModel m_tradelogSummaryModel = null;
@@ -247,17 +247,17 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			m_tradelogReport = m_tradePersistentModel.findTradelogReport(
 					this.portfolio, startDate, endDate,
 					filterButton.isSelected());
-			if (null == m_tradelogReport) {
-				this.setStatusBarMessage("Did not find trading day : "
-						+ startDate, INFORMATION);
-			} else {
-				m_tradelogDetailModel.setData(m_tradelogReport);
-				m_tradelogSummaryModel.setData(m_tradelogReport);
-				RowSorter<?> rsDetail = m_tableTradelogDetail.getRowSorter();
-				rsDetail.setSortKeys(null);
-				RowSorter<?> rsSummary = m_tableTradelogSummary.getRowSorter();
-				rsSummary.setSortKeys(null);
+			this.clearStatusBarMessage();
+			if (m_tradelogReport.getTradelogDetail().isEmpty()) {
+				this.setStatusBarMessage("No data found for selected criteria",
+						INFORMATION);
 			}
+			m_tradelogDetailModel.setData(m_tradelogReport);
+			m_tradelogSummaryModel.setData(m_tradelogReport);
+			RowSorter<?> rsDetail = m_tableTradelogDetail.getRowSorter();
+			rsDetail.setSortKeys(null);
+			RowSorter<?> rsSummary = m_tableTradelogSummary.getRowSorter();
+			rsSummary.setSortKeys(null);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(),
@@ -312,7 +312,10 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 		try {
 			resetPortfolioComboBox(portfolioEditorComboBox);
-		} catch (ValueTypeException ex) {
+			if (m_tradelogReport.getTradelogDetail().isEmpty()) {
+				doSearch();
+			}
+		} catch (Exception ex) {
 			this.setErrorMessage("Error activating window.", ex.getMessage(),
 					ex);
 		}
