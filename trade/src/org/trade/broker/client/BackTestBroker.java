@@ -449,7 +449,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					&& order.getTransmit()) {
 
 				BigDecimal filledPrice = getFilledPrice(order, candle);
-				if (null != filledPrice) {
+				if (filledPrice.compareTo(BigDecimal.ZERO) > 0) {
 					if (!orderfilled)
 						orderfilled = true;
 					// If OCA cancel other side
@@ -523,33 +523,24 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 */
 	private BigDecimal getFilledPrice(TradeOrder order, Candle candle) {
 
-		BigDecimal filledPrice = null;
-		boolean filled = false;
+		BigDecimal filledPrice = new BigDecimal(0);
 
 		if (OrderType.MKT.equals(order.getOrderType())) {
-			filled = true;
-			filledPrice = candle.getOpen();
+			return candle.getOpen();
 		} else {
-
-			if (OrderType.STP.equals(order.getOrderType())
-					|| OrderType.STPLMT.equals(order.getOrderType())) {
-				filledPrice = order.getAuxPrice();
-			} else {
-				filledPrice = order.getLimitPrice();
-			}
 
 			if (Action.SELL.equals(order.getAction())) {
 				if (OrderType.STP.equals(order.getOrderType())
 						|| OrderType.STPLMT.equals(order.getOrderType())) {
 					if (candle.getLow().compareTo(filledPrice) < 1) {
 						if (candle.getOpen().compareTo(filledPrice) < 1) {
-							filledPrice = candle.getOpen();
+							return candle.getOpen();
 						}
-						filled = true;
+						return order.getAuxPrice();
 					}
 				} else if (OrderType.LMT.equals(order.getOrderType())) {
 					if (candle.getHigh().compareTo(filledPrice) > -1) {
-						filled = true;
+						return order.getLimitPrice();
 					}
 				}
 
@@ -558,22 +549,18 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						|| OrderType.STPLMT.equals(order.getOrderType())) {
 					if (candle.getHigh().compareTo(filledPrice) > -1) {
 						if (candle.getOpen().compareTo(filledPrice) > -1) {
-							filledPrice = candle.getOpen();
+							return candle.getOpen();
 						}
-						filled = true;
+						return order.getAuxPrice();
 					}
 				} else if (OrderType.LMT.equals(order.getOrderType())) {
 					if (candle.getLow().compareTo(filledPrice) < 1) {
-						filled = true;
+						return order.getLimitPrice();
 					}
 				}
 			}
 		}
-		if (filled) {
-			return filledPrice;
-		} else {
-			return null;
-		}
+		return null;
 	}
 
 	/**
