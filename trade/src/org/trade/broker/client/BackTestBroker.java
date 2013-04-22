@@ -523,8 +523,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 */
 	private BigDecimal getFilledPrice(TradeOrder order, Candle candle) {
 
-		BigDecimal filledPrice = new BigDecimal(0);
-
 		if (OrderType.MKT.equals(order.getOrderType())) {
 			return candle.getOpen();
 		} else {
@@ -532,14 +530,14 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			if (Action.SELL.equals(order.getAction())) {
 				if (OrderType.STP.equals(order.getOrderType())
 						|| OrderType.STPLMT.equals(order.getOrderType())) {
-					if (candle.getLow().compareTo(filledPrice) < 1) {
-						if (candle.getOpen().compareTo(filledPrice) < 1) {
+					if (candle.getLow().compareTo(order.getAuxPrice()) < 1) {
+						if (candle.getOpen().compareTo(order.getAuxPrice()) < 1) {
 							return candle.getOpen();
 						}
 						return order.getAuxPrice();
 					}
 				} else if (OrderType.LMT.equals(order.getOrderType())) {
-					if (candle.getHigh().compareTo(filledPrice) > -1) {
+					if (candle.getHigh().compareTo(order.getLimitPrice()) > -1) {
 						return order.getLimitPrice();
 					}
 				}
@@ -547,20 +545,20 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			} else {
 				if (OrderType.STP.equals(order.getOrderType())
 						|| OrderType.STPLMT.equals(order.getOrderType())) {
-					if (candle.getHigh().compareTo(filledPrice) > -1) {
-						if (candle.getOpen().compareTo(filledPrice) > -1) {
+					if (candle.getHigh().compareTo(order.getAuxPrice()) > -1) {
+						if (candle.getOpen().compareTo(order.getAuxPrice()) > -1) {
 							return candle.getOpen();
 						}
 						return order.getAuxPrice();
 					}
 				} else if (OrderType.LMT.equals(order.getOrderType())) {
-					if (candle.getLow().compareTo(filledPrice) < 1) {
+					if (candle.getLow().compareTo(order.getLimitPrice()) < 1) {
 						return order.getLimitPrice();
 					}
 				}
 			}
 		}
-		return null;
+		return new BigDecimal(0);
 	}
 
 	/**
