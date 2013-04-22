@@ -556,7 +556,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				}
 			}
 		}
-		return new BigDecimal(0);
+		return BigDecimal.ZERO;
 	}
 
 	/**
