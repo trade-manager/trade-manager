@@ -366,6 +366,17 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
+	 * Method getStrategyManager.
+	 * 
+	 * @return boolean
+	 */
+	public boolean hasStrategyManager() {
+		if (null == getStrategyManager())
+			return false;
+		return true;
+	}
+
+	/**
 	 * Method isDirty.
 	 * 
 	 * @return boolean

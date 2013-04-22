@@ -68,7 +68,7 @@ public class DAOStrategyManager extends DAODecode {
 		final Vector<Decode> decodesAll = super.getCodesDecodes();
 		for (final Decode decode : decodesAll) {
 			final Strategy strategy = (Strategy) decode.getObject();
-			if (null == strategy.getStrategyManager()) {
+			if (!strategy.hasStrategyManager()) {
 				decodes.add(decode);
 			}
 		}

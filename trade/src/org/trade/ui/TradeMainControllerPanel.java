@@ -606,7 +606,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 * If this Strategy has a manager start the Strategy Manager.
 				 */
 
-				if (null != tradestrategy.getStrategy().getStrategyManager()) {
+				if (tradestrategy.getStrategy().hasStrategyManager()) {
 
 					if (!tradingdayPanel.isStrategyWorkerRunning(tradestrategy
 							.getStrategy().getStrategyManager().getClassName()
@@ -923,12 +923,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						int result = JOptionPane.showConfirmDialog(this
 								.getFrame(), "Position is open for: "
 								+ tradestrategy.getContract().getSymbol()
-								+ " do you want to run Position Mgr ?",
+								+ " do you want to run the Strategy ?",
 								"Information", JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.YES_OPTION) {
-							createStrategy(tradestrategy.getStrategy()
-									.getStrategyManager().getClassName(),
-									tradestrategy);
+							if (tradestrategy.getStrategy()
+									.hasStrategyManager()) {
+								createStrategy(tradestrategy.getStrategy()
+										.getStrategyManager().getClassName(),
+										tradestrategy);
+							} else {
+								createStrategy(tradestrategy.getStrategy()
+										.getClassName(), tradestrategy);
+							}
+
 						} else {
 							int result1 = JOptionPane.showConfirmDialog(this
 									.getFrame(), "Position is open for: "

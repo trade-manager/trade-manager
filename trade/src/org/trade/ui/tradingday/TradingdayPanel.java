@@ -967,7 +967,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		if (isStrategyWorkerRunning(key)) {
 			return true;
 		}
-		if (null != tradestrategy.getStrategy().getStrategyManager()) {
+		if (tradestrategy.getStrategy().hasStrategyManager()) {
 			key = tradestrategy.getStrategy().getStrategyManager()
 					.getClassName()
 					+ tradestrategy.getIdTradeStrategy();
@@ -1050,7 +1050,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		if (isStrategyWorkerRunning(key)) {
 			killStrategyWorker(key);
 		}
-		if (null != tradestrategy.getStrategy().getStrategyManager()) {
+		if (tradestrategy.getStrategy().hasStrategyManager()) {
 			key = tradestrategy.getStrategy().getStrategyManager()
 					.getClassName()
 					+ tradestrategy.getIdTradeStrategy();

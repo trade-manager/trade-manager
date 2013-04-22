@@ -370,12 +370,12 @@ public class TradestrategyTableModel extends TableModel {
 					.getObject();
 			element.setStrategy(strategy);
 
-			if (null == strategy.getStrategyManager()) {
-				this.setValueAt(DAOStrategyManager.newInstance(Decode.NONE),
-						row, column + 1);
-			} else {
+			if (strategy.hasStrategyManager()) {
 				this.setValueAt(DAOStrategyManager.newInstance(strategy
 						.getStrategyManager().getName()), row, column + 1);
+			} else {
+				this.setValueAt(DAOStrategyManager.newInstance(Decode.NONE),
+						row, column + 1);
 			}
 			break;
 		}
@@ -584,11 +584,11 @@ public class TradestrategyTableModel extends TableModel {
 		}
 		newRow.addElement(DAOStrategy.newInstance(element.getStrategy()
 				.getName()));
-		if (null == element.getStrategy().getStrategyManager()) {
-			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
-		} else {
+		if (element.getStrategy().hasStrategyManager()) {
 			newRow.addElement(DAOStrategyManager.newInstance(element
 					.getStrategy().getStrategyManager().getName()));
+		} else {
+			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
 		}
 
 		newRow.addElement(DAOPortfolio.newInstance(element.getPortfolio()

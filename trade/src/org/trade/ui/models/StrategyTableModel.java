@@ -209,11 +209,11 @@ public class StrategyTableModel extends AspectTableModel {
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getDescription());
 		newRow.addElement(element.getClassName());
-		if (null == element.getStrategyManager()) {
-			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
-		} else {
+		if (element.hasStrategyManager()) {
 			newRow.addElement(DAOStrategyManager.newInstance(element
 					.getStrategyManager().getName()));
+		} else {
+			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
 		}
 		if (null == element.getMarketData()) {
 			newRow.addElement(new YesNo());
