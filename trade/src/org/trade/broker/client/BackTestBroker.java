@@ -331,7 +331,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 * order. so we wait to see if those new orders need to be
 					 * filled.
 					 */
-					if (!this.tradestrategy.getStrategy().hasStrategyManager()) {
+					if (this.tradestrategy.getStrategy().hasStrategyManager()) {
 
 						synchronized (lockBackTestWorker) {
 							/*
