@@ -331,13 +331,17 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 * order. so we wait to see if those new orders need to be
 					 * filled.
 					 */
-					synchronized (lockBackTestWorker) {
-						/*
-						 * Wait for the strategy to create the OCA order.
-						 */
+					if (null != this.tradestrategy.getStrategy()
+							.getStrategyManager()) {
 
-						while (!positionCovered.get()) {
-							lockBackTestWorker.wait();
+						synchronized (lockBackTestWorker) {
+							/*
+							 * Wait for the strategy to create the OCA order.
+							 */
+
+							while (!positionCovered.get()) {
+								lockBackTestWorker.wait();
+							}
 						}
 					}
 					/*

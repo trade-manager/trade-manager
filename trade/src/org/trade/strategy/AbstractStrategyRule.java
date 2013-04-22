@@ -407,6 +407,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 */
 						if (isThereOpenPosition()) {
 							if (isPositionCovered()) {
+								_log.info("firePositionCovered Symbol: "
+										+ this.getSymbol());
 								this.firePositionCovered(this.tradestrategy);
 							}
 						}
@@ -415,6 +417,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 					} else {
 						if (isThereOpenPosition()) {
 							if (isPositionCovered()) {
+								_log.info("firePositionCovered Symbol: "
+										+ this.getSymbol());
 								this.firePositionCovered(this.tradestrategy);
 							}
 						}
