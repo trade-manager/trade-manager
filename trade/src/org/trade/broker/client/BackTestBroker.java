@@ -449,7 +449,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					&& order.getTransmit()) {
 
 				BigDecimal filledPrice = getFilledPrice(order, candle);
-				if (filledPrice.compareTo(BigDecimal.ZERO) > 0) {
+				if (null != filledPrice) {
 					if (!orderfilled)
 						orderfilled = true;
 					// If OCA cancel other side
@@ -556,7 +556,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				}
 			}
 		}
-		return BigDecimal.ZERO;
+		return null;
 	}
 
 	/**
