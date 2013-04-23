@@ -1167,14 +1167,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							+ transientInstance.getOrderKey());
 					TWSBrokerModel.logOrderState(orderState);
 					TWSBrokerModel.logTradeOrder(order);
-					boolean isFilled = transientInstance.getIsFilled();
 
 					transientInstance = m_tradePersistentModel
 							.persistTradeOrder(transientInstance);
-
-					// Let the controller know an order was filled
-					if (transientInstance.getIsFilled() && !isFilled)
-						this.fireTradeOrderFilled(transientInstance);
 
 					if (transientInstance.hasTradePosition()
 							&& !transientInstance.getTradePosition()
@@ -1183,7 +1178,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						this.firePositionClosed(transientInstance
 								.getTradePosition());
 					}
-
 				} else {
 					_log.info("Open order state changed. Status:"
 							+ orderState.m_status);
@@ -1307,15 +1301,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				transientInstance = m_tradePersistentModel
 						.persistTradeOrder(transientInstance);
 
-				// Let the controller know an order was filled
-				if (transientInstance.getIsFilled() && !isFilled)
-					this.fireTradeOrderFilled(transientInstance);
-
 				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
 					// Let the controller know a position was closed
 					this.fireTradeOrderCancelled(transientInstance);
 				} else {
 					this.fireTradeOrderStatusChanged(transientInstance);
+					// Let the controller know an order was filled
+					if (transientInstance.getIsFilled() && !isFilled)
+						this.fireTradeOrderFilled(transientInstance);
 				}
 			}
 		} catch (Exception ex) {

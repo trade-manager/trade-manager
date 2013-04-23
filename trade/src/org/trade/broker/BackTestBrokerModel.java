@@ -822,14 +822,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 							+ " filled.");
 					BackTestBrokerModel.logOrderState(orderState);
 					BackTestBrokerModel.logTradeOrder(order);
-					boolean isFilled = transientInstance.getIsFilled();
 
 					transientInstance = m_tradePersistentModel
 							.persistTradeOrder(transientInstance);
-
-					// Let the controller know an order was filled
-					if (transientInstance.getIsFilled() && !isFilled)
-						this.fireTradeOrderFilled(transientInstance);
 
 					if (transientInstance.hasTradePosition()
 							&& !transientInstance.getTradePosition()
@@ -943,15 +938,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				transientInstance = m_tradePersistentModel
 						.persistTradeOrder(transientInstance);
 
-				// Let the controller know an order was filled
-				if (transientInstance.getIsFilled() && !isFilled)
-					this.fireTradeOrderFilled(transientInstance);
-
 				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
 					// Let the controller know a position was closed
 					this.fireTradeOrderCancelled(transientInstance);
 				} else {
 					this.fireTradeOrderStatusChanged(transientInstance);
+					// Let the controller know an order was filled
+					if (transientInstance.getIsFilled() && !isFilled)
+						this.fireTradeOrderFilled(transientInstance);
 				}
 			}
 
