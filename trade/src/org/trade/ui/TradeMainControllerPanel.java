@@ -2109,19 +2109,20 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 		private void hasSubmittedInSeconds(int totalSumbitted)
 				throws InterruptedException {
-			long currentTime = System.currentTimeMillis();
-			int waitTime = 5;
-			_log.info("hasSubmittedInSeconds 6 in: "
-					+ ((currentTime - this.last6SubmittedTime) / 1000d));
+
 			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 					&& this.brokerManagerModel.isConnected()) {
+				long currentTime = System.currentTimeMillis();
+				int waitTime = 5;
+				_log.info("hasSubmittedInSeconds 6 in: "
+						+ ((currentTime - this.last6SubmittedTime) / 1000d));
 				if ((currentTime - this.last6SubmittedTime) < (waitTime * 1000)) {
 					timerRunning = new AtomicInteger(0);
 					timer.start();
 					synchronized (lockCoreUtilsTest) {
 						while (timerRunning.get() < (waitTime * 1000)
 								&& !this.isCancelled()) {
-							_log.error("Please wait "
+							_log.info("Please wait "
 									+ (waitTime - (timerRunning.get() / 1000))
 									+ " seconds.");
 							lockCoreUtilsTest.wait();

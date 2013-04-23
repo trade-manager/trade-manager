@@ -1043,37 +1043,33 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				return;
 			}
 
-			if (!transientInstance.getIsFilled()) {
-				/*
-				 * We already have this order fill.
-				 */
-				if (transientInstance.existTradeOrderfill(execution.m_execId))
-					return;
+			/*
+			 * We already have this order fill.
+			 */
+			if (transientInstance.existTradeOrderfill(execution.m_execId))
+				return;
 
-				TradeOrderfill tradeOrderfill = new TradeOrderfill();
-				TWSBrokerModel
-						.populateTradeOrderfill(execution, tradeOrderfill);
-				tradeOrderfill.setTradeOrder(transientInstance);
-				transientInstance.addTradeOrderfill(tradeOrderfill);
-				transientInstance.setAverageFilledPrice(tradeOrderfill
-						.getAveragePrice());
-				transientInstance.setFilledQuantity(tradeOrderfill
-						.getCumulativeQuantity());
-				transientInstance.setFilledDate(tradeOrderfill.getTime());
-				transientInstance = m_tradePersistentModel
-						.persistTradeOrderfill(transientInstance);
-				// Let the controller know an order was filled
-				if (transientInstance.getIsFilled())
-					this.fireTradeOrderFilled(transientInstance);
+			TradeOrderfill tradeOrderfill = new TradeOrderfill();
+			TWSBrokerModel.populateTradeOrderfill(execution, tradeOrderfill);
+			tradeOrderfill.setTradeOrder(transientInstance);
+			transientInstance.addTradeOrderfill(tradeOrderfill);
+			transientInstance.setAverageFilledPrice(tradeOrderfill
+					.getAveragePrice());
+			transientInstance.setFilledQuantity(tradeOrderfill
+					.getCumulativeQuantity());
+			transientInstance.setFilledDate(tradeOrderfill.getTime());
+			transientInstance = m_tradePersistentModel
+					.persistTradeOrderfill(transientInstance);
+			// Let the controller know an order was filled
+			if (transientInstance.getIsFilled())
+				this.fireTradeOrderFilled(transientInstance);
 
-				execDetails.put(transientInstance.getOrderKey(),
-						transientInstance);
-				_log.info("Exec Details for order key: "
-						+ transientInstance.getOrderKey() + " AvgPrice: "
-						+ execution.m_avgPrice + " CumQty: "
-						+ execution.m_cumQty + " Shares: " + execution.m_shares
-						+ " Price: " + execution.m_price);
-			}
+			execDetails.put(transientInstance.getOrderKey(), transientInstance);
+			_log.info("Exec Details for order key: "
+					+ transientInstance.getOrderKey() + " AvgPrice: "
+					+ execution.m_avgPrice + " CumQty: " + execution.m_cumQty
+					+ " Shares: " + execution.m_shares + " Price: "
+					+ execution.m_price);
 
 		} catch (Exception ex) {
 			error(reqId, 3160, "Errors saving execution: " + ex.getMessage());
