@@ -727,7 +727,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void positionClosed(TradePosition tradePosition) {
 		try {
 			if (m_brokerModel.isConnected()) {
-
+				tradePosition = m_tradePersistentModel
+						.findTradePositionById(tradePosition
+								.getIdTradePosition());
 				for (TradeOrder tradeOrder : tradePosition.getTradeOrders()) {
 					Tradestrategy tradestrategy = m_tradePersistentModel
 							.findTradestrategyById(tradeOrder
