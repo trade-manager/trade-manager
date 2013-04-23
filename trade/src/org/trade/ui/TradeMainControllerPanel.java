@@ -39,6 +39,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
@@ -51,11 +53,13 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1845,6 +1849,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private long startTime = 0;
 		private long last6SubmittedTime = 0;
 		private Integer backTestBarSize = 0;
+		private AtomicInteger timerRunning = null;
+		private final Object lockCoreUtilsTest = new Object();
+		private Timer timer = null;
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -1863,6 +1870,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.tradingdays = tradingdays;
 			backTestBarSize = ConfigProperties
 					.getPropAsInt("trade.backtest.barSize");
+			timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					synchronized (lockCoreUtilsTest) {
+						timerRunning.addAndGet(1000);
+						lockCoreUtilsTest.notifyAll();
+					}
+				}
+			});
 		}
 
 		/**
@@ -2035,15 +2050,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			if (((Math.floor(totalSumbitted / 58d) == (totalSumbitted / 58d)) && (totalSumbitted > 0))
 					&& this.brokerManagerModel.isConnected()) {
-				int waitTime = 0;
-				while ((waitTime < 601000) && !this.isCancelled()) {
-					String message = "Please wait "
-							+ (10 - (waitTime / 60000))
-							+ " minutes as there are more than 60 data requests.";
-					publish(message);
-					waitTime = waitTime + 1000;
-					Thread.sleep(1000);
+
+				timerRunning = new AtomicInteger(0);
+				timer.start();
+				synchronized (lockCoreUtilsTest) {
+					while (timerRunning.get() < 601000 && !this.isCancelled()) {
+						String message = "Please wait "
+								+ (10 - (timerRunning.get() / 60000))
+								+ " minutes as there are more than 60 data requests.";
+						publish(message);
+						lockCoreUtilsTest.wait();
+					}
 				}
+				timer.stop();
 			}
 
 			/*
@@ -2096,11 +2115,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					+ ((currentTime - this.last6SubmittedTime) / 1000d));
 			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
 					&& this.brokerManagerModel.isConnected()) {
-				while ((currentTime - this.last6SubmittedTime) < (waitTime * 1000)) {
-					_log.info("hasSubmittedInSeconds will sumbit in: "
-							+ (waitTime - ((currentTime - this.last6SubmittedTime) / 1000d)));
-					Thread.sleep(1000);
-					currentTime = System.currentTimeMillis();
+				if ((currentTime - this.last6SubmittedTime) < (waitTime * 1000)) {
+					timerRunning = new AtomicInteger(0);
+					timer.start();
+					synchronized (lockCoreUtilsTest) {
+						while (timerRunning.get() < (waitTime * 1000)
+								&& !this.isCancelled()) {
+							_log.error("Please wait "
+									+ (waitTime - (timerRunning.get() / 1000))
+									+ " seconds.");
+							lockCoreUtilsTest.wait();
+						}
+					}
+					timer.stop();
 				}
 				this.last6SubmittedTime = currentTime;
 			}

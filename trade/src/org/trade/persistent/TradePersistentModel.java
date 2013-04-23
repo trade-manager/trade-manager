@@ -1015,9 +1015,17 @@ public class TradePersistentModel implements PersistentModel {
 				BigDecimal avgFillPrice = new BigDecimal(filledValue
 						/ filledQuantity);
 				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
-				tradeOrder.setAverageFilledPrice(avgFillPrice);
-				tradeOrder.setFilledQuantity(filledQuantity);
-				tradeOrder.setFilledDate(filledDate);
+				/*
+				 * If filled qty is greater than current filled qty set the new
+				 * value. Note openOrder can update the filled order quantity
+				 * before the orderFills have arrived.
+				 */
+				if (CoreUtils.nullSafeComparator(new Integer(filledQuantity),
+						tradeOrder.getFilledQuantity()) > 0) {
+					tradeOrder.setAverageFilledPrice(avgFillPrice);
+					tradeOrder.setFilledQuantity(filledQuantity);
+					tradeOrder.setFilledDate(filledDate);
+				}
 			}
 			return persistTradeOrder(tradeOrder);
 

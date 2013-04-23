@@ -35,7 +35,13 @@
  */
 package org.trade.core.util;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.swing.Timer;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
@@ -125,10 +131,49 @@ public class CoreUtilsTest extends TestCase {
 				BigDecimal.ROUND_HALF_EVEN);
 		TestCase.assertEquals(new BigDecimal("35.34567"), avgFillPrice);
 
-		TestCase.assertEquals(0, BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
-		
-		TestCase.assertEquals(-1, BigDecimal.ZERO.compareTo(new BigDecimal(0.01)));
-		
-		TestCase.assertEquals(1, BigDecimal.ZERO.compareTo(new BigDecimal(-0.01)));
+		TestCase.assertEquals(0,
+				BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
+
+		TestCase.assertEquals(-1,
+				BigDecimal.ZERO.compareTo(new BigDecimal(0.01)));
+
+		TestCase.assertEquals(1,
+				BigDecimal.ZERO.compareTo(new BigDecimal(-0.01)));
+	}
+
+	private AtomicInteger timerRunning = null;
+	private final Object lockCoreUtilsTest = new Object();
+
+	@Test
+	public void test10MinTimer() {
+
+		try {
+
+			Timer timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					synchronized (lockCoreUtilsTest) {
+						timerRunning.addAndGet(1000);
+						lockCoreUtilsTest.notifyAll();
+					}
+				}
+			});
+
+			timerRunning = new AtomicInteger(0);
+			int sleeptime = 15;
+			timer.start();
+			synchronized (lockCoreUtilsTest) {
+				while (timerRunning.get() < (1000 * sleeptime)) {
+					String message = "Please wait "
+							+ (sleeptime - (timerRunning.get() / 1000))
+							+ " seconds.";
+					_log.info(message);
+					lockCoreUtilsTest.wait();
+				}
+			}
+			timer.stop();
+		} catch (Exception ex) {
+			_log.error("Error : " + ex.getMessage(), ex);
+			fail("Error : " + ex.getCause().getMessage());
+		}
 	}
 }

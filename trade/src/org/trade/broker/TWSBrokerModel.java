@@ -1062,6 +1062,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				transientInstance.setFilledDate(tradeOrderfill.getTime());
 				transientInstance = m_tradePersistentModel
 						.persistTradeOrderfill(transientInstance);
+				// Let the controller know an order was filled
+				if (transientInstance.getIsFilled())
+					this.fireTradeOrderFilled(transientInstance);
+
 				execDetails.put(transientInstance.getOrderKey(),
 						transientInstance);
 				_log.info("Exec Details for order key: "
@@ -1170,7 +1174,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.persistTradeOrder(transientInstance);
 
 					// Let the controller know an order was filled
-					this.fireTradeOrderFilled(transientInstance);
+					if (transientInstance.getIsFilled())
+						this.fireTradeOrderFilled(transientInstance);
 
 					if (transientInstance.hasTradePosition()
 							&& !transientInstance.getTradePosition()
@@ -1277,13 +1282,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				transientInstance.setWhyHeld(whyHeld);
 				changed = true;
 			}
-
-			if (changed) {
+			/*
+			 * If filled qty is greater than current filled qty set the new
+			 * value.
+			 */
+			if (CoreUtils.nullSafeComparator(new Integer(filled),
+					transientInstance.getFilledQuantity()) > 0) {
 				if (filled > 0) {
 					transientInstance.setAverageFilledPrice(new BigDecimal(
 							avgFillPrice));
 					transientInstance.setFilledQuantity(filled);
+					changed = true;
 				}
+			}
+
+			if (changed) {
 				transientInstance.setStatus(status.toUpperCase());
 				transientInstance.setWhyHeld(whyHeld);
 				_log.info("Order Status changed. Status: " + status);
@@ -1293,11 +1306,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				transientInstance = m_tradePersistentModel
 						.persistTradeOrder(transientInstance);
-				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
-					// Let the controller know a position was closed
-					this.fireTradeOrderCancelled(transientInstance);
+
+				// Let the controller know an order was filled
+				if (transientInstance.getIsFilled()) {
+					this.fireTradeOrderFilled(transientInstance);
 				} else {
-					this.fireTradeOrderStatusChanged(transientInstance);
+					if (OrderStatus.CANCELLED.equals(transientInstance
+							.getStatus())) {
+						// Let the controller know a position was closed
+						this.fireTradeOrderCancelled(transientInstance);
+					} else {
+						this.fireTradeOrderStatusChanged(transientInstance);
+					}
 				}
 			}
 		} catch (Exception ex) {

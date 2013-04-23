@@ -36,6 +36,7 @@
 package org.trade.broker;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -759,6 +760,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				transientInstance.setFilledDate(tradeOrderfill.getTime());
 				transientInstance = m_tradePersistentModel
 						.persistTradeOrderfill(transientInstance);
+				// Let the controller know an order was filled
+				if (transientInstance.getIsFilled())
+					this.fireTradeOrderFilled(transientInstance);
 			}
 
 		} catch (Exception ex) {
@@ -824,7 +828,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 							.persistTradeOrder(transientInstance);
 
 					// Let the controller know an order was filled
-					this.fireTradeOrderFilled(transientInstance);
+					if (transientInstance.getIsFilled())
+						this.fireTradeOrderFilled(transientInstance);
 
 					if (transientInstance.hasTradePosition()
 							&& !transientInstance.getTradePosition()
@@ -912,20 +917,45 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				transientInstance.setWhyHeld(whyHeld);
 				changed = true;
 			}
+			/*
+			 * If filled qty is greater than current filled qty set the new
+			 * value.
+			 */
+			if (CoreUtils.nullSafeComparator(new Integer(filled),
+					transientInstance.getFilledQuantity()) > 0) {
+				if (filled > 0) {
+					transientInstance.setAverageFilledPrice(new BigDecimal(
+							avgFillPrice));
+					transientInstance.setFilledQuantity(filled);
+					changed = true;
+				}
+			}
 
 			if (changed) {
 				transientInstance.setStatus(status.toUpperCase());
 				transientInstance.setWhyHeld(whyHeld);
-				_log.info("Order Status changed. Status:" + status);
+				_log.info("Order Status changed. Status: " + status);
 				TWSBrokerModel.logOrderStatus(orderId, status, filled,
 						remaining, avgFillPrice, permId, parentId,
 						lastFillPrice, clientId, whyHeld);
-				m_tradePersistentModel.persistTradeOrder(transientInstance);
-				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
-					// Let the controller know a position was closed
-					this.fireTradeOrderCancelled(transientInstance);
+
+				transientInstance = m_tradePersistentModel
+						.persistTradeOrder(transientInstance);
+
+				// Let the controller know an order was filled
+				if (transientInstance.getIsFilled()) {
+					this.fireTradeOrderFilled(transientInstance);
+				} else {
+					if (OrderStatus.CANCELLED.equals(transientInstance
+							.getStatus())) {
+						// Let the controller know a position was closed
+						this.fireTradeOrderCancelled(transientInstance);
+					} else {
+						this.fireTradeOrderStatusChanged(transientInstance);
+					}
 				}
 			}
+
 		} catch (Exception ex) {
 			error(orderId, 3100,
 					"Errors updating open order status: " + ex.getMessage());
