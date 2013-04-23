@@ -345,9 +345,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 					/*
 					 * If candle count > than current we have a new candle
 					 * 
-					 * If equal then we have ab updated candle.
+					 * If equal then we have an updated candle.
 					 * 
-					 * The currentCandleCount is less than the candle series.
+					 * The currentCandleCount is greater than the candle series.
 					 * Then another thread must have cleared the candle series
 					 * so shut down the strategy.
 					 */
@@ -356,12 +356,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 					boolean newCandle = false;
 					if ((candleSeries.getItemCount() - 1) > currentCandleCount) {
-
-						currentCandleCount = (candleSeries.getItemCount() - 1);
-
+						/*
+						 * Add one to the currentCandleCount until we catch up
+						 * to the candleSeries candle count. As it is possible
+						 * the candle count in another thread gets ahead of this
+						 * thread and so this thread is playing catch up.
+						 */
+						currentCandleCount++;
 						newCandle = true;
 
-					} else if (currentCandleCount < (candleSeries
+					} else if (currentCandleCount > (candleSeries
 							.getItemCount() - 1)) {
 
 						_log.info("Cancelled due to candleSeries clear Symbol: "
@@ -370,6 +374,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 								+ this.getClass().getName());
 						this.cancel();
 						break;
+					} else if (currentCandleCount == (candleSeries
+							.getItemCount() - 1)) {
+						/*
+						 * We have an updated candle
+						 */
 					}
 
 					if (currentCandleCount > -1) {
