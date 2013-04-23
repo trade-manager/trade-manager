@@ -98,14 +98,16 @@ public class CoreUtilsTest extends TestCase {
 
 			returnVal = CoreUtils.nullSafeComparator(null, 1);
 			TestCase.assertEquals(-1, returnVal);
-			
-			returnVal = CoreUtils.nullSafeComparator(null, new Integer(0) );
+
+			returnVal = CoreUtils.nullSafeComparator(null, new Integer(0));
 			TestCase.assertEquals(-1, returnVal);
-			
-			returnVal = CoreUtils.nullSafeComparator(new Integer(0), new Integer(0));
+
+			returnVal = CoreUtils.nullSafeComparator(new Integer(0),
+					new Integer(0));
 			TestCase.assertEquals(0, returnVal);
-			
-			returnVal = CoreUtils.nullSafeComparator(new Integer(1), new Integer(0));
+
+			returnVal = CoreUtils.nullSafeComparator(new Integer(1),
+					new Integer(0));
 			TestCase.assertEquals(1, returnVal);
 
 		} catch (Exception ex) {
@@ -122,5 +124,11 @@ public class CoreUtilsTest extends TestCase {
 		avgFillPrice = new BigDecimal("35.34567344").setScale(SCALE,
 				BigDecimal.ROUND_HALF_EVEN);
 		TestCase.assertEquals(new BigDecimal("35.34567"), avgFillPrice);
+
+		TestCase.assertEquals(0, BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
+		
+		TestCase.assertEquals(-1, BigDecimal.ZERO.compareTo(new BigDecimal(0.01)));
+		
+		TestCase.assertEquals(1, BigDecimal.ZERO.compareTo(new BigDecimal(-0.01)));
 	}
 }
