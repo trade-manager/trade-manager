@@ -2071,15 +2071,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * 
 		 * The following conditions can cause a pacing violation:
 		 * 
-		 * · Making identical historical data requests within 15 seconds;
+		 * Making identical historical data requests within 15 seconds;
 		 * 
-		 * · Making six or more historical data requests for the same Contract,
+		 * Making six or more historical data requests for the same Contract,
 		 * Exchange and Tick Type within two seconds.
 		 * 
 		 * Also, observe the following limitation when requesting historical
 		 * data:
 		 * 
-		 * · Do not make more than 60 historical data requests in any ten-minute
+		 * Do not make more than 60 historical data requests in any ten-minute
 		 * period.
 		 * 
 		 * @param totalSumbitted
