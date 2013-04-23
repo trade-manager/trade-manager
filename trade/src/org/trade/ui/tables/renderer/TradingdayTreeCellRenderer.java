@@ -106,7 +106,7 @@ public class TradingdayTreeCellRenderer extends DefaultTreeCellRenderer {
 					}
 
 					if (selected) {
-						this.setBackgroundSelectionColor(Color.black);
+						this.setBackgroundSelectionColor(backgroundSelectionColor);
 					}
 				}
 				this.setToolTipText("Select to open chart.");
