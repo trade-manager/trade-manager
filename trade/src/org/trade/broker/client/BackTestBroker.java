@@ -460,13 +460,14 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						// If OCA cancel other side
 						for (TradeOrder orderOCA : positionOrders
 								.getTradeOrders()) {
+							if (orderOCA.isDirty())
+								continue;
 
 							if (order.getOcaGroupName().equals(
 									orderOCA.getOcaGroupName())
 									&& !order.getOrderKey().equals(
 											orderOCA.getOrderKey())
-									&& !orderOCA.getIsFilled()
-									&& !orderOCA.isDirty()) {
+									&& !orderOCA.getIsFilled()) {
 								BigDecimal orderOCAFilledPrice = getFilledPrice(
 										orderOCA, candle);
 
@@ -488,7 +489,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 													orderOCAFilledPrice,
 													candle.getStartPeriod());
 											orderOCA.setDirty(true);
-
 											break;
 										}
 									} else {
