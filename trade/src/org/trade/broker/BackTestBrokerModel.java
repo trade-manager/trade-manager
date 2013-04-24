@@ -759,6 +759,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			boolean isFilled = transientInstance.getIsFilled();
 			transientInstance = m_tradePersistentModel
 					.persistTradeOrderfill(transientInstance);
+
 			// Let the controller know an order was filled
 			if (transientInstance.getIsFilled() && !isFilled)
 				this.fireTradeOrderFilled(transientInstance);

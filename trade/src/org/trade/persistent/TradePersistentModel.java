@@ -814,13 +814,17 @@ public class TradePersistentModel implements PersistentModel {
 			if (!tradeOrder.hasTradePosition()) {
 				if (CoreUtils.nullSafeComparator(
 						tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
+
 					positionOrders = this
 							.findPositionOrdersById(tradestrategyId);
 
-					tradePosition = this
-							.findOpenTradePositionByContractId(positionOrders
-									.getContract().getIdContract());
-					if (null == tradePosition) {
+					if (positionOrders.hasOpenTradePosition()) {
+						tradePosition = this
+								.findOpenTradePositionByContractId(positionOrders
+										.getContract().getIdContract());
+						if (!tradePosition.containsTradeOrder(tradeOrder))
+							tradePosition.addTradeOrder(tradeOrder);
+					} else {
 						tradePosition = new TradePosition(
 								positionOrders.getContract(),
 								tradeOrder.getFilledDate(),
@@ -832,9 +836,6 @@ public class TradePersistentModel implements PersistentModel {
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = (TradePosition) this
 								.persistAspect(tradePosition);
-					} else {
-						if (!tradePosition.containsTradeOrder(tradeOrder))
-							tradePosition.addTradeOrder(tradeOrder);
 					}
 					tradeOrder.setTradePosition(tradePosition);
 				} else {
