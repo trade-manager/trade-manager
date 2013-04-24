@@ -452,12 +452,12 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				if (null != filledPrice) {
 					if (!orderfilled)
 						orderfilled = true;
-					// If OCA cancel other side
+
 					if (null == order.getOcaGroupName()) {
 						createOrderExecution(contract, order, filledPrice,
 								candle.getStartPeriod());
 					} else {
-
+						// If OCA cancel other side
 						for (TradeOrder orderOCA : positionOrders
 								.getTradeOrders()) {
 
@@ -465,7 +465,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 									orderOCA.getOcaGroupName())
 									&& !order.getOrderKey().equals(
 											orderOCA.getOrderKey())
-									&& !orderOCA.getIsFilled()) {
+									&& !orderOCA.getIsFilled()
+									&& !orderOCA.isDirty()) {
 								BigDecimal orderOCAFilledPrice = getFilledPrice(
 										orderOCA, candle);
 
@@ -481,27 +482,34 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 										if (filledPrice
 												.compareTo(orderOCAFilledPrice) > 0) {
 											cancelOrder(contract, order);
+											order.setDirty(true);
 											createOrderExecution(contract,
 													orderOCA,
 													orderOCAFilledPrice,
 													candle.getStartPeriod());
+											orderOCA.setDirty(true);
+
 											break;
 										}
 									} else {
 										if (filledPrice
 												.compareTo(orderOCAFilledPrice) < 0) {
 											cancelOrder(contract, order);
+											order.setDirty(true);
 											createOrderExecution(contract,
 													orderOCA,
 													orderOCAFilledPrice,
 													candle.getStartPeriod());
+											orderOCA.setDirty(true);
 											break;
 										}
 									}
 								}
 								cancelOrder(contract, orderOCA);
+								orderOCA.setDirty(true);
 								createOrderExecution(contract, order,
 										filledPrice, candle.getStartPeriod());
+								order.setDirty(true);
 								break;
 							}
 						}
