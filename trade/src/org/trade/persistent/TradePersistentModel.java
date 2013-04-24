@@ -1022,7 +1022,7 @@ public class TradePersistentModel implements PersistentModel {
 				 * before the orderFills have arrived.
 				 */
 				if (CoreUtils.nullSafeComparator(new Integer(filledQuantity),
-						tradeOrder.getFilledQuantity()) > 0) {
+						tradeOrder.getFilledQuantity()) == 1) {
 					tradeOrder.setAverageFilledPrice(avgFillPrice);
 					tradeOrder.setFilledQuantity(filledQuantity);
 					tradeOrder.setFilledDate(filledDate);

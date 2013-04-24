@@ -918,7 +918,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			 * value.
 			 */
 			if (CoreUtils.nullSafeComparator(new Integer(filled),
-					transientInstance.getFilledQuantity()) > 0) {
+					transientInstance.getFilledQuantity()) == 1) {
 				if (filled > 0) {
 					transientInstance.setAverageFilledPrice(new BigDecimal(
 							avgFillPrice));
