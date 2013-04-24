@@ -1,28 +1,28 @@
-SELECT
-CAST(rand()*1000000000 as UNSIGNED INTEGER) as idTradelogDetail,
+select
+cast(rand()*1000000000 as unsigned integer) as idTradelogDetail,
 data.sortCol,
-IF(data.sortCol = 'Total' , 'Total', data.open) as open,
-IF(data.sortCol = 'Total' , data.symbol, IF(data.isOpenPosition is null,data.symbol ,IF(data.isOpenPosition = 1, data.symbol, null)))   as symbol,
+if(data.sortCol = 'Total' , 'Total', data.open) as open,
+if(data.sortCol = 'Total' , data.symbol, if(data.isOpenPosition is null,data.symbol ,if(data.isOpenPosition = 1, data.symbol, null)))   as symbol,
 data.idTradeStrategy as idTradeStrategy,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.longShort ,IF(data.isOpenPosition = 1, data.longShort, null)))  as longShort,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.tier ,IF(data.isOpenPosition = 1, data.tier, null)))  as tier,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.marketBias ,IF(data.isOpenPosition = 1, data.marketBias, null)))as marketBias,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.marketBar ,IF(data.isOpenPosition = 1, data.marketBar, null))) as marketBar,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.name ,IF(data.isOpenPosition = 1, data.name, null)))  as name,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.status ,IF(data.isOpenPosition = 1, data.status, null)))  as status,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.idTradePosition ,IF(data.isOpenPosition = 1, data.idTradePosition, null)))  as idTradePosition,
-IF(data.sortCol = 'Total' , null, IF(data.isOpenPosition is null,data.side ,IF(data.isOpenPosition = 1, data.side, null)))  as side,
-IF(data.sortCol = 'Total' , null, data.action) as action,
-IF(data.sortCol = 'Total' , null, data.stopPrice) as stopPrice,
-IF(data.sortCol = 'Total' , null, data.orderStatus) as orderStatus,
-IF(data.sortCol = 'Total' , null, data.filledDate) as filledDate,
-CAST(data.quantity AS SIGNED INTEGER) as quantity,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.longShort ,if(data.isOpenPosition = 1, data.longShort, null)))  as longShort,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.tier ,if(data.isOpenPosition = 1, data.tier, null)))  as tier,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.marketBias ,if(data.isOpenPosition = 1, data.marketBias, null)))as marketBias,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.marketBar ,if(data.isOpenPosition = 1, data.marketBar, null))) as marketBar,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.name ,if(data.isOpenPosition = 1, data.name, null)))  as name,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.status ,if(data.isOpenPosition = 1, data.status, null)))  as status,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.idTradePosition ,if(data.isOpenPosition = 1, data.idTradePosition, null)))  as idTradePosition,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.side ,if(data.isOpenPosition = 1, data.side, null)))  as side,
+if(data.sortCol = 'Total' , null, data.action) as action,
+if(data.sortCol = 'Total' , null, data.stopPrice) as stopPrice,
+if(data.sortCol = 'Total' , null, data.orderStatus) as orderStatus,
+if(data.sortCol = 'Total' , null, data.filledDate) as filledDate,
+cast(data.quantity AS SIGNED integer) as quantity,
 data.averageFilledPrice,
 data.commission,
-IF(data.quantity = 0,data.profitLoss,0) as profitLoss
-FROM (SELECT 
+if(data.quantity = 0,data.profitLoss,0) as profitLoss
+from (select 
 'A' as sortCol,
-DATE_FORMAT(tradingday.open , '%Y/%m/%d')as open,
+date_format(tradingday.open , '%Y/%m/%d')as open,
 contract.symbol as symbol,
 tradestrategy.idTradeStrategy as idTradeStrategy,
 tradestrategy.side as longShort,
@@ -38,11 +38,11 @@ tradeorder.action as action,
 tradeorder.stopPrice as stopPrice,
 tradeorder.status as orderStatus,
 tradeorder.filledDate as filledDate,
-((IF( tradeorder.action = 'BUY',  1 , -1)) *tradeorder.quantity) as quantity,
+((if( tradeorder.action = 'BUY',  1 , -1)) *tradeorder.quantity) as quantity,
 tradeorder.averageFilledPrice as averageFilledPrice,
-IFNULL(tradeorder.commission,0)  as commission,
+ifnull(tradeorder.commission,0)  as commission,
 tradeposition.totalNetValue as profitLoss
-FROM 
+from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
@@ -54,9 +54,9 @@ and tradingday.open between :start and :end
 and portfolio.idPortfolio = :idPortfolio
 and tradestrategy.trade = 1
 union all
-SELECT 
+select 
 'Total' as sortCol,
-DATE_FORMAT(tradingday.open , '%Y/%m/%d') as open,
+date_format(tradingday.open , '%Y/%m/%d') as open,
 contract.symbol as symbol,
 tradestrategy.idTradeStrategy as idTradeStrategy,
 tradestrategy.side as longShort,
@@ -72,11 +72,11 @@ tradeposition.idTradePosition as idTradePosition,
 "" as stopPrice,
 "" as orderStatus,
 null as filledDate,
-SUM((IF( tradeorder.action = 'BUY',  1 , -1)) * (IF(tradeorder.isFilled =1, 1, 0))* tradeorder.quantity) as quantity,
-(SUM((IF( tradeorder.action = 'BUY',  -1 , 1))* (IF(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice  * tradeorder.quantity)/SUM(((tradeorder.quantity/2)* (IF(tradeorder.isFilled =1, 1, 0))))) as averageFilledPrice,
-SUM(IFNULL(tradeorder.commission,0)) as commission,
-(SUM((IF( tradeorder.action = 'BUY',  -1 , 1))* (IF(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice * tradeorder.quantity) - SUM(IFNULL(tradeorder.commission,0)))as profitLoss
-FROM 
+sum((if( tradeorder.action = 'BUY',  1 , -1)) * (if(tradeorder.isFilled =1, 1, 0))* tradeorder.quantity) as quantity,
+(sum((if( tradeorder.action = 'BUY',  -1 , 1))* (if(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice  * tradeorder.quantity)/sum(((tradeorder.quantity/2)* (if(tradeorder.isFilled =1, 1, 0))))) as averageFilledPrice,
+sum(IFNULL(tradeorder.commission,0)) as commission,
+(sum((if( tradeorder.action = 'BUY',  -1 , 1))* (if(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice * tradeorder.quantity) - sum(ifnull(tradeorder.commission,0)))as profitLoss
+from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
@@ -98,10 +98,10 @@ tradingday.marketBar,
 strategy.name,
 tradestrategy.status,
 tradeposition.idTradePosition) AS data
-Order by
-data.open DESC,
-data.symbol ASC,
-data.idTradePosition ASC,
-data.sortCol ASC,
-data.isOpenPosition DESC,
-data.filledDate ASC
+order by
+data.open desc,
+data.symbol asc,
+data.idTradePosition asc,
+data.sortCol asc,
+data.isOpenPosition desc,
+data.filledDate asc

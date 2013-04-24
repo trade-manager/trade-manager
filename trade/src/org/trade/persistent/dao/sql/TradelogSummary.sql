@@ -1,19 +1,19 @@
-SELECT
-CAST(rand()*1000000000 as UNSIGNED INTEGER) as idTradelogSummary,
+select
+cast(rand()*1000000000 as unsigned integer) as idTradelogSummary,
 dataAll.period as period,
-(dataAll.winCount/ (dataAll.winCount  + dataAll.lossCount)) AS battingAverage,
-((dataAll.profitAmount/ dataAll.winCount)/((dataAll.lossAmount*-1)/dataAll.lossCount))  AS simpleSharpeRatio,
-CAST(dataAll.quantity AS SIGNED INTEGER) as quantity,
+(dataAll.winCount/ (dataAll.winCount  + dataAll.lossCount)) as battingAverage,
+((dataAll.profitAmount/ dataAll.winCount)/((dataAll.lossAmount*-1)/dataAll.lossCount))  as simpleSharpeRatio,
+cast(dataAll.quantity as signed integer) as quantity,
 dataAll.commission as commission,
 (dataAll.profitAmount + dataAll.lossAmount) as grossProfitLoss,
 (dataAll.profitAmount + dataAll.lossAmount - dataAll.commission) as netProfitLoss,
 dataAll.profitAmount as profitAmount,
 dataAll.lossAmount as lossAmount,
-CAST(dataAll.winCount AS SIGNED INTEGER)  as winCount,
-CAST(dataAll.lossCount AS SIGNED INTEGER)  as lossCount,
-CAST(dataAll.tradeCount AS SIGNED INTEGER)  as tradeCount,
-CAST(dataAll.tradestrategyCount AS SIGNED INTEGER)  as tradestrategyCount
-FROM (SELECT
+cast(dataAll.winCount as signed integer)  as winCount,
+cast(dataAll.lossCount as signed integer)  as lossCount,
+cast(dataAll.tradeCount as signed integer)  as tradeCount,
+cast(dataAll.tradestrategyCount as signed integer)  as tradestrategyCount
+from (select
 dataC.period as period,
 sum(dataC.quantity) as quantity,
 sum(dataC.commission) as commission,
@@ -23,7 +23,7 @@ sum(dataC.winCount) as winCount,
 sum(dataC.lossCount) as lossCount,
 sum(dataC.tradeCount) as tradeCount,
 sum(dataC.tradestrategyCount) as tradestrategyCount
-FROM( SELECT
+from( select
 'Total' as period,
 sum(dataA.quantity) as quantity,
 sum(dataA.commission) as commission,
@@ -33,31 +33,31 @@ sum(dataA.winCount) as winCount,
 sum(dataA.lossCount) as lossCount,
 sum(dataA.tradeCount) as tradeCount,
 sum(dataA.tradestrategyCount) as tradestrategyCount
-FROM (SELECT
+from (select
 dataD.period as period,
 dataD.quantityTotal as quantity,
 dataD.commission as commission,
-IF(dataD.quantity = 0 , dataD.profitAmount, 0) as profitAmount,
-IF(dataD.quantity = 0 , dataD.lossAmount, 0) as lossAmount,
-IF(dataD.quantity = 0 , dataD.winCount, 0) as winCount,
-IF(dataD.quantity = 0 , dataD.lossCount, 0) as lossCount,
+if(dataD.quantity = 0 , dataD.profitAmount, 0) as profitAmount,
+if(dataD.quantity = 0 , dataD.lossAmount, 0) as lossAmount,
+if(dataD.quantity = 0 , dataD.winCount, 0) as winCount,
+if(dataD.quantity = 0 , dataD.lossCount, 0) as lossCount,
 dataD.tradeCount as tradeCount,
 dataD.tradestrategyCount as tradestrategyCount
-FROM(
-SELECT 
-DATE_FORMAT(tradingday.open , '%Y/%m') AS period,
+from(
+select 
+date_format(tradingday.open , '%Y/%m') as period,
 contract.symbol,
 tradestrategy.idTradestrategy,
-SUM(IFNULL(tradeorder.quantity,0))  as quantityTotal,
-SUM((IF( tradeorder.action = 'BUY',  1 , -1)) * IFNULL(tradeorder.quantity,0))  as quantity,
-sum(IFNULL(tradeorder.commission,0))	 	AS commission,
-IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) > 0, SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	AS profitAmount,
-IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	AS lossAmount,
-(IF((tradestrategy.riskAmount/2) <= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
-(IF((-1*tradestrategy.riskAmount/2) >= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
-IF(IFNULL(tradeposition.idTradePosition,0),1, 0) AS tradeCount,
-0 AS tradestrategyCount
-FROM 
+sum(ifnull(tradeorder.quantity,0))  as quantityTotal,
+sum((if( tradeorder.action = 'BUY',  1 , -1)) * ifnull(tradeorder.quantity,0))  as quantity,
+sum(ifnull(tradeorder.commission,0))	 	as commission,
+if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) > 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as profitAmount,
+if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as lossAmount,
+(if((tradestrategy.riskAmount/2) <= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
+(if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
+if(ifnull(tradeposition.idTradePosition,0),1, 0) as tradeCount,
+0 as tradestrategyCount
+from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
@@ -72,21 +72,21 @@ group by
 period,
 contract.symbol,
 tradestrategy.idTradestrategy
-UNION ALL
-SELECT 
-DATE_FORMAT(tradingday.open , '%Y/%m') AS period,
+union all
+select 
+date_format(tradingday.open , '%Y/%m') as period,
 contract.symbol,
 tradestrategy.idTradestrategy,
 0 as quantityTotal,
 0  as quantity,
-0	 	AS commission,
-0 AS profitAmount,
-0	AS lossAmount,
+0	 	as commission,
+0 as profitAmount,
+0	as lossAmount,
 0 as winCount,
 0 as lossCount,
-0 AS tradeCount,
-IF(IFNULL(tradestrategy.idtradestrategy,0),1, 0) AS tradestrategyCount
-FROM 
+0 as tradeCount,
+if(ifnull(tradestrategy.idtradestrategy,0),1, 0) as tradestrategyCount
+from 
 tradingday left outer join tradestrategy on tradingday.idTradingday = tradestrategy.idTradingday  
 left outer join contract on tradestrategy.idContract = contract.idContract
 left outer join strategy on tradestrategy.idStrategy = strategy.idStrategy
@@ -100,8 +100,8 @@ tradestrategy.idTradestrategy) dataD) dataA
 group by dataA.period) dataC
 group by
 dataC.period
-UNION ALL
-SELECT
+union all
+select
 dataM.period as period,
 sum(dataM.quantity) as quantity,
 sum(dataM.commission) as commission,
@@ -111,32 +111,32 @@ sum(dataM.winCount) as winCount,
 sum(dataM.lossCount) as lossCount,
 sum(dataM.tradeCount) as tradeCount,
 sum(dataM.tradestrategyCount) as tradestrategyCount
-FROM (
-SELECT
+from (
+select
 dataD.period as period,
 dataD.quantityTotal as quantity,
 dataD.commission as commission,
-IF(dataD.quantity = 0 , dataD.profitAmount, 0) as profitAmount,
-IF(dataD.quantity = 0 , dataD.lossAmount, 0) as lossAmount,
-IF(dataD.quantity = 0 , dataD.winCount, 0) as winCount,
-IF(dataD.quantity = 0 , dataD.lossCount, 0) as lossCount,
+if(dataD.quantity = 0 , dataD.profitAmount, 0) as profitAmount,
+if(dataD.quantity = 0 , dataD.lossAmount, 0) as lossAmount,
+if(dataD.quantity = 0 , dataD.winCount, 0) as winCount,
+if(dataD.quantity = 0 , dataD.lossCount, 0) as lossCount,
 dataD.tradeCount as tradeCount,
 dataD.tradestrategyCount as tradestrategyCount
-FROM(
-SELECT 
-DATE_FORMAT(tradingday.open , '%Y/%m') AS period,
+from(
+select 
+date_format(tradingday.open , '%Y/%m') as period,
 contract.symbol,
 tradestrategy.idTradestrategy,
-SUM(IFNULL(tradeorder.quantity,0))  as quantityTotal,
-SUM((IF( tradeorder.action = 'BUY',  1 , -1)) * IFNULL(tradeorder.quantity,0))  as quantity,
-sum(IFNULL(tradeorder.commission,0))	 	AS commission,
-IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) > 0, SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	AS profitAmount,
-IF(SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	AS lossAmount,
-(IF((tradestrategy.riskAmount/2) <= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
-(IF((-1*tradestrategy.riskAmount/2) >= (SUM(((IF( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
-IF(IFNULL(tradeposition.idTradePosition,0),1, 0) AS tradeCount,
-0 AS tradestrategyCount
-FROM 
+sum(ifnull(tradeorder.quantity,0))  as quantityTotal,
+sum((if( tradeorder.action = 'BUY',  1 , -1)) * ifnull(tradeorder.quantity,0))  as quantity,
+sum(ifnull(tradeorder.commission,0))	 	as commission,
+if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) > 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as profitAmount,
+if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as lossAmount,
+(if((tradestrategy.riskAmount/2) <= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
+(if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
+if(ifnull(tradeposition.idTradePosition,0),1, 0) as tradeCount,
+0 as tradestrategyCount
+from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
 inner join contract on tradestrategy.idContract = contract.idContract
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
@@ -151,21 +151,21 @@ group by
 period,
 contract.symbol,
 tradestrategy.idTradestrategy
-UNION ALL
-SELECT 
-DATE_FORMAT(tradingday.open , '%Y/%m') AS period,
+union all
+select 
+date_format(tradingday.open , '%Y/%m') as period,
 contract.symbol,
 tradestrategy.idTradestrategy,
 0 as quantityTotal,
 0  as quantity,
-0	 	AS commission,
-0 AS profitAmount,
-0	AS lossAmount,
+0	 	as commission,
+0 as profitAmount,
+0	as lossAmount,
 0 as winCount,
 0 as lossCount,
-0 AS tradeCount,
-IF(IFNULL(tradestrategy.idtradestrategy,0),1, 0) AS tradestrategyCount
-FROM 
+0 as tradeCount,
+if(ifnull(tradestrategy.idtradestrategy,0),1, 0) as tradestrategyCount
+from 
 tradingday left outer join tradestrategy on tradingday.idTradingday = tradestrategy.idTradingday  
 left outer join contract on tradestrategy.idContract = contract.idContract
 left outer join strategy on tradestrategy.idStrategy = strategy.idStrategy
@@ -178,4 +178,4 @@ contract.symbol,
 tradestrategy.idTradestrategy) dataD
 ) dataM
 group by dataM.period) dataAll
-order by dataAll.period DESC
+order by dataAll.period desc
