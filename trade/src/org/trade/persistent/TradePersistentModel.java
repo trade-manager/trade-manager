@@ -966,7 +966,7 @@ public class TradePersistentModel implements PersistentModel {
 				 * update the trade.
 				 */
 				if (CoreUtils.nullSafeComparator(comms.getBigDecimalValue(),
-						tradePosition.getTotalCommission()) != 0) {
+						tradePosition.getTotalCommission()) == 1) {
 					tradePosition
 							.setTotalCommission(comms.getBigDecimalValue());
 					tradePosition.setUpdateDate(new Date());
