@@ -6,7 +6,7 @@ if(data.sortCol = 'Total' , data.symbol, if(data.isOpenPosition is null,data.sym
 data.idTradeStrategy as idTradeStrategy,
 if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.longShort ,if(data.isOpenPosition = 1, data.longShort, null)))  as longShort,
 if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.tier ,if(data.isOpenPosition = 1, data.tier, null)))  as tier,
-if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.marketBias ,if(data.isOpenPosition = 1, data.marketBias, null)))as marketBias,
+if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.marketBias ,if(data.isOpenPosition = 1, data.marketBias, null))) as marketBias,
 if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.marketBar ,if(data.isOpenPosition = 1, data.marketBar, null))) as marketBar,
 if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.name ,if(data.isOpenPosition = 1, data.name, null)))  as name,
 if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.status ,if(data.isOpenPosition = 1, data.status, null)))  as status,
@@ -16,13 +16,13 @@ if(data.sortCol = 'Total' , null, data.action) as action,
 if(data.sortCol = 'Total' , null, data.stopPrice) as stopPrice,
 if(data.sortCol = 'Total' , null, data.orderStatus) as orderStatus,
 if(data.sortCol = 'Total' , null, data.filledDate) as filledDate,
-cast(data.quantity AS SIGNED integer) as quantity,
+cast(data.quantity as signed integer) as quantity,
 data.averageFilledPrice,
 data.commission,
 if(data.quantity = 0,data.profitLoss,0) as profitLoss
 from (select 
 'A' as sortCol,
-date_format(tradingday.open , '%Y/%m/%d')as open,
+date_format(tradingday.open , '%Y/%m/%d') as open,
 contract.symbol as symbol,
 tradestrategy.idTradeStrategy as idTradeStrategy,
 tradestrategy.side as longShort,
@@ -97,7 +97,7 @@ tradingday.marketBias,
 tradingday.marketBar,
 strategy.name,
 tradestrategy.status,
-tradeposition.idTradePosition) AS data
+tradeposition.idTradePosition) as data
 order by
 data.open desc,
 data.symbol asc,

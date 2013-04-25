@@ -1870,10 +1870,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.tradingdays = tradingdays;
 			backTestBarSize = ConfigProperties
 					.getPropAsInt("trade.backtest.barSize");
-			timer = new Timer(1000, new ActionListener() {
+			timer = new Timer(250, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					synchronized (lockCoreUtilsTest) {
-						timerRunning.addAndGet(1000);
+						timerRunning.addAndGet(250);
 						lockCoreUtilsTest.notifyAll();
 					}
 				}
