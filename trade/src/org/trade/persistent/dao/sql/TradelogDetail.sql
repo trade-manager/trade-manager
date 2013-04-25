@@ -2,7 +2,7 @@ select
 cast(rand()*1000000000 as unsigned integer) as idTradelogDetail,
 data.sortCol,
 if(data.sortCol = 'Total' , 'Total', data.open) as open,
-if(data.sortCol = 'Total' , data.symbol, if(data.isOpenPosition is null,data.symbol ,if(data.isOpenPosition = 1, data.symbol, null)))   as symbol,
+if(data.sortCol = 'Total' , data.symbol, if(data.isOpenPosition is null,data.symbol ,if(data.isOpenPosition = 1, data.symbol,  if(data.filledDate is null,data.symbol, null))))   as symbol,
 data.idTradeStrategy as idTradeStrategy,
 if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.longShort ,if(data.isOpenPosition = 1, data.longShort, null)))  as longShort,
 if(data.sortCol = 'Total' , null, if(data.isOpenPosition is null,data.tier ,if(data.isOpenPosition = 1, data.tier, null)))  as tier,
