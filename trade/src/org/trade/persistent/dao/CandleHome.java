@@ -128,7 +128,7 @@ public class CandleHome {
 						Integer idTradingday = tradingday.getIdTradingDay();
 						Integer idContract = contract.getIdContract();
 						Integer barSize = candleSeries.getBarSize();
-						String hqlDelete = "delete Candle where idContract = :idContract and idTradingday = :idTradingday and barSize = :barSize";
+						String hqlDelete = "delete candle where idContract = :idContract and idTradingday = :idTradingday and barSize = :barSize";
 						entityManager.createQuery(hqlDelete)
 								.setParameter("idContract", idContract)
 								.setParameter("idTradingday", idTradingday)
