@@ -361,7 +361,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	public void setTradePosition(TradePosition tradePosition) {
 		this.tradePosition = tradePosition;
 	}
-	
+
 	/**
 	 * Method hasTradePosition.
 	 * 
