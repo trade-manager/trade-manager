@@ -149,24 +149,24 @@ public class CoreUtilsTest extends TestCase {
 
 		try {
 
-			Timer timer = new Timer(1000, new ActionListener() {
+			Timer timer = new Timer(250, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					synchronized (lockCoreUtilsTest) {
-						timerRunning.addAndGet(1000);
+						timerRunning.addAndGet(250);
 						lockCoreUtilsTest.notifyAll();
 					}
 				}
 			});
 
 			timerRunning = new AtomicInteger(0);
-			int sleeptime = 15;
+			int sleeptime = 5;
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
 				while (timerRunning.get() < (1000 * sleeptime)) {
 					String message = "Please wait "
 							+ (sleeptime - (timerRunning.get() / 1000))
 							+ " seconds.";
-					_log.info(message);
+					_log.error(message);
 					lockCoreUtilsTest.wait();
 				}
 			}
