@@ -127,15 +127,18 @@ public class TradePersistentModel implements PersistentModel {
 	 *            Date
 	 * @param filter
 	 *            boolean
+	 * @param symbol
+	 *            String
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradelogReport(Account,
 	 *      Date, Date, boolean)
 	 */
 	public TradelogReport findTradelogReport(Portfolio portfolio, Date start,
-			Date end, boolean filter) throws PersistentModelException {
+			Date end, boolean filter, String symbol)
+			throws PersistentModelException {
 		return m_tradelogHome.findByTradelogReport(portfolio, start, end,
-				filter);
+				filter, symbol);
 	}
 
 	/**

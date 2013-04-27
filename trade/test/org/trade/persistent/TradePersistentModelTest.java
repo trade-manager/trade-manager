@@ -1129,7 +1129,7 @@ public class TradePersistentModelTest extends TestCase {
 			TradelogReport result = this.tradePersistentModel
 					.findTradelogReport(this.tradestrategy.getPortfolio(),
 							TradingCalendar.getYearStart(), this.tradestrategy
-									.getTradingday().getClose(), true);
+									.getTradingday().getClose(), true, null);
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradelogReport Msg: " + e.getMessage());

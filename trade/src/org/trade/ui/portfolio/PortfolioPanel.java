@@ -65,6 +65,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.MaskFormatter;
 
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
@@ -90,6 +91,7 @@ import org.trade.ui.tables.TradelogDetailTable;
 import org.trade.ui.tables.TradelogSummaryTable;
 import org.trade.ui.widget.DAODecodeComboBoxEditor;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
+import org.trade.ui.widget.StringField;
 
 /**
  */
@@ -109,10 +111,15 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private JSpinner spinnerStart = new JSpinner();
 	private JSpinner spinnerEnd = new JSpinner();
 	private JCheckBox filterButton = new JCheckBox("Show not traded");
+	private StringField symbolField = null;
 	private DAODecodeComboBoxEditor portfolioEditorComboBox = null;
 	private static final String DATEFORMAT = "MM/dd/yyyy";
 	private TradelogDetail selectedTradelogDetail = null;
 	private Portfolio portfolio = null;
+
+	private static final String MASK = "**********";
+	private static final String VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789. ";
+	private static final String PLACE_HOLDER = " ";
 
 	/**
 	 * Constructor for PortfolioPanel.
@@ -129,6 +136,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			if (null != getMenu())
 				getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
+
 			m_tradePersistentModel = tradePersistentModel;
 			m_csvDefaultDir = ConfigProperties
 					.getPropAsString("trade.csv.default.dir");
@@ -168,12 +176,17 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JPanel jPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel startLabel = new JLabel("Start Date:");
 			JLabel endLabel = new JLabel("End Date:");
+			JLabel symbolLabel = new JLabel("Symbol:");
+			symbolField = new StringField(new MaskFormatter(MASK), VALID_CHARS,
+					PLACE_HOLDER);
 			jPanel2.add(portfolioLabel, null);
 			jPanel2.add(portfolioEditorComboBox, null);
 			jPanel2.add(startLabel, null);
 			jPanel2.add(spinnerStart, null);
 			jPanel2.add(endLabel, null);
 			jPanel2.add(spinnerEnd, null);
+			jPanel2.add(symbolLabel, null);
+			jPanel2.add(symbolField, null);
 			jPanel2.add(filterButton, null);
 			jPanel2.setBorder(new BevelBorder(BevelBorder.RAISED));
 
@@ -244,14 +257,19 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 				startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
 				spinnerStart.setValue(startDate);
 			}
+			String symbol = symbolField.getText().toUpperCase().trim();
+			if (symbol.length() == 0)
+				symbol = null;
+
 			m_tradelogReport = m_tradePersistentModel.findTradelogReport(
 					this.portfolio, startDate, endDate,
-					filterButton.isSelected());
+					filterButton.isSelected(), symbol);
 			this.clearStatusBarMessage();
 			if (m_tradelogReport.getTradelogDetail().isEmpty()) {
 				this.setStatusBarMessage("No data found for selected criteria",
 						INFORMATION);
 			}
+
 			m_tradelogDetailModel.setData(m_tradelogReport);
 			m_tradelogSummaryModel.setData(m_tradelogReport);
 			RowSorter<?> rsDetail = m_tableTradelogDetail.getRowSorter();

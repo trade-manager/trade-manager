@@ -425,11 +425,14 @@ public interface PersistentModel {
 	 *            Date
 	 * @param filter
 	 *            boolean
+	 * @param symbol
+	 *            String
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 */
 	TradelogReport findTradelogReport(Portfolio portfolio, Date start,
-			Date end, boolean filter) throws PersistentModelException;
+			Date end, boolean filter, String symbol)
+			throws PersistentModelException;
 
 	/**
 	 * Method findCandlesByContractDateRangeBarSize.

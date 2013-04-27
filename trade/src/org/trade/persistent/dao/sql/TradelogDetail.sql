@@ -50,6 +50,7 @@ inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 left outer join tradeorder on tradestrategy.idTradestrategy = tradeorder.idTradestrategy
 left outer join tradeposition on tradeposition.idTradePosition = tradeorder.idTradePosition
 where  (1 = :filter or tradeorder.isFilled = 1)
+and (isnull(:symbol) or contract.symbol = :symbol)
 and tradingday.open between :start and :end
 and portfolio.idPortfolio = :idPortfolio
 and tradestrategy.trade = 1
@@ -74,7 +75,7 @@ tradeposition.idTradePosition as idTradePosition,
 null as filledDate,
 sum((if( tradeorder.action = 'BUY',  1 , -1)) * (if(tradeorder.isFilled =1, 1, 0))* tradeorder.quantity) as quantity,
 (sum((if( tradeorder.action = 'BUY',  -1 , 1))* (if(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice  * tradeorder.quantity)/sum(((tradeorder.quantity/2)* (if(tradeorder.isFilled =1, 1, 0))))) as averageFilledPrice,
-sum(IFNULL(tradeorder.commission,0)) as commission,
+sum(ifnull(tradeorder.commission,0)) as commission,
 (sum((if( tradeorder.action = 'BUY',  -1 , 1))* (if(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice * tradeorder.quantity) - sum(ifnull(tradeorder.commission,0)))as profitLoss
 from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
@@ -85,6 +86,7 @@ left outer join tradeorder on tradestrategy.idTradestrategy = tradeorder.idTrade
 left outer join tradeposition on tradeposition.idTradePosition = tradeorder.idTradePosition
 where tradeorder.isFilled =1
 and (1 = :filter or tradeorder.isFilled = 1)
+and (isnull(:symbol) or contract.symbol = :symbol)
 and tradingday.open between :start and :end
 and portfolio.idPortfolio = :idPortfolio
 and tradestrategy.trade = 1
