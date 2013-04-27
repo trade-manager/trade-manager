@@ -536,7 +536,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		while (scanLine.hasNext()) {
 			// display csv values
 			tokenNumber++;
-			String token = scanLine.next();
+			String token = scanLine.next().trim();
+			if (token.length() == 0)
+				continue;
 
 			switch (tokenNumber) {
 			case 1: {
@@ -608,7 +610,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				while (custScan.hasNext()) {
 					// display csv values
 					custTokenNumber++;
-					String custToken = custScan.next();
+					String custToken = custScan.next().trim();
+					if (custToken.length() == 0)
+						continue;
 
 					switch (custTokenNumber) {
 					case 1: {
