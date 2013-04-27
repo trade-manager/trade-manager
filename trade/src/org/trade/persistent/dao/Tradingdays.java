@@ -397,7 +397,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		 * CSV file format CSV file format is: DES, Underlying, Sec Type,
 		 * Exchange, Expiration (yyyyMM, or yyyyMMdd opt),Strike
 		 * Price(opt),PUT/CALL
-		 * (opt),Multiplier(opt),BOT/SLD(opt)|DATE(MM/dd/yyyy) (opt)| Tier(Opt)|
+		 * (opt),Multiplier(opt),|BOT/SLD(opt)|DATE(MM/dd/yyyy) (opt)| Tier(Opt)|
 		 * Mkt Bias(opt)| Mkt Bar(opt)| Mkt Gap(opt)");
 		 */
 		FileReader fileReader = null;
