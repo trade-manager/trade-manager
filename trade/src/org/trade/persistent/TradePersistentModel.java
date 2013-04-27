@@ -37,6 +37,7 @@ package org.trade.persistent;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.persistence.OptimisticLockException;
@@ -320,7 +321,8 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 		TradePosition instance = m_tradePositionHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException("Trade not found for id: " + id);
+			throw new PersistentModelException(
+					"TradePosition not found for id: " + id);
 		return instance;
 	}
 
@@ -464,33 +466,33 @@ public class TradePersistentModel implements PersistentModel {
 		try {
 			transientInstance.setStatus(null);
 			m_aspectHome.persist(transientInstance);
-			TradePosition tradePosition = null;
+
+			Hashtable<Integer, TradePosition> tradePositions = new Hashtable<Integer, TradePosition>();
 			for (TradeOrder tradeOrder : transientInstance.getTradeOrders()) {
-				/*
-				 * Get the latest version of the trade to delete.
-				 */
-				if (null == tradePosition && tradeOrder.hasTradePosition())
-					tradePosition = tradeOrder.getTradePosition();
+				if (tradeOrder.hasTradePosition())
+					tradePositions.put(tradeOrder.getTradePosition()
+							.getIdTradePosition(), tradeOrder
+							.getTradePosition());
+
 				if (null != tradeOrder.getIdTradeOrder()) {
 					Aspect instance = m_aspectHome.findById(tradeOrder);
 					m_aspectHome.remove(instance);
 				}
 			}
-			if (null != tradePosition) {
+			for (TradePosition tradePosition : tradePositions.values()) {
 				tradePosition = this.findTradePositionById(tradePosition
 						.getIdTradePosition());
-				if (tradePosition.getTradeOrders().isEmpty())
-					m_aspectHome.remove(tradePosition);
+				m_aspectHome.remove(tradePosition);
 			}
 
 			transientInstance.getTradeOrders().clear();
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
-					"Error removing Tradestrategy Trades. Please refresh before remove.");
+					"Error removing Tradestrategy TradePositions. Please refresh before remove.");
 
 		} catch (Exception ex) {
 			throw new PersistentModelException(
-					"Error removing Tradestrategy Trades: "
+					"Error removing Tradestrategy TradePositions: "
 							+ transientInstance.getContract().getSymbol()
 							+ "\n Msg: " + ex.getMessage());
 		}
