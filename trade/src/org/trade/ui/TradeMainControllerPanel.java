@@ -2031,6 +2031,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			if (this.brokerManagerModel.isHistoricalDataRunning(contract)
 					|| this.isCancelled()) {
+				_log.error("submitBrokerRequest contract already running: "
+						+ contract.getSymbol() + " endDate: " + endDate
+						+ " barSize: " + barSize);
 				return totalSumbitted;
 			}
 			_log.info("submitBrokerRequest: " + contract.getSymbol()
@@ -2333,7 +2336,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					 * 60 requests in a 10min period to avoid TWS pacing errors
 					 */
 
-					if (!prevContract.equals(tradestrategy.getContract())) {
+					if (!prevContract.equals(tradestrategy.getContract())
+							|| !prevBarSize.equals(tradestrategy.getBarSize())
+							|| !prevChartDays.equals(tradestrategy
+									.getChartDays())) {
 						totalSumbitted = submitBrokerRequest(prevContract,
 								tradingday.getClose(), prevBarSize,
 								prevChartDays, totalSumbitted);
@@ -2441,8 +2447,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 			Tradingday toProcessTradingday = (Tradingday) tradingday.clone();
 			Contract currContract = null;
-			Integer currBarSize = null;
-			Integer currChartDays = null;
 
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 				if (this.brokerManagerModel
@@ -2450,17 +2454,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					if (!reProcessTradingday.existTradestrategy(tradestrategy))
 						reProcessTradingday.addTradestrategy(tradestrategy);
 				} else {
-					toProcessTradingday.addTradestrategy(tradestrategy);
-					if (tradestrategy.getContract().equals(currContract)
-							&& tradestrategy.getBarSize().equals(currBarSize)
-							&& tradestrategy.getChartDays().equals(
-									currChartDays)) {
-						currContract.addTradestrategy(tradestrategy);
+
+					if (tradestrategy.getContract().equals(currContract)) {
+						if (!reProcessTradingday
+								.existTradestrategy(tradestrategy))
+							reProcessTradingday.addTradestrategy(tradestrategy);
 					} else {
 						currContract = tradestrategy.getContract();
-						currChartDays = tradestrategy.getChartDays();
-						currBarSize = tradestrategy.getBarSize();
 						currContract.addTradestrategy(tradestrategy);
+						toProcessTradingday.addTradestrategy(tradestrategy);
 					}
 				}
 			}
