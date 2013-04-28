@@ -431,6 +431,8 @@ public class CoreUtils {
 	 * @return boolean
 	 */
 	public static boolean isNumeric(String number) {
-		return number.matches("-?\\d+(\\.\\d+)?");
+		if (null != number)
+			return number.matches("-?\\d+(\\.\\d+)?");
+		return false;
 	}
 }

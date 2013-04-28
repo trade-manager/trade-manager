@@ -67,7 +67,6 @@ public class CoreUtilsTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
-
 	}
 
 	/**
@@ -76,7 +75,6 @@ public class CoreUtilsTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-
 	}
 
 	@Test
@@ -166,7 +164,7 @@ public class CoreUtilsTest extends TestCase {
 					String message = "Please wait "
 							+ (sleeptime - (timerRunning.get() / 1000))
 							+ " seconds.";
-					_log.error(message);
+					_log.info(message);
 					lockCoreUtilsTest.wait();
 				}
 			}

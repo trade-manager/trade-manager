@@ -100,15 +100,6 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onConnect(host, port, clientId);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 			TestCase.assertNotNull(this.tradestrategy);
-			// try {
-			// do {
-			// Thread.sleep(3000);
-			// } while (!m_brokerModel.isConnected());
-			// assertTrue("Connected to TWS", m_brokerModel.isConnected());
-			//
-			// } catch (InterruptedException e) {
-			// _log.info(" Thread interrupt: " + e.getMessage());
-			// }
 
 		} catch (Exception e) {
 			TestCase.fail("Error on setup " + e.getMessage());
