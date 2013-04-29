@@ -646,6 +646,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 			BigDecimal FAPercent) throws ValueTypeException,
 			BrokerModelException, PersistentModelException {
 
+		if (quantity == 0)
+			throw new BrokerModelException(1, 62, "Quantity cannot be zero");
+
 		if (roundPrice) {
 			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
 			if (null != this.getOpenTradePosition()) {
@@ -952,6 +955,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 			StrategyRuleException {
 
 		Date createDate = new Date();
+
+		if (quantity == 0)
+			throw new BrokerModelException(1, 62, "Quantity cannot be zero");
 
 		if (!this.isThereOpenPosition()) {
 			throw new StrategyRuleException(1, 80, "Error position is not open");
