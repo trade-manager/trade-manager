@@ -55,7 +55,10 @@ if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * trade
 if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as lossAmount,
 (if((tradestrategy.riskAmount/2) <= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
 (if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
-if(ifnull(tradeposition.idTradePosition,0),1, 0) as tradeCount,
+(select count(distinct tradeposition.idTradePosition) from tradeposition
+inner join contract on tradeposition.idContract = contract.idContract
+inner join tradeOrder on tradeposition.idtradeposition = tradeOrder.idtradeposition
+where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy)  as tradeCount,
 0 as tradestrategyCount
 from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
@@ -134,7 +137,10 @@ if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * trade
 if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as lossAmount,
 (if((tradestrategy.riskAmount/2) <= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
 (if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
-if(ifnull(tradeposition.idTradePosition,0),1, 0) as tradeCount,
+(select count(distinct tradeposition.idTradePosition) from tradeposition
+inner join contract on tradeposition.idContract = contract.idContract
+inner join tradeOrder on tradeposition.idtradeposition = tradeOrder.idtradeposition
+where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy)  as tradeCount,
 0 as tradestrategyCount
 from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
