@@ -2057,11 +2057,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				timerRunning = new AtomicInteger(0);
 				timer.start();
 				synchronized (lockCoreUtilsTest) {
-					while (timerRunning.get() < 601000 && !this.isCancelled()) {
-						String message = "Please wait "
-								+ (10 - (timerRunning.get() / 60000))
-								+ " minutes as there are more than 60 data requests.";
-						publish(message);
+					while (timerRunning.get() / 1000 < 601
+							&& !this.isCancelled()) {
+						if ((timerRunning.get() % 60000) == 0) {
+							String message = "Please wait "
+									+ (10 - (timerRunning.get() / 1000 / 60))
+									+ " minutes as there are more than 60 data requests.";
+							publish(message);
+						}
 						lockCoreUtilsTest.wait();
 					}
 				}

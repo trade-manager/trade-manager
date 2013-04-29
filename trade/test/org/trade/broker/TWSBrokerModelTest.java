@@ -92,6 +92,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	private Integer port = null;
 	private String host = null;
 	private int grandTotal = 0;
+	private int testCaseGrandTotal = 0;
 	private long last6SubmittedTime = 0;
 	private Integer backTestBarSize = 0;
 	private long startTime = 0;
@@ -165,21 +166,28 @@ public class TWSBrokerModelTest extends TestCase implements
 	protected void tearDown() throws Exception {
 
 		deleteData();
-
 		this.brokerManagerModel.onDisconnect();
 
 		/*
 		 * Wait 10min between each test run to avoid pacing violations.
 		 */
-		_log.warn("Wait 10min between each test run to avoid pacing violations.");
-		timerRunning = new AtomicInteger(0);
-		timer.start();
-		synchronized (lockCoreUtilsTest) {
-			while (timerRunning.get() / 1000 < 601) {
-				lockCoreUtilsTest.wait();
+		if (((Math.floor(testCaseGrandTotal / 58d) == (testCaseGrandTotal / 58d)) && (testCaseGrandTotal > 0))
+				&& this.brokerManagerModel.isConnected()) {
+			timerRunning = new AtomicInteger(0);
+			timer.start();
+			synchronized (lockCoreUtilsTest) {
+				while (timerRunning.get() / 1000 < 601) {
+					if ((timerRunning.get() % 60000) == 0) {
+						String message = "Please wait "
+								+ (10 - (timerRunning.get() / 1000 / 60))
+								+ " minutes as there are more than 60 data requests.";
+						_log.warn(message);
+					}
+					lockCoreUtilsTest.wait();
+				}
 			}
+			timer.stop();
 		}
-		timer.stop();
 	}
 
 	@Test
@@ -203,6 +211,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 
 				doInBackground();
+				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
 			}
 		} catch (Exception ex) {
 			TestCase.fail("Error testOneSymbolOnBrokerData Msg: "
@@ -231,6 +240,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 
 				doInBackground();
+				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
 			}
 		} catch (Exception ex) {
 			TestCase.fail("Error testMarch2013OnBrokerData Msg: "
@@ -268,6 +278,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 
 				doInBackground();
+				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
 			}
 		} catch (Exception ex) {
 			TestCase.fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
@@ -442,15 +453,16 @@ public class TWSBrokerModelTest extends TestCase implements
 		 */
 		if (((Math.floor(totalSumbitted / 58d) == (totalSumbitted / 58d)) && (totalSumbitted > 0))
 				&& this.brokerManagerModel.isConnected()) {
-
 			timerRunning = new AtomicInteger(0);
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
-				while (timerRunning.get() < 601000) {
-					String message = "Please wait "
-							+ (10 - (timerRunning.get() / 60000))
-							+ " minutes as there are more than 60 data requests.";
-					_log.warn(message);
+				while (timerRunning.get() / 1000 < 601) {
+					if ((timerRunning.get() % 60000) == 0) {
+						String message = "Please wait "
+								+ (10 - (timerRunning.get() / 1000 / 60))
+								+ " minutes as there are more than 60 data requests.";
+						_log.warn(message);
+					}
 					lockCoreUtilsTest.wait();
 				}
 			}
@@ -887,11 +899,11 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	public void connectionOpened() {
-		_log.info("Connection opened");
+		_log.error("Connection opened");
 	}
 
 	public void connectionClosed(boolean forced) {
-		_log.info("Connection closed");
+		_log.error("Connection closed");
 	}
 
 	/**
