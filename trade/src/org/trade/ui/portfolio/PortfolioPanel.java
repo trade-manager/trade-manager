@@ -476,7 +476,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 						+ TradelogSummaryTableModel.WIN_AMOUNT + ","
 						+ TradelogSummaryTableModel.LOSS_COUNT + ","
 						+ TradelogSummaryTableModel.LOSS_AMOUNT + ","
-						+ TradelogSummaryTableModel.TRADE_COUNT + ","
+						+ TradelogSummaryTableModel.POSITION_COUNT + ","
 						+ TradelogSummaryTableModel.CONTRACT_COUNT);
 				// Write out the lines
 				if (null != m_tradelogReport) {
@@ -563,8 +563,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 				+ (tradelogSummary.getLossAmount() == null ? ""
 						: tradelogSummary.getLossAmount())
 				+ ","
-				+ (tradelogSummary.getTradeCount() == null ? ""
-						: tradelogSummary.getTradeCount())
+				+ (tradelogSummary.getPositionCount() == null ? ""
+						: tradelogSummary.getPositionCount())
 				+ ","
 				+ (tradelogSummary.getTradestrategyCount() == null ? ""
 						: tradelogSummary.getTradestrategyCount()));

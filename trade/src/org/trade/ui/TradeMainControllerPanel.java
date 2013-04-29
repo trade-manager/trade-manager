@@ -2043,14 +2043,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			int percent = (int) (((double) (totalSumbitted - this.brokerManagerModel
 					.getHistoricalData().size()) / getGrandTotal()) * 100d);
 			setProgress(percent);
-			
+
 			hasSubmittedInSeconds(totalSumbitted);
 			this.brokerManagerModel.onBrokerData(contract, endDate, barSize,
 					chartDays);
 
 			_log.info("Total: " + getGrandTotal() + " totalSumbitted: "
 					+ totalSumbitted);
-
 
 			/*
 			 * Need to slow things down as limit is 60 including real time bars

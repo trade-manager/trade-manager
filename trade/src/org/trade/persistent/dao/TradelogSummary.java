@@ -69,7 +69,7 @@ public class TradelogSummary extends Aspect implements java.io.Serializable {
 	private BigDecimal lossAmount;
 	private Integer winCount;
 	private Integer lossCount;
-	private Integer tradeCount;
+	private Integer positionCount;
 	private Integer tradestrategyCount;
 
 	public TradelogSummary() {
@@ -102,7 +102,7 @@ public class TradelogSummary extends Aspect implements java.io.Serializable {
 	 *            Integer
 	 * @param lossCount
 	 *            Integer
-	 * @param tradeCount
+	 * @param positionCount
 	 *            Integer
 	 * @param tradestrategyCount
 	 *            Integer
@@ -112,7 +112,7 @@ public class TradelogSummary extends Aspect implements java.io.Serializable {
 			BigDecimal grossProfitLoss, Integer quantity,
 			BigDecimal commission, BigDecimal netProfitLoss,
 			BigDecimal profitAmount, BigDecimal lossAmount, Integer winCount,
-			Integer lossCount, Integer tradeCount, Integer tradestrategyCount) {
+			Integer lossCount, Integer positionCount, Integer tradestrategyCount) {
 		this.id = idTradelogSummary;
 		this.period = period;
 		this.battingAverage = battingAverage;
@@ -125,7 +125,7 @@ public class TradelogSummary extends Aspect implements java.io.Serializable {
 		this.lossAmount = lossAmount;
 		this.winCount = winCount;
 		this.lossCount = lossCount;
-		this.tradeCount = tradeCount;
+		this.positionCount = positionCount;
 		this.tradestrategyCount = tradestrategyCount;
 	}
 
@@ -371,23 +371,23 @@ public class TradelogSummary extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getTradeCount.
+	 * Method getPositionCount.
 	 * 
 	 * @return Integer
 	 */
-	@Column(name = "tradeCount")
-	public Integer getTradeCount() {
-		return this.tradeCount;
+	@Column(name = "positionCount")
+	public Integer getPositionCount() {
+		return this.positionCount;
 	}
 
 	/**
-	 * Method setTradeCount.
+	 * Method setPositionCount.
 	 * 
-	 * @param tradeCount
+	 * @param positionCount
 	 *            Integer
 	 */
-	public void setTradeCount(Integer tradeCount) {
-		this.tradeCount = tradeCount;
+	public void setPositionCount(Integer positionCount) {
+		this.positionCount = positionCount;
 	}
 
 	/**

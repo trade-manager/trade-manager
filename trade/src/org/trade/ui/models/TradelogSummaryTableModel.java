@@ -66,7 +66,7 @@ public class TradelogSummaryTableModel extends TableModel {
 	public static final String WIN_AMOUNT = "Profit Amount";
 	public static final String LOSS_COUNT = "Losses";
 	public static final String LOSS_AMOUNT = "Loss Amount";
-	public static final String TRADE_COUNT = "Trades";
+	public static final String POSITION_COUNT = "Positions";
 	public static final String CONTRACT_COUNT = "Contracts";
 
 	private static final String[] columnHeaderToolTip = { null,
@@ -98,7 +98,7 @@ public class TradelogSummaryTableModel extends TableModel {
 		columnNames[8] = WIN_AMOUNT;
 		columnNames[9] = LOSS_COUNT;
 		columnNames[10] = LOSS_AMOUNT;
-		columnNames[11] = TRADE_COUNT;
+		columnNames[11] = POSITION_COUNT;
 		columnNames[12] = CONTRACT_COUNT;
 	}
 
@@ -209,7 +209,7 @@ public class TradelogSummaryTableModel extends TableModel {
 			break;
 		}
 		case 12: {
-			element.setTradeCount(((Quantity) value).getIntegerValue());
+			element.setPositionCount(((Quantity) value).getIntegerValue());
 			break;
 		}
 		case 13: {
@@ -293,7 +293,7 @@ public class TradelogSummaryTableModel extends TableModel {
 		newRow.addElement(new Money(element.getProfitAmount()));
 		newRow.addElement(new Quantity(element.getLossCount()));
 		newRow.addElement(new Money(element.getLossAmount()));
-		newRow.addElement(new Quantity(element.getTradeCount()));
+		newRow.addElement(new Quantity(element.getPositionCount()));
 		newRow.addElement(new Quantity(element.getTradestrategyCount()));
 	}
 }
