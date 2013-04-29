@@ -2040,12 +2040,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					+ " endDate: " + endDate);
 
 			totalSumbitted++;
+			int percent = (int) (((double) (totalSumbitted - this.brokerManagerModel
+					.getHistoricalData().size()) / getGrandTotal()) * 100d);
+			setProgress(percent);
+			
 			hasSubmittedInSeconds(totalSumbitted);
 			this.brokerManagerModel.onBrokerData(contract, endDate, barSize,
 					chartDays);
 
 			_log.info("Total: " + getGrandTotal() + " totalSumbitted: "
 					+ totalSumbitted);
+
+
 			/*
 			 * Need to slow things down as limit is 60 including real time bars
 			 * requests. When connected to TWS. Note only TWSManager return true
@@ -2082,10 +2088,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					this.brokerManagerModel.getHistoricalData().wait();
 				}
 			}
-
-			int percent = (int) (((double) (totalSumbitted - this.brokerManagerModel
-					.getHistoricalData().size()) / getGrandTotal()) * 100d);
-			setProgress(percent);
 			return totalSumbitted;
 		}
 
