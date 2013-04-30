@@ -72,7 +72,7 @@ public class TradeOrderTableModel extends TableModel {
 	private static final String STATUS = "   Status   ";
 	private static final String OCA_GRP_NAME = "OCA Id";
 	private static final String AVG_PRICE = "Avg Price";
-	private static final String FILLED_DATE = "Trade Time";
+	private static final String FILLED_DATE = "Filled Time";
 	private static final String FILLED_QTY = "Filled Qty";
 	private static final String STOP_PRICE = "Stop Price";
 	private static final String PROPERTIES = "Alloc Props";
