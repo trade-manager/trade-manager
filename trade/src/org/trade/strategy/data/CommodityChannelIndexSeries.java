@@ -400,6 +400,8 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 			sumMeanDeviation = sumMeanDeviation
 					+ Math.abs(typicalPriceSMA - typicalPrice);
 		}
+		if (sumMeanDeviation == 0)
+			return 0;
 		return (typicalPriceValues.getFirst() - typicalPriceSMA)
 				/ (0.015 * (sumMeanDeviation / getLength()));
 	}
