@@ -400,12 +400,12 @@ CREATE  TABLE IF NOT EXISTS candle (
   CONSTRAINT candle_Contract_fk
     FOREIGN KEY (idContract )
     REFERENCES contract (idContract )
-    ON DELETE NO ACTION
+    ON DELETE NO CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT candle_TradingDay_fk
     FOREIGN KEY (idTradingDay )
     REFERENCES tradingday (idTradingDay )
-    ON DELETE NO ACTION
+    ON DELETE NO CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
