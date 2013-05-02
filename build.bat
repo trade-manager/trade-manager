@@ -43,11 +43,11 @@ rem Create the database user and default data
 
 rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml createDB
 
-rem Clean all the data from the DB and reload the default data
+rem Deletes all the data from the DB and reload the default data
 
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanDB
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml resetDefaultData
 
-rem Delete all the orders from the database.
+rem Deletes all the orders from the database.
 
 rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
 

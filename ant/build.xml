@@ -108,7 +108,7 @@
 			<transaction src="../db/DropCreateUserProc.sql" />
 		</sql>
 	</target>
-	<target name="resetDBData" depends="initialise" description="Deletes all data in the database and sets up default data.">
+	<target name="resetDefaultData" depends="initialise" description="Deletes all data in the database and sets up default data.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/TradeManagerData.sql" />

@@ -36,10 +36,14 @@ java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/buil
 
 # java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml createDB
 
-# Clean all the data from the DB and reload the default data
+# Deletes all the data from the DB and reload the default data
 
-# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanDB
+# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml resetDefaultData
 
-# Clean all the orders from the DB and reload the default data
+# Deletes all the orders from the DB and reload the default data
 
-# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml cleanTradeOrdersDB
+# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
+
+# Delete the accounts and rules from the database. These will reload on login.
+
+# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteAccountRuleData
