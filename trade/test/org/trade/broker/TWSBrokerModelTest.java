@@ -143,6 +143,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	 */
 	protected void setUp() throws Exception {
 		try {
+
 			this.brokerManagerModel.onConnect(host, port, clientId);
 			timerRunning = new AtomicInteger(0);
 			timer.start();
@@ -168,7 +169,8 @@ public class TWSBrokerModelTest extends TestCase implements
 	protected void tearDown() throws Exception {
 
 		deleteData();
-		this.brokerManagerModel.onDisconnect();
+		if (this.brokerManagerModel.isConnected())
+			this.brokerManagerModel.onDisconnect();
 
 		/*
 		 * Wait 10min between each test run to avoid pacing violations.
