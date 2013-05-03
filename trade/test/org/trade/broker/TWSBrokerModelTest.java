@@ -905,6 +905,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	public void connectionClosed(boolean forced) {
+		connectionFailed = true;
 		_log.error("Connection closed");
 	}
 
@@ -976,7 +977,6 @@ public class TWSBrokerModelTest extends TestCase implements
 	 */
 	public void brokerError(BrokerModelException ex) {
 		if (502 == ex.getErrorCode()) {
-			connectionFailed = true;
 			_log.info("TWS is not running test will not be run");
 			return;
 		}

@@ -82,7 +82,7 @@ public class TradelogReportTest extends TestCase {
 					.getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(
 					portfolio, TradingCalendar.getYearStart(),
-					TradingCalendar.getTodayBusinessDayEnd(), false);
+					TradingCalendar.getTodayBusinessDayEnd(), false, null);
 			TestCase.assertFalse(!tradelogReport.getTradelogDetail().isEmpty());
 			for (TradelogDetail tradelogDetail : tradelogReport
 					.getTradelogDetail()) {

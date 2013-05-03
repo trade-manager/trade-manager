@@ -129,7 +129,7 @@ public class TradelogHome {
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogDetail(Portfolio portfolio, Date start,
-			Date end, boolean filter) {
+			Date end, boolean filter, String symbol) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -141,6 +141,7 @@ public class TradelogHome {
 			queryDetail.setParameter("start", m_sdf.format(start));
 			queryDetail.setParameter("end", m_sdf.format(end));
 			queryDetail.setParameter("filter", filter);
+			queryDetail.setParameter("symbol", symbol);
 
 			TradelogReport tradelogReport = new TradelogReport();
 			for (Object item : queryDetail.getResultList()) {
