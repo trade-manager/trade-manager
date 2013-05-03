@@ -97,6 +97,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	private Integer backTestBarSize = 0;
 	private long startTime = 0;
 	private Timer timer = null;
+	private boolean connectionFailed = false;
 	private AtomicInteger timerRunning = null;
 	private final Object lockCoreUtilsTest = new Object();
 	private final static String _broker = BrokerModel._broker;
@@ -146,7 +147,8 @@ public class TWSBrokerModelTest extends TestCase implements
 			timerRunning = new AtomicInteger(0);
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
-				while (!this.brokerManagerModel.isConnected()) {
+				while (!this.brokerManagerModel.isConnected()
+						&& !connectionFailed) {
 					lockCoreUtilsTest.wait();
 				}
 			}
@@ -974,6 +976,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	 */
 	public void brokerError(BrokerModelException ex) {
 		if (502 == ex.getErrorCode()) {
+			connectionFailed = true;
 			_log.info("TWS is not running test will not be run");
 			return;
 		}
