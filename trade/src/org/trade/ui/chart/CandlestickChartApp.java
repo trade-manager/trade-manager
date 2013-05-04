@@ -49,6 +49,7 @@ import org.trade.persistent.dao.Tradingday;
 import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
+import org.trade.strategy.data.candle.CandlePeriod;
 import org.trade.ui.MainPanelMenu;
 import org.trade.ui.TradeAppLoadConfig;
 import org.trade.ui.base.BasePanel;
@@ -282,14 +283,15 @@ public class CandlestickChartApp extends BasePanel {
 				double close = Double.parseDouble(st.nextToken());
 				long volume = Long.parseLong(st.nextToken());
 				// double adjClose = Double.parseDouble( st.nextToken() );
-				Candle candle = new Candle(contract, open, high, low, close,
-						volume, (open + close) / 2, ((int) volume / 100),
-						new Date());
-				candle.setStartPeriod(TradingCalendar.getBusinessDayStart(date));
-				candle.setPeriod(TradingCalendar.getBusinessDayStart(date)
-						.toString());
-				candle.setEndPeriod(TradingCalendar.addSeconds(
-						TradingCalendar.getBusinessDayEnd(date), -1));
+				CandlePeriod period = new CandlePeriod(
+						TradingCalendar.getBusinessDayStart(date),
+						TradingCalendar.addSeconds(
+								TradingCalendar.getBusinessDayEnd(date), -1));
+
+				Candle candle = new Candle(contract, period, open, high, low,
+						close, volume, (open + close) / 2,
+						((int) volume / 100), new Date());
+
 				candle.setContract(contract);
 				candle.setTradingday(tradingday);
 				candle.setLastUpdateDate(candle.getStartPeriod());

@@ -58,6 +58,7 @@ import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.strategy.data.candle.CandlePeriod;
 
 /**
  */
@@ -301,13 +302,15 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 			// _log.info("Time : " + time + " Open: " + open + " High: "
 			// + high + " Low: " + low + " Close: " + close
 			// + " Volume: " + volume);
-			Candle candle = new Candle(null, open, high, low, close,
+
+			CandlePeriod period = new CandlePeriod(time,
+					TradingCalendar.addSeconds(
+							TradingCalendar.getSpecificTime(endDate, time), -1));
+
+			Candle candle = new Candle(null, period, open, high, low, close,
 					(volume / 100), (open + close) / 2, ((int) volume / 100),
 					new Date());
-			candle.setStartPeriod(time);
-			candle.setPeriod(time.toString());
-			candle.setEndPeriod(TradingCalendar.addSeconds(
-					TradingCalendar.getSpecificTime(endDate, time), -1));
+
 			candle.setLastUpdateDate(candle.getStartPeriod());
 			candles.add(candle);
 

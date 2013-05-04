@@ -120,10 +120,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
-			// _log.info("PositionManagerStrategy symbol: " + getSymbol()
-			// + " startPeriod: " + startPeriod + " Close Price: "
-			// + currentCandle.getClose() + " Vwap: "
-			// + currentCandle.getVwap());
+			// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
@@ -288,37 +285,38 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		if (null == dataset) {
 			throw new StrategyRuleException(1, 110,
 					"Error no Hiekin-Ashi indicator defined for this strategy");
-		} else {
+		}
+		HeikinAshiSeries series = dataset.getSeries(0);
+		// Start with the previous bar and work back
+		int itemCount = (series.getItemCount());
 
-			HeikinAshiSeries series = dataset.getSeries(0);
-			// Start with the previous bar and work back
-			int itemCount = (series.getItemCount());
-			if (itemCount > (2 + bars)) {
-				itemCount = itemCount - 2;
-				for (int i = itemCount; i > (itemCount - bars); i--) {
-					HeikinAshiItem candle = (HeikinAshiItem) series
-							.getDataItem(i);
-					trail = false;
-					if (Side.BOT.equals(tradePosition.getSide())) {
-						if ((candle.getLow() > newStop.doubleValue())
-								&& (candle.getOpen() < candle.getClose())) {
-							newStop = new Money(candle.getLow());
-							trail = true;
-						}
-					} else {
-						if ((candle.getHigh() < newStop.doubleValue())
-								&& (candle.getOpen() > candle.getClose())) {
-							newStop = new Money(candle.getHigh());
-							trail = true;
-						}
+		AbstractStrategyRule.logCandle(((HeikinAshiItem) series
+				.getDataItem(itemCount - 1)).getCandle());
+
+		if (itemCount > (2 + bars)) {
+			itemCount = itemCount - 2;
+			for (int i = itemCount; i > (itemCount - bars); i--) {
+				HeikinAshiItem candle = (HeikinAshiItem) series.getDataItem(i);
+				trail = false;
+				if (Side.BOT.equals(tradePosition.getSide())) {
+					if ((candle.getLow() > newStop.doubleValue())
+							&& (candle.getOpen() < candle.getClose())) {
+						newStop = new Money(candle.getLow());
+						trail = true;
 					}
-					if (!trail) {
-						break;
+				} else {
+					if ((candle.getHigh() < newStop.doubleValue())
+							&& (candle.getOpen() > candle.getClose())) {
+						newStop = new Money(candle.getHigh());
+						trail = true;
 					}
 				}
-				if (trail) {
-					setTargetPrice(newStop);
+				if (!trail) {
+					break;
 				}
+			}
+			if (trail) {
+				setTargetPrice(newStop);
 			}
 		}
 		return trail;

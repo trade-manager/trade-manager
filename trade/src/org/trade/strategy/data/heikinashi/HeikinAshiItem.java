@@ -83,7 +83,7 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	public HeikinAshiItem(Contract contract, RegularTimePeriod period,
 			double open, double high, double low, double close,
 			Date lastUpdateDate) {
-		super(period, new Candle(contract, open, high, low, close,
+		super(period, new Candle(contract, period, open, high, low, close,
 				lastUpdateDate));
 	}
 
@@ -165,6 +165,16 @@ public class HeikinAshiItem extends ComparableObjectItem {
 		} else {
 			return Double.NaN;
 		}
+	}
+
+	/**
+	 * Returns the period.
+	 * 
+	 * 
+	 * @return The period (never <code>null</code>).
+	 */
+	public Candle getCandle() {
+		return (Candle) getObject();
 	}
 
 	/**

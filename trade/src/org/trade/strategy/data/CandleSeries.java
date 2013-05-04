@@ -761,10 +761,10 @@ public class CandleSeries extends IndicatorSeries {
 			}
 		}
 		if (numberOfCandles > 0 && sumVolume > 0) {
-			Candle avgCandle = new Candle(getContract(), 0, 0, 0, 99999,
-					new Date());
-			avgCandle.setStartPeriod(startDate);
-			avgCandle.setEndPeriod(endDate);
+
+			CandlePeriod period = new CandlePeriod(startDate, endDate);
+			Candle avgCandle = new Candle(getContract(), period, 0, 0, 0,
+					99999, new Date());
 			avgCandle.setHigh(new BigDecimal(
 					(sunHighPriceXVolume / (wieghted ? sumVolume
 							: numberOfCandles))));
@@ -815,8 +815,8 @@ public class CandleSeries extends IndicatorSeries {
 					.getPeriod().getStart().after(startDate))
 					&& (candle.getPeriod().getStart().before(endDate))) {
 				if (null == this.candleBar) {
-					this.candleBar = new Candle(getContract(), 0, 0, 99999, 0,
-							new Date());
+					this.candleBar = new Candle(getContract(),
+							candle.getPeriod(), 0, 0, 99999, 0, new Date());
 					this.candleBar.setEndPeriod(candle.getPeriod().getEnd());
 				}
 

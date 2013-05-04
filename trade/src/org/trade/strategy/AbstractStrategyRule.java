@@ -63,6 +63,7 @@ import org.trade.dictionary.valuetype.TimeInForce;
 import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
+import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.TradePosition;
@@ -1536,5 +1537,24 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            TradeOrder
 	 */
 	public void tradeOrderFilled(TradeOrder tradeOrder) {
+	}
+
+	/**
+	 * Method logCandle.
+	 * 
+	 * @param candle
+	 *            Candle
+	 */
+	public static void logCandle(Candle candle) {
+		_log.error("PositionManagerStrategy symbol: "
+				+ candle.getContract().getSymbol() + " startPeriod: "
+				+ candle.getStartPeriod() + " endPeriod: "
+				+ candle.getEndPeriod() + " Open Price: "
+				+ new Money(candle.getOpen()) + " High Price: "
+				+ new Money(candle.getHigh()) + " Low Price: "
+				+ new Money(candle.getLow()) + " Close Price: "
+				+ new Money(candle.getClose()) + " Vwap: "
+				+ new Money(candle.getVwap()) + " LastUpdate: "
+				+ candle.getLastUpdateDate());
 	}
 }

@@ -107,11 +107,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
-			/*
-			 * _log.info("PositionManagerStrategy symbol: " + getSymbol() +
-			 * " startPeriod: " + startPeriod + " Close Price: " +
-			 * currentCandle.getClose() + " Vwap: " + currentCandle.getVwap());
-			 */
+			// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy

@@ -118,9 +118,12 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public Candle(Contract contract, double open, double high, double low,
-			double close, Date lastUpdateDate) {
+	public Candle(Contract contract, RegularTimePeriod period, double open,
+			double high, double low, double close, Date lastUpdateDate) {
 		this.contract = contract;
+		this.setPeriod(period.toString());
+		this.setStartPeriod(period.getStart());
+		this.setEndPeriod(period.getEnd());
 		this.setOpen(new BigDecimal(open));
 		this.setClose(new BigDecimal(close));
 		this.setHigh(new BigDecimal(high));
@@ -150,10 +153,13 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public Candle(Contract contract, double open, double high, double low,
-			double close, long volume, double vwap, int tradeCount,
-			Date lastUpdateDate) {
+	public Candle(Contract contract, RegularTimePeriod period, double open,
+			double high, double low, double close, long volume, double vwap,
+			int tradeCount, Date lastUpdateDate) {
 		this.contract = contract;
+		this.setPeriod(period.toString());
+		this.setStartPeriod(period.getStart());
+		this.setEndPeriod(period.getEnd());
 		this.setOpen(new BigDecimal(open));
 		this.setClose(new BigDecimal(close));
 		this.setHigh(new BigDecimal(high));

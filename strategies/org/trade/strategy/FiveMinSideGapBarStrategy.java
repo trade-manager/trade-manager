@@ -132,9 +132,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 					return;
 				}
 
-				// _log.info(getTradestrategy().getStrategy().getClassName()
-				// + " symbol: " + getSymbol() +
-				// " startPeriod: " + startPeriod);
+				// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
 
 				CandleItem prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
