@@ -57,8 +57,8 @@ if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * trade
 (if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
 (select count(distinct tradeposition.idTradePosition) from tradeposition
 inner join contract on tradeposition.idContract = contract.idContract
-inner join tradeOrder on tradeposition.idtradeposition = tradeOrder.idtradeposition
-where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy)  as positionCount,
+inner join tradeorder on tradeposition.idtradeposition = tradeorder.idtradeposition
+where tradeorder.idTradestrategy = tradestrategy.idTradestrategy)  as positionCount,
 0 as tradestrategyCount
 from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
@@ -138,8 +138,8 @@ if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * trade
 (if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
 (select count(distinct tradeposition.idTradePosition) from tradeposition
 inner join contract on tradeposition.idContract = contract.idContract
-inner join tradeOrder on tradeposition.idtradeposition = tradeOrder.idtradeposition
-where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy)  as positionCount,
+inner join tradeorder on tradeposition.idtradeposition = tradeorder.idtradeposition
+where tradeorder.idTradestrategy = tradestrategy.idTradestrategy)  as positionCount,
 0 as tradestrategyCount
 from 
 tradestrategy inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
