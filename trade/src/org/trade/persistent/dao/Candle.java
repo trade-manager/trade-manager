@@ -97,9 +97,16 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param contract
 	 *            Contract
 	 */
-	public Candle(Tradingday tradingday, Contract contract) {
-		this.tradingday = tradingday;
-		this.contract = contract;
+	public Candle(Tradingday tradingday, Contract contract,
+			RegularTimePeriod period) {
+		this.setTradingday(tradingday);
+		this.setContract(contract);
+		this.setPeriod(period.toString());
+		this.setStartPeriod(period.getStart());
+		this.setEndPeriod(period.getEnd());
+		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
+				.getTime()) / 1000);
+		this.setBarSize(barSize);
 	}
 
 	/**
@@ -120,10 +127,13 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 */
 	public Candle(Contract contract, RegularTimePeriod period, double open,
 			double high, double low, double close, Date lastUpdateDate) {
-		this.contract = contract;
+		this.setContract(contract);
 		this.setPeriod(period.toString());
 		this.setStartPeriod(period.getStart());
 		this.setEndPeriod(period.getEnd());
+		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
+				.getTime()) / 1000);
+		this.setBarSize(barSize);
 		this.setOpen(new BigDecimal(open));
 		this.setClose(new BigDecimal(close));
 		this.setHigh(new BigDecimal(high));
@@ -156,10 +166,13 @@ public class Candle extends Aspect implements java.io.Serializable {
 	public Candle(Contract contract, RegularTimePeriod period, double open,
 			double high, double low, double close, long volume, double vwap,
 			int tradeCount, Date lastUpdateDate) {
-		this.contract = contract;
+		this.setContract(contract);
 		this.setPeriod(period.toString());
 		this.setStartPeriod(period.getStart());
 		this.setEndPeriod(period.getEnd());
+		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
+				.getTime()) / 1000);
+		this.setBarSize(barSize);
 		this.setOpen(new BigDecimal(open));
 		this.setClose(new BigDecimal(close));
 		this.setHigh(new BigDecimal(high));
@@ -198,9 +211,12 @@ public class Candle extends Aspect implements java.io.Serializable {
 			RegularTimePeriod period, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			Date lastUpdateDate) {
-		this.contract = contract;
-		this.tradingday = tradingday;
+		this.setTradingday(tradingday);
+		this.setContract(contract);
 		this.setPeriod(period.toString());
+		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
+				.getTime()) / 1000);
+		this.setBarSize(barSize);
 		this.setStartPeriod(period.getStart());
 		this.setEndPeriod(period.getEnd());
 		this.setOpen(new BigDecimal(open));
@@ -241,22 +257,27 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param vwap
 	 *            BigDecimal
 	 */
-	public Candle(Tradingday tradingday, Contract contract, BigDecimal open,
-			BigDecimal high, BigDecimal low, BigDecimal close, String period,
-			Date endPeriod, Date startPeriod, Integer tradeCount, Long volume,
-			BigDecimal vwap) {
-		this.tradingday = tradingday;
-		this.contract = contract;
-		this.close = close;
-		this.high = high;
-		this.low = low;
-		this.open = open;
-		this.period = period;
-		this.endPeriod = endPeriod;
-		this.startPeriod = startPeriod;
-		this.tradeCount = tradeCount;
-		this.volume = volume;
-		this.vwap = vwap;
+	public Candle(Tradingday tradingday, Contract contract,
+			RegularTimePeriod period, BigDecimal open, BigDecimal high,
+			BigDecimal low, BigDecimal close, Date endPeriod, Date startPeriod,
+			Integer tradeCount, Long volume, BigDecimal vwap,
+			Date lastUpdateDate) {
+		this.setTradingday(tradingday);
+		this.setContract(contract);
+		this.setPeriod(period.toString());
+		this.setStartPeriod(period.getStart());
+		this.setEndPeriod(period.getEnd());
+		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
+				.getTime()) / 1000);
+		this.setBarSize(barSize);
+		this.setOpen(open);
+		this.setClose(close);
+		this.setHigh(high);
+		this.setLow(low);
+		this.setVolume(new Long(volume));
+		this.setVwap(vwap);
+		this.setTradeCount(new Integer(tradeCount));
+		this.setLastUpdateDate(lastUpdateDate);
 
 	}
 
