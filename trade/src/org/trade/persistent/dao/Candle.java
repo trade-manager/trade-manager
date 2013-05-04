@@ -166,21 +166,10 @@ public class Candle extends Aspect implements java.io.Serializable {
 	public Candle(Contract contract, RegularTimePeriod period, double open,
 			double high, double low, double close, long volume, double vwap,
 			int tradeCount, Date lastUpdateDate) {
-		this.setContract(contract);
-		this.setPeriod(period.toString());
-		this.setStartPeriod(period.getStart());
-		this.setEndPeriod(period.getEnd());
-		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
-				.getTime()) / 1000);
-		this.setBarSize(barSize);
-		this.setOpen(new BigDecimal(open));
-		this.setClose(new BigDecimal(close));
-		this.setHigh(new BigDecimal(high));
-		this.setLow(new BigDecimal(low));
+		this(contract, period, open, high, low, close, lastUpdateDate);
 		this.setVolume(new Long(volume));
 		this.setVwap(new BigDecimal(vwap));
 		this.setTradeCount(new Integer(tradeCount));
-		this.setLastUpdateDate(lastUpdateDate);
 	}
 
 	/**
@@ -211,14 +200,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 			RegularTimePeriod period, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			Date lastUpdateDate) {
-		this.setTradingday(tradingday);
-		this.setContract(contract);
-		this.setPeriod(period.toString());
-		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
-				.getTime()) / 1000);
-		this.setBarSize(barSize);
-		this.setStartPeriod(period.getStart());
-		this.setEndPeriod(period.getEnd());
+		this(contract, tradingday, period);
 		this.setOpen(new BigDecimal(open));
 		this.setClose(new BigDecimal(close));
 		this.setHigh(new BigDecimal(high));
@@ -227,58 +209,6 @@ public class Candle extends Aspect implements java.io.Serializable {
 		this.setVwap(new BigDecimal(vwap));
 		this.setTradeCount(new Integer(tradeCount));
 		this.setLastUpdateDate(lastUpdateDate);
-	}
-
-	/**
-	 * Constructor for Candle.
-	 * 
-	 * @param tradingday
-	 *            Tradingday
-	 * @param contract
-	 *            Contract
-	 * @param open
-	 *            BigDecimal
-	 * @param high
-	 *            BigDecimal
-	 * @param low
-	 *            BigDecimal
-	 * @param close
-	 *            BigDecimal
-	 * @param period
-	 *            String
-	 * @param endPeriod
-	 *            Date
-	 * @param startPeriod
-	 *            Date
-	 * @param tradeCount
-	 *            Integer
-	 * @param volume
-	 *            Long
-	 * @param vwap
-	 *            BigDecimal
-	 */
-	public Candle(Contract contract, Tradingday tradingday,
-			RegularTimePeriod period, BigDecimal open, BigDecimal high,
-			BigDecimal low, BigDecimal close, Date endPeriod, Date startPeriod,
-			Integer tradeCount, Long volume, BigDecimal vwap,
-			Date lastUpdateDate) {
-		this.setTradingday(tradingday);
-		this.setContract(contract);
-		this.setPeriod(period.toString());
-		this.setStartPeriod(period.getStart());
-		this.setEndPeriod(period.getEnd());
-		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
-				.getTime()) / 1000);
-		this.setBarSize(barSize);
-		this.setOpen(open);
-		this.setClose(close);
-		this.setHigh(high);
-		this.setLow(low);
-		this.setVolume(new Long(volume));
-		this.setVwap(vwap);
-		this.setTradeCount(new Integer(tradeCount));
-		this.setLastUpdateDate(lastUpdateDate);
-
 	}
 
 	/**
