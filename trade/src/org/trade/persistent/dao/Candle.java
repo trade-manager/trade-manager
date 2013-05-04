@@ -97,7 +97,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param contract
 	 *            Contract
 	 */
-	public Candle(Tradingday tradingday, Contract contract,
+	public Candle(Contract contract, Tradingday tradingday,
 			RegularTimePeriod period) {
 		this.setTradingday(tradingday);
 		this.setContract(contract);
@@ -257,7 +257,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param vwap
 	 *            BigDecimal
 	 */
-	public Candle(Tradingday tradingday, Contract contract,
+	public Candle(Contract contract, Tradingday tradingday,
 			RegularTimePeriod period, BigDecimal open, BigDecimal high,
 			BigDecimal low, BigDecimal close, Date endPeriod, Date startPeriod,
 			Integer tradeCount, Long volume, BigDecimal vwap,

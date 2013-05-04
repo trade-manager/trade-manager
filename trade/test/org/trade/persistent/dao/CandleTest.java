@@ -92,8 +92,8 @@ public class CandleTest extends TestCase {
 			for (Tradestrategy tradestrategy : tradestrategyHome.findAll()) {
 				if (tradestrategy.getTradingday().getCandles().isEmpty()) {
 					Candle transientInstance = new Candle(
-							tradestrategy.getTradingday(),
-							tradestrategy.getContract(), period);
+							tradestrategy.getContract(),
+							tradestrategy.getTradingday(), period);
 					transientInstance.setHigh(new BigDecimal(20.33));
 					transientInstance.setLow(new BigDecimal(20.11));
 					transientInstance.setOpen(new BigDecimal(20.23));
