@@ -247,7 +247,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
-		if (source.getItemCount() > skip && newBar) {
+		if (source.getItemCount() > skip) {
 			if (source.getItemCount() > 1) {
 				/*
 				 * Get the prev candle the new candle may be just forming or
@@ -256,21 +256,29 @@ public class HeikinAshiSeries extends IndicatorSeries {
 				 */
 				CandleItem candleItem = (CandleItem) source
 						.getDataItem(skip - 1);
+				int index = this.indexOf(candleItem.getPeriod());
+				double xOpenPrev = 0;
+				double xClosePrev = 0;
+				if (index < 0) {
+					if (this.isEmpty()) {
+						xOpenPrev = candleItem.getOpen();
+						xClosePrev = candleItem.getClose();
+					} else {
+						HeikinAshiItem prevItem = (HeikinAshiItem) this
+								.getDataItem(this.getItemCount() - 1);
+						xClosePrev = prevItem.getClose();
+						xOpenPrev = prevItem.getOpen();
+					}
+				} else {
+					HeikinAshiItem prevItem = (HeikinAshiItem) this
+							.getDataItem(this.getItemCount() - 2);
+					xClosePrev = prevItem.getClose();
+					xOpenPrev = prevItem.getOpen();
+				}
 
 				double xClose = (candleItem.getOpen() + candleItem.getHigh()
 						+ candleItem.getLow() + candleItem.getClose()) / 4;
 
-				double xOpenPrev = 0;
-				double xClosePrev = 0;
-				if (this.isEmpty()) {
-					xOpenPrev = candleItem.getOpen();
-					xClosePrev = candleItem.getClose();
-				} else {
-					HeikinAshiItem prevItem = (HeikinAshiItem) this
-							.getDataItem(this.getItemCount() - 1);
-					xClosePrev = prevItem.getClose();
-					xOpenPrev = prevItem.getOpen();
-				}
 				double xOpen = (xOpenPrev + xClosePrev) / 2;
 
 				double xHigh = Math.max(candleItem.getHigh(),
@@ -279,20 +287,19 @@ public class HeikinAshiSeries extends IndicatorSeries {
 				double xLow = Math.min(candleItem.getLow(),
 						Math.min(xClosePrev, xOpenPrev));
 
-				int index = this.indexOf(candleItem.getPeriod());
 				if (index < 0) {
 					this.add(new HeikinAshiItem(source.getContract(),
 							candleItem.getPeriod(), xOpen, xHigh, xLow, xClose,
 							candleItem.getLastUpdateDate()), false);
 				} else {
-					// HeikinAshiItem currDataItem = (HeikinAshiItem) this
-					// .getDataItem(index);
-					// currDataItem.setOpen(xOpen);
-					// currDataItem.setHigh(xHigh);
-					// currDataItem.setLow(xLow);
-					// currDataItem.setClose(xClose);
-					// currDataItem.setLastUpdateDate(candleItem
-					// .getLastUpdateDate());
+					HeikinAshiItem currDataItem = (HeikinAshiItem) this
+							.getDataItem(index);
+					currDataItem.setOpen(xOpen);
+					currDataItem.setHigh(xHigh);
+					currDataItem.setLow(xLow);
+					currDataItem.setClose(xClose);
+					currDataItem.setLastUpdateDate(candleItem
+							.getLastUpdateDate());
 				}
 			}
 		}

@@ -235,7 +235,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			if ((null != getTargetPrice()) && newBar) {
 				Money newStop = getHiekinAshiTrailStop(
 						getStopPriceMinUnfilled(), 2);
-				if (!newStop.equals(getStopPriceMinUnfilled())) {
+				if (newStop.isGreaterThan(this.getTargetPrice())) {
 					_log.info("PositionManagerStrategy HiekinAshiTrail: "
 							+ getSymbol() + " Trail Price: " + getTargetPrice()
 							+ " Time: " + startPeriod);
@@ -264,15 +264,17 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	}
 
 	/**
-	 * Method setHiekinAshiTrail. * This method is used to trail on Heikin-Ashi
-	 * bars. Note trail is on the low/high of the bar and assumes the bar are in
-	 * the direction of the trade i.e. side.
+	 * Method getHiekinAshiTrailStop.
 	 * 
-	 * @param tradePosition
-	 *            TradePosition
+	 * * This method is used to trail on Heikin-Ashi bars. Note trail is on the
+	 * low/high of the bar and assumes the bar are in the direction of the trade
+	 * i.e. side.
+	 * 
+	 * @param stopPrice
+	 *            Money
 	 * @param bars
 	 *            int
-	 * @return boolean
+	 * @return Money new stop or orginal if not trail.
 	 * @throws StrategyRuleException
 	 */
 	public Money getHiekinAshiTrailStop(Money stopPrice, int bars)
