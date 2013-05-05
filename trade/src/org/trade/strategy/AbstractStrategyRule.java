@@ -1546,7 +1546,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Candle
 	 */
 	public static void logCandle(Candle candle) {
-		_log.error("PositionManagerStrategy symbol: "
+		_log.info("PositionManagerStrategy symbol: "
 				+ candle.getContract().getSymbol() + " startPeriod: "
 				+ candle.getStartPeriod() + " endPeriod: "
 				+ candle.getEndPeriod() + " Open Price: "

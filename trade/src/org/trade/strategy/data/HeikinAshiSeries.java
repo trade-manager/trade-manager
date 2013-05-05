@@ -220,7 +220,18 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Method updateSeries.
+	 * Method updateSeries. Heikin Ashi charts calculate their own open (HAO),
+	 * high (HAH), low (HAL), and close (HAC), using the actual open (O), high
+	 * (H), low (L), and close (C), of the time frame (e.g. the open, high, low,
+	 * and close, of each five minutes).
+	 * 
+	 * HAO = (HAO-1 + HAC-1) / 2
+	 * 
+	 * HAC = (O + H + L + C) / 4
+	 * 
+	 * HAH = Highest(H, HAO, HAC)
+	 * 
+	 * HAL = Lowest(L, HAO, HAC)
 	 * 
 	 * @param source
 	 *            CandleSeries
@@ -229,76 +240,56 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 * @param newBar
 	 *            boolean
 	 */
+
 	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
-		if (source.getItemCount() < 2) {
-			return;
-		}
 
-		HeikinAshiItem dataItem = null;
-		HeikinAshiItem prevHeikinAshiCandleItem = null;
+		if (source.getItemCount() > skip) {
+			if (source.getItemCount() > 0) {
 
-		if (!this.isEmpty()) {
-			prevHeikinAshiCandleItem = (HeikinAshiItem) this.getDataItem(this
-					.getItemCount() - 1);
-		}
-
-		for (int i = skip; i < source.getItemCount(); i++) {
-			if (i >= 0) {
-				CandleItem candleItem = (CandleItem) source.getDataItem(i);
+				CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 
 				double xClose = (candleItem.getOpen() + candleItem.getHigh()
 						+ candleItem.getLow() + candleItem.getClose()) / 4;
 
 				double xOpenPrev = 0;
 				double xClosePrev = 0;
-				if (null == prevHeikinAshiCandleItem) {
-					if (xOpenPrev == 0) {
-						CandleItem prevCandleItem = (CandleItem) source
-								.getDataItem(i);
-						xOpenPrev = prevCandleItem.getOpen();
-						xClosePrev = prevCandleItem.getClose();
-					}
+				if (this.getItemCount() > 1) {
+					HeikinAshiItem prevItem = (HeikinAshiItem) this
+							.getDataItem(this.getItemCount() - 1);
+					xClosePrev = prevItem.getClose();
+					xOpenPrev = prevItem.getOpen();
+
 				} else {
-					xClosePrev = prevHeikinAshiCandleItem.getClose();
-					xOpenPrev = prevHeikinAshiCandleItem.getOpen();
+					xOpenPrev = candleItem.getOpen();
+					xClosePrev = candleItem.getClose();
 				}
 				double xOpen = (xOpenPrev + xClosePrev) / 2;
 
-				double xHigh = xClose;
-				if (xHigh < xOpen) {
-					xHigh = xOpen;
-				}
-				if (xHigh < candleItem.getHigh()) {
-					xHigh = candleItem.getHigh();
-				}
+				double xHigh = Math.max(candleItem.getHigh(),
+						Math.max(xClosePrev, xOpenPrev));
 
-				double xLow = xClose;
-				if (xLow > xOpen) {
-					xLow = xOpen;
-				}
-				if (xLow > candleItem.getLow()) {
-					xLow = candleItem.getLow();
-				}
+				double xLow = Math.min(candleItem.getLow(),
+						Math.min(xClosePrev, xOpenPrev));
 
-				dataItem = new HeikinAshiItem(source.getContract(),
-						candleItem.getPeriod(), xOpen, xHigh, xLow, xClose,
-						candleItem.getLastUpdateDate());
-				int index = this.indexOf(dataItem.getPeriod());
+				int index = this.indexOf(candleItem.getPeriod());
 				if (index < 0) {
-					this.add(dataItem, false);
+					this.add(new HeikinAshiItem(source.getContract(),
+							candleItem.getPeriod(), xOpen, xHigh, xLow, xClose,
+							candleItem.getLastUpdateDate()), false);
 				} else {
 					HeikinAshiItem currDataItem = (HeikinAshiItem) this
 							.getDataItem(index);
-					currDataItem.setOpen(dataItem.getOpen());
-					currDataItem.setHigh(dataItem.getHigh());
-					currDataItem.setLow(dataItem.getLow());
-					currDataItem.setClose(dataItem.getClose());
+					currDataItem.setOpen(xOpen);
+					currDataItem.setHigh(xHigh);
+					currDataItem.setLow(xLow);
+					currDataItem.setClose(xClose);
+					currDataItem.setLastUpdateDate(candleItem
+							.getLastUpdateDate());
 				}
-				prevHeikinAshiCandleItem = dataItem;
 			}
 		}
 	}

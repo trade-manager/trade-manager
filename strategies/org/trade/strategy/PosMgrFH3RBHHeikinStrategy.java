@@ -120,7 +120,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
-			// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
+			AbstractStrategyRule.logCandle(currentCandle.getCandle());
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
@@ -234,6 +234,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Heikin-Ashi above target 1 with a two bar trail.
 			 */
 			if ((null != getTargetPrice()) && newBar) {
+				_log.info("PositionManagerStrategy HiekinAshiTrail: ");
 				if (setHiekinAshiTrail(getOpenTradePosition(), 2)) {
 					_log.info("PositionManagerStrategy HiekinAshiTrail: "
 							+ getSymbol() + " Trail Price: " + getTargetPrice()
@@ -288,10 +289,10 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		}
 		HeikinAshiSeries series = dataset.getSeries(0);
 		// Start with the previous bar and work back
-		int itemCount = (series.getItemCount());
+		int itemCount = series.getItemCount() - 1;
 
 		AbstractStrategyRule.logCandle(((HeikinAshiItem) series
-				.getDataItem(itemCount - 1)).getCandle());
+				.getDataItem(itemCount)).getCandle());
 
 		if (itemCount > (2 + bars)) {
 			itemCount = itemCount - 2;
