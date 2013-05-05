@@ -396,7 +396,7 @@ CREATE  TABLE IF NOT EXISTS candle (
   INDEX candle_Contract_idx (idContract ASC) ,
   INDEX candle_TradingDay_idx (idTradingDay ASC) ,
   INDEX candle_ConDayBar_idx (idContract ASC, idTradingDay ASC, barSize ASC) ,
-  UNIQUE INDEX candle_uq (idContract ASC, idTradingDay ASC, barSize ASC, startPeriod ASC, endPeriod ASC) ,
+  UNIQUE INDEX candle_uq (idContract ASC, idTradingDay ASC,  startPeriod ASC, endPeriod ASC) ,
   CONSTRAINT candle_Contract_fk
     FOREIGN KEY (idContract )
     REFERENCES contract (idContract )

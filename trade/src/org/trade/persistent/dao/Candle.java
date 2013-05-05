@@ -104,8 +104,8 @@ public class Candle extends Aspect implements java.io.Serializable {
 		this.setPeriod(period.toString());
 		this.setStartPeriod(period.getStart());
 		this.setEndPeriod(period.getEnd());
-		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
-				.getTime()) / 1000);
+		int barSize = (int) ((period.getEnd().getTime()
+				- period.getStart().getTime() + 1) / 1000);
 		this.setBarSize(barSize);
 	}
 
