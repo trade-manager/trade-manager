@@ -1460,6 +1460,27 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
+	 * Method getUnfilledStopPrice.
+	 * 
+	 * @return Money
+	 */
+	public Money getStopPriceMinUnfilled() {
+		double stopPrice = Double.MAX_VALUE;
+		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
+			if (!tradeOrder.getIsFilled()
+					&& !OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
+					&& OrderType.STP.equals(tradeOrder.getOrderType())) {
+				stopPrice = Math.min(stopPrice, tradeOrder.getAuxPrice()
+						.doubleValue());
+			}
+		}
+		if (stopPrice < Double.MAX_VALUE)
+			return new Money(stopPrice);
+
+		return null;
+	}
+
+	/**
 	 * Method setTargetPrice.
 	 * 
 	 * @param targetPrice
@@ -1549,10 +1570,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 		_log.info("PositionManagerStrategy symbol: "
 				+ candle.getContract().getSymbol() + " startPeriod: "
 				+ candle.getStartPeriod() + " endPeriod: "
-				+ candle.getEndPeriod() + " Open Price: "
-				+ new Money(candle.getOpen()) + " High Price: "
-				+ new Money(candle.getHigh()) + " Low Price: "
-				+ new Money(candle.getLow()) + " Close Price: "
+				+ candle.getEndPeriod() + " Open: "
+				+ new Money(candle.getOpen()) + " High: "
+				+ new Money(candle.getHigh()) + " Low: "
+				+ new Money(candle.getLow()) + " Close: "
 				+ new Money(candle.getClose()) + " Vwap: "
 				+ new Money(candle.getVwap()) + " LastUpdate: "
 				+ candle.getLastUpdateDate());

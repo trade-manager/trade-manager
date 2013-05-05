@@ -247,25 +247,29 @@ public class HeikinAshiSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
-		if (source.getItemCount() > skip) {
-			if (source.getItemCount() > 0) {
-
-				CandleItem candleItem = (CandleItem) source.getDataItem(skip);
+		if (source.getItemCount() > skip && newBar) {
+			if (source.getItemCount() > 1) {
+				/*
+				 * Get the prev candle the new candle may be just forming or
+				 * completed if back testing. Hiekin-Ashi bats must be formed
+				 * from completed bars.
+				 */
+				CandleItem candleItem = (CandleItem) source
+						.getDataItem(skip - 1);
 
 				double xClose = (candleItem.getOpen() + candleItem.getHigh()
 						+ candleItem.getLow() + candleItem.getClose()) / 4;
 
 				double xOpenPrev = 0;
 				double xClosePrev = 0;
-				if (this.getItemCount() > 1) {
+				if (this.isEmpty()) {
+					xOpenPrev = candleItem.getOpen();
+					xClosePrev = candleItem.getClose();
+				} else {
 					HeikinAshiItem prevItem = (HeikinAshiItem) this
 							.getDataItem(this.getItemCount() - 1);
 					xClosePrev = prevItem.getClose();
 					xOpenPrev = prevItem.getOpen();
-
-				} else {
-					xOpenPrev = candleItem.getOpen();
-					xClosePrev = candleItem.getClose();
 				}
 				double xOpen = (xOpenPrev + xClosePrev) / 2;
 
@@ -281,14 +285,14 @@ public class HeikinAshiSeries extends IndicatorSeries {
 							candleItem.getPeriod(), xOpen, xHigh, xLow, xClose,
 							candleItem.getLastUpdateDate()), false);
 				} else {
-					HeikinAshiItem currDataItem = (HeikinAshiItem) this
-							.getDataItem(index);
-					currDataItem.setOpen(xOpen);
-					currDataItem.setHigh(xHigh);
-					currDataItem.setLow(xLow);
-					currDataItem.setClose(xClose);
-					currDataItem.setLastUpdateDate(candleItem
-							.getLastUpdateDate());
+					// HeikinAshiItem currDataItem = (HeikinAshiItem) this
+					// .getDataItem(index);
+					// currDataItem.setOpen(xOpen);
+					// currDataItem.setHigh(xHigh);
+					// currDataItem.setLow(xLow);
+					// currDataItem.setClose(xClose);
+					// currDataItem.setLastUpdateDate(candleItem
+					// .getLastUpdateDate());
 				}
 			}
 		}
