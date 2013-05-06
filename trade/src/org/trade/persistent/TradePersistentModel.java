@@ -640,11 +640,10 @@ public class TradePersistentModel implements PersistentModel {
 				if (null != currentContract) {
 					transientInstance.setIdContract(currentContract
 							.getIdContract());
-					transientInstance.setVersion(currentContract.getVersion());
 				}
 			}
 
-			return (Contract) m_aspectHome.persist(transientInstance);
+			return (Contract) m_aspectHome.persist(transientInstance, true);
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error saving Contract please refresh before save.");
