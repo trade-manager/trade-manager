@@ -643,7 +643,7 @@ public class TradePersistentModel implements PersistentModel {
 				}
 			}
 
-			return (Contract) m_aspectHome.persist(transientInstance, true);
+			return (Contract) m_aspectHome.persist(transientInstance);
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error saving Contract please refresh before save.");
