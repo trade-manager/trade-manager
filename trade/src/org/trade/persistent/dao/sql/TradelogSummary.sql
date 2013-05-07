@@ -67,6 +67,7 @@ inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 left outer join tradeorder on tradestrategy.idTradestrategy = tradeorder.idTradestrategy
 where tradeorder.isFilled =1
+and (isnull(:symbol) or contract.symbol = :symbol)
 and tradingday.open between :start and :end
 and portfolio.idPortfolio = :idPortfolio
 and tradestrategy.trade = 1
@@ -94,6 +95,7 @@ left outer join contract on tradestrategy.idContract = contract.idContract
 left outer join strategy on tradestrategy.idStrategy = strategy.idStrategy
 left outer join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where  tradingday.open between :start and :end
+and (isnull(:symbol) or contract.symbol = :symbol)
 and (portfolio.idPortfolio = :idPortfolio or portfolio.idPortfolio is null)
 group by
 period,
@@ -148,6 +150,7 @@ inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 left outer join tradeorder on tradestrategy.idTradestrategy = tradeorder.idTradestrategy
 where tradeorder.isFilled =1
+and (isnull(:symbol) or contract.symbol = :symbol)
 and tradingday.open between :start and :end
 and portfolio.idPortfolio = :idPortfolio
 and tradestrategy.trade = 1
@@ -175,6 +178,7 @@ left outer join contract on tradestrategy.idContract = contract.idContract
 left outer join strategy on tradestrategy.idStrategy = strategy.idStrategy
 left outer join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradingday.open between :start and :end
+and (isnull(:symbol) or contract.symbol = :symbol)
 and (portfolio.idPortfolio = :idPortfolio or portfolio.idPortfolio is null)
 group by
 period,

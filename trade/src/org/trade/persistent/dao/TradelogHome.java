@@ -97,6 +97,7 @@ public class TradelogHome {
 					.setParameter("idPortfolio", portfolio.getIdPortfolio());
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
+			querySummary.setParameter("symbol", symbol);
 
 			for (Object item : querySummary.getResultList()) {
 				tradelogReport.add((TradelogSummary) item);
@@ -173,7 +174,7 @@ public class TradelogHome {
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogSummary(Portfolio portfolio,
-			Date start, Date end) {
+			Date start, Date end, String symbol) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -185,6 +186,7 @@ public class TradelogHome {
 					.setParameter("idPortfolio", portfolio.getIdPortfolio());
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
+			querySummary.setParameter("symbol", symbol);
 
 			TradelogReport tradelogReport = new TradelogReport();
 

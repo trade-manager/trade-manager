@@ -2404,16 +2404,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		// Called when a candle finishes
 		try {
 			volume = volume * 100;
-			/*
-			 * Only record 5sec bars that have some volume.
-			 */
 			if (volume == 0)
 				return;
 
 			Date date = TradingCalendar.getDate(time * 1000);
+
 			// Only store data that is during mkt hours
 			if (m_realTimeBarsRequests.containsKey(reqId)) {
 				Contract contract = m_realTimeBarsRequests.get(reqId);
+				/*
+				 * Only record 5sec bars that have some volume.
+				 */
+
 				synchronized (contract) {
 					Collections.sort(contract.getTradestrategies(),
 							Tradestrategy.TRADINGDAY_CONTRACT);
