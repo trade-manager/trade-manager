@@ -293,7 +293,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		}
 		HeikinAshiSeries series = dataset.getSeries(0);
 		// Start with the previous bar and work back
-		int itemCount = series.getItemCount() - 1;
+		int itemCount = series.getItemCount() - 2;
 
 		if (itemCount > (2 + bars) && this.isThereOpenPosition()) {
 			itemCount = itemCount - 2;
