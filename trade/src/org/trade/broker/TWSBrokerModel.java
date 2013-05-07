@@ -1666,7 +1666,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									int index = datasetContainer
 											.getBaseCandleSeries()
 											.indexOf(time);
-									if (index > 0) {
+									if (index > -1) {
 										CandleItem candle = (CandleItem) datasetContainer
 												.getBaseCandleSeries()
 												.getDataItem(index);
@@ -2404,6 +2404,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		// Called when a candle finishes
 		try {
 			volume = volume * 100;
+			/*
+			 * Only record 5sec bars that have some volume.
+			 */
+			if (volume == 0)
+				return;
+
 			Date date = TradingCalendar.getDate(time * 1000);
 			// Only store data that is during mkt hours
 			if (m_realTimeBarsRequests.containsKey(reqId)) {
