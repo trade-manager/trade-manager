@@ -91,7 +91,6 @@ public class CandleItem extends ComparableObjectItem {
 			Date lastUpdateDate) {
 		super(period, new Candle(contract, tradingday, period, open, high, low,
 				close, volume, vwap, count, lastUpdateDate));
-		this.setLastUpdateDate(lastUpdateDate);
 	}
 
 	/**
@@ -131,11 +130,9 @@ public class CandleItem extends ComparableObjectItem {
 	 * @return The open value.
 	 */
 	public double getOpen() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getOpen().doubleValue();
-		} else {
-			return Double.NaN;
-		}
+		return Double.NaN;
 	}
 
 	/**
@@ -145,11 +142,9 @@ public class CandleItem extends ComparableObjectItem {
 	 * @return The high value.
 	 */
 	public double getHigh() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getHigh().doubleValue();
-		} else {
-			return Double.NaN;
-		}
+		return Double.NaN;
 	}
 
 	/**
@@ -159,11 +154,10 @@ public class CandleItem extends ComparableObjectItem {
 	 * @return The low value.
 	 */
 	public double getLow() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getLow().doubleValue();
-		} else {
-			return Double.NaN;
-		}
+		return Double.NaN;
+
 	}
 
 	/**
@@ -173,11 +167,10 @@ public class CandleItem extends ComparableObjectItem {
 	 * @return The close value.
 	 */
 	public double getClose() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getClose().doubleValue();
-		} else {
-			return Double.NaN;
-		}
+		return Double.NaN;
+
 	}
 
 	/**
@@ -187,39 +180,45 @@ public class CandleItem extends ComparableObjectItem {
 	 * @return The volume value.
 	 */
 	public long getVolume() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getVolume().longValue();
-		} else {
-			return 0;
-		}
+		return 0;
 	}
 
 	/**
-	 * Returns the volume value.
+	 * Returns the trade count value.
 	 * 
 	 * 
-	 * @return The volume value.
+	 * @return The trade count value.
 	 */
 	public int getCount() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getTradeCount().intValue();
-		} else {
-			return 0;
-		}
+		return 0;
 	}
 
 	/**
-	 * Returns the volume value.
+	 * Returns the Vwap value.
 	 * 
 	 * 
-	 * @return The volume value.
+	 * @return The Vwap value.
 	 */
 	public double getVwap() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getVwap().doubleValue();
-		} else {
-			return 0;
-		}
+		return 0;
+	}
+
+	/**
+	 * Set the vwap value.
+	 * 
+	 * 
+	 * @param vwap
+	 *            double
+	 */
+	public void setVwap(double vwap) {
+		if (null != getCandle())
+			getCandle().setVwap(new BigDecimal(vwap));
 	}
 
 	/**
@@ -230,9 +229,8 @@ public class CandleItem extends ComparableObjectItem {
 	 *            double
 	 */
 	public void setOpen(double open) {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			getCandle().setOpen(new BigDecimal(open));
-		}
 	}
 
 	/**
@@ -243,9 +241,8 @@ public class CandleItem extends ComparableObjectItem {
 	 *            double
 	 */
 	public void setClose(double close) {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			getCandle().setClose(new BigDecimal(close));
-		}
 	}
 
 	/**
@@ -256,36 +253,20 @@ public class CandleItem extends ComparableObjectItem {
 	 *            double
 	 */
 	public void setHigh(double high) {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			getCandle().setHigh(new BigDecimal(high));
-		}
 	}
 
 	/**
-	 * Set the high value.
+	 * Set the count value.
 	 * 
 	 * 
 	 * @param count
 	 *            int
 	 */
 	public void setCount(int count) {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			getCandle().setTradeCount(new Integer(count));
-		}
-	}
-
-	/**
-	 * Set the high value.
-	 * 
-	 * 
-	 * @param vwap
-	 *            double
-	 */
-	public void setVwap(double vwap) {
-		if (getCandle() != null) {
-			getCandle().setVwap(new BigDecimal(vwap));
-		}
-
 	}
 
 	/**
@@ -296,9 +277,8 @@ public class CandleItem extends ComparableObjectItem {
 	 *            double
 	 */
 	public void setLow(double low) {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			getCandle().setLow(new BigDecimal(low));
-		}
 	}
 
 	/**
@@ -309,9 +289,8 @@ public class CandleItem extends ComparableObjectItem {
 	 *            long
 	 */
 	public void setVolume(long volume) {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			getCandle().setVolume(new Long(volume));
-		}
 	}
 
 	/**
@@ -332,12 +311,9 @@ public class CandleItem extends ComparableObjectItem {
 	 * @return boolean
 	 */
 	public boolean isSide(String side) {
-		if (Side.BOT.equals(side)) {
+		if (Side.BOT.equals(side))
 			return getSide();
-
-		} else {
-			return (getSide() ? false : true);
-		}
+		return (getSide() ? false : true);
 	}
 
 	/**
@@ -348,9 +324,8 @@ public class CandleItem extends ComparableObjectItem {
 	 *            Date
 	 */
 	public void setLastUpdateDate(Date lastUpdateDate) {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			getCandle().setLastUpdateDate(lastUpdateDate);
-		}
 	}
 
 	/**
@@ -360,10 +335,9 @@ public class CandleItem extends ComparableObjectItem {
 	 * @return The lastUpdateDate value.
 	 */
 	public Date getLastUpdateDate() {
-		if (getCandle() != null) {
+		if (null != getCandle())
 			return getCandle().getLastUpdateDate();
-		} else {
-			return null;
-		}
+		return null;
+
 	}
 }

@@ -38,6 +38,7 @@ package org.trade.broker.client;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -219,44 +220,35 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
 			startDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getOpen(), startDate);
+
 			if (backTestBarSize > 0) {
 
+				/*
+				 * Try and find the candles in the database with the matching
+				 * barSize or the next lowest.
+				 */
 				endDate = TradingCalendar.addBusinessDays(endDate, -1);
+				candles = this.getCandles(this.tradestrategy, startDate,
+						endDate, this.tradestrategy.getBarSize());
 
-				candles = tradePersistentModel
-						.findCandlesByContractDateRangeBarSize(
-								this.tradestrategy.getContract()
-										.getIdContract(), startDate, endDate,
-								this.tradestrategy.getBarSize());
-
-				List<Candle> candlesTradingday = tradePersistentModel
-						.findCandlesByContractDateRangeBarSize(
-								this.tradestrategy.getContract()
-										.getIdContract(), this.tradestrategy
-										.getTradingday().getOpen(),
-								this.tradestrategy.getTradingday().getOpen(),
-								backTestBarSize);
+				List<Candle> candlesTradingday = this.getCandles(
+						this.tradestrategy, this.tradestrategy.getTradingday()
+								.getOpen(), this.tradestrategy.getTradingday()
+								.getOpen(), backTestBarSize);
 
 				if (candlesTradingday.isEmpty()) {
-					candlesTradingday = tradePersistentModel
-							.findCandlesByContractDateRangeBarSize(
-									this.tradestrategy.getContract()
-											.getIdContract(),
-									this.tradestrategy.getTradingday()
-											.getOpen(), this.tradestrategy
-											.getTradingday().getOpen(),
-									this.tradestrategy.getBarSize());
+					candlesTradingday = this.getCandles(this.tradestrategy,
+							this.tradestrategy.getTradingday().getOpen(),
+							this.tradestrategy.getTradingday().getOpen(),
+							this.tradestrategy.getBarSize());
 				}
 				for (Candle candle : candlesTradingday) {
 					candles.add(candle);
 				}
 
 			} else {
-				candles = tradePersistentModel
-						.findCandlesByContractDateRangeBarSize(
-								this.tradestrategy.getContract()
-										.getIdContract(), startDate, endDate,
-								this.tradestrategy.getBarSize());
+				candles = this.getCandles(this.tradestrategy, startDate,
+						endDate, this.tradestrategy.getBarSize());
 			}
 
 			/*
@@ -293,7 +285,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						candle.getLow().doubleValue(),
 						candle.getClose().doubleValue(), candle.getVolume(),
 						candle.getVwap().doubleValue(), candle.getTradeCount(),
-						1);
+						this.tradestrategy.getBarSize() / candle.getBarSize());
 
 				/*
 				 * Wait for the candle to be processed by the strategy.
@@ -627,13 +619,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		order.setStatus(OrderStatus.CANCELLED);
 	}
 
-	/*
-	 * For any child indicators that are candle based create a Tradestrategy
-	 * that will get the data. If this tradestrategy already exist share this
-	 * with any other tradestrategy that requires this.
-	 */
 	/**
-	 * Method populateIndicatorCandleSeries.
+	 * Method populateIndicatorCandleSeries. For any child indicators that are
+	 * candle based create a Tradestrategy that will get the data. If this
+	 * tradestrategy already exist share this with any other tradestrategy that
+	 * requires this.
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
@@ -695,5 +685,47 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				}
 			}
 		}
+	}
+
+	/**
+	 * Method getCandles. Try to get the candles based the current barSize or
+	 * less. barSizes must be integer divisible.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @param startDate
+	 *            Date
+	 * @param endDate
+	 *            Date
+	 * @param barSize
+	 *            int
+	 * 
+	 * @return List<Candle>
+	 * @throws PersistentModelException
+	 */
+
+	private List<Candle> getCandles(Tradestrategy tradestrategy,
+			Date startDate, Date endDate, int barSize)
+			throws PersistentModelException {
+		List<Candle> candles = new ArrayList<Candle>(0);
+		int[] barSizes = { 3600, 1800, 900, 300, 120, 60, 30 };
+		for (int element : barSizes) {
+			if (element <= barSize) {
+				/*
+				 * Only go for barSize that are whole integer divisible.
+				 */
+				if ((Math.floor(tradestrategy.getBarSize() / (double) element) == (tradestrategy
+						.getBarSize() / (double) element))) {
+					candles = tradePersistentModel
+							.findCandlesByContractDateRangeBarSize(
+									tradestrategy.getContract().getIdContract(),
+									startDate, endDate, element);
+					if (!candles.isEmpty()) {
+						break;
+					}
+				}
+			}
+		}
+		return candles;
 	}
 }

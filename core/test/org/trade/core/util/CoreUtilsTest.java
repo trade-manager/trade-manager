@@ -174,4 +174,23 @@ public class CoreUtilsTest extends TestCase {
 			fail("Error : " + ex.getCause().getMessage());
 		}
 	}
+
+	@Test
+	public void testIntRounding() {
+
+		try {
+			int barSize = 900;
+			int[] barSizes = { 3600, 1800, 900, 300, 120, 60, 30 };
+			for (int element : barSizes) {
+				if (element <= barSize) {
+					if ((Math.floor(barSize / (double) element) == (barSize / (double) element))) {
+						_log.info("BarSize integer devisable : " + element);
+					}
+				}
+			}
+		} catch (Exception ex) {
+			_log.error("Error : " + ex.getMessage(), ex);
+			fail("Error : " + ex.getCause().getMessage());
+		}
+	}
 }

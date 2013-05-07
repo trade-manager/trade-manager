@@ -118,8 +118,11 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 */
 			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
-
-			// AbstractStrategyRule.logCandle(currentCandle.getCandle());
+			if (newBar && getCurrentCandleCount() > 0) {
+				CandleItem prevCandleItem = (CandleItem) candleSeries
+						.getDataItem(getCurrentCandleCount() - 1);
+				AbstractStrategyRule.logCandle(prevCandleItem.getCandle());
+			}
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
@@ -296,7 +299,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			itemCount = itemCount - 2;
 			for (int i = itemCount; i > (itemCount - bars); i--) {
 				HeikinAshiItem candle = (HeikinAshiItem) series.getDataItem(i);
-				AbstractStrategyRule.logCandle(candle.getCandle());
+				// AbstractStrategyRule.logCandle(candle.getCandle());
 				trail = false;
 				if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
 					if ((candle.getLow() > this.getTargetPrice().doubleValue())

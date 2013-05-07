@@ -264,7 +264,9 @@ public class StrategyData extends Worker {
 	 * @param tradeCount
 	 *            int
 	 * @param rollupInterval
-	 *            int
+	 *            int This is the barSize we are trading on over the barSize of
+	 *            the incoming data. Note the results should be an integer. i.e
+	 *            5min/1min 60min/5min but not 5min/2min.
 	 * @return boolean
 	 */
 	public boolean buildCandle(Date time, double open, double high, double low,

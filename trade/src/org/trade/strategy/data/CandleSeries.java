@@ -88,14 +88,13 @@ public class CandleSeries extends IndicatorSeries {
 	private Double sumVwap = new Double(0);
 	private Long sumVolume = new Long(0);
 	private Double vwapHigh = new Double(0);
-	private Double vwapLow = new Double(99999);
+	private Double vwapLow = Double.MAX_VALUE;
 	private Percent percentChangeFromClose = new Percent(0);
 	private Percent percentChangeFromOpen = new Percent(0);
 	private int rollupInterval = 0;
 	private Candle candleBar = null;
 	private LinkedList<Double> vwapValues = new LinkedList<Double>();
 	private LinkedList<Long> volumeValues = new LinkedList<Long>();
-	private LinkedList<Double> vwapCalculatedValues = new LinkedList<Double>();
 
 	public CandleSeries() {
 		super(IndicatorSeries.CandleSeries, true, 0, false);
@@ -575,7 +574,6 @@ public class CandleSeries extends IndicatorSeries {
 		CandleSeries clone = (CandleSeries) super.clone();
 		clone.vwapValues = new LinkedList<Double>();
 		clone.volumeValues = new LinkedList<Long>();
-		clone.vwapCalculatedValues = new LinkedList<Double>();
 		clone.sumVwap = new Double(0);
 		clone.sumVolume = new Long(0);
 		clone.vwapHigh = new Double(0);
@@ -589,60 +587,6 @@ public class CandleSeries extends IndicatorSeries {
 		clone.endTime = this.getEndTime();
 		clone.barSize = this.getBarSize();
 		return clone;
-	}
-
-	private void clearVwap() {
-		vwapValues.clear();
-		volumeValues.clear();
-		vwapCalculatedValues.clear();
-		sumVwap = new Double(0);
-		sumVolume = new Long(0);
-		vwapHigh = new Double(0);
-		vwapLow = new Double(99999);
-	}
-
-	/**
-	 * Uses a rollup Vwap based on a greater time period. So 5 sec bars rolled
-	 * up to 5min bars will rollup interval of 5min/5sec = 60.
-	 * 
-	 * 
-	 * @param rollupInterval
-	 *            the rollup Interval.
-	 * @param volume
-	 *            long
-	 * @param vwap
-	 *            double
-	 */
-
-	public void setCalcVwap(int rollupInterval, long volume, double vwap) {
-
-		if (this.rollupInterval != rollupInterval) {
-			this.clearVwap();
-			this.rollupInterval = rollupInterval;
-		}
-
-		if (rollupInterval == this.vwapValues.size()) {
-			Long volSum = this.volumeValues.removeLast();
-			Double vwapSum = this.vwapValues.removeLast();
-			this.vwapCalculatedValues.removeLast();
-			sumVwap = sumVwap - vwapSum;
-			sumVolume = sumVolume - volSum;
-		}
-		this.volumeValues.addFirst(volume);
-		sumVolume = sumVolume + volume;
-
-		this.vwapValues.addFirst((volume * vwap));
-		sumVwap = sumVwap + (volume * vwap);
-
-		this.vwapCalculatedValues.addFirst(getVwap());
-
-		if (vwapLow > getVwap()) {
-			vwapLow = getVwap();
-		}
-
-		if (vwapHigh < getVwap()) {
-			vwapHigh = getVwap();
-		}
 	}
 
 	/**
@@ -672,17 +616,14 @@ public class CandleSeries extends IndicatorSeries {
 	 */
 	@Transient
 	public double getVwap() {
-		double vwap = 0;
 		if (sumVolume > 0) {
-			vwap = sumVwap / sumVolume;
+			return sumVwap / sumVolume;
 		}
-		return vwap;
+		return 0;
 	}
 
 	/**
-	 * Checks to see if the previous number or bars make a V shape using the x,y
-	 * vwap values.
-	 * 
+	 * Method updateSeries.
 	 * 
 	 * @param source
 	 *            CandleSeries
@@ -764,7 +705,7 @@ public class CandleSeries extends IndicatorSeries {
 
 			CandlePeriod period = new CandlePeriod(startDate, endDate);
 			Candle avgCandle = new Candle(getContract(), period, 0, 0, 0,
-					99999, new Date());
+					Double.MAX_VALUE, new Date());
 			avgCandle.setHigh(new BigDecimal(
 					(sunHighPriceXVolume / (wieghted ? sumVolume
 							: numberOfCandles))));
@@ -816,7 +757,8 @@ public class CandleSeries extends IndicatorSeries {
 					&& (candle.getPeriod().getStart().before(endDate))) {
 				if (null == this.candleBar) {
 					this.candleBar = new Candle(getContract(),
-							candle.getPeriod(), 0, 0, 99999, 0, new Date());
+							candle.getPeriod(), 0, 0, Double.MAX_VALUE, 0,
+							new Date());
 					this.candleBar.setEndPeriod(candle.getPeriod().getEnd());
 				}
 
@@ -951,6 +893,56 @@ public class CandleSeries extends IndicatorSeries {
 					+ dataItem.getOpen() + " Close: " + dataItem.getClose()
 					+ " High: " + dataItem.getHigh() + " Low: "
 					+ dataItem.getLow() + " Volume: " + dataItem.getVolume());
+		}
+	}
+
+	private void clearVwap() {
+		vwapValues.clear();
+		volumeValues.clear();
+		sumVwap = new Double(0);
+		sumVolume = new Long(0);
+		vwapHigh = new Double(0);
+		vwapLow = Double.MAX_VALUE;
+	}
+
+	/**
+	 * Method setCalcVwap. Uses a rollup Vwap based on a greater time period. So
+	 * 5 sec bars rolled up to 5min bars will rollup interval of 5min/5sec = 60.
+	 * 
+	 * 
+	 * @param rollupInterval
+	 *            the rollup Interval.
+	 * @param volume
+	 *            long
+	 * @param vwap
+	 *            double
+	 */
+
+	private void setCalcVwap(int rollupInterval, long volume, double vwap) {
+
+		if (this.rollupInterval != rollupInterval) {
+			this.clearVwap();
+			this.rollupInterval = rollupInterval;
+		}
+
+		if (rollupInterval == this.vwapValues.size()) {
+			Long volSum = this.volumeValues.removeLast();
+			Double vwapSum = this.vwapValues.removeLast();
+			sumVwap = sumVwap - vwapSum;
+			sumVolume = sumVolume - volSum;
+		}
+		this.volumeValues.addFirst(volume);
+		sumVolume = sumVolume + volume;
+
+		this.vwapValues.addFirst((volume * vwap));
+		sumVwap = sumVwap + (volume * vwap);
+
+		if (vwapLow > getVwap()) {
+			vwapLow = getVwap();
+		}
+
+		if (vwapHigh < getVwap()) {
+			vwapHigh = getVwap();
 		}
 	}
 }
