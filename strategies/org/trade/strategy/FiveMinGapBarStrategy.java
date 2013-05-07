@@ -137,6 +137,18 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				 */
 				if (startPeriod.equals(TradingCalendar.getSpecificTime(
 						startPeriod, 9, 35)) && newBar) {
+
+					// TODO add the tails as a % of the body.
+					double barBodyPercent = (Math.abs(prevCandleItem.getOpen()
+							- prevCandleItem.getClose()) / Math
+							.abs(prevCandleItem.getHigh()
+									- prevCandleItem.getLow())) * 100;
+					if (barBodyPercent < 10) {
+						_log.info("Bar Body outside % range  Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+						// return;
+					}
+
 					Side side = Side.newInstance(Side.SLD);
 					if (prevCandleItem.isSide(Side.BOT)) {
 						side = Side.newInstance(Side.BOT);
@@ -149,7 +161,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						priceStop = new Money(prevCandleItem.getHigh());
 						action = Action.SELL;
 					}
-
 					Money priceClose = new Money(prevCandleItem.getClose());
 					Entrylimit entrylimit = getEntryLimit()
 							.getValue(priceClose);
@@ -164,8 +175,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					// If the candle less than the entry limit %
 					if (((highLowRange) / prevCandleItem.getClose()) < entrylimit
 							.getPercentOfPrice().doubleValue()) {
-						// TODO add the tails as a % of the body.
-						_log.info(" We have a trade!!  Symbol: " + getSymbol()
+						_log.info("We have a trade!!  Symbol: " + getSymbol()
 								+ " Time: " + startPeriod);
 						/*
 						 * Create an open position.
