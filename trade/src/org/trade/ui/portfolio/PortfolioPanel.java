@@ -179,6 +179,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JLabel symbolLabel = new JLabel("Symbol:");
 			symbolField = new StringField(new MaskFormatter(MASK), VALID_CHARS,
 					PLACE_HOLDER);
+			symbolField.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel2.add(portfolioLabel, null);
 			jPanel2.add(portfolioEditorComboBox, null);
 			jPanel2.add(startLabel, null);
