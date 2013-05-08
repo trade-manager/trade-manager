@@ -1941,13 +1941,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						 * hours if we are to get backtest data on a lower
 						 * timeframe.
 						 */
-						if (TradingCalendar.isTradingDay(TradingCalendar
-								.getDate())
+						Date now = new Date();
+						if (TradingCalendar.isTradingDay(itemTradingday
+								.getOpen())
 								&& TradingCalendar.sameDay(
 										itemTradingday.getOpen(),
-										TradingCalendar.getDate())
+										TradingCalendar.getDate(now.getTime()))
 								&& !TradingCalendar
-										.isAfterHours(TradingCalendar.getDate()))
+										.isAfterHours(TradingCalendar
+												.getDate(now.getTime())))
 							continue;
 
 						if (itemTradingday.getTradestrategies().isEmpty())
