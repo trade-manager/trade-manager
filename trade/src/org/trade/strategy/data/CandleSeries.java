@@ -883,7 +883,8 @@ public class CandleSeries extends IndicatorSeries {
 	private void updateRollupCandle(int interval, double open, double high,
 			double low, double close, long volume, int tradeCount, double vwap) {
 
-		if (this.getRollingCandle().getInterval() != interval) {
+		if (null == this.rollingCandle
+				|| this.getRollingCandle().getInterval() != interval) {
 			this.rollingCandle = new RollingCandle(interval, open, high, low,
 					close, volume, tradeCount, vwap);
 		}
@@ -960,11 +961,11 @@ public class CandleSeries extends IndicatorSeries {
 				Double openLast = this.openValues.removeLast();
 				this.open = openLast;
 				Double highLast = this.highValues.removeLast();
-				if (this.high == highLast)
+				if (this.high == highLast && !this.highValues.isEmpty())
 					this.high = Collections.max(this.highValues);
 				Double lowLast = this.lowValues.removeLast();
-				if (this.low == lowLast)
-					this.low = Collections.max(this.lowValues);
+				if (this.low == lowLast && !this.lowValues.isEmpty())
+					this.low = Collections.min(this.lowValues);
 
 				Integer tradeCountLast = this.tradeCountValues.removeLast();
 				sumTradeCount = sumTradeCount - tradeCountLast;
@@ -985,8 +986,9 @@ public class CandleSeries extends IndicatorSeries {
 
 			this.closePriceValues.addFirst(close);
 			sumClosePrice = sumClosePrice + close;
-			if (interval > 0)
-				this.avgClosePrice = sumClosePrice / interval;
+			if (this.closePriceValues.size() > 0)
+				this.avgClosePrice = sumClosePrice
+						/ this.closePriceValues.size();
 
 			if (sumVolume > 0)
 				this.vwap = sumVwap / sumVolume;
