@@ -1936,35 +1936,43 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							Tradingday.DATE_ORDER_ASC);
 					for (Tradingday itemTradingday : tradingdays
 							.getTradingdays()) {
-						Date today = new Date();
-						if (!(TradingCalendar.isMarketHours(
-								itemTradingday.getOpen(),
-								itemTradingday.getClose(), today) && TradingCalendar
-								.sameDay(itemTradingday.getOpen(), today))) {
-							if (itemTradingday.getTradestrategies().isEmpty())
-								continue;
-							Tradingday tradingday = (Tradingday) itemTradingday
-									.clone();
-							for (Tradestrategy itemTradestrategy : itemTradingday
-									.getTradestrategies()) {
-								if (backTestBarSize < itemTradestrategy
-										.getBarSize()) {
-									Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
-											.clone();
-									tradestrategy.setBarSize(backTestBarSize);
-									tradestrategy.setChartDays(1);
-									tradestrategy
-											.setIdTradeStrategy(this.brokerManagerModel
-													.getNextRequestId());
-									tradingday.addTradestrategy(tradestrategy);
-									this.grandTotal++;
-								}
+						/*
+						 * If its today and its a tradingday it must be after
+						 * hours if we are to get backtest data on a lower
+						 * timeframe.
+						 */
+						if (TradingCalendar.isTradingDay(TradingCalendar
+								.getDate())
+								&& TradingCalendar.sameDay(
+										itemTradingday.getOpen(),
+										TradingCalendar.getDate())
+								&& !TradingCalendar
+										.isAfterHours(TradingCalendar.getDate()))
+							continue;
+
+						if (itemTradingday.getTradestrategies().isEmpty())
+							continue;
+						Tradingday tradingday = (Tradingday) itemTradingday
+								.clone();
+						for (Tradestrategy itemTradestrategy : itemTradingday
+								.getTradestrategies()) {
+							if (backTestBarSize < itemTradestrategy
+									.getBarSize()) {
+								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
+										.clone();
+								tradestrategy.setBarSize(backTestBarSize);
+								tradestrategy.setChartDays(1);
+								tradestrategy
+										.setIdTradeStrategy(this.brokerManagerModel
+												.getNextRequestId());
+								tradingday.addTradestrategy(tradestrategy);
+								this.grandTotal++;
 							}
-							totalSumbitted = processTradingday(
-									getTradingdayToProcess(tradingday,
-											runningContractRequests),
-									totalSumbitted);
 						}
+						totalSumbitted = processTradingday(
+								getTradingdayToProcess(tradingday,
+										runningContractRequests),
+								totalSumbitted);
 					}
 				}
 

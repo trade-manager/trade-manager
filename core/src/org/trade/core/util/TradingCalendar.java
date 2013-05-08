@@ -498,6 +498,18 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
+	 * @return Date
+	 * @exception * @see
+	 */
+	public static Date getDate() {
+		synchronized (CALENDAR_NY) {
+			return CALENDAR_NY.getTime();
+		}
+	}
+
+	/**
+	 * Return the Day for this date
+	 * 
 	 * @param date
 	 *            Date
 	 * @return int
