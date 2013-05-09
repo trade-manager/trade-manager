@@ -909,7 +909,16 @@ public class CandleSeries extends IndicatorSeries {
 		private long volume = 0;
 		private int tradeCount = 0;
 		private double vwap = 0;
-		private double avgClosePrice = 0;
+		private double avgClose = 0;
+
+		private double previousOpen = 0;
+		private double previousHigh = 0;
+		private double previousLow = 0;
+		private double previousClose = 0;
+		private long previousVolume = 0;
+		private int previousTradeCount = 0;
+		private double previousVwap = 0;
+		private double previousAvgClose = 0;
 
 		private Double sumClosePrice = null;
 		private Double sumVwap = null;
@@ -922,7 +931,9 @@ public class CandleSeries extends IndicatorSeries {
 		private LinkedList<Double> closeValues = null;
 		private LinkedList<Long> volumeValues = null;
 		private LinkedList<Integer> tradeCountValues = null;
+		private LinkedList<Double> vwapVolumeValues = null;
 		private LinkedList<Double> vwapValues = null;
+		private LinkedList<Double> avgCloseValues = null;
 
 		public RollingCandle(int rollupInterval, double open, double high,
 				double low, double close, long volume, int tradeCount,
@@ -936,7 +947,7 @@ public class CandleSeries extends IndicatorSeries {
 			this.volume = volume;
 			this.tradeCount = tradeCount;
 			this.vwap = vwap;
-			this.avgClosePrice = close;
+			this.avgClose = close;
 
 			if (rollupInterval > 1) {
 				openValues = new LinkedList<Double>();
@@ -945,7 +956,9 @@ public class CandleSeries extends IndicatorSeries {
 				closeValues = new LinkedList<Double>();
 				volumeValues = new LinkedList<Long>();
 				tradeCountValues = new LinkedList<Integer>();
+				vwapVolumeValues = new LinkedList<Double>();
 				vwapValues = new LinkedList<Double>();
+				avgCloseValues = new LinkedList<Double>();
 
 				sumVwap = new Double(0);
 				sumClosePrice = new Double(0);
@@ -962,25 +975,28 @@ public class CandleSeries extends IndicatorSeries {
 				int tradeCount, double vwap) {
 
 			if (rollupInterval == this.openValues.size()) {
-				Double openLast = this.openValues.removeLast();
-				this.open = openLast;
-				Double highLast = this.highValues.removeLast();
-				if (this.high == highLast && !this.highValues.isEmpty())
+				this.previousOpen = this.openValues.removeLast();
+				this.open = previousOpen;
+				this.previousHigh = this.highValues.removeLast();
+				if (this.high == this.previousHigh
+						&& !this.highValues.isEmpty())
 					this.high = Collections.max(this.highValues);
 
-				Double lowLast = this.lowValues.removeLast();
-				if (this.low == lowLast && !this.lowValues.isEmpty())
+				this.previousLow = this.lowValues.removeLast();
+				if (this.low == this.previousLow && !this.lowValues.isEmpty())
 					this.low = Collections.min(this.lowValues);
 
-				Double closeLast = this.closeValues.removeLast();
-				sumClosePrice = sumClosePrice - closeLast;
+				this.previousClose = this.closeValues.removeLast();
+				sumClosePrice = sumClosePrice - this.previousClose;
 
-				Long volLast = this.volumeValues.removeLast();
-				sumVolume = sumVolume - volLast;
-				Double vwapLast = this.vwapValues.removeLast();
-				sumVwap = sumVwap - vwapLast;
-				Integer tradeCountLast = this.tradeCountValues.removeLast();
-				sumTradeCount = sumTradeCount - tradeCountLast;
+				this.previousVolume = this.volumeValues.removeLast();
+				sumVolume = sumVolume - this.previousVolume;
+				this.previousVwap = this.vwapVolumeValues.removeLast();
+				sumVwap = sumVwap - this.previousVwap;
+				this.previousTradeCount = this.tradeCountValues.removeLast();
+				sumTradeCount = sumTradeCount - this.previousTradeCount;
+				this.previousVwap = this.vwapValues.removeLast();
+				this.previousAvgClose = this.avgCloseValues.removeLast();
 			}
 
 			this.openValues.addFirst(open);
@@ -996,8 +1012,10 @@ public class CandleSeries extends IndicatorSeries {
 			this.closeValues.addFirst(close);
 
 			sumClosePrice = sumClosePrice + close;
+			this.avgClose = 0;
 			if (this.closeValues.size() > 0)
-				this.avgClosePrice = sumClosePrice / this.closeValues.size();
+				this.avgClose = sumClosePrice / this.closeValues.size();
+			this.avgCloseValues.addFirst(this.avgClose);
 
 			this.tradeCountValues.addFirst(tradeCount);
 			this.volumeValues.addFirst(volume);
@@ -1005,11 +1023,13 @@ public class CandleSeries extends IndicatorSeries {
 			sumVolume = sumVolume + volume;
 			sumTradeCount = sumTradeCount - tradeCount;
 
-			this.vwapValues.addFirst((volume * vwap));
+			this.vwapVolumeValues.addFirst(vwap * volume);
 			sumVwap = sumVwap + (volume * vwap);
 
+			this.vwap = 0;
 			if (sumVolume > 0)
 				this.vwap = sumVwap / sumVolume;
+			this.vwapValues.addFirst(this.vwap);
 		}
 
 		/**
@@ -1022,32 +1042,12 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		/**
-		 * Method setRollupInterval.
-		 * 
-		 * @param rollupInterval
-		 *            int
-		 */
-		public void setRollupInterval(int rollupInterval) {
-			this.rollupInterval = rollupInterval;
-		}
-
-		/**
 		 * Method getOpen.
 		 * 
 		 * @return double
 		 */
 		public double getOpen() {
 			return this.open;
-		}
-
-		/**
-		 * Method setOpen.
-		 * 
-		 * @param open
-		 *            double
-		 */
-		public void setOpen(double open) {
-			this.open = open;
 		}
 
 		/**
@@ -1060,32 +1060,12 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		/**
-		 * Method setHigh.
-		 * 
-		 * @param high
-		 *            double
-		 */
-		public void setHigh(double high) {
-			this.high = high;
-		}
-
-		/**
 		 * Method getLow.
 		 * 
 		 * @return double
 		 */
 		public double getLow() {
 			return this.low;
-		}
-
-		/**
-		 * Method setLow.
-		 * 
-		 * @param low
-		 *            double
-		 */
-		public void setLow(double low) {
-			this.low = low;
 		}
 
 		/**
@@ -1098,32 +1078,12 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		/**
-		 * Method setClose.
-		 * 
-		 * @param close
-		 *            double
-		 */
-		public void setClose(double close) {
-			this.close = close;
-		}
-
-		/**
 		 * Method getAverageClosePrice.
 		 * 
 		 * @return double
 		 */
 		public double getAverageClosePrice() {
-			return this.avgClosePrice;
-		}
-
-		/**
-		 * Method setAverageClosePrice.
-		 * 
-		 * @param avgClosePrice
-		 *            double
-		 */
-		public void setAverageClosePrice(double avgClosePrice) {
-			this.avgClosePrice = avgClosePrice;
+			return this.avgClose;
 		}
 
 		/**
@@ -1136,32 +1096,12 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		/**
-		 * Method setVwap.
-		 * 
-		 * @param vwap
-		 *            double
-		 */
-		public void setVwap(double vwap) {
-			this.vwap = vwap;
-		}
-
-		/**
 		 * Method getVolume.
 		 * 
 		 * @return long
 		 */
 		public long getVolume() {
 			return this.volume;
-		}
-
-		/**
-		 * Method setVolume.
-		 * 
-		 * @param volume
-		 *            long
-		 */
-		public void setVolume(long volume) {
-			this.volume = volume;
 		}
 
 		/**
@@ -1174,13 +1114,76 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		/**
-		 * Method setTradeCount.
+		 * Method getPreviousOpen.
 		 * 
-		 * @param tradeCount
-		 *            int
+		 * @return double
 		 */
-		public void setTradeCount(int tradeCount) {
-			this.tradeCount = tradeCount;
+		public double getPreviousOpen() {
+			return this.previousOpen;
 		}
+
+		/**
+		 * Method getPreviousHigh.
+		 * 
+		 * @return double
+		 */
+		public double getPreviousHigh() {
+			return this.previousHigh;
+		}
+
+		/**
+		 * Method getPreviousLow.
+		 * 
+		 * @return double
+		 */
+		public double getPreviousLow() {
+			return this.previousLow;
+		}
+
+		/**
+		 * Method getPreviousClose.
+		 * 
+		 * @return double
+		 */
+		public double getPreviousClose() {
+			return this.previousClose;
+		}
+
+		/**
+		 * Method getPreviousAverageClose.
+		 * 
+		 * @return double
+		 */
+		public double getPreviousAverageClose() {
+			return this.previousAvgClose;
+		}
+
+		/**
+		 * Method getPreviousVwap.
+		 * 
+		 * @return double
+		 */
+		public double getPreviousVwap() {
+			return this.previousVwap;
+		}
+
+		/**
+		 * Method getPreviousVolume.
+		 * 
+		 * @return long
+		 */
+		public long getPreviousVolume() {
+			return this.previousVolume;
+		}
+
+		/**
+		 * Method getPreviousTradeCount.
+		 * 
+		 * @return int
+		 */
+		public int getPreviousTradeCount() {
+			return this.previousTradeCount;
+		}
+
 	}
 }
