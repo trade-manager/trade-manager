@@ -373,7 +373,7 @@ public class PivotSeries extends IndicatorSeries {
 		if ((startBar + 1) >= this.getBars()) {
 			// Get the x,y pairs
 			for (int i = startBar; i > (startBar - this.getBars()); i--) {
-				CandleItem candle = (CandleItem) source.getDataItem(i);
+				CandleItem candleItem = (CandleItem) source.getDataItem(i);
 				// TODO next line just for debugging
 				// if (((BarPeriod) candle.getPeriod()).getDaySerialIndex() ==
 				// 690) {
@@ -384,9 +384,9 @@ public class PivotSeries extends IndicatorSeries {
 				 * another for 5 bars.
 				 */
 
-				long time = (((CandlePeriod) candle.getPeriod())
+				long time = (((CandlePeriod) candleItem.getPeriod())
 						.getDaySerialIndex());
-				userDataVector.put(time, new Pair(time, candle.getVwap()));
+				userDataVector.put(time, new Pair(time, candleItem.getVwap()));
 			}
 
 			/*
