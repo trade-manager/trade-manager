@@ -44,7 +44,6 @@ import javax.persistence.Entity;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
-import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.vwap.VwapItem;
 
 /**
@@ -209,27 +208,23 @@ public class VwapSeries extends IndicatorSeries {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
-		/*
-		 * Do not want to add the new bar.
-		 */
-		for (int i = skip; i < source.getItemCount(); i++) {
-			if (i >= 0) {
-				CandleItem candleItem = (CandleItem) source.getDataItem(i);
-				/*
-				 * If the item does not exist in the series then this is a new
-				 * time period and so we need to remove the last in the set and
-				 * add the new periods values. Otherwise we just update the last
-				 * value in the set.
-				 */
-				if (newBar) {
-					VwapItem dataItem = new VwapItem(candleItem.getPeriod(),
-							new BigDecimal(candleItem.getVwap()));
-					this.add(dataItem, false);
-				} else {
-					VwapItem dataItem = (VwapItem) this.getDataItem(this
-							.getItemCount() - 1);
-					dataItem.setVwapPrice(candleItem.getVwap());
-				}
+
+		if (source.getItemCount() > skip) {
+			/*
+			 * If the item does not exist in the series then this is a new time
+			 * period and so we need to remove the last in the set and add the
+			 * new periods values. Otherwise we just update the last value in
+			 * the set.
+			 */
+			if (newBar) {
+				VwapItem dataItem = new VwapItem(source.getRollingCandle()
+						.getPeriod(), new BigDecimal(source.getRollingCandle()
+						.getVwap()));
+				this.add(dataItem, false);
+			} else {
+				VwapItem dataItem = (VwapItem) this.getDataItem(this
+						.getItemCount() - 1);
+				dataItem.setVwapPrice(source.getRollingCandle().getVwap());
 			}
 		}
 	}

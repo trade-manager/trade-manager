@@ -47,7 +47,6 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.atr.AverageTrueRangeItem;
-import org.trade.strategy.data.candle.CandleItem;
 
 /**
  * A list of (RegularTimePeriod, open, high, low, close) data items.
@@ -312,17 +311,19 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 		if (source.getItemCount() > skip) {
 
 			// get the current data item...
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			double highLessLow = candleItem.getHigh() - candleItem.getLow();
+			double highLessLow = source.getRollingCandle().getHigh()
+					- source.getRollingCandle().getLow();
+
 			double absHighLessPrevClose = 0;
 			double absLowLessPrevClose = 0;
 			if (source.getItemCount() > 1) {
-				CandleItem prevCandleItem = (CandleItem) source
-						.getDataItem(skip - 1);
-				absHighLessPrevClose = Math.abs(candleItem.getHigh()
-						- prevCandleItem.getClose());
-				absLowLessPrevClose = Math.abs(candleItem.getLow()
-						- prevCandleItem.getClose());
+
+				absHighLessPrevClose = Math.abs(source.getRollingCandle()
+						.getHigh()
+						- source.getRollingCandle().getPreviousClose());
+				absLowLessPrevClose = Math.abs(source.getRollingCandle()
+						.getLow()
+						- source.getRollingCandle().getPreviousClose());
 
 				double tR = Math.max(highLessLow,
 						Math.max(absHighLessPrevClose, absLowLessPrevClose));
@@ -346,7 +347,8 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 					}
 					if (newBar) {
 						AverageTrueRangeItem dataItem = new AverageTrueRangeItem(
-								candleItem.getPeriod(), new BigDecimal(currATR));
+								source.getRollingCandle().getPeriod(),
+								new BigDecimal(currATR));
 						this.add(dataItem, false);
 
 					} else {

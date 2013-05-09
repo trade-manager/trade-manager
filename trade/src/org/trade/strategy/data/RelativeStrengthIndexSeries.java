@@ -46,7 +46,6 @@ import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
-import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.rsi.RelativeStrengthIndexItem;
 
 /**
@@ -321,15 +320,11 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 		}
 
 		if (source.getItemCount() > skip) {
-
-			// get the current data item...
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 			double diffCloseValue = 0;
 			if (source.getItemCount() > 1) {
-				CandleItem prevCandleItem = (CandleItem) source
-						.getDataItem(skip - 1);
-				diffCloseValue = candleItem.getClose()
-						- prevCandleItem.getClose();
+
+				diffCloseValue = source.getRollingCandle().getClose()
+						- source.getRollingCandle().getPreviousClose();
 
 				/*
 				 * If the item does not exist in the series then this is a new
@@ -402,7 +397,8 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 
 				if (newBar) {
 					RelativeStrengthIndexItem dataItem = new RelativeStrengthIndexItem(
-							candleItem.getPeriod(), new BigDecimal(currentRSI));
+							source.getRollingCandle().getPeriod(),
+							new BigDecimal(currentRSI));
 					this.add(dataItem, false);
 				} else {
 					RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
