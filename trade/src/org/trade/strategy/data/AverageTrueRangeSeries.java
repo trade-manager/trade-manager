@@ -336,7 +336,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 					sum = sum - prevTR + tR;
 				}
 
-				if (skip >= getLength()) {
+				if (skip >= getLength() - 1) {
 
 					if (currATR == -1) {
 						currATR = sum / getLength();
