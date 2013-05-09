@@ -490,13 +490,14 @@ public class CandleSeries extends IndicatorSeries {
 		// + " vwap: " + vwap + " tradeCount: " + tradeCount
 		// + " rollupInterval: " + rollupInterval);
 
-		this.rollingCandle.updateRollingCandle(rollupInterval, open, high, low,
-				close, volume, tradeCount, vwap, time);
-
 		CandleItem candle = null;
 		if (index > -1) {
 
 			candle = (CandleItem) this.getDataItem(index);
+
+			this.rollingCandle.updateRollingCandle(candle.getPeriod(),
+					rollupInterval, open, high, low, close, volume, tradeCount,
+					vwap, time);
 
 			if (candle.getHigh() < high) {
 				candle.setHigh(high);
@@ -517,9 +518,6 @@ public class CandleSeries extends IndicatorSeries {
 		} else {
 
 			/*
-			 * If the Vwap is zero use the close price. This should not happen
-			 * but some data from brokers does not always have a value.
-			 * 
 			 * For 60min time period start the clock at 9:00am. This matches
 			 * most charting platforms.
 			 */
@@ -543,10 +541,13 @@ public class CandleSeries extends IndicatorSeries {
 			Tradingday tradingday = new Tradingday(
 					TradingCalendar.getSpecificTime(this.getStartTime(), start),
 					TradingCalendar.getSpecificTime(this.getEndTime(), start));
-			candle = new CandleItem(this.getContract(), tradingday,
-					new CandlePeriod(start, this.getBarSize()), open, high,
-					low, close, volume, this.rollingCandle.getVwap(),
-					tradeCount, time);
+			CandlePeriod period = new CandlePeriod(start, this.getBarSize());
+			this.rollingCandle.updateRollingCandle(period, rollupInterval,
+					open, high, low, close, volume, tradeCount, vwap, time);
+
+			candle = new CandleItem(this.getContract(), tradingday, period,
+					open, high, low, close, volume,
+					this.rollingCandle.getVwap(), tradeCount, time);
 			this.add(candle, false);
 			return true;
 		}
@@ -869,6 +870,7 @@ public class CandleSeries extends IndicatorSeries {
 	public class RollingCandle {
 
 		private int rollupInterval = 0;
+		private RegularTimePeriod period = null;
 		private double open = 0;
 		private double high = 0;
 		private double low = Double.MAX_VALUE;
@@ -919,9 +921,10 @@ public class CandleSeries extends IndicatorSeries {
 		 * @param volume
 		 *            long
 		 */
-		public void updateRollingCandle(int rollupInterval, double open,
-				double high, double low, double close, long volume,
-				int tradeCount, double vwap, Date lastUpdateDate) {
+		public void updateRollingCandle(RegularTimePeriod period,
+				int rollupInterval, double open, double high, double low,
+				double close, long volume, int tradeCount, double vwap,
+				Date lastUpdateDate) {
 
 			if (rollupInterval != this.rollupInterval) {
 				this.rollupInterval = rollupInterval;
@@ -957,6 +960,7 @@ public class CandleSeries extends IndicatorSeries {
 				this.vwapValues.clear();
 				this.avgCloseValues.clear();
 			}
+			this.period = period;
 			this.lastUpdateDate = lastUpdateDate;
 
 			if (rollupInterval == this.openValues.size()) {
@@ -1031,6 +1035,15 @@ public class CandleSeries extends IndicatorSeries {
 			if (sumVolume > 0)
 				this.vwap = sumVwap / sumVolume;
 			this.vwapValues.addFirst(this.vwap);
+		}
+
+		/**
+		 * Method getPeriod.
+		 * 
+		 * @return CandlePeriod
+		 */
+		public RegularTimePeriod getPeriod() {
+			return this.period;
 		}
 
 		/**
@@ -1121,6 +1134,10 @@ public class CandleSeries extends IndicatorSeries {
 		 */
 		public Date getLastUpdateDate() {
 			return this.lastUpdateDate;
+		}
+
+		public boolean getSide() {
+			return this.getClose() >= this.getOpen();
 		}
 
 		/**
