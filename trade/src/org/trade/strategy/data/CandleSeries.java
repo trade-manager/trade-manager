@@ -491,7 +491,7 @@ public class CandleSeries extends IndicatorSeries {
 		// + " rollupInterval: " + rollupInterval);
 
 		this.rollingCandle.updateRollingCandle(rollupInterval, open, high, low,
-				close, volume, tradeCount, vwap);
+				close, volume, tradeCount, vwap, time);
 
 		CandleItem candle = null;
 		if (index > -1) {
@@ -877,6 +877,7 @@ public class CandleSeries extends IndicatorSeries {
 		private int tradeCount = 0;
 		private double vwap = 0;
 		private double avgClose = 0;
+		private Date lastUpdateDate = null;
 
 		private double previousOpen = 0;
 		private double previousHigh = 0;
@@ -903,7 +904,6 @@ public class CandleSeries extends IndicatorSeries {
 		private LinkedList<Double> avgCloseValues = new LinkedList<Double>();
 
 		public RollingCandle() {
-
 		}
 
 		/**
@@ -921,10 +921,33 @@ public class CandleSeries extends IndicatorSeries {
 		 */
 		public void updateRollingCandle(int rollupInterval, double open,
 				double high, double low, double close, long volume,
-				int tradeCount, double vwap) {
+				int tradeCount, double vwap, Date lastUpdateDate) {
 
 			if (rollupInterval != this.rollupInterval) {
-				openValues = new LinkedList<Double>();
+				this.rollupInterval = rollupInterval;
+				this.previousOpen = this.open;
+				this.previousHigh = this.high;
+				this.previousLow = this.low;
+				this.previousClose = this.close;
+				this.previousVolume = this.volume;
+				this.previousTradeCount = this.tradeCount;
+				this.previousVwap = this.vwap;
+				this.previousAvgClose = this.avgClose;
+
+				this.open = open;
+				this.high = 0;
+				this.low = Double.MAX_VALUE;
+				this.close = 0;
+				this.volume = 0;
+				this.tradeCount = 0;
+				this.vwap = 0;
+				this.avgClose = 0;
+				this.lastUpdateDate = null;
+				this.sumClosePrice = new Double(0);
+				this.sumVwap = new Double(0);
+				this.sumVolume = new Long(0);
+				this.sumTradeCount = new Integer(0);
+				this.openValues.clear();
 				this.highValues.clear();
 				this.lowValues.clear();
 				this.closeValues.clear();
@@ -933,38 +956,50 @@ public class CandleSeries extends IndicatorSeries {
 				this.vwapVolumeValues.clear();
 				this.vwapValues.clear();
 				this.avgCloseValues.clear();
-				sumClosePrice = new Double(0);
-				sumVwap = new Double(0);
-				sumVolume = new Long(0);
-				sumTradeCount = new Integer(0);
 			}
+			this.lastUpdateDate = lastUpdateDate;
 
 			if (rollupInterval == this.openValues.size()) {
 				this.previousOpen = this.openValues.removeLast();
 				this.open = previousOpen;
+				if (this.openValues.isEmpty()) {
+					this.open = open;
+				}
+
 				this.previousHigh = this.highValues.removeLast();
-				if (this.high == this.previousHigh
-						&& !this.highValues.isEmpty())
-					this.high = Collections.max(this.highValues);
+				if (this.highValues.isEmpty()) {
+					this.high = high;
+				} else {
+					if (this.high == this.previousHigh)
+						this.high = Collections.max(this.highValues);
+				}
 
 				this.previousLow = this.lowValues.removeLast();
-				if (this.low == this.previousLow && !this.lowValues.isEmpty())
-					this.low = Collections.min(this.lowValues);
+				if (this.lowValues.isEmpty()) {
+					this.low = low;
+				} else {
+					if (this.low == this.previousLow)
+						this.low = Collections.min(this.lowValues);
+				}
 
 				this.previousClose = this.closeValues.removeLast();
 				sumClosePrice = sumClosePrice - this.previousClose;
 
 				this.previousVolume = this.volumeValues.removeLast();
 				sumVolume = sumVolume - this.previousVolume;
+
 				this.previousVwap = this.vwapVolumeValues.removeLast();
 				sumVwap = sumVwap - this.previousVwap;
+
 				this.previousTradeCount = this.tradeCountValues.removeLast();
 				sumTradeCount = sumTradeCount - this.previousTradeCount;
+
 				this.previousVwap = this.vwapValues.removeLast();
 				this.previousAvgClose = this.avgCloseValues.removeLast();
 			}
 
 			this.openValues.addFirst(open);
+
 			this.highValues.addFirst(high);
 			if (high > this.high)
 				this.high = high;
@@ -983,15 +1018,16 @@ public class CandleSeries extends IndicatorSeries {
 			this.avgCloseValues.addFirst(this.avgClose);
 
 			this.tradeCountValues.addFirst(tradeCount);
-			this.volumeValues.addFirst(volume);
+			sumTradeCount = sumTradeCount + tradeCount;
+			this.tradeCount = sumTradeCount;
 
+			this.volumeValues.addFirst(volume);
 			sumVolume = sumVolume + volume;
-			sumTradeCount = sumTradeCount - tradeCount;
+			this.volume = sumVolume;
 
 			this.vwapVolumeValues.addFirst(vwap * volume);
 			sumVwap = sumVwap + (volume * vwap);
 
-			this.vwap = 0;
 			if (sumVolume > 0)
 				this.vwap = sumVwap / sumVolume;
 			this.vwapValues.addFirst(this.vwap);
@@ -1079,6 +1115,15 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		/**
+		 * Method getLastUpdateDate.
+		 * 
+		 * @return Date
+		 */
+		public Date getLastUpdateDate() {
+			return this.lastUpdateDate;
+		}
+
+		/**
 		 * Method getPreviousOpen.
 		 * 
 		 * @return double
@@ -1149,6 +1194,5 @@ public class CandleSeries extends IndicatorSeries {
 		public int getPreviousTradeCount() {
 			return this.previousTradeCount;
 		}
-
 	}
 }
