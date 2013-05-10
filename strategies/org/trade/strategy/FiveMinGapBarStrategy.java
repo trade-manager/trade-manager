@@ -83,6 +83,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinGapBarStrategy.class);
 
+	private Side side = null;
+
 	/**
 	 * Default Constructor
 	 * 
@@ -149,14 +151,14 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						// return;
 					}
 
-					Side side = Side.newInstance(Side.SLD);
+					this.side = Side.newInstance(Side.SLD);
 					if (prevCandleItem.isSide(Side.BOT)) {
-						side = Side.newInstance(Side.BOT);
+						this.side = Side.newInstance(Side.BOT);
 					}
 					Money price = new Money(prevCandleItem.getHigh());
 					Money priceStop = new Money(prevCandleItem.getLow());
 					String action = Action.BUY;
-					if (side.equalsCode(Side.SLD)) {
+					if (this.side.equalsCode(Side.SLD)) {
 						price = new Money(prevCandleItem.getLow());
 						priceStop = new Money(prevCandleItem.getHigh());
 						action = Action.SELL;
@@ -180,8 +182,11 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						/*
 						 * Create an open position.
 						 */
-						createRiskOpenPosition(action, price, priceStop, true,
-								null, null, null, null);
+						if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
+								.getLimitAmount().doubleValue() * 2)) {
+							createRiskOpenPosition(action, price, priceStop,
+									true, null, null, null, null);
+						}
 
 					} else {
 						_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
@@ -191,7 +196,40 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						this.cancel();
 					}
 
-				} else if (!startPeriod.before(TradingCalendar.getSpecificTime(
+				} else {
+					if (startPeriod.before(TradingCalendar.getSpecificTime(
+							startPeriod, 10, 30))) {
+						CandleItem firstCandle = this
+								.getCandle(TradingCalendar.getSpecificTime(this
+										.getTradestrategy().getTradingday()
+										.getOpen(), startPeriod));
+
+						if (Side.BOT.equals(this.side)) {
+							if (currentCandleItem.getVwap() < firstCandle
+									.getLow()) {
+								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
+								this.cancelAllOrders();
+								// No trade we timed out
+								_log.info("Rule 5min low broker Symbol: "
+										+ getSymbol() + " Time: " + startPeriod);
+								this.cancel();
+							}
+						} else {
+
+							if (currentCandleItem.getVwap() > firstCandle
+									.getHigh()) {
+								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
+								this.cancelAllOrders();
+								// No trade we timed out
+								_log.info("Rule 5min high broker Symbol: "
+										+ getSymbol() + " Time: " + startPeriod);
+								this.cancel();
+							}
+						}
+					}
+				}
+
+				if (!startPeriod.before(TradingCalendar.getSpecificTime(
 						startPeriod, 10, 30))) {
 					_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
 							+ getSymbol() + " Time: " + startPeriod);
