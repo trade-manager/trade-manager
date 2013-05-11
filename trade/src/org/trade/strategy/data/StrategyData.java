@@ -78,11 +78,11 @@ public class StrategyData extends Worker {
 	public StrategyData(Strategy strategy, CandleDataset baseCandleDataset) {
 
 		this.baseCandleDataset = baseCandleDataset;
-		candleDataset = new CandleDataset();
-		candleDataset.addSeries(CandleDataset.createSeries(baseCandleDataset,
-				0, getBaseCandleSeries().getContract(), getBaseCandleSeries()
-						.getBarSize(), getBaseCandleSeries().getStartTime(),
-				getBaseCandleSeries().getEndTime()));
+		this.candleDataset = new CandleDataset();
+		this.candleDataset.addSeries(CandleDataset.createSeries(
+				this.baseCandleDataset, 0, getBaseCandleSeries().getContract(),
+				getBaseCandleSeries().getBarSize(), getBaseCandleSeries()
+						.getStartTime(), getBaseCandleSeries().getEndTime()));
 		for (IndicatorSeries indicator : strategy.getIndicatorSeries()) {
 
 			try {
@@ -92,7 +92,7 @@ public class StrategyData extends Worker {
 				 */
 				IndicatorSeries series = (IndicatorSeries) indicator.clone();
 				series.setKey(series.getName());
-				series.createSeries(candleDataset, 0);
+				series.createSeries(this.baseCandleDataset, 0);
 				IndicatorDataset indicatorDataset = this
 						.getIndicatorByType(indicator.getType());
 				if (null == indicatorDataset) {
@@ -418,7 +418,7 @@ public class StrategyData extends Worker {
 	 * @return CandleDataset
 	 */
 	public CandleDataset getCandleDataset() {
-		return candleDataset;
+		return this.candleDataset;
 	}
 
 	/**
