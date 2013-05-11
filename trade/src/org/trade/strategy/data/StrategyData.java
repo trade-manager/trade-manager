@@ -505,22 +505,6 @@ public class StrategyData extends Worker {
 				indicator.updateDataset(source, newBar);
 			}
 		}
-		/*
-		 * Update the secondary chart candle series.
-		 */
-		CandleItem candle = (CandleItem) source.getDataItem(source
-				.getItemCount() - 1);
-		for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
-			CandleSeries series = getCandleDataset().getSeries(i);
-			synchronized (series) {
-				series.buildCandle(candle.getLastUpdateDate(),
-						candle.getOpen(), candle.getHigh(), candle.getLow(),
-						candle.getClose(), candle.getVolume(),
-						candle.getVwap(), candle.getCount(),
-						series.getBarSize() / source.getBarSize());
-				series.fireSeriesChanged();
-			}
-		}
 	}
 
 	/**
