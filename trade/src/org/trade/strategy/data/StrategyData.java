@@ -183,6 +183,8 @@ public class StrategyData extends Worker {
 							 */
 							this.getBaseCandleSeries().fireSeriesChanged();
 						}
+
+						updateCandleDataset(this.getBaseCandleSeries());
 					}
 				}
 
@@ -238,7 +240,7 @@ public class StrategyData extends Worker {
 		synchronized (getBaseCandleSeries()) {
 			clearChartDatasets();
 			this.getCandleDataset().getSeries(0).setBarSize(newPeriod);
-			updateDatasetSeries(getBaseCandleSeries(), true);
+			updateCandleDataset(this.getBaseCandleSeries());
 		}
 	}
 
@@ -310,18 +312,21 @@ public class StrategyData extends Worker {
 				 */
 				this.getBaseCandleSeries().fireSeriesChanged();
 			}
+			updateCandleDataset(this.getBaseCandleSeries());
 		}
 		return newBar;
 	}
 
 	/**
-	 * Method updateDatasetSeries. Update the chart data set with the new candle
-	 * from the base data set. Note there will only ever be one Series in the
-	 * candle data set. Then update all the indicators before notifying any
-	 * strategy workers of this even.
+	 * Method updateDatasetSeries. Update all the indicators from the base
+	 * candle series. Note there will only ever be one Series in the candle data
+	 * set. Then update all the indicators before notifying any strategy workers
+	 * of this even.
 	 * 
-	 * @param candle
-	 *            CandleItem
+	 * @param source
+	 *            CandleSeries
+	 * @param newBar
+	 *            boolean
 	 */
 	private void updateDatasetSeries(CandleSeries source, boolean newBar) {
 
@@ -341,13 +346,32 @@ public class StrategyData extends Worker {
 				.getItemCount() - 1);
 		for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
 			CandleSeries series = getCandleDataset().getSeries(i);
-			series.buildCandle(candle.getLastUpdateDate(), candle.getOpen(),
-					candle.getHigh(), candle.getLow(), candle.getClose(),
-					candle.getVolume(), candle.getVwap(), candle.getCount(),
-					series.getBarSize() / getBaseCandleSeries().getBarSize());
-			series.fireSeriesChanged();
+			synchronized (series) {
+				series.buildCandle(candle.getLastUpdateDate(),
+						candle.getOpen(), candle.getHigh(), candle.getLow(),
+						candle.getClose(), candle.getVolume(),
+						candle.getVwap(), candle.getCount(),
+						series.getBarSize() / source.getBarSize());
+				series.fireSeriesChanged();
+			}
 		}
+	}
 
+	private void updateCandleDataset(CandleSeries source) {
+
+		CandleItem candle = (CandleItem) source.getDataItem(source
+				.getItemCount() - 1);
+		for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
+			CandleSeries series = getCandleDataset().getSeries(i);
+			synchronized (series) {
+				series.buildCandle(candle.getLastUpdateDate(),
+						candle.getOpen(), candle.getHigh(), candle.getLow(),
+						candle.getClose(), candle.getVolume(),
+						candle.getVwap(), candle.getCount(),
+						series.getBarSize() / source.getBarSize());
+				series.fireSeriesChanged();
+			}
+		}
 	}
 
 	public synchronized void clearBaseCandleSeries() {
