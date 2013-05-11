@@ -1574,9 +1574,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 				+ new Money(candle.getOpen()) + " High: "
 				+ new Money(candle.getHigh()) + " Low: "
 				+ new Money(candle.getLow()) + " Close: "
-				+ new Money(candle.getClose()) + " Vwap: "
-				+ new Money(candle.getVwap()) + " Vwap: "
-				+ new Money(candle.getVwap()) + " LastUpdate: "
+				+ new Money(candle.getClose()) + " Volume: "
+				+ candle.getVolume() + " TradeCount: " + candle.getTradeCount()
+				+ " Vwap: " + new Money(candle.getVwap()) + " LastUpdate: "
 				+ candle.getLastUpdateDate());
 	}
 }
