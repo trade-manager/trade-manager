@@ -394,24 +394,20 @@ public class AverageTrueRangeDataset extends AbstractXYDataset implements
 	 * Method updateDataset.
 	 * 
 	 * @param source
-	 *            CandleDataset
-	 * @param seriesIndex
-	 *            int
+	 *            CandleSeries
 	 * @param newBar
 	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
-		if (source == null) {
-			throw new IllegalArgumentException("Null source (CandleDataset).");
+	public void updateDataset(CandleSeries source, boolean newBar) {
+		if (null == source) {
+			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			AverageTrueRangeSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source, source.getItemCount() - 1, newBar);
 		}
 	}
 

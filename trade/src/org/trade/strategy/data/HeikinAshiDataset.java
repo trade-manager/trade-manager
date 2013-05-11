@@ -498,26 +498,20 @@ public class HeikinAshiDataset extends AbstractXYDataset implements
 	 * Method updateDataset.
 	 * 
 	 * @param source
-	 *            CandleDataset
-	 * @param seriesIndex
-	 *            int
+	 *            CandleSeries
 	 * @param newBar
 	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
-		if (source == null) {
-			throw new IllegalArgumentException("Null source (CandleDataset).");
+	public void updateDataset(CandleSeries source, boolean newBar) {
+		if (null == source) {
+			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			HeikinAshiSeries series = this.getSeries(i);
-
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
-
+			series.updateSeries(source, source.getItemCount() - 1, newBar);
 		}
 	}
 

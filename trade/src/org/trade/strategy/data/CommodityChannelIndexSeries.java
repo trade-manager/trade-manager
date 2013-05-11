@@ -320,7 +320,6 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 
 		if (source.getItemCount() > skip) {
 
-
 			double typicalPrice = (source.getRollingCandle().getClose()
 					+ source.getRollingCandle().getHigh() + source
 					.getRollingCandle().getLow()) / 3;
@@ -364,7 +363,8 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 					// + cci + " newBar" + newBar);
 					if (newBar) {
 						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
-								source.getRollingCandle().getPeriod(), new BigDecimal(cci));
+								source.getRollingCandle().getPeriod(),
+								new BigDecimal(cci));
 						this.add(dataItem, false);
 
 					} else {

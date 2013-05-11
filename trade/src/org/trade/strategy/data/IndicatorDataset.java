@@ -60,7 +60,7 @@ public interface IndicatorDataset {
 	 * @param newBar
 	 *            boolean
 	 */
-	void updateDataset(CandleDataset source, int seriesIndex, boolean newBar);
+	void updateDataset(CandleSeries source, boolean newBar);
 
 	void clear();
 

@@ -44,7 +44,6 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.TradePosition;
-import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -195,41 +194,34 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 		Money newStop = new Money(this.getOpenPositionOrder()
 				.getAverageFilledPrice());
 
-		CandleDataset dataset = getTradestrategy().getDatasetContainer()
-				.getCandleDataset();
-		if (null == dataset) {
-			throw new StrategyRuleException(1, 110,
-					"Error no Candle indicator defined for this strategy");
-		} else {
-
-			CandleSeries series = dataset.getSeries(0);
-			// Start with the previous bar and work back
-			int itemCount = (series.getItemCount());
-			if (itemCount > (2 + bars)) {
-				itemCount = itemCount - 2;
-				for (int i = itemCount; i > (itemCount - bars); i--) {
-					CandleItem candle = (CandleItem) series.getDataItem(i);
-					trail = false;
-					if (Side.BOT.equals(tradePosition.getSide())) {
-						if ((candle.getLow() > newStop.doubleValue())
-								&& (candle.getOpen() < candle.getClose())) {
-							newStop = new Money(candle.getLow());
-							trail = true;
-						}
-					} else {
-						if ((candle.getHigh() < newStop.doubleValue())
-								&& (candle.getOpen() > candle.getClose())) {
-							newStop = new Money(candle.getHigh());
-							trail = true;
-						}
+		CandleSeries series = getTradestrategy().getDatasetContainer()
+				.getBaseCandleSeries();
+		// Start with the previous bar and work back
+		int itemCount = (series.getItemCount());
+		if (itemCount > (2 + bars)) {
+			itemCount = itemCount - 2;
+			for (int i = itemCount; i > (itemCount - bars); i--) {
+				CandleItem candle = (CandleItem) series.getDataItem(i);
+				trail = false;
+				if (Side.BOT.equals(tradePosition.getSide())) {
+					if ((candle.getLow() > newStop.doubleValue())
+							&& (candle.getOpen() < candle.getClose())) {
+						newStop = new Money(candle.getLow());
+						trail = true;
 					}
-					if (!trail) {
-						break;
+				} else {
+					if ((candle.getHigh() < newStop.doubleValue())
+							&& (candle.getOpen() > candle.getClose())) {
+						newStop = new Money(candle.getHigh());
+						trail = true;
 					}
 				}
-				if (trail) {
-					setTargetPrice(newStop);
+				if (!trail) {
+					break;
 				}
+			}
+			if (trail) {
+				setTargetPrice(newStop);
 			}
 		}
 		return trail;
