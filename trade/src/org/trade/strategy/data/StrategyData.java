@@ -345,7 +345,7 @@ public class StrategyData extends Worker {
 					candle.getHigh(), candle.getLow(), candle.getClose(),
 					candle.getVolume(), candle.getVwap(), candle.getCount(),
 					series.getBarSize() / getBaseCandleSeries().getBarSize());
-			// series.fireSeriesChanged();
+			series.fireSeriesChanged();
 		}
 
 	}
