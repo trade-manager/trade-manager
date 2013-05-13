@@ -1897,22 +1897,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
 					this.grandTotal = this.getGrandTotal()
 							+ tradingday.getTradestrategies().size();
-					if (backTestBarSize > 0
-							&& this.brokerManagerModel.isBrokerDataOnly()) {
-						if (TradingCalendar.isTradingDay(tradingday.getOpen())
-								&& TradingCalendar.sameDay(
-										tradingday.getOpen(),
-										TradingCalendar.getDate(now.getTime()))
-								&& !TradingCalendar
-										.isAfterHours(TradingCalendar
-												.getDate(now.getTime())))
-							continue;
-						for (Tradestrategy tradestrategy : tradingday
-								.getTradestrategies()) {
-							if (backTestBarSize < tradestrategy.getBarSize())
-								this.grandTotal = this.grandTotal + 1;
-						}
-					}
+
+					this.grandTotal = this.grandTotal
+							+ getBackTestTotal(tradingday);
+
 				}
 
 				this.startTime = System.currentTimeMillis();
@@ -1953,43 +1941,29 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							Tradingday.DATE_ORDER_ASC);
 					for (Tradingday itemTradingday : tradingdays
 							.getTradingdays()) {
-						/*
-						 * If its today and its a tradingday it must be after
-						 * hours if we are to get backtest data on a lower
-						 * timeframe.
-						 */
-						if (TradingCalendar.isTradingDay(itemTradingday
-								.getOpen())
-								&& TradingCalendar.sameDay(
-										itemTradingday.getOpen(),
-										TradingCalendar.getDate(now.getTime()))
-								&& !TradingCalendar
-										.isAfterHours(TradingCalendar
-												.getDate(now.getTime())))
-							continue;
+						if (getBackTestTotal(itemTradingday) > 0) {
 
-						if (itemTradingday.getTradestrategies().isEmpty())
-							continue;
-						Tradingday tradingday = (Tradingday) itemTradingday
-								.clone();
-						for (Tradestrategy itemTradestrategy : itemTradingday
-								.getTradestrategies()) {
-							if (backTestBarSize < itemTradestrategy
-									.getBarSize()) {
-								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
-										.clone();
-								tradestrategy.setBarSize(backTestBarSize);
-								tradestrategy.setChartDays(1);
-								tradestrategy
-										.setIdTradeStrategy(this.brokerManagerModel
-												.getNextRequestId());
-								tradingday.addTradestrategy(tradestrategy);
+							Tradingday tradingday = (Tradingday) itemTradingday
+									.clone();
+							for (Tradestrategy itemTradestrategy : itemTradingday
+									.getTradestrategies()) {
+								if (backTestBarSize < itemTradestrategy
+										.getBarSize()) {
+									Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
+											.clone();
+									tradestrategy.setBarSize(backTestBarSize);
+									tradestrategy.setChartDays(1);
+									tradestrategy
+											.setIdTradeStrategy(this.brokerManagerModel
+													.getNextRequestId());
+									tradingday.addTradestrategy(tradestrategy);
+								}
 							}
+							totalSumbitted = processTradingday(
+									getTradingdayToProcess(tradingday,
+											runningContractRequests),
+									totalSumbitted);
 						}
-						totalSumbitted = processTradingday(
-								getTradingdayToProcess(tradingday,
-										runningContractRequests),
-								totalSumbitted);
 					}
 				}
 
@@ -2440,6 +2414,33 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 		private int getGrandTotal() {
 			return this.grandTotal;
+		}
+
+		/**
+		 * Method getBackTestTotal.
+		 * 
+		 * @param tradingday
+		 *            Tradingday
+		 * @return int
+		 */
+		private int getBackTestTotal(Tradingday tradingday) {
+			Date now = new Date();
+			int total = 0;
+			if (backTestBarSize > 0
+					&& this.brokerManagerModel.isBrokerDataOnly()) {
+				if (TradingCalendar.isTradingDay(tradingday.getOpen())
+						&& TradingCalendar.sameDay(tradingday.getOpen(),
+								TradingCalendar.getDate(now.getTime()))
+						&& !TradingCalendar.isAfterHours(TradingCalendar
+								.getDate(now.getTime())))
+					return 0;
+				for (Tradestrategy tradestrategy : tradingday
+						.getTradestrategies()) {
+					if (backTestBarSize < tradestrategy.getBarSize())
+						total++;
+				}
+			}
+			return total;
 		}
 
 		/**
