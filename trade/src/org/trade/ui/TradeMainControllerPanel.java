@@ -2465,6 +2465,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 				if (this.brokerManagerModel
 						.isHistoricalDataRunning(tradestrategy.getContract())) {
+
 					if (!reProcessTradingday.existTradestrategy(tradestrategy))
 						reProcessTradingday.addTradestrategy(tradestrategy);
 				} else {

@@ -84,7 +84,6 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
-import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.DAOGroup;
 import org.trade.dictionary.valuetype.DAOProfile;
 import org.trade.dictionary.valuetype.AllocationMethod;
@@ -124,7 +123,7 @@ import org.trade.ui.widget.DecodeComboBoxRenderer;
 /**
  */
 public class ContractPanel extends BasePanel implements TreeSelectionListener,
-		ChangeListener, ItemListener {
+		ChangeListener {
 	/**
 	 * 
 	 */
@@ -146,7 +145,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private BaseButton refreshButton = null;
 	private BaseButton closeAllButton = null;
 	private BaseButton propertiesButton = null;
-	private DecodeComboBoxEditor periodEditorComboBox = null;
 	private Integer backfillOffsetDays = 0;
 	private Boolean connected = new Boolean(false);
 	private static final NumberFormat currencyFormater = NumberFormat
@@ -226,20 +224,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
 			// Chart Panel
-			JLabel jLabelPeriod = new JLabel("Period:");
-			periodEditorComboBox = new DecodeComboBoxEditor(
-					(new BarSize()).getCodesDecodes());
-			DecodeComboBoxRenderer periodRenderer = new DecodeComboBoxRenderer();
-			periodEditorComboBox.setRenderer(periodRenderer);
-			periodEditorComboBox.setItem(BarSize.newInstance(BarSize.FIVE_MIN));
-			periodEditorComboBox.addItemListener(this);
 			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
 			jPanel6.add(closeAllButton, null);
 			jPanel6.add(brokerDataButton, null);
 			jPanel6.add(cancelStrategiesButton, null);
-			jPanel6.add(jLabelPeriod, null);
-			jPanel6.add(periodEditorComboBox, null);
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
 			jToolBar.add(jPanel6);
@@ -604,39 +593,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	}
 
 	/**
-	 * Method itemStateChanged.
-	 * 
-	 * @param e
-	 *            ItemEvent
-	 * @see java.awt.event.ItemListener#itemStateChanged(ItemEvent)
-	 */
-	public void itemStateChanged(ItemEvent e) {
-
-		if (e.getStateChange() == ItemEvent.SELECTED) {
-
-			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
-					.getSelectedComponent();
-			Integer newPeriod = new Integer(((BarSize) e.getItem()).getCode());
-			if (newPeriod.equals(BarSize.DAY)) {
-				newPeriod = currentTab.getTradestrategy().getBarSize();
-			}
-
-			if (null != currentTab) {
-				if (newPeriod.compareTo(currentTab.getTradestrategy()
-						.getBarSize()) > -1) {
-					currentTab.getTradestrategy().getDatasetContainer()
-							.changeCandleSeriesPeriod(newPeriod);
-					this.clearStatusBarMessage();
-				} else {
-					this.setStatusBarMessage(
-							"Time period not supported by candle series",
-							BasePanel.WARNING);
-				}
-			}
-		}
-	}
-
-	/**
 	 * Method isConnected.
 	 * 
 	 * @return boolean
@@ -651,10 +607,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @return ChartPanel
-	 * @throws PersistentModelException
+	 * @throws Exception
 	 */
 	private ChartPanel createChartPanel(Tradestrategy tradestrategy)
-			throws PersistentModelException {
+			throws Exception {
 
 		Date startDate = null;
 		Date endDate = null;
@@ -863,8 +819,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				m_tradeOrderModel.setData(tradestrategy);
 				RowSorter<?> rsDetail = m_tradeOrderTable.getRowSorter();
 				rsDetail.setSortKeys(null);
-				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy
-						.getBarSize()));
 			}
 			/*
 			 * Refresh the header label above the chart and buttons.
@@ -1011,7 +965,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		cancelButton.setEnabled(false);
 		cancelStrategiesButton.setEnabled(false);
 		m_tradeOrderTable.enablePopupMenu(false);
-		periodEditorComboBox.setEnabled(false);
 		refreshButton.setEnabled(false);
 		brokerDataButton.setTransferObject(tradestrategy);
 		cancelStrategiesButton.setTransferObject(tradestrategy);
@@ -1021,7 +974,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			propertiesButton.setEnabled(true);
 			cancelStrategiesButton.setEnabled(true);
 			brokerDataButton.setEnabled(true);
-			periodEditorComboBox.setEnabled(true);
 			if (this.isConnected()) {
 				executeButton.setEnabled(true);
 				refreshButton.setEnabled(true);
@@ -1047,8 +999,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 * 
 		 * @param tradestrategy
 		 *            Tradestrategy
+		 * @throws Exception
 		 */
-		ChartPanel(Tradestrategy tradestrategy) {
+		ChartPanel(Tradestrategy tradestrategy) throws Exception {
 			this.tradestrategy = tradestrategy;
 			String ledgend = "("
 					+ tradestrategy.getContract().getSymbol()

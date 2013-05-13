@@ -447,19 +447,22 @@ public class VolumeDataset extends AbstractIntervalXYDataset implements
 	 * 
 	 * @param source
 	 *            CandleSeries
+	 * @param skip
+	 *            int
 	 * @param newBar
 	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleSeries source, boolean newBar) {
+	public void updateDataset(CandleSeries source, int skip, boolean newBar) {
+
 		if (null == source) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			VolumeSeries series = this.getSeries(i);
-			series.updateSeries(source, source.getItemCount() - 1, newBar);
+			series.updateSeries(source, skip, newBar);
 		}
 	}
 

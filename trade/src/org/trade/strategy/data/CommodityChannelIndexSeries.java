@@ -47,6 +47,7 @@ import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
+import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.cci.CommodityChannelIndexItem;
 
 /**
@@ -320,9 +321,12 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 
 		if (source.getItemCount() > skip) {
 
-			double typicalPrice = (source.getRollingCandle().getClose()
-					+ source.getRollingCandle().getHigh() + source
-					.getRollingCandle().getLow()) / 3;
+			// get the current data item...
+			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
+			// work out the average for the earlier values...
+
+			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
+					.getLow()) / 3;
 			if (0 != typicalPrice) {
 				if (typicalPriceValues.size() == getLength()) {
 					/*
@@ -363,8 +367,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 					// + cci + " newBar" + newBar);
 					if (newBar) {
 						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
-								source.getRollingCandle().getPeriod(),
-								new BigDecimal(cci));
+								candleItem.getPeriod(), new BigDecimal(cci));
 						this.add(dataItem, false);
 
 					} else {

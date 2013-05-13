@@ -483,7 +483,6 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * @throws CloneNotSupportedException
 	 */
 	public Object clone() throws CloneNotSupportedException {
-
 		IndicatorSeries clone = (IndicatorSeries) super.clone();
 		clone.data = new ArrayList<Object>();
 		return clone;
