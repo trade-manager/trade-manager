@@ -1893,11 +1893,28 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.grandTotal = 0;
 
 			try {
-
+				Date now = new Date();
 				for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
 					this.grandTotal = this.getGrandTotal()
 							+ tradingday.getTradestrategies().size();
+					if (backTestBarSize > 0
+							&& this.brokerManagerModel.isBrokerDataOnly()) {
+						if (TradingCalendar.isTradingDay(tradingday.getOpen())
+								&& TradingCalendar.sameDay(
+										tradingday.getOpen(),
+										TradingCalendar.getDate(now.getTime()))
+								&& !TradingCalendar
+										.isAfterHours(TradingCalendar
+												.getDate(now.getTime())))
+							continue;
+						for (Tradestrategy tradestrategy : tradingday
+								.getTradestrategies()) {
+							if (backTestBarSize < tradestrategy.getBarSize())
+								this.grandTotal = this.grandTotal + 1;
+						}
+					}
 				}
+
 				this.startTime = System.currentTimeMillis();
 				this.last6SubmittedTime = startTime;
 				// Initialize the progress bar
@@ -1941,7 +1958,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						 * hours if we are to get backtest data on a lower
 						 * timeframe.
 						 */
-						Date now = new Date();
 						if (TradingCalendar.isTradingDay(itemTradingday
 								.getOpen())
 								&& TradingCalendar.sameDay(
@@ -1968,7 +1984,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 										.setIdTradeStrategy(this.brokerManagerModel
 												.getNextRequestId());
 								tradingday.addTradestrategy(tradestrategy);
-								this.grandTotal++;
 							}
 						}
 						totalSumbitted = processTradingday(
