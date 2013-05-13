@@ -327,6 +327,11 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 
 			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
 					.getLow()) / 3;
+			if (skip == source.getItemCount() - 1) {
+				typicalPrice = (source.getRollingCandle().getClose()
+						+ source.getRollingCandle().getHigh() + source
+						.getRollingCandle().getLow()) / 3;
+			}
 			if (0 != typicalPrice) {
 				if (typicalPriceValues.size() == getLength()) {
 					/*

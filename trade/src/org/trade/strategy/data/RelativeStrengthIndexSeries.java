@@ -333,6 +333,11 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 				diffCloseValue = candleItem.getClose()
 						- prevCandleItem.getClose();
 
+				if (skip == source.getItemCount() - 1) {
+					diffCloseValue = source.getRollingCandle().getClose()
+							- source.getRollingCandle().getPreviousClose();
+				}
+
 				/*
 				 * If the item does not exist in the series then this is a new
 				 * time period and so we need to remove the last in the set and

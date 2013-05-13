@@ -310,14 +310,14 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 		if (source.getItemCount() > skip) {
 
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-
-			// get the current data item...
-			double highLessLow = candleItem.getHigh() - candleItem.getLow();
-
 			double absHighLessPrevClose = 0;
 			double absLowLessPrevClose = 0;
+
 			if (skip > 0) {
+
+				// get the current data item...
+				CandleItem candleItem = (CandleItem) source.getDataItem(skip);
+				double highLessLow = candleItem.getHigh() - candleItem.getLow();
 
 				CandleItem prevCandleItem = (CandleItem) source
 						.getDataItem(skip - 1);
@@ -326,6 +326,18 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 						- prevCandleItem.getClose());
 				absLowLessPrevClose = Math.abs(candleItem.getLow()
 						- prevCandleItem.getClose());
+
+				if (skip == source.getItemCount() - 1) {
+					highLessLow = source.getRollingCandle().getHigh()
+							- source.getRollingCandle().getLow();
+
+					absHighLessPrevClose = Math.abs(source.getRollingCandle()
+							.getHigh()
+							- source.getRollingCandle().getPreviousClose());
+					absLowLessPrevClose = Math.abs(source.getRollingCandle()
+							.getLow()
+							- source.getRollingCandle().getPreviousClose());
+				}
 
 				double tR = Math.max(highLessLow,
 						Math.max(absHighLessPrevClose, absLowLessPrevClose));
