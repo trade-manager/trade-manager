@@ -1893,14 +1893,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.grandTotal = 0;
 
 			try {
-				Date now = new Date();
+
 				for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
 					this.grandTotal = this.getGrandTotal()
 							+ tradingday.getTradestrategies().size();
-
+					/*
+					 * Get the total for lower barsize timeframes.
+					 */
 					this.grandTotal = this.grandTotal
 							+ getBackTestTotal(tradingday);
-
 				}
 
 				this.startTime = System.currentTimeMillis();
