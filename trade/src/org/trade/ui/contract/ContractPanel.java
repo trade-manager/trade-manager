@@ -226,7 +226,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
 			// Chart Panel
-			JLabel jLabelPeriod = new JLabel("Period:");
+//			JLabel jLabelPeriod = new JLabel("Period:");
 			periodEditorComboBox = new DecodeComboBoxEditor(
 					(new BarSize()).getCodesDecodes());
 			DecodeComboBoxRenderer periodRenderer = new DecodeComboBoxRenderer();
@@ -238,8 +238,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel6.add(closeAllButton, null);
 			jPanel6.add(brokerDataButton, null);
 			jPanel6.add(cancelStrategiesButton, null);
-			jPanel6.add(jLabelPeriod, null);
-			jPanel6.add(periodEditorComboBox, null);
+//			jPanel6.add(jLabelPeriod, null);
+//			jPanel6.add(periodEditorComboBox, null);
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
 			jToolBar.add(jPanel6);
