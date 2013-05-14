@@ -47,8 +47,8 @@ public class TradestrategyStatus extends Decode {
 	public static final String GB = "GB";
 	public static final String RB = "RB";
 	public static final String PERCENT = "PERCENT";
-	public static final String TT = "TT";
-	public static final String BT = "BT";
+	public static final String TTBT = "TTBT";
+	public static final String NBB = "NBB";
 	public static final String FIVE_MIN_LOW_BROKEN = "FIVE_MIN_LOW_BROKEN";
 	public static final String FIVE_MIN_HIGH_BROKEN = "FIVE_MIN_HIGH_BROKEN";
 	public static final String CLOSED = "CLOSED";

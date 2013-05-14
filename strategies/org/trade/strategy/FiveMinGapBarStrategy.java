@@ -145,10 +145,14 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 							- prevCandleItem.getClose()) / Math
 							.abs(prevCandleItem.getHigh()
 									- prevCandleItem.getLow())) * 100;
-					if (barBodyPercent < 10) {
+					if (barBodyPercent < 5) {
 						_log.info("Bar Body outside % range  Symbol: "
 								+ getSymbol() + " Time: " + startPeriod);
-						// return;
+						updateTradestrategyStatus(TradestrategyStatus.NBB);
+						_log.info("Rule 5min low broker Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+						this.cancel();
+						return;
 					}
 
 					this.side = Side.newInstance(Side.SLD);
