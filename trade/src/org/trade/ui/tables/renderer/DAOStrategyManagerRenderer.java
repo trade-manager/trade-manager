@@ -97,6 +97,10 @@ public class DAOStrategyManagerRenderer extends DefaultTableCellRenderer {
 				Tradestrategy transferObject = ((TradestrategyTableModel) table
 						.getModel()).getData().getTradestrategies()
 						.get(table.convertRowIndexToModel(row));
+
+				if (null == ((DAOStrategyManager) dAOStrategyManager)
+						.getObject())
+					return this;
 				String key = ((Strategy) ((DAOStrategyManager) dAOStrategyManager)
 						.getObject()).getClassName()
 						+ transferObject.getIdTradeStrategy();
