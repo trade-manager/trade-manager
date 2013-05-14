@@ -446,23 +446,25 @@ public class VolumeDataset extends AbstractIntervalXYDataset implements
 	 * Method updateDataset.
 	 * 
 	 * @param source
-	 *            CandleSeries
-	 * @param skip
+	 *            CandleDataset
+	 * @param seriesIndex
 	 *            int
 	 * @param newBar
 	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleSeries source, int skip, boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex,
+			boolean newBar) {
 
-		if (null == source) {
-			throw new IllegalArgumentException("Null source (CandleSeries).");
+		if (source == null) {
+			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			VolumeSeries series = this.getSeries(i);
-			series.updateSeries(source, skip, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source
+					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 		}
 	}
 

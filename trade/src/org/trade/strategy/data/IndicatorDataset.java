@@ -55,12 +55,12 @@ public interface IndicatorDataset {
 	 * 
 	 * @param source
 	 *            CandleDataset
-	 * @param skip
+	 * @param seriesIndex
 	 *            int
 	 * @param newBar
 	 *            boolean
 	 */
-	void updateDataset(CandleSeries source, int skip, boolean newBar);
+	void updateDataset(CandleDataset source, int seriesIndex, boolean newBar);
 
 	void clear();
 

@@ -59,6 +59,7 @@ public class StrategyData extends Worker {
 			.getLogger(StrategyData.class);
 
 	private CandleDataset baseCandleDataset = null;
+	private CandleDataset candleDataset = null;
 	private List<IndicatorDataset> indicators = new ArrayList<IndicatorDataset>();
 
 	private boolean seriesChanged = true;
@@ -77,6 +78,11 @@ public class StrategyData extends Worker {
 	public StrategyData(Strategy strategy, CandleDataset baseCandleDataset) {
 
 		this.baseCandleDataset = baseCandleDataset;
+		candleDataset = new CandleDataset();
+		candleDataset.addSeries(CandleDataset.createSeries(baseCandleDataset,
+				0, getBaseCandleSeries().getContract(), getBaseCandleSeries()
+						.getBarSize(), getBaseCandleSeries().getStartTime(),
+				getBaseCandleSeries().getEndTime()));
 		for (IndicatorSeries indicator : strategy.getIndicatorSeries()) {
 
 			try {
@@ -86,7 +92,7 @@ public class StrategyData extends Worker {
 				 */
 				IndicatorSeries series = (IndicatorSeries) indicator.clone();
 				series.setKey(series.getName());
-				series.createSeries(this.baseCandleDataset, 0);
+				series.createSeries(candleDataset, 0);
 				IndicatorDataset indicatorDataset = this
 						.getIndicatorByType(indicator.getType());
 				if (null == indicatorDataset) {
@@ -149,27 +155,24 @@ public class StrategyData extends Worker {
 				}
 
 				if (!this.isCancelled()) {
-					synchronized (this.getBaseCandleSeries()) {
-						if (!this.getBaseCandleSeries().isEmpty()) {
 
-							/*
-							 * Another candle has been added. Add the new candle
-							 * to the base series in the dataset.
-							 */
-							boolean newBar = false;
-							if (currentBaseCandleCount > lastBaseCandleProcessed) {
-								this.lastBaseCandleProcessed++;
-								newBar = true;
-							}
+					if (!this.getBaseCandleSeries().isEmpty()) {
 
-							CandleItem candle = (CandleItem) this
-									.getBaseCandleSeries().getDataItem(
-											lastBaseCandleProcessed);
+						/*
+						 * Another candle has been added. Add the new candle to
+						 * the base series in the dataset.
+						 */
+						if (currentBaseCandleCount > lastBaseCandleProcessed) {
+							this.lastBaseCandleProcessed++;
+						}
 
+						CandleItem candle = (CandleItem) this
+								.getBaseCandleSeries().getDataItem(
+										lastBaseCandleProcessed);
+						synchronized (this.getBaseCandleSeries()) {
 							this.getBaseCandleSeries().updatePercentChanged(
 									candle);
-							updateIndicators(getBaseCandleSeries(),
-									lastBaseCandleProcessed, newBar);
+							updateDatasetSeries(candle);
 							/*
 							 * Fire the change to the base series now the chart
 							 * candle series has been updated and all the
@@ -185,14 +188,14 @@ public class StrategyData extends Worker {
 
 		} catch (InterruptedException interExp) {
 			// Do nothing.
-		} catch (Exception ex) {
+		} catch (Exception ex1) {
 			_log.error("Error processing indicators symbol: "
 					+ this.getBaseCandleSeries().getSymbol()
 					+ " Candle series size: "
 					+ this.getBaseCandleSeries().getItemCount()
 					+ " last candle processed: " + this.lastBaseCandleProcessed
 					+ " current candle: " + this.currentBaseCandleCount
-					+ " Message: " + ex.getMessage(), ex);
+					+ " Message: " + ex1.getMessage(), ex1);
 
 		} finally {
 			/*
@@ -217,6 +220,28 @@ public class StrategyData extends Worker {
 	protected void done() {
 		// Free some memory!!
 		// this.clearBaseCandleSeries();
+	}
+
+	/**
+	 * Method changeCandleSeriesPeriod.
+	 * 
+	 * @param newPeriod
+	 *            int
+	 */
+	public void changeCandleSeriesPeriod(int newPeriod) {
+		/*
+		 * Clear down the dependent data sets and re populate from the base
+		 * candle series.
+		 */
+		synchronized (getBaseCandleSeries()) {
+			clearChartDatasets();
+			this.getCandleDataset().getSeries(0).setBarSize(newPeriod);
+			for (int i = 0; i < getBaseCandleSeries().getItemCount(); i++) {
+				CandleItem candle = (CandleItem) getBaseCandleSeries()
+						.getDataItem(i);
+				updateDatasetSeries(candle);
+			}
+		}
 	}
 
 	/**
@@ -279,8 +304,7 @@ public class StrategyData extends Worker {
 					.getDataItem(this.currentBaseCandleCount);
 			synchronized (this.getBaseCandleSeries()) {
 				this.getBaseCandleSeries().updatePercentChanged(candle);
-				updateIndicators(this.getBaseCandleSeries(),
-						this.currentBaseCandleCount, newBar);
+				updateDatasetSeries(candle);
 				/*
 				 * Fire the change to the base series now the chart candle
 				 * series has been updated and all the indicators are up to
@@ -293,20 +317,57 @@ public class StrategyData extends Worker {
 	}
 
 	/**
-	 * Method clearBaseCandleSeries.
+	 * Method updateDatasetSeries. Update the chart data set with the new candle
+	 * from the base data set. Note there will only ever be one Series in the
+	 * candle data set. Then update all the indicators before notifying any
+	 * strategy workers of this even.
 	 * 
+	 * @param candle
+	 *            CandleItem
 	 */
+	private void updateDatasetSeries(CandleItem candle) {
+
+		for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
+			CandleSeries series = getCandleDataset().getSeries(i);
+			synchronized (series) {
+
+				boolean newBar = series.buildCandle(candle.getLastUpdateDate(),
+						candle.getOpen(), candle.getHigh(), candle.getLow(),
+						candle.getClose(), candle.getVolume(),
+						candle.getVwap(), candle.getCount(),
+						series.getBarSize()
+								/ getBaseCandleSeries().getBarSize());
+				for (IndicatorDataset indicator : indicators) {
+					/*
+					 * CandleSeries are only updated via the API i.e. these are
+					 * not true indicators and are shared across Data-sets.
+					 */
+					if (!IndicatorSeries.CandleSeries.equals(indicator
+							.getType(0))) {
+						indicator.updateDataset(getCandleDataset(), i, newBar);
+					}
+				}
+				series.fireSeriesChanged();
+			}
+		}
+	}
+
 	public synchronized void clearBaseCandleSeries() {
 		if (this.isRunning())
 			this.cancel();
 		this.currentBaseCandleCount = -1;
 		this.lastBaseCandleProcessed = this.currentBaseCandleCount;
+		clearChartDatasets();
+		getBaseCandleSeries().clear();
+	}
+
+	public void clearChartDatasets() {
 		for (IndicatorDataset indicator : indicators) {
 			if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
 				indicator.clear();
 			}
 		}
-		getBaseCandleSeries().clear();
+		getCandleDataset().clear();
 	}
 
 	/**
@@ -341,16 +402,16 @@ public class StrategyData extends Worker {
 	 * @return CandleSeries
 	 */
 	public CandleSeries getBaseCandleSeries() {
-		return this.baseCandleDataset.getSeries(0);
+		return baseCandleDataset.getSeries(0);
 	}
 
 	/**
-	 * Method getBaseCandleDataset.
+	 * Method getCandleDataset.
 	 * 
 	 * @return CandleDataset
 	 */
-	public CandleDataset getBaseCandleDataset() {
-		return this.baseCandleDataset;
+	public CandleDataset getCandleDataset() {
+		return candleDataset;
 	}
 
 	/**
@@ -426,36 +487,15 @@ public class StrategyData extends Worker {
 
 		this.getBaseCandleSeries().printSeries();
 
+		for (int i = 0; i < this.getCandleDataset().getSeriesCount(); i++) {
+			IndicatorSeries series = this.getCandleDataset().getSeries(i);
+			series.printSeries();
+		}
+
 		for (IndicatorDataset indicatorDataset : this.getIndicators()) {
 			for (int i = 0; i < indicatorDataset.getSeriesCount(); i++) {
 				IndicatorSeries series = indicatorDataset.getSeries(i);
 				series.printSeries();
-			}
-		}
-	}
-
-	/**
-	 * Method updateDatasetSeries. Update all the indicators from the base
-	 * candle series. Note there will only ever be one Series in the candle data
-	 * set. Then update all the indicators before notifying any strategy workers
-	 * of this even.
-	 * 
-	 * @param source
-	 *            CandleSeries
-	 * @param skip
-	 *            int
-	 * @param newBar
-	 *            boolean
-	 */
-	private void updateIndicators(CandleSeries source, int skip, boolean newBar) {
-
-		for (IndicatorDataset indicator : indicators) {
-			/*
-			 * CandleSeries are only updated via the API i.e. these are not true
-			 * indicators and are shared across Data-sets.
-			 */
-			if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
-				indicator.updateDataset(source, skip, newBar);
 			}
 		}
 	}

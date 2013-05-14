@@ -375,17 +375,15 @@ public class TradeOrderTableModel extends TableModel {
 		final double risk = tradestrategy.getRiskAmount().doubleValue();
 		final double stop = 1.0d;
 		Money price = new Money(0);
-		if (tradestrategy.getDatasetContainer().getBaseCandleDataset()
+		if (tradestrategy.getDatasetContainer().getCandleDataset()
 				.getItemCount(0) > 0) {
-			price = new Money(
-					tradestrategy
-							.getDatasetContainer()
-							.getBaseCandleDataset()
-							.getCloseValue(
-									0,
-									(tradestrategy.getDatasetContainer()
-											.getBaseCandleDataset()
-											.getItemCount(0) - 1)));
+			price = new Money(tradestrategy
+					.getDatasetContainer()
+					.getCandleDataset()
+					.getCloseValue(
+							0,
+							(tradestrategy.getDatasetContainer()
+									.getCandleDataset().getItemCount(0) - 1)));
 		}
 		final int quantlty = (int) ((int) risk / stop);
 		final Date createDate = new Date(new java.util.Date());

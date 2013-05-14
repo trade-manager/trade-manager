@@ -479,7 +479,7 @@ public class CandleSeries extends IndicatorSeries {
 	 * 
 	 * @return completedCandle the last completed candle or -1 if still building
 	 */
-	public boolean buildCandle(Date time, double open, double high, double low,
+	boolean buildCandle(Date time, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			int rollupInterval) {
 
@@ -560,8 +560,6 @@ public class CandleSeries extends IndicatorSeries {
 	 * Clears down and resets all the Vwap calculated fields.
 	 */
 	public void clear() {
-		if (null != this.getRollingCandle())
-			this.getRollingCandle().clear();
 		super.clear();
 	}
 
@@ -613,13 +611,15 @@ public class CandleSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
-		if (source.getItemCount() > skip) {
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			buildCandle(candleItem.getLastUpdateDate(), candleItem.getOpen(),
-					candleItem.getHigh(), candleItem.getLow(),
-					candleItem.getClose(), candleItem.getVolume(),
-					candleItem.getVwap(), candleItem.getCount(),
-					this.getBarSize() / source.getBarSize());
+		for (int i = skip; i < source.getItemCount(); i++) {
+			if (i >= 0) {
+				CandleItem candle = (CandleItem) source.getDataItem(i);
+				buildCandle(candle.getLastUpdateDate(), candle.getOpen(),
+						candle.getHigh(), candle.getLow(), candle.getClose(),
+						candle.getVolume(), candle.getVwap(),
+						candle.getCount(),
+						this.getBarSize() / source.getBarSize());
+			}
 		}
 	}
 
@@ -850,13 +850,6 @@ public class CandleSeries extends IndicatorSeries {
 
 	public void createSeries(CandleDataset source, int seriesIndex) {
 
-		if (source.getSeries(seriesIndex) == null) {
-			throw new IllegalArgumentException("Null source (CandleDataset).");
-		}
-
-		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
-			this.updateSeries(source.getSeries(seriesIndex), i, true);
-		}
 	}
 
 	/**
@@ -1217,18 +1210,6 @@ public class CandleSeries extends IndicatorSeries {
 		 */
 		public int getPreviousTradeCount() {
 			return this.previousTradeCount;
-		}
-
-		public void clear() {
-			this.openValues.clear();
-			this.highValues.clear();
-			this.lowValues.clear();
-			this.closeValues.clear();
-			this.volumeValues.clear();
-			this.tradeCountValues.clear();
-			this.vwapVolumeValues.clear();
-			this.vwapValues.clear();
-			this.avgCloseValues.clear();
 		}
 	}
 }

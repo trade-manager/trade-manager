@@ -48,7 +48,6 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.dictionary.valuetype.CalculationType;
 import org.trade.persistent.dao.Strategy;
-import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.movingaverage.MovingAverageItem;
 
 /**
@@ -344,9 +343,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 		if (source.getItemCount() > skip) {
 
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-
-			if (0 != candleItem.getClose()) {
+			if (0 != source.getRollingCandle().getClose()) {
 				if (this.yyValues.size() == getLength()) {
 					/*
 					 * If the item does not exist in the series then this is a
@@ -358,44 +355,51 @@ public class MovingAverageSeries extends IndicatorSeries {
 					 */
 					if (newBar) {
 						sum = sum - this.yyValues.getLast()
-								+ candleItem.getClose();
+								+ source.getRollingCandle().getClose();
 						this.yyValues.removeLast();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(source.getRollingCandle()
+								.getClose());
 						this.volValues.removeLast();
-						this.volValues.addFirst(candleItem.getVolume());
+						this.volValues.addFirst(source.getRollingCandle()
+								.getVolume());
 					} else {
 						sum = sum - this.yyValues.getFirst()
-								+ candleItem.getClose();
+								+ source.getRollingCandle().getClose();
 						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(source.getRollingCandle()
+								.getClose());
 					}
 				} else {
 					if (newBar) {
-						sum = sum + candleItem.getClose();
-						this.yyValues.addFirst(candleItem.getClose());
-						this.volValues.addFirst(candleItem.getVolume());
+						sum = sum + source.getRollingCandle().getClose();
+						this.yyValues.addFirst(source.getRollingCandle()
+								.getClose());
+						this.volValues.addFirst(source.getRollingCandle()
+								.getVolume());
 					} else {
-						sum = sum + candleItem.getClose()
+						sum = sum + source.getRollingCandle().getClose()
 								- this.yyValues.getFirst();
 						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(source.getRollingCandle()
+								.getClose());
 						this.volValues.removeFirst();
-						this.volValues.addFirst(candleItem.getVolume());
+						this.volValues.addFirst(source.getRollingCandle()
+								.getVolume());
 					}
 				}
 
 				if (this.yyValues.size() == getLength()) {
 					double ma = calculateMA(this.getMAType(), this.yyValues,
 							this.volValues, sum);
-					int index = this.indexOf(candleItem.getPeriod());
-					if (index < 0) {
+					if (newBar) {
 						MovingAverageItem dataItem = new MovingAverageItem(
-								candleItem.getPeriod(), new BigDecimal(ma));
+								source.getRollingCandle().getPeriod(),
+								new BigDecimal(ma));
 						this.add(dataItem, false);
 
 					} else {
 						MovingAverageItem dataItem = (MovingAverageItem) this
-								.getDataItem(index);
+								.getDataItem(this.getItemCount() - 1);
 						dataItem.setMovingAverage(ma);
 					}
 				}

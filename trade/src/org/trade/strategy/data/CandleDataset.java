@@ -628,24 +628,25 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * Method updateDataset.
 	 * 
 	 * @param source
-	 *            CandleSeries
-	 * @param currentBarIndex
+	 *            CandleDataset
+	 * @param seriesIndex
 	 *            int
 	 * @param newBar
 	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleSeries source, int currentBarIndex,
+	public void updateDataset(CandleDataset source, int seriesIndex,
 			boolean newBar) {
-
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
-		for (int x = 0; x < this.getSeriesCount(); x++) {
-			CandleSeries series = this.getSeries(x);
-			series.updateSeries(source, currentBarIndex, newBar);
+		for (int i = 0; i < this.getSeriesCount(); i++) {
+			CandleSeries series = this.getSeries(i);
+
+			series.updateSeries(source.getSeries(seriesIndex), source
+					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 		}
 	}
 

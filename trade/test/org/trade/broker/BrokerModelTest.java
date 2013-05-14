@@ -273,7 +273,8 @@ public class BrokerModelTest extends TestCase {
 		try {
 			tradestrategy.getContract().addTradestrategy(tradestrategy);
 			StrategyData.doDummyData(this.tradestrategy.getDatasetContainer()
-					.getBaseCandleSeries(), tradestrategy.getTradingday(),
+					.getCandleDataset().getSeries(0),
+					tradestrategy.getTradingday(),
 					tradestrategy.getChartDays(), tradestrategy.getBarSize(),
 					true, 0);
 			m_brokerModel.onBrokerData(tradestrategy.getContract(),
@@ -281,10 +282,10 @@ public class BrokerModelTest extends TestCase {
 					tradestrategy.getBarSize(), tradestrategy.getChartDays());
 
 			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
-					.getBaseCandleSeries().isEmpty());
+					.getCandleDataset().getSeries(0).isEmpty());
 
 			IndicatorSeries candleseries = this.tradestrategy
-					.getDatasetContainer().getBaseCandleSeries();
+					.getDatasetContainer().getCandleDataset().getSeries(0);
 			IndicatorSeries sma1Series = this.tradestrategy
 					.getDatasetContainer()
 					.getIndicatorByType(IndicatorSeries.MovingAverageSeries)

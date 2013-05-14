@@ -44,7 +44,6 @@ import javax.persistence.Transient;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
-import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.volume.VolumeItem;
 
 /**
@@ -250,18 +249,16 @@ public class VolumeSeries extends IndicatorSeries {
 			 * new periods values. Otherwise we just update the last value in
 			 * the set.
 			 */
-
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-
-			int index = this.indexOf(candleItem.getPeriod());
-			if (index < 0) {
-				VolumeItem dataItem = new VolumeItem(candleItem.getPeriod(),
-						new Long(candleItem.getVolume()), candleItem.getSide());
+			if (newBar) {
+				VolumeItem dataItem = new VolumeItem(source.getRollingCandle()
+						.getPeriod(), new Long(source.getRollingCandle()
+						.getVolume()), source.getRollingCandle().getSide());
 				this.add(dataItem, true);
 			} else {
-				VolumeItem dataItem = (VolumeItem) this.getDataItem(index);
-				dataItem.setVolume(candleItem.getVolume());
-				dataItem.setSide(candleItem.getSide());
+				VolumeItem dataItem = (VolumeItem) this.getDataItem(this
+						.getItemCount() - 1);
+				dataItem.setVolume(source.getRollingCandle().getVolume());
+				dataItem.setSide(source.getRollingCandle().getSide());
 			}
 
 		}

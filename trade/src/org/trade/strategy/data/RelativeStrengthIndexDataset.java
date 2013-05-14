@@ -397,23 +397,24 @@ public class RelativeStrengthIndexDataset extends AbstractXYDataset implements
 	 * Method updateDataset.
 	 * 
 	 * @param source
-	 *            CandleSeries
-	 * @param skip
+	 *            CandleDataset
+	 * @param seriesIndex
 	 *            int
 	 * @param newBar
 	 *            boolean
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleSeries source, int skip, boolean newBar) {
-
-		if (null == source) {
-			throw new IllegalArgumentException("Null source (CandleSeries).");
+	public void updateDataset(CandleDataset source, int seriesIndex,
+			boolean newBar) {
+		if (source == null) {
+			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			RelativeStrengthIndexSeries series = this.getSeries(x);
-			series.updateSeries(source, skip, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source
+					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 		}
 	}
 

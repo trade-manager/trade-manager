@@ -44,7 +44,6 @@ import javax.persistence.Entity;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
-import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.vwap.VwapItem;
 
 /**
@@ -217,16 +216,15 @@ public class VwapSeries extends IndicatorSeries {
 			 * new periods values. Otherwise we just update the last value in
 			 * the set.
 			 */
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-
-			int index = this.indexOf(candleItem.getPeriod());
-			if (index > 0) {
-				VwapItem dataItem = new VwapItem(candleItem.getPeriod(),
-						new BigDecimal(candleItem.getVwap()));
+			if (newBar) {
+				VwapItem dataItem = new VwapItem(source.getRollingCandle()
+						.getPeriod(), new BigDecimal(source.getRollingCandle()
+						.getVwap()));
 				this.add(dataItem, false);
 			} else {
-				VwapItem dataItem = (VwapItem) this.getDataItem(index);
-				dataItem.setVwapPrice(candleItem.getVwap());
+				VwapItem dataItem = (VwapItem) this.getDataItem(this
+						.getItemCount() - 1);
+				dataItem.setVwapPrice(source.getRollingCandle().getVwap());
 			}
 		}
 	}

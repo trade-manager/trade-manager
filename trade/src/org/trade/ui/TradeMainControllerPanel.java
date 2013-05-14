@@ -1903,7 +1903,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					this.grandTotal = this.grandTotal
 							+ getBackTestTotal(tradingday);
 				}
-
 				this.startTime = System.currentTimeMillis();
 				this.last6SubmittedTime = startTime;
 				// Initialize the progress bar
@@ -2409,15 +2408,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 
 		/**
-		 * Method getGrandTotal.
-		 * 
-		 * @return int
-		 */
-		private int getGrandTotal() {
-			return this.grandTotal;
-		}
-
-		/**
 		 * Method getBackTestTotal.
 		 * 
 		 * @param tradingday
@@ -2442,6 +2432,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 			return total;
+		}
+
+		/**
+		 * Method getGrandTotal.
+		 * 
+		 * @return int
+		 */
+		private int getGrandTotal() {
+			return this.grandTotal;
 		}
 
 		/**
@@ -2482,7 +2481,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 				if (this.brokerManagerModel
 						.isHistoricalDataRunning(tradestrategy.getContract())) {
-
 					if (!reProcessTradingday.existTradestrategy(tradestrategy))
 						reProcessTradingday.addTradestrategy(tradestrategy);
 				} else {
