@@ -644,7 +644,6 @@ public class CandleDataset extends AbstractXYDataset implements
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			CandleSeries series = this.getSeries(i);
-
 			series.updateSeries(source.getSeries(seriesIndex), source
 					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 		}

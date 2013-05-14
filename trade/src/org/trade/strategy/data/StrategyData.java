@@ -175,6 +175,7 @@ public class StrategyData extends Worker {
 									candle);
 							this.getCandleDataset().updateDataset(
 									this.getBaseCandleDataset(), 0, newBar);
+							this.getCandleDataset().getSeries(0).fireSeriesChanged();
 							/*
 							 * Fire the change to the base series now the chart
 							 * candle series has been updated and all the
@@ -309,6 +310,7 @@ public class StrategyData extends Worker {
 				this.getBaseCandleSeries().updatePercentChanged(candle);
 				this.getCandleDataset().updateDataset(
 						this.getBaseCandleDataset(), 0, newBar);
+				this.getCandleDataset().getSeries(0).fireSeriesChanged();
 				/*
 				 * Fire the change to the base series now the chart candle
 				 * series has been updated and all the indicators are up to
