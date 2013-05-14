@@ -165,11 +165,10 @@ public class StrategyData extends Worker {
 						if (currentBaseCandleCount > lastBaseCandleProcessed) {
 							this.lastBaseCandleProcessed++;
 						}
-
-						CandleItem candle = (CandleItem) this
-								.getBaseCandleSeries().getDataItem(
-										lastBaseCandleProcessed);
 						synchronized (this.getBaseCandleSeries()) {
+							CandleItem candle = (CandleItem) this
+									.getBaseCandleSeries().getDataItem(
+											lastBaseCandleProcessed);
 							this.getBaseCandleSeries().updatePercentChanged(
 									candle);
 							updateDatasetSeries(candle);
@@ -300,9 +299,10 @@ public class StrategyData extends Worker {
 			 * Another candle has been added. Add the new candle to the base
 			 * series in the dataset.
 			 */
-			CandleItem candle = (CandleItem) this.getBaseCandleSeries()
-					.getDataItem(this.currentBaseCandleCount);
+
 			synchronized (this.getBaseCandleSeries()) {
+				CandleItem candle = (CandleItem) this.getBaseCandleSeries()
+						.getDataItem(this.currentBaseCandleCount);
 				this.getBaseCandleSeries().updatePercentChanged(candle);
 				updateDatasetSeries(candle);
 				/*
