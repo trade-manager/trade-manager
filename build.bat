@@ -49,11 +49,11 @@ rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/buil
 
 rem Deletes all the orders from the database.
 
-java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
 
 rem Delete the accounts and rules from the database. These will reload on login.
 
-java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteAccountRuleData
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteAccountRuleData
 
 pause
 
