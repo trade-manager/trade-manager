@@ -359,14 +359,15 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 						currATR = ((prevATR * (getLength() - 1)) + tR)
 								/ getLength();
 					}
-					if (newBar) {
+					int index = this.indexOf(candleItem.getPeriod());
+					if (index < 0) {
 						AverageTrueRangeItem dataItem = new AverageTrueRangeItem(
 								candleItem.getPeriod(), new BigDecimal(currATR));
 						this.add(dataItem, false);
 
 					} else {
 						AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
-								.getDataItem(this.getItemCount() - 1);
+								.getDataItem(index);
 						dataItem.setAverageTrueRange(currATR);
 					}
 				}

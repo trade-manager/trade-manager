@@ -405,14 +405,15 @@ public class BollingerBandsSeries extends IndicatorSeries {
 				if (this.yyValues.size() == getLength()) {
 					double ma = calculateBBands(this.getNumberOfSTD(),
 							this.yyValues, sum);
-					if (newBar) {
+					int index = this.indexOf(candleItem.getPeriod());
+					if (index < 0) {
 						BollingerBandsItem dataItem = new BollingerBandsItem(
 								candleItem.getPeriod(), new BigDecimal(ma));
 						this.add(dataItem, false);
 
 					} else {
 						BollingerBandsItem dataItem = (BollingerBandsItem) this
-								.getDataItem(this.getItemCount() - 1);
+								.getDataItem(index);
 						dataItem.setBollingerBands(ma);
 					}
 				}

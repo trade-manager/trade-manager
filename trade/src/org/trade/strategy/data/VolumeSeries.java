@@ -253,13 +253,13 @@ public class VolumeSeries extends IndicatorSeries {
 
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 
-			if (newBar) {
+			int index = this.indexOf(candleItem.getPeriod());
+			if (index < 0) {
 				VolumeItem dataItem = new VolumeItem(candleItem.getPeriod(),
 						new Long(candleItem.getVolume()), candleItem.getSide());
 				this.add(dataItem, true);
 			} else {
-				VolumeItem dataItem = (VolumeItem) this.getDataItem(this
-						.getItemCount() - 1);
+				VolumeItem dataItem = (VolumeItem) this.getDataItem(index);
 				dataItem.setVolume(candleItem.getVolume());
 				dataItem.setSide(candleItem.getSide());
 			}

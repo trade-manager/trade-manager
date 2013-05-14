@@ -370,14 +370,15 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 							typicalPriceValues);
 					// _log.info("Period: " + candleItem.getPeriod() + " CCI: "
 					// + cci + " newBar" + newBar);
-					if (newBar) {
+					int index = this.indexOf(candleItem.getPeriod());
+					if (index < 0) {
 						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
 								candleItem.getPeriod(), new BigDecimal(cci));
 						this.add(dataItem, false);
 
 					} else {
 						CommodityChannelIndexItem dataItem = (CommodityChannelIndexItem) this
-								.getDataItem(this.getItemCount() - 1);
+								.getDataItem(index);
 						dataItem.setCommodityChannelIndex(cci);
 					}
 				}

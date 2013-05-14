@@ -407,13 +407,14 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 							: avgLossRSI))));
 				}
 
-				if (newBar) {
+				int index = this.indexOf(candleItem.getPeriod());
+				if (index < 0) {
 					RelativeStrengthIndexItem dataItem = new RelativeStrengthIndexItem(
 							candleItem.getPeriod(), new BigDecimal(currentRSI));
 					this.add(dataItem, false);
 				} else {
 					RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
-							.getDataItem(this.getItemCount() - 1);
+							.getDataItem(index);
 					dataItem.setRelativeStrengthIndex(currentRSI);
 				}
 			}

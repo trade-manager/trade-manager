@@ -387,14 +387,15 @@ public class MovingAverageSeries extends IndicatorSeries {
 				if (this.yyValues.size() == getLength()) {
 					double ma = calculateMA(this.getMAType(), this.yyValues,
 							this.volValues, sum);
-					if (newBar) {
+					int index = this.indexOf(candleItem.getPeriod());
+					if (index < 0) {
 						MovingAverageItem dataItem = new MovingAverageItem(
 								candleItem.getPeriod(), new BigDecimal(ma));
 						this.add(dataItem, false);
 
 					} else {
 						MovingAverageItem dataItem = (MovingAverageItem) this
-								.getDataItem(this.getItemCount() - 1);
+								.getDataItem(index);
 						dataItem.setMovingAverage(ma);
 					}
 				}

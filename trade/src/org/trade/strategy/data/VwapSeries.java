@@ -219,13 +219,13 @@ public class VwapSeries extends IndicatorSeries {
 			 */
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 
-			if (newBar) {
+			int index = this.indexOf(candleItem.getPeriod());
+			if (index > 0) {
 				VwapItem dataItem = new VwapItem(candleItem.getPeriod(),
 						new BigDecimal(candleItem.getVwap()));
 				this.add(dataItem, false);
 			} else {
-				VwapItem dataItem = (VwapItem) this.getDataItem(this
-						.getItemCount() - 1);
+				VwapItem dataItem = (VwapItem) this.getDataItem(index);
 				dataItem.setVwapPrice(candleItem.getVwap());
 			}
 		}
