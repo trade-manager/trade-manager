@@ -560,6 +560,8 @@ public class CandleSeries extends IndicatorSeries {
 	 * Clears down and resets all the Vwap calculated fields.
 	 */
 	public void clear() {
+		if (null != this.getRollingCandle())
+			this.getRollingCandle().clear();
 		super.clear();
 	}
 
@@ -1210,6 +1212,18 @@ public class CandleSeries extends IndicatorSeries {
 		 */
 		public int getPreviousTradeCount() {
 			return this.previousTradeCount;
+		}
+
+		public void clear() {
+			this.openValues.clear();
+			this.highValues.clear();
+			this.lowValues.clear();
+			this.closeValues.clear();
+			this.volumeValues.clear();
+			this.tradeCountValues.clear();
+			this.vwapVolumeValues.clear();
+			this.vwapValues.clear();
+			this.avgCloseValues.clear();
 		}
 	}
 }
