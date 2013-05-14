@@ -162,8 +162,10 @@ public class StrategyData extends Worker {
 						 * Another candle has been added. Add the new candle to
 						 * the base series in the dataset.
 						 */
+						boolean newBar = false;
 						if (currentBaseCandleCount > lastBaseCandleProcessed) {
 							this.lastBaseCandleProcessed++;
+							newBar = true;
 						}
 						synchronized (this.getBaseCandleSeries()) {
 							CandleItem candle = (CandleItem) this
@@ -171,7 +173,8 @@ public class StrategyData extends Worker {
 											lastBaseCandleProcessed);
 							this.getBaseCandleSeries().updatePercentChanged(
 									candle);
-							updateDatasetSeries(candle);
+							this.getCandleDataset().updateDataset(
+									this.getBaseCandleDataset(), 0, newBar);
 							/*
 							 * Fire the change to the base series now the chart
 							 * candle series has been updated and all the
@@ -235,11 +238,8 @@ public class StrategyData extends Worker {
 		synchronized (getBaseCandleSeries()) {
 			clearChartDatasets();
 			this.getCandleDataset().getSeries(0).setBarSize(newPeriod);
-			for (int i = 0; i < getBaseCandleSeries().getItemCount(); i++) {
-				CandleItem candle = (CandleItem) getBaseCandleSeries()
-						.getDataItem(i);
-				updateDatasetSeries(candle);
-			}
+			this.getCandleDataset().updateDataset(this.getBaseCandleDataset(),
+					0, true);
 		}
 	}
 
@@ -274,6 +274,9 @@ public class StrategyData extends Worker {
 
 		boolean newBar = this.getBaseCandleSeries().buildCandle(time, open,
 				high, low, close, volume, vwap, tradeCount, rollupInterval);
+
+		updateIndicators(this.getBaseCandleDataset(), newBar);
+
 		this.currentBaseCandleCount = this.getBaseCandleSeries().getItemCount() - 1;
 		/*
 		 * If thread Indicators the updates to all indicators and the subsequent
@@ -304,7 +307,8 @@ public class StrategyData extends Worker {
 				CandleItem candle = (CandleItem) this.getBaseCandleSeries()
 						.getDataItem(this.currentBaseCandleCount);
 				this.getBaseCandleSeries().updatePercentChanged(candle);
-				updateDatasetSeries(candle);
+				this.getCandleDataset().updateDataset(
+						this.getBaseCandleDataset(), 0, newBar);
 				/*
 				 * Fire the change to the base series now the chart candle
 				 * series has been updated and all the indicators are up to
@@ -317,37 +321,24 @@ public class StrategyData extends Worker {
 	}
 
 	/**
-	 * Method updateDatasetSeries. Update the chart data set with the new candle
-	 * from the base data set. Note there will only ever be one Series in the
-	 * candle data set. Then update all the indicators before notifying any
+	 * Method updateIndicators. Update all the indicators before notifying any
 	 * strategy workers of this even.
 	 * 
-	 * @param candle
-	 *            CandleItem
+	 * @param source
+	 *            CandleDataset
+	 * 
+	 * @param newBar
+	 *            boolean
 	 */
-	private void updateDatasetSeries(CandleItem candle) {
+	private void updateIndicators(CandleDataset source, boolean newBar) {
 
-		for (int i = 0; i < getCandleDataset().getSeriesCount(); i++) {
-			CandleSeries series = getCandleDataset().getSeries(i);
-			synchronized (series) {
-
-				boolean newBar = series.buildCandle(candle.getLastUpdateDate(),
-						candle.getOpen(), candle.getHigh(), candle.getLow(),
-						candle.getClose(), candle.getVolume(),
-						candle.getVwap(), candle.getCount(),
-						series.getBarSize()
-								/ getBaseCandleSeries().getBarSize());
-				for (IndicatorDataset indicator : indicators) {
-					/*
-					 * CandleSeries are only updated via the API i.e. these are
-					 * not true indicators and are shared across Data-sets.
-					 */
-					if (!IndicatorSeries.CandleSeries.equals(indicator
-							.getType(0))) {
-						indicator.updateDataset(getCandleDataset(), i, newBar);
-					}
-				}
-				series.fireSeriesChanged();
+		for (IndicatorDataset indicator : indicators) {
+			/*
+			 * CandleSeries are only updated via the API i.e. these are not true
+			 * indicators and are shared across Data-sets.
+			 */
+			if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
+				indicator.updateDataset(source, 0, newBar);
 			}
 		}
 	}
@@ -394,6 +385,15 @@ public class StrategyData extends Worker {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Method getBaseCandleDataset.
+	 * 
+	 * @return CandleDataset
+	 */
+	public CandleDataset getBaseCandleDataset() {
+		return baseCandleDataset;
 	}
 
 	/**

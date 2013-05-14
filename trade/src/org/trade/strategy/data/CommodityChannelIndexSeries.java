@@ -325,13 +325,9 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 			// work out the average for the earlier values...
 
-			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
-					.getLow()) / 3;
-			if (skip == source.getItemCount() - 1) {
-				typicalPrice = (source.getRollingCandle().getClose()
-						+ source.getRollingCandle().getHigh() + source
-						.getRollingCandle().getLow()) / 3;
-			}
+			double typicalPrice = (source.getRollingCandle().getClose()
+					+ source.getRollingCandle().getHigh() + source
+					.getRollingCandle().getLow()) / 3;
 			if (0 != typicalPrice) {
 				if (typicalPriceValues.size() == getLength()) {
 					/*
@@ -369,7 +365,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 					double cci = calculateCCI(sumTypicalPrice,
 							typicalPriceValues);
 					// _log.info("Period: " + candleItem.getPeriod() + " CCI: "
-					// + cci + " newBar" + newBar);
+					// + cci + " newBar: " + newBar);
 					if (newBar) {
 						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
 								candleItem.getPeriod(), new BigDecimal(cci));
