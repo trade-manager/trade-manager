@@ -149,8 +149,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						_log.info("Bar Body outside % range  Symbol: "
 								+ getSymbol() + " Time: " + startPeriod);
 						updateTradestrategyStatus(TradestrategyStatus.NBB);
-						_log.info("Rule 5min low broker Symbol: "
-								+ getSymbol() + " Time: " + startPeriod);
+						_log.info("Rule 5min low broker Symbol: " + getSymbol()
+								+ " Time: " + startPeriod);
 						this.cancel();
 						return;
 					}
@@ -202,7 +202,9 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 				} else {
 					if (startPeriod.before(TradingCalendar.getSpecificTime(
-							startPeriod, 10, 30))) {
+							startPeriod, 10, 30))
+							&& startPeriod.after(TradingCalendar
+									.getSpecificTime(startPeriod, 9, 35))) {
 						CandleItem firstCandle = this
 								.getCandle(TradingCalendar.getSpecificTime(this
 										.getTradestrategy().getTradingday()

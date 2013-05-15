@@ -323,7 +323,6 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			// work out the average for the earlier values...
 
 			double typicalPrice = (source.getRollingCandle().getClose()
 					+ source.getRollingCandle().getHigh() + source
