@@ -457,26 +457,30 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				titleLegend2.setText(msg);
 				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
 						.getPlot();
-				@SuppressWarnings("unchecked")
-				List<XYPlot> subplots = combinedXYplot.getSubplots();
-				XYPlot xyplot = subplots.get(0);
-				if (null != closePriceLine) {
-					xyplot.removeAnnotation(closePriceLine);
+				synchronized (combinedXYplot) {
+					@SuppressWarnings("unchecked")
+					List<XYPlot> subplots = combinedXYplot.getSubplots();
+
+					XYPlot xyplot = subplots.get(0);
+
+					if (null != closePriceLine) {
+						xyplot.removeAnnotation(closePriceLine);
+					}
+
+					double x = TradingCalendar.getSpecificTime(
+							candleSeries.getStartTime(),
+							candleItem.getPeriod().getStart()).getTime();
+					closePriceLine = new XYTextAnnotation("("
+							+ dateFormat.format(candleItem.getLastUpdateDate())
+							+ ", " + new Money(candleItem.getClose()) + ")", x,
+							candleItem.getY());
+
+					closePriceLine.setTextAnchor(TextAnchor.BOTTOM_RIGHT);
+					xyplot.addAnnotation(closePriceLine);
+					xyplot.removeRangeMarker(valueMarker);
+					valueMarker.setValue(candleItem.getClose());
+					xyplot.addRangeMarker(valueMarker);
 				}
-
-				double x = TradingCalendar.getSpecificTime(
-						candleSeries.getStartTime(),
-						candleItem.getPeriod().getStart()).getTime();
-				closePriceLine = new XYTextAnnotation("("
-						+ dateFormat.format(candleItem.getLastUpdateDate())
-						+ ", " + new Money(candleItem.getClose()) + ")", x,
-						candleItem.getY());
-
-				closePriceLine.setTextAnchor(TextAnchor.BOTTOM_RIGHT);
-				xyplot.addAnnotation(closePriceLine);
-				xyplot.removeRangeMarker(valueMarker);
-				valueMarker.setValue(candleItem.getClose());
-				xyplot.addRangeMarker(valueMarker);
 				this.chart.fireChartChanged();
 			}
 		}
