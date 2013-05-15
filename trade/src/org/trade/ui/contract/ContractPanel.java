@@ -533,6 +533,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			if (nodeInfo instanceof Tradestrategy) {
 				Tradestrategy tradestrategy = (Tradestrategy) nodeInfo;
+				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy
+						.getBarSize()));
 				int currentTabIndex = -1;
 				for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
 					ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract
@@ -547,8 +549,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				}
 				if (currentTabIndex == -1) {
 					ChartPanel chartPanel = createChartPanel(tradestrategy);
-					periodEditorComboBox.setItem(BarSize
-							.newInstance(tradestrategy.getBarSize()));
 					m_jTabbedPaneContract.add(chartPanel.getCandlestickChart()
 							.getName(), chartPanel);
 					currentTabIndex = m_jTabbedPaneContract.getTabCount() - 1;
