@@ -208,7 +208,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 										.getTradestrategy().getTradingday()
 										.getOpen(), startPeriod));
 
-						if (Side.BOT.equals(this.side)) {
+						if (Side.BOT.equals(this.side.getCode())) {
 							if (currentCandleItem.getVwap() < firstCandle
 									.getLow()) {
 								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);

@@ -613,16 +613,12 @@ public class CandleSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
-		for (int i = skip; i < source.getItemCount(); i++) {
-			if (i >= 0) {
-				CandleItem candle = (CandleItem) source.getDataItem(i);
-				buildCandle(candle.getLastUpdateDate(), candle.getOpen(),
-						candle.getHigh(), candle.getLow(), candle.getClose(),
-						candle.getVolume(), candle.getVwap(),
-						candle.getCount(),
-						this.getBarSize() / source.getBarSize());
-			}
-		}
+		CandleItem candle = (CandleItem) source.getDataItem(skip);
+		buildCandle(candle.getLastUpdateDate(), candle.getOpen(),
+				candle.getHigh(), candle.getLow(), candle.getClose(),
+				candle.getVolume(), candle.getVwap(), candle.getCount(),
+				this.getBarSize() / source.getBarSize());
+
 	}
 
 	/**

@@ -168,21 +168,22 @@ public class StrategyData extends Worker {
 							newBar = true;
 						}
 						synchronized (this.getBaseCandleSeries()) {
-							CandleItem candle = (CandleItem) this
-									.getBaseCandleSeries().getDataItem(
-											lastBaseCandleProcessed);
-							this.getBaseCandleSeries().updatePercentChanged(
-									candle);
-							this.getCandleDataset().updateDataset(
-									this.getBaseCandleDataset(), 0, newBar);
-							this.getCandleDataset().getSeries(0).fireSeriesChanged();
-							/*
-							 * Fire the change to the base series now the chart
-							 * candle series has been updated and all the
-							 * indicators are up to date. Note the strategies
-							 * listen to the base candle series.
-							 */
-							this.getBaseCandleSeries().fireSeriesChanged();
+
+							for (int i = this.lastBaseCandleProcessed; i < this
+									.getBaseCandleSeries().getItemCount() - 1; i++) {
+								if (i >= 0) {
+									this.getCandleDataset()
+											.getSeries(0)
+											.updateSeries(
+													this.getBaseCandleSeries(),
+													i, newBar);
+								}
+							}
+							this.lastBaseCandleProcessed = this
+									.getBaseCandleSeries().getItemCount() - 1;
+
+							this.getCandleDataset().getSeries(0)
+									.fireSeriesChanged();
 						}
 					}
 				}
@@ -276,9 +277,14 @@ public class StrategyData extends Worker {
 		boolean newBar = this.getBaseCandleSeries().buildCandle(time, open,
 				high, low, close, volume, vwap, tradeCount, rollupInterval);
 
-		updateIndicators(this.getBaseCandleDataset(), newBar);
-
 		this.currentBaseCandleCount = this.getBaseCandleSeries().getItemCount() - 1;
+
+		CandleItem candle = (CandleItem) this.getBaseCandleSeries()
+				.getDataItem(this.currentBaseCandleCount);
+		this.getBaseCandleSeries().updatePercentChanged(candle);
+		updateIndicators(this.getBaseCandleDataset(), newBar);
+		this.getBaseCandleSeries().fireSeriesChanged();
+
 		/*
 		 * If thread Indicators the updates to all indicators and the subsequent
 		 * firing of base series changed is performed via the worker thread.
@@ -305,18 +311,10 @@ public class StrategyData extends Worker {
 			 */
 
 			synchronized (this.getBaseCandleSeries()) {
-				CandleItem candle = (CandleItem) this.getBaseCandleSeries()
-						.getDataItem(this.currentBaseCandleCount);
-				this.getBaseCandleSeries().updatePercentChanged(candle);
+
 				this.getCandleDataset().updateDataset(
 						this.getBaseCandleDataset(), 0, newBar);
 				this.getCandleDataset().getSeries(0).fireSeriesChanged();
-				/*
-				 * Fire the change to the base series now the chart candle
-				 * series has been updated and all the indicators are up to
-				 * date. Note the strategies listen to the base candle series.
-				 */
-				this.getBaseCandleSeries().fireSeriesChanged();
 			}
 		}
 		return newBar;
