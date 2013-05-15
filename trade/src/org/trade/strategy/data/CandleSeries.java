@@ -604,23 +604,31 @@ public class CandleSeries extends IndicatorSeries {
 	 *            int
 	 * @param newBar
 	 *            boolean
-	 * @throws ValueTypeException
 	 */
-
 	public void updateSeries(CandleSeries source, int skip, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
+		/*
+		 * Do not want to add the new bar.
+		 */
+		if (source.getItemCount() > skip) {
 
-		for (int i = skip; i < source.getItemCount(); i++) {
-			if (i >= 0) {
-				CandleItem candle = (CandleItem) source.getDataItem(i);
-				buildCandle(candle.getLastUpdateDate(), candle.getOpen(),
-						candle.getHigh(), candle.getLow(), candle.getClose(),
-						candle.getVolume(), candle.getVwap(),
-						candle.getCount(),
-						this.getBarSize() / source.getBarSize());
+			// get the current data item...
+			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
+			/*
+			 * If the item does not exist in the series then this is a new time
+			 * period and so we need to remove the last in the set and add the
+			 * new periods values. Otherwise we just update the last value in
+			 * the set.
+			 */
+			if (newBar) {
+				this.add(candleItem, false);
+			} else {
+				CandleItem dataItem = (CandleItem) this.getDataItem(this
+						.getItemCount() - 1);
+				this.update(dataItem.getPeriod(), dataItem.getCandle());
 			}
 		}
 	}

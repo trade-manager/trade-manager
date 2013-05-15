@@ -595,8 +595,9 @@ public class CandleDataset extends AbstractXYDataset implements
 
 		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex),
 				bars, startTime, endTime);
-
-		series.updateSeries(source.getSeries(seriesIndex), 0, true);
+		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount() - 1; i++) {
+			series.updateSeries(source.getSeries(seriesIndex), i, true);
+		}
 
 		return series;
 
