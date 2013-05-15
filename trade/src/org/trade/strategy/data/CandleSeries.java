@@ -628,7 +628,7 @@ public class CandleSeries extends IndicatorSeries {
 			} else {
 				CandleItem dataItem = (CandleItem) this.getDataItem(this
 						.getItemCount() - 1);
-				this.update(dataItem.getPeriod(), dataItem);
+				this.update(dataItem.getPeriod(), dataItem.getCandle());
 			}
 		}
 	}
