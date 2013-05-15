@@ -226,7 +226,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
 			// Chart Panel
-//			JLabel jLabelPeriod = new JLabel("Period:");
+			// JLabel jLabelPeriod = new JLabel("Period:");
 			periodEditorComboBox = new DecodeComboBoxEditor(
 					(new BarSize()).getCodesDecodes());
 			DecodeComboBoxRenderer periodRenderer = new DecodeComboBoxRenderer();
@@ -238,8 +238,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel6.add(closeAllButton, null);
 			jPanel6.add(brokerDataButton, null);
 			jPanel6.add(cancelStrategiesButton, null);
-//			jPanel6.add(jLabelPeriod, null);
-//			jPanel6.add(periodEditorComboBox, null);
+			// jPanel6.add(jLabelPeriod, null);
+			// jPanel6.add(periodEditorComboBox, null);
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
 			jToolBar.add(jPanel6);
@@ -547,6 +547,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				}
 				if (currentTabIndex == -1) {
 					ChartPanel chartPanel = createChartPanel(tradestrategy);
+					periodEditorComboBox.setItem(BarSize
+							.newInstance(tradestrategy.getBarSize()));
 					m_jTabbedPaneContract.add(chartPanel.getCandlestickChart()
 							.getName(), chartPanel);
 					currentTabIndex = m_jTabbedPaneContract.getTabCount() - 1;
@@ -555,7 +557,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				}
 				m_jTabbedPaneContract.setSelectedIndex(currentTabIndex);
 			}
-			this.reFreshTab();
 		} catch (PersistentModelException ex) {
 			setErrorMessage("Error refreshing Tradestrategy.", ex.getMessage(),
 					ex);
@@ -1050,6 +1051,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 */
 		ChartPanel(Tradestrategy tradestrategy) {
 			this.tradestrategy = tradestrategy;
+			this.setLayout(new BorderLayout());
+
 			String ledgend = "("
 					+ tradestrategy.getContract().getSymbol()
 					+ ") "
@@ -1060,8 +1063,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					tradestrategy.getTradingday());
 			this.candlestickChart.setName(tradestrategy.getContract()
 					.getSymbol());
-			this.setLayout(new BorderLayout());
-			this.add(this.candlestickChart, null);
+			this.add(this.candlestickChart);
 		}
 
 		/**

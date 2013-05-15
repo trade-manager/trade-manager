@@ -94,7 +94,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 	private static final long serialVersionUID = 2842422936659217811L;
 
-	private JFreeChart m_chart;
+	private JFreeChart chart = null;
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"HH:mm:ss");
 	private static SimpleDateFormat dateFormatShort = new SimpleDateFormat(
@@ -120,24 +120,23 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			Tradingday tradingday) {
 
 		this.datasetContainer = datasetContainer;
+		this.setLayout(new BorderLayout());
 		// Used to mark the current price
 		stroke = new BasicStroke(1, BasicStroke.CAP_BUTT,
 				BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 3 }, 0);
 		valueMarker = new ValueMarker(0.00, Color.black, stroke);
 
-		this.setLayout(new BorderLayout());
-		m_chart = createChart(this.datasetContainer, title, tradingday);
+		this.chart = createChart(this.datasetContainer, title, tradingday);
 
 		BlockContainer container = new BlockContainer(new BorderArrangement());
 		container.add(titleLegend1, RectangleEdge.LEFT);
 		container.add(titleLegend2, RectangleEdge.RIGHT);
-
 		container.add(new EmptyBlock(2000, 0));
 		CompositeTitle legends = new CompositeTitle(container);
 		legends.setPosition(RectangleEdge.BOTTOM);
-		m_chart.addSubtitle(legends);
+		this.chart.addSubtitle(legends);
 
-		final ChartPanel chartPanel = new ChartPanel(m_chart);
+		final ChartPanel chartPanel = new ChartPanel(this.chart);
 		chartPanel.setFillZoomRectangle(true);
 		chartPanel.setMouseZoomable(true, true);
 		chartPanel.setRefreshBuffer(true);
@@ -234,7 +233,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				}
 			}
 		});
-		this.add(chartPanel, BorderLayout.CENTER);
+		this.add(chartPanel, null);
 		this.datasetContainer.getCandleDataset().getSeries(0)
 				.addChangeListener(this);
 	}
@@ -242,11 +241,11 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	public void removeChart() {
 		this.datasetContainer.getCandleDataset().getSeries(0)
 				.removeChangeListener(this);
-		m_chart.getXYPlot().clearAnnotations();
-		m_chart.getXYPlot().clearDomainAxes();
-		m_chart.getXYPlot().clearDomainMarkers();
-		m_chart.getXYPlot().clearRangeAxes();
-		m_chart.getXYPlot().clearRangeMarkers();
+		this.chart.getXYPlot().clearAnnotations();
+		this.chart.getXYPlot().clearDomainAxes();
+		this.chart.getXYPlot().clearDomainMarkers();
+		this.chart.getXYPlot().clearRangeAxes();
+		this.chart.getXYPlot().clearRangeMarkers();
 	}
 
 	/**
@@ -255,7 +254,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * @return JFreeChart
 	 */
 	public JFreeChart getChart() {
-		return m_chart;
+		return this.chart;
 	}
 
 	/**
@@ -456,7 +455,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 						+ " Close: " + new Money(candleItem.getClose())
 						+ " Vwap: " + new Money(candleItem.getVwap());
 				titleLegend2.setText(msg);
-				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) m_chart
+				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
 						.getPlot();
 				@SuppressWarnings("unchecked")
 				List<XYPlot> subplots = combinedXYplot.getSubplots();
@@ -478,7 +477,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				xyplot.removeRangeMarker(valueMarker);
 				valueMarker.setValue(candleItem.getClose());
 				xyplot.addRangeMarker(valueMarker);
-				m_chart.fireChartChanged();
+				this.chart.fireChartChanged();
 			}
 		}
 	}
@@ -508,13 +507,13 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			arrow.setAngle(-90d);
 			arrow.setBackgroundPaint(Color.RED);
 		}
-		CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) m_chart
+		CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
 				.getPlot();
 		@SuppressWarnings("unchecked")
 		List<XYPlot> subplots = combinedXYplot.getSubplots();
 		XYPlot xyplot = subplots.get(0);
 		xyplot.addAnnotation(arrow);
-		m_chart.fireChartChanged();
+		this.chart.fireChartChanged();
 	}
 
 	/**
