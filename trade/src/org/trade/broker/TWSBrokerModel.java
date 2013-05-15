@@ -1037,9 +1037,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(execution.m_orderId));
 			if (null == transientInstance) {
-				error(reqId, 3320,
-						"Error Trade Order not found for Order Key: "
-								+ execution.m_orderId);
+				error(execution.m_orderId, 3170,
+						"Warning Order not found for Order Key: "
+								+ execution.m_orderId
+								+ " make sure Client ID: " + this.m_clientId
+								+ " is not the master in TWS.");
 				return;
 			}
 
@@ -1148,9 +1150,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(order.m_orderId));
 			if (null == transientInstance) {
-				error(orderId, 3170,
-						"Error openOrder not found for Order Key: "
-								+ order.m_orderId);
+				error(orderId, 3170, "Warning Order not found for Order Key: "
+						+ order.m_orderId + " make sure Client ID: "
+						+ this.m_clientId + " is not the master in TWS.");
 				return;
 			}
 
@@ -1255,9 +1257,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(orderId));
 			if (null == transientInstance) {
-				error(orderId, 3190,
-						"Error Execution Details order not found for Order Key: "
-								+ orderId);
+				error(orderId, 3170, "Warning Order not found for Order Key: "
+						+ orderId + " make sure Client ID: " + this.m_clientId
+						+ " is not the master in TWS.");
 				return;
 			}
 			/*
@@ -1397,7 +1399,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						+ " Msg: " + msg);
 				brokerModelException = new BrokerModelException(3, code,
 						"Code: " + code + " " + msg);
-			} else if (code == 202 || code == 201) {
+			} else if (code == 202 || code == 201 || code == 3170) {
 				_log.warn("BrokerModel Order Id: " + id + " Code: " + code
 						+ " Msg: " + msg);
 				brokerModelException = new BrokerModelException(2, code,
