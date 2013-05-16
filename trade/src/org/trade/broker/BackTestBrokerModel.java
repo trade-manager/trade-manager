@@ -734,9 +734,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					.findTradeOrderByKey(execution.getTradeOrder()
 							.getOrderKey());
 			if (null == transientInstance) {
-				error(reqId, 3320,
-						"Error Trade Order not found for Order Key: "
-								+ execution.getTradeOrder().getOrderKey());
+				error(execution.getTradeOrder().getOrderKey(), 3170,
+						"Warning Order not found for Order Key: "
+								+ execution.getTradeOrder().getOrderKey()
+								+ " make sure Client ID: " + 0
+								+ " is not the master in TWS.");
 				return;
 			}
 
@@ -802,10 +804,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(order.getOrderKey());
 			if (null == transientInstance) {
-				error(orderId,
-						3170,
-						"Error openOrder not found for Order Key: "
-								+ order.getOrderKey());
+				error(orderId, 3170, "Warning Order not found for Order Key: "
+						+ orderId + " make sure Client ID: " + 0
+						+ " is not the master in TWS.");
 				return;
 			}
 
@@ -893,9 +894,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(orderId));
 			if (null == transientInstance) {
-				error(orderId, 3090,
-						"Error Execution Details order not found for Order Key: "
-								+ orderId);
+				error(orderId, 3170, "Warning Order not found for Order Key: "
+						+ orderId + " make sure Client ID: " + 0
+						+ " is not the master in TWS.");
 				return;
 			}
 			/*
@@ -1028,13 +1029,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		 * in TWS via the Configure>API menu command.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
-				|| (code == 366) || (code == 162) || (code == 321)) {
+				|| (code == 366) || (code == 162) || (code == 321)
+				|| (code == 3170)) {
 			if (((code > 1999) && (code < 3000))) {
 				_log.info("BrokerModel Req Id: " + id + " Code: " + code
 						+ " Msg: " + msg);
 				brokerModelException = new BrokerModelException(3, code,
 						"Code: " + code + " " + msg);
-			} else if (code == 202 || code == 201) {
+			} else if (code == 202 || code == 201 || code == 3170) {
 				_log.warn("BrokerModel Order Id: " + id + " Code: " + code
 						+ " Msg: " + msg);
 				brokerModelException = new BrokerModelException(2, code,

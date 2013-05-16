@@ -1376,7 +1376,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 * operations ignored for non FA customers.
 		 */
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
-				|| (code == 366) || (code == 162) || (code == 321)) {
+				|| (code == 366) || (code == 162) || (code == 321)
+				|| (code == 3170)) {
 			if (((code > 1999) && (code < 3000))) {
 				_log.info("BrokerModel Req Id: " + id + " Code: " + code
 						+ " Msg: " + msg);

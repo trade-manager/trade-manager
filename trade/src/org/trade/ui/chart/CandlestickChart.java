@@ -445,7 +445,6 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			CandleSeries candleSeries = (CandleSeries) series;
 			if (!candleSeries.isEmpty()) {
 
-
 				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
 						.getPlot();
 				synchronized (combinedXYplot) {
@@ -457,16 +456,17 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 						xyplot.removeRangeMarker(valueMarker);
 						if (null != closePriceLine)
 							xyplot.removeAnnotation(closePriceLine);
-						
+
 						CandleItem candleItem = (CandleItem) candleSeries
 								.getDataItem(candleSeries.getItemCount() - 1);
 						String msg = "Time: "
-								+ dateFormat.format(candleItem.getLastUpdateDate())
-								+ " Open: " + new Money(candleItem.getOpen())
-								+ " High: " + new Money(candleItem.getHigh())
-								+ " Low: " + new Money(candleItem.getLow())
-								+ " Close: " + new Money(candleItem.getClose())
-								+ " Vwap: " + new Money(candleItem.getVwap());
+								+ dateFormat.format(candleItem
+										.getLastUpdateDate()) + " Open: "
+								+ new Money(candleItem.getOpen()) + " High: "
+								+ new Money(candleItem.getHigh()) + " Low: "
+								+ new Money(candleItem.getLow()) + " Close: "
+								+ new Money(candleItem.getClose()) + " Vwap: "
+								+ new Money(candleItem.getVwap());
 						titleLegend2.setText(msg);
 						valueMarker.setValue(candleItem.getClose());
 
@@ -479,8 +479,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 								+ new Money(candleItem.getClose()) + ")", x,
 								candleItem.getY());
 						closePriceLine.setTextAnchor(TextAnchor.BOTTOM_RIGHT);
-						
-						xyplot.addAnnotation(closePriceLine);						
+
+						xyplot.addAnnotation(closePriceLine);
 						xyplot.addRangeMarker(valueMarker);
 					}
 				}
