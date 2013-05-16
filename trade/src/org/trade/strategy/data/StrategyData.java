@@ -163,7 +163,7 @@ public class StrategyData extends Worker {
 						 * the base series in the dataset.
 						 */
 						boolean newBar = false;
-						if (currentBaseCandleCount > lastBaseCandleProcessed) {
+						if (this.currentBaseCandleCount > this.lastBaseCandleProcessed) {
 							this.lastBaseCandleProcessed++;
 							newBar = true;
 						}
@@ -184,12 +184,17 @@ public class StrategyData extends Worker {
 		} catch (InterruptedException interExp) {
 			// Do nothing.
 		} catch (Exception ex1) {
-			_log.error("Error processing indicators symbol: "
+			_log.error("Error processing candle symbol: "
 					+ this.getBaseCandleSeries().getSymbol()
+					+ " Base series size: "
+					+ this.getBaseCandleSeries().getItemCount() + " BarSize: "
+					+ this.getBaseCandleSeries().getBarSize()
+					+ " currentBaseCandleCount: " + this.currentBaseCandleCount
 					+ " Candle series size: "
-					+ this.getBaseCandleSeries().getItemCount()
-					+ " last candle processed: " + this.lastBaseCandleProcessed
-					+ " current candle: " + this.currentBaseCandleCount
+					+ this.getCandleDataset().getSeries(0).getItemCount()
+					+ " lastBaseCandleProcessed: "
+					+ this.lastBaseCandleProcessed + " BarSize: "
+					+ this.getCandleDataset().getSeries(0).getBarSize()
 					+ " Message: " + ex1.getMessage(), ex1);
 
 		} finally {
@@ -348,13 +353,13 @@ public class StrategyData extends Worker {
 		}
 	}
 
-	public synchronized void clearBaseCandleSeries() {
+	public synchronized void clearBaseCandleDataset() {
 		if (this.isRunning())
 			this.cancel();
 		this.currentBaseCandleCount = -1;
 		this.lastBaseCandleProcessed = this.currentBaseCandleCount;
 		clearChartDatasets();
-		getBaseCandleSeries().clear();
+		getBaseCandleDataset().clear();
 	}
 
 	public void clearChartDatasets() {

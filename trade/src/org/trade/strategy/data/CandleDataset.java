@@ -566,7 +566,6 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#clear()
 	 */
 	public void clear() {
-
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			this.getSeries(i).clear();
 		}
@@ -613,7 +612,7 @@ public class CandleDataset extends AbstractXYDataset implements
 	 */
 	public static void populateSeries(StrategyData datasetContainer,
 			List<Candle> candles) {
-		datasetContainer.clearBaseCandleSeries();
+		datasetContainer.clearBaseCandleDataset();
 		for (Candle candle : candles) {
 			datasetContainer
 					.buildCandle(candle.getStartPeriod(), candle.getOpen()

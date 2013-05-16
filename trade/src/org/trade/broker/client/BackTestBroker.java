@@ -208,7 +208,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 							this);
 			this.tradestrategy = this.tradePersistentModel
 					.findTradestrategyById(this.idTradestrategy);
-			this.datasetContainer.clearBaseCandleSeries();
+			this.datasetContainer.clearBaseCandleDataset();
 			this.tradestrategy.setDatasetContainer(this.datasetContainer);
 			List<Candle> candles = null;
 			Date endDate = TradingCalendar.getSpecificTime(tradestrategy
