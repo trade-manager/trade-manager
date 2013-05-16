@@ -209,6 +209,12 @@ public class TradingCalendarTest extends TestCase {
 			TestCase.assertEquals(29, TradingCalendar.getMinute(date));
 			TestCase.assertEquals(59, TradingCalendar.getSecond(date));
 			TestCase.assertEquals(2013, TradingCalendar.getYear(date));
+
+			// System.out.println(date.toString());
+			// boolean ans =
+			// date.toString().matches(".+\\d\\d:\\d\\d::(00\\.0)");
+			// TestCase.assertTrue(ans);
+
 		} catch (Exception ex) {
 			_log.error("Error parsing date: " + ex.getMessage(), ex);
 			fail("Error parsing date: " + ex.getCause().getMessage());
