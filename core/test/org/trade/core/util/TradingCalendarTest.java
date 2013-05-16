@@ -186,4 +186,32 @@ public class TradingCalendarTest extends TestCase {
 		_log.info("reqId: " + reqId.incrementAndGet());
 		TestCase.assertNotNull(reqId);
 	}
+
+	@Test
+	public void testGetDateParts() {
+		try {
+			SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
+					"yyyy/MM/dd HH:mm:ss z");
+			m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
+			Date date = m_sdfGMT.parse("2013/04/23 23:29:59 GMT");
+
+			/*
+			 * Takes a GMT dateTime converts to Java JM date time Use args to
+			 * run this
+			 * 
+			 * -Duser.timezone=EST5EDT
+			 * -Dlog4j.configuration=file:"config.properties"
+			 */
+
+			TestCase.assertEquals(23, TradingCalendar.getDayOfMonth(date));
+			TestCase.assertEquals(19, TradingCalendar.getHourOfDay(date));
+			TestCase.assertEquals(7, TradingCalendar.getHour(date));
+			TestCase.assertEquals(29, TradingCalendar.getMinute(date));
+			TestCase.assertEquals(59, TradingCalendar.getSecond(date));
+			TestCase.assertEquals(2013, TradingCalendar.getYear(date));
+		} catch (Exception ex) {
+			_log.error("Error parsing date: " + ex.getMessage(), ex);
+			fail("Error parsing date: " + ex.getCause().getMessage());
+		}
+	}
 }
