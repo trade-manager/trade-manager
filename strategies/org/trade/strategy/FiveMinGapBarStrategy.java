@@ -188,8 +188,15 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						 */
 						if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
 								.getLimitAmount().doubleValue() * 2)) {
+							
 							createRiskOpenPosition(action, price, priceStop,
 									true, null, null, null, null);
+						}else{
+							_log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
+									+ getSymbol() + " Time: " + startPeriod);
+							updateTradestrategyStatus(TradestrategyStatus.PERCENT);
+							// Kill this process we are done!
+							this.cancel();
 						}
 
 					} else {
