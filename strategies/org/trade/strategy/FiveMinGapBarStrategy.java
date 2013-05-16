@@ -194,7 +194,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						}else{
 							_log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
 									+ getSymbol() + " Time: " + startPeriod);
-							updateTradestrategyStatus(TradestrategyStatus.PERCENT);
+							updateTradestrategyStatus(TradestrategyStatus.NBB);
 							// Kill this process we are done!
 							this.cancel();
 						}
