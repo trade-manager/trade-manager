@@ -1089,30 +1089,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void execDetailsEnd(int reqId) {
 
 		try {
-
 			for (Integer key : execDetails.keySet()) {
 				TradeOrder tradeorder = execDetails.get(key);
-				if (!tradeorder.getIsFilled()) {
-					if (tradeorder.getQuantity().equals(
-							tradeorder.getFilledQuantity())) {
-						tradeorder.setStatus(OrderStatus.FILLED);
-						tradeorder.setIsFilled(true);
-						tradeorder = m_tradePersistentModel
-								.persistTradeOrder(tradeorder);
-						execDetails.replace(key, tradeorder);
-						/*
-						 * Check for each order that was filled if the trade
-						 * should now be closed.
-						 */
-						// Let the controller know an order was filled
-						this.fireTradeOrderFilled(tradeorder);
-
-						if (tradeorder.hasTradePosition()
-								&& !tradeorder.getTradePosition().getIsOpen()) {
-							// Let the controller know a position was closed
-							this.firePositionClosed(tradeorder
-									.getTradePosition());
-						}
+				if (tradeorder.getIsFilled()) {
+					if (tradeorder.hasTradePosition()
+							&& !tradeorder.getTradePosition().getIsOpen()) {
+						// Let the controller know a position was closed
+						this.firePositionClosed(tradeorder.getTradePosition());
 					}
 				}
 			}
