@@ -624,7 +624,7 @@ public class CandleSeries extends IndicatorSeries {
 			 * the set.
 			 */
 			if (newBar) {
-				this.add(candleItem, false);
+				this.add(candleItem, true);
 			} else {
 				CandleItem dataItem = (CandleItem) this.getDataItem(this
 						.getItemCount() - 1);

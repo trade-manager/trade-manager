@@ -42,6 +42,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.ListIterator;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -2248,12 +2249,24 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * Check to see if the trading day is today and this
 					 * strategy is selected to trade and that the market is open
 					 */
-					for (Tradestrategy item : contract.getTradestrategies()) {
-						this.fireHistoricalDataComplete(item);
-						if (item.getTradingday().getClose().after(new Date())) {
-							if (!this.isRealtimeBarsRunning(contract)) {
-								this.onReqRealTimeBars(contract, item
-										.getStrategy().getMarketData());
+					synchronized (contract.getTradestrategies()) {
+						for (ListIterator<Tradestrategy> itemIter = contract
+								.getTradestrategies().listIterator(); itemIter
+								.hasNext();) {
+							Tradestrategy item = itemIter.next();
+							this.fireHistoricalDataComplete(item);
+							if (item.getTradingday()
+									.getClose()
+									.after(TradingCalendar.getDate((new Date())
+											.getTime()))) {
+								if (!this.isRealtimeBarsRunning(contract)) {
+									this.onReqRealTimeBars(contract, item
+											.getStrategy().getMarketData());
+								}
+							} else {
+								item.getDatasetContainer()
+										.clearBaseCandleDataset();
+								itemIter.remove();
 							}
 						}
 					}

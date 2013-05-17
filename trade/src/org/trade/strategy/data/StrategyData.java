@@ -173,8 +173,6 @@ public class StrategyData extends Worker {
 									.updateSeries(this.getBaseCandleSeries(),
 											this.lastBaseCandleProcessed,
 											newBar);
-							this.getCandleDataset().getSeries(0)
-									.fireSeriesChanged();
 						}
 					}
 				}
@@ -324,7 +322,6 @@ public class StrategyData extends Worker {
 			synchronized (this.getBaseCandleDataset()) {
 				this.getCandleDataset().updateDataset(
 						this.getBaseCandleDataset(), 0, newBar);
-				this.getCandleDataset().getSeries(0).fireSeriesChanged();
 			}
 		}
 		return newBar;

@@ -42,6 +42,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
@@ -94,8 +95,8 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	private String secTypeId;
 	private String subCategory;
 	private String tradingClass;
-	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
-			0);
+	private List<Tradestrategy> tradestrategies = Collections
+			.synchronizedList(new ArrayList<Tradestrategy>(0));
 	private List<TradePosition> tradePositions = new ArrayList<TradePosition>(0);
 	private List<Candle> candles = new ArrayList<Candle>(0);
 

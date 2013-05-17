@@ -72,6 +72,7 @@ public interface BrokerChangeListener extends EventListener {
 	/**
 	 * Method historicalDataComplete.
 	 * 
+	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
