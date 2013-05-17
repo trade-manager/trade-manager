@@ -148,7 +148,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			public void chartMouseMoved(ChartMouseEvent e) {
 			}
 
-			public void chartMouseClicked(final ChartMouseEvent e) {
+			public synchronized void chartMouseClicked(final ChartMouseEvent e) {
 				if (e.getTrigger().getClickCount() == 2) {
 					CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) e
 							.getChart().getPlot();
@@ -437,7 +437,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            SeriesChangeEvent
 	 * @see org.jfree.data.general.SeriesChangeListener#seriesChanged(SeriesChangeEvent)
 	 */
-	public void seriesChanged(SeriesChangeEvent event) {
+	public synchronized void seriesChanged(SeriesChangeEvent event) {
 
 		Object series = event.getSource();
 		if (series instanceof CandleSeries) {
@@ -447,45 +447,41 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
 						.getPlot();
-				synchronized (combinedXYplot) {
 
-					@SuppressWarnings("unchecked")
-					List<XYPlot> subplots = combinedXYplot.getSubplots();
-					XYPlot xyplot = subplots.get(0);
-					synchronized (xyplot) {
-						xyplot.removeRangeMarker(valueMarker);
-						if (null != closePriceLine)
-							xyplot.removeAnnotation(closePriceLine);
+				@SuppressWarnings("unchecked")
+				List<XYPlot> subplots = combinedXYplot.getSubplots();
+				XYPlot xyplot = subplots.get(0);
+				xyplot.removeRangeMarker(valueMarker);
+				if (null != closePriceLine)
+					xyplot.removeAnnotation(closePriceLine);
 
-						CandleItem candleItem = (CandleItem) candleSeries
-								.getDataItem(candleSeries.getItemCount() - 1);
-						String msg = "Time: "
-								+ dateFormat.format(candleItem
-										.getLastUpdateDate()) + " Open: "
-								+ new Money(candleItem.getOpen()) + " High: "
-								+ new Money(candleItem.getHigh()) + " Low: "
-								+ new Money(candleItem.getLow()) + " Close: "
-								+ new Money(candleItem.getClose()) + " Vwap: "
-								+ new Money(candleItem.getVwap());
-						titleLegend2.setText(msg);
-						valueMarker.setValue(candleItem.getClose());
+				CandleItem candleItem = (CandleItem) candleSeries
+						.getDataItem(candleSeries.getItemCount() - 1);
+				String msg = "Time: "
+						+ dateFormat.format(candleItem.getLastUpdateDate())
+						+ " Open: " + new Money(candleItem.getOpen())
+						+ " High: " + new Money(candleItem.getHigh())
+						+ " Low: " + new Money(candleItem.getLow())
+						+ " Close: " + new Money(candleItem.getClose())
+						+ " Vwap: " + new Money(candleItem.getVwap());
+				titleLegend2.setText(msg);
+				valueMarker.setValue(candleItem.getClose());
 
-						double x = TradingCalendar.getSpecificTime(
-								candleSeries.getStartTime(),
-								candleItem.getPeriod().getStart()).getTime();
-						closePriceLine = new XYTextAnnotation("("
-								+ dateFormat.format(candleItem
-										.getLastUpdateDate()) + ", "
-								+ new Money(candleItem.getClose()) + ")", x,
-								candleItem.getY());
-						closePriceLine.setTextAnchor(TextAnchor.BOTTOM_RIGHT);
+				double x = TradingCalendar.getSpecificTime(
+						candleSeries.getStartTime(),
+						candleItem.getPeriod().getStart()).getTime();
+				closePriceLine = new XYTextAnnotation("("
+						+ dateFormat.format(candleItem.getLastUpdateDate())
+						+ ", " + new Money(candleItem.getClose()) + ")", x,
+						candleItem.getY());
+				closePriceLine.setTextAnchor(TextAnchor.BOTTOM_RIGHT);
 
-						xyplot.addAnnotation(closePriceLine);
-						xyplot.addRangeMarker(valueMarker);
-					}
-				}
-				this.chart.fireChartChanged();
+				xyplot.addAnnotation(closePriceLine);
+				xyplot.addRangeMarker(valueMarker);
 			}
+
+			this.chart.fireChartChanged();
+
 		}
 	}
 
