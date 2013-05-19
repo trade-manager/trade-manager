@@ -173,7 +173,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			jPanel1.setBorder(new BevelBorder(BevelBorder.RAISED));
-			JLabel jLabelSummary = new JLabel("Ignor Win/Loss $ under");
+			JLabel jLabelSummary = new JLabel("Ignor in Batting/Sharpe $ under");
 			m_lossGainAmt.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel1.add(jLabelSummary, null);
 			jPanel1.add(m_lossGainAmt, null);
