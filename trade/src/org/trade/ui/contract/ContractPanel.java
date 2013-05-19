@@ -898,34 +898,36 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				// Collections.sort(trade.getTradeOrders(), new
 				// TradeOrder());
 
-				if (null != tradestrategy.getTradePosition()) {
-					if (null != tradestrategy.getTradePosition()
-							.getTotalNetValue()) {
-						netValue = netValue
-								+ tradestrategy.getTradePosition()
-										.getTotalNetValue().doubleValue();
-					}
-					if (null != tradestrategy.getTradePosition()
-							.getTotalCommission()) {
-						commision = commision
-								+ tradestrategy.getTradePosition()
-										.getTotalCommission().doubleValue();
-					}
-				}
-
-				netValue = netValue - commision;
-
 				/*
 				 * Sum up orders that are filled and at the same time add the
 				 * fill price. This happens when orders stop out as there are
 				 * multiple stop orders for a position with multiple targets.
 				 */
+
 				TradeOrder prevTradeOrder = null;
+				Integer prevIdTradePosition = null;
 
 				for (TradeOrder order : tradestrategy.getTradeOrders()) {
 
-					Integer quantity = order.getFilledQuantity();
 					if (order.getIsFilled()) {
+						Integer quantity = order.getFilledQuantity();
+						if (null == prevIdTradePosition
+								|| prevIdTradePosition != order
+										.getTradePosition()
+										.getIdTradePosition()) {
+
+							netValue = netValue
+									+ order.getTradePosition()
+											.getTotalNetValue().doubleValue();
+
+							commision = commision
+									+ order.getTradePosition()
+											.getTotalCommission().doubleValue();
+
+							prevIdTradePosition = order.getTradePosition()
+									.getIdTradePosition();
+						}
+
 						if (null != prevTradeOrder) {
 							if (prevTradeOrder.getIsFilled()
 									&& prevTradeOrder.getFilledDate().equals(
@@ -945,6 +947,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					prevTradeOrder = order;
 				}
 			}
+
+			netValue = netValue - commision;
 
 			m_tradeLabel.setText(null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:",

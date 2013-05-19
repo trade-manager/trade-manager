@@ -20,7 +20,7 @@
 	<!-- top level targets -->
 	<!-- supporting targets -->
 
-	<target name="initialise"  depends="clean" description="initialize the build environment">
+	<target name="initialise" depends="clean" description="initialize the build environment">
 		<!-- Create the time stamp -->
 		<tstamp />
 		<!-- Create directory structures -->
@@ -34,7 +34,7 @@
 
 	<target name="compile" depends="initialise" description="compile the source code ">
 		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false">
-			<compilerarg value="-Xlint:none"/>
+			<compilerarg value="-Xlint:none" />
 			<classpath>
 				<fileset dir="${lib}">
 					<include name="**/*.jar" />
@@ -45,7 +45,7 @@
 			</classpath>
 		</javac>
 		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.6" target="1.6" includeantruntime="false">
-			<compilerarg value="-Xlint:none"/>
+			<compilerarg value="-Xlint:none" />
 			<classpath>
 				<fileset dir="${lib}">
 					<include name="**/*.jar" />
@@ -82,8 +82,8 @@
 		<delete dir="${build}" />
 	</target>
 
-			
-	<target name="clean"  description="clean up">
+
+	<target name="clean" description="clean up">
 		<!-- Delete the ${build} and ${dist} directory trees -->
 		<delete dir="${build}" />
 		<!--	<delete dir="${dist}" /> -->
@@ -92,7 +92,8 @@
 
 	<target name="run-tests" depends="dist, cleanDB" description="run your test suite">
 
-		<junit printsummary="yes" haltonfailure="no" showoutput="yes">
+		<junit printsummary="yes" haltonfailure="no" showoutput="yes" fork="yes">
+			<jvmarg value="-Duser.timezone=${market.timezone}" />
 			<classpath>
 				<pathelement path="${component.base}" />
 				<fileset dir="${lib}">
@@ -129,11 +130,11 @@
 		</junitreport>
 	</target>
 	<target name="cleanDB" depends="initialise">
-		  <input message="Do you really want to delete all data in the database (y/n)?" validargs="y,n" addproperty="do.delete" /> 
-	      <condition property="do.abort"> 
-	            <equals arg1="n" arg2="${do.delete}"/> 
-	      </condition> 
-	      <fail if="do.abort">Build aborted by user.</fail> 
+		<input message="Do you really want to delete all data in the database (y/n)?" validargs="y,n" addproperty="do.delete" />
+		<condition property="do.abort">
+			<equals arg1="n" arg2="${do.delete}" />
+		</condition>
+		<fail if="do.abort">Build aborted by user.</fail>
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath>
 				<fileset dir="${lib}">
@@ -144,6 +145,9 @@
 		</sql>
 	</target>
 	<target name="all" depends="test">
+		<junit fork="yes">
+			<jvmarg value="-Duser.timezone=EST5EDT" />
+		</junit>
 	</target>
 </project>
 

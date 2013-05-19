@@ -35,6 +35,7 @@
  */
 package org.trade.persistent;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -427,11 +428,13 @@ public interface PersistentModel {
 	 *            boolean
 	 * @param symbol
 	 *            String
+	 * @param winLossAmount
+	 *            BigDecimal
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 */
 	TradelogReport findTradelogReport(Portfolio portfolio, Date start,
-			Date end, boolean filter, String symbol)
+			Date end, boolean filter, String symbol, BigDecimal winLossAmount)
 			throws PersistentModelException;
 
 	/**

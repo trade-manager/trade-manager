@@ -35,6 +35,8 @@
  */
 package org.trade.persistent.dao;
 
+import java.math.BigDecimal;
+
 import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
@@ -113,7 +115,8 @@ public class TradelogReportTest extends TestCase {
 					.getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogSummary(
 					portfolio, TradingCalendar.getYearStart(),
-					TradingCalendar.getTodayBusinessDayEnd(), null);
+					TradingCalendar.getTodayBusinessDayEnd(), null,
+					new BigDecimal(0));
 			TestCase.assertFalse(!tradelogReport.getTradelogSummary().isEmpty());
 			for (TradelogSummary tradelogSummary : tradelogReport
 					.getTradelogSummary()) {

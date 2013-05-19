@@ -53,8 +53,8 @@ sum((if( tradeorder.action = 'BUY',  1 , -1)) * ifnull(tradeorder.quantity,0))  
 sum(ifnull(tradeorder.commission,0)) as commission,
 if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) > 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as profitAmount,
 if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as lossAmount,
-(if((tradestrategy.riskAmount/2) <= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
-(if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
+(if((:winLossAmount) < (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
+(if((-1*:winLossAmount) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
 (select count(distinct tradeposition.idTradePosition) from tradeposition
 inner join contract on tradeposition.idContract = contract.idContract
 inner join tradeorder on tradeposition.idtradeposition = tradeorder.idtradeposition
@@ -136,8 +136,8 @@ sum((if( tradeorder.action = 'BUY',  1 , -1)) * ifnull(tradeorder.quantity,0))  
 sum(ifnull(tradeorder.commission,0)) as commission,
 if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) > 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as profitAmount,
 if(sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)) < 0, sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice)), 0)	as lossAmount,
-(if((tradestrategy.riskAmount/2) <= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
-(if((-1*tradestrategy.riskAmount/2) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
+(if((:winLossAmount) <= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as winCount,
+(if((-1*:winLossAmount) >= (sum(((if( tradeorder.action = 'BUY',  -1 , 1))  * tradeorder.quantity * tradeorder.averageFilledPrice))), 1 ,0 )) as lossCount,
 (select count(distinct tradeposition.idTradePosition) from tradeposition
 inner join contract on tradeposition.idContract = contract.idContract
 inner join tradeorder on tradeposition.idtradeposition = tradeorder.idtradeposition

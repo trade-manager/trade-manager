@@ -91,6 +91,7 @@ import org.trade.ui.tables.TradelogDetailTable;
 import org.trade.ui.tables.TradelogSummaryTable;
 import org.trade.ui.widget.DAODecodeComboBoxEditor;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
+import org.trade.ui.widget.MoneyField;
 import org.trade.ui.widget.StringField;
 
 /**
@@ -116,6 +117,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private static final String DATEFORMAT = "MM/dd/yyyy";
 	private TradelogDetail selectedTradelogDetail = null;
 	private Portfolio portfolio = null;
+	private MoneyField m_lossGainAmt = new MoneyField();
 
 	private static final String MASK = "**********";
 	private static final String VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789. ";
@@ -170,9 +172,11 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			filterButton.setSelected(false);
 
 			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-			JLabel jLabelSummary = new JLabel(
-					"Note Win/Loss Count = +\\- 1/2 Risk Unit");
-			jPanel1.add(jLabelSummary, BorderLayout.NORTH);
+			jPanel1.setBorder(new BevelBorder(BevelBorder.RAISED));
+			JLabel jLabelSummary = new JLabel("Ignor Win/Loss $ under");
+			m_lossGainAmt.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			jPanel1.add(jLabelSummary, null);
+			jPanel1.add(m_lossGainAmt, null);
 			JPanel jPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel startLabel = new JLabel("Start Date:");
 			JLabel endLabel = new JLabel("End Date:");
@@ -194,7 +198,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JToolBar jToolBar = new JToolBar();
 			jToolBar.setLayout(new BorderLayout());
 			jToolBar.add(jPanel2, BorderLayout.WEST);
-			jToolBar.add(jLabelSummary, BorderLayout.EAST);
+			jToolBar.add(jPanel1, BorderLayout.EAST);
 
 			m_tableTradelogSummary.setEnabled(false);
 			m_tableTradelogSummary.setFont(new Font("Monospaced", Font.PLAIN,
@@ -263,8 +267,9 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 				symbol = null;
 
 			m_tradelogReport = m_tradePersistentModel.findTradelogReport(
-					this.portfolio, startDate, endDate,
-					filterButton.isSelected(), symbol);
+					this.portfolio, startDate, endDate, filterButton
+							.isSelected(), symbol, m_lossGainAmt.getMoney()
+							.getBigDecimalValue());
 			this.clearStatusBarMessage();
 			if (m_tradelogReport.getTradelogDetail().isEmpty()) {
 				this.setStatusBarMessage("No data found for selected criteria",

@@ -35,6 +35,7 @@
  */
 package org.trade.persistent.dao;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -71,7 +72,7 @@ public class TradelogHome {
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogReport(Portfolio portfolio, Date start,
-			Date end, boolean filter, String symbol) {
+			Date end, boolean filter, String symbol, BigDecimal winLossAmount) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -98,6 +99,7 @@ public class TradelogHome {
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
 			querySummary.setParameter("symbol", symbol);
+			querySummary.setParameter("winLossAmount", winLossAmount);
 
 			for (Object item : querySummary.getResultList()) {
 				tradelogReport.add((TradelogSummary) item);
@@ -174,7 +176,7 @@ public class TradelogHome {
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogSummary(Portfolio portfolio,
-			Date start, Date end, String symbol) {
+			Date start, Date end, String symbol, BigDecimal winLossAmount) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -187,6 +189,7 @@ public class TradelogHome {
 			querySummary.setParameter("start", m_sdf.format(start));
 			querySummary.setParameter("end", m_sdf.format(end));
 			querySummary.setParameter("symbol", symbol);
+			querySummary.setParameter("winLossAmount", winLossAmount);
 
 			TradelogReport tradelogReport = new TradelogReport();
 

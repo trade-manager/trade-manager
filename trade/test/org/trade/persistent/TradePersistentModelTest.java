@@ -303,9 +303,7 @@ public class TradePersistentModelTest extends TestCase {
 			Tradestrategy tradestrategyStpTgt = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			TradePosition openTradePosition = tradestrategyStpTgt
-					.getTradePosition();
-			TestCase.assertTrue(openTradePosition.getIsOpen());
+			TestCase.assertTrue(tradestrategyStpTgt.isThereOpenTradePosition());
 
 			int buySellMultiplier = 1;
 			if (action.equals(Action.BUY)) {
@@ -386,7 +384,7 @@ public class TradePersistentModelTest extends TestCase {
 			/*
 			 * Update Stop/target orders to Submitted.
 			 */
-			openTradePosition = this.tradePersistentModel
+			TradePosition openTradePosition = this.tradePersistentModel
 					.findOpenTradePositionByContractId(this.tradestrategy
 							.getContract().getIdContract());
 			for (TradeOrder tradeOrderOca : openTradePosition.getTradeOrders()) {
@@ -1129,7 +1127,8 @@ public class TradePersistentModelTest extends TestCase {
 			TradelogReport result = this.tradePersistentModel
 					.findTradelogReport(this.tradestrategy.getPortfolio(),
 							TradingCalendar.getYearStart(), this.tradestrategy
-									.getTradingday().getClose(), true, null);
+									.getTradingday().getClose(), true, null,
+							new BigDecimal(0));
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradelogReport Msg: " + e.getMessage());

@@ -925,8 +925,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (!m_brokerModel.isBrokerDataOnly()) {
 
 				if (tradestrategy.getTrade()) {
-					if (null != tradestrategy.getTradePosition()
-							&& tradestrategy.getTradePosition().getIsOpen()) {
+					if (tradestrategy.isThereOpenTradePosition()) {
 						int result = JOptionPane.showConfirmDialog(this
 								.getFrame(), "Position is open for: "
 								+ tradestrategy.getContract().getSymbol()
