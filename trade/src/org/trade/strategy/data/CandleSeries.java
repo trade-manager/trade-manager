@@ -888,7 +888,6 @@ public class CandleSeries extends IndicatorSeries {
 		private long volume = 0;
 		private int tradeCount = 0;
 		private double vwap = 0;
-		private double avgClose = 0;
 		private Date lastUpdateDate = null;
 
 		private double previousOpen = 0;
@@ -898,9 +897,7 @@ public class CandleSeries extends IndicatorSeries {
 		private long previousVolume = 0;
 		private int previousTradeCount = 0;
 		private double previousVwap = 0;
-		private double previousAvgClose = 0;
 
-		private Double sumClosePrice = new Double(0);
 		private Double sumVwapVolume = new Double(0);
 		private Long sumVolume = new Long(0);
 		private Integer sumTradeCount = new Integer(0);
@@ -913,7 +910,6 @@ public class CandleSeries extends IndicatorSeries {
 		private LinkedList<Integer> tradeCountValues = new LinkedList<Integer>();
 		private LinkedList<Double> vwapVolumeValues = new LinkedList<Double>();
 		private LinkedList<Double> vwapValues = new LinkedList<Double>();
-		private LinkedList<Double> avgCloseValues = new LinkedList<Double>();
 
 		public RollingCandle() {
 		}
@@ -945,7 +941,6 @@ public class CandleSeries extends IndicatorSeries {
 				this.previousVolume = this.volume;
 				this.previousTradeCount = this.tradeCount;
 				this.previousVwap = this.vwap;
-				this.previousAvgClose = this.avgClose;
 
 				this.open = open;
 				this.high = 0;
@@ -954,9 +949,7 @@ public class CandleSeries extends IndicatorSeries {
 				this.volume = 0;
 				this.tradeCount = 0;
 				this.vwap = 0;
-				this.avgClose = 0;
 				this.lastUpdateDate = null;
-				this.sumClosePrice = new Double(0);
 				this.sumVwapVolume = new Double(0);
 				this.sumVolume = new Long(0);
 				this.sumTradeCount = new Integer(0);
@@ -968,7 +961,6 @@ public class CandleSeries extends IndicatorSeries {
 				this.tradeCountValues.clear();
 				this.vwapVolumeValues.clear();
 				this.vwapValues.clear();
-				this.avgCloseValues.clear();
 			}
 			this.period = period;
 			this.lastUpdateDate = lastUpdateDate;
@@ -997,7 +989,6 @@ public class CandleSeries extends IndicatorSeries {
 				}
 
 				this.previousClose = this.closeValues.removeLast();
-				sumClosePrice = sumClosePrice - this.previousClose;
 
 				this.previousVolume = this.volumeValues.removeLast();
 				sumVolume = sumVolume - this.previousVolume;
@@ -1009,7 +1000,6 @@ public class CandleSeries extends IndicatorSeries {
 				sumTradeCount = sumTradeCount - this.previousTradeCount;
 
 				this.previousVwap = this.vwapValues.removeLast();
-				this.previousAvgClose = this.avgCloseValues.removeLast();
 			}
 
 			this.openValues.addFirst(open);
@@ -1024,12 +1014,6 @@ public class CandleSeries extends IndicatorSeries {
 
 			this.close = close;
 			this.closeValues.addFirst(close);
-
-			sumClosePrice = sumClosePrice + close;
-			this.avgClose = 0;
-			if (this.closeValues.size() > 0)
-				this.avgClose = sumClosePrice / this.closeValues.size();
-			this.avgCloseValues.addFirst(this.avgClose);
 
 			this.tradeCountValues.addFirst(tradeCount);
 			sumTradeCount = sumTradeCount + tradeCount;
@@ -1099,15 +1083,6 @@ public class CandleSeries extends IndicatorSeries {
 		 */
 		public double getClose() {
 			return this.close;
-		}
-
-		/**
-		 * Method getAverageClose.
-		 * 
-		 * @return double
-		 */
-		public double getAverageClose() {
-			return this.avgClose;
 		}
 
 		/**
@@ -1187,15 +1162,6 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		/**
-		 * Method getPreviousAverageClose.
-		 * 
-		 * @return double
-		 */
-		public double getPreviousAverageClose() {
-			return this.previousAvgClose;
-		}
-
-		/**
 		 * Method getPreviousVwap.
 		 * 
 		 * @return double
@@ -1231,7 +1197,6 @@ public class CandleSeries extends IndicatorSeries {
 			this.tradeCountValues.clear();
 			this.vwapVolumeValues.clear();
 			this.vwapValues.clear();
-			this.avgCloseValues.clear();
 		}
 	}
 }
