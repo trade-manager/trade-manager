@@ -320,10 +320,10 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 				absHighLessPrevClose = Math.abs(source.getRollingCandle()
 						.getHigh()
-						- source.getRollingCandle().getPreviousClose());
+						- source.getPreviousRollupCandle().getClose());
 				absLowLessPrevClose = Math.abs(source.getRollingCandle()
 						.getLow()
-						- source.getRollingCandle().getPreviousClose());
+						- source.getPreviousRollupCandle().getClose());
 
 				double tR = Math.max(highLessLow,
 						Math.max(absHighLessPrevClose, absLowLessPrevClose));

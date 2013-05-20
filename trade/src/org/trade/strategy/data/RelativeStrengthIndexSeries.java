@@ -324,7 +324,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 			if (source.getItemCount() > 1) {
 
 				diffCloseValue = source.getRollingCandle().getClose()
-						- source.getRollingCandle().getPreviousClose();
+						- source.getPreviousRollupCandle().getClose();
 
 				/*
 				 * If the item does not exist in the series then this is a new
