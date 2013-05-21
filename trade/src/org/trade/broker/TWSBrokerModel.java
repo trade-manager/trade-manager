@@ -1042,7 +1042,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						"Warning Order not found for Order Key: "
 								+ execution.m_orderId
 								+ " make sure Client ID: " + this.m_clientId
-								+ " is not the master in TWS.");
+								+ " is not the master in TWS. On execDetails update.");
 				return;
 			}
 
@@ -1136,7 +1136,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (null == transientInstance) {
 				error(orderId, 3170, "Warning Order not found for Order Key: "
 						+ order.m_orderId + " make sure Client ID: "
-						+ this.m_clientId + " is not the master in TWS.");
+						+ this.m_clientId + " is not the master in TWS. On openOrder update.");
 				return;
 			}
 
@@ -1243,7 +1243,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (null == transientInstance) {
 				error(orderId, 3170, "Warning Order not found for Order Key: "
 						+ orderId + " make sure Client ID: " + this.m_clientId
-						+ " is not the master in TWS.");
+						+ " is not the master in TWS. On orderStatus update.");
 				return;
 			}
 			/*

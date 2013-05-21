@@ -738,7 +738,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						"Warning Order not found for Order Key: "
 								+ execution.getTradeOrder().getOrderKey()
 								+ " make sure Client ID: " + 0
-								+ " is not the master in TWS.");
+								+ " is not the master in TWS. On execDetails update.");
 				return;
 			}
 
@@ -806,7 +806,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			if (null == transientInstance) {
 				error(orderId, 3170, "Warning Order not found for Order Key: "
 						+ orderId + " make sure Client ID: " + 0
-						+ " is not the master in TWS.");
+						+ " is not the master in TWS. On openOrder update.");
 				return;
 			}
 
@@ -896,7 +896,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			if (null == transientInstance) {
 				error(orderId, 3170, "Warning Order not found for Order Key: "
 						+ orderId + " make sure Client ID: " + 0
-						+ " is not the master in TWS.");
+						+ " is not the master in TWS. On orderStatus update.");
 				return;
 			}
 			/*
