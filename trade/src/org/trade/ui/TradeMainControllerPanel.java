@@ -58,6 +58,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
@@ -1062,22 +1063,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.broker.BrokerChangeListener#brokerError(BrokerModelException)
 	 */
 
-	public void brokerError(BrokerModelException ex) {
-
-		if (ex.getErrorId() == 1) {
-			this.setErrorMessage("Error: " + ex.getErrorCode(),
-					ex.getMessage(), ex);
-		} else if (ex.getErrorId() == 2) {
-			this.setStatusBarMessage("Warning: " + ex.getMessage(),
-					BasePanel.WARNING);
-		} else if (ex.getErrorId() == 3) {
-			this.setStatusBarMessage("Information: " + ex.getMessage(),
-					BasePanel.INFORMATION);
-		} else {
-			this.setErrorMessage("Unknown Error Id Code: " + ex.getErrorCode(),
-					ex.getMessage(), ex);
-		}
-		this.getFrame().setCursor(Cursor.getDefaultCursor());
+	public void brokerError(final BrokerModelException ex) {
+		/*
+		 * Dont block the broker thread.
+		 */
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					if (ex.getErrorId() == 1) {
+						setErrorMessage("Error: " + ex.getErrorCode(),
+								ex.getMessage(), ex);
+					} else if (ex.getErrorId() == 2) {
+						setStatusBarMessage("Warning: " + ex.getMessage(),
+								BasePanel.WARNING);
+					} else if (ex.getErrorId() == 3) {
+						setStatusBarMessage("Information: " + ex.getMessage(),
+								BasePanel.INFORMATION);
+					} else {
+						setErrorMessage(
+								"Unknown Error Id Code: " + ex.getErrorCode(),
+								ex.getMessage(), ex);
+					}
+				} finally {
+					getFrame().setCursor(Cursor.getDefaultCursor());
+				}
+			}
+		});
 	}
 
 	/**
