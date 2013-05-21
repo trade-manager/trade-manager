@@ -657,33 +657,39 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            TradeOrder
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderCancelled(TradeOrder)
 	 */
-	public void tradeOrderCancelled(TradeOrder tradeOrder) {
+	public void tradeOrderCancelled(final TradeOrder tradeOrder) {
 
-		try {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
 
-			if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
-				Tradestrategy tradestrategy = m_tradingdays
-						.getTradestrategy(tradeOrder.getTradestrategyId()
-								.getIdTradeStrategy());
-				if (null == tradestrategy) {
-					this.setStatusBarMessage(
-							"Warning position opened but Tradestrategy not found for Order Key: "
-									+ tradeOrder.getOrderKey()
-									+ " in the current Tradingday Tab selection.",
-							BasePanel.WARNING);
-					return;
+					if (m_brokerModel.isConnected()
+							&& contractPanel.isSelected()) {
+						Tradestrategy tradestrategy = m_tradingdays
+								.getTradestrategy(tradeOrder
+										.getTradestrategyId()
+										.getIdTradeStrategy());
+						if (null == tradestrategy) {
+							setStatusBarMessage(
+									"Warning position opened but Tradestrategy not found for Order Key: "
+											+ tradeOrder.getOrderKey()
+											+ " in the current Tradingday Tab selection.",
+									BasePanel.WARNING);
+							return;
+						}
+
+						_log.info("Trade Order cancelled for Symbol: "
+								+ tradestrategy.getContract().getSymbol()
+								+ " order key: " + tradeOrder.getOrderKey());
+
+						contractPanel.doRefresh(tradestrategy);
+					}
+				} catch (Exception ex) {
+					setErrorMessage("Error processing cancelled order.",
+							ex.getMessage(), ex);
 				}
-
-				_log.info("Trade Order cancelled for Symbol: "
-						+ tradestrategy.getContract().getSymbol()
-						+ " order key: " + tradeOrder.getOrderKey());
-
-				contractPanel.doRefresh(tradestrategy);
 			}
-		} catch (Exception ex) {
-			this.setErrorMessage("Error starting PositionManagerRule.",
-					ex.getMessage(), ex);
-		}
+		});
 	}
 
 	/**
@@ -693,31 +699,36 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            TradeOrder
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderCancelled(TradeOrder)
 	 */
-	public void tradeOrderStatusChanged(TradeOrder tradeOrder) {
+	public void tradeOrderStatusChanged(final TradeOrder tradeOrder) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					if (m_brokerModel.isConnected()
+							&& contractPanel.isSelected()) {
+						Tradestrategy tradestrategy = m_tradingdays
+								.getTradestrategy(tradeOrder
+										.getTradestrategyId()
+										.getIdTradeStrategy());
+						if (null == tradestrategy) {
+							setStatusBarMessage(
+									"Warning position opened but Tradestrategy not found for Order Key: "
+											+ tradeOrder.getOrderKey()
+											+ " in the current Tradingday Tab selection.",
+									BasePanel.WARNING);
+							return;
+						}
+						_log.info("Trade Order cancelled for Symbol: "
+								+ tradestrategy.getContract().getSymbol()
+								+ " order key: " + tradeOrder.getOrderKey());
+						contractPanel.doRefresh(tradestrategy);
+					}
 
-		try {
-			if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
-				Tradestrategy tradestrategy = m_tradingdays
-						.getTradestrategy(tradeOrder.getTradestrategyId()
-								.getIdTradeStrategy());
-				if (null == tradestrategy) {
-					this.setStatusBarMessage(
-							"Warning position opened but Tradestrategy not found for Order Key: "
-									+ tradeOrder.getOrderKey()
-									+ " in the current Tradingday Tab selection.",
-							BasePanel.WARNING);
-					return;
+				} catch (Exception ex) {
+					setErrorMessage("Error changing tradeOrder status.",
+							ex.getMessage(), ex);
 				}
-				_log.info("Trade Order cancelled for Symbol: "
-						+ tradestrategy.getContract().getSymbol()
-						+ " order key: " + tradeOrder.getOrderKey());
-				contractPanel.doRefresh(tradestrategy);
 			}
-
-		} catch (Exception ex) {
-			this.setErrorMessage("Error starting PositionManagerRule.",
-					ex.getMessage(), ex);
-		}
+		});
 	}
 
 	/**
@@ -729,31 +740,38 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            TradePosition
 	 * @see org.trade.broker.BrokerChangeListener#positionClosed(TradePosition)
 	 */
-	public void positionClosed(TradePosition tradePosition) {
-		try {
-			if (m_brokerModel.isConnected()) {
-				tradePosition = m_tradePersistentModel
-						.findTradePositionById(tradePosition
-								.getIdTradePosition());
-				for (TradeOrder tradeOrder : tradePosition.getTradeOrders()) {
-					Tradestrategy tradestrategy = m_tradePersistentModel
-							.findTradestrategyById(tradeOrder
-									.getTradestrategyId().getIdTradeStrategy());
-					_log.info("TradePosition closed for Symbol: "
-							+ tradePosition.getContract().getSymbol()
-							+ " Profit/Loss: "
-							+ tradePosition.getTotalNetValue());
-					m_tradingdays.getTradestrategy(
-							tradestrategy.getIdTradeStrategy()).setStatus(
-							tradestrategy.getStatus());
-					if (contractPanel.isSelected())
-						contractPanel.doRefresh(tradestrategy);
+	public void positionClosed(final TradePosition tradePosition) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					if (m_brokerModel.isConnected()) {
+						TradePosition currTradePosition = m_tradePersistentModel
+								.findTradePositionById(tradePosition
+										.getIdTradePosition());
+						for (TradeOrder tradeOrder : currTradePosition
+								.getTradeOrders()) {
+							Tradestrategy tradestrategy = m_tradePersistentModel
+									.findTradestrategyById(tradeOrder
+											.getTradestrategyId()
+											.getIdTradeStrategy());
+							_log.info("TradePosition closed for Symbol: "
+									+ tradePosition.getContract().getSymbol()
+									+ " Profit/Loss: "
+									+ tradePosition.getTotalNetValue());
+							m_tradingdays.getTradestrategy(
+									tradestrategy.getIdTradeStrategy())
+									.setStatus(tradestrategy.getStatus());
+							if (contractPanel.isSelected())
+								contractPanel.doRefresh(tradestrategy);
+						}
+					}
+				} catch (Exception ex) {
+					setErrorMessage("Error position closed: ", ex.getMessage(),
+							ex);
 				}
 			}
-		} catch (Exception ex) {
-			this.setErrorMessage("Error position closed : ", ex.getMessage(),
-					ex);
-		}
+		});
+
 	}
 
 	/**
@@ -815,14 +833,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#positionCovered(Tradestrategy)
 	 */
-	public void positionCovered(Tradestrategy tradestrategy) {
-		try {
-			if (m_brokerModel.isConnected() && contractPanel.isSelected())
-				contractPanel.doRefresh(tradestrategy);
-		} catch (Exception ex) {
-			this.setErrorMessage("Error positionCovered : ", ex.getMessage(),
-					ex);
-		}
+	public void positionCovered(final Tradestrategy tradestrategy) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					if (m_brokerModel.isConnected()
+							&& contractPanel.isSelected())
+						contractPanel.doRefresh(tradestrategy);
+				} catch (Exception ex) {
+					setErrorMessage("Error positionCovered : ",
+							ex.getMessage(), ex);
+				}
+			}
+		});
 	}
 
 	/**
@@ -832,22 +855,30 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            StrategyRuleException
 	 * @see org.trade.strategy.StrategyChangeListener#strategyError(StrategyRuleException)
 	 */
-	public void strategyError(StrategyRuleException ex) {
-		if (ex.getErrorId() == 1) {
-			this.setErrorMessage("Error: " + ex.getErrorCode(),
-					ex.getMessage(), ex);
-		} else if (ex.getErrorId() == 2) {
-			this.setStatusBarMessage("Warning: " + ex.getMessage(),
-					BasePanel.WARNING);
-		} else if (ex.getErrorId() == 3) {
-			this.setStatusBarMessage("Information: " + ex.getMessage(),
-					BasePanel.INFORMATION);
-		} else {
+	public void strategyError(final StrategyRuleException ex) {
 
-			this.setErrorMessage("Unknown Error Id Code: " + ex.getErrorCode(),
-					ex.getMessage(), ex);
-		}
-		this.getFrame().setCursor(Cursor.getDefaultCursor());
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					if (ex.getErrorId() == 1) {
+						setErrorMessage("Error: " + ex.getErrorCode(),
+								ex.getMessage(), ex);
+					} else if (ex.getErrorId() == 2) {
+						setStatusBarMessage("Warning: " + ex.getMessage(),
+								BasePanel.WARNING);
+					} else if (ex.getErrorId() == 3) {
+						setStatusBarMessage("Information: " + ex.getMessage(),
+								BasePanel.INFORMATION);
+					} else {
+						setErrorMessage(
+								"Unknown Error Id Code: " + ex.getErrorCode(),
+								ex.getMessage(), ex);
+					}
+				} finally {
+					getFrame().setCursor(Cursor.getDefaultCursor());
+				}
+			}
+		});
 	}
 
 	public void doHelp() {

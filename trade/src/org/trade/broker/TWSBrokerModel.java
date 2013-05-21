@@ -1038,10 +1038,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(execution.m_orderId));
 			if (null == transientInstance) {
-				error(execution.m_orderId, 3170,
+				error(execution.m_orderId,
+						3170,
 						"Warning Order not found for Order Key: "
 								+ execution.m_orderId
-								+ " make sure Client ID: " + this.m_clientId
+								+ " make sure Client ID: "
+								+ this.m_clientId
 								+ " is not the master in TWS. On execDetails update.");
 				return;
 			}
@@ -1136,7 +1138,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (null == transientInstance) {
 				error(orderId, 3170, "Warning Order not found for Order Key: "
 						+ order.m_orderId + " make sure Client ID: "
-						+ this.m_clientId + " is not the master in TWS. On openOrder update.");
+						+ this.m_clientId
+						+ " is not the master in TWS. On openOrder update.");
 				return;
 			}
 

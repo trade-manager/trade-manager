@@ -734,10 +734,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					.findTradeOrderByKey(execution.getTradeOrder()
 							.getOrderKey());
 			if (null == transientInstance) {
-				error(execution.getTradeOrder().getOrderKey(), 3170,
+				error(execution.getTradeOrder().getOrderKey(),
+						3170,
 						"Warning Order not found for Order Key: "
 								+ execution.getTradeOrder().getOrderKey()
-								+ " make sure Client ID: " + 0
+								+ " make sure Client ID: "
+								+ 0
 								+ " is not the master in TWS. On execDetails update.");
 				return;
 			}
