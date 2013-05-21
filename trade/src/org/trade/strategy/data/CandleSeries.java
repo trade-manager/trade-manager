@@ -706,7 +706,6 @@ public class CandleSeries extends IndicatorSeries {
 			if (this.rollingCandle.high == this.highValues.removeLast()) {
 				if (this.highValues.isEmpty()) {
 					this.rollingCandle.high = high;
-
 				} else {
 					this.rollingCandle.high = Collections.max(this.highValues);
 				}
@@ -717,7 +716,6 @@ public class CandleSeries extends IndicatorSeries {
 					this.rollingCandle.low = low;
 				} else {
 					this.rollingCandle.low = Collections.min(this.lowValues);
-
 				}
 			}
 
