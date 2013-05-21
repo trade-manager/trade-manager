@@ -2038,13 +2038,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					+ " endDate: " + endDate);
 
 			totalSumbitted++;
-			int percent = (int) (((double) (totalSumbitted - this.brokerModel
-					.getHistoricalData().size()) / getGrandTotal()) * 100d);
-			setProgress(percent);
-
 			hasSubmittedInSeconds(totalSumbitted);
 			this.brokerModel
 					.onBrokerData(contract, endDate, barSize, chartDays);
+			int percent = (int) (((double) (totalSumbitted - this.brokerModel
+					.getHistoricalData().size()) / getGrandTotal()) * 100d);
+			setProgress(percent);
 
 			_log.info("Total: " + getGrandTotal() + " totalSumbitted: "
 					+ totalSumbitted);
