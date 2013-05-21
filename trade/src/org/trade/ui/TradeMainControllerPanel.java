@@ -640,13 +640,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					strategy.tradeOrderFilled(tradeOrder);
 				}
 			}
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					if (contractPanel.isSelected()) {
+			if (contractPanel.isSelected()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
 						contractPanel.doRefresh(tradestrategy);
 					}
-				}
-			});
+				});
+			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
 					ex.getMessage(), ex);
@@ -662,13 +662,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderCancelled(TradeOrder)
 	 */
 	public void tradeOrderCancelled(final TradeOrder tradeOrder) {
-
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-
-					if (m_brokerModel.isConnected()
-							&& contractPanel.isSelected()) {
+		if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
 						Tradestrategy tradestrategy = m_tradingdays
 								.getTradestrategy(tradeOrder
 										.getTradestrategyId()
@@ -687,13 +684,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								+ " order key: " + tradeOrder.getOrderKey());
 
 						contractPanel.doRefresh(tradestrategy);
+
+					} catch (Exception ex) {
+						setErrorMessage("Error processing cancelled order.",
+								ex.getMessage(), ex);
 					}
-				} catch (Exception ex) {
-					setErrorMessage("Error processing cancelled order.",
-							ex.getMessage(), ex);
 				}
-			}
-		});
+			});
+		}
 	}
 
 	/**
@@ -704,11 +702,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderCancelled(TradeOrder)
 	 */
 	public void tradeOrderStatusChanged(final TradeOrder tradeOrder) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					if (m_brokerModel.isConnected()
-							&& contractPanel.isSelected()) {
+
+		if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
+
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
 						Tradestrategy tradestrategy = m_tradingdays
 								.getTradestrategy(tradeOrder
 										.getTradestrategyId()
@@ -725,14 +724,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								+ tradestrategy.getContract().getSymbol()
 								+ " order key: " + tradeOrder.getOrderKey());
 						contractPanel.doRefresh(tradestrategy);
-					}
 
-				} catch (Exception ex) {
-					setErrorMessage("Error changing tradeOrder status.",
-							ex.getMessage(), ex);
+					} catch (Exception ex) {
+						setErrorMessage("Error changing tradeOrder status.",
+								ex.getMessage(), ex);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	/**
@@ -745,10 +744,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.broker.BrokerChangeListener#positionClosed(TradePosition)
 	 */
 	public void positionClosed(final TradePosition tradePosition) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					if (m_brokerModel.isConnected()) {
+		if (m_brokerModel.isConnected()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
+
 						TradePosition currTradePosition = m_tradePersistentModel
 								.findTradePositionById(tradePosition
 										.getIdTradePosition());
@@ -768,14 +768,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							if (contractPanel.isSelected())
 								contractPanel.doRefresh(tradestrategy);
 						}
-					}
-				} catch (Exception ex) {
-					setErrorMessage("Error position closed: ", ex.getMessage(),
-							ex);
-				}
-			}
-		});
 
+					} catch (Exception ex) {
+						setErrorMessage("Error position closed: ",
+								ex.getMessage(), ex);
+					}
+				}
+			});
+		}
 	}
 
 	/**
@@ -838,18 +838,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.strategy.StrategyChangeListener#positionCovered(Tradestrategy)
 	 */
 	public void positionCovered(final Tradestrategy tradestrategy) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					if (m_brokerModel.isConnected()
-							&& contractPanel.isSelected())
+		if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
+
 						contractPanel.doRefresh(tradestrategy);
-				} catch (Exception ex) {
-					setErrorMessage("Error positionCovered : ",
-							ex.getMessage(), ex);
+					} catch (Exception ex) {
+						setErrorMessage("Error positionCovered : ",
+								ex.getMessage(), ex);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	/**
