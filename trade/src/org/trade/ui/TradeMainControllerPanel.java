@@ -571,10 +571,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            TradeOrder
 	 * @see org.trade.broker.BrokerChangeListener#tradeOrderFilled(TradeOrder)
 	 */
-	public void tradeOrderFilled(TradeOrder tradeOrder) {
+	public void tradeOrderFilled(final TradeOrder tradeOrder) {
 
 		try {
-			Tradestrategy tradestrategy = m_tradingdays
+			final Tradestrategy tradestrategy = m_tradingdays
 					.getTradestrategy(tradeOrder.getTradestrategyId()
 							.getIdTradeStrategy());
 
@@ -593,9 +593,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								+ "  but this tradestrategy is not set to trade. A manual order was created Key: "
 								+ tradeOrder.getOrderKey(), BasePanel.WARNING);
 				return;
-			}
-			if (contractPanel.isSelected()) {
-				contractPanel.doRefresh(tradestrategy);
 			}
 
 			/*
@@ -643,6 +640,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					strategy.tradeOrderFilled(tradeOrder);
 				}
 			}
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					if (contractPanel.isSelected()) {
+						contractPanel.doRefresh(tradestrategy);
+					}
+				}
+			});
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
 					ex.getMessage(), ex);
@@ -904,7 +908,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.setErrorMessage("Could not load about help.", ex.getMessage(),
 					ex);
 		}
-
 	}
 
 	/**
@@ -1317,23 +1320,28 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            String
 	 * @see org.trade.broker.BrokerChangeListener#updateAccountTime(String)
 	 */
-	public void updateAccountTime(String accountNumber) {
-		try {
-			Account account = m_tradePersistentModel
-					.findAccountByNumber(accountNumber);
-			Portfolio portfolio = account.getDefaultPortfolio();
-			if (null != portfolio) {
-				portfolio = m_tradePersistentModel.findPortfolioById(portfolio
-						.getId());
-				tradingdayPanel.setPortfolioLabel(portfolio);
-				this.setStatusBarMessage("Account: " + accountNumber
-						+ " information updated.", BasePanel.INFORMATION);
-			}
+	public void updateAccountTime(final String accountNumber) {
 
-		} catch (Exception ex) {
-			this.setErrorMessage("Could not retreive account data Msg: ",
-					ex.getMessage(), ex);
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Account account = m_tradePersistentModel
+							.findAccountByNumber(accountNumber);
+					Portfolio portfolio = account.getDefaultPortfolio();
+					if (null != portfolio) {
+						portfolio = m_tradePersistentModel
+								.findPortfolioById(portfolio.getId());
+						tradingdayPanel.setPortfolioLabel(portfolio);
+						setStatusBarMessage("Account: " + accountNumber
+								+ " information updated.",
+								BasePanel.INFORMATION);
+					}
+				} catch (Exception ex) {
+					setErrorMessage("Could not retreive account data Msg: ",
+							ex.getMessage(), ex);
+				}
+			}
+		});
 	}
 
 	/**
