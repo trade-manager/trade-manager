@@ -77,6 +77,8 @@ import org.jfree.data.general.SeriesChangeListener;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
@@ -444,7 +446,6 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 			CandleSeries candleSeries = (CandleSeries) series;
 			if (!candleSeries.isEmpty()) {
-
 				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
 						.getPlot();
 				@SuppressWarnings("unchecked")

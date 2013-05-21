@@ -91,6 +91,7 @@ public class CandleSeries extends IndicatorSeries {
 	private Percent percentChangeFromClose = new Percent(0);
 	private Percent percentChangeFromOpen = new Percent(0);
 
+	// Parms used for the rolling candle bar.
 	private RollingCandle rollingCandle = new RollingCandle();
 	private RollingCandle prevRollingCandle = null;
 
@@ -665,13 +666,26 @@ public class CandleSeries extends IndicatorSeries {
 	 * the under lying candle. So 5 sec bars rolled up to 5min bars will rollup
 	 * interval of 5min/5sec = 60.
 	 * 
-	 * 
+	 * @param period
+	 *            the candle period.
 	 * @param rollupInterval
 	 *            the rollup Interval.
+	 * @param open
+	 *            the open-value.
+	 * @param high
+	 *            the high-value.
+	 * @param low
+	 *            the low-value.
+	 * @param close
+	 *            the close-value.
 	 * @param volume
-	 *            long
-	 * @param volume
-	 *            long
+	 *            the volume value.
+	 * @param vwap
+	 *            the volume weighted price.
+	 * @param tradeCount
+	 *            the number of trades.
+	 * @param lastUpdateDate
+	 *            the lastUpdateDate
 	 */
 	public void updateRollingCandle(RegularTimePeriod period,
 			int rollupInterval, double open, double high, double low,
@@ -1128,7 +1142,7 @@ public class CandleSeries extends IndicatorSeries {
 		}
 
 		public boolean getSide() {
-			return this.getClose() >= this.getOpen();
+			return this.close >= this.open;
 		}
 
 		/**
