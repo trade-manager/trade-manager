@@ -613,12 +613,12 @@ public class CandleSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Method getPreviousRollupCandle.
+	 * Method getPreviousRollingCandle.
 	 * 
 	 * @return RollupCandle
 	 */
 	@Transient
-	public RollingCandle getPreviousRollupCandle() {
+	public RollingCandle getPreviousRollingCandle() {
 		return this.prevRollingCandle;
 	}
 
@@ -700,16 +700,25 @@ public class CandleSeries extends IndicatorSeries {
 			this.prevRollingCandle = this.rollingCandleValues.removeLast();
 
 			this.rollingCandle.open = this.openValues.removeLast();
+			if (this.openValues.isEmpty())
+				this.rollingCandle.open = open;
 
 			if (this.rollingCandle.high == this.highValues.removeLast()) {
-				if (!this.highValues.isEmpty())
-					this.rollingCandle.high = Collections.max(this.highValues);
+				if (this.highValues.isEmpty()) {
+					this.rollingCandle.high = high;
 
+				} else {
+					this.rollingCandle.high = Collections.max(this.highValues);
+				}
 			}
 
 			if (this.rollingCandle.low == this.lowValues.removeLast()) {
-				if (!this.lowValues.isEmpty())
+				if (this.lowValues.isEmpty()) {
+					this.rollingCandle.low = low;
+				} else {
 					this.rollingCandle.low = Collections.min(this.lowValues);
+
+				}
 			}
 
 			sumVolume = sumVolume - this.volumeValues.removeLast();
@@ -719,7 +728,7 @@ public class CandleSeries extends IndicatorSeries {
 
 		this.rollingCandle.period = period;
 		this.rollingCandle.lastUpdateDate = lastUpdateDate;
-		
+
 		this.openValues.addFirst(open);
 
 		this.highValues.addFirst(high);
