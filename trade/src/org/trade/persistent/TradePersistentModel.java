@@ -46,6 +46,7 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -831,9 +832,19 @@ public class TradePersistentModel implements PersistentModel {
 						if (!tradePosition.containsTradeOrder(tradeOrder))
 							tradePosition.addTradeOrder(tradeOrder);
 					} else {
+						/*
+						 * Note Order status can be fired before execDetails
+						 * this could result in a new tradeposition.
+						 * OrderStatus does not contain the filled date so we
+						 * must set it here.
+						 */
+						Date positionOpenDate = tradeOrder.getFilledDate();
+						if (null == positionOpenDate)
+							positionOpenDate = TradingCalendar
+									.getDate((new Date()).getTime());
 						tradePosition = new TradePosition(
 								positionOrders.getContract(),
-								tradeOrder.getFilledDate(),
+								positionOpenDate,
 								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
 										: Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
