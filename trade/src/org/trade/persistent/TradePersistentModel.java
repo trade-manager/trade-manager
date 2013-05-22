@@ -834,9 +834,9 @@ public class TradePersistentModel implements PersistentModel {
 					} else {
 						/*
 						 * Note Order status can be fired before execDetails
-						 * this could result in a new tradeposition.
-						 * OrderStatus does not contain the filled date so we
-						 * must set it here.
+						 * this could result in a new tradeposition. OrderStatus
+						 * does not contain the filled date so we must set it
+						 * here.
 						 */
 						Date positionOpenDate = tradeOrder.getFilledDate();
 						if (null == positionOpenDate)

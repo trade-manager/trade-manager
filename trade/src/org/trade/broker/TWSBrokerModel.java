@@ -1474,34 +1474,39 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					synchronized (datasetContainer) {
 						if (datasetContainer.getBaseCandleSeries()
 								.getItemCount() > 0) {
-							CandleItem candle = (CandleItem) datasetContainer
-									.getBaseCandleSeries().getDataItem(
-											datasetContainer
-													.getBaseCandleSeries()
-													.getItemCount() - 1);
+							// CandleItem candle = (CandleItem) datasetContainer
+							// .getBaseCandleSeries().getDataItem(
+							// datasetContainer
+							// .getBaseCandleSeries()
+							// .getItemCount() - 1);
 							switch (field) {
 							case TickType.ASK: {
-								candle.getCandle().getContract()
-										.setLastAskPrice(price);
+								datasetContainer.getBaseCandleSeries()
+										.getContract().setLastAskPrice(price);
 								break;
 							}
 							case TickType.BID: {
-								candle.getCandle().getContract()
-										.setLastBidPrice(price);
+								datasetContainer.getBaseCandleSeries()
+										.getContract().setLastBidPrice(price);
 								break;
 							}
 							case TickType.LAST: {
 
-								// if (candle.getCandle().getContract()
-								// .getLastAskPrice().doubleValue() > 0
-								// && candle.getCandle().getContract()
+								// if (datasetContainer.getBaseCandleSeries()
+								// .getContract().getLastAskPrice()
+								// .doubleValue() > 0
+								// && datasetContainer
+								// .getBaseCandleSeries()
+								// .getContract()
 								// .getLastBidPrice()
 								// .doubleValue() > 0
-								// && (value <= candle.getCandle()
+								// && (value <= datasetContainer
+								// .getBaseCandleSeries()
 								// .getContract()
 								// .getLastAskPrice()
-								// .doubleValue() && value >= candle
-								// .getCandle().getContract()
+								// .doubleValue() && value >= datasetContainer
+								// .getBaseCandleSeries()
+								// .getContract()
 								// .getLastBidPrice()
 								// .doubleValue())) {
 								//
@@ -1509,15 +1514,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								// && (value > candle.getHigh() || value <
 								// candle
 								// .getLow())) {
-								// candle.setClose(price);
+								// candle.setClose(price.doubleValue());
 								// candle.setLastUpdateDate(TradingCalendar
 								// .getDate(new Date()));
-								// datasetContainer
-								// .getBaseCandleSeries()
+								// datasetContainer.getBaseCandleSeries()
 								// .fireSeriesChanged();
 								// _log.info("TickPrice Symbol: "
-								// + tradestrategy
-								// .getContract()
+								// + tradestrategy.getContract()
 								// .getSymbol() + " "
 								// + TickType.getField(field)
 								// + " : " + value);
@@ -1676,16 +1679,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								CandleItem candle = (CandleItem) datasetContainer
 										.getBaseCandleSeries().getDataItem(
 												index);
-								if (candle.getCandle().getContract()
-										.getLastAskPrice().doubleValue() > 0
-										&& candle.getCandle().getContract()
+								if (datasetContainer.getBaseCandleSeries()
+										.getContract().getLastAskPrice()
+										.doubleValue() > 0
+										&& datasetContainer
+												.getBaseCandleSeries()
+												.getContract()
 												.getLastBidPrice()
 												.doubleValue() > 0
-										&& (price <= candle.getCandle()
+										&& (price <= datasetContainer
+												.getBaseCandleSeries()
 												.getContract()
 												.getLastAskPrice()
-												.doubleValue() && price >= candle
-												.getCandle().getContract()
+												.doubleValue() && price >= datasetContainer
+												.getBaseCandleSeries()
+												.getContract()
 												.getLastBidPrice()
 												.doubleValue())) {
 
@@ -1703,12 +1711,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 										// + " Price: "
 										// + price
 										// + " Bid: "
-										// + candle.getCandle()
-										// .getContract()
+										// +
+										// datasetContainer.getBaseCandleSeries().getContract()
 										// .getLastBidPrice()
 										// + " Ask: "
-										// + candle.getCandle()
-										// .getContract()
+										// +
+										// datasetContainer.getBaseCandleSeries().getContract()
 										// .getLastAskPrice());
 									}
 								}
