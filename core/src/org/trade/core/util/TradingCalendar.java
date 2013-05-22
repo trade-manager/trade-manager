@@ -494,6 +494,21 @@ public class TradingCalendar {
 			return CALENDAR_NY.getTime();
 		}
 	}
+	
+	/**
+	 * Return the Day for this date
+	 * 
+	 * @param millis
+	 *            long
+	 * @return Date
+	 * @exception * @see
+	 */
+	public static Date getDate(Date date) {
+		synchronized (CALENDAR_NY) {
+			CALENDAR_NY.setTimeInMillis(date.getTime());
+			return CALENDAR_NY.getTime();
+		}
+	}
 
 	/**
 	 * Return the Day for this date
