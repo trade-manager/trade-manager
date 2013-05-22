@@ -1621,9 +1621,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						int result = JOptionPane
 								.showConfirmDialog(
 										this.getFrame(),
-										"Trading strategy cannot be run as Trading day:"
+										"Tradingday: "
 												+ tradingday.getOpen()
-												+ " has trades. Do you want to delete trades?",
+												+ " has orders. Do you want to delete all orders?",
 										"Information",
 										JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.YES_OPTION) {
