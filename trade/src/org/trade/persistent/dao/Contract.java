@@ -85,6 +85,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	private String industry;
 	private BigDecimal lastAskPrice = new BigDecimal(0);
 	private BigDecimal lastBidPrice = new BigDecimal(0);
+	private BigDecimal lastPrice = new BigDecimal(0);
 	private String localSymbol;
 	private BigDecimal minTick;
 	private BigDecimal priceMagnifier;
@@ -356,6 +357,26 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setIndustry(String industry) {
 		this.industry = industry;
+	}
+
+	/**
+	 * Method getLastPrice.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Transient
+	public BigDecimal getLastPrice() {
+		return this.lastPrice;
+	}
+
+	/**
+	 * Method setLastPrice.
+	 * 
+	 * @param lastPrice
+	 *            BigDecimal
+	 */
+	public void setLastPrice(BigDecimal lastPrice) {
+		this.lastPrice = lastPrice;
 	}
 
 	/**

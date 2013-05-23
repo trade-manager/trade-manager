@@ -1491,7 +1491,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								break;
 							}
 							case TickType.LAST: {
-
+								datasetContainer.getBaseCandleSeries()
+										.getContract().setLastPrice(price);
+								break;
 								// if (datasetContainer.getBaseCandleSeries()
 								// .getContract().getLastAskPrice()
 								// .doubleValue() > 0
@@ -1526,8 +1528,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								// + " : " + value);
 								// }
 								// }
-
-								break;
+								// break;
 							}
 							default: {
 								break;
@@ -1624,7 +1625,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				case TickType.RT_VOLUME: {
 					StringTokenizer st = new StringTokenizer(value, ";");
 					int tokenNumber = 0;
-					double price = 0;
+					BigDecimal price = new BigDecimal(0);
+					;
 					Date time = null;
 					while (st.hasMoreTokens()) {
 						tokenNumber++;
@@ -1632,7 +1634,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 						switch (tokenNumber) {
 						case 1: {
-							price = Double.parseDouble(token);
+							price = (new BigDecimal(Double.parseDouble(token)))
+									.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 							break;
 						}
 						case 2: {
@@ -1670,6 +1673,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 							StrategyData datasetContainer = tradestrategy
 									.getDatasetContainer();
+							datasetContainer.getBaseCandleSeries()
+									.getContract().setLastPrice(price);
 
 							synchronized (datasetContainer) {
 								int index = datasetContainer
@@ -1687,20 +1692,23 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 												.getContract()
 												.getLastBidPrice()
 												.doubleValue() > 0
-										&& (price <= datasetContainer
+										&& (price.doubleValue() <= datasetContainer
 												.getBaseCandleSeries()
 												.getContract()
 												.getLastAskPrice()
-												.doubleValue() && price >= datasetContainer
+												.doubleValue() && price
+												.doubleValue() >= datasetContainer
 												.getBaseCandleSeries()
 												.getContract()
 												.getLastBidPrice()
 												.doubleValue())) {
 
-									if (price > 0
-											&& (price > candle.getHigh() || price < candle
+									if (price.doubleValue() > 0
+											&& (price.doubleValue() > candle
+													.getHigh() || price
+													.doubleValue() < candle
 													.getLow())) {
-										candle.setClose(price);
+										candle.setClose(price.doubleValue());
 										candle.setLastUpdateDate(time);
 										datasetContainer.getBaseCandleSeries()
 												.fireSeriesChanged();
