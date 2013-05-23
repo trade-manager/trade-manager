@@ -90,6 +90,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 	private ClientSocket m_client = null;
 
+	private static final int SCALE = 5;
+
 	private AtomicInteger orderKey = null;
 
 	private Integer backfillDateFormat = 2;
@@ -1228,22 +1230,28 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						}
 						if (tradestrategy.getTradingday().getClose()
 								.after(date)) {
-							if (backfillUseRTH == 1) {
-								if (TradingCalendar.isMarketHours(tradestrategy
-										.getTradingday().getOpen(),
-										tradestrategy.getTradingday()
-												.getClose(), date)) {
-									tradestrategy.getDatasetContainer()
-											.buildCandle(date, open, high, low,
-													close, volume, vwap,
-													tradeCount, 1);
-								}
-							} else {
-								tradestrategy.getDatasetContainer()
-										.buildCandle(date, open, high, low,
-												close, volume, vwap,
-												tradeCount, 1);
-							}
+							if (backfillUseRTH != 1
+									|| !TradingCalendar.isMarketHours(
+											tradestrategy.getTradingday()
+													.getOpen(),
+											tradestrategy.getTradingday()
+													.getClose(), date))
+								return;
+
+							tradestrategy.getDatasetContainer().buildCandle(
+									date, open, high, low, close, volume, vwap,
+									tradeCount, 1);
+							BigDecimal price = (new BigDecimal(close))
+									.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+							tradestrategy.getDatasetContainer()
+									.getBaseCandleSeries().getContract()
+									.setLastAskPrice(price);
+							tradestrategy.getDatasetContainer()
+									.getBaseCandleSeries().getContract()
+									.setLastBidPrice(price);
+							tradestrategy.getDatasetContainer()
+									.getBaseCandleSeries().getContract()
+									.setLastPrice(price);
 						}
 					}
 				}
