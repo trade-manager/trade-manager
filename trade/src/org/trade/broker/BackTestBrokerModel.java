@@ -1230,8 +1230,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						}
 						if (tradestrategy.getTradingday().getClose()
 								.after(date)) {
-							if (backfillUseRTH != 1
-									|| !TradingCalendar.isMarketHours(
+							if (backfillUseRTH == 1
+									&& !TradingCalendar.isMarketHours(
 											tradestrategy.getTradingday()
 													.getOpen(),
 											tradestrategy.getTradingday()
