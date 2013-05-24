@@ -1710,8 +1710,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 													.getLow())) {
 										candle.setClose(price.doubleValue());
 										candle.setLastUpdateDate(time);
-										datasetContainer.getBaseCandleSeries()
-												.fireSeriesChanged();
+										/*
+										 * Note if you want you can fire the
+										 * series change here this will fire
+										 * runStrategy. Could cause problems if
+										 * the method is not sunchronized in the
+										 * strategy where the stock is fast
+										 * running.
+										 */
+										// datasetContainer.getBaseCandleSeries()
+										// .fireSeriesChanged();
 										// _log.info("TickString Symbol: "
 										// + contract.getSymbol()
 										// + " Trade Time: "
