@@ -252,6 +252,7 @@ public class StrategyData extends Worker {
 										.getBarSize()
 										/ getBaseCandleSeries().getBarSize());
 			}
+			this.getCandleDataset().getSeries(0).fireSeriesChanged();
 		}
 	}
 
