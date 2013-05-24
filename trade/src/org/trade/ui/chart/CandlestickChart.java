@@ -242,6 +242,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					for (XYPlot xyplot : subplots) {
 						if (xyplot.removeAnnotation(clickCrossHairs)) {
 							clickCrossHairs = null;
+							titleLegend1.setText(" Time: 0, Price :0.0");
 							break;
 						}
 					}
