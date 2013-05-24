@@ -628,9 +628,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						.getBarSize()) > -1) {
 					// currentTab.getTradestrategy().getDatasetContainer()
 					// .changeCandleSeriesPeriod(newPeriod);
-					// this.clearStatusBarMessage();
-					this.setStatusBarMessage("Feature not supported",
-							BasePanel.INFORMATION);
+					periodEditorComboBox.setItem(BarSize.newInstance(currentTab
+							.getTradestrategy().getBarSize()));
+					this.clearStatusBarMessage();
 				} else {
 					this.setStatusBarMessage(
 							"Time period not supported by candle series",
