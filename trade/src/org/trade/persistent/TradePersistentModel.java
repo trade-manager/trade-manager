@@ -796,18 +796,17 @@ public class TradePersistentModel implements PersistentModel {
 				tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 			}
 
-			if (!tradeOrder.getIsFilled()
-					&& CoreUtils.nullSafeComparator(tradeOrder.getQuantity(),
-							tradeOrder.getFilledQuantity()) == 0) {
-				tradeOrder.setIsFilled(true);
-				tradeOrder.setStatus(OrderStatus.FILLED);
-			}
-			if (!tradeOrder.getIsFilled()
-					&& CoreUtils
-							.nullSafeComparator(tradeOrder.getFilledQuantity(), 0) == 1
-					&& CoreUtils.nullSafeComparator(tradeOrder.getQuantity(),
-							tradeOrder.getFilledQuantity()) == 1) {
-				tradeOrder.setStatus(OrderStatus.PARTIALFILLED);
+			if (!tradeOrder.getIsFilled()) {
+				if (CoreUtils.nullSafeComparator(tradeOrder.getQuantity(),
+						tradeOrder.getFilledQuantity()) == 0) {
+					tradeOrder.setIsFilled(true);
+					tradeOrder.setStatus(OrderStatus.FILLED);
+				} else {
+					if (CoreUtils.nullSafeComparator(
+							tradeOrder.getFilledQuantity(), 0) == 1) {
+						tradeOrder.setStatus(OrderStatus.PARTIALFILLED);
+					}
+				}
 			}
 
 			Integer tradestrategyId = null;
