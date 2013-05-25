@@ -619,22 +619,25 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 					.getSelectedComponent();
 			Integer newPeriod = new Integer(((BarSize) e.getItem()).getCode());
+
 			if (newPeriod.equals(BarSize.DAY)) {
 				newPeriod = currentTab.getTradestrategy().getBarSize();
 			}
 
 			if (null != currentTab && !this.isConnected()) {
-				if (newPeriod.compareTo(currentTab.getTradestrategy()
-						.getBarSize()) > -1) {
-					currentTab.getTradestrategy().getDatasetContainer()
-							.changeCandleSeriesPeriod(newPeriod);
-					// periodEditorComboBox.setItem(BarSize.newInstance(currentTab
-					// .getTradestrategy().getBarSize()));
-					this.clearStatusBarMessage();
-				} else {
-					this.setStatusBarMessage(
-							"Time period not supported by candle series",
-							BasePanel.WARNING);
+				if (!newPeriod.equals(currentTab.getTradestrategy()
+						.getDatasetContainer().getCandleDataset().getSeries(0)
+						.getBarSize())) {
+					if (newPeriod.compareTo(currentTab.getTradestrategy()
+							.getBarSize()) > -1) {
+						currentTab.getTradestrategy().getDatasetContainer()
+								.changeCandleSeriesPeriod(newPeriod);
+						this.clearStatusBarMessage();
+					} else {
+						this.setStatusBarMessage(
+								"Time period not supported by candle series",
+								BasePanel.WARNING);
+					}
 				}
 			}
 		}
@@ -1029,12 +1032,13 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			propertiesButton.setEnabled(true);
 			cancelStrategiesButton.setEnabled(true);
 			brokerDataButton.setEnabled(true);
-			periodEditorComboBox.setEnabled(true);
 			if (this.isConnected()) {
 				executeButton.setEnabled(true);
 				refreshButton.setEnabled(true);
 				cancelButton.setEnabled(true);
 				m_tradeOrderTable.enablePopupMenu(true);
+			} else {
+				periodEditorComboBox.setEnabled(true);
 			}
 		}
 	}

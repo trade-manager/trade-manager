@@ -237,7 +237,8 @@ public class StrategyData extends Worker {
 			for (int i = 0; i < getBaseCandleSeries().getItemCount(); i++) {
 				CandleItem candelItem = (CandleItem) getBaseCandleSeries()
 						.getDataItem(i);
-				this.getCandleDataset()
+				boolean newBar = this
+						.getCandleDataset()
 						.getSeries(0)
 						.buildCandle(
 								candelItem.getLastUpdateDate(),
@@ -251,8 +252,8 @@ public class StrategyData extends Worker {
 								this.getCandleDataset().getSeries(0)
 										.getBarSize()
 										/ getBaseCandleSeries().getBarSize());
+				updateIndicators(this.getCandleDataset(), newBar);
 			}
-			createIndicators(this.getCandleDataset());
 			this.getCandleDataset().getSeries(0).fireSeriesChanged();
 		}
 	}
@@ -362,7 +363,7 @@ public class StrategyData extends Worker {
 	 * @param newBar
 	 *            boolean
 	 */
-	private void createIndicators(CandleDataset source) {
+	public void createIndicators(CandleDataset source) {
 
 		for (IndicatorDataset indicator : indicators) {
 			if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
