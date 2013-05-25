@@ -626,10 +626,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			if (null != currentTab && !this.isConnected()) {
 				if (newPeriod.compareTo(currentTab.getTradestrategy()
 						.getBarSize()) > -1) {
-					// currentTab.getTradestrategy().getDatasetContainer()
-					// .changeCandleSeriesPeriod(newPeriod);
-					periodEditorComboBox.setItem(BarSize.newInstance(currentTab
-							.getTradestrategy().getBarSize()));
+					currentTab.getTradestrategy().getDatasetContainer()
+							.changeCandleSeriesPeriod(newPeriod);
+					// periodEditorComboBox.setItem(BarSize.newInstance(currentTab
+					// .getTradestrategy().getBarSize()));
 					this.clearStatusBarMessage();
 				} else {
 					this.setStatusBarMessage(

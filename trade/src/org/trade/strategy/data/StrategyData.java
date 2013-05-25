@@ -252,6 +252,7 @@ public class StrategyData extends Worker {
 										.getBarSize()
 										/ getBaseCandleSeries().getBarSize());
 			}
+			createIndicators(this.getCandleDataset());
 			this.getCandleDataset().getSeries(0).fireSeriesChanged();
 		}
 	}
@@ -347,6 +348,32 @@ public class StrategyData extends Worker {
 			 */
 			if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
 				indicator.updateDataset(source, 0, newBar);
+			}
+		}
+	}
+
+	/**
+	 * Method updateIndicators. Update all the indicators before notifying any
+	 * strategy workers of this even.
+	 * 
+	 * @param source
+	 *            CandleDataset
+	 * 
+	 * @param newBar
+	 *            boolean
+	 */
+	private void createIndicators(CandleDataset source) {
+
+		for (IndicatorDataset indicator : indicators) {
+			if (!IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
+				for (int x = 0; x < indicator.getSeriesCount(); x++) {
+					IndicatorSeries series = indicator.getSeries(x);
+					/*
+					 * CandleSeries are only updated via the API i.e. these are
+					 * not true indicators and are shared across Data-sets.
+					 */
+					series.createSeries(source, 0);
+				}
 			}
 		}
 	}

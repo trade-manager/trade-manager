@@ -215,13 +215,15 @@ public class VolumeSeries extends IndicatorSeries {
 	 * @param seriesIndex
 	 *            int
 	 */
-	public void createSeries(CandleDataset candleDataset, int seriesIndex) {
+	public void createSeries(CandleDataset source, int seriesIndex) {
 
-		if (candleDataset.getSeries(seriesIndex) == null) {
+		if (source.getSeries(seriesIndex) == null) {
 			throw new IllegalArgumentException("Null source (XYDataset).");
 		}
-		this.updateSeries(candleDataset.getSeries(seriesIndex), 0, true);
 
+		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
+			this.updateSeries(source.getSeries(seriesIndex), i, true);
+		}
 	}
 
 	/**

@@ -318,7 +318,6 @@ public class MovingAverageSeries extends IndicatorSeries {
 		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
 			this.updateSeries(source.getSeries(seriesIndex), i, true);
 		}
-
 	}
 
 	/**

@@ -203,8 +203,9 @@ public class HeikinAshiSeries extends IndicatorSeries {
 		if (source.getSeries(seriesIndex) == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
-
-		this.updateSeries(source.getSeries(seriesIndex), 0, true);
+		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount(); i++) {
+			this.updateSeries(source.getSeries(seriesIndex), i, true);
+		}
 	}
 
 	/**
