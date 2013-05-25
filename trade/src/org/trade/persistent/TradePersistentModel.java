@@ -803,7 +803,8 @@ public class TradePersistentModel implements PersistentModel {
 				tradeOrder.setStatus(OrderStatus.FILLED);
 			}
 			if (!tradeOrder.getIsFilled()
-					&& tradeOrder.getFilledQuantity() > 0
+					&& CoreUtils
+							.nullSafeComparator(tradeOrder.getFilledQuantity(), 0) == 1
 					&& CoreUtils.nullSafeComparator(tradeOrder.getQuantity(),
 							tradeOrder.getFilledQuantity()) == 1) {
 				tradeOrder.setStatus(OrderStatus.PARTIALFILLED);
