@@ -42,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.SwingWorker;
@@ -93,7 +92,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			"yyyyMMdd HH:mm:ss z");
 	private AtomicInteger ruleComplete = new AtomicInteger(0);
 	private AtomicInteger strategiesRunning = new AtomicInteger(0);
-	private AtomicBoolean positionCovered = new AtomicBoolean(false);
 	private final Object lockBackTestWorker = new Object();
 	private long execId = new Date().getTime();
 	private Integer backTestBarSize = 0;
@@ -165,20 +163,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	public synchronized void ruleComplete(Tradestrategy tradestrategy) {
 		synchronized (lockBackTestWorker) {
 			ruleComplete.getAndIncrement();
-			lockBackTestWorker.notifyAll();
-		}
-	}
-
-	/**
-	 * Method positionCovered.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see org.trade.strategy.StrategyChangeListener#positionCovered(Tradestrategy)
-	 */
-	public synchronized void positionCovered(Tradestrategy tradestrategy) {
-		synchronized (lockBackTestWorker) {
-			positionCovered.set(true);
 			lockBackTestWorker.notifyAll();
 		}
 	}
@@ -330,18 +314,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 * order. so we wait to see if those new orders need to be
 					 * filled.
 					 */
-					if (this.tradestrategy.getStrategy().hasStrategyManager()) {
 
-						synchronized (lockBackTestWorker) {
-							/*
-							 * Wait for the strategy to create the OCA order.
-							 */
-
-							while (!positionCovered.get()) {
-								lockBackTestWorker.wait();
-							}
-						}
-					}
 					/*
 					 * Check to see if the strategy needs to update the OCA
 					 * orders if the current bar requires the stop to be moved.
@@ -353,6 +326,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 */
 					positionOrders = this.tradePersistentModel
 							.findPositionOrdersById(this.idTradestrategy);
+
+					if (this.tradestrategy.getStrategy().hasStrategyManager()) {
+						synchronized (lockBackTestWorker) {
+							while (strategiesRunning.get() < 1
+									&& positionOrders.hasOpenTradePosition()) {
+								lockBackTestWorker.wait();
+							}
+						}
+					}
 					if (positionOrders.hasOpenTradePosition()) {
 						if (!this.tradestrategy.getDatasetContainer()
 								.getBaseCandleSeries().isEmpty()) {
@@ -372,7 +354,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						}
 					}
 
-					positionCovered.set(false);
 					/*
 					 * We now have an open position so we wait for the strategy
 					 * that got us into this position to close.

@@ -270,25 +270,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Notifies all registered listeners that the strategyRule position has been
-	 * covered.
-	 * 
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see #addChangeListener(StrategyChangeListener)
-	 */
-	protected void firePositionCovered(Tradestrategy tradestrategy) {
-		Object[] listeners = this.listenerList.getListenerList();
-		for (int i = listeners.length - 2; i >= 0; i -= 2) {
-			if (listeners[i] == StrategyChangeListener.class) {
-				((StrategyChangeListener) listeners[i + 1])
-						.positionCovered(tradestrategy);
-			}
-		}
-	}
-
-	/*
 	 * The main process thread. This will run until it is either canceled or is
 	 * done.
 	 * 
@@ -415,19 +396,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * Tell the worker if listening. Note only for back
 						 * testing that the strategy is running.
 						 */
-						if (isThereOpenPosition()) {
-							if (isPositionCovered()) {
-								this.firePositionCovered(this.tradestrategy);
-							}
-						}
 						this.fireStrategyStarted(this.tradestrategy);
 						listeningCandles = true;
 					} else {
-						if (isThereOpenPosition()) {
-							if (isPositionCovered()) {
-								this.firePositionCovered(this.tradestrategy);
-							}
-						}
 						this.fireRuleComplete(this.tradestrategy);
 					}
 				}

@@ -75,14 +75,6 @@ public interface StrategyChangeListener extends EventListener {
 	public void ruleComplete(Tradestrategy tradestrategy);
 
 	/**
-	 * Method positionCovered.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 */
-	public void positionCovered(Tradestrategy tradestrategy);
-
-	/**
 	 * Method strategyError.
 	 * 
 	 * @param strategyError

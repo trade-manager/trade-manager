@@ -831,29 +831,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	}
 
 	/**
-	 * Method positionCovered.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see org.trade.strategy.StrategyChangeListener#positionCovered(Tradestrategy)
-	 */
-	public void positionCovered(final Tradestrategy tradestrategy) {
-		if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					try {
-
-						contractPanel.doRefresh(tradestrategy);
-					} catch (Exception ex) {
-						setErrorMessage("Error positionCovered : ",
-								ex.getMessage(), ex);
-					}
-				}
-			});
-		}
-	}
-
-	/**
 	 * Method strategyError.
 	 * 
 	 * @param ex
