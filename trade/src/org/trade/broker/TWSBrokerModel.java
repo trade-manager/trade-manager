@@ -1623,55 +1623,50 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					Contract contract = m_marketDataRequests.get(reqId);
 					// _log.warn("TickString ReqId: " + reqId + " Field: "
 					// + field + " String: " + value);
-					synchronized (contract) {
-						for (Tradestrategy tradestrategy : contract
-								.getTradestrategies()) {
+					for (Tradestrategy tradestrategy : contract
+							.getTradestrategies()) {
 
-							Contract seriesContract = tradestrategy
-									.getDatasetContainer()
-									.getBaseCandleSeries().getContract();
-							seriesContract.setLastPrice(price);
+						Contract seriesContract = tradestrategy
+								.getDatasetContainer().getBaseCandleSeries()
+								.getContract();
+						int index = tradestrategy.getDatasetContainer()
+								.getBaseCandleSeries().indexOf(time);
+						if (index < 0)
+							return;
+						CandleItem candleItem = (CandleItem) tradestrategy
+								.getDatasetContainer().getBaseCandleSeries()
+								.getDataItem(index);
+						if (seriesContract.getLastAskPrice().doubleValue() > 0
+								&& seriesContract.getLastBidPrice()
+										.doubleValue() > 0
+								&& (price.doubleValue() <= seriesContract
+										.getLastAskPrice().doubleValue() && price
+										.doubleValue() >= seriesContract
+										.getLastBidPrice().doubleValue())) {
 
-							int index = tradestrategy.getDatasetContainer()
-									.getBaseCandleSeries().indexOf(time);
-							if (index < 0)
-								return;
-							CandleItem candle = (CandleItem) tradestrategy
-									.getDatasetContainer()
-									.getBaseCandleSeries().getDataItem(index);
-							if (seriesContract.getLastAskPrice().doubleValue() > 0
-									&& seriesContract.getLastBidPrice()
-											.doubleValue() > 0
-									&& (price.doubleValue() <= seriesContract
-											.getLastAskPrice().doubleValue() && price
-											.doubleValue() >= seriesContract
-											.getLastBidPrice().doubleValue())) {
-
-								if (price.doubleValue() > 0
-										&& (price.doubleValue() > candle
-												.getHigh() || price
-												.doubleValue() < candle
-												.getLow())) {
-									candle.setClose(price.doubleValue());
-									candle.setLastUpdateDate(time);
-									/*
-									 * Note if you want you can fire the series
-									 * change here this will fire runStrategy.
-									 * Could cause problems if the method is not
-									 * synchronized in the strategy when the
-									 * stock is fast running.
-									 */
-									tradestrategy.getDatasetContainer()
-											.getBaseCandleSeries()
-											.fireSeriesChanged();
-									// _log.info("TickString Symbol: "
-									// + seriesContract.getSymbol()
-									// + " Trade Time: " + time
-									// + " Price: " + price + " Bid: "
-									// + seriesContract.getLastBidPrice()
-									// + " Ask: "
-									// + seriesContract.getLastAskPrice());
-								}
+							if (price.doubleValue() > 0
+									&& (price.doubleValue() > candleItem
+											.getHigh() || price.doubleValue() < candleItem
+											.getLow())) {
+								candleItem.setClose(price.doubleValue());
+								candleItem.setLastUpdateDate(time);
+								/*
+								 * Note if you want you can fire the series
+								 * change here this will fire runStrategy. Could
+								 * cause problems if the method is not
+								 * synchronized in the strategy when the stock
+								 * is fast running.
+								 */
+								tradestrategy.getDatasetContainer()
+										.getBaseCandleSeries()
+										.fireSeriesChanged();
+								// _log.info("TickString Symbol: "
+								// + seriesContract.getSymbol()
+								// + " Trade Time: " + time
+								// + " Price: " + price + " Bid: "
+								// + seriesContract.getLastBidPrice()
+								// + " Ask: "
+								// + seriesContract.getLastAskPrice());
 							}
 						}
 					}

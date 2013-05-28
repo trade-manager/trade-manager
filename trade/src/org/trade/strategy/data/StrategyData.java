@@ -292,9 +292,9 @@ public class StrategyData extends Worker {
 
 		this.currentBaseCandleCount = this.getBaseCandleSeries().getItemCount() - 1;
 
-		CandleItem candle = (CandleItem) this.getBaseCandleSeries()
+		CandleItem candleItem = (CandleItem) this.getBaseCandleSeries()
 				.getDataItem(this.currentBaseCandleCount);
-		this.getBaseCandleSeries().updatePercentChanged(candle);
+		this.getBaseCandleSeries().updatePercentChanged(candleItem);
 		updateIndicators(this.getBaseCandleDataset(), newBar);
 		this.getBaseCandleSeries().fireSeriesChanged();
 

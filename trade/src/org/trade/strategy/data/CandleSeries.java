@@ -504,30 +504,30 @@ public class CandleSeries extends IndicatorSeries {
 		// + " vwap: " + vwap + " tradeCount: " + tradeCount
 		// + " rollupInterval: " + rollupInterval);
 
-		CandleItem candle = null;
+		CandleItem candleItem = null;
 		if (index > -1) {
 
-			candle = (CandleItem) this.getDataItem(index);
+			candleItem = (CandleItem) this.getDataItem(index);
 
-			this.updateRollingCandle(candle.getPeriod(), rollupInterval, open,
-					high, low, close, volume, tradeCount, vwap, time);
+			this.updateRollingCandle(candleItem.getPeriod(), rollupInterval,
+					open, high, low, close, volume, tradeCount, vwap, time);
 
-			if (candle.getHigh() < high) {
-				candle.setHigh(high);
+			if (candleItem.getHigh() < high) {
+				candleItem.setHigh(high);
 			}
-			if (candle.getLow() > low) {
-				candle.setLow(low);
+			if (candleItem.getLow() > low) {
+				candleItem.setLow(low);
 			}
-			candle.setClose(close);
+			candleItem.setClose(close);
 			if (rollupInterval > 1) {
-				candle.setVolume(candle.getVolume() + volume);
-				candle.setCount(candle.getCount() + tradeCount);
+				candleItem.setVolume(candleItem.getVolume() + volume);
+				candleItem.setCount(candleItem.getCount() + tradeCount);
 			} else {
-				candle.setVolume(volume);
-				candle.setCount(tradeCount);
+				candleItem.setVolume(volume);
+				candleItem.setCount(tradeCount);
 			}
-			candle.setVwap(this.rollingCandle.getVwap());
-			candle.setLastUpdateDate(time);
+			candleItem.setVwap(this.rollingCandle.getVwap());
+			candleItem.setLastUpdateDate(time);
 		} else {
 
 			/*
@@ -558,10 +558,10 @@ public class CandleSeries extends IndicatorSeries {
 			this.updateRollingCandle(period, rollupInterval, open, high, low,
 					close, volume, tradeCount, vwap, time);
 
-			candle = new CandleItem(this.getContract(), tradingday, period,
+			candleItem = new CandleItem(this.getContract(), tradingday, period,
 					open, high, low, close, volume,
 					this.rollingCandle.getVwap(), tradeCount, time);
-			this.add(candle, false);
+			this.add(candleItem, false);
 			return true;
 		}
 		return false;
