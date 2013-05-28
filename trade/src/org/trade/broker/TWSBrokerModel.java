@@ -1661,22 +1661,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									 * synchronized in the strategy when the
 									 * stock is fast running.
 									 */
-									// datasetContainer.getBaseCandleSeries()
-									// .fireSeriesChanged();
+									tradestrategy.getDatasetContainer()
+											.getBaseCandleSeries()
+											.fireSeriesChanged();
 									// _log.info("TickString Symbol: "
-									// + contract.getSymbol()
-									// + " Trade Time: "
-									// + time
-									// + " Price: "
-									// + price
-									// + " Bid: "
-									// +
-									// datasetContainer.getBaseCandleSeries().getContract()
-									// .getLastBidPrice()
+									// + seriesContract.getSymbol()
+									// + " Trade Time: " + time
+									// + " Price: " + price + " Bid: "
+									// + seriesContract.getLastBidPrice()
 									// + " Ask: "
-									// +
-									// datasetContainer.getBaseCandleSeries().getContract()
-									// .getLastAskPrice());
+									// + seriesContract.getLastAskPrice());
 								}
 							}
 						}
