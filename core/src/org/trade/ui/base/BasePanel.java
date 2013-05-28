@@ -307,6 +307,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	 *            Exception
 	 */
 	public void setErrorMessage(String title, String message, Exception ex) {
+		_log.error("Title: " + title + " Msg: " + message, ex);
 		this.setStatusBarMessage(message, ERROR);
 		JOptionPane.showMessageDialog(getFrame(), message
 				+ " See log for details.", title, JOptionPane.ERROR_MESSAGE);
