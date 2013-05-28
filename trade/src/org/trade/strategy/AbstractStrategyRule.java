@@ -468,13 +468,23 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method runStrategy. This method is called every time the candledataset is
-	 * either updated or a candle is added.
+	 * Method runStrategy. This method is called every time the candleSeries is
+	 * either updated or a candleItem is added.
+	 * 
+	 * 
+	 * If market data is selected this will fire every time the last price falls
+	 * outside the H/L of the current candle. Note also if market data is
+	 * selected the current Bid/Ask/Last can be accessed via the
+	 * candleSeries.getContract().
+	 * 
+	 * If market data is not selected this method fires every 5sec as real time
+	 * bars update the current candle.
 	 * 
 	 * @param candleSeries
 	 *            CandleSeries
 	 * @param newBar
-	 *            boolean
+	 *            boolean when ever a new bar is added to the candleSeries.
+	 * 
 	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
 	 */
 	public abstract void runStrategy(CandleSeries candleSeries, boolean newBar);
