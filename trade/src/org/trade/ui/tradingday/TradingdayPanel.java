@@ -698,6 +698,18 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	}
 
 	/**
+	 * This is fired when the menu-bar Contract Details is pressed from the
+	 * Action menu.
+	 * 
+	 */
+
+	public void doProperties() {
+		if (null != transferButton.getTransferObject()) {
+			transferButton.doClick();
+		}
+	}
+
+	/**
 	 * This is fired when the tool-bar File open button is pressed or the main
 	 * menu Open File.
 	 * 

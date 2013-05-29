@@ -321,6 +321,19 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	public void doOpen() {
 	}
 
+	/**
+	 * This is fired when the menu-bar Contract Details is pressed from the
+	 * Action menu.
+	 * 
+	 */
+	public void doProperties() {
+		if (null != selectedTradelogDetail) {
+			transferButton.setTransferObject(selectedTradelogDetail
+					.getIdTradestrategy());
+			transferButton.doClick();
+		}
+	}
+
 	public void doSave() {
 		doReadWrite(openFileChooser());
 	}
