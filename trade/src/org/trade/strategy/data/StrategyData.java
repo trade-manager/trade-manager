@@ -231,31 +231,28 @@ public class StrategyData extends Worker {
 		 * Clear down the dependent data sets and re populate from the base
 		 * candle series.
 		 */
-		synchronized (getBaseCandleSeries()) {
-			clearChartDatasets();
-			this.getCandleDataset().getSeries(0).setBarSize(newPeriod);
-			for (int i = 0; i < getBaseCandleSeries().getItemCount(); i++) {
-				CandleItem candelItem = (CandleItem) getBaseCandleSeries()
-						.getDataItem(i);
-				boolean newBar = this
-						.getCandleDataset()
-						.getSeries(0)
-						.buildCandle(
-								candelItem.getLastUpdateDate(),
-								candelItem.getOpen(),
-								candelItem.getHigh(),
-								candelItem.getLow(),
-								candelItem.getClose(),
-								candelItem.getVolume(),
-								candelItem.getVwap(),
-								candelItem.getCount(),
-								this.getCandleDataset().getSeries(0)
-										.getBarSize()
-										/ getBaseCandleSeries().getBarSize());
-				updateIndicators(this.getCandleDataset(), newBar);
-			}
-			this.getCandleDataset().getSeries(0).fireSeriesChanged();
+		clearChartDatasets();
+		this.getCandleDataset().getSeries(0).setBarSize(newPeriod);
+		for (int i = 0; i < getBaseCandleSeries().getItemCount(); i++) {
+			CandleItem candelItem = (CandleItem) getBaseCandleSeries()
+					.getDataItem(i);
+			boolean newBar = this
+					.getCandleDataset()
+					.getSeries(0)
+					.buildCandle(
+							candelItem.getLastUpdateDate(),
+							candelItem.getOpen(),
+							candelItem.getHigh(),
+							candelItem.getLow(),
+							candelItem.getClose(),
+							candelItem.getVolume(),
+							candelItem.getVwap(),
+							candelItem.getCount(),
+							this.getCandleDataset().getSeries(0).getBarSize()
+									/ getBaseCandleSeries().getBarSize());
+			updateIndicators(this.getCandleDataset(), newBar);
 		}
+		this.getCandleDataset().getSeries(0).fireSeriesChanged();
 	}
 
 	/**
