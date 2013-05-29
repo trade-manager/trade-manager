@@ -645,8 +645,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				Money diffPrice = limitPrice.subtract(auxPrice);
 				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
 						action, 0.01);
-				limitPrice = diffPrice.isNegative() ? auxPrice
-						.subtract(diffPrice) : auxPrice.add(diffPrice);
+				limitPrice = auxPrice.add(diffPrice);
 			} else {
 				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
 						action, 0.01);
@@ -728,8 +727,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				Money diffPrice = limitPrice.subtract(auxPrice);
 				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
 						action, 0.01);
-				limitPrice = diffPrice.isNegative() ? auxPrice
-						.subtract(diffPrice) : auxPrice.add(diffPrice);
+				limitPrice = auxPrice.add(diffPrice);
 			} else {
 				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
 						action, 0.01);
