@@ -100,7 +100,6 @@ public class DAOStrategyRenderer extends DefaultTableCellRenderer {
 				String key = ((Strategy) ((DAOStrategy) dAOStrategy)
 						.getObject()).getClassName()
 						+ transferObject.getIdTradeStrategy();
-				System.out.println("Key: " + key);
 				if (this.strategyWorkers.containsKey(key) && !isSelected) {
 					if (this.strategyWorkers.get(key).isDone()) {
 						setBackground(Color.YELLOW);
