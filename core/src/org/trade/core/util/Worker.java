@@ -177,12 +177,16 @@ public abstract class Worker {
 
 	public boolean isRunning() {
 		Thread t = threadVar.get();
-		if (t != null) {
-			if (t.getState().compareTo(Thread.State.NEW) != 0
-					&& t.getState().compareTo(Thread.State.TERMINATED) != 0)
-				return true;
-		}
-		return false;
+		if (t == null)
+			return false;
+
+		if (t.getState().compareTo(Thread.State.NEW) == 0)
+			return false;
+
+		if (t.getState().compareTo(Thread.State.TERMINATED) == 0)
+			return false;
+
+		return true;
 	}
 
 	/**
