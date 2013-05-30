@@ -151,7 +151,7 @@
 		<copy todir="${pathname.component.documentroot}/app/lib">
 			<fileset dir="${pathname.library.external}">
 				<include name="jsyntaxpane-0.9.5-b29.jar" />
-				<include name="tws-9.66.jar" />				
+				<include name="tws-9.67.jar" />				
 				<include name="jfreechart-1.0.14.jar" />
 				<include name="jcommon-1.0.17.jar" />
 				<include name="swt.jar" />
@@ -188,7 +188,7 @@
 		
 		<signjar jar="${pathname.component.documentroot}/app/lib/${component.name.server.jar}" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/jsyntaxpane-0.9.5-b29.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/tws-9.65.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/tws-9.67.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/jcommon-1.0.17.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/jfreechart-1.0.14.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/swt.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
