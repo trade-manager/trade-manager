@@ -108,7 +108,7 @@ public class DAOStrategyManagerRenderer extends DefaultTableCellRenderer {
 					if (this.strategyWorkers.get(key).isDone()) {
 						setBackground(Color.YELLOW);
 						setToolTipText("Strategy complete");
-					} else {
+					} else if (this.strategyWorkers.get(key).isRunning()) {
 						setBackground(Color.GREEN);
 						setToolTipText("Strategy running");
 					}

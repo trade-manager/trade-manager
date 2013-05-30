@@ -178,8 +178,9 @@ public abstract class Worker {
 	public boolean isRunning() {
 		Thread t = threadVar.get();
 		if (t != null) {
-			return !(t.getState().compareTo(Thread.State.NEW) == 0 || t
-					.getState().compareTo(Thread.State.TERMINATED) == 0);
+			if (t.getState().compareTo(Thread.State.NEW) != 0
+					&& t.getState().compareTo(Thread.State.TERMINATED) != 0)
+				return true;
 		}
 		return false;
 	}
@@ -213,8 +214,9 @@ public abstract class Worker {
 	public boolean isWaiting() {
 		Thread t = threadVar.get();
 		if (t != null) {
-			return t.getState().compareTo(Thread.State.WAITING) == 0
-					|| t.getState().compareTo(Thread.State.TIMED_WAITING) == 0;
+			if (t.getState().compareTo(Thread.State.WAITING) == 0
+					|| t.getState().compareTo(Thread.State.TIMED_WAITING) == 0)
+				return true;
 		}
 		return false;
 	}

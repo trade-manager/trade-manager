@@ -494,7 +494,7 @@ public class TradingCalendar {
 			return CALENDAR_NY.getTime();
 		}
 	}
-	
+
 	/**
 	 * Return the Day for this date
 	 * 

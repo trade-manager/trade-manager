@@ -85,7 +85,7 @@ public class DAOStrategyRenderer extends DefaultTableCellRenderer {
 	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
 	 *      Object, boolean, boolean, int, int)
 	 */
-	public synchronized Component getTableCellRendererComponent(JTable table,
+	public Component getTableCellRendererComponent(JTable table,
 			Object dAOStrategy, boolean isSelected, boolean hasFocus, int row,
 			int column) {
 
@@ -100,11 +100,12 @@ public class DAOStrategyRenderer extends DefaultTableCellRenderer {
 				String key = ((Strategy) ((DAOStrategy) dAOStrategy)
 						.getObject()).getClassName()
 						+ transferObject.getIdTradeStrategy();
+				System.out.println("Key: " + key);
 				if (this.strategyWorkers.containsKey(key) && !isSelected) {
 					if (this.strategyWorkers.get(key).isDone()) {
 						setBackground(Color.YELLOW);
 						setToolTipText("Strategy complete");
-					} else {
+					} else if (this.strategyWorkers.get(key).isRunning()) {
 						setBackground(Color.GREEN);
 						setToolTipText("Strategy running");
 					}
