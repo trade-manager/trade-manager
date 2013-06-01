@@ -512,12 +512,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 					action = Action.SELL;
 				}
 
-				return this.createOrder(action, OrderType.MKT, new Money(0),
-						new Money(0), openQuantity, null,
-						TriggerMethod.DEFAULT, OverrideConstraints.YES,
-						TimeInForce.DAY, false, transmit, this
-								.getOpenPositionOrder().getFAProfile(), this
-								.getOpenPositionOrder().getFAGroup(), this
+				return this.createOrder(action, OrderType.MKT, null, null,
+						openQuantity, null, TriggerMethod.DEFAULT,
+						OverrideConstraints.YES, TimeInForce.DAY, false,
+						transmit, this.getOpenPositionOrder().getFAProfile(),
+						this.getOpenPositionOrder().getFAGroup(), this
 								.getOpenPositionOrder().getFAMethod(), this
 								.getOpenPositionOrder().getFAPercent());
 			}
@@ -606,8 +605,27 @@ public abstract class AbstractStrategyRule extends Worker implements
 			BigDecimal FAPercent) throws ValueTypeException,
 			BrokerModelException, PersistentModelException {
 
+		if (null == orderType)
+			throw new BrokerModelException(1, 60, "Order Type cannot be null");
+
+		if (null == action)
+			throw new BrokerModelException(1, 61, "Action cannot be null");
+
 		if (quantity == 0)
 			throw new BrokerModelException(1, 62, "Quantity cannot be zero");
+
+		if (!OrderType.LMT.equals(orderType) && null == limitPrice)
+			throw new BrokerModelException(1, 63, "Limit price cannot be null");
+
+		if (!OrderType.STPLMT.equals(orderType)
+				&& (null == limitPrice || null == auxPrice))
+			throw new BrokerModelException(1, 64,
+					"Limit/Aux price cannot be null");
+
+		if (!OrderType.MKT.equals(orderType)) {
+			limitPrice = new Money(0);
+			auxPrice = new Money(0);
+		}
 
 		if (roundPrice) {
 			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
