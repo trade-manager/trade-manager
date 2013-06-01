@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
-import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
@@ -496,10 +495,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws ValueTypeException
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
+	 * @throws StrategyRuleException
 	 */
 	public TradeOrder closePosition(boolean transmit)
 			throws ValueTypeException, BrokerModelException,
-			PersistentModelException {
+			PersistentModelException, StrategyRuleException {
 
 		if (this.isThereOpenPosition()) {
 
@@ -507,45 +507,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 					.getOpenQuantity());
 
 			if (openQuantity > 0) {
-				Date createDate = new Date();
-
 				String action = Action.BUY;
 				if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
 					action = Action.SELL;
 				}
-				TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
-						action, OrderType.MKT, openQuantity, null, null,
-						createDate);
-				tradeOrder.setTransmit(transmit);
-				/*
-				 * If the portfolio has an individual account use the account
-				 * number. If the portfolio has an allocation method and that
-				 * allocation method is an integer then assume its a profile
-				 * otherwise it must be a group. Note this only applied for TWS
-				 * Broker. TODO figure out a better implementation.
-				 */
-				if (null != getTradestrategy().getPortfolio()
-						.getIndividualAccount()) {
-					tradeOrder.setAccountNumber(getTradestrategy()
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber());
-				} else {
-					if (null != this.getTradestrategy().getPortfolio()
-							.getAllocationMethod()) {
-						if (CoreUtils.isNumeric(this.getTradestrategy()
-								.getPortfolio().getAllocationMethod())) {
-							tradeOrder.setFAProfile(this.getTradestrategy()
-									.getPortfolio().getName());
-						} else {
-							tradeOrder.setFAGroup(this.getTradestrategy()
-									.getPortfolio().getName());
-						}
-					}
-				}
-				tradeOrder = getBrokerManager().onPlaceOrder(
-						getTradestrategy().getContract(), tradeOrder);
-				this.getPositionOrders().addTradeOrder(tradeOrder);
-				return tradeOrder;
+
+				return this.createOrder(action, OrderType.MKT, null, null,
+						openQuantity, null, TriggerMethod.DEFAULT,
+						OverrideConstraints.YES, TimeInForce.DAY, false,
+						transmit, this.getOpenPositionOrder().getFAProfile(),
+						this.getOpenPositionOrder().getFAGroup(), this
+								.getOpenPositionOrder().getFAMethod(), this
+								.getOpenPositionOrder().getFAPercent());
 			}
 		}
 		return null;
