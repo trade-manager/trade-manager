@@ -720,9 +720,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									BasePanel.WARNING);
 							return;
 						}
-						_log.info("Trade Order cancelled for Symbol: "
-								+ tradestrategy.getContract().getSymbol()
-								+ " order key: " + tradeOrder.getOrderKey());
 						contractPanel.doRefresh(tradestrategy);
 
 					} catch (Exception ex) {

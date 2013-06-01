@@ -497,8 +497,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws BrokerModelException
 	 * @throws PersistentModelException
 	 */
-	public void closePosition(boolean transmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException {
+	public TradeOrder closePosition(boolean transmit)
+			throws ValueTypeException, BrokerModelException,
+			PersistentModelException {
 
 		if (this.isThereOpenPosition()) {
 
@@ -543,8 +544,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 				tradeOrder = getBrokerManager().onPlaceOrder(
 						getTradestrategy().getContract(), tradeOrder);
+				this.getPositionOrders().addTradeOrder(tradeOrder);
+				return tradeOrder;
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -1138,18 +1142,19 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 * @throws StrategyRuleException
 	 */
-	public void closeOpenPosition() throws StrategyRuleException {
+	public TradeOrder closeOpenPosition() throws StrategyRuleException {
 
 		_log.info("Strategy  closeOpenPosition symbol: " + symbol);
 		try {
 			cancelAllOrders();
 			if (this.isThereOpenPosition()) {
-				closePosition(true);
+				return closePosition(true);
 			}
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 70,
 					"Error StrategyWorker exception: " + ex.getMessage());
 		}
+		return null;
 	}
 
 	/**
