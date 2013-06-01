@@ -614,15 +614,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 		if (quantity == 0)
 			throw new BrokerModelException(1, 62, "Quantity cannot be zero");
 
-		if (!OrderType.LMT.equals(orderType) && null == limitPrice)
+		if (OrderType.LMT.equals(orderType) && null == limitPrice)
 			throw new BrokerModelException(1, 63, "Limit price cannot be null");
 
-		if (!OrderType.STPLMT.equals(orderType)
+		if (OrderType.STPLMT.equals(orderType)
 				&& (null == limitPrice || null == auxPrice))
 			throw new BrokerModelException(1, 64,
 					"Limit/Aux price cannot be null");
 
-		if (!OrderType.MKT.equals(orderType)) {
+		if (OrderType.MKT.equals(orderType)) {
 			limitPrice = new Money(0);
 			auxPrice = new Money(0);
 		}
