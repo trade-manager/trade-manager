@@ -398,7 +398,8 @@ public class AbstractStrategyTest extends TestCase {
 	public void testClosePosition() {
 		try {
 			createOpenBuyPosition(new Money(100), false);
-			this.strategyProxy.closePosition(true);
+			TradeOrder order = this.strategyProxy.closePosition(true);
+			TestCase.assertNotNull(order);
 			TestCase.assertFalse(this.strategyProxy.isThereOpenPosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testClosePosition Msg:" + ex.getMessage());
