@@ -257,7 +257,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 				int index = this.indexOf(source.getRollingCandle().getPeriod());
 				double xOpenPrev = 0;
 				double xClosePrev = 0;
-				if (index < 0) {
+				if (index < 1) {
 					if (this.isEmpty()) {
 						xOpenPrev = source.getRollingCandle().getOpen();
 						xClosePrev = source.getRollingCandle().getClose();
