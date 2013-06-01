@@ -512,11 +512,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 					action = Action.SELL;
 				}
 
-				return this.createOrder(action, OrderType.MKT, null, null,
-						openQuantity, null, TriggerMethod.DEFAULT,
-						OverrideConstraints.YES, TimeInForce.DAY, false,
-						transmit, this.getOpenPositionOrder().getFAProfile(),
-						this.getOpenPositionOrder().getFAGroup(), this
+				return this.createOrder(action, OrderType.MKT, new Money(0),
+						new Money(0), openQuantity, null,
+						TriggerMethod.DEFAULT, OverrideConstraints.YES,
+						TimeInForce.DAY, false, transmit, this
+								.getOpenPositionOrder().getFAProfile(), this
+								.getOpenPositionOrder().getFAGroup(), this
 								.getOpenPositionOrder().getFAMethod(), this
 								.getOpenPositionOrder().getFAPercent());
 			}
