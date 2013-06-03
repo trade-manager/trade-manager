@@ -47,13 +47,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BackTestBrokerModel;
 import org.trade.broker.BrokerModel;
-import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
-import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
@@ -810,13 +808,12 @@ public class AbstractStrategyTest extends TestCase {
 	 *            Money
 	 * @param fillOpenPosition
 	 *            boolean
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
+	 * 
+	 * @throws StrategyRuleException
 	 * @throws PersistentModelException
 	 */
 	private void createOpenBuyPosition(Money price, boolean fillOpenPosition)
-			throws ValueTypeException, BrokerModelException,
-			PersistentModelException {
+			throws StrategyRuleException, PersistentModelException {
 		if (!strategyProxy.getTradestrategy().getTradeOrders().isEmpty()) {
 			tradePersistentModel.removeTradestrategyTradeOrders(strategyProxy
 					.getTradestrategy());

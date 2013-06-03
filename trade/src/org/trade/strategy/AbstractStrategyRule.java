@@ -46,12 +46,10 @@ import org.jfree.data.general.SeriesChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
-import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
-import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -61,7 +59,6 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TimeInForce;
 import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.PositionOrders;
@@ -410,7 +407,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					"Error StrategyWorker exception: " + getSymbol()
 							+ " class: " + this.getClass().getName() + " Msg: "
 							+ ex.getMessage(), ex);
-			error(1, 50, "Error StrategyWorker exception: " + ex.getMessage());
+			error(1, 100, "Error StrategyWorker exception: " + ex.getMessage());
 		} finally {
 			/*
 			 * Ok we are complete clean up.
@@ -498,8 +495,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder closePosition(boolean transmit)
-			throws ValueTypeException, BrokerModelException,
-			PersistentModelException, StrategyRuleException {
+			throws StrategyRuleException {
 
 		if (this.isThereOpenPosition()) {
 
@@ -547,16 +543,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param transmit
 	 *            boolean
 	 * @return TradeOrder
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createOrder(String action, String orderType,
 			Money limitPrice, Money auxPrice, int quantity,
 			String ocaGroupName, boolean roundPrice, boolean transmit)
-			throws ValueTypeException, BrokerModelException,
-			PersistentModelException, StrategyRuleException {
+			throws StrategyRuleException {
 		return createOrder(action, orderType, limitPrice, auxPrice, quantity,
 				ocaGroupName, TriggerMethod.DEFAULT, OverrideConstraints.YES,
 				TimeInForce.DAY, roundPrice, transmit, null, null, null, null);
@@ -592,9 +584,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param transmit
 	 *            boolean
 	 * @return TradeOrder
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createOrder(String action, String orderType,
@@ -602,77 +591,82 @@ public abstract class AbstractStrategyRule extends Worker implements
 			String ocaGroupName, int triggerMethod, int overrideConstraints,
 			String timeInForce, boolean roundPrice, boolean transmit,
 			String FAProfile, String FAGroup, String FAMethod,
-			BigDecimal FAPercent) throws ValueTypeException,
-			BrokerModelException, PersistentModelException {
+			BigDecimal FAPercent) throws StrategyRuleException {
 
 		if (null == orderType)
-			throw new BrokerModelException(1, 60, "Order Type cannot be null");
+			throw new StrategyRuleException(1, 200, "Order Type cannot be null");
 
 		if (null == action)
-			throw new BrokerModelException(1, 61, "Action cannot be null");
+			throw new StrategyRuleException(1, 201, "Action cannot be null");
 
 		if (quantity == 0)
-			throw new BrokerModelException(1, 62, "Quantity cannot be zero");
+			throw new StrategyRuleException(1, 202, "Quantity cannot be zero");
 
 		if (OrderType.LMT.equals(orderType) && null == limitPrice)
-			throw new BrokerModelException(1, 63, "Limit price cannot be null");
+			throw new StrategyRuleException(1, 203,
+					"Limit price cannot be null");
 
 		if (OrderType.STPLMT.equals(orderType)
 				&& (null == limitPrice || null == auxPrice))
-			throw new BrokerModelException(1, 64,
+			throw new StrategyRuleException(1, 204,
 					"Limit/Aux price cannot be null");
-
-		if (OrderType.MKT.equals(orderType)) {
-			limitPrice = new Money(0);
-			auxPrice = new Money(0);
-		}
-
-		if (roundPrice) {
-			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
-			if (null != this.getOpenTradePosition()) {
-				side = this.getOpenTradePosition().getSide();
+		try {
+			if (OrderType.MKT.equals(orderType)) {
+				limitPrice = new Money(0);
+				auxPrice = new Money(0);
 			}
-			if (OrderType.LMT.equals(orderType)) {
-				if (roundPrice) {
-					limitPrice = addPennyAndRoundStop(limitPrice.doubleValue(),
+
+			if (roundPrice) {
+				String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
+				if (null != this.getOpenTradePosition()) {
+					side = this.getOpenTradePosition().getSide();
+				}
+				if (OrderType.LMT.equals(orderType)) {
+					if (roundPrice) {
+						limitPrice = addPennyAndRoundStop(
+								limitPrice.doubleValue(), side, action, 0.01);
+					}
+				} else if (OrderType.STPLMT.equals(orderType)) {
+					Money diffPrice = limitPrice.subtract(auxPrice);
+					auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
+							side, action, 0.01);
+					limitPrice = auxPrice.add(diffPrice);
+				} else {
+					auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
 							side, action, 0.01);
 				}
-			} else if (OrderType.STPLMT.equals(orderType)) {
-				Money diffPrice = limitPrice.subtract(auxPrice);
-				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
-						action, 0.01);
-				limitPrice = auxPrice.add(diffPrice);
-			} else {
-				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
-						action, 0.01);
 			}
-		}
-		TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(), action,
-				new Date(), orderType, quantity, auxPrice.getBigDecimalValue(),
-				limitPrice.getBigDecimalValue(), overrideConstraints,
-				timeInForce, triggerMethod);
-		tradeOrder.setOcaGroupName(ocaGroupName);
-		tradeOrder.setTransmit(transmit);
-		if (FAProfile != null) {
-			tradeOrder.setFAProfile(FAProfile);
-		} else {
-			if (FAGroup != null) {
-				tradeOrder.setFAGroup(FAGroup);
-				tradeOrder.setFAMethod(FAMethod);
-				tradeOrder.setFAPercent(FAPercent);
+			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
+					action, new Date(), orderType, quantity,
+					auxPrice.getBigDecimalValue(),
+					limitPrice.getBigDecimalValue(), overrideConstraints,
+					timeInForce, triggerMethod);
+			tradeOrder.setOcaGroupName(ocaGroupName);
+			tradeOrder.setTransmit(transmit);
+			if (FAProfile != null) {
+				tradeOrder.setFAProfile(FAProfile);
 			} else {
-				if (null != getTradestrategy().getPortfolio()
-						.getIndividualAccount()) {
-					tradeOrder.setAccountNumber(getTradestrategy()
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber());
+				if (FAGroup != null) {
+					tradeOrder.setFAGroup(FAGroup);
+					tradeOrder.setFAMethod(FAMethod);
+					tradeOrder.setFAPercent(FAPercent);
+				} else {
+					if (null != getTradestrategy().getPortfolio()
+							.getIndividualAccount()) {
+						tradeOrder.setAccountNumber(getTradestrategy()
+								.getPortfolio().getIndividualAccount()
+								.getAccountNumber());
+					}
 				}
 			}
+			tradeOrder = getBrokerManager().onPlaceOrder(
+					getTradestrategy().getContract(), tradeOrder);
+			this.getPositionOrders().addTradeOrder(tradeOrder);
+			return tradeOrder;
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 300,
+					"Error create tradeOrder : " + ex.getMessage());
 		}
-		tradeOrder = getBrokerManager().onPlaceOrder(
-				getTradestrategy().getContract(), tradeOrder);
-		this.getPositionOrders().addTradeOrder(tradeOrder);
-		return tradeOrder;
 	}
 
 	/**
@@ -698,42 +692,43 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param transmit
 	 *            boolean
 	 * @return TradeOrder
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
+	 * @throws StrategyRuleException
 	 */
 	public TradeOrder updateOrder(Integer orderKey, String action,
 			String orderType, Money limitPrice, Money auxPrice, int quantity,
-			boolean roundPrice, boolean transmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException {
-
-		TradeOrder tradeOrder = tradePersistentModel
-				.findTradeOrderByKey(orderKey);
-		if (roundPrice) {
-			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
-			if (null != this.getOpenTradePosition()) {
-				side = this.getOpenTradePosition().getSide();
-			}
-			if (OrderType.LMT.equals(orderType)) {
-				if (roundPrice) {
-					limitPrice = addPennyAndRoundStop(limitPrice.doubleValue(),
+			boolean roundPrice, boolean transmit) throws StrategyRuleException {
+		try {
+			TradeOrder tradeOrder = tradePersistentModel
+					.findTradeOrderByKey(orderKey);
+			if (roundPrice) {
+				String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
+				if (null != this.getOpenTradePosition()) {
+					side = this.getOpenTradePosition().getSide();
+				}
+				if (OrderType.LMT.equals(orderType)) {
+					if (roundPrice) {
+						limitPrice = addPennyAndRoundStop(
+								limitPrice.doubleValue(), side, action, 0.01);
+					}
+				} else if (OrderType.STPLMT.equals(orderType)) {
+					Money diffPrice = limitPrice.subtract(auxPrice);
+					auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
+							side, action, 0.01);
+					limitPrice = auxPrice.add(diffPrice);
+				} else {
+					auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
 							side, action, 0.01);
 				}
-			} else if (OrderType.STPLMT.equals(orderType)) {
-				Money diffPrice = limitPrice.subtract(auxPrice);
-				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
-						action, 0.01);
-				limitPrice = auxPrice.add(diffPrice);
-			} else {
-				auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(), side,
-						action, 0.01);
 			}
+			tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
+			tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
+			tradeOrder.setTransmit(transmit);
+			return getBrokerManager().onPlaceOrder(
+					getTradestrategy().getContract(), tradeOrder);
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 310,
+					"Error update tradeOrder : " + ex.getMessage());
 		}
-		tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
-		tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
-		tradeOrder.setTransmit(transmit);
-		return getBrokerManager().onPlaceOrder(
-				getTradestrategy().getContract(), tradeOrder);
 	}
 
 	/**
@@ -750,92 +745,101 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param transmit
 	 *            boolean
 	 * @return TradeOrder
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
+	 * 
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createRiskOpenPosition(String action, Money entryPrice,
 			Money stopPrice, boolean transmit, String FAProfile,
 			String FAGroup, String FAMethod, BigDecimal FAPercent)
-			throws ValueTypeException, BrokerModelException,
-			PersistentModelException {
+			throws StrategyRuleException {
 
 		if (this.isThereOpenPosition())
-			throw new BrokerModelException(1, 52,
+			throw new StrategyRuleException(1, 205,
 					"Cannot create position for TradePosition Id: "
 							+ this.getOpenTradePosition().getIdTradePosition()
 							+ " as position is already open.");
 
-		Date createDate = new Date();
-		Entrylimit entrylimit = getEntryLimit().getValue(entryPrice);
-		String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
+		if (null == action)
+			throw new StrategyRuleException(1, 206, "Action cannot be null");
 
-		/*
-		 * Add/Subtract 1 cent to the entry round the price for 1, 0.5 numbers
-		 */
-		entryPrice = addPennyAndRoundStop(entryPrice.doubleValue(), side,
-				action, 0.01);
-		double risk = getTradestrategy().getRiskAmount().doubleValue();
+		try {
 
-		double stop = entryPrice.doubleValue() - stopPrice.doubleValue();
+			Date createDate = new Date();
+			Entrylimit entrylimit = getEntryLimit().getValue(entryPrice);
+			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
 
-		// Round to round value
-		int quantity = (int) ((int) risk / Math.abs(stop));
-		/*
-		 * Check to see if we are in the limits of the amount of margin we can
-		 * use. If percentOfMargin is null or zero ignore this calc.
-		 */
-		if (null != entrylimit.getPercentOfMargin()
-				&& entrylimit.getPercentOfMargin().doubleValue() > 0) {
-			if ((quantity * entryPrice.doubleValue()) > this
-					.getIndividualAccount().getBuyingPower()
-					.multiply(entrylimit.getPercentOfMargin()).doubleValue()) {
-				quantity = (int) ((int) this.getIndividualAccount()
-						.getBuyingPower().doubleValue()
-						* entrylimit.getPercentOfMargin().doubleValue() / entryPrice
-						.getBigDecimalValue().doubleValue());
-			}
-		}
+			/*
+			 * Add/Subtract 1 cent to the entry round the price for 1, 0.5
+			 * numbers
+			 */
+			entryPrice = addPennyAndRoundStop(entryPrice.doubleValue(), side,
+					action, 0.01);
+			double risk = getTradestrategy().getRiskAmount().doubleValue();
 
-		quantity = (int) ((Math.rint(quantity
-				/ entrylimit.getShareRound().doubleValue())) * entrylimit
-				.getShareRound().doubleValue());
-		if (quantity == 0) {
-			quantity = 10;
-		}
+			double stop = entryPrice.doubleValue() - stopPrice.doubleValue();
 
-		Money limitPrice = new Money(
-				(Side.BOT.equals(side) ? (entryPrice.doubleValue() + entrylimit
-						.getLimitAmount().doubleValue())
-						: (entryPrice.doubleValue() - entrylimit
-								.getLimitAmount().doubleValue())));
-		TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(), action,
-				OrderType.STPLMT, quantity, entryPrice.getBigDecimalValue(),
-				limitPrice.getBigDecimalValue(), createDate);
-
-		tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
-		tradeOrder.setTransmit(transmit);
-		if (FAProfile != null) {
-			tradeOrder.setFAProfile(FAProfile);
-		} else {
-			if (FAGroup != null) {
-				tradeOrder.setFAGroup(FAGroup);
-				tradeOrder.setFAMethod(FAMethod);
-				tradeOrder.setFAPercent(FAPercent);
-			} else {
-				if (null != getTradestrategy().getPortfolio()
-						.getIndividualAccount()) {
-					tradeOrder.setAccountNumber(getTradestrategy()
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber());
+			// Round to round value
+			int quantity = (int) ((int) risk / Math.abs(stop));
+			/*
+			 * Check to see if we are in the limits of the amount of margin we
+			 * can use. If percentOfMargin is null or zero ignore this calc.
+			 */
+			if (null != entrylimit.getPercentOfMargin()
+					&& entrylimit.getPercentOfMargin().doubleValue() > 0) {
+				if ((quantity * entryPrice.doubleValue()) > this
+						.getIndividualAccount().getBuyingPower()
+						.multiply(entrylimit.getPercentOfMargin())
+						.doubleValue()) {
+					quantity = (int) ((int) this.getIndividualAccount()
+							.getBuyingPower().doubleValue()
+							* entrylimit.getPercentOfMargin().doubleValue() / entryPrice
+							.getBigDecimalValue().doubleValue());
 				}
 			}
+
+			quantity = (int) ((Math.rint(quantity
+					/ entrylimit.getShareRound().doubleValue())) * entrylimit
+					.getShareRound().doubleValue());
+			if (quantity == 0) {
+				quantity = 10;
+			}
+
+			Money limitPrice = new Money(
+					(Side.BOT.equals(side) ? (entryPrice.doubleValue() + entrylimit
+							.getLimitAmount().doubleValue()) : (entryPrice
+							.doubleValue() - entrylimit.getLimitAmount()
+							.doubleValue())));
+			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
+					action, OrderType.STPLMT, quantity,
+					entryPrice.getBigDecimalValue(),
+					limitPrice.getBigDecimalValue(), createDate);
+
+			tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
+			tradeOrder.setTransmit(transmit);
+			if (FAProfile != null) {
+				tradeOrder.setFAProfile(FAProfile);
+			} else {
+				if (FAGroup != null) {
+					tradeOrder.setFAGroup(FAGroup);
+					tradeOrder.setFAMethod(FAMethod);
+					tradeOrder.setFAPercent(FAPercent);
+				} else {
+					if (null != getTradestrategy().getPortfolio()
+							.getIndividualAccount()) {
+						tradeOrder.setAccountNumber(getTradestrategy()
+								.getPortfolio().getIndividualAccount()
+								.getAccountNumber());
+					}
+				}
+			}
+			tradeOrder = getBrokerManager().onPlaceOrder(
+					getTradestrategy().getContract(), tradeOrder);
+			this.getPositionOrders().addTradeOrder(tradeOrder);
+			return tradeOrder;
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 320,
+					"Error create risk open tradeOrder : " + ex.getMessage());
 		}
-		tradeOrder = getBrokerManager().onPlaceOrder(
-				getTradestrategy().getContract(), tradeOrder);
-		this.getPositionOrders().addTradeOrder(tradeOrder);
-		return tradeOrder;
 	}
 
 	/**
@@ -845,14 +849,19 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 * @param order
 	 *            TradeOrder
-	 * @throws BrokerModelException
+	 * @throws StrategyRuleException
 	 */
-	public void cancelOrder(TradeOrder order) throws BrokerModelException {
-		if (null != order) {
-			if (!order.getIsFilled()
-					&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
-				getBrokerManager().onCancelOrder(order);
+	public void cancelOrder(TradeOrder order) throws StrategyRuleException {
+		try {
+			if (null != order) {
+				if (!order.getIsFilled()
+						&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
+					getBrokerManager().onCancelOrder(order);
+				}
 			}
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 330,
+					"Error create risk open tradeOrder : " + ex.getMessage());
 		}
 	}
 
@@ -890,7 +899,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			return false;
 
 		} catch (Exception ex) {
-			throw new StrategyRuleException(1, 60,
+			throw new StrategyRuleException(1, 340,
 					"Error StrategyWorker isPositionCovered exception: "
 							+ ex.getMessage());
 		}
@@ -920,64 +929,66 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param stopTransmit
 	 *            boolean
 	 * @return Money
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
 	 * @throws StrategyRuleException
 	 */
 	public Money createStopAndTargetOrder(Money stopPrice, Money targetPrice,
-			int quantity, boolean stopTransmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException,
-			StrategyRuleException {
+			int quantity, boolean stopTransmit) throws StrategyRuleException {
 
 		Date createDate = new Date();
 
 		if (quantity == 0)
-			throw new BrokerModelException(1, 62, "Quantity cannot be zero");
+			throw new StrategyRuleException(1, 207, "Quantity cannot be zero");
 
 		if (!this.isThereOpenPosition()) {
-			throw new StrategyRuleException(1, 80, "Error position is not open");
+			throw new StrategyRuleException(1, 208,
+					"Error position is not open");
 		}
+		try {
+			String action = Action.BUY;
+			if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+				action = Action.SELL;
+			}
 
-		String action = Action.BUY;
-		if (Side.BOT.equals(getOpenTradePosition().getSide())) {
-			action = Action.SELL;
+			String ocaID = new String(Integer.toString((new BigDecimal(Math
+					.random() * 1000000)).intValue()));
+
+			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
+					action, OrderType.LMT, quantity, null,
+					targetPrice.getBigDecimalValue(), createDate);
+
+			orderTarget.setOcaType(2);
+			orderTarget.setTransmit(true);
+			orderTarget.setOcaGroupName(ocaID);
+
+			orderTarget = getBrokerManager().onPlaceOrder(
+					getTradestrategy().getContract(), orderTarget);
+			this.getPositionOrders().addTradeOrder(orderTarget);
+			/*
+			 * Note the last order submitted in TWS on OCA order is the only one
+			 * that can be updated
+			 */
+
+			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
+					action, OrderType.STP, quantity,
+					stopPrice.getBigDecimalValue(), null, createDate);
+			orderStop.setOcaType(2);
+			orderStop.setTransmit(stopTransmit);
+			orderStop.setOcaGroupName(ocaID);
+			if (null != getTradestrategy().getPortfolio()
+					.getIndividualAccount()) {
+				orderStop.setAccountNumber(getTradestrategy().getPortfolio()
+						.getIndividualAccount().getAccountNumber());
+
+			}
+			orderStop = getBrokerManager().onPlaceOrder(
+					getTradestrategy().getContract(), orderStop);
+			this.getPositionOrders().addTradeOrder(orderStop);
+			return targetPrice;
+
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 350,
+					"Error create stop/target tradeOrder: " + ex.getMessage());
 		}
-
-		String ocaID = new String(Integer.toString((new BigDecimal(Math
-				.random() * 1000000)).intValue()));
-
-		TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
-				action, OrderType.LMT, quantity, null,
-				targetPrice.getBigDecimalValue(), createDate);
-
-		orderTarget.setOcaType(2);
-		orderTarget.setTransmit(true);
-		orderTarget.setOcaGroupName(ocaID);
-
-		orderTarget = getBrokerManager().onPlaceOrder(
-				getTradestrategy().getContract(), orderTarget);
-		this.getPositionOrders().addTradeOrder(orderTarget);
-		/*
-		 * Note the last order submitted in TWS on OCA order is the only one
-		 * that can be updated
-		 */
-
-		TradeOrder orderStop = new TradeOrder(this.getTradestrategy(), action,
-				OrderType.STP, quantity, stopPrice.getBigDecimalValue(), null,
-				createDate);
-		orderStop.setOcaType(2);
-		orderStop.setTransmit(stopTransmit);
-		orderStop.setOcaGroupName(ocaID);
-		if (null != getTradestrategy().getPortfolio().getIndividualAccount()) {
-			orderStop.setAccountNumber(getTradestrategy().getPortfolio()
-					.getIndividualAccount().getAccountNumber());
-
-		}
-		orderStop = getBrokerManager().onPlaceOrder(
-				getTradestrategy().getContract(), orderStop);
-		this.getPositionOrders().addTradeOrder(orderStop);
-		return targetPrice;
 	}
 
 	/**
@@ -1007,97 +1018,99 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param stopTransmit
 	 *            boolean
 	 * @return Money
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
 	 * @throws StrategyRuleException
 	 */
 	public Money createStopAndTargetOrder(TradeOrder openPosition,
 			int stopRiskUnits, int targetRiskUnits, int percentQty,
-			boolean stopTransmit) throws ValueTypeException,
-			BrokerModelException, PersistentModelException,
-			StrategyRuleException {
+			boolean stopTransmit) throws StrategyRuleException {
 
 		Date createDate = new Date();
 
 		if (!this.isThereOpenPosition()) {
-			throw new StrategyRuleException(1, 80, "Error position is not open");
+			throw new StrategyRuleException(1, 209,
+					"Error position is not open");
 		}
+		try {
+			/*
+			 * Risk amount is based of the average filled price and actual stop
+			 * price not the rounded quantity. But if the stop price is not set
+			 * use Risk Amount/Quantity.
+			 */
+			double riskAmount = 0;
+			if (null == openPosition.getStopPrice()) {
+				riskAmount = Math.abs(this.getTradestrategy().getRiskAmount()
+						.doubleValue()
+						/ openPosition.getFilledQuantity().doubleValue());
+			} else {
+				riskAmount = Math.abs(openPosition.getAverageFilledPrice()
+						.doubleValue()
+						- openPosition.getStopPrice().doubleValue());
+			}
 
-		/*
-		 * Risk amount is based of the average filled price and actual stop
-		 * price not the rounded quantity. But if the stop price is not set use
-		 * Risk Amount/Quantity.
-		 */
-		double riskAmount = 0;
-		if (null == openPosition.getStopPrice()) {
-			riskAmount = Math.abs(this.getTradestrategy().getRiskAmount()
-					.doubleValue()
-					/ openPosition.getFilledQuantity().doubleValue());
-		} else {
-			riskAmount = Math.abs(openPosition.getAverageFilledPrice()
-					.doubleValue() - openPosition.getStopPrice().doubleValue());
+			String action = Action.BUY;
+			int buySellMultipliter = 1;
+			if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+				action = Action.SELL;
+				buySellMultipliter = -1;
+			}
+
+			// Add a penny to the stop and target
+			Money stopPrice = addPennyAndRoundStop(openPosition
+					.getAverageFilledPrice().doubleValue()
+					+ (riskAmount * stopRiskUnits * buySellMultipliter), this
+					.getOpenTradePosition().getSide(), action, 0.01);
+
+			Money targetPrice = addPennyAndRoundStop(openPosition
+					.getAverageFilledPrice().doubleValue()
+					+ (riskAmount * targetRiskUnits * buySellMultipliter * -1),
+					this.getOpenTradePosition().getSide(), action, 0.01);
+
+			int quantity = Math.abs(this.getOpenTradePosition()
+					.getOpenQuantity() * percentQty) / 100;
+
+			String ocaID = new String(Integer.toString((new BigDecimal(Math
+					.random() * 1000000)).intValue()));
+
+			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
+					action, OrderType.LMT, quantity, null,
+					targetPrice.getBigDecimalValue(), createDate);
+
+			orderTarget.setOcaType(2);
+			orderTarget.setTransmit(true);
+			orderTarget.setOcaGroupName(ocaID);
+			orderTarget.setAccountNumber(openPosition.getAccountNumber());
+			orderTarget.setFAGroup(openPosition.getFAGroup());
+			orderTarget.setFAProfile(openPosition.getFAProfile());
+			orderTarget.setFAMethod(openPosition.getFAMethod());
+			orderTarget.setFAPercent(openPosition.getFAPercent());
+			orderTarget = getBrokerManager().onPlaceOrder(
+					getTradestrategy().getContract(), orderTarget);
+			this.getPositionOrders().addTradeOrder(orderTarget);
+			/*
+			 * Note the last order submitted in TWS on OCA order is the only one
+			 * that can be updated
+			 */
+
+			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
+					action, OrderType.STP, quantity,
+					stopPrice.getBigDecimalValue(), null, createDate);
+			orderStop.setOcaType(2);
+			orderStop.setTransmit(stopTransmit);
+			orderStop.setOcaGroupName(ocaID);
+			orderStop.setAccountNumber(openPosition.getAccountNumber());
+			orderStop.setFAGroup(openPosition.getFAGroup());
+			orderStop.setFAProfile(openPosition.getFAProfile());
+			orderStop.setFAMethod(openPosition.getFAMethod());
+			orderStop.setFAPercent(openPosition.getFAPercent());
+			orderStop = getBrokerManager().onPlaceOrder(
+					getTradestrategy().getContract(), orderStop);
+			this.getPositionOrders().addTradeOrder(orderStop);
+			return targetPrice;
+
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 360,
+					"Error create stop/target tradeOrder: " + ex.getMessage());
 		}
-
-		String action = Action.BUY;
-		int buySellMultipliter = 1;
-		if (Side.BOT.equals(getOpenTradePosition().getSide())) {
-			action = Action.SELL;
-			buySellMultipliter = -1;
-		}
-
-		// Add a penny to the stop and target
-		Money stopPrice = addPennyAndRoundStop(openPosition
-				.getAverageFilledPrice().doubleValue()
-				+ (riskAmount * stopRiskUnits * buySellMultipliter), this
-				.getOpenTradePosition().getSide(), action, 0.01);
-
-		Money targetPrice = addPennyAndRoundStop(openPosition
-				.getAverageFilledPrice().doubleValue()
-				+ (riskAmount * targetRiskUnits * buySellMultipliter * -1),
-				this.getOpenTradePosition().getSide(), action, 0.01);
-
-		int quantity = Math.abs(this.getOpenTradePosition().getOpenQuantity()
-				* percentQty) / 100;
-
-		String ocaID = new String(Integer.toString((new BigDecimal(Math
-				.random() * 1000000)).intValue()));
-
-		TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
-				action, OrderType.LMT, quantity, null,
-				targetPrice.getBigDecimalValue(), createDate);
-
-		orderTarget.setOcaType(2);
-		orderTarget.setTransmit(true);
-		orderTarget.setOcaGroupName(ocaID);
-		orderTarget.setAccountNumber(openPosition.getAccountNumber());
-		orderTarget.setFAGroup(openPosition.getFAGroup());
-		orderTarget.setFAProfile(openPosition.getFAProfile());
-		orderTarget.setFAMethod(openPosition.getFAMethod());
-		orderTarget.setFAPercent(openPosition.getFAPercent());
-		orderTarget = getBrokerManager().onPlaceOrder(
-				getTradestrategy().getContract(), orderTarget);
-		this.getPositionOrders().addTradeOrder(orderTarget);
-		/*
-		 * Note the last order submitted in TWS on OCA order is the only one
-		 * that can be updated
-		 */
-
-		TradeOrder orderStop = new TradeOrder(this.getTradestrategy(), action,
-				OrderType.STP, quantity, stopPrice.getBigDecimalValue(), null,
-				createDate);
-		orderStop.setOcaType(2);
-		orderStop.setTransmit(stopTransmit);
-		orderStop.setOcaGroupName(ocaID);
-		orderStop.setAccountNumber(openPosition.getAccountNumber());
-		orderStop.setFAGroup(openPosition.getFAGroup());
-		orderStop.setFAProfile(openPosition.getFAProfile());
-		orderStop.setFAMethod(openPosition.getFAMethod());
-		orderStop.setFAPercent(openPosition.getFAPercent());
-		orderStop = getBrokerManager().onPlaceOrder(
-				getTradestrategy().getContract(), orderStop);
-		this.getPositionOrders().addTradeOrder(orderStop);
-		return targetPrice;
 	}
 
 	/**
@@ -1109,23 +1122,29 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param numberRiskUnits
 	 *            int
 	 * @return Money
-	 * @throws ValueTypeException
+	 * @throws StrategyRuleException
 	 */
 	public Money getStopPriceForPositionRisk(TradeOrder openPosition,
-			int numberRiskUnits) throws ValueTypeException {
+			int numberRiskUnits) throws StrategyRuleException {
+		try {
+			double riskAmount = (this.getTradestrategy().getRiskAmount()
+					.doubleValue() / this.getOpenTradePosition()
+					.getOpenQuantity()) * numberRiskUnits;
 
-		double riskAmount = (this.getTradestrategy().getRiskAmount()
-				.doubleValue() / this.getOpenTradePosition().getOpenQuantity())
-				* numberRiskUnits;
+			if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
+				riskAmount = riskAmount * -1;
+			}
 
-		if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
-			riskAmount = riskAmount * -1;
+			// Add a penny to the stop
+			Money stopPrice = new Money(openPosition.getAverageFilledPrice()
+					.doubleValue() + riskAmount);
+			return stopPrice;
+
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 370,
+					"Error getting stop price for risk position: "
+							+ ex.getMessage());
 		}
-
-		// Add a penny to the stop
-		Money stopPrice = new Money(openPosition.getAverageFilledPrice()
-				.doubleValue() + riskAmount);
-		return stopPrice;
 	}
 
 	/**
@@ -1143,7 +1162,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				return closePosition(true);
 			}
 		} catch (Exception ex) {
-			throw new StrategyRuleException(1, 70,
+			throw new StrategyRuleException(1, 380,
 					"Error StrategyWorker exception: " + ex.getMessage());
 		}
 		return null;
@@ -1186,11 +1205,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 			}
 		} catch (Exception ex) {
-			_log.error(
-					"Error StrategyWorker moveStopOCAPrice exception Symbol: "
-							+ this.symbol + " Stop Price: " + stopPrice
-							+ " Msg: " + ex.getMessage(), ex);
-			throw new StrategyRuleException(1, 80,
+			throw new StrategyRuleException(1, 390,
 					"Error StrategyWorker moveStopOCAPrice exception Symbol: "
 							+ this.symbol + " Stop Price: " + stopPrice
 							+ " Msg: " + ex.getMessage());
@@ -1205,14 +1220,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void cancelAllOrders() throws StrategyRuleException {
 
 		_log.info("Strategy  cancelAllOrders symbol: " + symbol);
-		try {
-			for (TradeOrder order : this.getPositionOrders().getTradeOrders()) {
-				cancelOrder(order);
-			}
-		} catch (Exception ex) {
-			throw new StrategyRuleException(1, 90,
-					"Error StrategyWorker cancelAllOrders exception: "
-							+ ex.getMessage());
+		for (TradeOrder order : this.getPositionOrders().getTradeOrders()) {
+			cancelOrder(order);
 		}
 	}
 
@@ -1229,10 +1238,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param dollars
 	 *            double
 	 * @return Money
-	 * @throws ValueTypeException
+	 * @throws StrategyRuleException
 	 */
 	public Money addPennyAndRoundStop(double price, String side, String action,
-			double dollars) throws ValueTypeException {
+			double dollars) throws StrategyRuleException {
 		double roundPrice = 0;
 		if (Side.BOT.equals(side)) {
 			roundPrice = roundPrice(price + dollars, action);
@@ -1285,7 +1294,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		if (index > -1) {
 			candle = (CandleItem) baseCandleSeries.getDataItem(index);
 		} else {
-			throw new StrategyRuleException(1, 100,
+			throw new StrategyRuleException(1, 210,
 					"Error Candle not found for period: " + period
 							+ " in baseCandleSeries barSize: "
 							+ baseCandleSeries.getBarSize() + " series count: "
@@ -1300,12 +1309,17 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 * @param status
 	 *            String
-	 * @throws PersistentModelException
+	 * @throws StrategyRuleException
 	 */
 	public void updateTradestrategyStatus(String status)
-			throws PersistentModelException {
-		this.getPositionOrders().setStatus(status);
-		this.tradePersistentModel.persistAspect(this.getPositionOrders());
+			throws StrategyRuleException {
+		try {
+			this.getPositionOrders().setStatus(status);
+			this.tradePersistentModel.persistAspect(this.getPositionOrders());
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 400,
+					"Error updating tradestrategy status: " + ex.getMessage());
+		}
 	}
 
 	/**
@@ -1347,11 +1361,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 	/**
 	 * Method reFreshPositionOrders.
 	 * 
+	 * @throws StrategyRuleException
 	 */
 
-	public void reFreshPositionOrders() throws PersistentModelException {
-		this.positionOrders = this.tradePersistentModel
-				.findPositionOrdersById(this.idTradestrategy);
+	public void reFreshPositionOrders() throws StrategyRuleException {
+		try {
+
+			this.positionOrders = this.tradePersistentModel
+					.findPositionOrdersById(this.idTradestrategy);
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 410, "Error position orders: "
+					+ ex.getMessage());
+		}
 	}
 
 	/**
@@ -1359,11 +1380,17 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * is updated when connected to TWS every time the account values change.
 	 * 
 	 * @return Account
-	 * @throws PersistentModelException
+	 * @throws StrategyRuleException
 	 */
-	public Account getIndividualAccount() throws PersistentModelException {
-		return this.tradePersistentModel.findAccountByNumber(getTradestrategy()
-				.getPortfolio().getIndividualAccount().getAccountNumber());
+	public Account getIndividualAccount() throws StrategyRuleException {
+		try {
+			return this.tradePersistentModel
+					.findAccountByNumber(getTradestrategy().getPortfolio()
+							.getIndividualAccount().getAccountNumber());
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 420,
+					"Error finding individual accounts: " + ex.getMessage());
+		}
 	}
 
 	/**
@@ -1493,38 +1520,42 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param action
 	 *            String
 	 * @return double
-	 * @throws ValueTypeException
+	 * @throws StrategyRuleException
 	 */
 	private double roundPrice(double price, String action)
-			throws ValueTypeException {
-
-		// Round at whole and half numbers add to this if you
-		// need others.
-		Entrylimit entrylimit = getEntryLimit().getValue(new Money(price));
-		if (null == entrylimit) {
-			throw new ValueTypeException("No EntryLimits found for price: "
-					+ price);
-		}
-
-		double[] rounding = { 1, 0.5 };
-		int buySellMultiplier = 1;
-
-		if (action.equals(Action.SELL)) {
-			buySellMultiplier = -1;
-		}
-
-		for (double element : rounding) {
-			// Round the price to over under half numbers
-			double wholePrice = price + (1 - element);
-			double remainder = ((Math.rint(wholePrice) - wholePrice) * buySellMultiplier);
-			if ((remainder < entrylimit.getPriceRound().doubleValue())
-					&& (remainder >= 0)) {
-				price = (Math.rint(wholePrice) + (0.01d * buySellMultiplier))
-						- (1 - element);
-				return price;
+			throws StrategyRuleException {
+		try {
+			// Round at whole and half numbers add to this if you
+			// need others.
+			Entrylimit entrylimit = getEntryLimit().getValue(new Money(price));
+			if (null == entrylimit) {
+				throw new StrategyRuleException(1, 211,
+						"No EntryLimits found for price: " + price);
 			}
+
+			double[] rounding = { 1, 0.5 };
+			int buySellMultiplier = 1;
+
+			if (action.equals(Action.SELL)) {
+				buySellMultiplier = -1;
+			}
+
+			for (double element : rounding) {
+				// Round the price to over under half numbers
+				double wholePrice = price + (1 - element);
+				double remainder = ((Math.rint(wholePrice) - wholePrice) * buySellMultiplier);
+				if ((remainder < entrylimit.getPriceRound().doubleValue())
+						&& (remainder >= 0)) {
+					price = (Math.rint(wholePrice) + (0.01d * buySellMultiplier))
+							- (1 - element);
+					return price;
+				}
+			}
+			return price;
+		} catch (Exception ex) {
+			throw new StrategyRuleException(1, 420, "Error rounding price: "
+					+ ex.getMessage());
 		}
-		return price;
 	}
 
 	/**
