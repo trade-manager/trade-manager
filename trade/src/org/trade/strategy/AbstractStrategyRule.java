@@ -46,6 +46,7 @@ import org.jfree.data.general.SeriesChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
+import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
@@ -188,7 +189,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 		for (int i = 0; i < listeners.length; i++) {
 			removeMessageListener(listeners[i]);
 		}
-
 	}
 
 	/**
@@ -412,7 +412,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 			/*
 			 * Ok we are complete clean up.
 			 */
-
 		}
 		return null;
 	}
@@ -663,6 +662,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 					getTradestrategy().getContract(), tradeOrder);
 			this.getPositionOrders().addTradeOrder(tradeOrder);
 			return tradeOrder;
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 500,
+					"Error submitting new tradeOrder to broker : "
+							+ ex.getMessage());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 300,
 					"Error create tradeOrder : " + ex.getMessage());
@@ -725,6 +728,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 			tradeOrder.setTransmit(transmit);
 			return getBrokerManager().onPlaceOrder(
 					getTradestrategy().getContract(), tradeOrder);
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 510,
+					"Error submitting updated tradeOrder to broker: "
+							+ ex.getMessage());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 310,
 					"Error update tradeOrder : " + ex.getMessage());
@@ -836,6 +843,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 					getTradestrategy().getContract(), tradeOrder);
 			this.getPositionOrders().addTradeOrder(tradeOrder);
 			return tradeOrder;
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 520,
+					"Error submitting new tradeOrder to broker: "
+							+ ex.getMessage());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 320,
 					"Error create risk open tradeOrder : " + ex.getMessage());
@@ -859,6 +870,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 					getBrokerManager().onCancelOrder(order);
 				}
 			}
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 530,
+					"Error cancelling tradeOrder to broker: " + ex.getMessage());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 330,
 					"Error create risk open tradeOrder : " + ex.getMessage());
@@ -984,7 +998,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 					getTradestrategy().getContract(), orderStop);
 			this.getPositionOrders().addTradeOrder(orderStop);
 			return targetPrice;
-
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 540,
+					"Error submitting new tradeOrder to broker: "
+							+ ex.getMessage());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 350,
 					"Error create stop/target tradeOrder: " + ex.getMessage());
@@ -1106,7 +1123,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 					getTradestrategy().getContract(), orderStop);
 			this.getPositionOrders().addTradeOrder(orderStop);
 			return targetPrice;
-
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 550,
+					"Error submitting new tradeOrder to broker: "
+							+ ex.getMessage());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 360,
 					"Error create stop/target tradeOrder: " + ex.getMessage());
@@ -1204,6 +1224,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 					}
 				}
 			}
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 560,
+					"Error updating tradeOrder to broker: " + ex.getMessage());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 390,
 					"Error StrategyWorker moveStopOCAPrice exception Symbol: "
