@@ -213,7 +213,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 						+ getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 			}
-		} catch (Exception ex) {
+		} catch (StrategyRuleException ex) {
 			_log.error("Error Position Manager exception: " + ex.getMessage(),
 					ex);
 			error(1, 30,

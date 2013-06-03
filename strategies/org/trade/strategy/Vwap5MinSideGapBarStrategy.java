@@ -203,7 +203,7 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 				}
 			}
 
-		} catch (Exception ex) {
+		} catch (StrategyRuleException ex) {
 			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
 			error(1, 20, "Error  runRule exception: " + ex.getMessage());
 		}

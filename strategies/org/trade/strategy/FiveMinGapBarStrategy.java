@@ -141,19 +141,20 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						startPeriod, 9, 35)) && newBar) {
 
 					// TODO add the tails as a % of the body.
-//					double barBodyPercent = (Math.abs(prevCandleItem.getOpen()
-//							- prevCandleItem.getClose()) / Math
-//							.abs(prevCandleItem.getHigh()
-//									- prevCandleItem.getLow())) * 100;
-//					if (barBodyPercent < 5) {
-//						_log.info("Bar Body outside % range  Symbol: "
-//								+ getSymbol() + " Time: " + startPeriod);
-//						updateTradestrategyStatus(TradestrategyStatus.NBB);
-//						_log.info("Rule 5min low broker Symbol: " + getSymbol()
-//								+ " Time: " + startPeriod);
-//						this.cancel();
-//						return;
-//					}
+					// double barBodyPercent =
+					// (Math.abs(prevCandleItem.getOpen()
+					// - prevCandleItem.getClose()) / Math
+					// .abs(prevCandleItem.getHigh()
+					// - prevCandleItem.getLow())) * 100;
+					// if (barBodyPercent < 5) {
+					// _log.info("Bar Body outside % range  Symbol: "
+					// + getSymbol() + " Time: " + startPeriod);
+					// updateTradestrategyStatus(TradestrategyStatus.NBB);
+					// _log.info("Rule 5min low broker Symbol: " + getSymbol()
+					// + " Time: " + startPeriod);
+					// this.cancel();
+					// return;
+					// }
 
 					this.side = Side.newInstance(Side.SLD);
 					if (prevCandleItem.isSide(Side.BOT)) {
@@ -188,10 +189,10 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						 */
 						if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
 								.getLimitAmount().doubleValue() * 2)) {
-							
+
 							createRiskOpenPosition(action, price, priceStop,
 									true, null, null, null, null);
-						}else{
+						} else {
 							_log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
 									+ getSymbol() + " Time: " + startPeriod);
 							updateTradestrategyStatus(TradestrategyStatus.NBB);
@@ -258,7 +259,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					this.cancel();
 				}
 			}
-		} catch (Exception ex) {
+		} catch (StrategyRuleException ex) {
 			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
 			error(1, 10, "Error  runRule exception: " + ex.getMessage());
 		}

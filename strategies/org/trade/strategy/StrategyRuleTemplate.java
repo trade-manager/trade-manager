@@ -135,7 +135,7 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 				}
 			}
 
-		} catch (Exception ex) {
+		} catch (StrategyRuleException ex) {
 			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
 			error(1, 10, "Error  runRule exception: " + ex.getMessage());
 		}
