@@ -315,6 +315,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 * filled.
 					 */
 
+					/*
+					 * Check to see if the strategy needs to update the OCA
+					 * orders if the current bar requires the stop to be moved.
+					 * This check is only done if the current candle is against
+					 * the bar. i.e. we assume if we had a candle that
+					 * encompassed the entry and stop and is in the direction of
+					 * the trade that we weren't stopped out on the entry
+					 * candle.
+					 */
 					positionOrders = this.tradePersistentModel
 							.findPositionOrdersById(this.idTradestrategy);
 
@@ -326,14 +335,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 							}
 						}
 					}
-					/*
-					 * Check to see if the strategy needs to update the orders
-					 * if the current bar requires the stop to be moved. This
-					 * check is only done if the current candle is against the
-					 * bar. i.e. we assume if we had a candle that encompassed
-					 * the entry and stop and is in the direction of the trade
-					 * that we weren't stopped out on the entry candle.
-					 */
 					if (positionOrders.hasOpenTradePosition()) {
 						if (!this.tradestrategy.getDatasetContainer()
 								.getBaseCandleSeries().isEmpty()) {

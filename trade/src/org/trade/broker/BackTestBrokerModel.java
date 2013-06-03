@@ -367,14 +367,16 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								+ contract.getSymbol()
 								+ " Please wait or cancel.");
 			}
-			m_historyDataRequests.put(contract.getIdContract(), contract);
-
+			synchronized (m_historyDataRequests) {
+				m_historyDataRequests.put(contract.getIdContract(), contract);
+			}
 			if (this.isBrokerDataOnly()) {
 				/*
 				 * This will use the Yahoo API to get the data.
 				 */
-				m_contractRequests.put(contract.getIdContract(), contract);
-
+				synchronized (m_contractRequests) {
+					m_contractRequests.put(contract.getIdContract(), contract);
+				}
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
 								.addBusinessDays(endDate, backfillOffsetDays)));
@@ -1167,6 +1169,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 							.get(contract.getTradestrategies().size() - 1);
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
+					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
 					_log.info("HistoricalData complete Req Id: " + reqId
 							+ " Symbol: " + contract.getSymbol()
@@ -1177,29 +1180,24 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 							+ " Contract Tradestrategies size:: "
 							+ contract.getTradestrategies().size());
 
-					m_tradePersistentModel.persistCandleSeries(candleSeries);
-
 					/*
 					 * Check to see if the trading day is today and this
 					 * strategy is selected to trade and that the market is open
 					 */
-
-					// if (contract.getTradestrategies().isEmpty()) {
-					synchronized (m_historyDataRequests) {
-						m_historyDataRequests.remove(reqId);
-						m_historyDataRequests.notifyAll();
+					for (ListIterator<Tradestrategy> iterItem = contract
+							.getTradestrategies().listIterator(); iterItem
+							.hasNext();) {
+						Tradestrategy item = iterItem.next();
+						if (item.getTrade() && !this.isBrokerDataOnly()) {
+							this.fireHistoricalDataComplete(item);
+						} else {
+							iterItem.remove();
+						}
 					}
-					// }
-					synchronized (contract.getTradestrategies()) {
-						for (ListIterator<Tradestrategy> iterItem = contract
-								.getTradestrategies().listIterator(); iterItem
-								.hasNext();) {
-							Tradestrategy item = iterItem.next();
-							if (item.getTrade() && !this.isBrokerDataOnly()) {
-								this.fireHistoricalDataComplete(item);
-							} else {
-								iterItem.remove();
-							}
+					if (contract.getTradestrategies().isEmpty()) {
+						synchronized (m_historyDataRequests) {
+							m_historyDataRequests.remove(reqId);
+							m_historyDataRequests.notifyAll();
 						}
 					}
 
