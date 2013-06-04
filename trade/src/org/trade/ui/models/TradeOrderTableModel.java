@@ -159,9 +159,21 @@ public class TradeOrderTableModel extends TableModel {
 						|| ((OrderType) super.getValueAt(row, 3)).getCode()
 								.equals(OrderType.STP)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() != 0) {
-						Money zero = new Money(0);
-						this.setValueAt(zero, row, column);
-						return zero;
+						Money price = new Money(0);
+						this.setValueAt(price, row, column);
+						return price;
+					}
+				}
+				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
+						OrderType.LMT)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode()
+								.equals(OrderType.STPLMT)) {
+					if (((Money) super.getValueAt(row, column)).doubleValue() == 0) {
+						Money price = new Money(this.getData()
+								.getDatasetContainer().getBaseCandleSeries()
+								.getContract().getLastPrice());
+						this.setValueAt(price, row, column);
+						return price;
 					}
 				}
 			}
@@ -170,11 +182,25 @@ public class TradeOrderTableModel extends TableModel {
 				&& null != super.getValueAt(row, column)) {
 			if (((OrderType) super.getValueAt(row, 3)).isValid()) {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
-						OrderType.LMT)) {
+						OrderType.MKT)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode()
+								.equals(OrderType.LMT)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() != 0) {
-						Money zero = new Money(0);
-						this.setValueAt(zero, row, column);
-						return zero;
+						Money price = new Money(0);
+						this.setValueAt(price, row, column);
+						return price;
+					}
+				}
+				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
+						OrderType.STP)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode()
+								.equals(OrderType.STPLMT)) {
+					if (((Money) super.getValueAt(row, column)).doubleValue() == 0) {
+						Money price = new Money(this.getData()
+								.getDatasetContainer().getBaseCandleSeries()
+								.getContract().getLastPrice());
+						this.setValueAt(price, row, column);
+						return price;
 					}
 				}
 			}
