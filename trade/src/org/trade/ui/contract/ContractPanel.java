@@ -881,6 +881,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			double netValue = 0;
 			double commision = 0;
+			double unRealizedPL = 0;
+			double realizedPL = 0;
 			String symbol = "";
 			String side = "";
 			String tier = "";
@@ -932,6 +934,52 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 							prevIdTradePosition = order.getTradePosition()
 									.getIdTradePosition();
+							if (order.getTradePosition().getIsOpen()) {
+								unRealizedPL = order.getTradePosition()
+										.getTotalNetValue().doubleValue()
+										+ (order.getTradePosition()
+												.getOpenQuantity() * tradestrategy
+												.getDatasetContainer()
+												.getBaseCandleSeries()
+												.getContract().getLastPrice()
+												.doubleValue());
+
+							}
+							if (order.getTradePosition().getTotalSellQuantity()
+									.doubleValue() > 0
+									&& order.getTradePosition()
+											.getTotalBuyQuantity()
+											.doubleValue() > 0) {
+
+								double qty = (order.getTradePosition()
+										.getTotalSellQuantity().doubleValue() - order
+										.getTradePosition()
+										.getTotalBuyQuantity().doubleValue());
+								if (qty == 0) {
+									realizedPL = realizedPL
+											+ +order.getTradePosition()
+													.getTotalNetValue()
+													.doubleValue();
+								} else {
+
+									double avgBuy = (order.getTradePosition()
+											.getTotalBuyValue().doubleValue() / order
+											.getTradePosition()
+											.getTotalBuyQuantity()
+											.doubleValue());
+
+									double avgSell = (order.getTradePosition()
+											.getTotalSellValue().doubleValue() / order
+											.getTradePosition()
+											.getTotalSellQuantity()
+											.doubleValue());
+
+									int sideVal = (Side.BOT.equals(side) ? -1
+											: 1);
+									realizedPL = realizedPL
+											+ (qty * (avgSell - avgBuy) * sideVal);
+								}
+							}
 						}
 
 						if (null != prevTradeOrder) {
@@ -949,6 +997,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 								order.getAction(),
 								new Money(order.getAverageFilledPrice()),
 								order.getFilledDate(), quantity);
+
 					}
 					prevTradeOrder = order;
 				}
@@ -996,12 +1045,41 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						.padLeft(currencyFormater.format(netValue), 10), false,
 						null);
 			}
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					" Realized P/L:", false, bold);
+			if (realizedPL < 0) {
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(realizedPL), 10),
+						false, colorRedAttr);
+			} else if (realizedPL > 0) {
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(realizedPL), 10),
+						false, colorGreenAttr);
+			} else {
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(realizedPL), 10),
+						false, null);
+			}
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					" UnRealized P/L:", false, bold);
+			if (unRealizedPL < 0) {
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(unRealizedPL), 10),
+						false, colorRedAttr);
+			} else if (unRealizedPL > 0) {
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(unRealizedPL), 10),
+						false, colorGreenAttr);
+			} else {
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
+						.padLeft(currencyFormater.format(unRealizedPL), 10),
+						false, null);
+			}
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Comms:",
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
 					CoreUtils.padLeft(currencyFormater.format(commision), 10),
 					false, null);
-
 		} catch (Exception ex) {
 			this.setErrorMessage("Error refreshing Tab.", ex.getMessage(), ex);
 		}

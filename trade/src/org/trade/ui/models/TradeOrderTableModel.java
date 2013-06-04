@@ -52,6 +52,7 @@ import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.TradeOrder;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.ui.base.TableModel;
 
@@ -367,45 +368,54 @@ public class TradeOrderTableModel extends TableModel {
 	public void addRow() {
 		final Tradestrategy tradestrategy = getData();
 
-		final String side = tradestrategy.getSide();
+		String side = tradestrategy.getSide();
+		if (null == side)
+			side = Side.BOT;
+		String orderType = OrderType.STPLMT;
 		String action = Action.BUY;
 		if (Side.SLD.equals(side)) {
 			action = Action.SELL;
 		}
-		final double risk = tradestrategy.getRiskAmount().doubleValue();
-		final double stop = 1.0d;
-		Money price = new Money(0);
-		if (tradestrategy.getDatasetContainer().getCandleDataset()
-				.getItemCount(0) > 0) {
-			price = new Money(tradestrategy
-					.getDatasetContainer()
-					.getCandleDataset()
-					.getCloseValue(
-							0,
-							(tradestrategy.getDatasetContainer()
-									.getCandleDataset().getItemCount(0) - 1)));
-		}
-		final int quantlty = (int) ((int) risk / stop);
-		final Date createDate = new Date(new java.util.Date());
+		double risk = tradestrategy.getRiskAmount().doubleValue();
+		double stop = 1.0d;
 
-		int buySellMultiplier = 1;
+		Money price = new Money(tradestrategy.getDatasetContainer()
+				.getBaseCandleSeries().getContract().getLastPrice());
 
-		if (action.equals(Action.BUY)) {
-			action = Action.SELL;
+		Date createDate = new Date(new java.util.Date());
 
-		} else {
-			action = Action.BUY;
-			buySellMultiplier = -1;
-		}
 		final Entrylimit entrylimit = DAOEntryLimit.newInstance().getValue(
 				price);
+
+		Money limitPrice = Action.BUY.equals(action) ? price.add(new Money(
+				entrylimit.getLimitAmount().doubleValue())) : price
+				.subtract(new Money(entrylimit.getLimitAmount().doubleValue()));
+
+		int quantity = (int) ((int) risk / stop);
+		if (tradestrategy.isThereOpenTradePosition()) {
+			for (TradeOrder item : tradestrategy.getTradeOrders()) {
+				if (item.hasTradePosition()) {
+					TradePosition position = item.getTradePosition();
+					if (position.getIsOpen()) {
+						quantity = Math.abs(position.getOpenQuantity());
+						side = position.getSide();
+						action = Action.BUY;
+						if (Side.BOT.equals(side)) {
+							action = Action.SELL;
+						}
+						orderType = OrderType.LMT;
+						limitPrice = price;
+					}
+				}
+			}
+		}
+
 		final TradeOrder tradeOrder = new TradeOrder(tradestrategy, action,
-				OrderType.STPLMT, quantlty, price.getBigDecimalValue(), price
-						.add(new Money(entrylimit.getLimitAmount()
-								.doubleValue() * buySellMultiplier))
-						.getBigDecimalValue(), createDate.getDate());
+				orderType, quantity, price.getBigDecimalValue(),
+				limitPrice.getBigDecimalValue(), createDate.getDate());
 		tradeOrder.setOcaGroupName("");
-		tradeOrder.setStatus(OrderStatus.newInstance().getCode());
+		tradeOrder.setTransmit(true);
+		tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 		tradestrategy.addTradeOrder(tradeOrder);
 
 		final Vector<Object> newRow = new Vector<Object>();
