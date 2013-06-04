@@ -621,6 +621,12 @@ public class CandleDataset extends AbstractXYDataset implements
 									.doubleValue(), candle.getVolume(), candle
 									.getVwap().doubleValue(), candle
 									.getTradeCount(), 1);
+			datasetContainer.getBaseCandleSeries().getContract()
+					.setLastAskPrice(candle.getClose());
+			datasetContainer.getBaseCandleSeries().getContract()
+					.setLastBidPrice(candle.getClose());
+			datasetContainer.getBaseCandleSeries().getContract()
+					.setLastPrice(candle.getClose());
 		}
 	}
 
