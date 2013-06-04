@@ -957,8 +957,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 										.getTotalBuyQuantity().doubleValue());
 								if (qty == 0) {
 									realizedPL = realizedPL
-											+ +order.getTradePosition()
+											+ order.getTradePosition()
 													.getTotalNetValue()
+													.doubleValue()
+											- order.getTradePosition()
+													.getTotalCommission()
 													.doubleValue();
 								} else {
 
@@ -977,7 +980,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 									int sideVal = (Side.BOT.equals(side) ? -1
 											: 1);
 									realizedPL = realizedPL
-											+ (qty * (avgSell - avgBuy) * sideVal);
+											+ (qty * (avgSell - avgBuy) * sideVal)
+											- order.getTradePosition()
+													.getTotalCommission()
+													.doubleValue();
 								}
 							}
 						}
