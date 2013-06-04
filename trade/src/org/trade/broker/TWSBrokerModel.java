@@ -2201,7 +2201,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				if (dateString.contains("finished-")) {
 
 					Tradestrategy tradestrategy = contract.getTradestrategies()
-							.get(contract.getTradestrategies().size() - 1);
+							.get(0);
 
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
@@ -2246,9 +2246,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 											.getStrategy().getMarketData());
 								}
 							} else {
-								item.getDatasetContainer()
-										.clearBaseCandleDataset();
-								itemIter.remove();
+								if (item.equals(tradestrategy)) {
+									item.getDatasetContainer()
+											.clearBaseCandleDataset();
+									itemIter.remove();
+								}
 							}
 						}
 					}

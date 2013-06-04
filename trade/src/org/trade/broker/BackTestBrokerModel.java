@@ -1166,7 +1166,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					 * tradeStrategyId. Remove this from the processing vector.
 					 */
 					Tradestrategy tradestrategy = contract.getTradestrategies()
-							.get(contract.getTradestrategies().size() - 1);
+							.get(0);
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
@@ -1184,14 +1184,17 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					 * Check to see if the trading day is today and this
 					 * strategy is selected to trade and that the market is open
 					 */
-					for (ListIterator<Tradestrategy> iterItem = contract
-							.getTradestrategies().listIterator(); iterItem
-							.hasNext();) {
-						Tradestrategy item = iterItem.next();
-						if (item.getTrade() && !this.isBrokerDataOnly()) {
-							this.fireHistoricalDataComplete(item);
-						} else {
-							iterItem.remove();
+					synchronized (contract.getTradestrategies()) {
+						for (ListIterator<Tradestrategy> iterItem = contract
+								.getTradestrategies().listIterator(); iterItem
+								.hasNext();) {
+							Tradestrategy item = iterItem.next();
+							if (item.getTrade() && !this.isBrokerDataOnly()) {
+								this.fireHistoricalDataComplete(item);
+							} else {
+								if (iterItem.equals(tradestrategy))
+									iterItem.remove();
+							}
 						}
 					}
 					if (contract.getTradestrategies().isEmpty()) {
