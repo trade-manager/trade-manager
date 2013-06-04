@@ -79,6 +79,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.trade.core.dao.Aspects;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
@@ -188,12 +189,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			propertiesButton.setEnabled(false);
 			executeButton = new BaseButton(controller,
 					BaseUIPropertyCodes.EXECUTE);
+			executeButton.addMessageListener(this);
 			brokerDataButton = new BaseButton(controller,
 					BaseUIPropertyCodes.DATA);
 			brokerDataButton.setToolTipText("Get Chart data");
 			cancelButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
 			cancelButton.setToolTipText("Cancel Order");
+			cancelButton.setTransferObject(new Aspects());
+			cancelButton.addMessageListener(this);
 			cancelStrategiesButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
 			cancelStrategiesButton.setToolTipText("Cancel Strategy");
@@ -371,6 +375,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		}
 	}
 
+	public void doCancel(Aspects aspects) {
+		this.setStatusBarMessage("Please select an order to cancel ...\n",
+				BasePanel.INFORMATION);
+	}
+
 	public void doCloseAll() {
 		try {
 			int tabsCount = m_jTabbedPaneContract.getTabCount();
@@ -425,6 +434,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	}
 
 	public void doExecute() {
+		this.setStatusBarMessage("Please select an order to execute ...\n",
+				BasePanel.INFORMATION);
 	}
 
 	public void doWindowOpen() {
@@ -784,6 +795,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				ListSelectionModel model = (ListSelectionModel) event
 						.getSource();
 				if (model.getLeadSelectionIndex() > -1) {
+					clearStatusBarMessage();
 					int row = m_tradeOrderTable.convertRowIndexToModel(model
 							.getLeadSelectionIndex());
 
@@ -799,6 +811,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						}
 						i++;
 					}
+				} else {
+					cancelButton.setTransferObject(new Aspects());
+					executeButton.setTransferObject(null);
+					propertiesButton.setTransferObject(null);
 				}
 			}
 		}
@@ -855,6 +871,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 */
 	private void reFreshTab() {
 		try {
+			this.clearStatusBarMessage();
 			Tradestrategy tradestrategy = null;
 			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 					.getSelectedComponent();

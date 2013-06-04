@@ -450,8 +450,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	public void addTradeOrder(TradeOrder tradeOrder) {
 		int index = 0;
 		for (TradeOrder currTradeOrder : this.tradeOrders) {
-			if (currTradeOrder.getIdTradeOrder().equals(
-					tradeOrder.getIdTradeOrder())) {
+			if (CoreUtils.nullSafeComparator(currTradeOrder.getIdTradeOrder(),
+					tradeOrder.getIdTradeOrder()) == 0) {
 				index = this.tradeOrders.indexOf(currTradeOrder);
 				break;
 			}
