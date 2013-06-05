@@ -68,7 +68,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 	 * 4/ At 10:30 move the STP order to the average fill price of the filled
 	 * open order.
 	 * 
-	 * 5/ Close any open positions at 15:55.
+	 * 5/ Close any open positions at 15:58.
 	 * 
 	 */
 
@@ -208,9 +208,9 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			 */
 			if (!currentCandle.getLastUpdateDate().before(
 					TradingCalendar.getSpecificTime(
-							currentCandle.getLastUpdateDate(), 15, 55))) {
+							currentCandle.getLastUpdateDate(), 15, 58))) {
 				closeOpenPosition();
-				_log.info("PositionManagerStrategy 15:55:00 done: "
+				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 			}

@@ -76,7 +76,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	 * Heikin-Ashi bar -2 as long as the prev bars low is higher than the prev
 	 * bar -1 low.
 	 * 
-	 * 6/ Close any open positions at 15:55.
+	 * 6/ Close any open positions at 15:58.
 	 * 
 	 */
 
@@ -257,9 +257,9 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 */
 			if (!currentCandle.getLastUpdateDate().before(
 					TradingCalendar.getSpecificTime(
-							currentCandle.getLastUpdateDate(), 15, 55))) {
+							currentCandle.getLastUpdateDate(), 15, 58))) {
 				closeOpenPosition();
-				_log.info("PositionManagerStrategy 15:55:00 done: "
+				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 			}

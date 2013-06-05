@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2011-2011, by Simon Allen and Contributors.
  *
- * Project Info:  org.trade test    
+ * Project Info:  org.trade
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -41,33 +41,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.core.util.TradingCalendar;
-import org.trade.core.valuetype.Money;
-import org.trade.dictionary.valuetype.Side;
-import org.trade.persistent.dao.TradePosition;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
 
 /**
+ * @author Simon Allen
+ * 
+ * @version $Revision: 1.0 $
  */
+
 public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 
 	/**
-	 * 1/ If the open position is filled create a STP and 1 Target (LMT) OCA
-	 * order at 6R with 100% of the filled quantity. Use the open position fill
-	 * quantity, price and stop price to determine the target price. The STP
-	 * order take an initial risk of 1R.
-	 * 
-	 * 2/ Target/Stop prices should be round over/under whole/half numbers when
-	 * ever they are calculated..
-	 * 
-	 * 4/ After 9:40 trail the whole position under/over the previous bar.
-	 * 
-	 * 5/ Close any open positions at 15:55.
 	 * 
 	 */
-
-	private static final long serialVersionUID = -1802229646519981959L;
+	private static final long serialVersionUID = -2281013751087462982L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrAll5MinBarStrategy.class);
 
@@ -87,6 +76,14 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
 	}
 
+	/*
+	 * Note the current candle is just forming Enter a tier 1-3 gap in first
+	 * 5min bar direction, with a 3R target and stop @ 5min high/low
+	 * 
+	 * @param candleSeries the series of candels that has been updated.
+	 * 
+	 * @param newBar has a new bar just started.
+	 */
 	/**
 	 * Method runStrategy.
 	 * 
@@ -99,132 +96,48 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
 		try {
+			if (getCurrentCandleCount() > 0) {
+				// Get the current candle
+				CandleItem currentCandleItem = (CandleItem) candleSeries
+						.getDataItem(getCurrentCandleCount());
+				Date startPeriod = currentCandleItem.getPeriod().getStart();
 
-			/*
-			 * Get the current candle
-			 */
-			CandleItem currentCandle = this.getCurrentCandle();
-			Date startPeriod = currentCandle.getPeriod().getStart();
+				// _log.info(getTradestrategy().getStrategy().getClassName()
+				// + " symbol: " + getSymbol() + " startPeriod: "
+				// + startPeriod);
 
-			// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
+				// Is it the the 9:35 candle?
+				if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 9, 35)) && newBar) {
 
-			/*
-			 * Get the current open trade. If no trade is open this Strategy
-			 * will be closed down.
-			 */
+				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))) {
 
-			if (!this.isThereOpenPosition()) {
-				_log.info("No open position so Cancel Strategy Mgr Symbol: "
-						+ getSymbol() + " Time:" + startPeriod);
-				this.cancel();
-				return;
-			}
+				} else if (startPeriod.after(TradingCalendar.getSpecificTime(
+						startPeriod, 10, 30))) {
+					_log.info("Rule after 10:30:00 bar, close the "
+							+ getTradestrategy().getStrategy().getClassName()
+							+ " Symbol: " + getSymbol());
+					// Kill this process we are done!
+					this.cancel();
+				}
 
-			/*
-			 * If all trades are closed shut down the position manager
-			 * 
-			 * Note this strategy is run as soon as we enter a position.
-			 * 
-			 * Check to see if the open position is filled and the open quantity
-			 * is > 0 also check to see if we already have this position
-			 * covered.
-			 */
-			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 				/*
-				 * Position has been opened and not covered submit the target
-				 * and stop orders for the open quantity.
+				 * Close any opened positions with a market order at the end of
+				 * the day.
 				 */
-
-				Money targetOnePrice = createStopAndTargetOrder(
-						getOpenPositionOrder(), 1, 6, 100, true);
-				setTargetPrice(targetOnePrice);
-				_log.info("Open position submit Stop/Tgt orders created Symbol: "
-						+ getSymbol() + " Time:" + startPeriod);
-
-			}
-
-			/*
-			 * Trail the whole position at the low of the previous 5min bar.
-			 */
-			if ((null != getTargetPrice())
-					&& newBar
-					&& startPeriod.after(TradingCalendar.getSpecificTime(
-							startPeriod, 9, 40))) {
-
-				if (set5MinBarTrail(getOpenTradePosition(), 1)) {
-					_log.info("PositionManagerStrategy 5min Candle: "
-							+ getSymbol() + " Trail Price: " + getTargetPrice()
-							+ " Time: " + startPeriod);
-					moveStopOCAPrice(getTargetPrice(), true);
+				if (!startPeriod.before(TradingCalendar.getSpecificTime(
+						startPeriod, 15, 58))) {
+					closeOpenPosition();
+					_log.info("Rule 15:58:00 close all open positions: "
+							+ getSymbol() + " Time: " + startPeriod);
+					this.cancel();
 				}
 			}
-			/*
-			 * Close any opened positions with a market order at the end of the
-			 * day.
-			 */
-			if (!currentCandle.getLastUpdateDate().before(
-					TradingCalendar.getSpecificTime(
-							currentCandle.getLastUpdateDate(), 15, 55))) {
-				closeOpenPosition();
-				_log.info("PositionManagerStrategy 15:55:00 done: "
-						+ getSymbol() + " Time: " + startPeriod);
-				this.cancel();
-			}
+
 		} catch (StrategyRuleException ex) {
-			_log.error("Error Position Manager exception: " + ex.getMessage(),
-					ex);
-			error(1, 40, "Error Position Manager exception: " + ex.getMessage());
+			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
+			error(1, 10, "Error  runRule exception: " + ex.getMessage());
 		}
-	}
-
-	/**
-	 * Method set5MinBarTrail. This method is used to trail on candle bars. Note
-	 * trail is on the low/high of the bar and assumes the bar are in the
-	 * direction of the trade i.e. side.
-	 * 
-	 * @param tradePosition
-	 *            TradePosition
-	 * @param bars
-	 *            int
-	 * @return boolean
-	 * @throws StrategyRuleException
-	 */
-	public boolean set5MinBarTrail(TradePosition tradePosition, int bars)
-			throws StrategyRuleException {
-		boolean trail = false;
-		Money newStop = new Money(this.getOpenPositionOrder()
-				.getAverageFilledPrice());
-
-		CandleSeries series = getTradestrategy().getDatasetContainer()
-				.getBaseCandleSeries();
-		// Start with the previous bar and work back
-		int itemCount = (series.getItemCount());
-		if (itemCount > (2 + bars)) {
-			itemCount = itemCount - 2;
-			for (int i = itemCount; i > (itemCount - bars); i--) {
-				CandleItem candle = (CandleItem) series.getDataItem(i);
-				trail = false;
-				if (Side.BOT.equals(tradePosition.getSide())) {
-					if ((candle.getLow() > newStop.doubleValue())
-							&& (candle.getOpen() < candle.getClose())) {
-						newStop = new Money(candle.getLow());
-						trail = true;
-					}
-				} else {
-					if ((candle.getHigh() < newStop.doubleValue())
-							&& (candle.getOpen() > candle.getClose())) {
-						newStop = new Money(candle.getHigh());
-						trail = true;
-					}
-				}
-				if (!trail) {
-					break;
-				}
-			}
-			if (trail) {
-				setTargetPrice(newStop);
-			}
-		}
-		return trail;
 	}
 }
