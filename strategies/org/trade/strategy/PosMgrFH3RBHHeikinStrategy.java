@@ -255,8 +255,9 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!startPeriod.before(TradingCalendar.getSpecificTime(
-					startPeriod, 15, 55))) {
+			if (!currentCandle.getLastUpdateDate().before(
+					TradingCalendar.getSpecificTime(
+							currentCandle.getLastUpdateDate(), 15, 57))) {
 				closeOpenPosition();
 				_log.info("PositionManagerStrategy 15:55:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

@@ -100,7 +100,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 	public TradeMainPanelMenu(BasePanel basePanel) {
 		super(basePanel);
 
-		cancelButton.setToolTipText("Cancel strategies & data");
+		cancelButton.setToolTipText("Cancel Strategies & Data");
 		cancelButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(cancelButton.getMethod());
