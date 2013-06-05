@@ -164,7 +164,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 */
 			if (!currentCandle.getLastUpdateDate().before(
 					TradingCalendar.getSpecificTime(
-							currentCandle.getLastUpdateDate(), 15, 57))) {
+							currentCandle.getLastUpdateDate(), 15, 55))) {
 				closeOpenPosition();
 				_log.info("PositionManagerStrategy 15:55:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);
