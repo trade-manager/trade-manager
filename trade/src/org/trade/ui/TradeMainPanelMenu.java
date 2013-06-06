@@ -82,6 +82,10 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 			BaseUIPropertyCodes.CANCEL);
 	private final BaseMenuItem cancelMenu = new BaseMenuItem(null,
 			BaseUIPropertyCodes.CANCEL);
+	private final BaseButton closeAllButton = new BaseButton(null,
+			BaseUIPropertyCodes.CLOSE_ALL);
+	private final BaseMenuItem closeAllMenu = new BaseMenuItem(null,
+			BaseUIPropertyCodes.CLOSE_ALL);
 	private final BaseMenuItem propertiesMenu = new BaseMenuItem(null,
 			BaseUIPropertyCodes.PROPERTIES);
 	private final BaseMenuItem connect = new BaseMenuItem(null,
@@ -109,6 +113,17 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 		cancelMenu.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(cancelMenu.getMethod());
+			}
+		});
+		closeAllButton.setToolTipText("Cancel Orders Close Positions");
+		closeAllButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				messageEvent(closeAllButton.getMethod());
+			}
+		});
+		closeAllMenu.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				messageEvent(closeAllMenu.getMethod());
 			}
 		});
 		runStrategyButton.setToolTipText("Run Strategy");
@@ -257,6 +272,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 		getButtonPanel().add(searchButton, 7);
 		getButtonPanel().add(refreshButton, 8);
 		getButtonPanel().add(deleteButton, 9);
+		getButtonPanel().add(closeAllButton, 10);
 
 		actionMenu.add(brokerDataMenu, 0);
 		actionMenu.add(testStrategyMenu, 1);
@@ -265,7 +281,8 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 		actionMenu.add(searchMenu, 4);
 		actionMenu.add(refreshMenu, 5);
 		actionMenu.add(deleteMenu, 6);
-		actionMenu.add(propertiesMenu, 7);
+		actionMenu.add(closeAllMenu, 7);
+		actionMenu.add(propertiesMenu, 8);
 
 		helpMenu.add(disclaimer, 1);
 

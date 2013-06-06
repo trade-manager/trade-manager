@@ -72,14 +72,21 @@ import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
+import org.trade.dictionary.valuetype.OrderType;
+import org.trade.dictionary.valuetype.OverrideConstraints;
+import org.trade.dictionary.valuetype.Side;
+import org.trade.dictionary.valuetype.TimeInForce;
+import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
+import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Account;
@@ -1427,6 +1434,105 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Could not cancel strategy.", ex.getMessage(),
+					ex);
+		}
+	}
+
+	/**
+	 * This method is fired from the Main menu this will close all open
+	 * positions
+	 */
+	public void doCloseAll() {
+		try {
+			for (Tradingday tradingday : m_tradingdays.getTradingdays()) {
+				for (Tradestrategy tradestrategy : tradingday
+						.getTradestrategies()) {
+					doCloseAll(tradestrategy);
+				}
+			}
+		} catch (Exception ex) {
+			this.setErrorMessage("Could not close position.", ex.getMessage(),
+					ex);
+		}
+	}
+
+	/**
+	 * This method is fired from the Contract Tab this will close all open
+	 * positions
+	 */
+	public void doCloseAll(Tradestrategy tradestrategy) {
+		try {
+
+			PositionOrders positionOrders = m_tradePersistentModel
+					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
+			tradestrategy = m_tradePersistentModel
+					.findTradestrategyById(tradestrategy.getIdTradeStrategy());
+			for (TradeOrder order : positionOrders.getTradeOrders()) {
+				if (!order.getIsFilled()
+						&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
+					m_brokerModel.onCancelOrder(order);
+				}
+			}
+			if (positionOrders.hasOpenTradePosition()) {
+				int result = JOptionPane.showConfirmDialog(this.getFrame(),
+						"Are you sure you want to close "
+								+ tradestrategy.getContract().getSymbol()
+								+ " open position with a market order?",
+						"Information", JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+
+					TradeOrder openTradeOrder = null;
+					for (TradeOrder tradeOrder : positionOrders
+							.getTradeOrders()) {
+						if (tradeOrder.getIsOpenPosition()) {
+							openTradeOrder = tradeOrder;
+						}
+					}
+					int openQuantity = Math.abs(positionOrders
+							.getOpenTradePosition().getOpenQuantity());
+
+					if (openQuantity > 0) {
+						String action = Action.BUY;
+						if (Side.BOT.equals(positionOrders
+								.getOpenTradePosition().getSide())) {
+							action = Action.SELL;
+						}
+						TradeOrder tradeOrder = new TradeOrder(tradestrategy,
+								action, new Date(), OrderType.MKT,
+								openQuantity, null, null,
+								OverrideConstraints.YES, TimeInForce.DAY,
+								TriggerMethod.DEFAULT);
+						tradeOrder.setTransmit(true);
+						if (null != openTradeOrder.getFAProfile()) {
+							tradeOrder.setFAProfile(openTradeOrder
+									.getFAProfile());
+						} else {
+							if (openTradeOrder.getFAGroup() != null) {
+								tradeOrder.setFAGroup(openTradeOrder
+										.getFAGroup());
+								tradeOrder.setFAMethod(openTradeOrder
+										.getFAMethod());
+								tradeOrder.setFAPercent(openTradeOrder
+										.getFAPercent());
+							} else {
+								if (null != tradestrategy.getPortfolio()
+										.getIndividualAccount()) {
+
+									tradeOrder.setAccountNumber(tradestrategy
+											.getPortfolio()
+											.getIndividualAccount()
+											.getAccountNumber());
+								}
+							}
+						}
+						tradeOrder = m_brokerModel.onPlaceOrder(
+								tradestrategy.getContract(), tradeOrder);
+
+					}
+				}
+			}
+		} catch (Exception ex) {
+			this.setErrorMessage("Could not close position.", ex.getMessage(),
 					ex);
 		}
 	}

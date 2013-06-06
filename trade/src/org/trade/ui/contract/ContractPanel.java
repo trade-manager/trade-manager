@@ -146,6 +146,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private BaseButton cancelStrategiesButton = null;
 	private BaseButton refreshButton = null;
 	private BaseButton closeAllButton = null;
+	private BaseButton closeAllPositionsButton = null;
 	private BaseButton propertiesButton = null;
 	private DecodeComboBoxEditor periodEditorComboBox = null;
 	private Integer backfillOffsetDays = 0;
@@ -203,6 +204,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			cancelStrategiesButton.setToolTipText("Cancel Strategy");
 			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
 			closeAllButton = new BaseButton(this, BaseUIPropertyCodes.CLOSE_ALL);
+			closeAllPositionsButton = new BaseButton(controller,
+					BaseUIPropertyCodes.CLOSE_ALL);
+			closeAllPositionsButton
+					.setToolTipText("Cancel Orders Close Position");
 			m_tradeOrderModel = new TradeOrderTableModel();
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
@@ -276,6 +281,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel5.add(executeButton, null);
 			jPanel5.add(cancelButton, null);
 			jPanel5.add(refreshButton, null);
+			jPanel5.add(closeAllPositionsButton, null);
 			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
 			JToolBar jToolBar1 = new JToolBar();
 			jToolBar1.setLayout(new BorderLayout());
@@ -877,6 +883,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					.getSelectedComponent();
 			if (null == currentTab) {
 				m_tradeOrderModel.setData(new Tradestrategy());
+				closeAllPositionsButton.setTransferObject(new Tradestrategy());
 			} else {
 				/*
 				 * Refresh the Tradestrategy this will get the latest orders.
@@ -889,6 +896,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				rsDetail.setSortKeys(null);
 				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy
 						.getBarSize()));
+				closeAllPositionsButton.setTransferObject(tradestrategy);
 			}
 			/*
 			 * Refresh the header label above the chart and buttons.
@@ -1119,6 +1127,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			throws Exception {
 		propertiesButton.setEnabled(false);
 		executeButton.setEnabled(false);
+		closeAllPositionsButton.setEnabled(false);
 		brokerDataButton.setEnabled(false);
 		cancelButton.setEnabled(false);
 		cancelStrategiesButton.setEnabled(false);
@@ -1137,6 +1146,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				executeButton.setEnabled(true);
 				refreshButton.setEnabled(true);
 				cancelButton.setEnabled(true);
+				closeAllPositionsButton.setEnabled(true);
 				m_tradeOrderTable.enablePopupMenu(true);
 			} else {
 				periodEditorComboBox.setEnabled(true);
