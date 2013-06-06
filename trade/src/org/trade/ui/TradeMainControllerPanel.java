@@ -1462,7 +1462,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	public void doCloseAll(Tradestrategy tradestrategy) {
 		try {
-
+			if (null == tradestrategy.getIdTradeStrategy()) {
+				return;
+			}
 			PositionOrders positionOrders = m_tradePersistentModel
 					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
 			tradestrategy = m_tradePersistentModel

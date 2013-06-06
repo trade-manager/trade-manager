@@ -137,6 +137,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private BaseButton testStrategyButton = null;
 	private BaseButton brokerDataButton = null;
 	private BaseButton cancelStrategiesButton = null;
+	private BaseButton closeAllPositionsButton = null;
 	private BaseButton reAssignButton = null;
 	private BaseButton transferButton = null;
 	private DAODecodeComboBoxEditor strategyFromEditorComboBox = null;
@@ -206,6 +207,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			brokerDataButton = new BaseButton(controller,
 					BaseUIPropertyCodes.DATA);
 			brokerDataButton.setToolTipText("Get Chart Data");
+			closeAllPositionsButton = new BaseButton(controller,
+					BaseUIPropertyCodes.CLOSE_ALL);
+			closeAllPositionsButton
+					.setToolTipText("Cancel Orders Close Position");
 			reAssignButton = new BaseButton(this,
 					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));
 			m_tradestrategyModel = new TradestrategyTableModel();
@@ -290,6 +295,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel5.add(runStrategyButton, null);
 			jPanel5.add(cancelStrategiesButton, null);
 			jPanel5.add(deleteTradeOrderButton, null);
+			jPanel5.add(closeAllPositionsButton, null);
 			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
 			JToolBar jToolBar1 = new JToolBar();
 			jToolBar1.setLayout(new BorderLayout());
@@ -1206,6 +1212,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 		deleteTradeOrderButton.setTransferObject(transferObject);
 		cancelStrategiesButton.setTransferObject(transferObject);
+		closeAllPositionsButton.setTransferObject(transferObject);
 		testStrategyButton.setTransferObject(transferObject);
 		ordersButton.setTransferObject(transferObject);
 		brokerDataButton.setTransferObject(transferObject);
@@ -1213,6 +1220,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 		deleteTradeOrderButton.setEnabled(enable);
 		cancelStrategiesButton.setEnabled(enable);
+		closeAllPositionsButton.setEnabled(enable);
 		testStrategyButton.setEnabled(enable);
 		brokerDataButton.setEnabled(enable);
 		ordersButton.setEnabled(enable);
