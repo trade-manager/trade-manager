@@ -276,23 +276,23 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method findTradestrategyById.
+	 * Method findPositionOrdersById.
 	 * 
-	 * @param id
+	 * @param idTradestrategy
 	 *            Integer
 	 * 
 	 * @return PositionOrders
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	public PositionOrders findPositionOrdersById(Integer id)
+	public PositionOrders findPositionOrdersById(Integer idTradestrategy)
 			throws PersistentModelException {
 
 		PositionOrders instance = m_tradestrategyHome
-				.findPositionOrdersById(id);
+				.findPositionOrdersById(idTradestrategy);
 		if (null == instance)
 			throw new PersistentModelException(
-					"Tradestrategy not found for id: " + id);
+					"Tradestrategy not found for id: " + idTradestrategy);
 		return instance;
 	}
 

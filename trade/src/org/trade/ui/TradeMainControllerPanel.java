@@ -1529,7 +1529,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						}
 						tradeOrder = m_brokerModel.onPlaceOrder(
 								tradestrategy.getContract(), tradeOrder);
-
 					}
 				}
 			}

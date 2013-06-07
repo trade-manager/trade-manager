@@ -97,6 +97,7 @@ import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
@@ -879,6 +880,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		try {
 			this.clearStatusBarMessage();
 			Tradestrategy tradestrategy = null;
+			PositionOrders position = null;
 			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 					.getSelectedComponent();
 			if (null == currentTab) {
@@ -890,6 +892,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				 */
 				tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(currentTab.getTradestrategy());
+				position = m_tradePersistentModel
+						.findPositionOrdersById(currentTab.getTradestrategy()
+								.getIdTradeStrategy());
 				currentTab.setTradestrategy(tradestrategy);
 				m_tradeOrderModel.setData(tradestrategy);
 				RowSorter<?> rsDetail = m_tradeOrderTable.getRowSorter();
@@ -940,7 +945,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				TradeOrder prevTradeOrder = null;
 				Integer prevIdTradePosition = null;
 
-				for (TradeOrder order : tradestrategy.getTradeOrders()) {
+				for (TradeOrder order : position.getTradeOrders()) {
 
 					if (order.getIsFilled()) {
 						Integer quantity = order.getFilledQuantity();
@@ -948,69 +953,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 								|| prevIdTradePosition != order
 										.getTradePosition()
 										.getIdTradePosition()) {
-
-							netValue = netValue
-									+ order.getTradePosition()
-											.getTotalNetValue().doubleValue();
-
-							commision = commision
-									+ order.getTradePosition()
-											.getTotalCommission().doubleValue();
-
 							prevIdTradePosition = order.getTradePosition()
 									.getIdTradePosition();
-							if (order.getTradePosition().getIsOpen()) {
-								unRealizedPL = order.getTradePosition()
-										.getTotalNetValue().doubleValue()
-										+ (order.getTradePosition()
-												.getOpenQuantity() * tradestrategy
-												.getDatasetContainer()
-												.getBaseCandleSeries()
-												.getContract().getLastPrice()
-												.doubleValue());
-
-							}
-							if (order.getTradePosition().getTotalSellQuantity()
-									.doubleValue() > 0
-									&& order.getTradePosition()
-											.getTotalBuyQuantity()
-											.doubleValue() > 0) {
-
-								double qty = (order.getTradePosition()
-										.getTotalSellQuantity().doubleValue() - order
-										.getTradePosition()
-										.getTotalBuyQuantity().doubleValue());
-								if (qty == 0) {
-									realizedPL = realizedPL
-											+ order.getTradePosition()
-													.getTotalNetValue()
-													.doubleValue()
-											- order.getTradePosition()
-													.getTotalCommission()
-													.doubleValue();
-								} else {
-
-									double avgBuy = (order.getTradePosition()
-											.getTotalBuyValue().doubleValue() / order
-											.getTradePosition()
-											.getTotalBuyQuantity()
-											.doubleValue());
-
-									double avgSell = (order.getTradePosition()
-											.getTotalSellValue().doubleValue() / order
-											.getTradePosition()
-											.getTotalSellQuantity()
-											.doubleValue());
-
-									int sideVal = (Side.BOT.equals(side) ? -1
-											: 1);
-									realizedPL = realizedPL
-											+ (qty * (avgSell - avgBuy) * sideVal)
-											- order.getTradePosition()
-													.getTotalCommission()
-													.doubleValue();
-								}
-							}
 						}
 
 						if (null != prevTradeOrder) {
@@ -1032,6 +976,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					}
 					prevTradeOrder = order;
 				}
+
+				unRealizedPL = position.getUnRealizedProfit(
+						tradestrategy.getDatasetContainer()
+								.getBaseCandleSeries().getContract()
+								.getLastPrice()).doubleValue();
+				realizedPL = position.getRealizedProfit().doubleValue();
+				netValue = position.getNetValue().doubleValue();
+				commision = position.getCommision().doubleValue();
 			}
 
 			netValue = netValue - commision;

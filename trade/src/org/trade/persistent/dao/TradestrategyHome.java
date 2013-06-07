@@ -97,17 +97,18 @@ public class TradestrategyHome {
 	/**
 	 * Method findPositionOrdersById.
 	 * 
-	 * @param id
+	 * @param idTradestrategy
 	 *            Integer
 	 * @return PositionOrders
 	 */
-	public synchronized PositionOrders findPositionOrdersById(Integer id) {
+	public synchronized PositionOrders findPositionOrdersById(
+			Integer idTradestrategy) {
 
 		try {
 			entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			PositionOrders instance = entityManager.find(PositionOrders.class,
-					id);
+					idTradestrategy);
 			if (null != instance) {
 				for (TradePosition tradePosition : instance.getContract()
 						.getTradePositions()) {
