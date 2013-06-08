@@ -708,18 +708,39 @@ public class CandleSeries extends IndicatorSeries {
 			this.vwapVolumeValues.clear();
 			this.rollingCandleValues.clear();
 		} else {
+
+			/*
+			 * If no trades happen in a period then no 5 sec bar is sent from
+			 * TWS. So we need to advance the rolling periods until we catch up
+			 * with the incoming time. This makes sure the rolling period lists
+			 * contain the correct number of periods i.e. 5min of 5sec bars
+			 * should contain 300/5 = 60 items.
+			 */
 			long periodLength = this.getBarSize() / rollupInterval * 1000;
+			RegularTimePeriod currPeriod = period;
+			long nextPeriod = this.getRollingCandle().getLastUpdateDate()
+					.getTime()
+					+ periodLength;
 
-			while ((this.getRollingCandle().getLastUpdateDate().getTime() + periodLength) != lastUpdateDate
-					.getTime()) {
+			while (nextPeriod != lastUpdateDate.getTime()) {
 
-				updateRollingCandle(period, rollupInterval, this
+				/*
+				 * Find the correct period.
+				 */
+				int index = this.indexOf(new Date(nextPeriod));
+				if (index > -1)
+					currPeriod = this.getPeriod(index);
+				_log.warn("currPeriod: " + currPeriod + " nextPeriod: "
+						+ new Date(nextPeriod) + " lastUpdateDate:"
+						+ lastUpdateDate + " rolling close: "
+						+ this.getRollingCandle().getClose() + " close: "
+						+ close);
+				updateRollingCandle(currPeriod, rollupInterval, this
 						.getRollingCandle().getClose(), this.getRollingCandle()
 						.getClose(), this.getRollingCandle().getClose(), this
 						.getRollingCandle().getClose(), 0, 0, this
-						.getRollingCandle().getClose(), new Date(this
-						.getRollingCandle().getLastUpdateDate().getTime()
-						+ periodLength));
+						.getRollingCandle().getClose(), new Date(nextPeriod));
+				nextPeriod = nextPeriod + periodLength;
 			}
 		}
 
