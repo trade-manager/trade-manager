@@ -509,8 +509,8 @@ public class CandleSeries extends IndicatorSeries {
 
 			candleItem = (CandleItem) this.getDataItem(index);
 
-			this.updateRollingCandle(candleItem.getPeriod(), rollupInterval,
-					open, high, low, close, volume, tradeCount, vwap, time);
+			this.rollCandle(candleItem.getPeriod(), rollupInterval, open, high,
+					low, close, volume, tradeCount, vwap, time);
 
 			if (candleItem.getHigh() < high) {
 				candleItem.setHigh(high);
@@ -555,8 +555,8 @@ public class CandleSeries extends IndicatorSeries {
 					TradingCalendar.getSpecificTime(this.getStartTime(), start),
 					TradingCalendar.getSpecificTime(this.getEndTime(), start));
 			CandlePeriod period = new CandlePeriod(start, this.getBarSize());
-			this.updateRollingCandle(period, rollupInterval, open, high, low,
-					close, volume, tradeCount, vwap, time);
+			this.rollCandle(period, rollupInterval, open, high, low, close,
+					volume, tradeCount, vwap, time);
 
 			candleItem = new CandleItem(this.getContract(), tradingday, period,
 					open, high, low, close, volume,
@@ -662,6 +662,72 @@ public class CandleSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method rollCandle. Creates a rolling candle that is the sum of the under
+	 * lying candle. So 5 sec bars rolled up to 5min bars will rollup interval
+	 * of 5min/5sec = 60.
+	 * 
+	 * @param period
+	 *            the candle period.
+	 * @param rollupInterval
+	 *            the rollup Interval.
+	 * @param open
+	 *            the open-value.
+	 * @param high
+	 *            the high-value.
+	 * @param low
+	 *            the low-value.
+	 * @param close
+	 *            the close-value.
+	 * @param volume
+	 *            the volume value.
+	 * @param vwap
+	 *            the volume weighted price.
+	 * @param tradeCount
+	 *            the number of trades.
+	 * @param lastUpdateDate
+	 *            the lastUpdateDate
+	 */
+	public void rollCandle(RegularTimePeriod period, int rollupInterval,
+			double open, double high, double low, double close, long volume,
+			int tradeCount, double vwap, Date lastUpdateDate) {
+
+		if (rollupInterval != this.rollingCandle.rollupInterval) {
+			this.prevRollingCandle = this.rollingCandle;
+			this.rollingCandle = new RollingCandle(period, rollupInterval,
+					open, high, low, close, volume, tradeCount, vwap,
+					lastUpdateDate);
+
+			this.sumVwapVolume = new Double(0);
+			this.sumVolume = new Long(0);
+			this.sumTradeCount = new Integer(0);
+			this.openValues.clear();
+			this.highValues.clear();
+			this.lowValues.clear();
+			this.volumeValues.clear();
+			this.tradeCountValues.clear();
+			this.vwapVolumeValues.clear();
+			this.rollingCandleValues.clear();
+		} else {
+			long periodLength = this.getBarSize() / rollupInterval * 1000;
+
+			while ((this.getRollingCandle().getLastUpdateDate().getTime() + periodLength) != lastUpdateDate
+					.getTime()) {
+
+				updateRollingCandle(period, rollupInterval, this
+						.getRollingCandle().getClose(), this.getRollingCandle()
+						.getClose(), this.getRollingCandle().getClose(), this
+						.getRollingCandle().getClose(), 0, 0, this
+						.getRollingCandle().getClose(), new Date(this
+						.getRollingCandle().getLastUpdateDate().getTime()
+						+ periodLength));
+			}
+		}
+
+		updateRollingCandle(period, rollupInterval, open, high, low, close,
+				volume, tradeCount, vwap, lastUpdateDate);
+	}
+
+	/**
 	 * Method updateRollupCandle. Creates a rolling candle that is the sum of
 	 * the under lying candle. So 5 sec bars rolled up to 5min bars will rollup
 	 * interval of 5min/5sec = 60.
@@ -691,24 +757,6 @@ public class CandleSeries extends IndicatorSeries {
 			int rollupInterval, double open, double high, double low,
 			double close, long volume, int tradeCount, double vwap,
 			Date lastUpdateDate) {
-
-		if (rollupInterval != this.rollingCandle.rollupInterval) {
-			this.prevRollingCandle = this.rollingCandle;
-			this.rollingCandle = new RollingCandle(period, rollupInterval,
-					open, high, low, close, volume, tradeCount, vwap,
-					lastUpdateDate);
-
-			this.sumVwapVolume = new Double(0);
-			this.sumVolume = new Long(0);
-			this.sumTradeCount = new Integer(0);
-			this.openValues.clear();
-			this.highValues.clear();
-			this.lowValues.clear();
-			this.volumeValues.clear();
-			this.tradeCountValues.clear();
-			this.vwapVolumeValues.clear();
-			this.rollingCandleValues.clear();
-		}
 
 		if (rollupInterval == this.rollingCandleValues.size()) {
 			this.prevRollingCandle = this.rollingCandleValues.removeLast();
