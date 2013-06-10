@@ -716,22 +716,26 @@ public class CandleSeries extends IndicatorSeries {
 			 * contain the correct number of periods i.e. 5min of 5sec bars
 			 * should contain 300/5 = 60 items.
 			 */
-			if (rollupInterval > 1) {
-				RegularTimePeriod currPeriod = period;
-				long rollingPeriodLength = this.getBarSize() / rollupInterval
-						* 1000;
-				long nextRollingPeriod = this.getRollingCandle()
-						.getLastUpdateDate().getTime()
-						+ rollingPeriodLength;
 
-				while (nextRollingPeriod != lastUpdateDate.getTime()) {
+			RegularTimePeriod currPeriod = period;
+			long rollingPeriodLength = this.getBarSize() / rollupInterval
+					* 1000;
+			long nextRollingPeriod = this.getRollingCandle()
+					.getLastUpdateDate().getTime()
+					+ rollingPeriodLength;
 
-					/*
-					 * Find the correct period.
-					 */
-					int index = this.indexOf(new Date(nextRollingPeriod));
-					if (index > -1)
-						currPeriod = this.getPeriod(index);
+			while (nextRollingPeriod != lastUpdateDate.getTime()) {
+
+				/*
+				 * Find the correct period.
+				 */
+				int index = this.indexOf(new Date(nextRollingPeriod));
+				if (index > -1)
+					currPeriod = this.getPeriod(index);
+				if ((nextRollingPeriod >= currPeriod.getFirstMillisecond())
+						&& (nextRollingPeriod <= currPeriod
+								.getLastMillisecond())) {
+
 					/*
 					 * Add in the missing periods with zero volume and last
 					 * close price.
@@ -742,8 +746,8 @@ public class CandleSeries extends IndicatorSeries {
 							.getRollingCandle().getClose(), this
 							.getRollingCandle().getClose(), 0, 0, 0, new Date(
 							nextRollingPeriod));
-					nextRollingPeriod = nextRollingPeriod + rollingPeriodLength;
 				}
+				nextRollingPeriod = nextRollingPeriod + rollingPeriodLength;
 			}
 		}
 
