@@ -732,11 +732,6 @@ public class CandleSeries extends IndicatorSeries {
 					int index = this.indexOf(new Date(nextRollingPeriod));
 					if (index > -1)
 						currPeriod = this.getPeriod(index);
-					_log.warn("currPeriod: " + currPeriod + " nextPeriod: "
-							+ new Date(nextRollingPeriod) + " lastUpdateDate:"
-							+ lastUpdateDate + " rolling close: "
-							+ this.getRollingCandle().getClose() + " close: "
-							+ close);
 					/*
 					 * Add in the missing periods with zero volume and last
 					 * close price.
