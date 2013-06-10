@@ -44,6 +44,7 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
+import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.heikinashi.HeikinAshiItem;
 
 /**
@@ -248,19 +249,22 @@ public class HeikinAshiSeries extends IndicatorSeries {
 		}
 
 		if (source.getItemCount() > skip) {
+			// get the current data item...
+			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
+
 			if (source.getItemCount() > 1) {
 				/*
 				 * Get the prev candle the new candle may be just forming or
 				 * completed if back testing. Hiekin-Ashi bats must be formed
 				 * from completed bars.
 				 */
-				int index = this.indexOf(source.getRollingCandle().getPeriod());
+				int index = this.indexOf(candleItem.getPeriod());
 				double xOpenPrev = 0;
 				double xClosePrev = 0;
 				if (index < 1) {
 					if (this.isEmpty()) {
-						xOpenPrev = source.getRollingCandle().getOpen();
-						xClosePrev = source.getRollingCandle().getClose();
+						xOpenPrev = candleItem.getOpen();
+						xClosePrev = candleItem.getClose();
 					} else {
 						HeikinAshiItem prevItem = (HeikinAshiItem) this
 								.getDataItem(this.getItemCount() - 1);
@@ -274,24 +278,21 @@ public class HeikinAshiSeries extends IndicatorSeries {
 					xOpenPrev = prevItem.getOpen();
 				}
 
-				double xClose = (source.getRollingCandle().getOpen()
-						+ source.getRollingCandle().getHigh()
-						+ source.getRollingCandle().getLow() + source
-						.getRollingCandle().getClose()) / 4;
+				double xClose = (candleItem.getOpen() + candleItem.getHigh()
+						+ candleItem.getLow() + candleItem.getClose()) / 4;
 
 				double xOpen = (xOpenPrev + xClosePrev) / 2;
 
-				double xHigh = Math.max(source.getRollingCandle().getHigh(),
+				double xHigh = Math.max(candleItem.getHigh(),
 						Math.max(xClosePrev, xOpenPrev));
 
-				double xLow = Math.min(source.getRollingCandle().getLow(),
+				double xLow = Math.min(candleItem.getLow(),
 						Math.min(xClosePrev, xOpenPrev));
 
 				if (index < 0) {
-					this.add(new HeikinAshiItem(source.getContract(), source
-							.getRollingCandle().getPeriod(), xOpen, xHigh,
-							xLow, xClose, source.getRollingCandle()
-									.getLastUpdateDate()), false);
+					this.add(new HeikinAshiItem(source.getContract(),
+							candleItem.getPeriod(), xOpen, xHigh, xLow, xClose,
+							candleItem.getLastUpdateDate()), false);
 				} else {
 					HeikinAshiItem currDataItem = (HeikinAshiItem) this
 							.getDataItem(index);
@@ -299,7 +300,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 					currDataItem.setHigh(xHigh);
 					currDataItem.setLow(xLow);
 					currDataItem.setClose(xClose);
-					currDataItem.setLastUpdateDate(source.getRollingCandle()
+					currDataItem.setLastUpdateDate(candleItem
 							.getLastUpdateDate());
 				}
 			}

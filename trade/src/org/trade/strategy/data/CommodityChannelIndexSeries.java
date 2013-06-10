@@ -323,9 +323,16 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 
-			double typicalPrice = (source.getRollingCandle().getClose()
-					+ source.getRollingCandle().getHigh() + source
-					.getRollingCandle().getLow()) / 3;
+			/*
+			 * Rolling candles can be used to smooth transition between bars.
+			 */
+			
+			// double typicalPrice = (source.getRollingCandle().getClose()
+			// + source.getRollingCandle().getHigh() + source
+			// .getRollingCandle().getLow()) / 3;
+			
+			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
+					.getLow()) / 3;
 
 			if (0 != typicalPrice) {
 				if (typicalPriceValues.size() == getLength()) {
