@@ -716,36 +716,39 @@ public class CandleSeries extends IndicatorSeries {
 			 * contain the correct number of periods i.e. 5min of 5sec bars
 			 * should contain 300/5 = 60 items.
 			 */
-			RegularTimePeriod currPeriod = period;
-			long rollingPeriodLength = this.getBarSize() / rollupInterval
-					* 1000;
-			long nextRollingPeriod = this.getRollingCandle()
-					.getLastUpdateDate().getTime()
-					+ rollingPeriodLength;
+			if (rollupInterval > 1) {
+				RegularTimePeriod currPeriod = period;
+				long rollingPeriodLength = this.getBarSize() / rollupInterval
+						* 1000;
+				long nextRollingPeriod = this.getRollingCandle()
+						.getLastUpdateDate().getTime()
+						+ rollingPeriodLength;
 
-			while (nextRollingPeriod != lastUpdateDate.getTime()) {
+				while (nextRollingPeriod != lastUpdateDate.getTime()) {
 
-				/*
-				 * Find the correct period.
-				 */
-				int index = this.indexOf(new Date(nextRollingPeriod));
-				if (index > -1)
-					currPeriod = this.getPeriod(index);
-				_log.warn("currPeriod: " + currPeriod + " nextPeriod: "
-						+ new Date(nextRollingPeriod) + " lastUpdateDate:"
-						+ lastUpdateDate + " rolling close: "
-						+ this.getRollingCandle().getClose() + " close: "
-						+ close);
-				/*
-				 * Add in the missing periods with zero volume and last close
-				 * price.
-				 */
-				updateRollingCandle(currPeriod, rollupInterval, this
-						.getRollingCandle().getClose(), this.getRollingCandle()
-						.getClose(), this.getRollingCandle().getClose(), this
-						.getRollingCandle().getClose(), 0, 0, 0, new Date(
-						nextRollingPeriod));
-				nextRollingPeriod = nextRollingPeriod + rollingPeriodLength;
+					/*
+					 * Find the correct period.
+					 */
+					int index = this.indexOf(new Date(nextRollingPeriod));
+					if (index > -1)
+						currPeriod = this.getPeriod(index);
+					_log.warn("currPeriod: " + currPeriod + " nextPeriod: "
+							+ new Date(nextRollingPeriod) + " lastUpdateDate:"
+							+ lastUpdateDate + " rolling close: "
+							+ this.getRollingCandle().getClose() + " close: "
+							+ close);
+					/*
+					 * Add in the missing periods with zero volume and last
+					 * close price.
+					 */
+					updateRollingCandle(currPeriod, rollupInterval, this
+							.getRollingCandle().getClose(), this
+							.getRollingCandle().getClose(), this
+							.getRollingCandle().getClose(), this
+							.getRollingCandle().getClose(), 0, 0, 0, new Date(
+							nextRollingPeriod));
+					nextRollingPeriod = nextRollingPeriod + rollingPeriodLength;
+				}
 			}
 		}
 
