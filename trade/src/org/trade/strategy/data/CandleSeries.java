@@ -743,8 +743,7 @@ public class CandleSeries extends IndicatorSeries {
 				updateRollingCandle(currPeriod, rollupInterval, this
 						.getRollingCandle().getClose(), this.getRollingCandle()
 						.getClose(), this.getRollingCandle().getClose(), this
-						.getRollingCandle().getClose(), 0, 0, this
-						.getRollingCandle().getClose(), new Date(
+						.getRollingCandle().getClose(), 0, 0, 0, new Date(
 						nextRollingPeriod));
 				nextRollingPeriod = nextRollingPeriod + rollingPeriodLength;
 			}
