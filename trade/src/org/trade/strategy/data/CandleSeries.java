@@ -693,6 +693,18 @@ public class CandleSeries extends IndicatorSeries {
 
 		if (rollupInterval != this.rollingCandle.rollupInterval) {
 			this.prevRollingCandle = this.rollingCandle;
+
+			/*
+			 * going to a lower period i.e say we were 5 min bars now going to
+			 * 5sec bars within the current 5min bar.
+			 */
+			if (period.equals(this.prevRollingCandle.getPeriod())) {
+				open = this.prevRollingCandle.getOpen();
+				high = this.prevRollingCandle.getHigh();
+				low = this.prevRollingCandle.getLow();
+				vwap = this.prevRollingCandle.getVwap();
+			}
+
 			this.rollingCandle = new RollingCandle(period, rollupInterval,
 					open, high, low, close, volume, tradeCount, vwap,
 					lastUpdateDate);

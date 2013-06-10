@@ -104,7 +104,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	private final Object lockStrategyWorker = new Object();
 	private boolean listeningCandles = false;
 	private int currentCandleCount = -1;
-	private Date strategyLastFired = null;
+	private Date strategyLastFired = new Date();
 
 	/**
 	 * Constructor for AbstractStrategyRule. An abstract class that implements
@@ -376,8 +376,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 							 * gets the Orders/OpenPosition and Contract
 							 */
 							reFreshPositionOrders();
-							strategyLastFired = new Date();
 							runStrategy(candleSeries, newCandle);
+							strategyLastFired = new Date();
 						}
 					}
 					/*
