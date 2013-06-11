@@ -606,11 +606,33 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Method getRollingCandle.
 	 * 
-	 * @return Candle
+	 * @return RollingCandle
 	 */
 	@Transient
 	public RollingCandle getRollingCandle() {
-		return this.rollingCandle;
+		return this.rollingCandleValues.getFirst();
+	}
+
+	/**
+	 * Method getRollingCandle.
+	 * 
+	 * @param index
+	 *            int
+	 * @return RollingCandle
+	 */
+	@Transient
+	public RollingCandle getRollingCandle(int index) {
+		return this.rollingCandleValues.get(index);
+	}
+
+	/**
+	 * Method getRollingCandleSize.
+	 * 
+	 * @return int
+	 */
+	@Transient
+	public int getRollingCandleSize() {
+		return this.rollingCandleValues.size();
 	}
 
 	/**
@@ -692,26 +714,54 @@ public class CandleSeries extends IndicatorSeries {
 			int tradeCount, double vwap, Date lastUpdateDate) {
 
 		if (rollupInterval != this.rollingCandle.rollupInterval) {
-			this.prevRollingCandle = this.rollingCandle;
 
 			/*
 			 * going to a lower period i.e say we were 5 min bars now going to
 			 * 5sec bars within the current 5min bar.
 			 */
-			if (period.equals(this.prevRollingCandle.getPeriod())) {
-				open = this.prevRollingCandle.getOpen();
-				high = this.prevRollingCandle.getHigh();
-				low = this.prevRollingCandle.getLow();
-				vwap = this.prevRollingCandle.getVwap();
+			if (!this.isEmpty()) {
+
+				/*
+				 * Build current bar
+				 */
+				CandleItem candleItem = (CandleItem) this.getDataItem(this
+						.getItemCount() - 1);
+				if (candleItem.getPeriod().equals(period)) {
+					this.rollingCandle = new RollingCandle(period,
+							rollupInterval, candleItem.getOpen(),
+							candleItem.getHigh(), candleItem.getLow(),
+							candleItem.getClose(), candleItem.getVolume(),
+							candleItem.getCount(), candleItem.getVwap(),
+							lastUpdateDate);
+
+					this.sumVwapVolume = new Double(candleItem.getVwap()
+							* candleItem.getVolume());
+					this.sumVolume = candleItem.getVolume();
+					this.sumTradeCount = candleItem.getCount();
+				} else {
+					this.sumVwapVolume = new Double(0);
+					this.sumVolume = new Long(0);
+					this.sumTradeCount = new Integer(0);
+				}
+				if (this.getItemCount() > 1) {
+					CandleItem prevCandleItem = (CandleItem) this
+							.getDataItem(this.getItemCount() - 2);
+					this.prevRollingCandle = new RollingCandle(
+							prevCandleItem.getPeriod(),
+							this.rollingCandle.rollupInterval,
+							prevCandleItem.getOpen(), prevCandleItem.getHigh(),
+							prevCandleItem.getLow(), prevCandleItem.getClose(),
+							prevCandleItem.getVolume(),
+							prevCandleItem.getCount(),
+							prevCandleItem.getVwap(),
+							prevCandleItem.getLastUpdateDate());
+				}
+			} else {
+				this.sumVwapVolume = new Double(0);
+				this.sumVolume = new Long(0);
+				this.sumTradeCount = new Integer(0);
 			}
 
-			this.rollingCandle = new RollingCandle(period, rollupInterval,
-					open, high, low, close, volume, tradeCount, vwap,
-					lastUpdateDate);
-
-			this.sumVwapVolume = new Double(0);
-			this.sumVolume = new Long(0);
-			this.sumTradeCount = new Integer(0);
 			this.openValues.clear();
 			this.highValues.clear();
 			this.lowValues.clear();
