@@ -48,7 +48,6 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jfree.data.time.RegularTimePeriod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.client.BackTestBroker;
@@ -2394,18 +2393,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			double low, double close, long volume, double vwap, int tradeCount) {
 		// Called when a candle finishes
 		try {
-			volume = volume * 100;
-			if (volume == 0)
-				return;
 
+			volume = volume * 100;
 			Date date = TradingCalendar.getDate(time * 1000);
 
 			// Only store data that is during mkt hours
 			if (m_realTimeBarsRequests.containsKey(reqId)) {
 				Contract contract = m_realTimeBarsRequests.get(reqId);
-				/*
-				 * Only record 5sec bars that have some volume.
-				 */
 
 				synchronized (contract) {
 					Collections.sort(contract.getTradestrategies(),
@@ -2415,13 +2409,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.getTradestrategies()) {
 						StrategyData datasetContainer = tradestrategy
 								.getDatasetContainer();
-						/*
-						 * RollupInterval is the number of bar that rollup to
-						 * make the bar. So for real time we have 5sec bars
-						 * rolling up to the barSize so for 5min bars calc is
-						 * 5min *60/5 seconds = 60. i.e 60 values summed
-						 * together give us the rolling vwap and volume values.
-						 */
+
 						if (TradingCalendar.isMarketHours(tradestrategy
 								.getTradingday().getOpen(), tradestrategy
 								.getTradingday().getClose(), date)) {
@@ -2437,83 +2425,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								datasetContainer.getBaseCandleSeries()
 										.getContract().setLastPrice(price);
 							}
-							/*
-							 * If no trades happen in a period then no 5 sec bar
-							 * is sent from TWS. So we need to advance the
-							 * rolling periods until we catch up with the
-							 * incoming time. This makes sure the rolling period
-							 * lists contain the correct number of periods i.e.
-							 * 5min of 5sec bars should contain 300/5 = 60
-							 * items.
-							 */
 
-							RegularTimePeriod currPeriod = datasetContainer
-									.getBaseCandleSeries().getPeriodStart(date,
-											tradestrategy.getBarSize());
-							long rollingPeriodLength = 5 * 1000;
-							long nextRollingPeriod = datasetContainer
-									.getBaseCandleSeries().getRollingCandle()
-									.getLastUpdateDate().getTime()
-									+ rollingPeriodLength;
-
-							while (nextRollingPeriod != date.getTime()) {
-
-								/*
-								 * Find the correct period.
-								 */
-								int index = datasetContainer
-										.getBaseCandleSeries().indexOf(
-												new Date(nextRollingPeriod));
-								if (index > -1)
-									currPeriod = datasetContainer
-											.getBaseCandleSeries().getPeriod(
-													index);
-								if ((nextRollingPeriod >= currPeriod
-										.getFirstMillisecond())
-										&& (nextRollingPeriod <= currPeriod
-												.getLastMillisecond())) {
-
-									/*
-									 * Add in the missing periods with zero
-									 * volume and last close price.
-									 */
-									datasetContainer.buildCandle(new Date(
-											nextRollingPeriod),
-											datasetContainer
-													.getBaseCandleSeries()
-													.getRollingCandle()
-													.getClose(),
-											datasetContainer
-													.getBaseCandleSeries()
-													.getRollingCandle()
-													.getClose(),
-											datasetContainer
-													.getBaseCandleSeries()
-													.getRollingCandle()
-													.getClose(),
-											datasetContainer
-													.getBaseCandleSeries()
-													.getRollingCandle()
-													.getClose(), 0, 0, 0,
-											(tradestrategy.getBarSize() / 5));
-
-									if (!datasetContainer.getBaseCandleSeries()
-											.isEmpty()) {
-										CandleItem candleItem = (CandleItem) datasetContainer
-												.getBaseCandleSeries()
-												.getDataItem(
-														datasetContainer
-																.getBaseCandleSeries()
-																.getItemCount() - 1);
-										if (updateCandleDB) {
-											m_tradePersistentModel
-													.persistCandleItem(candleItem);
-										}
-									}
-								}
-								nextRollingPeriod = nextRollingPeriod
-										+ rollingPeriodLength;
-							}
 							datasetContainer.buildCandle(date, open, high, low,
 									close, volume, vwap, tradeCount,
 									(tradestrategy.getBarSize() / 5));
