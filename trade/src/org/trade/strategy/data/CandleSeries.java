@@ -1263,7 +1263,9 @@ public class CandleSeries extends IndicatorSeries {
 		 * @throws CloneNotSupportedException
 		 */
 		public Object clone() throws CloneNotSupportedException {
-			return (RollingCandle) super.clone();
+			RollingCandle clone = (RollingCandle) super.clone();
+			clone.period = this.getPeriod();
+			return clone;
 		}
 	}
 }
