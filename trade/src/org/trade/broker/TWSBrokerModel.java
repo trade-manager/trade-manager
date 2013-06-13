@@ -2477,23 +2477,25 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									 * Add in the missing periods with zero
 									 * volume and last close price.
 									 */
-									datasetContainer
-											.buildCandle(
-													new Date(nextRollingPeriod),
-													datasetContainer
-															.getBaseCandleSeries()
-															.getRollingCandle()
-															.getClose(),
-													datasetContainer
-															.getBaseCandleSeries()
-															.getRollingCandle()
-															.getClose(),
-													datasetContainer
-															.getBaseCandleSeries()
-															.getRollingCandle()
-															.getClose(), close,
-													0, 0, 0, (tradestrategy
-															.getBarSize() / 5));
+									datasetContainer.buildCandle(new Date(
+											nextRollingPeriod),
+											datasetContainer
+													.getBaseCandleSeries()
+													.getRollingCandle()
+													.getClose(),
+											datasetContainer
+													.getBaseCandleSeries()
+													.getRollingCandle()
+													.getClose(),
+											datasetContainer
+													.getBaseCandleSeries()
+													.getRollingCandle()
+													.getClose(),
+											datasetContainer
+													.getBaseCandleSeries()
+													.getRollingCandle()
+													.getClose(), 0, 0, 0,
+											(tradestrategy.getBarSize() / 5));
 
 									if (!datasetContainer.getBaseCandleSeries()
 											.isEmpty()) {
