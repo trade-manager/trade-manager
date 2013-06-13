@@ -772,6 +772,8 @@ public class CandleSeries extends IndicatorSeries {
 							prevCandleItem.getLastUpdateDate());
 				}
 			} else {
+				this.rollingCandle.rollupInterval = rollupInterval;
+				this.rollingCandle.open = open;
 				this.sumVwapVolume = new Double(0);
 				this.sumVolume = new Long(0);
 				this.sumTradeCount = new Integer(0);
@@ -1263,9 +1265,7 @@ public class CandleSeries extends IndicatorSeries {
 		 * @throws CloneNotSupportedException
 		 */
 		public Object clone() throws CloneNotSupportedException {
-			RollingCandle clone = (RollingCandle) super.clone();
-			clone.period = this.getPeriod();
-			return clone;
+			return (RollingCandle) super.clone();
 		}
 	}
 }
