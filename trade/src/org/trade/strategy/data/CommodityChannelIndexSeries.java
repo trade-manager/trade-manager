@@ -326,11 +326,11 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 			/*
 			 * Rolling candles can be used to smooth transition between bars.
 			 */
-			
+
 			// double typicalPrice = (source.getRollingCandle().getClose()
 			// + source.getRollingCandle().getHigh() + source
 			// .getRollingCandle().getLow()) / 3;
-			
+
 			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
 					.getLow()) / 3;
 

@@ -530,31 +530,14 @@ public class CandleSeries extends IndicatorSeries {
 			candleItem.setLastUpdateDate(time);
 		} else {
 
-			/*
-			 * For 60min time period start the clock at 9:00am. This matches
-			 * most charting platforms.
-			 */
-			Date startBusDate = TradingCalendar.getSpecificTime(
-					this.getStartTime(), time);
-			if (3600 == this.getBarSize()) {
-				if (TradingCalendar.getMinute(startBusDate) == 30) {
-					startBusDate = TradingCalendar
-							.addMinutes(startBusDate, -30);
-					if (TradingCalendar.getMinute(time) == 30
-							&& startBusDate.equals(time)) {
-						time = TradingCalendar.addMinutes(time, -30);
-					}
-				}
-			}
-			long periods = (time.getTime() - startBusDate.getTime()) / 1000
-					/ this.getBarSize();
-			long startPeriod = startBusDate.getTime()
-					+ (periods * this.getBarSize() * 1000);
-			Date start = new Date(startPeriod);
+			RegularTimePeriod period = this.getPeriodStart(time,
+					this.getBarSize());
 			Tradingday tradingday = new Tradingday(
-					TradingCalendar.getSpecificTime(this.getStartTime(), start),
-					TradingCalendar.getSpecificTime(this.getEndTime(), start));
-			CandlePeriod period = new CandlePeriod(start, this.getBarSize());
+					TradingCalendar.getSpecificTime(this.getStartTime(),
+							period.getStart()),
+					TradingCalendar.getSpecificTime(this.getEndTime(),
+							period.getStart()));
+
 			this.rollCandle(period, rollupInterval, open, high, low, close,
 					volume, tradeCount, vwap, time);
 
@@ -601,6 +584,38 @@ public class CandleSeries extends IndicatorSeries {
 		clone.barSize = this.getBarSize();
 		clone.rollingCandle = new RollingCandle();
 		return clone;
+	}
+
+	/**
+	 * Method getPeriodStart.
+	 * 
+	 * @param time
+	 *            Date
+	 * @param barSize
+	 *            int
+	 * @return RegularTimePeriod
+	 */
+	@Transient
+	public RegularTimePeriod getPeriodStart(Date time, int barSize) {
+		/*
+		 * For 60min time period start the clock at 9:00am. This matches most
+		 * charting platforms.
+		 */
+		Date startBusDate = TradingCalendar.getSpecificTime(
+				this.getStartTime(), time);
+		if (3600 == barSize) {
+			if (TradingCalendar.getMinute(startBusDate) == 30) {
+				startBusDate = TradingCalendar.addMinutes(startBusDate, -30);
+				if (TradingCalendar.getMinute(time) == 30
+						&& startBusDate.equals(time)) {
+					time = TradingCalendar.addMinutes(time, -30);
+				}
+			}
+		}
+		long periods = (time.getTime() - startBusDate.getTime()) / 1000
+				/ barSize;
+		long startPeriod = startBusDate.getTime() + (periods * barSize * 1000);
+		return new CandlePeriod(new Date(startPeriod), barSize);
 	}
 
 	/**
@@ -716,7 +731,7 @@ public class CandleSeries extends IndicatorSeries {
 		if (rollupInterval != this.rollingCandle.rollupInterval) {
 
 			/*
-			 * going to a lower period i.e say we were 5 min bars now going to
+			 * Going to a lower period i.e say we were 5 min bars now going to
 			 * 5sec bars within the current 5min bar.
 			 */
 			if (!this.isEmpty()) {
@@ -769,48 +784,6 @@ public class CandleSeries extends IndicatorSeries {
 			this.tradeCountValues.clear();
 			this.vwapVolumeValues.clear();
 			this.rollingCandleValues.clear();
-		} else {
-
-			/*
-			 * If no trades happen in a period then no 5 sec bar is sent from
-			 * TWS. So we need to advance the rolling periods until we catch up
-			 * with the incoming time. This makes sure the rolling period lists
-			 * contain the correct number of periods i.e. 5min of 5sec bars
-			 * should contain 300/5 = 60 items.
-			 */
-
-			RegularTimePeriod currPeriod = period;
-			long rollingPeriodLength = this.getBarSize() / rollupInterval
-					* 1000;
-			long nextRollingPeriod = this.getRollingCandle()
-					.getLastUpdateDate().getTime()
-					+ rollingPeriodLength;
-
-			while (nextRollingPeriod != lastUpdateDate.getTime()) {
-
-				/*
-				 * Find the correct period.
-				 */
-				int index = this.indexOf(new Date(nextRollingPeriod));
-				if (index > -1)
-					currPeriod = this.getPeriod(index);
-				if ((nextRollingPeriod >= currPeriod.getFirstMillisecond())
-						&& (nextRollingPeriod <= currPeriod
-								.getLastMillisecond())) {
-
-					/*
-					 * Add in the missing periods with zero volume and last
-					 * close price.
-					 */
-					updateRollingCandle(currPeriod, rollupInterval, this
-							.getRollingCandle().getClose(), this
-							.getRollingCandle().getClose(), this
-							.getRollingCandle().getClose(), this
-							.getRollingCandle().getClose(), 0, 0, 0, new Date(
-							nextRollingPeriod));
-				}
-				nextRollingPeriod = nextRollingPeriod + rollingPeriodLength;
-			}
 		}
 
 		updateRollingCandle(period, rollupInterval, open, high, low, close,

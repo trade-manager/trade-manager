@@ -144,9 +144,10 @@ public interface PersistentModel {
 	 * 
 	 * @param candleItem
 	 *            CandleItem
+	 * @return Candle
 	 * @throws PersistentModelException
 	 */
-	void persistCandleItem(CandleItem candleItem)
+	Candle persistCandleItem(CandleItem candleItem)
 			throws PersistentModelException;
 
 	/**

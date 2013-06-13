@@ -695,10 +695,11 @@ public class TradePersistentModel implements PersistentModel {
 	 * 
 	 * @param candleItem
 	 *            CandleItem
+	 * @return Candle
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistCandleItem(CandleItem)
 	 */
-	public void persistCandleItem(CandleItem candleItem)
+	public Candle persistCandleItem(CandleItem candleItem)
 			throws PersistentModelException {
 		try {
 			synchronized (candleItem) {
@@ -734,7 +735,7 @@ public class TradePersistentModel implements PersistentModel {
 								currCandle.getVersion());
 					}
 				}
-				m_aspectHome.persist(candleItem.getCandle());
+				return (Candle) m_aspectHome.persist(candleItem.getCandle());
 			}
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
