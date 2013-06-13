@@ -2450,8 +2450,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							RegularTimePeriod currPeriod = datasetContainer
 									.getBaseCandleSeries().getPeriodStart(date,
 											tradestrategy.getBarSize());
-							long rollingPeriodLength = (tradestrategy
-									.getBarSize() / 5) * 1000;
+							long rollingPeriodLength = 5 * 1000;
 							long nextRollingPeriod = datasetContainer
 									.getBaseCandleSeries().getRollingCandle()
 									.getLastUpdateDate().getTime()
