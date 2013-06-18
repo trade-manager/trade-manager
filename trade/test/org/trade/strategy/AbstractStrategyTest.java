@@ -769,10 +769,10 @@ public class AbstractStrategyTest extends TestCase {
 	}
 
 	@Test
-	public void testIsThereUnfilledOpenPositionOrder() {
+	public void testHasActiveOrders() {
 		try {
 			createOpenBuyPosition(new Money(100), false);
-			TestCase.assertTrue(this.strategyProxy.isThereUnfilledOrders());
+			TestCase.assertTrue(this.strategyProxy.hasActiveOrders());
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsThereOpenPosition Msg:"
 					+ ex.getMessage());

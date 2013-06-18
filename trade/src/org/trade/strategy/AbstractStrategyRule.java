@@ -1423,12 +1423,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method isThereUnfilledOrders.
+	 * Method hasActiveOrders.
 	 * 
 	 * @return boolean
 	 */
 
-	public boolean isThereUnfilledOrders() {
+	public boolean hasActiveOrders() {
 		for (TradeOrder tradeOrder : getPositionOrders().getTradeOrders()) {
 			if (tradeOrder.isActive())
 				return true;
