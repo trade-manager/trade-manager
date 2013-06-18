@@ -53,7 +53,6 @@ import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
-import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.OverrideConstraints;
 import org.trade.dictionary.valuetype.Side;
@@ -867,9 +866,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void cancelOrder(TradeOrder order) throws StrategyRuleException {
 		try {
 			if (null != order) {
-				if (!order.getIsFilled()
-						&& !OrderStatus.CANCELLED.equals(order.getStatus())
-						&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
+				if (order.isActive()) {
 					getBrokerManager().onCancelOrder(order);
 				}
 			}
@@ -898,9 +895,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				// Find the open position orders
 				for (TradeOrder order : this.getPositionOrders()
 						.getTradeOrders()) {
-					if (!order.getIsOpenPosition() && !order.getIsFilled()
-							&& !OrderStatus.CANCELLED.equals(order.getStatus())
-							&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
+					if (order.isActive()) {
 						/*
 						 * Note that this will give 2X the open amount. But when
 						 * an OCA order is filled the cancel tends to happen
@@ -1213,11 +1208,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				for (TradeOrder tradeOrder : this.getPositionOrders()
 						.getTradeOrders()) {
 					if (!tradeOrder.getIsOpenPosition()
-							&& !tradeOrder.getIsFilled()
-							&& !OrderStatus.CANCELLED.equals(tradeOrder
-									.getStatus())
-							&& !OrderStatus.INACTIVE.equals(tradeOrder
-									.getStatus())) {
+							&& tradeOrder.isActive()) {
 						if (OrderType.STP.equals(tradeOrder.getOrderType())
 								&& null != tradeOrder.getOcaGroupName()) {
 							tradeOrder.setAuxPrice(stopPrice
@@ -1439,9 +1430,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	public boolean isThereUnfilledOrders() {
 		for (TradeOrder tradeOrder : getPositionOrders().getTradeOrders()) {
-			if (!tradeOrder.getIsFilled()
-					&& !OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
-					&& !OrderStatus.INACTIVE.equals(tradeOrder.getStatus()))
+			if (tradeOrder.isActive())
 				return true;
 		}
 		return false;
@@ -1510,9 +1499,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public Money getStopPriceMinUnfilled() {
 		double stopPrice = Double.MAX_VALUE;
 		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
-			if (!tradeOrder.getIsFilled()
-					&& !OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
-					&& !OrderStatus.INACTIVE.equals(tradeOrder.getStatus())
+			if (tradeOrder.isActive()
 					&& OrderType.STP.equals(tradeOrder.getOrderType())) {
 				stopPrice = Math.min(stopPrice, tradeOrder.getAuxPrice()
 						.doubleValue());

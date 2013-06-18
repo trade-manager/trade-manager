@@ -517,9 +517,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Tradestrategy instance = m_tradePersistentModel
 						.findTradestrategyById(tradestrategy);
 				for (TradeOrder todayTradeOrder : instance.getTradeOrders()) {
-					if (!todayTradeOrder.getIsFilled()
-							&& OrderStatus.CANCELLED.equals(todayTradeOrder
-									.getStatus())) {
+					if (todayTradeOrder.isActive()) {
 						if (!openTradeOrders.containsKey(todayTradeOrder
 								.getOrderKey())) {
 							todayTradeOrder.setStatus(OrderStatus.CANCELLED);
@@ -1470,8 +1468,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			tradestrategy = m_tradePersistentModel
 					.findTradestrategyById(tradestrategy.getIdTradeStrategy());
 			for (TradeOrder order : positionOrders.getTradeOrders()) {
-				if (!order.getIsFilled()
-						&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
+				if (order.isActive()) {
 					m_brokerModel.onCancelOrder(order);
 				}
 			}

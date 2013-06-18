@@ -122,7 +122,8 @@ public class TradeOrderTableModel extends TableModel {
 		OrderStatus orderStatus = (OrderStatus) this.getValueAt(row, 8);
 		if (null != orderStatus) {
 			if (OrderStatus.CANCELLED.equals(orderStatus.getCode())
-					|| OrderStatus.FILLED.equals(orderStatus.getCode())) {
+					|| OrderStatus.FILLED.equals(orderStatus.getCode())
+					|| OrderStatus.INACTIVE.equals(orderStatus.getCode())) {
 				return false;
 			}
 		}

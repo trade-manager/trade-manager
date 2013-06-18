@@ -64,6 +64,7 @@ import javax.persistence.Version;
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
+import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OverrideConstraints;
 import org.trade.dictionary.valuetype.TimeInForce;
 import org.trade.dictionary.valuetype.TriggerMethod;
@@ -1047,6 +1048,21 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	@Column(name = "status", length = 45)
 	public String getStatus() {
 		return this.status;
+	}
+
+	/**
+	 * Method isActive.
+	 * 
+	 * @return boolean
+	 */
+
+	public boolean isActive() {
+
+		if (!this.getIsFilled()
+				&& !OrderStatus.CANCELLED.equals(this.getStatus())
+				&& !OrderStatus.INACTIVE.equals(this.getStatus()))
+			return true;
+		return false;
 	}
 
 	/**
