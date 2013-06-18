@@ -868,7 +868,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 		try {
 			if (null != order) {
 				if (!order.getIsFilled()
-						&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
+						&& !OrderStatus.CANCELLED.equals(order.getStatus())
+						&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
 					getBrokerManager().onCancelOrder(order);
 				}
 			}
@@ -898,7 +899,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 				for (TradeOrder order : this.getPositionOrders()
 						.getTradeOrders()) {
 					if (!order.getIsOpenPosition() && !order.getIsFilled()
-							&& !OrderStatus.CANCELLED.equals(order.getStatus())) {
+							&& !OrderStatus.CANCELLED.equals(order.getStatus())
+							&& !OrderStatus.INACTIVE.equals(order.getStatus())) {
 						/*
 						 * Note that this will give 2X the open amount. But when
 						 * an OCA order is filled the cancel tends to happen
@@ -1213,6 +1215,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 					if (!tradeOrder.getIsOpenPosition()
 							&& !tradeOrder.getIsFilled()
 							&& !OrderStatus.CANCELLED.equals(tradeOrder
+									.getStatus())
+							&& !OrderStatus.INACTIVE.equals(tradeOrder
 									.getStatus())) {
 						if (OrderType.STP.equals(tradeOrder.getOrderType())
 								&& null != tradeOrder.getOcaGroupName()) {
@@ -1435,7 +1439,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	public boolean isThereUnfilledOrders() {
 		for (TradeOrder tradeOrder : getPositionOrders().getTradeOrders()) {
-			if (!tradeOrder.getIsFilled())
+			if (!tradeOrder.getIsFilled()
+					&& !OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
+					&& !OrderStatus.INACTIVE.equals(tradeOrder.getStatus()))
 				return true;
 		}
 		return false;
@@ -1506,6 +1512,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
 			if (!tradeOrder.getIsFilled()
 					&& !OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
+					&& !OrderStatus.INACTIVE.equals(tradeOrder.getStatus())
 					&& OrderType.STP.equals(tradeOrder.getOrderType())) {
 				stopPrice = Math.min(stopPrice, tradeOrder.getAuxPrice()
 						.doubleValue());
