@@ -1055,7 +1055,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * 
 	 * @return boolean
 	 */
-
+	@Transient
 	public boolean isActive() {
 
 		if (!this.getIsFilled()
