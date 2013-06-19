@@ -61,6 +61,8 @@ public class TradestrategyId extends Aspect implements Serializable {
 
 	private static final long serialVersionUID = -2181676329258092177L;
 
+	private String status;
+
 	public TradestrategyId() {
 	}
 
@@ -84,6 +86,26 @@ public class TradestrategyId extends Aspect implements Serializable {
 	 */
 	public void setIdTradeStrategy(Integer idTradeStrategy) {
 		this.id = idTradeStrategy;
+	}
+
+	/**
+	 * Method getStatus.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "status", length = 20)
+	public String getStatus() {
+		return this.status;
+	}
+
+	/**
+	 * Method setStatus.
+	 * 
+	 * @param status
+	 *            String
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	/**

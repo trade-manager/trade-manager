@@ -646,8 +646,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					strategy.tradeOrderFilled(tradeOrder);
 				}
 			}
-			tradestrategy.setStatus(tradeOrder.getTradestrategy().getStatus());
+			tradestrategy
+					.setStatus(tradeOrder.getTradestrategyId().getStatus());
 			contractPanel.doRefresh(tradestrategy);
+
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
 					ex.getMessage(), ex);
@@ -683,8 +685,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						_log.info("Trade Order cancelled for Symbol: "
 								+ tradestrategy.getContract().getSymbol()
 								+ " order key: " + tradeOrder.getOrderKey());
-						tradestrategy.setStatus(tradeOrder.getTradestrategy()
-								.getStatus());
 						contractPanel.doRefresh(tradestrategy);
 
 					} catch (Exception ex) {
@@ -722,7 +722,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									BasePanel.WARNING);
 							return;
 						}
-						tradestrategy.setStatus(tradeOrder.getTradestrategy()
+						tradestrategy.setStatus(tradeOrder.getTradestrategyId()
 								.getStatus());
 						contractPanel.doRefresh(tradestrategy);
 
