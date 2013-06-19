@@ -1043,13 +1043,12 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	/**
 	 * Method getStatus.
 	 * 
-	 * The order status. Possible values include: 
+	 * The order status. Possible values include:
 	 * 
-	 * · PendingSubmit - indicates
-	 * that you have transmitted the order, but have not yet received
-	 * confirmation that it has been accepted by the order destination. NOTE:
-	 * This order status is not sent by TWS and should be explicitly set by the
-	 * API developer when an order is submitted.
+	 * · PendingSubmit - indicates that you have transmitted the order, but have
+	 * not yet received confirmation that it has been accepted by the order
+	 * destination. NOTE: This order status is not sent by TWS and should be
+	 * explicitly set by the API developer when an order is submitted.
 	 * 
 	 * · PendingCancel - indicates that you have sent a request to cancel the
 	 * order but have not yet received cancel confirmation from the order

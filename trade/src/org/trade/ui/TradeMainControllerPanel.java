@@ -591,6 +591,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						BasePanel.WARNING);
 				return;
 			}
+
 			if (!tradestrategy.getTrade()) {
 				this.setStatusBarMessage(
 						"Warning position opened for Symbol: "
@@ -645,13 +646,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					strategy.tradeOrderFilled(tradeOrder);
 				}
 			}
-			if (contractPanel.isSelected()) {
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						contractPanel.doRefresh(tradestrategy);
-					}
-				});
-			}
+			tradestrategy.setStatus(tradeOrder.getTradestrategy().getStatus());
+			contractPanel.doRefresh(tradestrategy);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
 					ex.getMessage(), ex);
@@ -687,7 +683,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						_log.info("Trade Order cancelled for Symbol: "
 								+ tradestrategy.getContract().getSymbol()
 								+ " order key: " + tradeOrder.getOrderKey());
-
+						tradestrategy.setStatus(tradeOrder.getTradestrategy()
+								.getStatus());
 						contractPanel.doRefresh(tradestrategy);
 
 					} catch (Exception ex) {
@@ -725,6 +722,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									BasePanel.WARNING);
 							return;
 						}
+						tradestrategy.setStatus(tradeOrder.getTradestrategy()
+								.getStatus());
 						contractPanel.doRefresh(tradestrategy);
 
 					} catch (Exception ex) {
@@ -767,8 +766,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							m_tradingdays.getTradestrategy(
 									tradestrategy.getIdTradeStrategy())
 									.setStatus(tradestrategy.getStatus());
-							if (contractPanel.isSelected())
-								contractPanel.doRefresh(tradestrategy);
+							contractPanel.doRefresh(tradestrategy);
 						}
 
 					} catch (Exception ex) {
@@ -798,8 +796,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				m_tradingdays.getTradestrategy(
 						tradestrategy.getIdTradeStrategy()).setStatus(
 						tradestrategy.getStatus());
-				if (contractPanel.isSelected())
-					contractPanel.doRefresh(tradestrategy);
+				contractPanel.doRefresh(tradestrategy);
 			}
 			tradingdayPanel.removeStrategyWorker(strategyClassName
 					+ tradestrategy.getIdTradeStrategy());
