@@ -110,13 +110,13 @@ COMMIT;
 
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (1,'0','8','0.02','0.04','0','100','0.05', '0.05',0);
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (2,'8.01','15','0.02', '0.03','0','100', '0.05', '0.05',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (3,'15.01','30','0.04', '0.02','0','100', '0.05', '0.05',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (4,'30.01','50','0.08', '0.02','0', '50', '0.07', '0.05',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (5,'50.01','80','0.12','0.02','0','20', '0.15', '0.08',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (6,'80.01','140','0.12','0.02','0','20', '0.20', '0.10',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (7,'140.01','300','0.30','0.02','0','10', '0.25', '0.15',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (8,'300.01','1000','0.30','0.02','0','10', '0.25', '0.20',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (9,'1000.01','3000','0.60','0.02','0','10', '0.5', '0.20',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (3,'15.01','30','0.03', '0.02','0','100', '0.05', '0.05',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (4,'30.01','50','0.04', '0.02','0', '50', '0.07', '0.07',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (5,'50.01','80','0.6','0.02','0','20', '0.15', '0.15',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (6,'80.01','140','0.08','0.02','0','20', '0.20', '0.20',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (7,'140.01','300','0.15','0.02','0','10', '0.25', '0.25',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (8,'300.01','1000','0.15','0.02','0','10', '0.25', '0.30',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (9,'1000.01','3000','0.30','0.02','0','10', '0.5', '0.50',0);
 
 COMMIT;
 
