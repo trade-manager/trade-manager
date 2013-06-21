@@ -490,12 +490,13 @@ public class CandleSeries extends IndicatorSeries {
 	 * 
 	 * @param rollupInterval
 	 *            the interval to roll up Vwap
-	 * 
+	 * @param lastUpdateDate
+	 *            Date the update time.
 	 * @return completedCandle the last completed candle or -1 if still building
 	 */
 	boolean buildCandle(Date time, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
-			int rollupInterval) {
+			int rollupInterval, Date lastUpdateDate) {
 
 		int index = this.indexOf(time);
 		// _log.info("Symbol :" + this.getSymbol() + " Bar Time: " + time
@@ -527,7 +528,11 @@ public class CandleSeries extends IndicatorSeries {
 				candleItem.setCount(tradeCount);
 			}
 			candleItem.setVwap(this.rollingCandle.getVwap());
-			candleItem.setLastUpdateDate(time);
+
+			if (null == lastUpdateDate)
+				lastUpdateDate = candleItem.getPeriod().getEnd();
+
+			candleItem.setLastUpdateDate(lastUpdateDate);
 		} else {
 
 			RegularTimePeriod period = this.getPeriodStart(time,
@@ -538,12 +543,15 @@ public class CandleSeries extends IndicatorSeries {
 					TradingCalendar.getSpecificTime(this.getEndTime(),
 							period.getStart()));
 
+			if (null == lastUpdateDate)
+				lastUpdateDate = period.getEnd();
+
 			this.rollCandle(period, rollupInterval, open, high, low, close,
-					volume, tradeCount, vwap, time);
+					volume, tradeCount, vwap, lastUpdateDate);
 
 			candleItem = new CandleItem(this.getContract(), tradingday, period,
 					open, high, low, close, volume,
-					this.rollingCandle.getVwap(), tradeCount, time);
+					this.rollingCandle.getVwap(), tradeCount, lastUpdateDate);
 			this.add(candleItem, false);
 			return true;
 		}

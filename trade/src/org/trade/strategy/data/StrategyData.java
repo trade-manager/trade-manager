@@ -249,7 +249,7 @@ public class StrategyData extends Worker {
 							candelItem.getVwap(),
 							candelItem.getCount(),
 							this.getCandleDataset().getSeries(0).getBarSize()
-									/ getBaseCandleSeries().getBarSize());
+									/ getBaseCandleSeries().getBarSize(), null);
 			updateIndicators(this.getCandleDataset(), newBar);
 		}
 		this.getCandleDataset().getSeries(0).fireSeriesChanged();
@@ -278,14 +278,18 @@ public class StrategyData extends Worker {
 	 *            int This is the barSize we are trading on over the barSize of
 	 *            the incoming data. Note the results should be an integer. i.e
 	 *            5min/1min 60min/5min but not 5min/2min.
+	 * 
+	 * @param lastUpdateDate
+	 *            Date the update time.
 	 * @return boolean
 	 */
 	public boolean buildCandle(Date time, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
-			int rollupInterval) {
+			int rollupInterval, Date lastUpdateDate) {
 
 		boolean newBar = this.getBaseCandleSeries().buildCandle(time, open,
-				high, low, close, volume, vwap, tradeCount, rollupInterval);
+				high, low, close, volume, vwap, tradeCount, rollupInterval,
+				lastUpdateDate);
 
 		this.currentBaseCandleCount = this.getBaseCandleSeries().getItemCount() - 1;
 
@@ -494,7 +498,7 @@ public class StrategyData extends Worker {
 		series.clear();
 		for (int i = 0; i < count; i++) {
 			series.buildCandle(period.getStart(), open, high, low, close,
-					volume, vwap, tradeCount, 1);
+					volume, vwap, tradeCount, 1, null);
 			high = high + (0.02 * longShort);
 			low = low + (0.02 * longShort);
 			open = open + (0.02 * longShort);

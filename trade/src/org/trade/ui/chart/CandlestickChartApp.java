@@ -386,7 +386,7 @@ public class CandlestickChartApp extends BasePanel {
 							datasetContainer.buildCandle(time, open, high, low,
 									close, volume, (open + close) / 2,
 									((int) volume / 100), periodSeconds
-											/ BarSize.FIVE_MIN);
+											/ BarSize.FIVE_MIN, null);
 						}
 					}
 				}

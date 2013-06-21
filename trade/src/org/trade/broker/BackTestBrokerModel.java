@@ -1243,7 +1243,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 							tradestrategy.getDatasetContainer().buildCandle(
 									date, open, high, low, close, volume, vwap,
-									tradeCount, 1);
+									tradeCount, 1, null);
 							BigDecimal price = (new BigDecimal(close))
 									.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 							tradestrategy.getDatasetContainer()

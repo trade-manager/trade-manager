@@ -614,13 +614,12 @@ public class CandleDataset extends AbstractXYDataset implements
 			List<Candle> candles) {
 		datasetContainer.clearBaseCandleDataset();
 		for (Candle candle : candles) {
-			datasetContainer
-					.buildCandle(candle.getStartPeriod(), candle.getOpen()
-							.doubleValue(), candle.getHigh().doubleValue(),
-							candle.getLow().doubleValue(), candle.getClose()
-									.doubleValue(), candle.getVolume(), candle
-									.getVwap().doubleValue(), candle
-									.getTradeCount(), 1);
+			datasetContainer.buildCandle(candle.getStartPeriod(), candle
+					.getOpen().doubleValue(), candle.getHigh().doubleValue(),
+					candle.getLow().doubleValue(), candle.getClose()
+							.doubleValue(), candle.getVolume(), candle
+							.getVwap().doubleValue(), candle.getTradeCount(),
+					1, null);
 			datasetContainer.getBaseCandleSeries().getContract()
 					.setLastAskPrice(candle.getClose());
 			datasetContainer.getBaseCandleSeries().getContract()

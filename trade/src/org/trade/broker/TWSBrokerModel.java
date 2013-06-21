@@ -2296,7 +2296,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 							tradestrategy.getDatasetContainer().buildCandle(
 									date, open, high, low, close, volume, vwap,
-									tradeCount, 1);
+									tradeCount, 1, null);
 							BigDecimal price = (new BigDecimal(close))
 									.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 							tradestrategy.getDatasetContainer()
@@ -2428,7 +2428,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 							datasetContainer.buildCandle(date, open, high, low,
 									close, volume, vwap, tradeCount,
-									(tradestrategy.getBarSize() / 5));
+									(tradestrategy.getBarSize() / 5), new Date(
+											date.getTime() + 4999));
 
 							if (!datasetContainer.getBaseCandleSeries()
 									.isEmpty()) {

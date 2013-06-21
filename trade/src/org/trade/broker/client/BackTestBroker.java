@@ -269,7 +269,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						candle.getLow().doubleValue(),
 						candle.getClose().doubleValue(), candle.getVolume(),
 						candle.getVwap().doubleValue(), candle.getTradeCount(),
-						this.tradestrategy.getBarSize() / candle.getBarSize());
+						this.tradestrategy.getBarSize() / candle.getBarSize(),
+						candle.getLastUpdateDate());
 
 				this.tradestrategy.getDatasetContainer().getBaseCandleSeries()
 						.getContract().setLastAskPrice(candle.getClose());

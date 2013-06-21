@@ -687,7 +687,7 @@ public class AbstractStrategyTest extends TestCase {
 		try {
 			this.tradestrategy.getDatasetContainer().buildCandle(
 					this.tradestrategy.getTradingday().getOpen(), 100d, 101d,
-					99d, 100d, 100000l, 100d, 100, 1);
+					99d, 100d, 100000l, 100d, 100, 1, null);
 			CandleItem candleItem = this.strategyProxy
 					.getCandle(this.tradestrategy.getTradingday().getOpen());
 			TestCase.assertNotNull(candleItem);
