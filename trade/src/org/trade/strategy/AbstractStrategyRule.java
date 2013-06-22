@@ -1615,6 +1615,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
+	/**
+	 * Method getOrderCreateDate. If the current candle last update + 1 min is
+	 * after current time we must be live trading so use currrent time for
+	 * create date otherwise use test bar.
+	 * 
+	 * @return Date
+	 * @throws StrategyRuleException
+	 */
 	private Date getOrderCreateDate() {
 		Date createDate = new Date();
 		if (!TradingCalendar.addMinutes(
