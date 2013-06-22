@@ -637,8 +637,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 			}
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
-					action, this.getCurrentCandle().getLastUpdateDate(),
-					orderType, quantity, auxPrice.getBigDecimalValue(),
+					action, this.getOrderCreateDate(), orderType, quantity,
+					auxPrice.getBigDecimalValue(),
 					limitPrice.getBigDecimalValue(), overrideConstraints,
 					timeInForce, triggerMethod);
 			tradeOrder.setOcaGroupName(ocaGroupName);
@@ -821,8 +821,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STPLMT, quantity,
 					entryPrice.getBigDecimalValue(),
-					limitPrice.getBigDecimalValue(), this.getCurrentCandle()
-							.getLastUpdateDate());
+					limitPrice.getBigDecimalValue(), this.getOrderCreateDate());
 
 			tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
 			tradeOrder.setTransmit(transmit);
@@ -967,8 +966,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.LMT, quantity, null,
-					targetPrice.getBigDecimalValue(), this.getCurrentCandle()
-							.getLastUpdateDate());
+					targetPrice.getBigDecimalValue(), this.getOrderCreateDate());
 
 			orderTarget.setOcaType(2);
 			orderTarget.setTransmit(true);
@@ -984,8 +982,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STP, quantity,
-					stopPrice.getBigDecimalValue(), null, this
-							.getCurrentCandle().getLastUpdateDate());
+					stopPrice.getBigDecimalValue(), null,
+					this.getOrderCreateDate());
 			orderStop.setOcaType(2);
 			orderStop.setTransmit(stopTransmit);
 			orderStop.setOcaGroupName(ocaID);
@@ -1089,8 +1087,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.LMT, quantity, null,
-					targetPrice.getBigDecimalValue(), this.getCurrentCandle()
-							.getLastUpdateDate());
+					targetPrice.getBigDecimalValue(), this.getOrderCreateDate());
 
 			orderTarget.setOcaType(2);
 			orderTarget.setTransmit(true);
@@ -1110,8 +1107,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STP, quantity,
-					stopPrice.getBigDecimalValue(), null, this
-							.getCurrentCandle().getLastUpdateDate());
+					stopPrice.getBigDecimalValue(), null,
+					this.getOrderCreateDate());
 			orderStop.setOcaType(2);
 			orderStop.setTransmit(stopTransmit);
 			orderStop.setOcaGroupName(ocaID);
@@ -1543,6 +1540,36 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
+	 * Method tradeOrderFilled.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	public void tradeOrderFilled(TradeOrder tradeOrder) {
+	}
+
+	/**
+	 * Method logCandle.
+	 * 
+	 * @param candle
+	 *            Candle
+	 */
+	public static void logCandle(Candle candle) {
+		_log.info("AbstractStrategyRule Symbol: "
+				+ candle.getContract().getSymbol() + " startPeriod: "
+				+ candle.getStartPeriod() + " endPeriod: "
+				+ candle.getEndPeriod() + " Open: "
+				+ new Money(candle.getOpen()) + " High: "
+				+ new Money(candle.getHigh()) + " Low: "
+				+ new Money(candle.getLow()) + " Close: "
+				+ new Money(candle.getClose()) + " Volume: "
+				+ new Money(candle.getVolume()) + " Vwap: "
+				+ new Money(candle.getVwap()) + " TradeCount: "
+				+ new Money(candle.getTradeCount()) + " LastUpdate: "
+				+ candle.getLastUpdateDate());
+	}
+
+	/**
 	 * Method roundPrice.
 	 * 
 	 * @param price
@@ -1588,33 +1615,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 		}
 	}
 
-	/**
-	 * Method tradeOrderFilled.
-	 * 
-	 * @param tradeOrder
-	 *            TradeOrder
-	 */
-	public void tradeOrderFilled(TradeOrder tradeOrder) {
-	}
-
-	/**
-	 * Method logCandle.
-	 * 
-	 * @param candle
-	 *            Candle
-	 */
-	public static void logCandle(Candle candle) {
-		_log.info("AbstractStrategyRule Symbol: "
-				+ candle.getContract().getSymbol() + " startPeriod: "
-				+ candle.getStartPeriod() + " endPeriod: "
-				+ candle.getEndPeriod() + " Open: "
-				+ new Money(candle.getOpen()) + " High: "
-				+ new Money(candle.getHigh()) + " Low: "
-				+ new Money(candle.getLow()) + " Close: "
-				+ new Money(candle.getClose()) + " Volume: "
-				+ new Money(candle.getVolume()) + " Vwap: "
-				+ new Money(candle.getVwap()) + " TradeCount: "
-				+ new Money(candle.getTradeCount()) + " LastUpdate: "
-				+ candle.getLastUpdateDate());
+	private Date getOrderCreateDate() {
+		Date createDate = new Date();
+		if (!TradingCalendar.addMinutes(
+				this.getCurrentCandle().getLastUpdateDate(), 1).after(
+				createDate)) {
+			createDate = this.getCurrentCandle().getLastUpdateDate();
+		}
+		return createDate;
 	}
 }
