@@ -637,8 +637,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 			}
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
-					action, new Date(), orderType, quantity,
-					auxPrice.getBigDecimalValue(),
+					action, this.getCurrentCandle().getLastUpdateDate(),
+					orderType, quantity, auxPrice.getBigDecimalValue(),
 					limitPrice.getBigDecimalValue(), overrideConstraints,
 					timeInForce, triggerMethod);
 			tradeOrder.setOcaGroupName(ocaGroupName);
@@ -724,6 +724,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 							side, action, 0.01);
 				}
 			}
+			tradeOrder.setUpdateDate(this.getCurrentCandle()
+					.getLastUpdateDate());
 			tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
 			tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
 			tradeOrder.setTransmit(transmit);
@@ -772,7 +774,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		try {
 
-			Date createDate = new Date();
 			Entrylimit entrylimit = getEntryLimit().getValue(entryPrice);
 			String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
 
@@ -820,7 +821,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STPLMT, quantity,
 					entryPrice.getBigDecimalValue(),
-					limitPrice.getBigDecimalValue(), createDate);
+					limitPrice.getBigDecimalValue(), this.getCurrentCandle()
+							.getLastUpdateDate());
 
 			tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
 			tradeOrder.setTransmit(transmit);
@@ -947,8 +949,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public Money createStopAndTargetOrder(Money stopPrice, Money targetPrice,
 			int quantity, boolean stopTransmit) throws StrategyRuleException {
 
-		Date createDate = new Date();
-
 		if (quantity == 0)
 			throw new StrategyRuleException(1, 207, "Quantity cannot be zero");
 
@@ -967,7 +967,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.LMT, quantity, null,
-					targetPrice.getBigDecimalValue(), createDate);
+					targetPrice.getBigDecimalValue(), this.getCurrentCandle()
+							.getLastUpdateDate());
 
 			orderTarget.setOcaType(2);
 			orderTarget.setTransmit(true);
@@ -983,7 +984,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STP, quantity,
-					stopPrice.getBigDecimalValue(), null, createDate);
+					stopPrice.getBigDecimalValue(), null, this
+							.getCurrentCandle().getLastUpdateDate());
 			orderStop.setOcaType(2);
 			orderStop.setTransmit(stopTransmit);
 			orderStop.setOcaGroupName(ocaID);
@@ -1040,8 +1042,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 			int stopRiskUnits, int targetRiskUnits, int percentQty,
 			boolean stopTransmit) throws StrategyRuleException {
 
-		Date createDate = new Date();
-
 		if (!this.isThereOpenPosition()) {
 			throw new StrategyRuleException(1, 209,
 					"Error position is not open");
@@ -1089,7 +1089,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.LMT, quantity, null,
-					targetPrice.getBigDecimalValue(), createDate);
+					targetPrice.getBigDecimalValue(), this.getCurrentCandle()
+							.getLastUpdateDate());
 
 			orderTarget.setOcaType(2);
 			orderTarget.setTransmit(true);
@@ -1109,7 +1110,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STP, quantity,
-					stopPrice.getBigDecimalValue(), null, createDate);
+					stopPrice.getBigDecimalValue(), null, this
+							.getCurrentCandle().getLastUpdateDate());
 			orderStop.setOcaType(2);
 			orderStop.setTransmit(stopTransmit);
 			orderStop.setOcaGroupName(ocaID);
