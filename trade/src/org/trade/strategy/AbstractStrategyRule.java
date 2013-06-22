@@ -1543,36 +1543,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method tradeOrderFilled.
-	 * 
-	 * @param tradeOrder
-	 *            TradeOrder
-	 */
-	public void tradeOrderFilled(TradeOrder tradeOrder) {
-	}
-
-	/**
-	 * Method logCandle.
-	 * 
-	 * @param candle
-	 *            Candle
-	 */
-	public static void logCandle(Candle candle) {
-		_log.info("AbstractStrategyRule Symbol: "
-				+ candle.getContract().getSymbol() + " startPeriod: "
-				+ candle.getStartPeriod() + " endPeriod: "
-				+ candle.getEndPeriod() + " Open: "
-				+ new Money(candle.getOpen()) + " High: "
-				+ new Money(candle.getHigh()) + " Low: "
-				+ new Money(candle.getLow()) + " Close: "
-				+ new Money(candle.getClose()) + " Volume: "
-				+ new Money(candle.getVolume()) + " Vwap: "
-				+ new Money(candle.getVwap()) + " TradeCount: "
-				+ new Money(candle.getTradeCount()) + " LastUpdate: "
-				+ candle.getLastUpdateDate());
-	}
-
-	/**
 	 * Method roundPrice.
 	 * 
 	 * @param price
@@ -1616,5 +1586,35 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throw new StrategyRuleException(1, 420, "Error rounding price: "
 					+ ex.getMessage());
 		}
+	}
+
+	/**
+	 * Method tradeOrderFilled.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	public void tradeOrderFilled(TradeOrder tradeOrder) {
+	}
+
+	/**
+	 * Method logCandle.
+	 * 
+	 * @param candle
+	 *            Candle
+	 */
+	public static void logCandle(Candle candle) {
+		_log.info("AbstractStrategyRule Symbol: "
+				+ candle.getContract().getSymbol() + " startPeriod: "
+				+ candle.getStartPeriod() + " endPeriod: "
+				+ candle.getEndPeriod() + " Open: "
+				+ new Money(candle.getOpen()) + " High: "
+				+ new Money(candle.getHigh()) + " Low: "
+				+ new Money(candle.getLow()) + " Close: "
+				+ new Money(candle.getClose()) + " Volume: "
+				+ new Money(candle.getVolume()) + " Vwap: "
+				+ new Money(candle.getVwap()) + " TradeCount: "
+				+ new Money(candle.getTradeCount()) + " LastUpdate: "
+				+ candle.getLastUpdateDate());
 	}
 }

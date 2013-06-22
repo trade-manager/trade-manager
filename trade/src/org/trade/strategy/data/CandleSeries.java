@@ -511,7 +511,7 @@ public class CandleSeries extends IndicatorSeries {
 			candleItem = (CandleItem) this.getDataItem(index);
 
 			this.rollCandle(candleItem.getPeriod(), rollupInterval, open, high,
-					low, close, volume, tradeCount, vwap, lastUpdateDate);
+					low, close, volume, tradeCount, vwap, time);
 
 			if (candleItem.getHigh() < high) {
 				candleItem.setHigh(high);
