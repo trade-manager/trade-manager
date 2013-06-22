@@ -512,6 +512,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 */
 	private BigDecimal getFilledPrice(TradeOrder order, Candle candle) {
 
+		if (order.getCreateDate().after(candle.getLastUpdateDate())) {
+			return null;
+		}
+
 		/*
 		 * Use the close price for market orders as the candle has been
 		 * processed by the Strategy at this point.
