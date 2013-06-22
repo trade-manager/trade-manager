@@ -518,7 +518,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 */
 	private BigDecimal getFilledPrice(TradeOrder order, CandleItem candleItem) {
 
-		if (!candleItem.getLastUpdateDate().after(order.getCreateDate())) {
+		if (order.getCreateDate().before(candleItem.getLastUpdateDate())) {
 			return null;
 		}
 

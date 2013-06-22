@@ -637,10 +637,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 				}
 			}
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
-					action, this.getTradestrategy().getDatasetContainer()
-							.getBaseCandleSeries().getRollingCandle()
-							.getBarStartDate(), orderType, quantity,
-					auxPrice.getBigDecimalValue(),
+					action, this.getCurrentCandle().getLastUpdateDate(),
+					orderType, quantity, auxPrice.getBigDecimalValue(),
 					limitPrice.getBigDecimalValue(), overrideConstraints,
 					timeInForce, triggerMethod);
 			tradeOrder.setOcaGroupName(ocaGroupName);
@@ -823,9 +821,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STPLMT, quantity,
 					entryPrice.getBigDecimalValue(),
-					limitPrice.getBigDecimalValue(), this.getTradestrategy()
-							.getDatasetContainer().getBaseCandleSeries()
-							.getRollingCandle().getBarStartDate());
+					limitPrice.getBigDecimalValue(), this.getCurrentCandle()
+							.getLastUpdateDate());
 
 			tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
 			tradeOrder.setTransmit(transmit);
@@ -970,9 +967,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.LMT, quantity, null,
-					targetPrice.getBigDecimalValue(), this.getTradestrategy()
-							.getDatasetContainer().getBaseCandleSeries()
-							.getRollingCandle().getBarStartDate());
+					targetPrice.getBigDecimalValue(), this.getCurrentCandle()
+							.getLastUpdateDate());
 
 			orderTarget.setOcaType(2);
 			orderTarget.setTransmit(true);
@@ -989,9 +985,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STP, quantity,
 					stopPrice.getBigDecimalValue(), null, this
-							.getTradestrategy().getDatasetContainer()
-							.getBaseCandleSeries().getRollingCandle()
-							.getBarStartDate());
+							.getCurrentCandle().getLastUpdateDate());
 			orderStop.setOcaType(2);
 			orderStop.setTransmit(stopTransmit);
 			orderStop.setOcaGroupName(ocaID);
@@ -1095,9 +1089,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			TradeOrder orderTarget = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.LMT, quantity, null,
-					targetPrice.getBigDecimalValue(), this.getTradestrategy()
-							.getDatasetContainer().getBaseCandleSeries()
-							.getRollingCandle().getBarStartDate());
+					targetPrice.getBigDecimalValue(), this.getCurrentCandle()
+							.getLastUpdateDate());
 
 			orderTarget.setOcaType(2);
 			orderTarget.setTransmit(true);
@@ -1118,9 +1111,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			TradeOrder orderStop = new TradeOrder(this.getTradestrategy(),
 					action, OrderType.STP, quantity,
 					stopPrice.getBigDecimalValue(), null, this
-							.getTradestrategy().getDatasetContainer()
-							.getBaseCandleSeries().getRollingCandle()
-							.getBarStartDate());
+							.getCurrentCandle().getLastUpdateDate());
 			orderStop.setOcaType(2);
 			orderStop.setTransmit(stopTransmit);
 			orderStop.setOcaGroupName(ocaID);
