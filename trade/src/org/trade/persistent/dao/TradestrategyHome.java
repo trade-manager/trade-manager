@@ -113,6 +113,7 @@ public class TradestrategyHome {
 				for (TradePosition tradePosition : instance.getContract()
 						.getTradePositions()) {
 					if (tradePosition.getIsOpen()) {
+						tradePosition.getTradeOrders().size();
 						instance.setOpenTradePosition(tradePosition);
 						break;
 					}
