@@ -602,7 +602,7 @@ public class AbstractStrategyTest extends TestCase {
 	public void testCloseOpenPosition() {
 		try {
 			createOpenBuyPosition(new Money(100), true);
-			this.strategyProxy.closeOpenPosition();
+			this.strategyProxy.closeOpenPosition(true);
 			this.reFreshPositionOrders();
 			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {

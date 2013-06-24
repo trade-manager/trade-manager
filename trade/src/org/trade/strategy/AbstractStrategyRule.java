@@ -489,9 +489,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 * @param transmit
 	 *            boolean
-	 * @throws ValueTypeException
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder closePosition(boolean transmit)
@@ -1169,15 +1166,19 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * Method closeOpenPosition. This method will close all open order positions
 	 * for the Trade.
 	 * 
+	 * @param transmit
+	 *            boolean
+	 * 
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder closeOpenPosition() throws StrategyRuleException {
+	public TradeOrder closeOpenPosition(boolean transmit)
+			throws StrategyRuleException {
 
 		_log.info("Strategy  closeOpenPosition symbol: " + symbol);
 		try {
 			cancelAllOrders();
 			if (this.isThereOpenPosition()) {
-				return closePosition(true);
+				return closePosition(transmit);
 			}
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 380,

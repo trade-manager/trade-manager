@@ -209,7 +209,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			if (!currentCandle.getLastUpdateDate().before(
 					TradingCalendar.getSpecificTime(
 							currentCandle.getLastUpdateDate(), 15, 58))) {
-				closeOpenPosition();
+				closeOpenPosition(true);
 				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);
 				this.cancel();

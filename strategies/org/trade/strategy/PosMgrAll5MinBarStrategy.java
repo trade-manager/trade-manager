@@ -128,7 +128,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 				 */
 				if (!startPeriod.before(TradingCalendar.getSpecificTime(
 						startPeriod, 15, 58))) {
-					closeOpenPosition();
+					closeOpenPosition(true);
 					_log.info("Rule 15:58:00 close all open positions: "
 							+ getSymbol() + " Time: " + startPeriod);
 					this.cancel();
