@@ -599,10 +599,10 @@ public class AbstractStrategyTest extends TestCase {
 	}
 
 	@Test
-	public void testCloseOpenPosition() {
+	public void testCancelOrdersClosePosition() {
 		try {
 			createOpenBuyPosition(new Money(100), true);
-			this.strategyProxy.closeOpenPosition(true);
+			this.strategyProxy.cancelOrdersClosePosition(true);
 			this.reFreshPositionOrders();
 			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {

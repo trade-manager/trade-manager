@@ -1163,15 +1163,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method closeOpenPosition. This method will close all open order positions
-	 * for the Trade.
+	 * Method cancelOrdersClosePosition. This method will close a position by canceling
+	 * all unfilled orders and creating a market order to close the position.
 	 * 
 	 * @param transmit
 	 *            boolean
 	 * 
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder closeOpenPosition(boolean transmit)
+	public TradeOrder cancelOrdersClosePosition(boolean transmit)
 			throws StrategyRuleException {
 
 		_log.info("Strategy  closeOpenPosition symbol: " + symbol);
