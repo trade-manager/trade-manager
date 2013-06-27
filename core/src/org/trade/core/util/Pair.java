@@ -41,7 +41,8 @@ package org.trade.core.util;
  */
 public final class Pair {
 
-	public double x = 0, y = 0;
+	public double x = 0;
+	public double y = 0;
 
 	/**
 	 * Constructor for Pair.
@@ -56,15 +57,11 @@ public final class Pair {
 		this.y = y;
 	}
 
-	public Pair() {
-	}
-
 	/**
 	 * Method toString.
 	 * 
 	 * @return String
 	 */
-	@Override
 	public String toString() {
 		return x + "," + y;
 	}

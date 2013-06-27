@@ -1163,8 +1163,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method cancelOrdersClosePosition. This method will close a position by canceling
-	 * all unfilled orders and creating a market order to close the position.
+	 * Method cancelOrdersClosePosition. This method will close a position by
+	 * canceling all unfilled orders and creating a market order to close the
+	 * position.
 	 * 
 	 * @param transmit
 	 *            boolean
