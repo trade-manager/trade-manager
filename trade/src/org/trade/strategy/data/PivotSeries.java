@@ -82,8 +82,7 @@ public class PivotSeries extends IndicatorSeries {
 	private Boolean quadratic;
 
 	private PivotCalculator calcPivot = new PivotCalculator();
-	private DAOEntryLimit entryLimits = new DAOEntryLimit();
-
+	
 	public static final String BARS = "Bars";
 	public static final String QUADRATIC = "Quadratic";
 	public static final String SIDE = "Side";
@@ -360,6 +359,7 @@ public class PivotSeries extends IndicatorSeries {
 		}
 		PivotItem dataItem = null;
 		Hashtable<Long, Pair> userDataVector = new Hashtable<Long, Pair>();
+		DAOEntryLimit entryLimits = new DAOEntryLimit();
 
 		boolean pivot = false;
 		String side = null;
