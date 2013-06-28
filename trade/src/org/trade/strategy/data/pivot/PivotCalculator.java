@@ -49,11 +49,11 @@ import org.trade.core.util.Pair;
  */
 public class PivotCalculator {
 
-	private int polyOrder = 2; // default order
-	private double minCorrelationCoeff = 0.6;
+	private static final int _polyOrder = 2; // default order
+	private static final double _minCorrelationCoeff = 0.6;
 	private int listingForm = 0;
 	private MatrixFunctions m_matrixFunctions = new MatrixFunctions();
-	String text = null;
+	private String text = null;
 
 	public PivotCalculator() {
 
@@ -69,8 +69,6 @@ public class PivotCalculator {
 	public boolean calculatePivot(Hashtable<Long, Pair> userDataVector) {
 
 		boolean isPivot = false;
-		polyOrder = (polyOrder < 0) ? 0 : polyOrder;
-		polyOrder = (polyOrder > 512) ? 512 : polyOrder;
 
 		int size = userDataVector.size();
 		if (size > 1) {
@@ -78,14 +76,14 @@ public class PivotCalculator {
 			Collection<Pair> pairs = userDataVector.values();
 			Pair[] userData = pairs.toArray(new Pair[] {});
 			double[] terms = m_matrixFunctions.getCalculatedCoeffients(
-					userData, polyOrder);
+					userData, _polyOrder);
 			double correlationCoeff = m_matrixFunctions
 					.getCorrelationCoefficient(userData, terms);
 			double standardError = m_matrixFunctions.getStandardError(userData,
 					terms);
-			if (correlationCoeff > minCorrelationCoeff) {
+			if (correlationCoeff > _minCorrelationCoeff) {
 				isPivot = true;
-				toPrint(polyOrder, correlationCoeff, standardError, terms,
+				toPrint(_polyOrder, correlationCoeff, standardError, terms,
 						userData.length);
 				for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs
 						.hasMoreElements();) {
@@ -95,7 +93,6 @@ public class PivotCalculator {
 				}
 			}
 		}
-
 		return isPivot;
 	}
 
@@ -162,7 +159,6 @@ public class PivotCalculator {
 		if (polyOrder > (n - 1)) {
 			text += "\n\nWarning: Polynomial degree exceeds data size - 1.";
 		}
-
 		return text;
 	}
 
@@ -180,10 +176,11 @@ public class PivotCalculator {
 		return String.format("%" + w + ".12e", n);
 	}
 
-	/*
-	 * private void changeListingStyle() { listingForm++; listingForm %= 3;
-	 * process(); }
-	 */
+	// public void changeListingStyle() {
+	// listingForm++;
+	// listingForm %= 3;
+	// process();
+	// }
 
 	/**
 	 * Method fx.
