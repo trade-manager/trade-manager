@@ -506,6 +506,7 @@ public class CandleSeries extends IndicatorSeries {
 		// + " rollupInterval: " + rollupInterval);
 
 		CandleItem candleItem = null;
+		boolean newCandle = false;
 		if (index > -1) {
 
 			candleItem = (CandleItem) this.getDataItem(index);
@@ -553,9 +554,11 @@ public class CandleSeries extends IndicatorSeries {
 					open, high, low, close, volume,
 					this.rollingCandle.getVwap(), tradeCount, lastUpdateDate);
 			this.add(candleItem, false);
-			return true;
+
+			newCandle = true;
 		}
-		return false;
+		// printCandleItem(candleItem);
+		return newCandle;
 	}
 
 	/**
@@ -765,6 +768,7 @@ public class CandleSeries extends IndicatorSeries {
 					this.sumVwapVolume = new Double(0);
 					this.sumVolume = new Long(0);
 					this.sumTradeCount = new Integer(0);
+					this.rollingCandle.rollupInterval = rollupInterval;
 				}
 				if (this.getItemCount() > 1) {
 					CandleItem prevCandleItem = (CandleItem) this
@@ -888,6 +892,9 @@ public class CandleSeries extends IndicatorSeries {
 		if (sumVolume > 0)
 			this.rollingCandle.vwap = sumVwapVolume / sumVolume;
 
+		// _log.info("**Date: " + period.getStart() + " sumVwapVolume: "
+		// + sumVwapVolume + " sumVolume: " + sumVolume + " volume: "
+		// + volume + " vwap: " + this.rollingCandle.vwap);
 		try {
 			this.rollingCandleValues
 					.addFirst((RollingCandle) this.rollingCandle.clone());
@@ -1139,6 +1146,24 @@ public class CandleSeries extends IndicatorSeries {
 					+ " High: " + dataItem.getHigh() + " Low: "
 					+ dataItem.getLow() + " Volume: " + dataItem.getVolume());
 		}
+	}
+
+	/**
+	 * Method printCandleItem.
+	 * 
+	 * @param candleItem
+	 *            CandleItem
+	 */
+	public void printCandleItem(CandleItem dataItem) {
+
+		_log.info("Symbol: " + this.getSymbol() + " Start Time: "
+				+ dataItem.getPeriod().getStart() + " Open: "
+				+ dataItem.getOpen() + " High: " + dataItem.getHigh()
+				+ " Low: " + dataItem.getLow() + " Close: "
+				+ dataItem.getClose() + " Vwap: " + dataItem.getVwap()
+				+ " Volume: " + dataItem.getVolume() + " Count: "
+				+ dataItem.getCount() + " LastUpdateDate: "
+				+ dataItem.getLastUpdateDate());
 	}
 
 	public class RollingCandle implements Cloneable {
