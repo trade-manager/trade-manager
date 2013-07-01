@@ -532,6 +532,10 @@ public class CandleSeries extends IndicatorSeries {
 
 			if (null == lastUpdateDate)
 				lastUpdateDate = candleItem.getPeriod().getEnd();
+			Date currTime = TradingCalendar.getDate(new Date());
+			if (lastUpdateDate.after(currTime)) {
+				lastUpdateDate = currTime;
+			}
 
 			candleItem.setLastUpdateDate(lastUpdateDate);
 		} else {
@@ -546,6 +550,10 @@ public class CandleSeries extends IndicatorSeries {
 
 			if (null == lastUpdateDate)
 				lastUpdateDate = period.getEnd();
+			Date currTime = TradingCalendar.getDate(new Date());
+			if (lastUpdateDate.after(currTime)) {
+				lastUpdateDate = currTime;
+			}
 
 			this.rollCandle(period, rollupInterval, open, high, low, close,
 					volume, tradeCount, vwap, lastUpdateDate);

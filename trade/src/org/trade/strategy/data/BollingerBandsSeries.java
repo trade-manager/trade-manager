@@ -68,7 +68,6 @@ public class BollingerBandsSeries extends IndicatorSeries {
 
 	public static final String LENGTH = "Length";
 	public static final String NUMBER_OF_STD = "NumberOfSTD";
-	
 
 	private BigDecimal numberOfSTD;
 	private Integer length;
@@ -271,7 +270,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	public void setLength(Integer length) {
 		this.length = length;
 	}
-	
+
 	/**
 	 * Method getNumberOfSTD.
 	 * 
