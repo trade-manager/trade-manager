@@ -66,8 +66,10 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	private static final long serialVersionUID = 20183087035446657L;
 
 	public static final String LENGTH = "Length";
+	public static final String ROLLING_CANDLE = "RollingCandle";
 
 	private Integer length;
+	private Boolean rollingCandle;
 	/*
 	 * Vales used to calculate AverageTrueRange. These need to be reset when the
 	 * series is cleared.
@@ -270,6 +272,33 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getRollingCandle.
+	 * 
+	 * @return Boolean
+	 */
+	@Transient
+	public Boolean getRollingCandle() {
+		try {
+			if (null == this.rollingCandle)
+				this.rollingCandle = (Boolean) this
+						.getValueCode(ROLLING_CANDLE);
+		} catch (Exception e) {
+			this.rollingCandle = null;
+		}
+		return this.rollingCandle;
+	}
+
+	/**
+	 * Method setRollingCandle.
+	 * 
+	 * @param rollingCandle
+	 *            Boolean
+	 */
+	public void setRollingCandle(Boolean rollingCandle) {
+		this.rollingCandle = rollingCandle;
+	}
+
+	/**
 	 * Method createSeries.
 	 * 
 	 * @param source
@@ -315,8 +344,10 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 
 			// get the current data item...
 			double highLessLow = candleItem.getHigh() - candleItem.getLow();
-			// double highLessLow = source.getRollingCandle().getHigh() -
-			// source.getRollingCandle().getLow();
+			if (this.getRollingCandle()) {
+				highLessLow = source.getRollingCandle().getHigh()
+						- source.getRollingCandle().getLow();
+			}
 
 			double absHighLessPrevClose = 0;
 			double absLowLessPrevClose = 0;
@@ -328,11 +359,13 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 						- prevCandleItem.getClose());
 				absLowLessPrevClose = Math.abs(candleItem.getLow()
 						- prevCandleItem.getClose());
-				
-//				absHighLessPrevClose = Math.abs(source.getRollingCandle().getHigh()
-//						- source.getPreviousRollingCandle().getClose());
-//				absLowLessPrevClose = Math.abs(source.getRollingCandle().getLow()
-//						- source.getPreviousRollingCandle().getClose());
+
+				// absHighLessPrevClose =
+				// Math.abs(source.getRollingCandle().getHigh()
+				// - source.getPreviousRollingCandle().getClose());
+				// absLowLessPrevClose =
+				// Math.abs(source.getRollingCandle().getLow()
+				// - source.getPreviousRollingCandle().getClose());
 
 				double tR = Math.max(highLessLow,
 						Math.max(absHighLessPrevClose, absLowLessPrevClose));
