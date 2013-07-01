@@ -67,8 +67,10 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	private static final long serialVersionUID = 20183087035446657L;
 
 	public static final String LENGTH = "Length";
+	public static final String ROLLING_CANDLE = "RollingCandle";
 
 	private Integer length;
+	private Boolean rollingCandle;
 	/*
 	 * Vales used to calculate CommodityChannelIndex's. These need to be reset
 	 * when the series is cleared.
@@ -264,6 +266,33 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 */
 	public void setLength(Integer length) {
 		this.length = length;
+	}
+
+	/**
+	 * Method getRollingCandle.
+	 * 
+	 * @return Boolean
+	 */
+	@Transient
+	public Boolean getRollingCandle() {
+		try {
+			if (null == this.rollingCandle)
+				this.rollingCandle = (Boolean) this
+						.getValueCode(ROLLING_CANDLE);
+		} catch (Exception e) {
+			this.rollingCandle = null;
+		}
+		return this.rollingCandle;
+	}
+
+	/**
+	 * Method setRollingCandle.
+	 * 
+	 * @param rollingCandle
+	 *            Boolean
+	 */
+	public void setRollingCandle(Boolean rollingCandle) {
+		this.rollingCandle = rollingCandle;
 	}
 
 	/**

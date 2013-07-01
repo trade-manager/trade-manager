@@ -52,46 +52,29 @@ public class YesNo extends BaseDecode {
 	}
 
 	/**
-	 * is the YES
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
+	 * isYes
 	 * 
 	 * @return boolean
 	 * @exception * @see
 	 */
 
 	public boolean isYes() {
-
 		return YES.equals(getCode());
 	}
 
 	/**
-	 * is the NO
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
+	 * isNo
 	 * 
 	 * @return boolean
 	 * @exception * @see
 	 */
 
 	public boolean isNo() {
-
 		return NO.equals(getCode());
 	}
 
 	/**
 	 * Create a new instance of this object
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 
 	 * @param code
 	 *            String
@@ -126,5 +109,4 @@ public class YesNo extends BaseDecode {
 	protected boolean convertToUppercase() {
 		return false;
 	}
-
 }

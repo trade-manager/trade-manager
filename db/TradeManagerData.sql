@@ -44,18 +44,22 @@ COMMIT;
 
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(1,'Length','The length of the Moving Average','10','java.lang.Integer',null, 1,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(2,'MAType','Type of the Moving Average','LINEAR','java.lang.String', 'org.trade.dictionary.valuetype.CalculationType',1,0) ;
-INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(3,'Side','Use candle direct for V','false','java.lang.Boolean',null, 2,0) ;
-INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(4,'Quadratic','Use quadratic calc for pivot','true','java.lang.Boolean',null, 2,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(3,'Side','Use candle direct for V','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 2,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(4,'Quadratic','Use quadratic calc for pivot','true','java.lang.Boolean','org.trade.core.valuetype.YesNo', 2,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(5,'Bars','Number of bars to use for pivot 5 or 7','5','java.lang.Integer', null,2,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(6,'Symbol','The contract symbol','SPY','java.lang.String', null,3,0);
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(7,'Currency','The contract currency','USD','java.lang.String', 'org.trade.dictionary.valuetype.Currency',3,0);
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(8,'Exchange','The contract exchange','SMART','java.lang.String', 'org.trade.dictionary.valuetype.Exchange',3,0);
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(9,'SECType','The contract SECType','STK','java.lang.String', 'org.trade.dictionary.valuetype.SECType',3,0);
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(10,'Length','The length of the Average True Range','14','java.lang.Integer',null, 4,0) ;
-INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(11,'Length','The length of the Relative Strength Index','14','java.lang.Integer',null, 5,0) ;
-INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(12,'Length','The length of the Commodity Channel Index','20','java.lang.Integer',null, 6,0) ;
-INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(13,'Length','The length of the Moving Average','20','java.lang.Integer',null,7,0) ;
-INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(14,'NumberOfSTD','Number of STDs','2.0','java.math.BigDecimal', null,7,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(11,'RollingCandle','Use rolling candle values','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 4,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(12,'Length','The length of the Relative Strength Index','14','java.lang.Integer',null, 5,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(13,'RollingCandle','Use rolling candle values','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 5,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(14,'Length','The length of the Commodity Channel Index','20','java.lang.Integer',null, 6,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(15,'RollingCandle','Use rolling candle values','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 6,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(16,'Length','The length of the Moving Average','20','java.lang.Integer',null,7,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(17,'NumberOfSTD','Number of STDs','2.0','java.math.BigDecimal', null,7,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(18,'RollingCandle','Use rolling candle values','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 7,0) ;
 
 COMMIT;
 
