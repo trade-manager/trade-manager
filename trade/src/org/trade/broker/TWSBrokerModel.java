@@ -2966,9 +2966,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public static void populateTradeOrderfill(
 			com.ib.client.Execution execution, TradeOrderfill tradeOrderfill)
 			throws ParseException, IOException {
-		// TimeZone twsTimeZone = TimeZone.getTimeZone(ConfigProperties
-		// .getPropAsString("trade.tws.timezone"));
-		TimeZone twsTimeZone = TimeZone.getDefault();
+		TimeZone twsTimeZone = TimeZone.getTimeZone(ConfigProperties
+				.getPropAsString("trade.tws.timezone"));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 		sdf.setTimeZone(twsTimeZone);
 		Date date = sdf.parse(execution.m_time);
