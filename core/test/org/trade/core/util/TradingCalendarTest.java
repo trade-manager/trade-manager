@@ -119,7 +119,7 @@ public class TradingCalendarTest extends TestCase {
 		}
 		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String setDate = m_sdfGMT.format(endDate);
-		_log.warn("BusinessDayEnd GMT: " + setDate);
+		_log.info("BusinessDayEnd GMT: " + setDate);
 
 	}
 
@@ -132,7 +132,7 @@ public class TradingCalendarTest extends TestCase {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 			sdf.setTimeZone(twsTimeZone);
 			Date date = sdf.parse("20130701 15:58:00");
-			_log.warn("Date: " + date + " TZ: " + tz);
+			_log.info("Date: " + date + " TZ: " + tz);
 			TestCase.assertEquals(TradingCalendar.getHourOfDay(date), 15);
 			TestCase.assertEquals(TradingCalendar.getMinute(date), 58);
 
