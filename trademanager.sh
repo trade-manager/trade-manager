@@ -14,8 +14,8 @@ PATH="$JAVA_HOME/bin:$PATH"
 # tools.jar is needed for the javac compiler
 LOCALCLASSPATH="$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/tools.jar:lib/*:dist/*"
 
-# set the timezone to be your markets zone so NYSE=EST5EDT London=GMT
-TIMEZONE=EST5EDT
+# set the timezone to be your markets zone so NYSE=America/New_York London=GMT
+TIMEZONE=America/New_York
 
 echo "PATH=$PATH"
 echo "CLASSPATH=$LOCALCLASSPATH"

@@ -12,7 +12,7 @@ rem Change this dir to be the location for J2SE edition
 rem ***************************************************
 
 @if defined JAVA_HOME goto javahomedefined
-SET JAVA_HOME=C:/Program Files/Java/jdk1.7.0_17
+SET JAVA_HOME=C:/Program Files/Java/jdk1.7.0_25
 :javahomedefined
 
 rem set the path to include the bin dir
@@ -21,8 +21,8 @@ PATH=%JAVA_HOME%/bin;%PATH%
 rem java runtime lib
 SET CLASSPATH=%JAVA_HOME%/jre/lib/rt.jar;%JAVA_HOME%/lib/tools.jar;lib/*;dist/*;
 
-rem set the timezone to be your markets zone so NYSE=EST5EDT London=GMT
-SET TIMEZONE=EST5EDT
+rem set the timezone to be your markets zone so NYSE=America/New_York London=Europe/London
+SET TIMEZONE=America/New_York
 
 echo Path=%PATH%
 echo ClassPath=%CLASSPATH%
