@@ -132,7 +132,7 @@ public class TradingCalendarTest extends TestCase {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 			sdf.setTimeZone(twsTimeZone);
 			Date date = sdf.parse("20130701 15:58:00");
-			_log.warn("Date: " + date + " TZ: " + tz);
+			_log.info("Date: " + date + " TZ: " + tz);
 			TestCase.assertEquals(18, TradingCalendar.getHourOfDay(date));
 			TestCase.assertEquals(58, TradingCalendar.getMinute(date));
 
