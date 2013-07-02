@@ -46,6 +46,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.trade.core.properties.ConfigProperties;
 
 /**
  * Some tests for the {@link TradingCalendar} class.
@@ -118,7 +119,27 @@ public class TradingCalendarTest extends TestCase {
 		}
 		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String setDate = m_sdfGMT.format(endDate);
-		_log.info("BusinessDayEnd GMT: " + setDate);
+		_log.warn("BusinessDayEnd GMT: " + setDate);
+
+	}
+
+	@Test
+	public void testGetExecutionFillTime() {
+		try {
+
+			String tz = ConfigProperties.getPropAsString("trade.tws.timezone");
+			TimeZone twsTimeZone = TimeZone.getDefault();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+			sdf.setTimeZone(twsTimeZone);
+			Date date = sdf.parse("20130701 15:58:00");
+			_log.warn("Date: " + date + " TZ: " + tz);
+			TestCase.assertEquals(TradingCalendar.getHourOfDay(date), 15);
+			TestCase.assertEquals(TradingCalendar.getMinute(date), 58);
+
+		} catch (Exception ex) {
+			_log.error("Error parsing date: " + ex.getMessage(), ex);
+			fail("Error parsing date: " + ex.getCause().getMessage());
+		}
 
 	}
 
