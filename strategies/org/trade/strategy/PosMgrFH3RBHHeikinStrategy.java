@@ -155,9 +155,9 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				 * bar.
 				 */
 				Money targetOnePrice = createStopAndTargetOrder(
-						getOpenPositionOrder(), 2, 4, 50, true);
+						getOpenPositionOrder(), 2, 2, 50, true);
 				setTargetPrice(targetOnePrice);
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 7, 50, true);
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 4, 50, true);
 				_log.info("Open position submit Stop/Tgt orders created Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 
