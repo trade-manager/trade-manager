@@ -129,7 +129,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private Table m_tradingdayTable = null;
 	private Tradingdays m_tradingdays = null;
 	private static final ConcurrentHashMap<String, StrategyRule> m_strategyWorkers = new ConcurrentHashMap<String, StrategyRule>();
-
+	private DeleteProgressMonitor deleteProgressMonitor = null;
 	private String m_defaultDir = null;
 	private BaseButton ordersButton = null;
 	private BaseButton deleteTradeOrderButton = null;
@@ -397,6 +397,10 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					"Please Save or Refresh as changed are pending",
 					BasePanel.WARNING);
 			return false;
+		}
+		if (null != deleteProgressMonitor) {
+			if (!deleteProgressMonitor.isDone())
+				return false;
 		}
 		return true;
 	}
@@ -1148,7 +1152,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 		this.setStatusBarMessage("Delete in progress ...\n",
 				BasePanel.INFORMATION);
-		final DeleteProgressMonitor deleteProgressMonitor = new DeleteProgressMonitor(
+		deleteProgressMonitor = new DeleteProgressMonitor(
 				m_tradePersistentModel, tradingdays);
 		deleteProgressMonitor
 				.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
