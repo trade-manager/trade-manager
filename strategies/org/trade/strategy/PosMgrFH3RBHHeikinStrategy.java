@@ -269,19 +269,17 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * We have sold the first half of the position try to trail BH on
 			 * Heikin-Ashi above target 1 with a two bar trail.
 			 */
-			// if (this.getTradeOrder(targetOneOrderKey).getIsFilled() &&
-			// newBar) {
-			//
-			// Money newStop = getHiekinAshiTrailStop(
-			// this.getStopPriceMinUnfilled(), 2);
-			// if (!newStop.equals(this.getStopPriceMinUnfilled())) {
-			// _log.warn("PositionManagerStrategy HiekinAshiTrail: "
-			// + getSymbol() + " Trail Price: " + newStop
-			// + " Time: " + startPeriod + " Side: "
-			// + this.getOpenTradePosition().getSide());
-			// moveStopOCAPrice(newStop, true);
-			// }
-			// }
+			if (this.getTradeOrder(targetOneOrderKey).getIsFilled() && newBar) {
+				Money newStop = getHiekinAshiTrailStop(
+						this.getStopPriceMinUnfilled(), 2);
+				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+					_log.info("PositionManagerStrategy HiekinAshiTrail: "
+							+ getSymbol() + " Trail Price: " + newStop
+							+ " Time: " + startPeriod + " Side: "
+							+ this.getOpenTradePosition().getSide());
+					// moveStopOCAPrice(newStop, true);
+				}
+			}
 
 			/*
 			 * We have sold the first half of the position try to trail BH on
@@ -291,7 +289,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			// Money newStop = getOneMinuteTrailStop(
 			// this.getStopPriceMinUnfilled(), currentCandle);
 			// if (!newStop.equals(this.getStopPriceMinUnfilled())) {
-			// _log.warn("PositionManagerStrategy OneMinuteTrail: "
+			// _log.info("PositionManagerStrategy OneMinuteTrail: "
 			// + getSymbol() + " Trail Price: " + newStop
 			// + " Time: " + startPeriod + " Side: "
 			// + this.getOpenTradePosition().getSide());

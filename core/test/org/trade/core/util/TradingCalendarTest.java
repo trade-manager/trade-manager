@@ -120,7 +120,6 @@ public class TradingCalendarTest extends TestCase {
 		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String setDate = m_sdfGMT.format(endDate);
 		_log.info("BusinessDayEnd GMT: " + setDate);
-
 	}
 
 	@Test
@@ -140,7 +139,6 @@ public class TradingCalendarTest extends TestCase {
 			_log.error("Error parsing date: " + ex.getMessage(), ex);
 			fail("Error parsing date: " + ex.getCause().getMessage());
 		}
-
 	}
 
 	@Test
