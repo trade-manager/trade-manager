@@ -1394,7 +1394,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 	public void reFreshPositionOrders() throws StrategyRuleException {
 		try {
-
 			this.positionOrders = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.idTradestrategy);
 		} catch (Exception ex) {
