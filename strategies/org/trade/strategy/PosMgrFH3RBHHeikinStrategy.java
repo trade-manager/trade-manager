@@ -194,8 +194,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 								.getTradingday().getOpen(), startPeriod));
 
 				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
-					if (currentCandle.getVwap() < firstCandle.getVwap()
-							&& newBar) {
+					if (currentCandle.getVwap() < firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(this
 								.getOpenPositionOrder().getAverageFilledPrice()
 								.doubleValue(), getOpenTradePosition()
@@ -209,8 +208,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 					}
 				} else {
 
-					if (currentCandle.getVwap() > firstCandle.getVwap()
-							&& newBar) {
+					if (currentCandle.getVwap() > firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(this
 								.getOpenPositionOrder().getAverageFilledPrice()
 								.doubleValue(), getOpenTradePosition()
@@ -293,7 +291,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 							+ getSymbol() + " Trail Price: " + newStop
 							+ " Time: " + startPeriod + " Side: "
 							+ this.getOpenTradePosition().getSide());
-				//	moveStopOCAPrice(newStop, true);
+					// moveStopOCAPrice(newStop, true);
 				}
 			}
 			/*

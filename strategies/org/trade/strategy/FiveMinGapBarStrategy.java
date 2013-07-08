@@ -139,21 +139,37 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				 */
 				if (startPeriod.equals(TradingCalendar.getSpecificTime(
 						startPeriod, 9, 35)) && newBar) {
-
-					// TODO add the tails as a % of the body.
-					// double barBodyPercent =
-					// (Math.abs(prevCandleItem.getOpen()
-					// - prevCandleItem.getClose()) / Math
+					// boolean inside = false;
+					// if (prevCandleItem.isSide(Side.BOT)) {
+					// if (prevCandleItem.getVwap() >= prevCandleItem
+					// .getOpen()
+					// && prevCandleItem.getVwap() <= prevCandleItem
+					// .getClose())
+					// inside = true;
+					//
+					// } else {
+					// if (prevCandleItem.getVwap() <= prevCandleItem
+					// .getOpen()
+					// && prevCandleItem.getVwap() >= prevCandleItem
+					// .getClose())
+					// inside = true;
+					// }
+					//
+					// if (inside) {
+					// // TODO add the tails as a % of the body.
+					// double barBodyPercent = (Math.abs(prevCandleItem
+					// .getOpen() - prevCandleItem.getClose()) / Math
 					// .abs(prevCandleItem.getHigh()
 					// - prevCandleItem.getLow())) * 100;
-					// if (barBodyPercent < 5) {
+					// if (barBodyPercent < 10) {
 					// _log.info("Bar Body outside % range  Symbol: "
 					// + getSymbol() + " Time: " + startPeriod);
 					// updateTradestrategyStatus(TradestrategyStatus.NBB);
-					// _log.info("Rule 5min low broker Symbol: " + getSymbol()
-					// + " Time: " + startPeriod);
+					// _log.info("Rule 5min low broker Symbol: "
+					// + getSymbol() + " Time: " + startPeriod);
 					// this.cancel();
 					// return;
+					// }
 					// }
 
 					this.side = Side.newInstance(Side.SLD);
