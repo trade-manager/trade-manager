@@ -120,9 +120,10 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Get the current candle
 			 */
 			CandleItem currentCandle = this.getCurrentCandle();
+			CandleItem prevCandleItem = null;
 			Date startPeriod = currentCandle.getPeriod().getStart();
 			if (newBar && getCurrentCandleCount() > 0) {
-				CandleItem prevCandleItem = (CandleItem) candleSeries
+				prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
 				AbstractStrategyRule.logCandle(prevCandleItem.getCandle());
 			}
@@ -237,12 +238,16 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 						.getTotalBuyValue().doubleValue()
 						/ this.getOpenTradePosition().getTotalBuyQuantity()
 								.doubleValue();
+				if (avgPrice < prevCandleItem.getLow())
+					avgPrice = prevCandleItem.getLow();
 				if (Side.SLD.equals(getOpenTradePosition().getSide())) {
 					action = Action.BUY;
 					avgPrice = this.getOpenTradePosition().getTotalSellValue()
 							.doubleValue()
 							/ this.getOpenTradePosition()
 									.getTotalSellQuantity().doubleValue();
+					if (avgPrice > prevCandleItem.getHigh())
+						avgPrice = prevCandleItem.getHigh();
 				}
 				moveStopOCAPrice(
 						addPennyAndRoundStop(avgPrice, getOpenTradePosition()
