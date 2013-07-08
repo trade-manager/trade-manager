@@ -44,6 +44,7 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Side;
+import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.HeikinAshiDataset;
 import org.trade.strategy.data.HeikinAshiSeries;
@@ -83,6 +84,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	private static final long serialVersionUID = -6717691162128305191L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrFH3RBHHeikinStrategy.class);
+
+	private Integer targetOneOrderKey = new Integer(0);
 
 	/**
 	 * Default Constructor
@@ -154,10 +157,21 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				 * Make the stop -2R and manage to the Vwap MA of the opening
 				 * bar.
 				 */
-				Money targetOnePrice = createStopAndTargetOrder(
-						getOpenPositionOrder(), 2, 2, 50, true);
-				setTargetPrice(targetOnePrice);
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 4, 50, true);
+				Integer quantity = this.getOpenPositionOrder()
+						.getFilledQuantity();
+				Integer tgt1Qty = quantity / 2;
+				Integer tgt2Qty = quantity - tgt1Qty;
+				// Integer tgt3Qty = quantity - (tgt1Qty + tgt2Qty);
+
+				TradeOrder orderTarget = createStopAndTargetOrder(
+						getOpenPositionOrder(), 2, 2, tgt1Qty, true);
+				targetOneOrderKey = orderTarget.getOrderKey();
+
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 2, tgt2Qty,
+						true);
+				// createStopAndTargetOrder(getOpenPositionOrder(), 2, 3,
+				// tgt3Qty,
+				// true);
 				_log.info("Open position submit Stop/Tgt orders created Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 
@@ -171,7 +185,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 */
 
 			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
-					10, 30))
+					10, 15))
 					&& startPeriod.after(TradingCalendar.getSpecificTime(
 							startPeriod, 9, 35))) {
 
@@ -236,21 +250,54 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 						addPennyAndRoundStop(avgPrice, getOpenTradePosition()
 								.getSide(), action, 0.01), true);
 			}
-
+			// if (this.getTradeOrder(targetOneOrderKey).getIsFilled() &&
+			// newBar) {
+			//
+			// _log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
+			// + " Time: " + startPeriod);
+			// String action = Action.SELL;
+			// if (Side.SLD.equals(getOpenTradePosition().getSide()))
+			// action = Action.BUY;
+			// moveStopOCAPrice(
+			// addPennyAndRoundStop(
+			// this.getTradeOrder(targetOneOrderKey)
+			// .getAverageFilledPrice().doubleValue(),
+			// getOpenTradePosition().getSide(), action, 0.01),
+			// true);
+			// }
 			/*
 			 * We have sold the first half of the position try to trail BH on
 			 * Heikin-Ashi above target 1 with a two bar trail.
 			 */
-			if ((null != getTargetPrice()) && newBar) {
-				Money newStop = getHiekinAshiTrailStop(
-						getStopPriceMinUnfilled(), 2);
-				if (newStop.isGreaterThan(this.getTargetPrice())) {
-					_log.info("PositionManagerStrategy HiekinAshiTrail: "
-							+ getSymbol() + " Trail Price: " + getTargetPrice()
-							+ " Time: " + startPeriod);
-					moveStopOCAPrice(newStop, true);
-				}
-			}
+			// if (this.getTradeOrder(targetOneOrderKey).getIsFilled() &&
+			// newBar) {
+			//
+			// Money newStop = getHiekinAshiTrailStop(
+			// this.getStopPriceMinUnfilled(), 2);
+			// if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+			// _log.warn("PositionManagerStrategy HiekinAshiTrail: "
+			// + getSymbol() + " Trail Price: " + newStop
+			// + " Time: " + startPeriod + " Side: "
+			// + this.getOpenTradePosition().getSide());
+			// moveStopOCAPrice(newStop, true);
+			// }
+			// }
+
+			/*
+			 * We have sold the first half of the position try to trail BH on
+			 * one minute bars.
+			 */
+			// if (this.getTradeOrder(targetOneOrderKey).getIsFilled()) {
+			// Money newStop = getOneMinuteTrailStop(
+			// this.getStopPriceMinUnfilled(), currentCandle);
+			// if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+			// _log.warn("PositionManagerStrategy OneMinuteTrail: "
+			// + getSymbol() + " Trail Price: " + newStop
+			// + " Time: " + startPeriod + " Side: "
+			// + this.getOpenTradePosition().getSide());
+			// moveStopOCAPrice(newStop, true);
+			// }
+			// }
 			/*
 			 * Close any opened positions with a market order at the end of the
 			 * day.
@@ -309,13 +356,13 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				// AbstractStrategyRule.logCandle(candle.getCandle());
 				trail = false;
 				if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
-					if ((candle.getLow() > this.getTargetPrice().doubleValue())
+					if ((candle.getLow() > stopPrice.doubleValue())
 							&& (candle.getOpen() < candle.getClose())) {
 						stopPrice = new Money(candle.getLow());
 						trail = true;
 					}
 				} else {
-					if ((candle.getHigh() < this.getTargetPrice().doubleValue())
+					if ((candle.getHigh() < stopPrice.doubleValue())
 							&& (candle.getOpen() > candle.getClose())) {
 						stopPrice = new Money(candle.getHigh());
 						trail = true;
@@ -328,4 +375,49 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		}
 		return stopPrice;
 	}
+
+	/**
+	 * Method getOneMinuteTrailStop.
+	 * 
+	 * This method is used to trail on one minute bars over the first target.
+	 * 
+	 * @param stopPrice
+	 *            Money
+	 * @param bars
+	 *            int
+	 * @return Money new stop or orginal if not trail.
+	 * @throws StrategyRuleException
+	 */
+	Money candleHighLow = null;
+
+	public Money getOneMinuteTrailStop(Money stopPrice, CandleItem currentCandle)
+			throws StrategyRuleException {
+
+		if (null == candleHighLow) {
+			if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
+				candleHighLow = new Money(0);
+			} else {
+				candleHighLow = new Money(Double.MAX_VALUE);
+			}
+		}
+
+		if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
+			if (currentCandle.getLow() > candleHighLow.doubleValue())
+				candleHighLow = new Money(currentCandle.getLow());
+			if (stopPrice.isLessThan(candleHighLow)
+					&& (59 == TradingCalendar.getSecond(currentCandle
+							.getLastUpdateDate())))
+				return candleHighLow;
+		} else {
+			if (currentCandle.getHigh() < candleHighLow.doubleValue())
+				candleHighLow = new Money(currentCandle.getHigh());
+			if (stopPrice.isGreaterThan(candleHighLow)
+					&& (59 == TradingCalendar.getSecond(currentCandle
+							.getLastUpdateDate())))
+				return candleHighLow;
+		}
+
+		return stopPrice;
+	}
+
 }

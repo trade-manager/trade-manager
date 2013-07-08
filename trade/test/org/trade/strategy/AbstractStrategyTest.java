@@ -231,27 +231,20 @@ public class AbstractStrategyTest extends TestCase {
 					_log.info("Open position submit Stop/Tgt orders Symbol: "
 							+ openOrder.getTradestrategy().getContract()
 									.getSymbol());
-					Money targetPrice = strategyProxy.createStopAndTargetOrder(
-							strategyProxy.getOpenPositionOrder(), 1, 3, 50,
-							true);
-					strategyProxy.setTargetPrice(targetPrice);
+					strategyProxy
+							.createStopAndTargetOrder(strategyProxy
+									.getOpenPositionOrder(), 1, 3,
+									strategyProxy.getOpenTradePosition()
+											.getOpenQuantity() / 2, true);
 
-					strategyProxy.createStopAndTargetOrder(
-							strategyProxy.getOpenPositionOrder(), 1, 3, 50,
-							true);
+					strategyProxy
+							.createStopAndTargetOrder(strategyProxy
+									.getOpenPositionOrder(), 1, 3,
+									strategyProxy.getOpenTradePosition()
+											.getOpenQuantity() / 2, true);
 
-					for (TradeOrder newOrder : strategyProxy
-							.getPositionOrders().getTradeOrders()) {
-						if (OrderType.LMT.equals(newOrder.getOrderType())) {
-							assertEquals(targetPrice.doubleValue(), newOrder
-									.getLimitPrice().doubleValue(), 0);
-						}
-
-						if (OrderType.STPLMT.equals(newOrder.getOrderType())) {
-							newOrder.setAverageFilledPrice(price
-									.getBigDecimalValue());
-						}
-					}
+					TestCase.assertNotNull(this.strategyProxy
+							.isPositionCovered());
 				}
 			}
 
@@ -503,12 +496,14 @@ public class AbstractStrategyTest extends TestCase {
 			 * 
 			 * Make the stop -2R and manage to the Vwap MA of the opening bar.
 			 */
-			Money targetOnePrice = this.strategyProxy.createStopAndTargetOrder(
-					this.strategyProxy.getOpenPositionOrder(), 1, 4, 50, true);
-			TestCase.assertNotNull(targetOnePrice);
-			this.strategyProxy.setTargetPrice(targetOnePrice);
-			this.strategyProxy.createStopAndTargetOrder(
-					this.strategyProxy.getOpenPositionOrder(), 1, 7, 50, true);
+			this.strategyProxy
+					.createStopAndTargetOrder(this.strategyProxy
+							.getOpenPositionOrder(), 1, 4, this.strategyProxy
+							.getOpenPositionOrder().getQuantity() / 2, true);
+			this.strategyProxy
+					.createStopAndTargetOrder(this.strategyProxy
+							.getOpenPositionOrder(), 1, 7, this.strategyProxy
+							.getOpenPositionOrder().getQuantity() / 2, true);
 			for (TradeOrder order : this.strategyProxy.getTradestrategy()
 					.getTradeOrders()) {
 				_log.info("Key: " + order.getOrderKey() + " Qty: "
@@ -563,9 +558,10 @@ public class AbstractStrategyTest extends TestCase {
 	public void testCreateStopAndTargetOrder() {
 		try {
 			createOpenBuyPosition(new Money(100), true);
-			Money price = this.strategyProxy.createStopAndTargetOrder(
+			TradeOrder targetOne = this.strategyProxy.createStopAndTargetOrder(
 					new Money(99.0), new Money(103.99), 100, true);
-			TestCase.assertNotNull(price);
+			TestCase.assertNotNull(targetOne);
+			TestCase.assertNotNull(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testCreateStopAndTargetOrder Msg:"
 					+ ex.getMessage());
@@ -576,9 +572,11 @@ public class AbstractStrategyTest extends TestCase {
 	public void testCreateStopAndTargetOrderPercentQty() {
 		try {
 			createOpenBuyPosition(new Money(100), true);
-			Money price = this.strategyProxy.createStopAndTargetOrder(
-					this.strategyProxy.getOpenPositionOrder(), 2, 4, 50, true);
-			TestCase.assertNotNull(price);
+			this.strategyProxy
+					.createStopAndTargetOrder(this.strategyProxy
+							.getOpenPositionOrder(), 2, 4, this.strategyProxy
+							.getOpenPositionOrder().getQuantity() / 2, true);
+			TestCase.assertNotNull(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testCreateStopAndTargetOrderPercentQty Msg:"
 					+ ex.getMessage());
@@ -615,15 +613,15 @@ public class AbstractStrategyTest extends TestCase {
 	public void testMoveStopOCAPrice() {
 		try {
 			this.createOpenBuyPosition(new Money(100), true);
-			Money price = this.strategyProxy.createStopAndTargetOrder(
+			TradeOrder targetOne = this.strategyProxy.createStopAndTargetOrder(
 					new Money(99.0), new Money(103.99), this.strategyProxy
 							.getOpenPositionOrder().getQuantity() / 2, true);
-			TestCase.assertNotNull(price);
+			TestCase.assertNotNull(targetOne);
 			reFreshPositionOrders();
-			Money price1 = this.strategyProxy.createStopAndTargetOrder(
+			TradeOrder targetTwo = this.strategyProxy.createStopAndTargetOrder(
 					new Money(99.0), new Money(105.99), this.strategyProxy
 							.getOpenPositionOrder().getQuantity() / 2, true);
-			TestCase.assertNotNull(price1);
+			TestCase.assertNotNull(targetTwo);
 			reFreshPositionOrders();
 			double avgPrice = this.strategyProxy.getOpenTradePosition()
 					.getTotalBuyValue().doubleValue()
@@ -776,28 +774,6 @@ public class AbstractStrategyTest extends TestCase {
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsThereOpenPosition Msg:"
 					+ ex.getMessage());
-		}
-	}
-
-	@Test
-	public void testGetTargetPrice() {
-		try {
-			Money tgtPriceResult = this.strategyProxy.setTargetPrice(new Money(
-					107.99));
-			Money result = this.strategyProxy.getTargetPrice();
-			TestCase.assertEquals(tgtPriceResult, result);
-		} catch (Exception ex) {
-			TestCase.fail("Error testGetTargetPrice Msg:" + ex.getMessage());
-		}
-	}
-
-	@Test
-	public void testSetTargetPrice() {
-		try {
-			Money result = this.strategyProxy.setTargetPrice(new Money(107.99));
-			TestCase.assertNotNull(result);
-		} catch (Exception ex) {
-			TestCase.fail("Error testSetTargetPrice Msg:" + ex.getMessage());
 		}
 	}
 

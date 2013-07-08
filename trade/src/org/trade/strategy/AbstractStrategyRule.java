@@ -98,7 +98,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	private PositionOrders positionOrders = null;
 	private Integer idTradestrategy = null;
 	private String symbol = null;
-	private Money targetPrice = null;
 	private boolean seriesChanged = false;
 	private final Object lockStrategyWorker = new Object();
 	private boolean listeningCandles = false;
@@ -939,10 +938,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            int
 	 * @param stopTransmit
 	 *            boolean
-	 * @return Money
+	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public Money createStopAndTargetOrder(Money stopPrice, Money targetPrice,
+	public TradeOrder createStopAndTargetOrder(Money stopPrice, Money targetPrice,
 			int quantity, boolean stopTransmit) throws StrategyRuleException {
 
 		if (quantity == 0)
@@ -993,7 +992,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 			orderStop = getBrokerManager().onPlaceOrder(
 					getTradestrategy().getContract(), orderStop);
 			this.getPositionOrders().addTradeOrder(orderStop);
-			return targetPrice;
+			return orderTarget;
+			
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 540,
 					"Error submitting new tradeOrder to broker: "
@@ -1030,11 +1030,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            int
 	 * @param stopTransmit
 	 *            boolean
-	 * @return Money
+	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public Money createStopAndTargetOrder(TradeOrder openPosition,
-			int stopRiskUnits, int targetRiskUnits, int percentQty,
+	public TradeOrder createStopAndTargetOrder(TradeOrder openPosition,
+			int stopRiskUnits, int targetRiskUnits, Integer quantity,
 			boolean stopTransmit) throws StrategyRuleException {
 
 		if (!this.isThereOpenPosition()) {
@@ -1076,9 +1076,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 					+ (riskAmount * targetRiskUnits * buySellMultipliter * -1),
 					this.getOpenTradePosition().getSide(), action, 0.01);
 
-			int quantity = Math.abs(this.getOpenTradePosition()
-					.getOpenQuantity() * percentQty) / 100;
-
 			String ocaID = new String(Integer.toString((new BigDecimal(Math
 					.random() * 1000000)).intValue()));
 
@@ -1117,7 +1114,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			orderStop = getBrokerManager().onPlaceOrder(
 					getTradestrategy().getContract(), orderStop);
 			this.getPositionOrders().addTradeOrder(orderStop);
-			return targetPrice;
+			return orderTarget;
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 550,
 					"Error submitting new tradeOrder to broker: "
@@ -1485,16 +1482,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method getTargetPrice.
-	 * 
-	 * @return Money
-	 */
-	public Money getTargetPrice() {
-		return this.targetPrice;
-	}
-
-	/**
-	 * Method getUnfilledStopPrice.
+	 * Method getStopPriceMinUnfilled.
 	 * 
 	 * @return Money
 	 */
@@ -1512,20 +1500,45 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		return null;
 	}
-
+	
 	/**
-	 * Method setTargetPrice.
+	 * Method getStopPriceMinUnfilled.
 	 * 
-	 * @param targetPrice
-	 *            Money
 	 * @return Money
 	 */
-	public Money setTargetPrice(Money targetPrice) {
-		return this.targetPrice = targetPrice;
+	public Money getTargetPriceMinUnfilled() {
+		double stopPrice = Double.MAX_VALUE;
+		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
+			if (tradeOrder.isActive()
+					&& OrderType.STP.equals(tradeOrder.getOrderType())) {
+				stopPrice = Math.min(stopPrice, tradeOrder.getAuxPrice()
+						.doubleValue());
+			}
+		}
+		if (stopPrice < Double.MAX_VALUE)
+			return new Money(stopPrice);
+
+		return null;
 	}
 
 	/**
-	 * Method setTargetPrice.
+	 * Method getTradeOrder.
+	 * 
+	 * @param orderKey
+	 *            Integer
+	 * @return TradeOrder
+	 */
+	public TradeOrder getTradeOrder(Integer orderKey) {
+		for (TradeOrder order : this.getPositionOrders().getTradeOrders()) {
+			if (order.getOrderKey().equals(orderKey)) {
+				return order;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Method isDuringTradingday.
 	 * 
 	 * @param dateTime
 	 *            Date
