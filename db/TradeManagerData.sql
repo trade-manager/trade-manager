@@ -111,9 +111,9 @@ INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSerie
 
 COMMIT;
 
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (1,'0','8','0.02','0.04','0','100','0.05', '0.05',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (2,'8.01','15','0.02', '0.03','0','100', '0.05', '0.05',0);
-INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (3,'15.01','30','0.03', '0.02','0','100', '0.05', '0.05',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (1,'0','8','0.02','0.06','0','100','0.05', '0.05',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (2,'8.01','15','0.02', '0.05','0','100', '0.05', '0.05',0);
+INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (3,'15.01','30','0.03', '0.03','0','100', '0.05', '0.05',0);
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (4,'30.01','50','0.04', '0.02','0', '50', '0.07', '0.07',0);
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (5,'50.01','80','0.6','0.02','0','20', '0.15', '0.15',0);
 INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfPrice, percentOfMargin, shareRound, pivotRange, priceRound, version) VALUES (6,'80.01','140','0.08','0.02','0','20', '0.20', '0.20',0);
