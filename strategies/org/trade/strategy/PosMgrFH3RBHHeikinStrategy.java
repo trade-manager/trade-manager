@@ -185,7 +185,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 */
 
 			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
-					10, 15))
+					10, 40))
 					&& startPeriod.after(TradingCalendar.getSpecificTime(
 							startPeriod, 9, 35))) {
 
@@ -230,7 +230,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * the open order.
 			 */
 			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
-					10, 30)) && newBar) {
+					10, 40)) && newBar) {
 
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
 						+ " Time: " + startPeriod);
@@ -285,17 +285,17 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * We have sold the first half of the position try to trail BH on
 			 * one minute bars.
 			 */
-			// if (this.getTradeOrder(targetOneOrderKey).getIsFilled()) {
-			// Money newStop = getOneMinuteTrailStop(
-			// this.getStopPriceMinUnfilled(), currentCandle);
-			// if (!newStop.equals(this.getStopPriceMinUnfilled())) {
-			// _log.info("PositionManagerStrategy OneMinuteTrail: "
-			// + getSymbol() + " Trail Price: " + newStop
-			// + " Time: " + startPeriod + " Side: "
-			// + this.getOpenTradePosition().getSide());
-			// moveStopOCAPrice(newStop, true);
-			// }
-			// }
+			if (this.getTradeOrder(targetOneOrderKey).getIsFilled()) {
+				Money newStop = getOneMinuteTrailStop(
+						this.getStopPriceMinUnfilled(), currentCandle);
+				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+					_log.info("PositionManagerStrategy OneMinuteTrail: "
+							+ getSymbol() + " Trail Price: " + newStop
+							+ " Time: " + startPeriod + " Side: "
+							+ this.getOpenTradePosition().getSide());
+				//	moveStopOCAPrice(newStop, true);
+				}
+			}
 			/*
 			 * Close any opened positions with a market order at the end of the
 			 * day.
