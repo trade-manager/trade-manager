@@ -210,7 +210,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 				} else {
 					if (startPeriod.before(TradingCalendar.getSpecificTime(
-							startPeriod, 10, 30))
+							startPeriod, 10, 50))
 							&& startPeriod.after(TradingCalendar
 									.getSpecificTime(startPeriod, 9, 35))) {
 						CandleItem firstCandle = this
