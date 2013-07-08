@@ -96,7 +96,8 @@ public class TradestrategyTest extends TestCase {
 					+ tradestrategy.getIdTradeStrategy());
 
 			PositionOrders positionOrders = tradestrategyHome
-					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
+					.findPositionOrdersByTradestrategyId(tradestrategy
+							.getIdTradeStrategy());
 			TestCase.assertNotNull(positionOrders);
 			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + "found.");
@@ -105,7 +106,8 @@ public class TradestrategyTest extends TestCase {
 			positionOrders = (PositionOrders) aspectHome
 					.persist(positionOrders);
 			positionOrders = tradestrategyHome
-					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
+					.findPositionOrdersByTradestrategyId(tradestrategy
+							.getIdTradeStrategy());
 			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + "found Status: "
 					+ positionOrders.getStatus());

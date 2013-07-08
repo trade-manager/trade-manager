@@ -297,7 +297,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					continue;
 
 				positionOrders = this.tradePersistentModel
-						.findPositionOrdersById(this.idTradestrategy);
+						.findPositionOrdersByTradestrategyId(this.idTradestrategy);
 
 				/*
 				 * The new candle may create an order so this call fills it and
@@ -326,7 +326,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					 * candle.
 					 */
 					positionOrders = this.tradePersistentModel
-							.findPositionOrdersById(this.idTradestrategy);
+							.findPositionOrdersByTradestrategyId(this.idTradestrategy);
 
 					if (this.tradestrategy.getStrategy().hasStrategyManager()) {
 						synchronized (lockBackTestWorker) {

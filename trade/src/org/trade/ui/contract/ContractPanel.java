@@ -893,8 +893,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(currentTab.getTradestrategy());
 				position = m_tradePersistentModel
-						.findPositionOrdersById(currentTab.getTradestrategy()
-								.getIdTradeStrategy());
+						.findPositionOrdersByTradestrategyId(currentTab
+								.getTradestrategy().getIdTradeStrategy());
 				currentTab.setTradestrategy(tradestrategy);
 				m_tradeOrderModel.setData(tradestrategy);
 				RowSorter<?> rsDetail = m_tradeOrderTable.getRowSorter();

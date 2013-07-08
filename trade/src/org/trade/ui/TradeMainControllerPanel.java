@@ -1461,7 +1461,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				return;
 			}
 			PositionOrders positionOrders = m_tradePersistentModel
-					.findPositionOrdersById(tradestrategy.getIdTradeStrategy());
+					.findPositionOrdersByTradestrategyId(tradestrategy
+							.getIdTradeStrategy());
 			tradestrategy = m_tradePersistentModel
 					.findTradestrategyById(tradestrategy.getIdTradeStrategy());
 			for (TradeOrder order : positionOrders.getTradeOrders()) {

@@ -276,7 +276,7 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method findPositionOrdersById.
+	 * Method findPositionOrdersByTradestrategyId.
 	 * 
 	 * @param idTradestrategy
 	 *            Integer
@@ -285,11 +285,11 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	public PositionOrders findPositionOrdersById(Integer idTradestrategy)
-			throws PersistentModelException {
+	public PositionOrders findPositionOrdersByTradestrategyId(
+			Integer idTradestrategy) throws PersistentModelException {
 
 		PositionOrders instance = m_tradestrategyHome
-				.findPositionOrdersById(idTradestrategy);
+				.findPositionOrdersByTradestrategyId(idTradestrategy);
 		if (null == instance)
 			throw new PersistentModelException(
 					"Tradestrategy not found for id: " + idTradestrategy);
@@ -824,7 +824,7 @@ public class TradePersistentModel implements PersistentModel {
 						tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
 
 					positionOrders = this
-							.findPositionOrdersById(tradestrategyId);
+							.findPositionOrdersByTradestrategyId(tradestrategyId);
 
 					if (positionOrders.hasOpenTradePosition()) {
 						tradePosition = this
@@ -951,7 +951,7 @@ public class TradePersistentModel implements PersistentModel {
 				// Partial fills case.
 				if (null == positionOrders)
 					positionOrders = this
-							.findPositionOrdersById(tradestrategyId);
+							.findPositionOrdersByTradestrategyId(tradestrategyId);
 
 				if (!tradePosition.getIsOpen()
 						&& !TradestrategyStatus.CLOSED.equals(positionOrders
@@ -968,7 +968,7 @@ public class TradePersistentModel implements PersistentModel {
 				if (allOrdersCancelled) {
 					if (null == positionOrders)
 						positionOrders = this
-								.findPositionOrdersById(tradestrategyId);
+								.findPositionOrdersByTradestrategyId(tradestrategyId);
 					if (!TradestrategyStatus.CANCELLED.equals(positionOrders
 							.getStatus())) {
 						if (null == positionOrders.getStatus()) {

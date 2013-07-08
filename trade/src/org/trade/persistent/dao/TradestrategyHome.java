@@ -95,13 +95,13 @@ public class TradestrategyHome {
 	}
 
 	/**
-	 * Method findPositionOrdersById.
+	 * Method findPositionOrdersByTradestrategyId.
 	 * 
 	 * @param idTradestrategy
 	 *            Integer
 	 * @return PositionOrders
 	 */
-	public synchronized PositionOrders findPositionOrdersById(
+	public synchronized PositionOrders findPositionOrdersByTradestrategyId(
 			Integer idTradestrategy) {
 
 		try {

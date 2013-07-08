@@ -941,8 +941,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder createStopAndTargetOrder(Money stopPrice, Money targetPrice,
-			int quantity, boolean stopTransmit) throws StrategyRuleException {
+	public TradeOrder createStopAndTargetOrder(Money stopPrice,
+			Money targetPrice, int quantity, boolean stopTransmit)
+			throws StrategyRuleException {
 
 		if (quantity == 0)
 			throw new StrategyRuleException(1, 207, "Quantity cannot be zero");
@@ -993,7 +994,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					getTradestrategy().getContract(), orderStop);
 			this.getPositionOrders().addTradeOrder(orderStop);
 			return orderTarget;
-			
+
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 540,
 					"Error submitting new tradeOrder to broker: "
@@ -1395,7 +1396,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		try {
 
 			this.positionOrders = this.tradePersistentModel
-					.findPositionOrdersById(this.idTradestrategy);
+					.findPositionOrdersByTradestrategyId(this.idTradestrategy);
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 410, "Error position orders: "
 					+ ex.getMessage());
@@ -1500,7 +1501,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		return null;
 	}
-	
+
 	/**
 	 * Method getStopPriceMinUnfilled.
 	 * 

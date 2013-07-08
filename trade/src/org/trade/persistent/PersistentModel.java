@@ -235,14 +235,14 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method findPositionOrdersById.
+	 * Method findPositionOrdersByTradestrategyId.
 	 * 
 	 * @param idTradestrategy
 	 *            Integer
 	 * @return PositionOrders
 	 * @throws PersistentModelException
 	 */
-	PositionOrders findPositionOrdersById(Integer idTradestrategy)
+	PositionOrders findPositionOrdersByTradestrategyId(Integer idTradestrategy)
 			throws PersistentModelException;
 
 	/**
