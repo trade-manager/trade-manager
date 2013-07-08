@@ -244,7 +244,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				}
 
 				if (!startPeriod.before(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
+						startPeriod, 10, 50))) {
 					_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
 							+ getSymbol() + " Time: " + startPeriod);
 					if (!this.isThereOpenPosition()
