@@ -1184,7 +1184,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		_log.info("Strategy  closeOpenPosition symbol: " + symbol);
 		try {
-			cancelAllPositionOrders();
+			cancelAllOrders();
 			if (this.isThereOpenPosition()) {
 				return closePosition(transmit);
 			}
@@ -1237,21 +1237,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 					"Error StrategyWorker moveStopOCAPrice exception Symbol: "
 							+ this.symbol + " Stop Price: " + stopPrice
 							+ " Msg: " + ex.getMessage());
-		}
-	}
-
-	/**
-	 * Method cancelAllPositionOrders. This method will all orders for a trade
-	 * position.
-	 * 
-	 * @throws StrategyRuleException
-	 */
-	public void cancelAllPositionOrders() throws StrategyRuleException {
-		_log.info("Strategy  cancelAllPositionOrders symbol: " + symbol);
-		cancelAllOrders();
-		for (TradeOrder order : this.getPositionOrders().getOpenTradePosition()
-				.getTradeOrders()) {
-			cancelOrder(order);
 		}
 	}
 
