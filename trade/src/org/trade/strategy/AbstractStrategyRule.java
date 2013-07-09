@@ -614,9 +614,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			if (roundPrice) {
 				String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
-				if (null != this.getOpenTradePosition()) {
-					side = this.getOpenTradePosition().getSide();
-				}
 				if (OrderType.LMT.equals(orderType)) {
 					if (roundPrice) {
 						limitPrice = addPennyAndRoundStop(
@@ -698,13 +695,19 @@ public abstract class AbstractStrategyRule extends Worker implements
 			String orderType, Money limitPrice, Money auxPrice, int quantity,
 			boolean roundPrice, boolean transmit) throws StrategyRuleException {
 		try {
+
+			if (null == orderKey)
+				throw new StrategyRuleException(1, 200,
+						"Order Key cannot be null");
+
 			TradeOrder tradeOrder = tradePersistentModel
 					.findTradeOrderByKey(orderKey);
+
+			if (null == action)
+				throw new StrategyRuleException(1, 201, "Action cannot be null");
+
 			if (roundPrice) {
 				String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
-				if (null != this.getOpenTradePosition()) {
-					side = this.getOpenTradePosition().getSide();
-				}
 				if (OrderType.LMT.equals(orderType)) {
 					if (roundPrice) {
 						limitPrice = addPennyAndRoundStop(
@@ -724,6 +727,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 					.getLastUpdateDate());
 			tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
 			tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
+			if (quantity > 0)
+				tradeOrder.setQuantity(quantity);
+
+			if (null != orderType)
+				tradeOrder.setOrderType(orderType);
+
 			tradeOrder.setTransmit(transmit);
 			return getBrokerManager().onPlaceOrder(
 					getTradestrategy().getContract(), tradeOrder);
@@ -1237,8 +1246,21 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public void cancelAllOrders() throws StrategyRuleException {
-
 		_log.info("Strategy  cancelAllOrders symbol: " + symbol);
+		for (TradeOrder order : this.getPositionOrders().getOpenTradePosition()
+				.getTradeOrders()) {
+			cancelOrder(order);
+		}
+	}
+
+	/**
+	 * Method cancelTradeStrategyOrders. This method will all orders for a trade
+	 * position.
+	 * 
+	 * @throws StrategyRuleException
+	 */
+	public void cancelTradeStrategyOrders() throws StrategyRuleException {
+		_log.info("Strategy  cancelTradeStrategyOrders symbol: " + symbol);
 		for (TradeOrder order : this.getPositionOrders().getTradeOrders()) {
 			cancelOrder(order);
 		}
