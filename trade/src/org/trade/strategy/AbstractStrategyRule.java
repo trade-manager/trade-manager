@@ -1184,7 +1184,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 		_log.info("Strategy  closeOpenPosition symbol: " + symbol);
 		try {
-			cancelAllOrders();
+			cancelAllPositionOrders();
 			if (this.isThereOpenPosition()) {
 				return closePosition(transmit);
 			}
@@ -1241,12 +1241,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method cancelAllOrders. This method will all orders for a trade position.
+	 * Method cancelAllPositionOrders. This method will all orders for a trade
+	 * position.
 	 * 
 	 * @throws StrategyRuleException
 	 */
-	public void cancelAllOrders() throws StrategyRuleException {
-		_log.info("Strategy  cancelAllOrders symbol: " + symbol);
+	public void cancelAllPositionOrders() throws StrategyRuleException {
+		_log.info("Strategy  cancelAllPositionOrders symbol: " + symbol);
 		for (TradeOrder order : this.getPositionOrders().getOpenTradePosition()
 				.getTradeOrders()) {
 			cancelOrder(order);
@@ -1254,13 +1255,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
-	 * Method cancelTradeStrategyOrders. This method will all orders for a trade
-	 * position.
+	 * Method cancelAllOrders. This method will all orders for a trade position.
 	 * 
 	 * @throws StrategyRuleException
 	 */
-	public void cancelTradeStrategyOrders() throws StrategyRuleException {
-		_log.info("Strategy  cancelTradeStrategyOrders symbol: " + symbol);
+	public void cancelAllOrders() throws StrategyRuleException {
+		_log.info("Strategy  cancelAllOrders symbol: " + symbol);
 		for (TradeOrder order : this.getPositionOrders().getTradeOrders()) {
 			cancelOrder(order);
 		}
