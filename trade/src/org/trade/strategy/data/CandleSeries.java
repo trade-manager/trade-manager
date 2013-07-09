@@ -897,8 +897,11 @@ public class CandleSeries extends IndicatorSeries {
 		this.vwapVolumeValues.addFirst(vwap * volume);
 		sumVwapVolume = sumVwapVolume + this.vwapVolumeValues.getFirst();
 
-		if (sumVolume > 0)
+		if (sumVolume > 0) {
 			this.rollingCandle.vwap = sumVwapVolume / sumVolume;
+		} else {
+			this.rollingCandle.vwap = this.rollingCandle.close;
+		}
 
 		// _log.info("**Date: " + period.getStart() + " sumVwapVolume: "
 		// + sumVwapVolume + " sumVolume: " + sumVolume + " volume: "
