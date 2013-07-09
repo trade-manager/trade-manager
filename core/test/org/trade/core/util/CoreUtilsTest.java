@@ -78,6 +78,36 @@ public class CoreUtilsTest extends TestCase {
 	}
 
 	@Test
+	public void testIsBetween() {
+		try {
+
+			TestCase.assertTrue(CoreUtils.isBetween(new BigDecimal(12.20),
+					new BigDecimal(12.24), new BigDecimal(12.23)));
+
+			TestCase.assertTrue(CoreUtils.isBetween(new Integer(12),
+					new Integer(18), new Integer(15)));
+
+			TestCase.assertFalse(CoreUtils.isBetween(new Integer(12),
+					new Integer(18), new Integer(6)));
+
+			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.24d, 12.23d));
+
+			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
+
+			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
+
+			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
+			TestCase.assertFalse(CoreUtils.isBetween(12, 14, 11));
+
+			TestCase.assertFalse(CoreUtils.isBetween(12, 14, 15));
+
+		} catch (Exception ex) {
+			_log.error("Error creating class: " + ex.getMessage(), ex);
+			fail("Error creating class: " + ex.getCause().getMessage());
+		}
+	}
+
+	@Test
 	public void testNullSafe() {
 		try {
 

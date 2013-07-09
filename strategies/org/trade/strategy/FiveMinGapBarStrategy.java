@@ -40,6 +40,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
@@ -139,24 +140,15 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				 */
 				if (startPeriod.equals(TradingCalendar.getSpecificTime(
 						startPeriod, 9, 35)) && newBar) {
-					boolean inside = false;
-					if (prevCandleItem.isSide(Side.BOT)) {
-						if (prevCandleItem.getVwap() >= prevCandleItem
-								.getOpen()
-								&& prevCandleItem.getVwap() <= prevCandleItem
-										.getClose())
-							inside = true;
 
-					} else {
-						if (prevCandleItem.getVwap() <= prevCandleItem
-								.getOpen()
-								&& prevCandleItem.getVwap() >= prevCandleItem
-										.getClose())
-							inside = true;
-					}
-
-					if (inside) {
-						// TODO add the tails as a % of the body.
+					/*
+					 * Add the tails as a % of the body. 10% and vwap must be
+					 * between O/C.
+					 */
+					if (CoreUtils
+							.isBetween(prevCandleItem.getOpen(),
+									prevCandleItem.getClose(),
+									prevCandleItem.getVwap())) {
 						double barBodyPercent = (Math.abs(prevCandleItem
 								.getOpen() - prevCandleItem.getClose()) / Math
 								.abs(prevCandleItem.getHigh()
@@ -190,8 +182,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 					double highLowRange = Math.abs(prevCandleItem.getHigh()
 							- prevCandleItem.getLow());
-					// double openCloseRange = Math.abs(prevCandleItem
-					// .getOpen() - prevCandleItem.getClose());
 
 					priceStop = new Money(prevCandleItem.getOpen());
 

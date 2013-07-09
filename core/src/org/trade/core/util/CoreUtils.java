@@ -424,6 +424,25 @@ public class CoreUtils {
 	}
 
 	/**
+	 * Method isBetween.
+	 * 
+	 * @param a
+	 *            <T extends Number>
+	 * @param b
+	 *            <T extends Number>
+	 * @param c
+	 *            <T extends Number>
+	 * @return boolean
+	 */
+
+	public static <T extends Number> boolean isBetween(T a, T b, T c) {
+		return b.doubleValue() > a.doubleValue() ? c.doubleValue() >= a
+				.doubleValue() && c.doubleValue() <= b.doubleValue() : c
+				.doubleValue() >= b.doubleValue()
+				&& c.doubleValue() <= a.doubleValue();
+	}
+
+	/**
 	 * Method isNumeric.
 	 * 
 	 * @param str
