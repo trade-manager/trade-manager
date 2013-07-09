@@ -232,6 +232,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 					double low = Double.parseDouble(scanLine.nextToken());
 					double open = Double.parseDouble(scanLine.nextToken());
 					long volume = Long.parseLong(scanLine.nextToken());
+					if (volume == 0)
+						volume = 100;
 					// _log.info("Time : " + time + " Open: " + open + " High: "
 					// + high + " Low: " + low + " Close: " + close
 					// + " Volume: " + volume);
@@ -298,6 +300,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 			double low = Double.parseDouble(st.nextToken());
 			double close = Double.parseDouble(st.nextToken());
 			long volume = Long.parseLong(st.nextToken());
+			if (volume == 0)
+				volume = 100;
 			// double adjClose = Double.parseDouble( st.nextToken() );
 			// _log.info("Time : " + time + " Open: " + open + " High: "
 			// + high + " Low: " + low + " Close: " + close
