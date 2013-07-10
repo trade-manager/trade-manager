@@ -7,6 +7,10 @@ table.
 the direction of the trade, same for stop price.
 5/ After 9:35 and before 10:50 if the Vwap falls below the H/L 
 before open position filled cancel open position. 
+6/ If 9:35 bars body is less than 10% of the H/L and Vwap is with O/C close strategy
+i.e. Doji bar.
+7/ The entry price - stop price must be 2X the STPLMT amount from the Entry Limit. 
+i.e. prevents entries on NRB.
 
 E.g. If first 5min bar is H=21.50 L=21.15 Open= 21.2 Close=21.40 then
 position order will be Buy STPLMT=21.51-21.55 (STPLMT range 0.04 from
