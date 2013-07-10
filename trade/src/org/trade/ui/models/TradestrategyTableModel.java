@@ -87,7 +87,7 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String PORTFOLIO = "Portfolio*";
 	private static final String BAR_SIZE = "Bar Size*";
 	private static final String CHART_HISTORY = "Chart Hist*";
-	private static final String RISK_AMOUNT = "Risk Amt*";
+	private static final String RISK_AMOUNT = "Risk Amt";
 	private static final String PERCENTCHGFRCLOSE = "%Chg Close";
 	private static final String PERCENTCHGFROPEN = "%Chg Open";
 	private static final String STATUS = "     Status     ";
