@@ -238,16 +238,20 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 						.getTotalBuyValue().doubleValue()
 						/ this.getOpenTradePosition().getTotalBuyQuantity()
 								.doubleValue();
+				
 				if (avgPrice < prevCandleItem.getLow())
 					avgPrice = prevCandleItem.getLow();
+				
 				if (Side.SLD.equals(getOpenTradePosition().getSide())) {
 					action = Action.BUY;
 					avgPrice = this.getOpenTradePosition().getTotalSellValue()
 							.doubleValue()
 							/ this.getOpenTradePosition()
 									.getTotalSellQuantity().doubleValue();
+					
 					if (avgPrice > prevCandleItem.getHigh())
 						avgPrice = prevCandleItem.getHigh();
+					
 				}
 				moveStopOCAPrice(
 						addPennyAndRoundStop(avgPrice, getOpenTradePosition()
