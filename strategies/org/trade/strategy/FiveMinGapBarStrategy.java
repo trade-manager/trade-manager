@@ -188,16 +188,32 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					// If the candle less than the entry limit %
 					if (((highLowRange) / prevCandleItem.getClose()) < entrylimit
 							.getPercentOfPrice().doubleValue()) {
-						_log.info("We have a trade!!  Symbol: " + getSymbol()
-								+ " Time: " + startPeriod);
+
 						/*
-						 * Create an open position.
+						 * Check that the entry - stop is greater than 2* the
+						 * STPLMT amount.
 						 */
 						if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
 								.getLimitAmount().doubleValue() * 2)) {
 
-							createRiskOpenPosition(action, price, priceStop,
-									true, null, null, null, null);
+							if (!CoreUtils.isBetween(prevCandleItem.getOpen(),
+									prevCandleItem.getClose(),
+									prevCandleItem.getVwap())) {
+								_log.info("Rule 9:35 Vwap not between open/close. Symbol: "
+										+ getSymbol() + " Time: " + startPeriod);
+								updateTradestrategyStatus(TradestrategyStatus.NBB);
+								// Kill this process we are done!
+								this.cancel();
+							} else {
+								/*
+								 * Create an open position.
+								 */
+								_log.info("We have a trade!!  Symbol: "
+										+ getSymbol() + " Time: " + startPeriod);
+								createRiskOpenPosition(action, price,
+										priceStop, true, null, null, null, null);
+							}
+
 						} else {
 							_log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
 									+ getSymbol() + " Time: " + startPeriod);
