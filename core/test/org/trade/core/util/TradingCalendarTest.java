@@ -127,6 +127,7 @@ public class TradingCalendarTest extends TestCase {
 		try {
 
 			String tz = ConfigProperties.getPropAsString("trade.tws.timezone");
+			// tz = "America/Vancouver";
 			TimeZone twsTimeZone = TimeZone.getTimeZone(tz);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 			sdf.setTimeZone(twsTimeZone);
@@ -134,6 +135,22 @@ public class TradingCalendarTest extends TestCase {
 			_log.info("Date: " + date + " TZ: " + tz);
 			TestCase.assertEquals(18, TradingCalendar.getHourOfDay(date));
 			TestCase.assertEquals(58, TradingCalendar.getMinute(date));
+
+		} catch (Exception ex) {
+			_log.error("Error parsing date: " + ex.getMessage(), ex);
+			fail("Error parsing date: " + ex.getCause().getMessage());
+		}
+	}
+
+	@Test
+	public void testPrintTimeZones() {
+		try {
+
+			String[] timeZones = TimeZone.getAvailableIDs();
+
+			for (int i = 0; i < timeZones.length; i++) {
+				_log.info("TZ: " + timeZones[i]);
+			}
 
 		} catch (Exception ex) {
 			_log.error("Error parsing date: " + ex.getMessage(), ex);
