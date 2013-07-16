@@ -47,7 +47,9 @@ import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Entrylimit;
+import org.trade.strategy.data.AverageTrueRangeDataset;
 import org.trade.strategy.data.CandleSeries;
+import org.trade.strategy.data.IndicatorSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
 
@@ -134,6 +136,15 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				CandleItem prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
 
+				AverageTrueRangeDataset datasetATR = (AverageTrueRangeDataset) getTradestrategy()
+						.getDatasetContainer().getIndicatorByType(
+								IndicatorSeries.AverageTrueRangeSeries);
+				if (null == datasetATR) {
+					error(1, 20,
+							"No ATRdefined for Strategy. Please add ATR Indicator to Strategy");
+					return;
+				}
+
 				/*
 				 * Is it the the 9:35 candle? and we have not created an open
 				 * position trade.
@@ -157,8 +168,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 							_log.info("Bar Body outside % range  Symbol: "
 									+ getSymbol() + " Time: " + startPeriod);
 							updateTradestrategyStatus(TradestrategyStatus.NBB);
-							_log.info("Rule 5min low broker Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
 							this.cancel();
 							return;
 						}

@@ -238,20 +238,20 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 						.getTotalBuyValue().doubleValue()
 						/ this.getOpenTradePosition().getTotalBuyQuantity()
 								.doubleValue();
-				
+
 				if (avgPrice < prevCandleItem.getLow())
 					avgPrice = prevCandleItem.getLow();
-				
+
 				if (Side.SLD.equals(getOpenTradePosition().getSide())) {
 					action = Action.BUY;
 					avgPrice = this.getOpenTradePosition().getTotalSellValue()
 							.doubleValue()
 							/ this.getOpenTradePosition()
 									.getTotalSellQuantity().doubleValue();
-					
+
 					if (avgPrice > prevCandleItem.getHigh())
 						avgPrice = prevCandleItem.getHigh();
-					
+
 				}
 				moveStopOCAPrice(
 						addPennyAndRoundStop(avgPrice, getOpenTradePosition()
@@ -292,17 +292,23 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * We have sold the first half of the position try to trail BH on
 			 * one minute bars.
 			 */
+
 			if (this.getTradeOrder(targetOneOrderKey).getIsFilled()) {
-				Money newStop = getOneMinuteTrailStop(
+
+				Money newStop = getOneMinuteTrailStop(candleSeries,
 						this.getStopPriceMinUnfilled(), currentCandle);
-				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+				if (!newStop.equals(new Money(this.getStopPriceMinUnfilled()))) {
+
+					// if (!newStop.equals(this.getStopPriceMinUnfilled())) {
 					_log.info("PositionManagerStrategy OneMinuteTrail: "
 							+ getSymbol() + " Trail Price: " + newStop
 							+ " Time: " + startPeriod + " Side: "
 							+ this.getOpenTradePosition().getSide());
 					// moveStopOCAPrice(newStop, true);
+					// }
 				}
 			}
+
 			/*
 			 * Close any opened positions with a market order at the end of the
 			 * day.
@@ -395,34 +401,56 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	 */
 	Money candleHighLow = null;
 
-	public Money getOneMinuteTrailStop(Money stopPrice, CandleItem currentCandle)
+	public Money getOneMinuteTrailStop(CandleSeries candleSeries,
+			Money stopPrice, CandleItem currentCandle)
 			throws StrategyRuleException {
 
-		if (null == candleHighLow) {
-			if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
-				candleHighLow = new Money(0);
-			} else {
-				candleHighLow = new Money(Double.MAX_VALUE);
-			}
-		}
+		if (!(59 == TradingCalendar
+				.getSecond(currentCandle.getLastUpdateDate())))
+			return stopPrice;
 
 		if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
-			if (currentCandle.getLow() > candleHighLow.doubleValue())
-				candleHighLow = new Money(currentCandle.getLow());
-			if (stopPrice.isLessThan(candleHighLow)
-					&& (59 == TradingCalendar.getSecond(currentCandle
-							.getLastUpdateDate())))
-				return candleHighLow;
+
+			if (stopPrice.isLessThan(new Money(candleSeries
+					.getPreviousRollingCandle().getVwap())))
+				return new Money(candleSeries.getPreviousRollingCandle()
+						.getVwap());
+
+			if (candleSeries.getPreviousRollingCandle().getVwap() < candleSeries
+					.getRollingCandle().getVwap())
+				return new Money(candleSeries.getPreviousRollingCandle()
+						.getVwap());
+
 		} else {
-			if (currentCandle.getHigh() < candleHighLow.doubleValue())
-				candleHighLow = new Money(currentCandle.getHigh());
-			if (stopPrice.isGreaterThan(candleHighLow)
-					&& (59 == TradingCalendar.getSecond(currentCandle
-							.getLastUpdateDate())))
-				return candleHighLow;
+
+			if (stopPrice.isGreaterThan(new Money(candleSeries
+					.getPreviousRollingCandle().getVwap())))
+				return new Money(candleSeries.getPreviousRollingCandle()
+						.getVwap());
+
+			if (candleSeries.getPreviousRollingCandle().getVwap() > candleSeries
+					.getRollingCandle().getVwap())
+				return new Money(candleSeries.getPreviousRollingCandle()
+						.getVwap());
 		}
+
+		// if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
+		// if (null == candleHighLow
+		// || currentCandle.getLow() > candleHighLow.doubleValue())
+		// candleHighLow = new Money(currentCandle.getLow());
+		//
+		// if (stopPrice.isLessThan(candleHighLow))
+		// return candleHighLow;
+		//
+		// } else {
+		// if (null == candleHighLow
+		// || currentCandle.getHigh() < candleHighLow.doubleValue())
+		// candleHighLow = new Money(currentCandle.getHigh());
+		//
+		// if (stopPrice.isGreaterThan(candleHighLow))
+		// return candleHighLow;
+		// }
 
 		return stopPrice;
 	}
-
 }
