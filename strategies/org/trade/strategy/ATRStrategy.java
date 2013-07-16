@@ -47,8 +47,12 @@ import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Entrylimit;
+import org.trade.strategy.data.AverageTrueRangeDataset;
+import org.trade.strategy.data.AverageTrueRangeSeries;
 import org.trade.strategy.data.CandleSeries;
+import org.trade.strategy.data.IndicatorSeries;
 import org.trade.strategy.data.StrategyData;
+import org.trade.strategy.data.atr.AverageTrueRangeItem;
 import org.trade.strategy.data.candle.CandleItem;
 
 /**
@@ -57,7 +61,7 @@ import org.trade.strategy.data.candle.CandleItem;
  * @version $Revision: 1.0 $
  */
 
-public class FiveMinGapBarStrategy extends AbstractStrategyRule {
+public class ATRStrategy extends AbstractStrategyRule {
 
 	/**
 	 * 1/ Enter in the direction of the first 5min bar with a stop at the first
@@ -82,7 +86,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 	private static final long serialVersionUID = -1373776942145894938L;
 	private final static Logger _log = LoggerFactory
-			.getLogger(FiveMinGapBarStrategy.class);
+			.getLogger(ATRStrategy.class);
 
 	private Side side = null;
 
@@ -97,7 +101,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 	 *            Integer
 	 */
 
-	public FiveMinGapBarStrategy(BrokerModel brokerManagerModel,
+	public ATRStrategy(BrokerModel brokerManagerModel,
 			StrategyData datasetContainer, Integer idTradestrategy) {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
 	}
@@ -134,6 +138,23 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				CandleItem prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
 
+				AverageTrueRangeDataset datasetATR = (AverageTrueRangeDataset) getTradestrategy()
+						.getDatasetContainer().getIndicatorByType(
+								IndicatorSeries.AverageTrueRangeSeries);
+				if (null == datasetATR) {
+					error(1, 20,
+							"No ATRdefined for Strategy. Please add ATR Indicator to Strategy");
+					return;
+				}
+				AverageTrueRangeSeries seriesATR = datasetATR.getSeries(0);
+				int itemCountATR = seriesATR.getItemCount();
+				if (itemCountATR < 2) {
+					return;
+				}
+
+				double prevATR = ((AverageTrueRangeItem) seriesATR
+						.getDataItem(itemCountATR - 2)).getAverageTrueRange();
+
 				/*
 				 * Is it the the 9:35 candle? and we have not created an open
 				 * position trade.
@@ -167,11 +188,13 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						this.side = Side.newInstance(Side.BOT);
 					}
 					Money price = new Money(prevCandleItem.getHigh());
-					Money priceStop = new Money(prevCandleItem.getLow());
+					Money priceStop = new Money(prevCandleItem.getOpen()
+							- prevATR);
 					String action = Action.BUY;
 					if (this.side.equalsCode(Side.SLD)) {
 						price = new Money(prevCandleItem.getLow());
-						priceStop = new Money(prevCandleItem.getHigh());
+						priceStop = new Money(prevCandleItem.getOpen()
+								+ prevATR);
 						action = Action.SELL;
 					}
 					Money priceClose = new Money(prevCandleItem.getClose());
@@ -181,7 +204,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					double highLowRange = Math.abs(prevCandleItem.getHigh()
 							- prevCandleItem.getLow());
 
-					priceStop = new Money(prevCandleItem.getOpen());
+					// priceStop = new Money(prevCandleItem.getOpen());
 
 					// If the candle less than the entry limit %
 					if (((highLowRange) / prevCandleItem.getClose()) < entrylimit
