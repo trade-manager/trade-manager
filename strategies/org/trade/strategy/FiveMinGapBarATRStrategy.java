@@ -61,7 +61,7 @@ import org.trade.strategy.data.candle.CandleItem;
  * @version $Revision: 1.0 $
  */
 
-public class ATRStrategy extends AbstractStrategyRule {
+public class FiveMinGapBarATRStrategy extends AbstractStrategyRule {
 
 	/**
 	 * 1/ Enter in the direction of the first 5min bar with a stop at the first
@@ -86,7 +86,7 @@ public class ATRStrategy extends AbstractStrategyRule {
 
 	private static final long serialVersionUID = -1373776942145894938L;
 	private final static Logger _log = LoggerFactory
-			.getLogger(ATRStrategy.class);
+			.getLogger(FiveMinGapBarATRStrategy.class);
 
 	private Side side = null;
 
@@ -101,7 +101,7 @@ public class ATRStrategy extends AbstractStrategyRule {
 	 *            Integer
 	 */
 
-	public ATRStrategy(BrokerModel brokerManagerModel,
+	public FiveMinGapBarATRStrategy(BrokerModel brokerManagerModel,
 			StrategyData datasetContainer, Integer idTradestrategy) {
 		super(brokerManagerModel, datasetContainer, idTradestrategy);
 	}
