@@ -220,7 +220,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 				} else {
 					if (startPeriod.before(TradingCalendar.getSpecificTime(
-							startPeriod, 10, 50))
+							startPeriod, 11, 30))
 							&& startPeriod.after(TradingCalendar
 									.getSpecificTime(startPeriod, 9, 35))) {
 						CandleItem firstCandle = this
@@ -254,7 +254,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				}
 
 				if (!startPeriod.before(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 50))) {
+						startPeriod, 11, 30))) {
 					_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
 							+ getSymbol() + " Time: " + startPeriod);
 					if (!this.isThereOpenPosition()

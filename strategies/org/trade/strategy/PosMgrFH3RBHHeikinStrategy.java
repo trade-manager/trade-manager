@@ -187,7 +187,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 */
 
 			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
-					10, 40))
+					15, 30))
 					&& startPeriod.after(TradingCalendar.getSpecificTime(
 							startPeriod, 9, 35))) {
 
@@ -230,7 +230,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * the open order.
 			 */
 			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
-					10, 40)) && newBar) {
+					15, 30)) && newBar) {
 
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
 						+ " Time: " + startPeriod);
