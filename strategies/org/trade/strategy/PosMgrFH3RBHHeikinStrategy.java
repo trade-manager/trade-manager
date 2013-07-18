@@ -160,7 +160,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				 */
 				Integer quantity = this.getOpenPositionOrder()
 						.getFilledQuantity();
-				Integer tgt1Qty = quantity / 2;
+				Integer tgt1Qty = quantity / 3;
 				Integer tgt2Qty = quantity - tgt1Qty;
 				// Integer tgt3Qty = quantity - (tgt1Qty + tgt2Qty);
 
@@ -171,7 +171,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 				createStopAndTargetOrder(getOpenPositionOrder(), 2, 2, tgt2Qty,
 						true);
-				// createStopAndTargetOrder(getOpenPositionOrder(), 2, 3,
+				// createStopAndTargetOrder(getOpenPositionOrder(), 2, 4,
 				// tgt3Qty,
 				// true);
 				_log.info("Open position submit Stop/Tgt orders created Symbol: "
@@ -252,11 +252,11 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 					if (avgPrice > prevCandleItem.getHigh())
 						avgPrice = prevCandleItem.getHigh();
-
 				}
-				moveStopOCAPrice(
-						addPennyAndRoundStop(avgPrice, getOpenTradePosition()
-								.getSide(), action, 0.01), true);
+
+				Money stopPrice = addPennyAndRoundStop(avgPrice,
+						getOpenTradePosition().getSide(), action, 0.01);
+				moveStopOCAPrice(stopPrice, true);
 			}
 
 			/*
@@ -273,8 +273,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				Money newStop = addPennyAndRoundStop(
 						this.getTradeOrder(targetOneOrderKey)
 								.getAverageFilledPrice().doubleValue(),
-
 						getOpenTradePosition().getSide(), action, 0.01);
+
 				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
 					// moveStopOCAPrice(newStop, true);
 				}
