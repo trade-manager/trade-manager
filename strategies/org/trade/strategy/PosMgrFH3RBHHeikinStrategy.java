@@ -160,7 +160,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				 */
 				Integer quantity = this.getOpenPositionOrder()
 						.getFilledQuantity();
-				Integer tgt1Qty = quantity / 3;
+				Integer tgt1Qty = quantity / 2;
 				Integer tgt2Qty = quantity - tgt1Qty;
 				// Integer tgt3Qty = quantity - (tgt1Qty + tgt2Qty);
 
