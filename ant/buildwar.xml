@@ -43,30 +43,31 @@
 		<tstamp/>
 		<fileset dir="${pathname.library.external}" id="fileset.external.library.dist">
 			<include name="jsyntaxpane-0.9.5-b29.jar" />
-			<include name="tws-9.67.jar" />				
+			<include name="tws-9.67.jar" />
 			<include name="jfreechart-1.0.14.jar" />
 			<include name="jcommon-1.0.17.jar" />
 			<include name="swt.jar" />
-			<include name="c3p0-0.9.1.jar" />
-			<include name="hibernate-c3p0-4.2.0.Final.jar" />
+			<include name="c3p0-0.9.1.1.jar" />
+			<include name="hibernate-c3p0-4.2.3.Final.jar" />
+			<include name="mchange-commons-java-0.2.3.4.jar" />
 			<include name="javassist-3.15.0.GA.jar" />
 			<include name="dom4j-1.6.1.jar" />
-			<include name="hibernate-commons-annotations-4.0.1.Final.jar" />
-			<include name="hibernate-core-4.2.0.Final.jar" />
-			<include name="hibernate-entitymanager-4.2.0.Final.jar" />
+			<include name="hibernate-commons-annotations-4.0.2.Final.jar" />
+			<include name="hibernate-core-4.2.3.Final.jar" />
+			<include name="hibernate-entitymanager-4.2.3.Final.jar" />
 			<include name="hibernate-jpa-2.0-api-1.0.1.Final.jar" />
 			<include name="hibernate-validator-4.2.0.Final.jar" />
 			<include name="ejb-api-3.0.jar" />
 			<include name="antlr-2.7.7.jar" />
 			<include name="mysql-connector-java-5.1.18.jar" />
 			<include name="jboss-logging-3.1.0.GA.jar" />
-			<include name="jboss-transaction-api_1.1_spec-1.0.0.Final.jar" />
+			<include name="jboss-transaction-api_1.1_spec-1.0.1.Final.jar" />
 			<include name="slf4j-api-1.6.1.jar" />
 			<include name="slf4j-log4j12-1.6.1.jar" />
 			<include name="log4j-1.2.16.jar" />
-			<include name="commons-collections-3.2.1.jar" />				
+			<include name="commons-collections-3.2.1.jar" />
 			<include name="junit-4.8.2.jar" />
-			<include name="validation-api-1.0.0.GA.jar" />	
+			<include name="validation-api-1.0.0.GA.jar" />
 		</fileset>
 		<fileset dir="${env.JAVA_HOME}/lib" id="fileset.external.library.java">
 			<include name="tools.jar"/>
@@ -151,30 +152,31 @@
 		<copy todir="${pathname.component.documentroot}/app/lib">
 			<fileset dir="${pathname.library.external}">
 				<include name="jsyntaxpane-0.9.5-b29.jar" />
-				<include name="tws-9.67.jar" />				
+				<include name="tws-9.67.jar" />
 				<include name="jfreechart-1.0.14.jar" />
 				<include name="jcommon-1.0.17.jar" />
 				<include name="swt.jar" />
-				<include name="c3p0-0.9.1.jar" />
-				<include name="hibernate-c3p0-4.2.0.Final.jar" />
+				<include name="c3p0-0.9.1.1.jar" />
+				<include name="hibernate-c3p0-4.2.3.Final.jar" />
+				<include name="mchange-commons-java-0.2.3.4.jar" />
 				<include name="javassist-3.15.0.GA.jar" />
 				<include name="dom4j-1.6.1.jar" />
-				<include name="hibernate-commons-annotations-4.0.1.Final.jar" />
-				<include name="hibernate-core-4.2.0.Final.jar" />
-				<include name="hibernate-entitymanager-4.2.0.Final.jar" />
+				<include name="hibernate-commons-annotations-4.0.2.Final.jar" />
+				<include name="hibernate-core-4.2.3.Final.jar" />
+				<include name="hibernate-entitymanager-4.2.3.Final.jar" />
 				<include name="hibernate-jpa-2.0-api-1.0.1.Final.jar" />
 				<include name="hibernate-validator-4.2.0.Final.jar" />
 				<include name="ejb-api-3.0.jar" />
 				<include name="antlr-2.7.7.jar" />
 				<include name="mysql-connector-java-5.1.18.jar" />
 				<include name="jboss-logging-3.1.0.GA.jar" />
-				<include name="jboss-transaction-api_1.1_spec-1.0.0.Final.jar" />
+				<include name="jboss-transaction-api_1.1_spec-1.0.1.Final.jar" />
 				<include name="slf4j-api-1.6.1.jar" />
 				<include name="slf4j-log4j12-1.6.1.jar" />
 				<include name="log4j-1.2.16.jar" />
-				<include name="commons-collections-3.2.1.jar" />				
+				<include name="commons-collections-3.2.1.jar" />
 				<include name="junit-4.8.2.jar" />
-				<include name="validation-api-1.0.0.GA.jar" />	
+				<include name="validation-api-1.0.0.GA.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${pathname.component.documentroot}">
@@ -192,13 +194,13 @@
 		<signjar jar="${pathname.component.documentroot}/app/lib/jcommon-1.0.17.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/jfreechart-1.0.14.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/swt.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/c3p0-0.9.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-c3p0-4.2.0.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/c3p0-0.9.2.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-c3p0-4.2.3.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/javassist-3.15.0.GA.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/dom4j-1.6.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-commons-annotations-4.0.1.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-core-4.2.0.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-entitymanager-4.2.0.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-commons-annotations-4.0.2.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-core-4.2.3.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-entitymanager-4.2.3.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-validator-4.2.0.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/ejb-api-3.0.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
@@ -206,11 +208,12 @@
 		<signjar jar="${pathname.component.documentroot}/app/lib/mysql-connector-java-5.1.18.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/slf4j-api-1.6.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/slf4j-log4j12-1.6.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jboss-transaction-api_1.1_spec-1.0.1.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/jboss--logging-3.1.0.GA.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/commons-collections-3.2.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/log4j-1.2.16.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/validation-api-1.0.0.GA.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/mchange-commons-java-0.2.3.4.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 
 		<war warfile="${pathname.distribute}/${component.name.server.war}" webxml="${pathname.component.documentroot}/WEB-INF/web.xml" manifest="${component.name.server.war.manifest}">
 			<fileset dir="${pathname.component.documentroot}"/>
