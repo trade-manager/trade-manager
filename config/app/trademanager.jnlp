@@ -35,7 +35,7 @@
 	<jar href="hibernate-validator-4.2.0.Final.jar" />
 	<jar href="ejb-api-3.0.jar" />
 	<jar href="antlr-2.7.7.jar" />
-	<jar href="mysql-connector-java-5.1.18.jar" />
+	<jar href="mysql-connector-java-5.1.24.jar" />
 	<jar href="jboss-logging-3.1.0.GA.jar" />
 	<jar href="jboss-transaction-api_1.1_spec-1.0.1.Final.jar" />
 	<jar href="slf4j-api-1.6.1.jar" />
