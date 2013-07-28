@@ -86,7 +86,7 @@ public class StrategyPanelTest extends TestCase {
 						Rule nextRule = new Rule(strategy, 1, null, new Date(),
 								content.getBytes(), new Date());
 						strategy.add(nextRule);
-						this.tradePersistentModel.persistRule(nextRule);
+						this.tradePersistentModel.persistAspect(nextRule);
 					}
 				}
 			}
@@ -351,7 +351,7 @@ public class StrategyPanelTest extends TestCase {
 			String content = strategyPanel.readFile(fileName);
 			textArea.setText(content);
 			myrule.setRule(textArea.getText().getBytes());
-			myrule = (Rule) this.tradePersistentModel.persistRule(myrule);
+			myrule = this.tradePersistentModel.persistAspect(myrule);
 			TestCase.assertNotNull(myrule.getIdRule());
 			Rule ruleSaved = this.tradePersistentModel.findRuleById(myrule
 					.getIdRule());

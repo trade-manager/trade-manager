@@ -747,31 +747,6 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method persistTradestrategy.
-	 * 
-	 * @param transientInstance
-	 *            Tradestrategy
-	 * @return Tradestrategy
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#persistTradestrategy(Tradestrategy)
-	 */
-	public Tradestrategy persistTradestrategy(Tradestrategy transientInstance)
-			throws PersistentModelException {
-
-		try {
-			return m_aspectHome.persist(transientInstance);
-
-		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Tradestrategy please refresh before save.");
-		} catch (Exception e) {
-			throw new PersistentModelException(" Error saving Tradestrategy: "
-					+ transientInstance.getContract().getSymbol() + "\n Msg: "
-					+ e.getMessage());
-		}
-	}
-
-	/**
 	 * Method persistTradeOrder.
 	 * 
 	 * @param tradeOrder
@@ -852,8 +827,7 @@ public class TradePersistentModel implements PersistentModel {
 						positionOrders.setStatus(TradestrategyStatus.OPEN);
 						this.persistAspect(positionOrders);
 						tradePosition.addTradeOrder(tradeOrder);
-						tradePosition = (TradePosition) this
-								.persistAspect(tradePosition);
+						tradePosition = this.persistAspect(tradePosition);
 					}
 					tradeOrder.setTradePosition(tradePosition);
 				} else {
@@ -1058,32 +1032,6 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method persistTradePosition.
-	 * 
-	 * @param transientInstance
-	 *            TradePosition
-	 * @return TradePosition
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#persistTrade(TradePosition)
-	 */
-	public TradePosition persistTradePosition(TradePosition transientInstance)
-			throws PersistentModelException {
-
-		try {
-			return m_aspectHome.persist(transientInstance);
-
-		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Trade please refresh before save.");
-		} catch (Exception e) {
-
-			throw new PersistentModelException("Error saving Trade: "
-					+ transientInstance.getContract().getSymbol() + "\n Msg: "
-					+ e.getMessage());
-		}
-	}
-
-	/**
 	 * Method findRuleById.
 	 * 
 	 * @param id
@@ -1154,28 +1102,6 @@ public class TradePersistentModel implements PersistentModel {
 	 */
 	public List<Strategy> findStrategies() throws PersistentModelException {
 		return m_strategyHome.findAll();
-	}
-
-	/**
-	 * Method persistRule.
-	 * 
-	 * @param transientInstance
-	 *            Rule
-	 * @return Rule
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#persistRule(Rule)
-	 */
-	public Rule persistRule(Rule transientInstance)
-			throws PersistentModelException {
-		try {
-			return m_aspectHome.persist(transientInstance);
-		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Aspect please refresh before save.");
-		} catch (Exception ex) {
-			throw new PersistentModelException("Error saving Aspect: "
-					+ ex.getMessage());
-		}
 	}
 
 	/**
@@ -1297,7 +1223,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistAspect(Aspect)
 	 */
-	public Aspect persistAspect(Aspect transientInstance)
+	public <T extends Aspect> T persistAspect(T transientInstance)
 			throws PersistentModelException {
 		try {
 			return m_aspectHome.persist(transientInstance);
@@ -1324,7 +1250,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * 
 	 * @see org.trade.persistent.PersistentModel#persistAspect(Aspect)
 	 */
-	public Aspect persistAspect(Aspect transientInstance,
+	public <T extends Aspect> T persistAspect(T transientInstance,
 			boolean overrideVersion) throws PersistentModelException {
 		try {
 			return m_aspectHome.persist(transientInstance, overrideVersion);
@@ -1360,29 +1286,6 @@ public class TradePersistentModel implements PersistentModel {
 					+ transientInstance.getClass().getSimpleName() + " : "
 					+ e.getMessage());
 		}
-	}
-
-	/**
-	 * Method removeRule.
-	 * 
-	 * @param transientInstance
-	 *            Rule
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#removeRule(Rule)
-	 */
-	public void removeRule(Rule transientInstance)
-			throws PersistentModelException {
-		try {
-			m_aspectHome.remove(transientInstance);
-		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving rule please refresh before save.");
-		} catch (Exception e) {
-			throw new PersistentModelException("Error saving rule: "
-					+ transientInstance.getIdRule() + "\n Msg: "
-					+ e.getMessage());
-		}
-
 	}
 
 	/**

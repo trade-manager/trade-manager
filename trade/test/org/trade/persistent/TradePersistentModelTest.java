@@ -511,7 +511,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradestrategy = TradestrategyTest
 					.removeTradeOrders(this.tradestrategy);
 			Tradestrategy result = this.tradePersistentModel
-					.persistTradestrategy(this.tradestrategy);
+					.persistAspect(this.tradestrategy);
 			TestCase.assertNotNull(result.getId());
 		} catch (Exception e) {
 			TestCase.fail("Error testPersistTradestrategy Msg: "
@@ -766,7 +766,7 @@ public class TradePersistentModelTest extends TestCase {
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
 			TradePosition result = this.tradePersistentModel
-					.persistTradePosition(tradePosition);
+					.persistAspect(tradePosition);
 			TestCase.assertNotNull(result.getId());
 		} catch (Exception e) {
 			TestCase.fail("Error testPersistTrade Msg: " + e.getMessage());
@@ -937,7 +937,7 @@ public class TradePersistentModelTest extends TestCase {
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
 			TradePosition resultTrade = this.tradePersistentModel
-					.persistTradePosition(tradePosition);
+					.persistAspect(tradePosition);
 			TradePosition result = this.tradePersistentModel
 					.findTradePositionById(resultTrade.getIdTradePosition());
 			TestCase.assertNotNull(result);
@@ -955,14 +955,14 @@ public class TradePersistentModelTest extends TestCase {
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
 			tradePosition.setIsOpen(true);
-			tradePersistentModel.persistTradePosition(tradePosition);
+			tradePersistentModel.persistAspect(tradePosition);
 			TradePosition result = this.tradePersistentModel
 					.findOpenTradePositionByContractId(this.tradestrategy
 							.getContract().getIdContract());
 			TestCase.assertNotNull(result);
 
 			tradePosition.setIsOpen(false);
-			tradePersistentModel.persistTradePosition(tradePosition);
+			tradePersistentModel.persistAspect(tradePosition);
 			result = this.tradePersistentModel
 					.findOpenTradePositionByContractId(this.tradestrategy
 							.getContract().getIdContract());
@@ -981,7 +981,7 @@ public class TradePersistentModelTest extends TestCase {
 					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
-			this.tradePersistentModel.persistTradePosition(tradePosition);
+			this.tradePersistentModel.persistAspect(tradePosition);
 			Tradingday result = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
@@ -1001,7 +1001,7 @@ public class TradePersistentModelTest extends TestCase {
 					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
-			this.tradePersistentModel.persistTradePosition(tradePosition);
+			this.tradePersistentModel.persistAspect(tradePosition);
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
@@ -1173,9 +1173,9 @@ public class TradePersistentModelTest extends TestCase {
 					.findRuleByMaxVersion(this.tradestrategy.getStrategy()) + 1;
 			Rule rule = new Rule(this.tradestrategy.getStrategy(), version,
 					"Test", new Date(), new Date());
-			Aspect result = this.tradePersistentModel.persistRule(rule);
+			Aspect result = this.tradePersistentModel.persistAspect(rule);
 			TestCase.assertNotNull(result);
-			this.tradePersistentModel.removeRule(rule);
+			this.tradePersistentModel.removeAspect(rule);
 		} catch (Exception e) {
 			TestCase.fail("Error testPersistRule Msg: " + e.getMessage());
 		}
@@ -1189,12 +1189,12 @@ public class TradePersistentModelTest extends TestCase {
 					.findRuleByMaxVersion(this.tradestrategy.getStrategy()) + 1;
 			Rule rule = new Rule(this.tradestrategy.getStrategy(), version,
 					"Test", new Date(), new Date());
-			Aspect resultAspect = this.tradePersistentModel.persistRule(rule);
+			Aspect resultAspect = this.tradePersistentModel.persistAspect(rule);
 			TestCase.assertNotNull(resultAspect);
 			Rule result = this.tradePersistentModel.findRuleById(resultAspect
 					.getId());
 			TestCase.assertNotNull(result);
-			this.tradePersistentModel.removeRule(rule);
+			this.tradePersistentModel.removeAspect(rule);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindRuleById Msg: " + e.getMessage());
 		}
@@ -1247,10 +1247,9 @@ public class TradePersistentModelTest extends TestCase {
 					.findRuleByMaxVersion(this.tradestrategy.getStrategy()) + 1;
 			Rule rule = new Rule(this.tradestrategy.getStrategy(), version,
 					"Test", new Date(), new Date());
-			Rule resultAspect = (Rule) this.tradePersistentModel
-					.persistRule(rule);
+			Rule resultAspect = this.tradePersistentModel.persistAspect(rule);
 			TestCase.assertNotNull(resultAspect);
-			this.tradePersistentModel.removeRule(resultAspect);
+			this.tradePersistentModel.removeAspect(resultAspect);
 		} catch (Exception e) {
 			TestCase.fail("Error testRemoveRule Msg: " + e.getMessage());
 		}

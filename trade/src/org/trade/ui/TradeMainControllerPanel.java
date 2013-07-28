@@ -1246,7 +1246,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						 * when the default Portfolio has no accounts.
 						 */
 						defaultPortfolio.setName(account.getAccountNumber());
-						defaultPortfolio = (Portfolio) m_tradePersistentModel
+						defaultPortfolio = m_tradePersistentModel
 								.persistAspect(defaultPortfolio);
 
 					} else {
@@ -2390,7 +2390,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									.getCurrency(), series.getContract()
 									.getExpiry());
 					if (null == contract) {
-						contract = (Contract) this.tradePersistentModel
+						contract = this.tradePersistentModel
 								.persistAspect(series.getContract());
 					}
 				}

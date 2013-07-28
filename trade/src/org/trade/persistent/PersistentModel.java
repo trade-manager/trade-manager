@@ -75,17 +75,6 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method persistTradestrategy.
-	 * 
-	 * @param transientInstance
-	 *            Tradestrategy
-	 * @return Tradestrategy
-	 * @throws PersistentModelException
-	 */
-	Tradestrategy persistTradestrategy(Tradestrategy transientInstance)
-			throws PersistentModelException;
-
-	/**
 	 * Method persistContract.
 	 * 
 	 * @param transientInstance
@@ -116,17 +105,6 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	TradeOrder persistTradeOrderfill(TradeOrder tradeOrder)
-			throws PersistentModelException;
-
-	/**
-	 * Method persistTradePosition.
-	 * 
-	 * @param transientInstance
-	 *            TradePosition
-	 * @return TradePosition
-	 * @throws PersistentModelException
-	 */
-	TradePosition persistTradePosition(TradePosition transientInstance)
 			throws PersistentModelException;
 
 	/**
@@ -470,16 +448,6 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method persistRule.
-	 * 
-	 * @param transientInstance
-	 *            Rule
-	 * @return Aspect
-	 * @throws PersistentModelException
-	 */
-	Aspect persistRule(Rule transientInstance) throws PersistentModelException;
-
-	/**
 	 * Method findRuleById.
 	 * 
 	 * @param idRule
@@ -520,15 +488,6 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	Strategy findStrategyByName(String name) throws PersistentModelException;
-
-	/**
-	 * Method removeRule.
-	 * 
-	 * @param rule
-	 *            Rule
-	 * @throws PersistentModelException
-	 */
-	void removeRule(Rule rule) throws PersistentModelException;
 
 	/**
 	 * Method findStrategies.
@@ -583,7 +542,8 @@ public interface PersistentModel {
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
-	Aspect persistAspect(Aspect aspect) throws PersistentModelException;
+	<T extends Aspect> T persistAspect(T transientInstance)
+			throws PersistentModelException;
 
 	/**
 	 * Method persistAspect.
@@ -595,8 +555,8 @@ public interface PersistentModel {
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
-	Aspect persistAspect(Aspect aspect, boolean overrideVersion)
-			throws PersistentModelException;
+	<T extends Aspect> T persistAspect(T transientInstance,
+			boolean overrideVersion) throws PersistentModelException;
 
 	/**
 	 * Method removeAspect.

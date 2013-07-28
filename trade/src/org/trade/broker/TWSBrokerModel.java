@@ -1876,8 +1876,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 */
 					if (account.isDirty()) {
 						account.setUpdateDate(new Date());
-						account = (Account) m_tradePersistentModel
-								.persistAspect(account, true);
+						account = m_tradePersistentModel.persistAspect(account,
+								true);
 						m_accountRequests.replace(accountNumber, account);
 						this.fireUpdateAccountTime(accountNumber);
 					}

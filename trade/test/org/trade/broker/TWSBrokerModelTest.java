@@ -660,8 +660,8 @@ public class TWSBrokerModelTest extends TestCase implements
 								.getCurrency(), series.getContract()
 								.getExpiry());
 				if (null == contract) {
-					contract = (Contract) this.tradePersistentModel
-							.persistAspect(series.getContract());
+					contract = this.tradePersistentModel.persistAspect(series
+							.getContract());
 				}
 			}
 			indicatorTradestrategy = new Tradestrategy(contract,
