@@ -65,16 +65,6 @@ public interface PersistentModel {
 	public final static String _persistentModel = "PersistentModel";
 
 	/**
-	 * Method persistTradingday.
-	 * 
-	 * @param transientInstance
-	 *            Tradingday
-	 * @throws PersistentModelException
-	 */
-	void persistTradingday(Tradingday transientInstance)
-			throws PersistentModelException;
-
-	/**
 	 * Method persistContract.
 	 * 
 	 * @param transientInstance
@@ -158,18 +148,6 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	Contract findContractById(Integer idContract)
-			throws PersistentModelException;
-
-	/**
-	 * Method persistPortfolio.
-	 * 
-	 * @param instance
-	 *            Portfolio
-	 * @return Portfolio
-	 * @throws PersistentModelException
-	 */
-
-	Portfolio persistPortfolio(Portfolio instance)
 			throws PersistentModelException;
 
 	/**

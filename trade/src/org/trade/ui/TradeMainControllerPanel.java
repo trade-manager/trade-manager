@@ -1239,8 +1239,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								defaultPortfolio, account);
 						defaultPortfolio.getPortfolioAccounts().add(
 								portfolioAccount);
-						defaultPortfolio = (Portfolio) m_tradePersistentModel
-								.persistPortfolio(defaultPortfolio);
+						defaultPortfolio = m_tradePersistentModel
+								.persistAspect(defaultPortfolio);
 						/*
 						 * Update the account (key) to the current account only
 						 * when the default Portfolio has no accounts.
@@ -1256,8 +1256,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						PortfolioAccount portfolioAccount = new PortfolioAccount(
 								portfolio, account);
 						portfolio.getPortfolioAccounts().add(portfolioAccount);
-						portfolio = (Portfolio) m_tradePersistentModel
-								.persistPortfolio(portfolio);
+						portfolio = m_tradePersistentModel
+								.persistAspect(portfolio);
 						if (tokens == 0) {
 							/*
 							 * Update the default portfolio.

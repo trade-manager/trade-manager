@@ -599,28 +599,6 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method persistTradingday.
-	 * 
-	 * @param transientInstance
-	 *            Tradingday
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#persistTradingday(Tradingday)
-	 */
-	public void persistTradingday(Tradingday transientInstance)
-			throws PersistentModelException {
-
-		try {
-			m_tradingdayHome.persist(transientInstance);
-		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Tradingday please refresh before save.");
-		} catch (Exception e) {
-			throw new PersistentModelException("Error saving Tradingday: "
-					+ transientInstance.getOpen() + "\n Msg: " + e.getMessage());
-		}
-	}
-
-	/**
 	 * Method persistContract.
 	 * 
 	 * @param transientInstance
@@ -1194,24 +1172,6 @@ public class TradePersistentModel implements PersistentModel {
 			throw new PersistentModelException("Aspect not found for Id: "
 					+ transientInstance.getId());
 		return instance;
-	}
-
-	/**
-	 * Method persistPortfolio.
-	 * 
-	 * @param instance
-	 *            Portfolio
-	 * @throws PersistentModelException
-	 */
-
-	public Portfolio persistPortfolio(Portfolio instance)
-			throws PersistentModelException {
-		try {
-			return m_portfolioHome.persistPortfolio(instance);
-		} catch (Exception ex) {
-			throw new PersistentModelException(
-					"Error saving PortfolioAccount: " + ex.getMessage());
-		}
 	}
 
 	/**

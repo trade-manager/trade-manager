@@ -187,7 +187,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							"org/trade/broker/request/allocationEmpty.xml"));
 
 			for (Aspect aspect : aspects.getAspect()) {
-				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
+				m_tradePersistentModel.persistAspect(aspect);
 			}
 		} catch (Exception e) {
 			TestCase.fail("Error :" + e.getMessage());
@@ -206,7 +206,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getResourceAsStream(
 							"org/trade/broker/request/allocation.xml"));
 			for (Aspect aspect : aspects.getAspect()) {
-				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
+				m_tradePersistentModel.persistAspect(aspect);
 			}
 
 		} catch (Exception e) {
@@ -226,7 +226,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getResourceAsStream(
 							"org/trade/broker/request/allocation1.xml"));
 			for (Aspect aspect : aspects.getAspect()) {
-				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
+				m_tradePersistentModel.persistAspect(aspect);
 			}
 
 		} catch (Exception e) {
@@ -247,7 +247,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 			aspects.add(portfolio);
 
 			for (Aspect aspect : aspects.getAspect()) {
-				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
+				m_tradePersistentModel.persistAspect(aspect);
 			}
 
 		} catch (Exception e) {
@@ -267,7 +267,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 					.getResourceAsStream(
 							"org/trade/broker/request/groupsEmpty.xml"));
 			for (Aspect aspect : aspects.getAspect()) {
-				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
+				m_tradePersistentModel.persistAspect(aspect);
 			}
 
 		} catch (Exception e) {
@@ -288,7 +288,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							.getResourceAsStream(
 									"org/trade/broker/request/groups.xml"));
 			for (Aspect aspect : aspects.getAspect()) {
-				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
+				m_tradePersistentModel.persistAspect(aspect);
 			}
 
 		} catch (Exception e) {
@@ -309,7 +309,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							.getResourceAsStream(
 									"org/trade/broker/request/groups1.xml"));
 			for (Aspect aspect : aspects.getAspect()) {
-				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
+				m_tradePersistentModel.persistAspect(aspect);
 			}
 
 		} catch (Exception e) {

@@ -163,12 +163,12 @@ public class TradePersistentModelTest extends TestCase {
 						+ " already exists.");
 			} else {
 				tradingday.addTradestrategy(tradestrategy);
-				this.tradePersistentModel.persistTradingday(tradingday);
+				this.tradePersistentModel.persistAspect(tradingday);
 				_log.info("testTradingdaysSave IdTradeStrategy:"
 						+ tradestrategy.getIdTradeStrategy());
 			}
 			tradingday.getTradestrategies().remove(tradestrategy);
-			this.tradePersistentModel.persistTradingday(tradingday);
+			this.tradePersistentModel.persistAspect(tradingday);
 			_log.info("testTradingdaysRemoce IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 			TestCase.assertNotNull(tradingday.getIdTradingDay());
@@ -495,7 +495,7 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			this.tradestrategy = TradestrategyTest
 					.removeTradeOrders(this.tradestrategy);
-			this.tradePersistentModel.persistTradingday(this.tradestrategy
+			this.tradePersistentModel.persistAspect(this.tradestrategy
 					.getTradingday());
 			TestCase.assertNotNull(this.tradestrategy.getTradingday()
 					.getIdTradingDay());
