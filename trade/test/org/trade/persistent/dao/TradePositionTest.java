@@ -90,8 +90,7 @@ public class TradePositionTest extends TestCase {
 			TradePosition instance = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
 			instance.setIsOpen(true);
-			TradePosition tradePosition = (TradePosition) aspectHome
-					.persist(instance);
+			TradePosition tradePosition = aspectHome.persist(instance);
 
 			TestCase.assertNotNull(tradePosition.getIdTradePosition());
 			_log.info("testAddTradePosition IdTradeStrategy: "

@@ -646,7 +646,7 @@ public class TradePersistentModel implements PersistentModel {
 				}
 			}
 
-			return (Contract) m_aspectHome.persist(transientInstance);
+			return m_aspectHome.persist(transientInstance);
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error saving Contract please refresh before save.");
@@ -711,8 +711,8 @@ public class TradePersistentModel implements PersistentModel {
 							candleItem.getCandle().getTradingday().getClose());
 
 					if (null == tradingday) {
-						tradingday = (Tradingday) m_aspectHome
-								.persist(candleItem.getCandle().getTradingday());
+						tradingday = m_aspectHome.persist(candleItem
+								.getCandle().getTradingday());
 					}
 					candleItem.getCandle().setTradingday(tradingday);
 				}
@@ -735,7 +735,7 @@ public class TradePersistentModel implements PersistentModel {
 								currCandle.getVersion());
 					}
 				}
-				return (Candle) m_aspectHome.persist(candleItem.getCandle());
+				return m_aspectHome.persist(candleItem.getCandle());
 			}
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
@@ -759,7 +759,7 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 
 		try {
-			return (Tradestrategy) m_aspectHome.persist(transientInstance);
+			return m_aspectHome.persist(transientInstance);
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
@@ -1070,7 +1070,7 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 
 		try {
-			return (TradePosition) m_aspectHome.persist(transientInstance);
+			return m_aspectHome.persist(transientInstance);
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
@@ -1168,7 +1168,7 @@ public class TradePersistentModel implements PersistentModel {
 	public Rule persistRule(Rule transientInstance)
 			throws PersistentModelException {
 		try {
-			return (Rule) m_aspectHome.persist(transientInstance);
+			return m_aspectHome.persist(transientInstance);
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error saving Aspect please refresh before save.");

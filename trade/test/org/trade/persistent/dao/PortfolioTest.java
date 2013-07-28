@@ -86,7 +86,7 @@ public class PortfolioTest extends TestCase {
 			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
 					account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);
-			portfolio = (Portfolio) aspectHome.persist(portfolio);
+			portfolio = aspectHome.persist(portfolio);
 			TestCase.assertNotNull(portfolio.getIndividualAccount());
 
 		} catch (Exception e) {

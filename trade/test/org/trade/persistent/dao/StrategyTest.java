@@ -85,8 +85,7 @@ public class StrategyTest extends TestCase {
 			if (null == transientInstance) {
 				transientInstance = new Strategy(name);
 			}
-			transientInstance = (Strategy) aspectHome
-					.persist(transientInstance);
+			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Strategy added Id = "
 					+ transientInstance.getIdStrategy());
 			TestCase.assertNotNull(transientInstance.getIdStrategy());

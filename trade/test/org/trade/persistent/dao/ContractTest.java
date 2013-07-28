@@ -85,8 +85,7 @@ public class ContractTest extends TestCase {
 			Contract transientInstance = new Contract(SECType.STOCK, "QQQ",
 					Exchange.SMART, Currency.USD, null, null);
 
-			transientInstance = (Contract) aspectHome
-					.persist(transientInstance);
+			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
 			Contract contract = contractHome.findByUniqueKey(
@@ -122,8 +121,7 @@ public class ContractTest extends TestCase {
 			_log.info("Expiry Date: " + expiry);
 			Contract transientInstance = new Contract(SECType.FUTURE, "ES",
 					Exchange.SMART, Currency.USD, expiry, new BigDecimal(50));
-			transientInstance = (Contract) aspectHome
-					.persist(transientInstance);
+			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
 			expiry = TradingCalendar.addDays(expiry, 1);

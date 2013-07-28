@@ -103,8 +103,7 @@ public class CandleTest extends TestCase {
 					transientInstance.setTradeCount(10);
 					transientInstance.setLastUpdateDate(period.getStart());
 
-					transientInstance = (Candle) aspectHome
-							.persist(transientInstance);
+					transientInstance = aspectHome.persist(transientInstance);
 					TestCase.assertNotNull(transientInstance.getIdCandle());
 					_log.info("testAddCandle IdCandle: "
 							+ transientInstance.getIdCandle());

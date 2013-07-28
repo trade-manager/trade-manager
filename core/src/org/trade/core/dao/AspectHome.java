@@ -62,7 +62,7 @@ public class AspectHome {
 	 *            Aspect
 	 * @return Aspect
 	 */
-	public synchronized Aspect persist(Aspect transientInstance) {
+	public synchronized <T extends Aspect> T persist(T transientInstance) {
 		return persist(transientInstance, false);
 	}
 
@@ -75,7 +75,7 @@ public class AspectHome {
 	 *            boolean
 	 * @return Aspect
 	 */
-	public synchronized Aspect persist(Aspect transientInstance,
+	public synchronized <T extends Aspect> T persist(T transientInstance,
 			boolean overrideVersion) {
 
 		try {
@@ -93,7 +93,7 @@ public class AspectHome {
 							transientInstance.getId());
 					transientInstance.setVersion(aspect.getVersion());
 				}
-				Aspect instance = entityManager.merge(transientInstance);
+				T instance = entityManager.merge(transientInstance);
 				entityManager.getTransaction().commit();
 				transientInstance.setVersion(instance.getVersion());
 				transientInstance.setDirty(false);

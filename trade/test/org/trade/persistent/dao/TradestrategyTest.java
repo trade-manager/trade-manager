@@ -103,8 +103,7 @@ public class TradestrategyTest extends TestCase {
 					+ positionOrders.getIdTradeStrategy() + "found.");
 			positionOrders.setStatus(TradestrategyStatus.CANCELLED);
 			AspectHome aspectHome = new AspectHome();
-			positionOrders = (PositionOrders) aspectHome
-					.persist(positionOrders);
+			positionOrders = aspectHome.persist(positionOrders);
 			positionOrders = tradestrategyHome
 					.findPositionOrdersByTradestrategyId(tradestrategy
 							.getIdTradeStrategy());
@@ -262,7 +261,7 @@ public class TradestrategyTest extends TestCase {
 			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
 					account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);
-			portfolio = (Portfolio) aspectHome.persist(portfolio);
+			portfolio = aspectHome.persist(portfolio);
 		}
 		Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
 				.getMostRecentTradingDay(new Date()));
@@ -272,7 +271,7 @@ public class TradestrategyTest extends TestCase {
 		if (null == contract) {
 			contract = new Contract(SECType.STOCK, symbol, Exchange.SMART,
 					Currency.USD, null, null);
-			contract = (Contract) aspectHome.persist(contract);
+			contract = aspectHome.persist(contract);
 
 		} else {
 			tradestrategy = tradestrategyHome.findTradestrategyByUniqueKeys(
@@ -291,8 +290,7 @@ public class TradestrategyTest extends TestCase {
 				}
 				tradestrategy.setStatus(null);
 				tradestrategy.getTradeOrders().clear();
-				tradestrategy = (Tradestrategy) aspectHome
-						.persist(tradestrategy);
+				tradestrategy = aspectHome.persist(tradestrategy);
 				return tradestrategy;
 			}
 		}
