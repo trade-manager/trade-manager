@@ -211,7 +211,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				tradingdays.populateDataFromFile(fileName, tradingday);
 
 				for (Tradingday item : tradingdays.getTradingdays()) {
-					tradePersistentModel.persistAspect(item);
+					tradePersistentModel.persistTradingday(item);
 				}
 
 				doInBackground();
@@ -240,7 +240,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				tradingdays.populateDataFromFile(fileName, tradingday);
 
 				for (Tradingday item : tradingdays.getTradingdays()) {
-					tradePersistentModel.persistAspect(item);
+					tradePersistentModel.persistTradingday(item);
 				}
 
 				doInBackground();
@@ -278,7 +278,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 
 				for (Tradingday item : tradingdays.getTradingdays()) {
-					tradePersistentModel.persistAspect(item);
+					tradePersistentModel.persistTradingday(item);
 				}
 
 				doInBackground();

@@ -65,6 +65,16 @@ public interface PersistentModel {
 	public final static String _persistentModel = "PersistentModel";
 
 	/**
+	 * Method persistTradingday.
+	 * 
+	 * @param transientInstance
+	 *            Tradingday
+	 * @throws PersistentModelException
+	 */
+	void persistTradingday(Tradingday transientInstance)
+			throws PersistentModelException;
+
+	/**
 	 * Method persistContract.
 	 * 
 	 * @param transientInstance

@@ -500,7 +500,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 							if (tradingday.isDirty()) {
 								dirty = true;
 								m_tradePersistentModel
-										.persistAspect(tradingday);
+										.persistTradingday(tradingday);
 							}
 						}
 						if (dirty)

@@ -725,6 +725,28 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method persistTradingday.
+	 * 
+	 * @param transientInstance
+	 *            Tradingday
+	 * @throws PersistentModelException
+	 * @see org.trade.persistent.PersistentModel#persistTradingday(Tradingday)
+	 */
+	public void persistTradingday(Tradingday transientInstance)
+			throws PersistentModelException {
+
+		try {
+			m_tradingdayHome.persist(transientInstance);
+		} catch (OptimisticLockException ex1) {
+			throw new PersistentModelException(
+					"Error saving Tradingday please refresh before save.");
+		} catch (Exception e) {
+			throw new PersistentModelException("Error saving Tradingday: "
+					+ transientInstance.getOpen() + "\n Msg: " + e.getMessage());
+		}
+	}
+
+	/**
 	 * Method persistTradeOrder.
 	 * 
 	 * @param tradeOrder
