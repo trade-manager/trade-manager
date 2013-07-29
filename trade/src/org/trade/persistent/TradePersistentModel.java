@@ -407,6 +407,24 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method persistPortfolio.
+	 * 
+	 * @param instance
+	 *            Portfolio
+	 * @throws PersistentModelException
+	 */
+
+	public Portfolio persistPortfolio(Portfolio instance)
+			throws PersistentModelException {
+		try {
+			return m_portfolioHome.persistPortfolio(instance);
+		} catch (Exception ex) {
+			throw new PersistentModelException(
+					"Error saving PortfolioAccount: " + ex.getMessage());
+		}
+	}
+
+	/**
 	 * Method findAllTradestrategies.
 	 * 
 	 * @return List<Tradestrategy>

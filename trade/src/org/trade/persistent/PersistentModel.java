@@ -86,6 +86,18 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
+	 * Method persistPortfolio.
+	 * 
+	 * @param instance
+	 *            Portfolio
+	 * @return Portfolio
+	 * @throws PersistentModelException
+	 */
+
+	Portfolio persistPortfolio(Portfolio instance)
+			throws PersistentModelException;
+
+	/**
 	 * Method persistTradeOrder.
 	 * 
 	 * @param transientInstance

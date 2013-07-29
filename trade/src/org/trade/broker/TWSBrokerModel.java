@@ -2120,7 +2120,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final TWSAllocationRequest request = new TWSAllocationRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
-					m_tradePersistentModel.persistAspect((Portfolio) aspect);
+					m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 				}
 				this.fireFAAccountsCompleted();
 				break;
@@ -2130,7 +2130,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final TWSGroupRequest request = new TWSGroupRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
-					m_tradePersistentModel.persistAspect((Portfolio) aspect);
+					m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 				}
 				m_client.requestFA(EClientSocket.PROFILES);
 				break;
