@@ -50,6 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -528,7 +529,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					|| OrderType.STPLMT.equals(order.getOrderType())) {
 				if (candle.getLow().compareTo(order.getAuxPrice()) < 1) {
 					if (candle.getOpen().compareTo(order.getAuxPrice()) < 1) {
-						return candle.getOpen();
+						if (OrderType.STPLMT.equals(order.getOrderType())) {
+							if (CoreUtils.isBetween(order.getLimitPrice(),
+									candle.getHigh(), candle.getLow()))
+								return candle.getOpen();
+						} else {
+							return candle.getOpen();
+						}
 					}
 					return order.getAuxPrice();
 				}
@@ -543,7 +550,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					|| OrderType.STPLMT.equals(order.getOrderType())) {
 				if (candle.getHigh().compareTo(order.getAuxPrice()) > -1) {
 					if (candle.getOpen().compareTo(order.getAuxPrice()) > -1) {
-						return candle.getOpen();
+						if (OrderType.STPLMT.equals(order.getOrderType())) {
+							if (CoreUtils.isBetween(order.getLimitPrice(),
+									candle.getHigh(), candle.getLow()))
+								return candle.getOpen();
+						} else {
+							return candle.getOpen();
+						}
 					}
 					return order.getAuxPrice();
 				}
