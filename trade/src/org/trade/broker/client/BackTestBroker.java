@@ -525,31 +525,44 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			return candle.getClose();
 
 		if (Action.SELL.equals(order.getAction())) {
-			if (OrderType.STP.equals(order.getOrderType())
-					|| OrderType.STPLMT.equals(order.getOrderType())) {
+			if (OrderType.STP.equals(order.getOrderType())) {
 				if (candle.getLow().compareTo(order.getAuxPrice()) < 1) {
-					/*
-					 * Check to see if we have a gap between bars. i.e. if the
-					 * open is less than the aux price then this candles open
-					 * and low are lower than the aux price. So there must have
-					 * been a gap from the last bar to this. Note this should
-					 * really not happen as in real time this order would have
-					 * filled.
-					 */
 					if (candle.getOpen().compareTo(order.getAuxPrice()) < 1) {
-						/*
-						 * For stop limit orders after a gap the limit price
-						 * must be with the bars range.
-						 */
-						if (OrderType.STPLMT.equals(order.getOrderType())) {
-							if (CoreUtils.isBetween(order.getLimitPrice(),
-									candle.getHigh(), candle.getLow()))
-								return candle.getOpen();
-						} else {
-							return candle.getOpen();
-						}
+						return candle.getOpen();
 					}
 					return order.getAuxPrice();
+				}
+			} else if (OrderType.STPLMT.equals(order.getOrderType())) {
+				/*
+				 * Check to see if we have a gap between bars. i.e. if the open
+				 * is less than the aux price then this candles open and low are
+				 * lower than the aux price. So there must have been a gap from
+				 * the last bar to this. Note this should really not happen as
+				 * in real time this order would have filled.
+				 * 
+				 * For stop limit orders after a gap the limit price must be
+				 * with the bars range.
+				 */
+				if (candle.getLow().compareTo(order.getAuxPrice()) < 1) {
+					if (CoreUtils.isBetween(candle.getLow(), candle.getHigh(),
+							order.getLimitPrice())) {
+						if (CoreUtils.isBetween(order.getLimitPrice(),
+								order.getAuxPrice(), candle.getOpen())) {
+							return candle.getOpen();
+						} else {
+							if (CoreUtils.isBetween(candle.getLow(),
+									candle.getHigh(), order.getAuxPrice())) {
+								if (candle.getOpen().compareTo(
+										order.getAuxPrice()) < 1) {
+									return order.getLimitPrice();
+								} else {
+									return order.getAuxPrice();
+								}
+							} else {
+								return order.getLimitPrice();
+							}
+						}
+					}
 				}
 			} else if (OrderType.LMT.equals(order.getOrderType())) {
 				if (candle.getHigh().compareTo(order.getLimitPrice()) > -1) {
@@ -558,23 +571,38 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			}
 
 		} else {
-			if (OrderType.STP.equals(order.getOrderType())
-					|| OrderType.STPLMT.equals(order.getOrderType())) {
+			if (OrderType.STP.equals(order.getOrderType())) {
 				if (candle.getHigh().compareTo(order.getAuxPrice()) > -1) {
 					if (candle.getOpen().compareTo(order.getAuxPrice()) > -1) {
-						if (OrderType.STPLMT.equals(order.getOrderType())) {
-							/*
-							 * For stop limit orders after a gap the limit price
-							 * must be with the bars range.
-							 */
-							if (CoreUtils.isBetween(order.getLimitPrice(),
-									candle.getHigh(), candle.getLow()))
-								return candle.getOpen();
-						} else {
-							return candle.getOpen();
-						}
+						return candle.getOpen();
 					}
 					return order.getAuxPrice();
+				}
+			} else if (OrderType.STPLMT.equals(order.getOrderType())) {
+				/*
+				 * For stop limit orders after a gap the limit price must be
+				 * with the bars range.
+				 */
+				if (candle.getHigh().compareTo(order.getAuxPrice()) > -1) {
+					if (CoreUtils.isBetween(candle.getLow(), candle.getHigh(),
+							order.getLimitPrice())) {
+						if (CoreUtils.isBetween(order.getAuxPrice(),
+								order.getLimitPrice(), candle.getOpen())) {
+							return candle.getOpen();
+						} else {
+							if (CoreUtils.isBetween(candle.getLow(),
+									candle.getHigh(), order.getAuxPrice())) {
+								if (candle.getOpen().compareTo(
+										order.getAuxPrice()) > -1) {
+									return order.getLimitPrice();
+								} else {
+									return order.getAuxPrice();
+								}
+							} else {
+								return order.getLimitPrice();
+							}
+						}
+					}
 				}
 			} else if (OrderType.LMT.equals(order.getOrderType())) {
 				if (candle.getLow().compareTo(order.getLimitPrice()) < 1) {

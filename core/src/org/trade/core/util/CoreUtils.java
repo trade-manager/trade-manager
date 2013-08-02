@@ -424,7 +424,7 @@ public class CoreUtils {
 	}
 
 	/**
-	 * Method isBetween.
+	 * Method isBetween. Is c between a and b
 	 * 
 	 * @param a
 	 *            <T extends Number>
