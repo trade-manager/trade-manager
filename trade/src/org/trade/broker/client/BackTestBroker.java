@@ -533,32 +533,17 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					return order.getAuxPrice();
 				}
 			} else if (OrderType.STPLMT.equals(order.getOrderType())) {
-				/*
-				 * Check to see if we have a gap between bars. i.e. if the open
-				 * is less than the aux price then this candles open and low are
-				 * lower than the aux price. So there must have been a gap from
-				 * the last bar to this. Note this should really not happen as
-				 * in real time this order would have filled.
-				 * 
-				 * For stop limit orders after a gap the limit price must be
-				 * with the bars range.
-				 */
-				if (candle.getLow().compareTo(order.getAuxPrice()) < 1) {
-					if (CoreUtils.isBetween(candle.getLow(), candle.getHigh(),
-							order.getLimitPrice())) {
-						if (CoreUtils.isBetween(order.getLimitPrice(),
-								order.getAuxPrice(), candle.getOpen())) {
+				if (candle.getLow().compareTo(order.getAuxPrice()) < 1
+						&& candle.getHigh().compareTo(order.getLimitPrice()) > -1) {
+					if (candle.getOpen().compareTo(order.getAuxPrice()) > -1) {
+						return order.getAuxPrice();
+					} else {
+						if (CoreUtils.isBetween(order.getAuxPrice(),
+								order.getLimitPrice(), candle.getOpen())) {
 							return candle.getOpen();
 						} else {
-							if (CoreUtils.isBetween(candle.getLow(),
-									candle.getHigh(), order.getAuxPrice())) {
-								if (candle.getOpen().compareTo(
-										order.getAuxPrice()) < 1) {
-									return order.getLimitPrice();
-								} else {
-									return order.getAuxPrice();
-								}
-							} else {
+							if (candle.getOpen().compareTo(
+									order.getLimitPrice()) < 1) {
 								return order.getLimitPrice();
 							}
 						}
@@ -579,31 +564,23 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					return order.getAuxPrice();
 				}
 			} else if (OrderType.STPLMT.equals(order.getOrderType())) {
-				/*
-				 * For stop limit orders after a gap the limit price must be
-				 * with the bars range.
-				 */
-				if (candle.getHigh().compareTo(order.getAuxPrice()) > -1) {
-					if (CoreUtils.isBetween(candle.getLow(), candle.getHigh(),
-							order.getLimitPrice())) {
+				if (candle.getHigh().compareTo(order.getAuxPrice()) > -1
+						&& candle.getLow().compareTo(order.getLimitPrice()) < 1) {
+					if (candle.getOpen().compareTo(order.getAuxPrice()) < 1) {
+						return order.getAuxPrice();
+					} else {
 						if (CoreUtils.isBetween(order.getAuxPrice(),
 								order.getLimitPrice(), candle.getOpen())) {
 							return candle.getOpen();
 						} else {
-							if (CoreUtils.isBetween(candle.getLow(),
-									candle.getHigh(), order.getAuxPrice())) {
-								if (candle.getOpen().compareTo(
-										order.getAuxPrice()) > -1) {
-									return order.getLimitPrice();
-								} else {
-									return order.getAuxPrice();
-								}
-							} else {
+							if (candle.getOpen().compareTo(
+									order.getLimitPrice()) > -1) {
 								return order.getLimitPrice();
 							}
 						}
 					}
 				}
+
 			} else if (OrderType.LMT.equals(order.getOrderType())) {
 				if (candle.getLow().compareTo(order.getLimitPrice()) < 1) {
 					return order.getLimitPrice();
