@@ -511,8 +511,11 @@ public class CandleSeries extends IndicatorSeries {
 
 			candleItem = (CandleItem) this.getDataItem(index);
 
+			if (null == lastUpdateDate)
+				lastUpdateDate = candleItem.getPeriod().getEnd();
+
 			this.rollCandle(candleItem.getPeriod(), rollupInterval, open, high,
-					low, close, volume, tradeCount, vwap, time);
+					low, close, volume, tradeCount, vwap, lastUpdateDate);
 
 			if (candleItem.getHigh() < high) {
 				candleItem.setHigh(high);
@@ -529,14 +532,6 @@ public class CandleSeries extends IndicatorSeries {
 				candleItem.setCount(tradeCount);
 			}
 			candleItem.setVwap(this.rollingCandle.getVwap());
-
-			if (null == lastUpdateDate)
-				lastUpdateDate = candleItem.getPeriod().getEnd();
-			Date currTime = TradingCalendar.getDate(new Date());
-			if (lastUpdateDate.after(currTime)) {
-				lastUpdateDate = currTime;
-			}
-
 			candleItem.setLastUpdateDate(lastUpdateDate);
 		} else {
 
@@ -550,10 +545,6 @@ public class CandleSeries extends IndicatorSeries {
 
 			if (null == lastUpdateDate)
 				lastUpdateDate = period.getEnd();
-			Date currTime = TradingCalendar.getDate(new Date());
-			if (lastUpdateDate.after(currTime)) {
-				lastUpdateDate = currTime;
-			}
 
 			this.rollCandle(period, rollupInterval, open, high, low, close,
 					volume, tradeCount, vwap, lastUpdateDate);

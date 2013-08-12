@@ -2425,11 +2425,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								datasetContainer.getBaseCandleSeries()
 										.getContract().setLastPrice(price);
 							}
+							Date lastUpdateDate = new Date(
+									date.getTime() + 4999);
 
 							datasetContainer.buildCandle(date, open, high, low,
 									close, volume, vwap, tradeCount,
-									(tradestrategy.getBarSize() / 5), new Date(
-											date.getTime() + 4999));
+									(tradestrategy.getBarSize() / 5),
+									lastUpdateDate);
 
 							if (!datasetContainer.getBaseCandleSeries()
 									.isEmpty()) {
