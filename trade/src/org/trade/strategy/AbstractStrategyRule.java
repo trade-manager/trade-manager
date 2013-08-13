@@ -1650,7 +1650,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		Date createDate = new Date();
 		if (!brokerModel.isRealtimeBarsRunning(this.tradestrategy)) {
 			if (null != this.getCurrentCandle())
-				createDate = this.getCurrentCandle().getLastUpdateDate();
+				createDate = this.getCurrentCandle().getPeriod().getStart();
 		}
 		return createDate;
 	}
