@@ -49,8 +49,6 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class AspectHome {
 
-	private EntityManager entityManager = null;
-
 	public AspectHome() {
 
 	}
@@ -79,7 +77,8 @@ public class AspectHome {
 			boolean overrideVersion) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			if (null == transientInstance.getId()) {
 				entityManager.persist(transientInstance);
@@ -119,7 +118,8 @@ public class AspectHome {
 
 		try {
 			if (null != transientInstance.getId()) {
-				entityManager = EntityManagerHelper.getEntityManager();
+				EntityManager entityManager = EntityManagerHelper
+						.getEntityManager();
 				entityManager.getTransaction().begin();
 				Object aspect = entityManager
 						.find(transientInstance.getClass(),
@@ -150,7 +150,8 @@ public class AspectHome {
 			throws ClassNotFoundException {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Aspects aspects = new Aspects();
 			Class<?> c = Class.forName(className);
@@ -193,7 +194,8 @@ public class AspectHome {
 			String value) throws ClassNotFoundException {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Aspects aspects = new Aspects();
 			Class<?> c = Class.forName(className);
@@ -232,7 +234,8 @@ public class AspectHome {
 	public <T extends Aspect> Aspect findById(Aspect transientInstance) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Object aspect = entityManager.find(transientInstance.getClass(),
 					transientInstance.getId());

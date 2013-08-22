@@ -53,8 +53,6 @@ import org.trade.core.dao.EntityManagerHelper;
 @Stateless
 public class TradePositionHome {
 
-	private EntityManager entityManager = null;
-
 	public TradePositionHome() {
 
 	}
@@ -68,7 +66,8 @@ public class TradePositionHome {
 	public void remove(TradePosition transientInstance) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			TradePosition tradePosition = entityManager
 					.find(TradePosition.class,
@@ -96,7 +95,8 @@ public class TradePositionHome {
 	public TradePosition findById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			TradePosition instance = entityManager
 					.find(TradePosition.class, id);
@@ -122,7 +122,8 @@ public class TradePositionHome {
 	public TradePosition findOpenTradePositionByContractId(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<TradePosition> query = builder

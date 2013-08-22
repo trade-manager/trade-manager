@@ -58,8 +58,6 @@ import org.trade.strategy.data.IndicatorSeries;
 @Stateless
 public class TradingdayHome {
 
-	private EntityManager entityManager = null;
-
 	public TradingdayHome() {
 
 	}
@@ -76,7 +74,8 @@ public class TradingdayHome {
 	public void persist(Tradingday detachedInstance) throws Exception {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			/*
 			 * Check the incoming tradingday to see if it exists if it does
@@ -204,7 +203,8 @@ public class TradingdayHome {
 	public Tradingday findTradingdayById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingday instance = entityManager.find(Tradingday.class, id);
 			if (null != instance) {
@@ -236,7 +236,8 @@ public class TradingdayHome {
 	public Tradingdays findTradingdaysByDateRange(Date startDate, Date endDate) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingdays tradingdays = new Tradingdays();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -295,7 +296,8 @@ public class TradingdayHome {
 	public Tradingday findByOpenCloseDate(Date openDate, Date closeDate) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Tradingday> query = builder
@@ -339,7 +341,8 @@ public class TradingdayHome {
 	private Strategy findStrategyByName(String name) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Strategy> query = builder.createQuery(Strategy.class);
 			Root<Strategy> from = query.from(Strategy.class);
@@ -369,7 +372,8 @@ public class TradingdayHome {
 			Date closeDate) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Tradingday> query = builder
 					.createQuery(Tradingday.class);
@@ -404,7 +408,8 @@ public class TradingdayHome {
 			Integer idTradingday) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Tradestrategy> query = builder
 					.createQuery(Tradestrategy.class);
@@ -449,7 +454,8 @@ public class TradingdayHome {
 			String exchange, String currency, Date expiryDate) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Contract> query = builder.createQuery(Contract.class);
 			Root<Contract> from = query.from(Contract.class);

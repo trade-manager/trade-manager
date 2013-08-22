@@ -56,8 +56,6 @@ import org.trade.core.util.TradingCalendar;
 @Stateless
 public class ContractHome {
 
-	private EntityManager entityManager = null;
-
 	public ContractHome() {
 
 	}
@@ -81,7 +79,8 @@ public class ContractHome {
 			String exchange, String currency, Date expiryDate) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Contract> query = builder.createQuery(Contract.class);
@@ -149,7 +148,8 @@ public class ContractHome {
 	public Contract findById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Contract instance = entityManager.find(Contract.class, id);
 			if (null != instance) {

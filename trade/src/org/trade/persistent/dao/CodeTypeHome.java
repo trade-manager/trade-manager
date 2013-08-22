@@ -53,7 +53,6 @@ import org.trade.core.dao.EntityManagerHelper;
  */
 @Stateless
 public class CodeTypeHome {
-	private EntityManager entityManager = null;
 
 	public CodeTypeHome() {
 
@@ -69,7 +68,8 @@ public class CodeTypeHome {
 	public CodeType findById(Integer idCodeType) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CodeType instance = entityManager.find(CodeType.class, idCodeType);
 			entityManager.getTransaction().commit();
@@ -93,7 +93,8 @@ public class CodeTypeHome {
 	public CodeType findByName(String name) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<CodeType> query = builder.createQuery(CodeType.class);
@@ -130,7 +131,8 @@ public class CodeTypeHome {
 
 		try {
 
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<CodeValue> query = builder
@@ -176,7 +178,8 @@ public class CodeTypeHome {
 	public List<CodeType> findAll() {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<CodeType> query = builder.createQuery(CodeType.class);

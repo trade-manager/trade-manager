@@ -62,7 +62,6 @@ public class CandleHome {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandleHome.class);
-	private EntityManager entityManager = null;
 
 	public CandleHome() {
 
@@ -82,7 +81,8 @@ public class CandleHome {
 			if (candleSeries.isEmpty())
 				return;
 
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingday tradingday = null;
 			Contract contract = findContractById(candleSeries.getContract()
@@ -176,7 +176,8 @@ public class CandleHome {
 			Date startPeriod, Date endPeriod, Integer barSize) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Candle> query = builder.createQuery(Candle.class);
@@ -238,7 +239,8 @@ public class CandleHome {
 			Integer barSize) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Candle> query = builder.createQuery(Candle.class);
@@ -298,7 +300,8 @@ public class CandleHome {
 	public Candle findById(Integer idCandle) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Candle instance = entityManager.find(Candle.class, idCandle);
 			entityManager.getTransaction().commit();
@@ -329,7 +332,8 @@ public class CandleHome {
 			Date startPeriod, Date endPeriod, Integer barSize) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Candle> query = builder.createQuery(Candle.class);
@@ -391,7 +395,8 @@ public class CandleHome {
 	public Long findCandleCount(Integer idTradingday, Integer idContract) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> query = builder.createQuery();
@@ -441,7 +446,8 @@ public class CandleHome {
 	private Contract findContractById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			Contract instance = entityManager.find(Contract.class, id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -459,7 +465,8 @@ public class CandleHome {
 	private Tradingday findTradingdayById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			Tradingday instance = entityManager.find(Tradingday.class, id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -477,7 +484,8 @@ public class CandleHome {
 	private Tradingday findTradingdayByDate(Date open, Date close) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Tradingday> query = builder
 					.createQuery(Tradingday.class);

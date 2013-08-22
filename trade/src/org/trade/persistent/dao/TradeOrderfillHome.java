@@ -50,8 +50,6 @@ import org.trade.core.dao.EntityManagerHelper;
 @Stateless
 public class TradeOrderfillHome {
 
-	private EntityManager entityManager = null;
-
 	public TradeOrderfillHome() {
 
 	}
@@ -66,7 +64,8 @@ public class TradeOrderfillHome {
 	public TradeOrderfill findById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			TradeOrderfill instance = entityManager.find(TradeOrderfill.class,
 					id);
@@ -90,7 +89,8 @@ public class TradeOrderfillHome {
 	public synchronized TradeOrderfill findOrderFillByExecId(String execId) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<TradeOrderfill> query = builder

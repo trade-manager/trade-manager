@@ -57,7 +57,6 @@ public class TradeOrderHome {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradeOrderHome.class);
-	private EntityManager entityManager = null;
 
 	public TradeOrderHome() {
 
@@ -73,7 +72,8 @@ public class TradeOrderHome {
 	public synchronized TradeOrder persist(TradeOrder transientInstance) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			transientInstance.setUpdateDate(new Date());
 			if (null == transientInstance.getIdTradeOrder()) {
@@ -123,7 +123,8 @@ public class TradeOrderHome {
 	public synchronized TradeOrder findTradeOrderByKey(Integer orderKey) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<TradeOrder> query = builder
@@ -158,7 +159,8 @@ public class TradeOrderHome {
 	public Integer findTradeOrderByMaxKey() {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> query = builder.createQuery();

@@ -69,7 +69,6 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 	private final static Logger _log = LoggerFactory
 			.getLogger(DBTableLookupServiceProvider.class);
 	private static Hashtable<String, Hashtable<String, Lookup>> _lookups = new Hashtable<String, Hashtable<String, Lookup>>();
-	private EntityManager entityManager = null;
 
 	/**
 	 * Default Constructor
@@ -307,7 +306,8 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 			throws ClassNotFoundException {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Class<?> c = Class.forName(className);
 			CriteriaBuilder criteriaBuilder = entityManager

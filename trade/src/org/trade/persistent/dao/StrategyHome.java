@@ -49,7 +49,6 @@ import org.trade.core.dao.EntityManagerHelper;
  */
 @Stateless
 public class StrategyHome {
-	private EntityManager entityManager = null;
 
 	public StrategyHome() {
 
@@ -65,7 +64,8 @@ public class StrategyHome {
 	public Strategy findById(Integer idStrategy) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Strategy instance = entityManager.find(Strategy.class, idStrategy);
 			if (null != instance) {
@@ -93,7 +93,8 @@ public class StrategyHome {
 	public Strategy findByName(String name) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Strategy> query = builder.createQuery(Strategy.class);
@@ -128,7 +129,8 @@ public class StrategyHome {
 	public List<Strategy> findAll() {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Strategy> query = builder.createQuery(Strategy.class);

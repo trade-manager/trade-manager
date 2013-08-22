@@ -56,8 +56,6 @@ import org.trade.strategy.data.IndicatorSeries;
 @Stateless
 public class TradestrategyHome {
 
-	private EntityManager entityManager = null;
-
 	public TradestrategyHome() {
 	}
 
@@ -71,7 +69,8 @@ public class TradestrategyHome {
 	public synchronized Tradestrategy findById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradestrategy instance = entityManager
 					.find(Tradestrategy.class, id);
@@ -105,7 +104,8 @@ public class TradestrategyHome {
 			Integer idTradestrategy) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			PositionOrders instance = entityManager.find(PositionOrders.class,
 					idTradestrategy);
@@ -140,7 +140,8 @@ public class TradestrategyHome {
 
 		try {
 			Tradestrategy tradestrategy = null;
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			TradeOrder instance = entityManager.find(TradeOrder.class,
 					idTradeOrder);
@@ -169,7 +170,8 @@ public class TradestrategyHome {
 	public List<Tradestrategy> findAll() {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Tradestrategy> query = builder
@@ -212,7 +214,8 @@ public class TradestrategyHome {
 			String strategyName, Integer idContract, String portfolioName) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Tradestrategy> query = builder

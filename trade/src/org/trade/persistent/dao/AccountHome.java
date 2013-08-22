@@ -49,7 +49,6 @@ import org.trade.core.dao.EntityManagerHelper;
  */
 @Stateless
 public class AccountHome {
-	private EntityManager entityManager = null;
 
 	public AccountHome() {
 
@@ -65,7 +64,8 @@ public class AccountHome {
 	public Account findById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Account instance = entityManager.find(Account.class, id);
 			entityManager.getTransaction().commit();
@@ -88,7 +88,8 @@ public class AccountHome {
 	public Account findByAccountNumber(String accountNumber) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Account> query = builder.createQuery(Account.class);

@@ -54,7 +54,6 @@ import org.trade.core.dao.EntityManagerHelper;
  */
 @Stateless
 public class RuleHome {
-	private EntityManager entityManager = null;
 
 	public RuleHome() {
 
@@ -70,7 +69,8 @@ public class RuleHome {
 	public Rule findById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Rule instance = entityManager.find(Rule.class, id);
 			entityManager.getTransaction().commit();
@@ -93,7 +93,8 @@ public class RuleHome {
 	public Integer findByMaxVersion(Strategy strategy) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> query = builder.createQuery();

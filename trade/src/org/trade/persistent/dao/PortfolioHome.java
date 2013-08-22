@@ -57,7 +57,6 @@ import org.trade.persistent.PersistentModelException;
  */
 @Stateless
 public class PortfolioHome {
-	private EntityManager entityManager = null;
 
 	public PortfolioHome() {
 
@@ -73,7 +72,8 @@ public class PortfolioHome {
 	public Portfolio findById(Integer id) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Portfolio instance = entityManager.find(Portfolio.class, id);
 			instance.getPortfolioAccounts().size();
@@ -95,7 +95,8 @@ public class PortfolioHome {
 	public List<Portfolio> findAll() {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Portfolio> query = builder
@@ -127,7 +128,8 @@ public class PortfolioHome {
 
 		try {
 			Portfolio portfolio = null;
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Portfolio> query = builder
@@ -165,7 +167,8 @@ public class PortfolioHome {
 	public Portfolio findByName(String name) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Portfolio> query = builder
@@ -201,7 +204,8 @@ public class PortfolioHome {
 	public void resetDefaultPortfolio(Portfolio defaultPortfolio) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Portfolio> query = builder
@@ -240,7 +244,8 @@ public class PortfolioHome {
 	public synchronized Portfolio persistPortfolio(Portfolio instance)
 			throws PersistentModelException {
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			entityManager.getTransaction().begin();
 			Portfolio portfolio = findPortfolioByName(instance.getName());
 			if (null == portfolio) {
@@ -309,7 +314,8 @@ public class PortfolioHome {
 	private Account findByAccountNumber(String accountNumber) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Account> query = builder.createQuery(Account.class);
 			Root<Account> from = query.from(Account.class);
@@ -337,7 +343,8 @@ public class PortfolioHome {
 	private Portfolio findPortfolioByName(String name) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Portfolio> query = builder
 					.createQuery(Portfolio.class);
@@ -369,7 +376,8 @@ public class PortfolioHome {
 			String accountNumber) {
 
 		try {
-			entityManager = EntityManagerHelper.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<PortfolioAccount> query = builder
 					.createQuery(PortfolioAccount.class);
