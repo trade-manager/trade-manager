@@ -99,7 +99,6 @@ public class EntityManagerHelper {
 			manager = factory.createEntityManager();
 			threadLocal.set(manager);
 		}
-		manager.clear();
 		return manager;
 	}
 
@@ -118,7 +117,6 @@ public class EntityManagerHelper {
 	 */
 	public static EntityManager getLocalEntityManager() {
 		EntityManager manager = factory.createEntityManager();
-		manager.clear();
 		return manager;
 	}
 
@@ -130,6 +128,7 @@ public class EntityManagerHelper {
 	public static void close() {
 		EntityManager em = threadLocal.get();
 		if (em != null) {
+			em.clear();
 			em.close();
 		}
 		threadLocal.remove();
