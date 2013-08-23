@@ -128,7 +128,6 @@ public class EntityManagerHelper {
 	public static void close() {
 		EntityManager em = threadLocal.get();
 		if (em != null) {
-			em.clear();
 			em.close();
 		}
 		threadLocal.remove();
