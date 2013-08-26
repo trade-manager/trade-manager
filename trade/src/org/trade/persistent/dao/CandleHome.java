@@ -255,21 +255,18 @@ public class CandleHome {
 				predicates.add(predicateContract);
 			}
 			if (null != startOpenDate) {
-				Join<Candle, Tradingday> tradingdayStartDate = from
+				Join<Candle, Tradingday> tradingdayOpenDate = from
 						.join("tradingday");
 				Predicate predicateStartDate = builder.greaterThanOrEqualTo(
-						tradingdayStartDate.get("open").as(Date.class),
+						tradingdayOpenDate.get("open").as(Date.class),
 						startOpenDate);
 				predicates.add(predicateStartDate);
-			}
-			if (null != endOpenDate) {
-				Join<Candle, Tradingday> tradingdayEndDate = from
-						.join("tradingday");
 				Predicate predicateEndDate = builder.lessThanOrEqualTo(
-						tradingdayEndDate.get("open").as(Date.class),
+						tradingdayOpenDate.get("open").as(Date.class),
 						endOpenDate);
 				predicates.add(predicateEndDate);
 			}
+
 			if (null != barSize) {
 				Predicate predicate = builder.equal(from.get("barSize"),
 						barSize);
