@@ -74,7 +74,7 @@ public class ContractId extends Aspect implements Serializable, Cloneable {
 	}
 
 	public ContractId(Integer id) {
-		this.setIdContract(id);
+		this.id = id;
 	}
 
 	/**
