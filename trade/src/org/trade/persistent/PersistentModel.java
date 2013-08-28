@@ -43,7 +43,7 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.ContractId;
+import org.trade.persistent.dao.ContractLite;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Rule;
@@ -192,7 +192,7 @@ public interface PersistentModel {
 	 * @return ContractId
 	 * @throws PersistentModelException
 	 */
-	ContractId findContractByContractId(Integer idContract)
+	ContractLite findContractByContractId(Integer idContract)
 			throws PersistentModelException;
 
 	/**

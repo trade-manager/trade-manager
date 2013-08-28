@@ -66,7 +66,7 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.ContractId;
+import org.trade.persistent.dao.ContractLite;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Rule;
@@ -862,7 +862,7 @@ public class TradePersistentModelTest extends TestCase {
 	public void testFindContractByContractId() {
 
 		try {
-			ContractId result = this.tradePersistentModel
+			ContractLite result = this.tradePersistentModel
 					.findContractByContractId(this.tradestrategy.getContract()
 							.getIdContract());
 			TestCase.assertNotNull(result);

@@ -86,7 +86,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 
 	private static final long serialVersionUID = 715993951200025530L;
-	private ContractId contract;
+	private ContractLite contract;
 	private Integer openQuantity = new Integer(0);
 	private Date positionOpenDate;
 	private Date positionCloseDate;
@@ -115,7 +115,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 *            String
 	 */
 	public TradePosition(Contract contract, Date positionOpenDate, String side) {
-		this.contract = new ContractId(contract.getIdContract());
+		this.contract = new ContractLite(contract.getIdContract());
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;
 	}
@@ -130,7 +130,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * @param side
 	 *            String
 	 */
-	public TradePosition(ContractId contract, Date positionOpenDate, String side) {
+	public TradePosition(ContractLite contract, Date positionOpenDate, String side) {
 		this.contract = contract;
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;
@@ -168,7 +168,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 			BigDecimal totalBuyValue, Integer totalSellQuantity,
 			BigDecimal totalSellValue, BigDecimal totalNetValue,
 			List<TradeOrder> tradeOrders) {
-		this.contract = new ContractId(contract.getIdContract());
+		this.contract = new ContractLite(contract.getIdContract());
 		this.positionOpenDate = positionOpenDate;
 		this.positionCloseDate = positionCloseDate;
 		this.openQuantity = openQuantity;
@@ -211,7 +211,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idContract", insertable = true, updatable = true, nullable = false)
-	public ContractId getContract() {
+	public ContractLite getContract() {
 		return this.contract;
 	}
 
@@ -221,7 +221,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * @param contract
 	 *            ContractId
 	 */
-	public void setContract(ContractId contract) {
+	public void setContract(ContractLite contract) {
 		this.contract = contract;
 	}
 

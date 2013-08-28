@@ -172,13 +172,13 @@ public class ContractHome {
 	 *            Integer
 	 * @return ContractId
 	 */
-	public ContractId findByContractId(Integer id) {
+	public ContractLite findByContractId(Integer id) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
 					.getEntityManager();
 			entityManager.getTransaction().begin();
-			ContractId instance = entityManager.find(ContractId.class, id);
+			ContractLite instance = entityManager.find(ContractLite.class, id);
 			// if (null != instance) {
 			// instance.getTradePositions().size();
 			// }

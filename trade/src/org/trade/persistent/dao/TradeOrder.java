@@ -83,7 +83,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private static final long serialVersionUID = -832064631322873796L;
 	private TradePosition tradePosition;
 	private Tradestrategy tradestrategy;
-	private TradestrategyId tradestrategyId;
+	private TradestrategyLite tradestrategyId;
 	private String action;
 	private String accountNumber;
 	private BigDecimal averageFilledPrice;
@@ -402,7 +402,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idTradeStrategy", insertable = false, updatable = false, nullable = false)
-	public TradestrategyId getTradestrategyId() {
+	public TradestrategyLite getTradestrategyId() {
 		return this.tradestrategyId;
 	}
 
@@ -412,7 +412,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param tradestrategyId
 	 *            TradestrategyId
 	 */
-	public void setTradestrategyId(TradestrategyId tradestrategyId) {
+	public void setTradestrategyId(TradestrategyLite tradestrategyId) {
 		this.tradestrategyId = tradestrategyId;
 	}
 

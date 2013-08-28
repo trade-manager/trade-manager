@@ -56,7 +56,7 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CandleHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
-import org.trade.persistent.dao.ContractId;
+import org.trade.persistent.dao.ContractLite;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioHome;
 import org.trade.persistent.dao.PositionOrders;
@@ -253,9 +253,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findContractById(Integer)
 	 */
-	public ContractId findContractByContractId(Integer id)
+	public ContractLite findContractByContractId(Integer id)
 			throws PersistentModelException {
-		ContractId instance = m_contractHome.findByContractId(id);
+		ContractLite instance = m_contractHome.findByContractId(id);
 		if (null == instance)
 			throw new PersistentModelException("Contract not found for id: "
 					+ id);
