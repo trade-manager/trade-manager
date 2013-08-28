@@ -50,7 +50,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
 
@@ -74,9 +73,8 @@ public class ContractId extends Aspect implements Serializable, Cloneable {
 	public ContractId() {
 	}
 
-	public ContractId(Integer id, Integer version) {
+	public ContractId(Integer id) {
 		this.setIdContract(id);
-		this.setVersion(version);
 	}
 
 	/**
@@ -119,26 +117,5 @@ public class ContractId extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setTradePositions(List<TradePosition> tradePositions) {
 		this.tradePositions = tradePositions;
-	}
-
-	/**
-	 * Method getVersion.
-	 * 
-	 * @return Integer
-	 */
-	@Version
-	@Column(name = "version")
-	public Integer getVersion() {
-		return this.version;
-	}
-
-	/**
-	 * Method setVersion.
-	 * 
-	 * @param version
-	 *            Integer
-	 */
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 }

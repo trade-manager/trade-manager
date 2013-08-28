@@ -115,8 +115,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 *            String
 	 */
 	public TradePosition(Contract contract, Date positionOpenDate, String side) {
-		this.contract = new ContractId(contract.getIdContract(),
-				contract.getVersion());
+		this.contract = new ContractId(contract.getIdContract());
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;
 	}
@@ -169,8 +168,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 			BigDecimal totalBuyValue, Integer totalSellQuantity,
 			BigDecimal totalSellValue, BigDecimal totalNetValue,
 			List<TradeOrder> tradeOrders) {
-		this.contract = new ContractId(contract.getIdContract(),
-				contract.getVersion());
+		this.contract = new ContractId(contract.getIdContract());
 		this.positionOpenDate = positionOpenDate;
 		this.positionCloseDate = positionCloseDate;
 		this.openQuantity = openQuantity;
