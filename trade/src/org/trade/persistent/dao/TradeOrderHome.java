@@ -114,6 +114,30 @@ public class TradeOrderHome {
 	}
 
 	/**
+	 * Method findById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return TradeOrder
+	 */
+	public TradeOrder findById(Integer id) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			entityManager.getTransaction().begin();
+			TradeOrder instance = entityManager.find(TradeOrder.class, id);
+			entityManager.getTransaction().commit();
+			return instance;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
 	 * Method findTradeOrderByKey.
 	 * 
 	 * @param orderKey

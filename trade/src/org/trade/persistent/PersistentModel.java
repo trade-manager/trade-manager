@@ -43,6 +43,7 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.ContractId;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Rule;
@@ -170,6 +171,28 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	Contract findContractById(Integer idContract)
+			throws PersistentModelException;
+
+	/**
+	 * Method findTradeOrderById.
+	 * 
+	 * @param idTradeOrder
+	 *            Integer
+	 * @return TradeOrder
+	 * @throws PersistentModelException
+	 */
+	TradeOrder findTradeOrderById(Integer idTradeOrder)
+			throws PersistentModelException;
+
+	/**
+	 * Method findContractByContractId.
+	 * 
+	 * @param idContract
+	 *            Integer
+	 * @return ContractId
+	 * @throws PersistentModelException
+	 */
+	ContractId findContractByContractId(Integer idContract)
 			throws PersistentModelException;
 
 	/**

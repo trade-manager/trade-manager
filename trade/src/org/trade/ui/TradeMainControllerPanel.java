@@ -760,7 +760,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 											.getTradestrategyId()
 											.getIdTradeStrategy());
 							_log.info("TradePosition closed for Symbol: "
-									+ tradePosition.getContract().getSymbol()
+									+ tradestrategy.getContract().getSymbol()
 									+ " Profit/Loss: "
 									+ tradePosition.getTotalNetValue());
 							m_tradingdays.getTradestrategy(

@@ -86,7 +86,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 
 	private static final long serialVersionUID = 715993951200025530L;
-	private Contract contract;
+	private ContractId contract;
 	private Integer openQuantity = new Integer(0);
 	private Date positionOpenDate;
 	private Date positionCloseDate;
@@ -115,6 +115,23 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 *            String
 	 */
 	public TradePosition(Contract contract, Date positionOpenDate, String side) {
+		this.contract = new ContractId(contract.getIdContract(),
+				contract.getVersion());
+		this.positionOpenDate = positionOpenDate;
+		this.side = side;
+	}
+
+	/**
+	 * Constructor for TradePosition.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param positionOpenDate
+	 *            Date
+	 * @param side
+	 *            String
+	 */
+	public TradePosition(ContractId contract, Date positionOpenDate, String side) {
 		this.contract = contract;
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;
@@ -152,7 +169,8 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 			BigDecimal totalBuyValue, Integer totalSellQuantity,
 			BigDecimal totalSellValue, BigDecimal totalNetValue,
 			List<TradeOrder> tradeOrders) {
-		this.contract = contract;
+		this.contract = new ContractId(contract.getIdContract(),
+				contract.getVersion());
 		this.positionOpenDate = positionOpenDate;
 		this.positionCloseDate = positionCloseDate;
 		this.openQuantity = openQuantity;
@@ -191,11 +209,11 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	/**
 	 * Method getContract.
 	 * 
-	 * @return Contract
+	 * @return ContractId
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idContract", insertable = true, updatable = true, nullable = false)
-	public Contract getContract() {
+	public ContractId getContract() {
 		return this.contract;
 	}
 
@@ -203,9 +221,9 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * Method setContract.
 	 * 
 	 * @param contract
-	 *            Contract
+	 *            ContractId
 	 */
-	public void setContract(Contract contract) {
+	public void setContract(ContractId contract) {
 		this.contract = contract;
 	}
 

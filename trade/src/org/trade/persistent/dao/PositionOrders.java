@@ -71,7 +71,7 @@ public class PositionOrders extends Aspect implements Serializable {
 
 	private static final long serialVersionUID = -2181676329258092177L;
 
-	private Contract contract;
+	private ContractId contract;
 	private String status;
 	private TradePosition tradePosition;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
@@ -104,11 +104,11 @@ public class PositionOrders extends Aspect implements Serializable {
 	/**
 	 * Method getContract.
 	 * 
-	 * @return Contract
+	 * @return ContractId
 	 */
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH })
 	@JoinColumn(name = "idContract", insertable = false, updatable = false, nullable = false)
-	public Contract getContract() {
+	public ContractId getContract() {
 		return this.contract;
 	}
 
@@ -116,9 +116,9 @@ public class PositionOrders extends Aspect implements Serializable {
 	 * Method setContract.
 	 * 
 	 * @param contract
-	 *            Contract
+	 *            ContractId
 	 */
-	public void setContract(Contract contract) {
+	public void setContract(ContractId contract) {
 		this.contract = contract;
 	}
 

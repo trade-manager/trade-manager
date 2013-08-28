@@ -164,4 +164,31 @@ public class ContractHome {
 			EntityManagerHelper.close();
 		}
 	}
+
+	/**
+	 * Method findByContractId.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return ContractId
+	 */
+	public ContractId findByContractId(Integer id) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			entityManager.getTransaction().begin();
+			ContractId instance = entityManager.find(ContractId.class, id);
+			// if (null != instance) {
+			// instance.getTradePositions().size();
+			// }
+			entityManager.getTransaction().commit();
+			return instance;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
 }

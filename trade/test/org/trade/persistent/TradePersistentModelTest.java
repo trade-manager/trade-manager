@@ -66,7 +66,9 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.Contract;
+import org.trade.persistent.dao.ContractId;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradePosition;
@@ -857,6 +859,19 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
+	public void testFindContractByContractId() {
+
+		try {
+			ContractId result = this.tradePersistentModel
+					.findContractByContractId(this.tradestrategy.getContract()
+							.getIdContract());
+			TestCase.assertNotNull(result);
+		} catch (Exception e) {
+			TestCase.fail("Error testFindContractById Msg: " + e.getMessage());
+		}
+	}
+
+	@Test
 	public void testFindContractByUniqueKey() {
 
 		try {
@@ -947,6 +962,24 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
+	public void testFindPositionOrdersByTradestrategyId() {
+
+		try {
+			TradePosition tradePosition = new TradePosition(
+					this.tradestrategy.getContract(), new Date(), Side.BOT);
+			TradePosition resultTrade = this.tradePersistentModel
+					.persistAspect(tradePosition);
+			PositionOrders result = this.tradePersistentModel
+					.findPositionOrdersByTradestrategyId(resultTrade
+							.getIdTradePosition());
+			TestCase.assertNotNull(result);
+		} catch (Exception e) {
+			TestCase.fail("Error testFindPositionOrdersByTradestrategyId Msg: "
+					+ e.getMessage());
+		}
+	}
+
+	@Test
 	public void testFindOpenTradePositionByContractId() {
 
 		try {
@@ -1009,6 +1042,29 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradePersistentModel.removeTradestrategyTradeOrders(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testRemoveTradestrategyTrades Msg: "
+					+ e.getMessage());
+		}
+	}
+
+	@Test
+	public void testFindTradeOrderById() {
+
+		try {
+			this.tradestrategy = TradestrategyTest
+					.removeTradeOrders(this.tradestrategy);
+			BigDecimal price = new BigDecimal(100.00);
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
+					Action.BUY, OrderType.STPLMT, 1000, price,
+					price.add(new BigDecimal(4)), new Date());
+			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
+					.intValue());
+			TradeOrder resultTradeOrder = this.tradePersistentModel
+					.persistTradeOrder(tradeOrder);
+			TradeOrder result = this.tradePersistentModel
+					.findTradeOrderById(resultTradeOrder.getIdTradeOrder());
+			TestCase.assertNotNull(result);
+		} catch (Exception e) {
+			TestCase.fail("Error testFindTradeOrderByKey Msg: "
 					+ e.getMessage());
 		}
 	}
