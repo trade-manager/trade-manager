@@ -110,13 +110,11 @@ public class TradestrategyHome {
 			PositionOrders instance = entityManager.find(PositionOrders.class,
 					idTradestrategy);
 			if (null != instance) {
-				for (TradePosition tradePosition : instance.getContract()
-						.getTradePositions()) {
-					if (tradePosition.getIsOpen()) {
-						tradePosition.getTradeOrders().size();
-						instance.setOpenTradePosition(tradePosition);
-						break;
-					}
+				TradePosition tradePosition = findOpenTradePositionByContractId(instance
+						.getContract().getIdContract());
+				if (null != tradePosition) {
+					tradePosition.getTradeOrders().size();
+					instance.setOpenTradePosition(tradePosition);
 				}
 			}
 			entityManager.getTransaction().commit();
@@ -255,6 +253,48 @@ public class TradestrategyHome {
 					.createQuery(query);
 			List<Tradestrategy> items = typedQuery.getResultList();
 			entityManager.getTransaction().commit();
+			if (items.size() > 0) {
+				return items.get(0);
+			}
+			return null;
+
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
+	 * Method findOpenTradePositionByContractId.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return TradePosition
+	 */
+	private TradePosition findOpenTradePositionByContractId(Integer id) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<TradePosition> query = builder
+					.createQuery(TradePosition.class);
+			Root<TradePosition> from = query.from(TradePosition.class);
+			query.select(from);
+
+			Join<TradePosition, Contract> contract = from.join("contract");
+			Predicate contractId = builder
+					.equal(contract.get("idContract"), id);
+
+			Predicate isOpenTrue = builder.equal(from.get("isOpen"),
+					new Boolean("true"));
+			query.where(builder.and(contractId, isOpenTrue));
+
+			TypedQuery<TradePosition> typedQuery = entityManager
+					.createQuery(query);
+			List<TradePosition> items = typedQuery.getResultList();
 			if (items.size() > 0) {
 				return items.get(0);
 			}

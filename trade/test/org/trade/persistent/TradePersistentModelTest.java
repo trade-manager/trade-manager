@@ -967,6 +967,7 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
+			tradePosition.setIsOpen(true);
 			TradePosition resultTrade = this.tradePersistentModel
 					.persistAspect(tradePosition);
 			PositionOrders result = this.tradePersistentModel

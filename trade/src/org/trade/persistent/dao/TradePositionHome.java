@@ -147,7 +147,7 @@ public class TradePositionHome {
 			}
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
-				return (TradePosition) items.get(0);
+				return items.get(0);
 			}
 			return null;
 
