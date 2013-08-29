@@ -895,7 +895,7 @@ public class TradePersistentModel implements PersistentModel {
 					 * TradePosition this is the first order that has just been
 					 * update.
 					 */
-					return (TradeOrder) this.persistAspect(tradeOrder);
+					return this.persistAspect(tradeOrder);
 				}
 			} else {
 				tradePosition = this.findTradePositionById(tradeOrder
@@ -994,8 +994,7 @@ public class TradePersistentModel implements PersistentModel {
 				}
 
 				tradePosition.setUpdateDate(new Date());
-				tradePosition = (TradePosition) this
-						.persistAspect(tradePosition);
+				tradePosition = this.persistAspect(tradePosition);
 
 			} else {
 				if (allOrdersCancelled) {
@@ -1021,12 +1020,11 @@ public class TradePersistentModel implements PersistentModel {
 					tradePosition
 							.setTotalCommission(comms.getBigDecimalValue());
 					tradePosition.setUpdateDate(new Date());
-					tradePosition = (TradePosition) this
-							.persistAspect(tradePosition);
+					tradePosition = this.persistAspect(tradePosition);
 				}
 			}
 
-			return (TradeOrder) this.persistAspect(tradeOrder);
+			return this.persistAspect(tradeOrder);
 
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
