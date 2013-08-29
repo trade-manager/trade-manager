@@ -347,7 +347,6 @@ public class TradingdayHome {
 			List<Strategy> items = entityManager.createQuery(query)
 					.getResultList();
 			if (items.size() > 0) {
-				items.get(0).getIndicatorSeries().size();
 				return items.get(0);
 			}
 			return null;

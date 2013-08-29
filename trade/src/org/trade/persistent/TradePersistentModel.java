@@ -1198,7 +1198,6 @@ public class TradePersistentModel implements PersistentModel {
 				aspects.setDirty(false);
 				return aspects;
 			} else {
-
 				return m_aspectHome.findByClassName(aspectClassName);
 			}
 
