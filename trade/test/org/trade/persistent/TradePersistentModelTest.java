@@ -908,8 +908,7 @@ public class TradePersistentModelTest extends TestCase {
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			TestCase.assertNotNull(result);
-			
+			TestCase.assertNotNull(result);			
 		} catch (Exception e) {
 			TestCase.fail("Error testFindTradestrategyById Msg: "
 					+ e.getMessage());
