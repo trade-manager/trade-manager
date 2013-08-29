@@ -187,6 +187,9 @@ public class CodeTypeHome {
 			query.select(from);
 			List<CodeType> items = entityManager.createQuery(query)
 					.getResultList();
+			for (CodeType codeType : items) {
+				codeType.getCodeAttribute().size();
+			}
 			entityManager.getTransaction().commit();
 			return items;
 
