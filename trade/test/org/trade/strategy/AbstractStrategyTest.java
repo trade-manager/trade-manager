@@ -443,7 +443,7 @@ public class AbstractStrategyTest extends TestCase {
 
 			TestCase.assertEquals(2500, result.getQuantity(), 0);
 			entryLimit.setPercentOfMargin(new BigDecimal(0));
-			entryLimit = (Entrylimit) tradePersistentModel
+			entryLimit =  tradePersistentModel
 					.persistAspect(entryLimit);
 			TestCase.assertEquals(entryLimit.getPercentOfMargin(),
 					new BigDecimal(0));
