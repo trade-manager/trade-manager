@@ -130,7 +130,8 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * @param side
 	 *            String
 	 */
-	public TradePosition(ContractLite contract, Date positionOpenDate, String side) {
+	public TradePosition(ContractLite contract, Date positionOpenDate,
+			String side) {
 		this.contract = contract;
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;

@@ -49,7 +49,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
-import org.trade.strategy.data.IndicatorSeries;
 
 /**
  */
@@ -76,10 +75,7 @@ public class TradestrategyHome {
 					.find(Tradestrategy.class, id);
 
 			if (null != instance) {
-				for (IndicatorSeries indicatorSeries : instance.getStrategy()
-						.getIndicatorSeries()) {
-					indicatorSeries.getCodeValues().size();
-				}
+				instance.getStrategy().getIndicatorSeries().size();
 				instance.getTradeOrders().size();
 				instance.getPortfolio().getPortfolioAccounts().size();
 			}

@@ -51,7 +51,6 @@ import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.core.util.TradingCalendar;
-import org.trade.strategy.data.IndicatorSeries;
 
 /**
  */
@@ -269,10 +268,7 @@ public class TradingdayHome {
 						.getTradestrategies()) {
 					tradestrategy.getTradeOrders().size();
 					tradestrategy.getPortfolio().getPortfolioAccounts().size();
-					for (IndicatorSeries indicatorSeries : tradestrategy
-							.getStrategy().getIndicatorSeries()) {
-						indicatorSeries.getCodeValues().size();
-					}
+					tradestrategy.getStrategy().getIndicatorSeries().size();
 				}
 			}
 			entityManager.getTransaction().commit();
