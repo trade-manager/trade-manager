@@ -507,7 +507,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @return Date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "lastUpdateDate", length = 19)
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
 	public Date getLastUpdateDate() {
 		return this.lastUpdateDate;
 	}

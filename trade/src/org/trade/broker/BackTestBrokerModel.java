@@ -1463,7 +1463,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				changed = true;
 			}
 			if (changed)
-				order.setUpdateDate(new Date());
+				order.setLastUpdateDate(new Date());
 		}
 		return changed;
 	}

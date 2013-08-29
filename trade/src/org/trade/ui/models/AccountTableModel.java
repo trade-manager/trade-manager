@@ -192,7 +192,7 @@ public class AccountTableModel extends TableModel {
 			break;
 		}
 		case 11: {
-			element.getAccount().setUpdateDate(((Date) value).getDate());
+			element.getAccount().setLastUpdateDate(((Date) value).getDate());
 			break;
 		}
 		default: {
@@ -288,10 +288,10 @@ public class AccountTableModel extends TableModel {
 		} else {
 			newRow.addElement(new Money(element.getAccount().getUnrealizedPnL()));
 		}
-		if (null == element.getAccount().getUpdateDate()) {
+		if (null == element.getAccount().getLastUpdateDate()) {
 			newRow.addElement(new Date());
 		} else {
-			newRow.addElement(new Date(element.getAccount().getUpdateDate()));
+			newRow.addElement(new Date(element.getAccount().getLastUpdateDate()));
 		}
 	}
 }

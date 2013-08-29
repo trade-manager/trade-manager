@@ -723,7 +723,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 							side, action, 0.01);
 				}
 			}
-			tradeOrder.setUpdateDate(this.getCurrentCandle()
+			tradeOrder.setLastUpdateDate(this.getCurrentCandle()
 					.getLastUpdateDate());
 			tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
 			tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());

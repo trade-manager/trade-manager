@@ -75,7 +75,7 @@ public class TradeOrderHome {
 			EntityManager entityManager = EntityManagerHelper
 					.getEntityManager();
 			entityManager.getTransaction().begin();
-			transientInstance.setUpdateDate(new Date());
+			transientInstance.setLastUpdateDate(new Date());
 			if (null == transientInstance.getIdTradeOrder()) {
 				if (null != transientInstance.getTradePosition()) {
 					if (null != transientInstance.getTradePosition()

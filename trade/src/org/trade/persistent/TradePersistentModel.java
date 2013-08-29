@@ -993,7 +993,7 @@ public class TradePersistentModel implements PersistentModel {
 					this.persistAspect(positionOrders);
 				}
 
-				tradePosition.setUpdateDate(new Date());
+				tradePosition.setLastUpdateDate(new Date());
 				tradePosition = this.persistAspect(tradePosition);
 
 			} else {
@@ -1019,7 +1019,7 @@ public class TradePersistentModel implements PersistentModel {
 						tradePosition.getTotalCommission()) == 1) {
 					tradePosition
 							.setTotalCommission(comms.getBigDecimalValue());
-					tradePosition.setUpdateDate(new Date());
+					tradePosition.setLastUpdateDate(new Date());
 					tradePosition = this.persistAspect(tradePosition);
 				}
 			}

@@ -75,7 +75,7 @@ public class Rule extends Aspect implements java.io.Serializable {
 	private Strategy strategy;
 	private String comment;
 	private Date createDate;
-	private Date updateDate;
+	private Date lastUpdateDate;
 	private byte[] rule;
 	private boolean dirty = false;
 
@@ -97,12 +97,12 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 *            Date
 	 */
 	public Rule(Strategy strategy, Integer version, String comment,
-			Date createDate, Date updateDate) {
+			Date createDate, Date lastUpdateDate) {
 		this.strategy = strategy;
 		this.version = version;
 		this.comment = comment;
 		this.createDate = createDate;
-		this.updateDate = updateDate;
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**
@@ -122,13 +122,13 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 *            Date
 	 */
 	public Rule(Strategy strategy, Integer version, String comment,
-			Date createDate, byte[] rule, Date updateDate) {
+			Date createDate, byte[] rule, Date lastUpdateDate) {
 		this.strategy = strategy;
 		this.version = version;
 		this.comment = comment;
 		this.createDate = createDate;
 		this.rule = rule;
-		this.updateDate = updateDate;
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**
@@ -216,24 +216,24 @@ public class Rule extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getUpdateDate.
+	 * Method getLastUpdateDate.
 	 * 
 	 * @return Date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updateDate", nullable = false, length = 19)
-	public Date getUpdateDate() {
-		return this.updateDate;
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
+	public Date getLastUpdateDate() {
+		return this.lastUpdateDate;
 	}
 
 	/**
-	 * Method setUpdateDate.
+	 * Method setLastUpdateDate.
 	 * 
-	 * @param updateDate
+	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**

@@ -40,6 +40,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -53,6 +54,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -73,6 +76,7 @@ public class PositionOrders extends Aspect implements Serializable {
 
 	private ContractLite contract;
 	private String status;
+	private Date lastUpdateDate;
 	private TradePosition tradePosition;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 
@@ -140,6 +144,27 @@ public class PositionOrders extends Aspect implements Serializable {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * Method getLastUpdateDate.
+	 * 
+	 * @return Date
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
+	public Date getLastUpdateDate() {
+		return this.lastUpdateDate;
+	}
+
+	/**
+	 * Method setLastUpdateDate.
+	 * 
+	 * @param lastUpdateDate
+	 *            Date
+	 */
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**

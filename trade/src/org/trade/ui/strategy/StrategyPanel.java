@@ -484,7 +484,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			} else {
 				if (getComments().length() > 0)
 					this.currentRule.setComment(getComments());
-				this.currentRule.setUpdateDate(new Date());
+				this.currentRule.setLastUpdateDate(new Date());
 				this.currentRule.setRule(getContent().getBytes());
 				this.tradePersistentModel.persistAspect(this.currentRule);
 				doSaveFile(fileNameSource, getContent());

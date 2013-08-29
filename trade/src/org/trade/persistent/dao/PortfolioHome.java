@@ -249,7 +249,7 @@ public class PortfolioHome {
 			entityManager.getTransaction().begin();
 			Portfolio portfolio = findPortfolioByName(instance.getName());
 			if (null == portfolio) {
-				instance.setUpdateDate(new Date());
+				instance.setLastUpdateDate(new Date());
 				for (PortfolioAccount item : instance.getPortfolioAccounts()) {
 					Account account = findByAccountNumber(item.getAccount()
 							.getAccountNumber());
@@ -257,7 +257,7 @@ public class PortfolioHome {
 						item.getAccount().setCurrency(Currency.USD);
 						item.getAccount().setName(
 								item.getAccount().getAccountNumber());
-						item.getAccount().setUpdateDate(new Date());
+						item.getAccount().setLastUpdateDate(new Date());
 					} else {
 						item.setAccount(account);
 					}
@@ -270,7 +270,7 @@ public class PortfolioHome {
 						instance.getAllocationMethod())) {
 					portfolio.setAllocationMethod(instance
 							.getAllocationMethod());
-					portfolio.setUpdateDate(new Date());
+					portfolio.setLastUpdateDate(new Date());
 				}
 				for (PortfolioAccount item : instance.getPortfolioAccounts()) {
 
@@ -280,7 +280,7 @@ public class PortfolioHome {
 						item.getAccount().setCurrency(Currency.USD);
 						item.getAccount().setName(
 								item.getAccount().getAccountNumber());
-						item.getAccount().setUpdateDate(new Date());
+						item.getAccount().setLastUpdateDate(new Date());
 					} else {
 						item.setAccount(account);
 					}

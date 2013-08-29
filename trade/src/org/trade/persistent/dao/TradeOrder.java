@@ -121,7 +121,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private Integer triggerMethod;
 	private String warningMessage;
 	private String whyHeld;
-	private Date updateDate;
+	private Date lastUpdateDate;
 	private List<TradeOrderfill> tradeOrderfills = new ArrayList<TradeOrderfill>(
 			0);
 
@@ -193,7 +193,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.quantity = quantity;
 		this.timeInForce = timeInForce;
 		this.triggerMethod = triggerMethod;
-		this.updateDate = createDate;
+		this.lastUpdateDate = createDate;
 	}
 
 	/**
@@ -316,7 +316,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.triggerMethod = triggerMethod;
 		this.warningMessage = warningMessage;
 		this.whyHeld = whyHeld;
-		this.updateDate = updateDate;
+		this.lastUpdateDate = updateDate;
 		this.tradeOrderfills = tradeOrderfills;
 	}
 
@@ -1169,24 +1169,24 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	}
 
 	/**
-	 * Method getUpdateDate.
+	 * Method getLastUpdateDate.
 	 * 
 	 * @return Date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updateDate", nullable = false, length = 19)
-	public Date getUpdateDate() {
-		return this.updateDate;
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
+	public Date getLastUpdateDate() {
+		return this.lastUpdateDate;
 	}
 
 	/**
-	 * Method setUpdateDate.
+	 * Method setLastUpdateDate.
 	 * 
-	 * @param updateDate
+	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**

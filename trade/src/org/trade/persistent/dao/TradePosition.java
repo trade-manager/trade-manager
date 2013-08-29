@@ -98,7 +98,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	private Integer totalSellQuantity;
 	private BigDecimal totalSellValue;
 	private BigDecimal totalNetValue;
-	private Date updateDate;
+	private Date lastUpdateDate;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 
 	public TradePosition() {
@@ -135,6 +135,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 		this.contract = contract;
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;
+		this.lastUpdateDate = positionOpenDate;
 	}
 
 	/**
@@ -449,24 +450,24 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getUpdateDate.
+	 * Method getLastUpdateDate.
 	 * 
 	 * @return Date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updateDate", nullable = true, length = 19)
-	public Date getUpdateDate() {
-		return this.updateDate;
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
+	public Date getLastUpdateDate() {
+		return this.lastUpdateDate;
 	}
 
 	/**
-	 * Method setUpdateDate.
+	 * Method setLastUpdateDate.
 	 * 
-	 * @param updateDate
+	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**
@@ -555,6 +556,6 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 				+ this.getTotalSellQuantity() + " Total Sell Value: "
 				+ new Money(this.getTotalSellValue()) + " Total Comm: "
 				+ new Money(this.getTotalCommission()) + " updateDate: "
-				+ this.getUpdateDate();
+				+ this.getLastUpdateDate();
 	}
 }

@@ -1875,7 +1875,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * seconds just HH:mm format.
 					 */
 					if (account.isDirty()) {
-						account.setUpdateDate(new Date());
+						account.setLastUpdateDate(new Date());
 						account = m_tradePersistentModel.persistAspect(account,
 								true);
 						m_accountRequests.replace(accountNumber, account);
@@ -2109,7 +2109,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								item.getAccountNumber(), Currency.USD);
 					}
 					account.setAlias(item.getAlias());
-					account.setUpdateDate(new Date());
+					account.setLastUpdateDate(new Date());
 					m_tradePersistentModel.persistAspect(account);
 				}
 				m_client.requestFA(EClientSocket.GROUPS);
@@ -2821,7 +2821,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				changed = true;
 			}
 			if (changed)
-				order.setUpdateDate(new Date());
+				order.setLastUpdateDate(new Date());
 		}
 		return changed;
 	}

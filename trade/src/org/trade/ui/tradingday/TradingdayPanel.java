@@ -879,7 +879,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 						.add((portfolioAccount.getAccount().getUnrealizedPnL() == null ? new BigDecimal(
 								0) : portfolioAccount.getAccount()
 								.getUnrealizedPnL()));
-				updateDate = portfolioAccount.getAccount().getUpdateDate();
+				updateDate = portfolioAccount.getAccount().getLastUpdateDate();
 			}
 			portfolioLabel.setText(null);
 			CoreUtils.setDocumentText(portfolioLabel.getDocument(),

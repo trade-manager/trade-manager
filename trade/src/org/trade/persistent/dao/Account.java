@@ -87,7 +87,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	private String name;
 	private BigDecimal realizedPnL = new BigDecimal(0);
 	private BigDecimal unrealizedPnL = new BigDecimal(0);
-	private Date updateDate;
+	private Date lastUpdateDate;
 	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
 			0);
 
@@ -414,24 +414,24 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getUpdateDate.
+	 * Method getLastUpdateDate.
 	 * 
 	 * @return Date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updateDate", nullable = true, length = 19)
-	public Date getUpdateDate() {
-		return this.updateDate;
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
+	public Date getLastUpdateDate() {
+		return this.lastUpdateDate;
 	}
 
 	/**
-	 * Method setUpdateDate.
+	 * Method setLastUpdateDate.
 	 * 
-	 * @param updateDate
+	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**

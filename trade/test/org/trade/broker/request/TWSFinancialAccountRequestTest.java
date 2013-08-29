@@ -138,7 +138,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							item.getAccountNumber(), Currency.USD);
 				}
 				account.setAlias(item.getAlias());
-				account.setUpdateDate(new Date());
+				account.setLastUpdateDate(new Date());
 				m_tradePersistentModel.persistAspect(account);
 			}
 		} catch (Exception e) {
@@ -166,7 +166,7 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 							item.getAccountNumber(), Currency.USD);
 				}
 				account.setAlias(item.getAlias());
-				account.setUpdateDate(new Date());
+				account.setLastUpdateDate(new Date());
 				m_tradePersistentModel.persistAspect(account);
 			}
 		} catch (Exception e) {

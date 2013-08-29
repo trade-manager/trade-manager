@@ -38,6 +38,7 @@ package org.trade.persistent.dao;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,6 +46,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
@@ -62,6 +65,7 @@ public class TradestrategyLite extends Aspect implements Serializable {
 	private static final long serialVersionUID = -2181676329258092177L;
 
 	private String status;
+	private Date lastUpdateDate;
 
 	public TradestrategyLite() {
 	}
@@ -106,6 +110,27 @@ public class TradestrategyLite extends Aspect implements Serializable {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * Method getLastUpdateDate.
+	 * 
+	 * @return Date
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
+	public Date getLastUpdateDate() {
+		return this.lastUpdateDate;
+	}
+
+	/**
+	 * Method setLastUpdateDate.
+	 * 
+	 * @param lastUpdateDate
+	 *            Date
+	 */
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**

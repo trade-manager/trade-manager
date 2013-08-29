@@ -70,7 +70,7 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	private String allocationMethod;
 	private String description;
 	private Boolean isDefault = new Boolean(false);
-	private Date updateDate;
+	private Date lastUpdateDate;
 	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
 			0);
 	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
@@ -90,6 +90,7 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	public Portfolio(String name, String description) {
 		this.name = name;
 		this.description = description;
+		this.lastUpdateDate = new Date();
 	}
 
 	/**
@@ -215,24 +216,24 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getUpdateDate.
+	 * Method getLastUpdateDate.
 	 * 
 	 * @return Date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updateDate", nullable = true, length = 19)
-	public Date getUpdateDate() {
-		return this.updateDate;
+	@Column(name = "lastUpdateDate", nullable = false, length = 19)
+	public Date getLastUpdateDate() {
+		return this.lastUpdateDate;
 	}
 
 	/**
-	 * Method setUpdateDate.
+	 * Method setLastUpdateDate.
 	 * 
-	 * @param updateDate
+	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	/**
