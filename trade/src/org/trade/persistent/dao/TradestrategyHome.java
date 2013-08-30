@@ -106,12 +106,15 @@ public class TradestrategyHome {
 			PositionOrders instance = entityManager.find(PositionOrders.class,
 					idTradestrategy);
 			if (null != instance) {
-				for(TradeOrder item : instance.getTradeOrders()){
-					if(item.getTradePosition().getIsOpen()){
-						item.getTradePosition().getTradeOrders().size();
-						instance.setOpenTradePosition(item.getTradePosition());
-						break;
-					}					
+				for (TradeOrder item : instance.getTradeOrders()) {
+					if (null != item.getTradePosition()) {
+						if (item.getTradePosition().getIsOpen()) {
+							item.getTradePosition().getTradeOrders().size();
+							instance.setOpenTradePosition(item
+									.getTradePosition());
+							break;
+						}
+					}
 				}
 			}
 			entityManager.getTransaction().commit();
