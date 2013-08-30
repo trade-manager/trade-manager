@@ -111,6 +111,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 		this.accountNumber = accountNumber;
 		this.name = name;
 		this.currency = currency;
+		this.lastUpdateDate = new Date();
 	}
 
 	/**
@@ -154,6 +155,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 		this.grossPositionValue = grossPositionValue;
 		this.realizedPnL = realizedPnL;
 		this.unrealizedPnL = unrealizedPnL;
+		this.lastUpdateDate = new Date();
 	}
 
 	/**
