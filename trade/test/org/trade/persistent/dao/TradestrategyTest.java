@@ -87,6 +87,25 @@ public class TradestrategyTest extends TestCase {
 	}
 
 	@Test
+	public void testFindVersionById() {
+		try {
+			Tradestrategy tradestrategy = TradestrategyTest
+					.getTestTradestrategy(symbol);
+			TestCase.assertNotNull(tradestrategy);
+
+			Integer version = tradestrategyHome.findVersionById(tradestrategy
+					.getIdTradeStrategy());
+			TestCase.assertNotNull(version);
+			_log.info("testFindVersionById IdTradeStrategy:"
+					+ tradestrategy.getIdTradeStrategy() + " version: "
+					+ version);
+
+		} catch (Exception e) {
+			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		}
+	}
+
+	@Test
 	public void testFindPositionOrdersById() {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest

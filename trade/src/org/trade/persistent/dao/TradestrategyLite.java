@@ -69,6 +69,10 @@ public class TradestrategyLite extends Aspect implements Serializable {
 
 	public TradestrategyLite() {
 	}
+	
+	public TradestrategyLite(Integer version) {
+		this.version = version;
+	}
 
 	/**
 	 * Method getIdTradeStrategy.

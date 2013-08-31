@@ -213,6 +213,7 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
   INDEX tradeStrategy_Stategy_idx  (idStrategy ASC) ,
   INDEX tradeStrategy_Portfolio_idx  (idPortfolio ASC) ,
   UNIQUE INDEX tradeStrategy_uq (idTradingDay ASC, idContract ASC, idStrategy ASC, idPortfolio ASC, barSize ASC), 
+  UNIQUE INDEX tradeStrategyId_uq (idTradingDay ASC, version ASC), 
   CONSTRAINT tradeStrategy_TradingDay_fk
     FOREIGN KEY (idTradingDay )
     REFERENCES tradingday (idTradingDay )

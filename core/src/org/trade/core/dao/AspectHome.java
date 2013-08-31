@@ -94,8 +94,6 @@ public class AspectHome {
 				}
 				T instance = entityManager.merge(transientInstance);
 				entityManager.getTransaction().commit();
-				transientInstance.setVersion(instance.getVersion());
-				transientInstance.setDirty(false);
 				instance.setDirty(false);
 				return instance;
 			}

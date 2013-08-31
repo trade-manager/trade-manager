@@ -981,6 +981,44 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
+	public void testRefreshPositionOrdersByTradestrategyId() {
+
+		try {
+			TradePosition tradePosition = new TradePosition(
+					this.tradestrategy.getContract(), new Date(), Side.BOT);
+			tradePosition.setIsOpen(true);
+			TradePosition resultTrade = this.tradePersistentModel
+					.persistAspect(tradePosition);
+			PositionOrders positionOrders = this.tradePersistentModel
+					.findPositionOrdersByTradestrategyId(resultTrade
+							.getIdTradePosition());
+
+			_log.error("testFindVersionById IdTradeStrategy:"
+					+ positionOrders.getIdTradeStrategy() + " version: "
+					+ positionOrders.getVersion());
+
+			positionOrders.setLastUpdateDate(new Date());
+			PositionOrders result = this.tradePersistentModel
+					.persistAspect(positionOrders);
+
+			_log.error("testFindVersionById IdTradeStrategy:"
+					+ result.getIdTradeStrategy() + " version: "
+					+ result.getVersion());
+			result = this.tradePersistentModel
+					.refreshPositionOrdersByTradestrategyId(positionOrders);
+			_log.error("testFindVersionById IdTradeStrategy:"
+					+ result.getIdTradeStrategy() + " prev version: "
+					+ positionOrders.getVersion() + " current version: "
+					+ result.getVersion());
+
+			TestCase.assertNotNull(result);
+		} catch (Exception e) {
+			TestCase.fail("Error testFindPositionOrdersByTradestrategyId Msg: "
+					+ e.getMessage());
+		}
+	}
+
+	@Test
 	public void testFindOpenTradePositionByContractId() {
 
 		try {

@@ -107,10 +107,26 @@ public class TradestrategyHome {
 			EntityManager entityManager = EntityManagerHelper
 					.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradestrategyLite instance = entityManager.find(
-					TradestrategyLite.class, id);
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<TradestrategyLite> query = builder
+					.createQuery(TradestrategyLite.class);
+			Root<TradestrategyLite> from = query.from(TradestrategyLite.class);
+
+			CriteriaQuery<TradestrategyLite> select = query.multiselect(from
+					.get("version"));
+			Predicate predicate = builder
+					.equal(from.get("idTradeStrategy"), id);
+			query.where(predicate);
+			TypedQuery<TradestrategyLite> typedQuery = entityManager
+					.createQuery(select);
+			List<TradestrategyLite> items = typedQuery.getResultList();
+
 			entityManager.getTransaction().commit();
-			return instance.getVersion();
+			if (items.size() > 0) {
+				return items.get(0).getVersion();
+			}
+			return null;
+
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();
 			throw re;
@@ -137,7 +153,7 @@ public class TradestrategyHome {
 			PositionOrders instance = entityManager.find(PositionOrders.class,
 					idTradestrategy);
 
-			_log.error("idTradestrategy: " + instance);
+			// _log.error("idTradestrategy: " + instance);
 
 			if (null != instance) {
 				for (TradeOrder item : instance.getTradeOrders()) {
