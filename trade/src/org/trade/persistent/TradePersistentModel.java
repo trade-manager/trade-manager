@@ -317,6 +317,36 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method refreshPositionOrdersByTradestrategyId.
+	 * 
+	 * @param positionOrders
+	 *            PositionOrders
+	 * 
+	 * @return PositionOrders
+	 * @throws PersistentModelException
+	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
+	 */
+	public PositionOrders refreshPositionOrdersByTradestrategyId(
+			PositionOrders positionOrders) throws PersistentModelException {
+
+		Integer version = m_tradestrategyHome.findVersionById(positionOrders
+				.getIdTradeStrategy());
+
+		if (positionOrders.getVersion().equals(version)) {
+			return positionOrders;
+		} else {
+			PositionOrders instance = m_tradestrategyHome
+					.findPositionOrdersByTradestrategyId(positionOrders
+							.getIdTradeStrategy());
+			if (null == instance)
+				throw new PersistentModelException(
+						"Tradestrategy not found for id: "
+								+ positionOrders.getIdTradeStrategy());
+			return instance;
+		}
+	}
+
+	/**
 	 * Method findPositionOrdersByTradestrategyId.
 	 * 
 	 * @param idTradestrategy

@@ -247,6 +247,19 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
+	 * Method refreshPositionOrdersByTradestrategyId.
+	 * 
+	 * @param positionOrders
+	 *            PositionOrders
+	 * 
+	 * @return PositionOrders
+	 * @throws PersistentModelException
+	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
+	 */
+	PositionOrders refreshPositionOrdersByTradestrategyId(
+			PositionOrders positionOrders) throws PersistentModelException;
+
+	/**
 	 * Method findTradestrategyByUniqueKeys.
 	 * 
 	 * @param open

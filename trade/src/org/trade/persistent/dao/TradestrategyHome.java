@@ -48,12 +48,17 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.core.dao.EntityManagerHelper;
 
 /**
  */
 @Stateless
 public class TradestrategyHome {
+
+	private final static Logger _log = LoggerFactory
+			.getLogger(TradestrategyHome.class);
 
 	public TradestrategyHome() {
 	}
@@ -90,12 +95,38 @@ public class TradestrategyHome {
 	}
 
 	/**
+	 * Method findVersionById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return Integer
+	 */
+	public synchronized Integer findVersionById(Integer id) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			entityManager.getTransaction().begin();
+			TradestrategyLite instance = entityManager.find(
+					TradestrategyLite.class, id);
+			entityManager.getTransaction().commit();
+			return instance.getVersion();
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
 	 * Method findPositionOrdersByTradestrategyId.
 	 * 
 	 * @param idTradestrategy
 	 *            Integer
 	 * @return PositionOrders
 	 */
+
 	public synchronized PositionOrders findPositionOrdersByTradestrategyId(
 			Integer idTradestrategy) {
 
@@ -105,6 +136,9 @@ public class TradestrategyHome {
 			entityManager.getTransaction().begin();
 			PositionOrders instance = entityManager.find(PositionOrders.class,
 					idTradestrategy);
+
+			_log.error("idTradestrategy: " + instance);
+
 			if (null != instance) {
 				for (TradeOrder item : instance.getTradeOrders()) {
 					if (null != item.getTradePosition()) {
