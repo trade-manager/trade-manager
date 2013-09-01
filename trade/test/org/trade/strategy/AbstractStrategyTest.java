@@ -435,7 +435,7 @@ public class AbstractStrategyTest extends TestCase {
 			DAOEntryLimit entryLimits = new DAOEntryLimit();
 			Entrylimit entryLimit = entryLimits.getValue(price);
 			entryLimit.setPercentOfMargin(new BigDecimal(0.5));
-			tradePersistentModel.persistAspect(entryLimit);
+			entryLimit = tradePersistentModel.persistAspect(entryLimit);
 
 			TradeOrder result = this.strategyProxy.createRiskOpenPosition(
 					Action.BUY, new Money(20.00), new Money(19.98), true, null,
@@ -467,7 +467,7 @@ public class AbstractStrategyTest extends TestCase {
 			DAOEntryLimit entryLimits = new DAOEntryLimit();
 			Entrylimit entryLimit = entryLimits.getValue(price);
 			entryLimit.setPercentOfMargin(new BigDecimal(0.5));
-			tradePersistentModel.persistAspect(entryLimit);
+			entryLimit = tradePersistentModel.persistAspect(entryLimit);
 
 			TradeOrder openOrder = this.strategyProxy.createRiskOpenPosition(
 					Action.SELL, new Money(45.75), new Money(46.00), true,
@@ -482,7 +482,7 @@ public class AbstractStrategyTest extends TestCase {
 					new Date());
 			openOrder.addTradeOrderfill(orderFill);
 			openOrder.setStatus(OrderStatus.FILLED);
-			tradePersistentModel.persistTradeOrderfill(openOrder);
+			openOrder = tradePersistentModel.persistTradeOrderfill(openOrder);
 
 			reFreshPositionOrders();
 

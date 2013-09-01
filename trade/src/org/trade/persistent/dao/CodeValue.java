@@ -162,7 +162,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return IndicatorSeries
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idIndicatorSeries", nullable = true)
 	public IndicatorSeries getIndicatorSeries() {
 		return this.indicatorSeries;

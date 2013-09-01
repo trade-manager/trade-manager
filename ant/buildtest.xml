@@ -146,7 +146,7 @@
 	</target>
 	<target name="all" depends="test">
 		<junit fork="yes">
-			<jvmarg value="-Duser.timezone=EST5EDT" />
+			<jvmarg value="-Duser.timezone=America/New_York" />
 		</junit>
 	</target>
 </project>

@@ -965,14 +965,17 @@ public class TradePersistentModelTest extends TestCase {
 	public void testFindPositionOrdersByTradestrategyId() {
 
 		try {
+			this.tradestrategy = TradestrategyTest
+					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
 			tradePosition.setIsOpen(true);
 			TradePosition resultTrade = this.tradePersistentModel
 					.persistAspect(tradePosition);
+			TestCase.assertNotNull(resultTrade);
 			PositionOrders result = this.tradePersistentModel
-					.findPositionOrdersByTradestrategyId(resultTrade
-							.getIdTradePosition());
+					.findPositionOrdersByTradestrategyId(this.tradestrategy
+							.getIdTradeStrategy());
 			TestCase.assertNotNull(result);
 		} catch (Exception e) {
 			TestCase.fail("Error testFindPositionOrdersByTradestrategyId Msg: "
@@ -984,16 +987,19 @@ public class TradePersistentModelTest extends TestCase {
 	public void testRefreshPositionOrdersByTradestrategyId() {
 
 		try {
+			this.tradestrategy = TradestrategyTest
+					.removeTradeOrders(this.tradestrategy);
 			TradePosition tradePosition = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
 			tradePosition.setIsOpen(true);
 			TradePosition resultTrade = this.tradePersistentModel
 					.persistAspect(tradePosition);
+			TestCase.assertNotNull(resultTrade);
 			PositionOrders positionOrders = this.tradePersistentModel
-					.findPositionOrdersByTradestrategyId(resultTrade
-							.getIdTradePosition());
+					.findPositionOrdersByTradestrategyId(this.tradestrategy
+							.getIdTradeStrategy());
 
-			_log.error("testFindVersionById IdTradeStrategy:"
+			_log.info("testFindVersionById IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + " version: "
 					+ positionOrders.getVersion());
 
@@ -1001,12 +1007,12 @@ public class TradePersistentModelTest extends TestCase {
 			PositionOrders result = this.tradePersistentModel
 					.persistAspect(positionOrders);
 
-			_log.error("testFindVersionById IdTradeStrategy:"
+			_log.info("testFindVersionById IdTradeStrategy:"
 					+ result.getIdTradeStrategy() + " version: "
 					+ result.getVersion());
 			result = this.tradePersistentModel
 					.refreshPositionOrdersByTradestrategyId(positionOrders);
-			_log.error("testFindVersionById IdTradeStrategy:"
+			_log.info("testFindVersionById IdTradeStrategy:"
 					+ result.getIdTradeStrategy() + " prev version: "
 					+ positionOrders.getVersion() + " current version: "
 					+ result.getVersion());
