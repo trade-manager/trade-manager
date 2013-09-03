@@ -83,7 +83,7 @@ public class TradestrategyTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy(symbol);
+		TradestrategyTest.clearDBData();
 	}
 
 	@Test
@@ -330,12 +330,31 @@ public class TradestrategyTest extends TestCase {
 	}
 
 	/**
-	 * Method removeTestTradestrategy.
+	 * Method clearDBData.
 	 * 
 	 * @throws Exception
 	 */
-	public static void removeTestTradestrategy(String symbol) throws Exception {
+	public static void clearDBData() throws Exception {
+
 		AspectHome aspectHome = new AspectHome();
+		Aspects contracts = aspectHome
+				.findByClassName(Contract.class.getName());
+		for (Aspect aspect : contracts.getAspect()) {
+			((Contract) aspect).setTradePosition(null);
+			aspectHome.persist(aspect);
+		}
+
+		Aspects tradeOrders = aspectHome.findByClassName(TradeOrder.class
+				.getName());
+		for (Aspect aspect : tradeOrders.getAspect()) {
+			aspectHome.remove(aspect);
+		}
+
+		Aspects tradePositions = aspectHome.findByClassName(TradePosition.class
+				.getName());
+		for (Aspect aspect : tradePositions.getAspect()) {
+			aspectHome.remove(aspect);
+		}
 		Aspects portfolioAccounts = aspectHome
 				.findByClassName(PortfolioAccount.class.getName());
 		for (Aspect aspect : portfolioAccounts.getAspect()) {
@@ -350,8 +369,7 @@ public class TradestrategyTest extends TestCase {
 		for (Aspect aspect : tradestrategies.getAspect()) {
 			aspectHome.remove(aspect);
 		}
-		Aspects contracts = aspectHome
-				.findByClassName(Contract.class.getName());
+		contracts = aspectHome.findByClassName(Contract.class.getName());
 		for (Aspect aspect : contracts.getAspect()) {
 			aspectHome.remove(aspect);
 		}
@@ -360,31 +378,5 @@ public class TradestrategyTest extends TestCase {
 		for (Aspect aspect : tradingdays.getAspect()) {
 			aspectHome.remove(aspect);
 		}
-	}
-
-	/**
-	 * Method removeTradeOrders.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @return Tradestrategy
-	 * @throws Exception
-	 */
-	public static Tradestrategy removeTradeOrders(Tradestrategy tradestrategy)
-			throws Exception {
-		AspectHome aspectHome = new AspectHome();
-		TradestrategyHome tradestrategyHome = new TradestrategyHome();
-		Aspects tradeOrders = aspectHome.findByClassName(TradeOrder.class
-				.getName());
-		for (Aspect aspect : tradeOrders.getAspect()) {
-			aspectHome.remove(aspect);
-		}
-
-		Aspects tradePositions = aspectHome.findByClassName(TradePosition.class
-				.getName());
-		for (Aspect aspect : tradePositions.getAspect()) {
-			aspectHome.remove(aspect);
-		}
-		return tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
 	}
 }

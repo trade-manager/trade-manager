@@ -70,7 +70,20 @@ public class TradestrategyLite extends Aspect implements Serializable {
 	public TradestrategyLite() {
 	}
 
-	public TradestrategyLite(Integer version) {
+	/**
+	 * Constructor for TradestrategyLite. Need for filterexd query that just
+	 * gets the current version
+	 * 
+	 * @see findVersionById(Integer)
+	 * 
+	 * @param id
+	 *            Integer
+	 * @param version
+	 *            Integer
+	 */
+
+	public TradestrategyLite(Integer id, Integer version) {
+		this.id = id;
 		this.version = version;
 	}
 

@@ -40,15 +40,14 @@ package org.trade.persistent.dao;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.trade.core.dao.Aspect;
@@ -68,7 +67,7 @@ public class ContractLite extends Aspect implements Serializable, Cloneable {
 	 */
 	private static final long serialVersionUID = 5691902477608387034L;
 
-	private List<TradePosition> tradePositions = new ArrayList<TradePosition>(0);
+	private TradePosition tradePosition;
 
 	public ContractLite() {
 	}
@@ -100,22 +99,24 @@ public class ContractLite extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getTradePositions.
+	 * Method getTradePosition.
 	 * 
-	 * @return List<TradePosition>
+	 * @return TradePosition
 	 */
-	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
-	public List<TradePosition> getTradePositions() {
-		return this.tradePositions;
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "idTradePosition", insertable = false, updatable = true, nullable = true)
+	public TradePosition getTradePosition() {
+		return this.tradePosition;
 	}
 
 	/**
-	 * Method setTradePositions.
+	 * Method setTradePosition.
 	 * 
-	 * @param tradePositions
-	 *            List<TradePosition>
+	 * @param tradePosition
+	 *            TradePosition
 	 */
-	public void setTradePositions(List<TradePosition> tradePositions) {
-		this.tradePositions = tradePositions;
+	public void setTradePosition(TradePosition tradePosition) {
+		this.tradePosition = tradePosition;
 	}
+
 }

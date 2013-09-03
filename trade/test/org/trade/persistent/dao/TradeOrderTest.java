@@ -95,15 +95,13 @@ public class TradeOrderTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy(symbol);
+		TradestrategyTest.clearDBData();
 	}
 
 	@Test
 	public void testAddTradeOrder() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 			String side = this.tradestrategy.getSide();
 			String action = Action.BUY;
 			if (Side.SLD.equals(side)) {
@@ -153,8 +151,6 @@ public class TradeOrderTest extends TestCase {
 	public void testAddOpenStopTargetTradeOrder() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 			String side = this.tradestrategy.getSide();
 			String action = Action.BUY;
 			if (Side.SLD.equals(side)) {
@@ -245,11 +241,7 @@ public class TradeOrderTest extends TestCase {
 	public void testAddTradeOrderFill() {
 
 		try {
-
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 			testAddTradeOrder();
-
 			boolean stopped = true;
 			int minute = 25;
 
@@ -367,8 +359,6 @@ public class TradeOrderTest extends TestCase {
 	@Test
 	public void testAddDetachedTradeOrder() {
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 			String side = this.tradestrategy.getSide();
 			String action = Action.BUY;
 			if (Side.SLD.equals(side)) {

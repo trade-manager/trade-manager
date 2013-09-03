@@ -1481,8 +1481,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 */
 	public TradeOrder getOpenPositionOrder() {
-		for (TradeOrder tradeOrder : this.getPositionOrders()
-				.getOpenTradePosition().getTradeOrders()) {
+		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
 			if (tradeOrder.getIsOpenPosition())
 				return tradeOrder;
 		}

@@ -35,16 +35,8 @@
  */
 package org.trade.persistent.dao;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
 
@@ -104,53 +96,6 @@ public class TradePositionHome {
 				instance.getTradeOrders().size();
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
-			EntityManagerHelper.rollback();
-			throw re;
-		} finally {
-			EntityManagerHelper.close();
-		}
-	}
-
-	/**
-	 * Method findOpenTradePositionByContractId.
-	 * 
-	 * @param id
-	 *            Integer
-	 * @return TradePosition
-	 */
-	public TradePosition findOpenTradePositionByContractId(Integer id) {
-
-		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
-			entityManager.getTransaction().begin();
-			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<TradePosition> query = builder
-					.createQuery(TradePosition.class);
-			Root<TradePosition> from = query.from(TradePosition.class);
-			query.select(from);
-
-			Join<TradePosition, Contract> contract = from.join("contract");
-			Predicate contractId = builder
-					.equal(contract.get("idContract"), id);
-
-			Predicate isOpenTrue = builder.equal(from.get("isOpen"),
-					new Boolean("true"));
-			query.where(builder.and(contractId, isOpenTrue));
-
-			TypedQuery<TradePosition> typedQuery = entityManager
-					.createQuery(query);
-			List<TradePosition> items = typedQuery.getResultList();
-			for (TradePosition tradePosition : items) {
-				tradePosition.getTradeOrders().size();
-			}
-			entityManager.getTransaction().commit();
-			if (items.size() > 0) {
-				return items.get(0);
-			}
-			return null;
-
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();
 			throw re;

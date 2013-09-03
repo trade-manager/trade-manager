@@ -104,7 +104,7 @@ public class StrategyPanelTest extends TestCase {
 	protected void tearDown() throws Exception {
 		File dir = new File(m_tmpDir);
 		StrategyPanel.deleteDir(dir);
-		TradestrategyTest.removeTestTradestrategy(symbol);
+		TradestrategyTest.clearDBData();
 	}
 
 	@Test

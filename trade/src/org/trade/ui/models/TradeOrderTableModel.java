@@ -423,7 +423,7 @@ public class TradeOrderTableModel extends TableModel {
 			for (TradeOrder item : tradestrategy.getTradeOrders()) {
 				if (item.hasTradePosition()) {
 					TradePosition position = item.getTradePosition();
-					if (position.getIsOpen()) {
+					if (position.isOpen()) {
 						quantity = Math.abs(position.getOpenQuantity());
 						side = position.getSide();
 						action = Action.BUY;

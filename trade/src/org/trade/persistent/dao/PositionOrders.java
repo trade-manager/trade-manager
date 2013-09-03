@@ -77,7 +77,6 @@ public class PositionOrders extends Aspect implements Serializable {
 	private ContractLite contract;
 	private String status;
 	private Date lastUpdateDate;
-	private TradePosition tradePosition;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 
 	public PositionOrders() {
@@ -204,17 +203,7 @@ public class PositionOrders extends Aspect implements Serializable {
 	 */
 	@Transient
 	public TradePosition getOpenTradePosition() {
-		return this.tradePosition;
-	}
-
-	/**
-	 * Method setOpenTradePosition.
-	 * 
-	 * @param tradePosition
-	 *            TradePosition
-	 */
-	public void setOpenTradePosition(TradePosition tradePosition) {
-		this.tradePosition = tradePosition;
+		return this.getContract().getTradePosition();
 	}
 
 	/**
@@ -249,7 +238,9 @@ public class PositionOrders extends Aspect implements Serializable {
 
 					prevIdTradePosition = order.getTradePosition()
 							.getIdTradePosition();
-					if (order.getTradePosition().getIsOpen()) {
+					if (order.getTradePosition().equals(
+							order.getTradePosition().getContract()
+									.getTradePosition())) {
 						unRealizedProfit = order.getTradePosition()
 								.getTotalNetValue().doubleValue()
 								+ (order.getTradePosition().getOpenQuantity() * lastPrice

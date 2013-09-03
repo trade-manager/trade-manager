@@ -56,8 +56,15 @@ CREATE  TABLE IF NOT EXISTS contract (
   subCategory VARCHAR(80) NULL ,
   tradingClass VARCHAR(80) NULL ,
   version INT NULL,
+  idTradePosition INT NULL,
   PRIMARY KEY (idContract) ,
-  UNIQUE INDEX contract_uq (secType ASC, symbol ASC, exchange ASC, currency ASC, expiry ASC) )
+  UNIQUE INDEX contract_tradePosition_uq (idTradePosition ASC),
+  UNIQUE INDEX contract_uq (secType ASC, symbol ASC, exchange ASC, currency ASC, expiry ASC),
+  CONSTRAINT contract_tradePosition_fk
+    FOREIGN KEY (idTradePosition )
+    REFERENCES tradeposition (idTradePosition )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -208,6 +215,7 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
   idStrategy INT NOT NULL ,
   idPortfolio INT NOT NULL ,
   PRIMARY KEY (idTradeStrategy) ,
+ UNIQUE INDEX tradeStrategy_version_uq (idTradeStrategy ASC, version ASC),
   INDEX tradeStrategy_TradingDay_idx (idTradingDay ASC) ,
   INDEX tradeStrategy_Contract_idx  (idContract ASC) ,
   INDEX tradeStrategy_Stategy_idx  (idStrategy ASC) ,
@@ -245,7 +253,6 @@ DROP TABLE IF EXISTS tradeposition ;
 SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS tradeposition (
   idTradePosition INT NOT NULL AUTO_INCREMENT ,
-  isOpen TINYINT(1)  NOT NULL ,
   openQuantity INT NULL ,
   positionOpenDate DATETIME(3) NOT NULL ,
   positionCloseDate DATETIME(3) NULL ,  
@@ -261,7 +268,6 @@ CREATE  TABLE IF NOT EXISTS tradeposition (
   idContract INT NOT NULL ,
   PRIMARY KEY (idTradePosition) ,
   INDEX tradePosition_Contract_idx (idContract ASC) ,
-  INDEX tradePosition_ContractIdIsOpen_idx (idContract ASC, isOpen ASC) ,
   CONSTRAINT tradePosition_Contract_fk
     FOREIGN KEY (idContract )
     REFERENCES contract (idContract )

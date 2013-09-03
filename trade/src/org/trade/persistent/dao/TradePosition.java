@@ -90,7 +90,6 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	private Integer openQuantity = new Integer(0);
 	private Date positionOpenDate;
 	private Date positionCloseDate;
-	private Boolean isOpen = new Boolean(false);
 	private String side;
 	private BigDecimal totalCommission;
 	private Integer totalBuyQuantity;
@@ -211,9 +210,9 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	/**
 	 * Method getContract.
 	 * 
-	 * @return ContractId
+	 * @return ContractLite
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idContract", insertable = true, updatable = true, nullable = false)
 	public ContractLite getContract() {
 		return this.contract;
@@ -223,7 +222,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * Method setContract.
 	 * 
 	 * @param contract
-	 *            ContractId
+	 *            ContractLite
 	 */
 	public void setContract(ContractLite contract) {
 		this.contract = contract;
@@ -269,26 +268,6 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 	public void setPositionCloseDate(Date positionCloseDate) {
 		this.positionCloseDate = positionCloseDate;
-	}
-
-	/**
-	 * Method getIsOpen.
-	 * 
-	 * @return Boolean
-	 */
-	@Column(name = "isOpen", nullable = false)
-	public Boolean getIsOpen() {
-		return this.isOpen;
-	}
-
-	/**
-	 * Method setIsOpen.
-	 * 
-	 * @param isOpen
-	 *            Boolean
-	 */
-	public void setIsOpen(Boolean isOpen) {
-		this.isOpen = isOpen;
 	}
 
 	/**
@@ -525,6 +504,18 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	}
 
 	/**
+	 * Method isOpen.
+	 * 
+	 * @return boolean
+	 */
+	@Transient
+	public boolean isOpen() {
+		if (this.equals(this.getContract().getTradePosition()))
+			return true;
+		return false;
+	}
+
+	/**
 	 * Method containsTradeOrder.
 	 * 
 	 * @param tradeOrder
@@ -550,9 +541,8 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 		return "TradePosition Id: " + this.getIdTradePosition() + " Version: "
 				+ this.getVersion() + " positionOpenDate: "
 				+ this.getPositionOpenDate() + " positionCloseDate: "
-				+ this.getPositionCloseDate() + " isOpen: " + this.getIsOpen()
-				+ " Side: " + this.getSide() + " Open Qty: "
-				+ this.getOpenQuantity() + " Total Buy qty: "
+				+ this.getPositionCloseDate() + " Side: " + this.getSide()
+				+ " Open Qty: " + this.getOpenQuantity() + " Total Buy qty: "
 				+ this.getTotalBuyQuantity() + " Total Buy Value: "
 				+ new Money(this.getTotalBuyValue()) + " Total Sell qty: "
 				+ this.getTotalSellQuantity() + " Total Sell Value: "

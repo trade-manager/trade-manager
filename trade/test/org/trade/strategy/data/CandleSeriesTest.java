@@ -38,7 +38,7 @@ public class CandleSeriesTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy(symbol);
+		TradestrategyTest.clearDBData();
 	}
 
 	@Test

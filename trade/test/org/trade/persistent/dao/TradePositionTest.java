@@ -77,19 +77,16 @@ public class TradePositionTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
-		TradestrategyTest.removeTestTradestrategy(symbol);
+		TradestrategyTest.clearDBData();
 	}
 
 	@Test
-	public void testAddTradePosition() {
+	public void testAddRemoveTradePosition() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
-
 			TradePosition instance = new TradePosition(
 					this.tradestrategy.getContract(), new Date(), Side.BOT);
-			instance.setIsOpen(true);
+
 			TradePosition tradePosition = aspectHome.persist(instance);
 
 			TestCase.assertNotNull(tradePosition.getIdTradePosition());
@@ -97,24 +94,12 @@ public class TradePositionTest extends TestCase {
 					+ this.tradestrategy.getIdTradeStrategy()
 					+ "IdTradePosition: " + tradePosition.getIdTradePosition());
 
-		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testDeleteTradePosition() {
-
-		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
-			testAddTradePosition();
-			TradePosition instance = tradePositionHome
-					.findOpenTradePositionByContractId(this.tradestrategy
-							.getContract().getIdContract());
-			tradePositionHome.remove(instance);
+			tradePositionHome.remove(tradePosition);
 			_log.info("testDeleteTradePosition IdTradeStrategy: "
 					+ tradestrategy.getIdTradeStrategy());
+			tradePosition = tradePositionHome.findById(tradePosition
+					.getIdTradePosition());
+			TestCase.assertNull(tradePosition);
 
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());

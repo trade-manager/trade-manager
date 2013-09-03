@@ -113,15 +113,13 @@ public class BrokerModelTest extends TestCase {
 	 */
 	protected void tearDown() throws Exception {
 		m_brokerModel.onDisconnect();
-		TradestrategyTest.removeTestTradestrategy(symbol);
+		TradestrategyTest.clearDBData();
 	}
 
 	@Test
 	public void testSubmitBuyOrder() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
 					Action.BUY, OrderType.STPLMT, 100, price,
@@ -146,8 +144,6 @@ public class BrokerModelTest extends TestCase {
 	public void testSubmitSellShortOrder() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 			_log.info("Symbol: " + this.tradestrategy.getContract().getSymbol());
 
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
@@ -175,8 +171,6 @@ public class BrokerModelTest extends TestCase {
 	public void testSubmitComboOrder() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 			String ocaID = new String(Integer.toString((new BigDecimal(Math
 					.random() * 1000000)).intValue()));
 
@@ -639,8 +633,6 @@ public class BrokerModelTest extends TestCase {
 	public void testOnPlaceOrder() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
 					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder = m_brokerModel.onPlaceOrder(
@@ -655,8 +647,7 @@ public class BrokerModelTest extends TestCase {
 	public void testOnCancelOrder() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
+
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
 					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder = m_brokerModel.onPlaceOrder(

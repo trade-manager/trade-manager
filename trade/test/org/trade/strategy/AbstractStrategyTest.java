@@ -143,7 +143,7 @@ public class AbstractStrategyTest extends TestCase {
 	protected void tearDown() throws Exception {
 		m_brokerModel.onDisconnect();
 		strategyProxy.cancel();
-		TradestrategyTest.removeTestTradestrategy(symbol);
+		TradestrategyTest.clearDBData();
 	}
 
 	@Test
@@ -151,7 +151,6 @@ public class AbstractStrategyTest extends TestCase {
 
 		try {
 			tradestrategy.setTrade(true);
-
 			Vector<Object> parm = new Vector<Object>(0);
 			parm.add(m_brokerModel);
 			parm.add(this.tradestrategy.getDatasetContainer());
@@ -194,9 +193,6 @@ public class AbstractStrategyTest extends TestCase {
 	public void testEntryRuleMoveStopToBE() {
 
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
-
 			Money price = new Money(37.99);
 			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
 					Action.BUY, price, price.subtract(new Money(0.2)), true,
@@ -524,9 +520,6 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testCancelOrder() {
 		try {
-			this.tradestrategy = TradestrategyTest
-					.removeTradeOrders(this.tradestrategy);
-
 			Money price = new Money(37.99);
 			TradeOrder openOrder = strategyProxy.createRiskOpenPosition(
 					Action.BUY, price, price.subtract(new Money(0.2)), true,

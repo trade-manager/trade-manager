@@ -58,7 +58,6 @@ import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.CodeTypeHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
-import org.trade.persistent.dao.ContractLite;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioHome;
 import org.trade.persistent.dao.PositionOrders;
@@ -249,24 +248,6 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
-	 * Method findContractByContractId.
-	 * 
-	 * @param id
-	 *            Integer
-	 * @return ContractId
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#findContractById(Integer)
-	 */
-	public ContractLite findContractByContractId(Integer id)
-			throws PersistentModelException {
-		ContractLite instance = m_contractHome.findByContractId(id);
-		if (null == instance)
-			throw new PersistentModelException("Contract not found for id: "
-					+ id);
-		return instance;
-	}
-
-	/**
 	 * Method findContractByUniqueKey.
 	 * 
 	 * @param SECType
@@ -401,19 +382,6 @@ public class TradePersistentModel implements PersistentModel {
 			throw new PersistentModelException(
 					"TradePosition not found for id: " + id);
 		return instance;
-	}
-
-	/**
-	 * Method findOpenTradePositionByContractId.
-	 * 
-	 * @param id
-	 *            Integer
-	 * @return TradePosition
-	 * @throws PersistentModelException
-	 * @see org.trade.persistent.PersistentModel#findOpenTradePositionByContractId(Integer)
-	 */
-	public TradePosition findOpenTradePositionByContractId(Integer id) {
-		return m_tradePositionHome.findOpenTradePositionByContractId(id);
 	}
 
 	/**
@@ -876,12 +844,13 @@ public class TradePersistentModel implements PersistentModel {
 				tradestrategyId = tradeOrder.getTradestrategyId()
 						.getIdTradeStrategy();
 			}
-			TradePosition tradePosition = null;
-			PositionOrders positionOrders = null;
+
 			/*
 			 * If the filled qty is > 0 and we have no TradePosition then create
 			 * one.
 			 */
+			TradePosition tradePosition = null;
+			PositionOrders positionOrders = null;
 
 			if (!tradeOrder.hasTradePosition()) {
 				if (CoreUtils.nullSafeComparator(
@@ -892,8 +861,9 @@ public class TradePersistentModel implements PersistentModel {
 
 					if (positionOrders.hasOpenTradePosition()) {
 						tradePosition = this
-								.findOpenTradePositionByContractId(positionOrders
-										.getContract().getIdContract());
+								.findTradePositionById(positionOrders
+										.getContract().getTradePosition()
+										.getIdTradePosition());
 						if (!tradePosition.containsTradeOrder(tradeOrder))
 							tradePosition.addTradeOrder(tradeOrder);
 					} else {
@@ -993,11 +963,17 @@ public class TradePersistentModel implements PersistentModel {
 				if ((totalBuyQuantity - totalSellQuantity) < 0)
 					tradePosition.setSide(Side.SLD);
 
-				tradePosition.setIsOpen(true);
-				if ((totalBuyQuantity - totalSellQuantity) == 0) {
-					tradePosition.setPositionCloseDate(tradeOrder
-							.getFilledDate());
-					tradePosition.setIsOpen(false);
+				if (tradePosition.equals(tradePosition.getContract()
+						.getTradePosition())) {
+					if ((totalBuyQuantity - totalSellQuantity) == 0) {
+						tradePosition.setPositionCloseDate(tradeOrder
+								.getFilledDate());
+						tradePosition.getContract().setTradePosition(null);
+						this.persistAspect(tradePosition.getContract());
+					}
+				} else {
+					tradePosition.getContract().setTradePosition(tradePosition);
+					this.persistAspect(tradePosition.getContract());
 				}
 
 				tradePosition.setTotalBuyQuantity(totalBuyQuantity);
@@ -1016,7 +992,7 @@ public class TradePersistentModel implements PersistentModel {
 					positionOrders = this
 							.findPositionOrdersByTradestrategyId(tradestrategyId);
 
-				if (!tradePosition.getIsOpen()
+				if (!tradePosition.isOpen()
 						&& !TradestrategyStatus.CLOSED.equals(positionOrders
 								.getStatus())) {
 					positionOrders.setStatus(TradestrategyStatus.CLOSED);

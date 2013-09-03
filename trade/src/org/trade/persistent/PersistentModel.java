@@ -43,7 +43,6 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.ContractLite;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.Rule;
@@ -185,17 +184,6 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method findContractByContractId.
-	 * 
-	 * @param idContract
-	 *            Integer
-	 * @return ContractId
-	 * @throws PersistentModelException
-	 */
-	ContractLite findContractByContractId(Integer idContract)
-			throws PersistentModelException;
-
-	/**
 	 * Method findContractByUniqueKey.
 	 * 
 	 * @param SECType
@@ -296,15 +284,6 @@ public interface PersistentModel {
 	 */
 	TradePosition findTradePositionById(Integer idTradePosition)
 			throws PersistentModelException;
-
-	/**
-	 * Method findOpenTradePositionByContractId.
-	 * 
-	 * @param id
-	 *            Integer
-	 * @return TradePosition
-	 */
-	TradePosition findOpenTradePositionByContractId(Integer id);
 
 	/**
 	 * Method findPortfolioById.

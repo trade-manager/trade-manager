@@ -833,8 +833,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 							.persistTradeOrder(transientInstance);
 
 					if (transientInstance.hasTradePosition()
-							&& !transientInstance.getTradePosition()
-									.getIsOpen()) {
+							&& !transientInstance.getTradePosition().isOpen()) {
 						// Let the controller know a position was closed
 						this.firePositionClosed(transientInstance
 								.getTradePosition());

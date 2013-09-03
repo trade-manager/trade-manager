@@ -48,17 +48,12 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.dao.EntityManagerHelper;
 
 /**
  */
 @Stateless
 public class TradestrategyHome {
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradestrategyHome.class);
 
 	public TradestrategyHome() {
 	}
@@ -112,8 +107,8 @@ public class TradestrategyHome {
 					.createQuery(TradestrategyLite.class);
 			Root<TradestrategyLite> from = query.from(TradestrategyLite.class);
 
-			CriteriaQuery<TradestrategyLite> select = query.multiselect(from
-					.get("version"));
+			CriteriaQuery<TradestrategyLite> select = query.multiselect(
+					from.get("idTradeStrategy"), from.get("version"));
 			Predicate predicate = builder
 					.equal(from.get("idTradeStrategy"), id);
 			query.where(predicate);
@@ -152,21 +147,6 @@ public class TradestrategyHome {
 			entityManager.getTransaction().begin();
 			PositionOrders instance = entityManager.find(PositionOrders.class,
 					idTradestrategy);
-
-			// _log.error("idTradestrategy: " + instance);
-
-			if (null != instance) {
-				for (TradeOrder item : instance.getTradeOrders()) {
-					if (null != item.getTradePosition()) {
-						if (item.getTradePosition().getIsOpen()) {
-							item.getTradePosition().getTradeOrders().size();
-							instance.setOpenTradePosition(item
-									.getTradePosition());
-							break;
-						}
-					}
-				}
-			}
 			entityManager.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {

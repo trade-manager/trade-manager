@@ -53,7 +53,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -96,6 +98,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	private String secTypeId;
 	private String subCategory;
 	private String tradingClass;
+	private TradePosition tradePosition;
 	private List<Tradestrategy> tradestrategies = Collections
 			.synchronizedList(new ArrayList<Tradestrategy>(0));
 	private List<TradePosition> tradePositions = new ArrayList<TradePosition>(0);
@@ -687,6 +690,27 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setTradestrategies(List<Tradestrategy> tradestrategies) {
 		this.tradestrategies = tradestrategies;
+	}
+
+	/**
+	 * Method getTradePosition.
+	 * 
+	 * @return TradePosition
+	 */
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "idTradePosition", insertable = false, updatable = true, nullable = true)
+	public TradePosition getTradePosition() {
+		return this.tradePosition;
+	}
+
+	/**
+	 * Method setTradePosition.
+	 * 
+	 * @param tradePosition
+	 *            TradePosition
+	 */
+	public void setTradePosition(TradePosition tradePosition) {
+		this.tradePosition = tradePosition;
 	}
 
 	/**
