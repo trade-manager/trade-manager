@@ -56,7 +56,6 @@ import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.Tradingdays;
 import org.trade.strategy.data.CandleSeries;
-import org.trade.strategy.data.candle.CandleItem;
 
 /**
  */
@@ -130,15 +129,14 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
-	 * Method persistCandleItem.
+	 * Method persistCandle.
 	 * 
-	 * @param candleItem
-	 *            CandleItem
+	 * @param candle
+	 *            Candle
 	 * @return Candle
 	 * @throws PersistentModelException
 	 */
-	Candle persistCandleItem(CandleItem candleItem)
-			throws PersistentModelException;
+	Candle persistCandle(Candle candle) throws PersistentModelException;
 
 	/**
 	 * Method findAccountById.

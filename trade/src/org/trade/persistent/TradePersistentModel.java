@@ -728,56 +728,50 @@ public class TradePersistentModel implements PersistentModel {
 	/**
 	 * Method persistCandleItem.
 	 * 
-	 * @param candleItem
-	 *            CandleItem
+	 * @param candle
+	 *            Candle
 	 * @return Candle
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistCandleItem(CandleItem)
 	 */
-	public Candle persistCandleItem(CandleItem candleItem)
-			throws PersistentModelException {
+	public Candle persistCandle(Candle candle) throws PersistentModelException {
 		try {
-			synchronized (candleItem) {
-				if (null == candleItem.getCandle().getTradingday()
-						.getIdTradingDay()) {
+			synchronized (candle) {
+				if (null == candle.getTradingday().getIdTradingDay()) {
 
 					Tradingday tradingday = this.findTradingdayByOpenCloseDate(
-							candleItem.getCandle().getTradingday().getOpen(),
-							candleItem.getCandle().getTradingday().getClose());
+							candle.getTradingday().getOpen(), candle
+									.getTradingday().getClose());
 
 					if (null == tradingday) {
-						tradingday = m_aspectHome.persist(candleItem
-								.getCandle().getTradingday());
+						tradingday = m_aspectHome.persist(candle
+								.getTradingday());
 					}
-					candleItem.getCandle().setTradingday(tradingday);
+					candle.setTradingday(tradingday);
 				}
-				if (null == candleItem.getCandle().getIdCandle()) {
-					Candle currCandle = m_candleHome.findByUniqueKey(candleItem
-							.getCandle().getTradingday().getIdTradingDay(),
-							candleItem.getCandle().getContract()
-									.getIdContract(), candleItem.getCandle()
-									.getStartPeriod(), candleItem.getCandle()
-									.getEndPeriod(), candleItem.getCandle()
-									.getBarSize());
+				if (null == candle.getIdCandle()) {
+					Candle currCandle = m_candleHome.findByUniqueKey(candle
+							.getTradingday().getIdTradingDay(), candle
+							.getContract().getIdContract(), candle
+							.getStartPeriod(), candle.getEndPeriod(), candle
+							.getBarSize());
 					/*
 					 * Candle exists set the id and version so we can merge the
 					 * incoming candle.
 					 */
 					if (null != currCandle) {
-						candleItem.getCandle().setIdCandle(
-								currCandle.getIdCandle());
-						candleItem.getCandle().setVersion(
-								currCandle.getVersion());
+						candle.setIdCandle(currCandle.getIdCandle());
+						candle.setVersion(currCandle.getVersion());
 					}
 				}
-				return m_aspectHome.persist(candleItem.getCandle());
+				return m_aspectHome.persist(candle);
 			}
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
 					"Error saving Candle please refresh before save.");
 		} catch (Exception e) {
 			throw new PersistentModelException("Error saving CandleItem: "
-					+ candleItem.getOpen() + "\n Msg: " + e.getMessage());
+					+ candle.getOpen() + "\n Msg: " + e.getMessage());
 		}
 	}
 

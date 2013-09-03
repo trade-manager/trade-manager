@@ -794,7 +794,7 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
-	public void testPersistCandleItem() {
+	public void testPersistCandle() {
 
 		try {
 			CandleItem candleItem = new CandleItem(
@@ -802,8 +802,9 @@ public class TradePersistentModelTest extends TestCase {
 					this.tradestrategy.getTradingday(), new CandlePeriod(),
 					100.23, 100.23, 100.23, 100.23, 10000000L, 100.23, 100,
 					new Date());
-			this.tradePersistentModel.persistCandleItem(candleItem);
-			TestCase.assertNotNull(candleItem.getCandle().getIdCandle());
+			Candle candle = this.tradePersistentModel.persistCandle(candleItem
+					.getCandle());
+			TestCase.assertNotNull(candle.getIdCandle());
 		} catch (Exception e) {
 			TestCase.fail("Error testPersistCandleItem Msg: " + e.getMessage());
 		}

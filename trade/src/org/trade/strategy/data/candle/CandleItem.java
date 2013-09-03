@@ -340,4 +340,28 @@ public class CandleItem extends ComparableObjectItem {
 		return null;
 
 	}
+
+	/**
+	 * Set the version value.
+	 * 
+	 * @param version
+	 *            Integer
+	 */
+	public void setVersion(Integer version) {
+		if (null != getCandle())
+			getCandle().setVersion(version);
+	}
+
+	/**
+	 * Returns the version value.
+	 * 
+	 * 
+	 * @return The version value.
+	 */
+	public Integer getVersion() {
+		if (null != getCandle())
+			return getCandle().getVersion();
+		return null;
+
+	}
 }

@@ -68,6 +68,7 @@ import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.persistent.PersistentModel;
+import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Portfolio;
@@ -2440,8 +2441,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 														.getBaseCandleSeries()
 														.getItemCount() - 1);
 								if (updateCandleDB) {
-									m_tradePersistentModel
-											.persistCandleItem(candleItem);
+									Candle candle = m_tradePersistentModel
+											.persistCandle(candleItem
+													.getCandle());
+									candleItem.setVersion(candle.getVersion());
 									updateCandleDB = false;
 								}
 							}
