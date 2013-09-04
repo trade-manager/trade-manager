@@ -530,6 +530,11 @@ public class TradePersistentModel implements PersistentModel {
 			transientInstance.setStatus(null);
 			m_aspectHome.persist(transientInstance);
 
+			if (null != transientInstance.getContract().getTradePosition()) {
+				transientInstance.getContract().setTradePosition(null);
+				m_aspectHome.persist(transientInstance.getContract());
+			}
+
 			Hashtable<Integer, TradePosition> tradePositions = new Hashtable<Integer, TradePosition>();
 			for (TradeOrder tradeOrder : transientInstance.getTradeOrders()) {
 				if (tradeOrder.hasTradePosition())
@@ -764,7 +769,9 @@ public class TradePersistentModel implements PersistentModel {
 						candle.setVersion(currCandle.getVersion());
 					}
 				}
-				return m_aspectHome.persist(candle);
+				Candle item = m_aspectHome.persist(candle);
+				candle.setVersion(item.getVersion());
+				return item;
 			}
 		} catch (OptimisticLockException ex1) {
 			throw new PersistentModelException(
