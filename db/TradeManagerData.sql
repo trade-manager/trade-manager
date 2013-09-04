@@ -26,9 +26,9 @@ commit;
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (50, 'FH=3R BH=3R+Heikin', 'Sets 3/5R Target with Heikin-Ashi trail over 3R', 'PosMgrFH3RBHHeikinStrategy',0);
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (51, '3R-AllOrNothing', 'Sets 3R Target', 'PosMgrAllOrNothingStrategy',0);
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (52, 'All5MinBar', 'Trails whole pos on 5min bars after 9:40', 'PosMgrAll5MinBarStrategy',0);
-INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (1, '5min bar gap', 'Enter a tier 1-3 gap in first 5min bar direction, and stop @ 5min high/low',0, 'FiveMinGapBarStrategy',50,0);
-INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (2, '5min Side bar gap', 'Enter a tier 1-3 gap via expectd Side after first 5min bar and stop @ 5min high/low',0, 'FiveMinSideGapBarStrategy',50,0);
-INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (3, '5min WRB bar gap', 'Enter a tier 1-3 gap in first 5min WRB bar direction, and stop @ 55% of high/low',0, 'FiveMinWRBGapBarStrategy',52,0);
+INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (1, '5min bar gap', 'Enter a tier 1-3 gap in first 5min bar direction, and stop @ 5min high/low',1, 'FiveMinGapBarStrategy',50,0);
+INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (2, '5min Side bar gap', 'Enter a tier 1-3 gap via expectd Side after first 5min bar and stop @ 5min high/low',1, 'FiveMinSideGapBarStrategy',50,0);
+INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (3, '5min WRB bar gap', 'Enter a tier 1-3 gap in first 5min WRB bar direction, and stop @ 55% of high/low',1, 'FiveMinWRBGapBarStrategy',52,0);
 
 COMMIT;
 
