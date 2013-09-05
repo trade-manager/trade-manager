@@ -10,7 +10,6 @@
 	<property name="db" location="${component.base}/db" />
 	<property name="config" location="${component.base}/config" />
 	<property name="lib" location="${component.base}/lib" />
-	<property name="antlib" location="${component.base}/ant/lib" />
 	<property name="res" location="${component.base}/res" />
 	<property name="reports" location="${component.base}/reports" />
 
@@ -82,8 +81,6 @@
 		<!-- delete the temp directory	-->
 		<delete dir="${build}" />
 	</target>
-
-
 	<target name="clean" description="clean up">
 		<!-- Delete the ${build} and ${dist} directory trees -->
 		<delete dir="${build}" />
@@ -102,7 +99,7 @@
 					<include name="mysql-connector-java-5.1.26-bin.jar" />
 				</fileset>
 			</classpath>
-			<transaction src="../db/TradeManagerData.sql" />
+			<transaction src="${component.base}/db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="run-tests" depends="dist, cleanDB" description="run your test suite">
