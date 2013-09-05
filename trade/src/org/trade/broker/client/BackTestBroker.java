@@ -350,6 +350,12 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 													.getItemCount() - 1);
 							if (!candleItem.isSide(positionOrders
 									.getOpenTradePosition().getSide())) {
+								/*
+								 * Refresh the orders as the other thread may
+								 * have added orders that need to be filled.
+								 */
+								positionOrders = this.tradePersistentModel
+										.findPositionOrdersByTradestrategyId(this.idTradestrategy);
 								filledOrders(this.tradestrategy.getContract(),
 										positionOrders, candle);
 							}
