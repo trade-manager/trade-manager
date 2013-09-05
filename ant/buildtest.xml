@@ -10,6 +10,7 @@
 	<property name="db" location="${component.base}/db" />
 	<property name="config" location="${component.base}/config" />
 	<property name="lib" location="${component.base}/lib" />
+	<property name="antlib" location="${component.base}/ant/lib" />
 	<property name="res" location="${component.base}/res" />
 	<property name="reports" location="${component.base}/reports" />
 
@@ -89,11 +90,25 @@
 		<!--	<delete dir="${dist}" /> -->
 		<delete dir="${reports}" />
 	</target>
-
+	<target name="cleanDB" depends="initialise">
+		<input message="Do you really want to delete all data in the database (y/n)?" validargs="y,n" addproperty="do.delete" />
+		<condition property="do.abort">
+			<equals arg1="n" arg2="${do.delete}" />
+		</condition>
+		<fail if="do.abort">Build aborted by user.</fail>
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="mysql-connector-java-5.1.26-bin.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="../db/TradeManagerData.sql" />
+		</sql>
+	</target>
 	<target name="run-tests" depends="dist, cleanDB" description="run your test suite">
-
 		<junit printsummary="yes" haltonfailure="no" showoutput="yes" fork="yes">
 			<jvmarg value="-Duser.timezone=${market.timezone}" />
+			<jvmarg value="-Dlog4j.configuration=file:config/config.properties" />
 			<classpath>
 				<pathelement path="${component.base}" />
 				<fileset dir="${lib}">
@@ -120,7 +135,6 @@
 			</batchtest>
 		</junit>
 	</target>
-
 	<target name="test" depends="run-tests">
 		<junitreport todir="${reports}">
 			<fileset dir="${reports}/raw/">
@@ -129,25 +143,6 @@
 			<report format="frames" todir="${reports}\html\" />
 		</junitreport>
 	</target>
-	<target name="cleanDB" depends="initialise">
-		<input message="Do you really want to delete all data in the database (y/n)?" validargs="y,n" addproperty="do.delete" />
-		<condition property="do.abort">
-			<equals arg1="n" arg2="${do.delete}" />
-		</condition>
-		<fail if="do.abort">Build aborted by user.</fail>
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
-			<classpath>
-				<fileset dir="${lib}">
-					<include name="mysql-connector-java-5.1.26-bin.jar" />
-				</fileset>
-			</classpath>
-			<transaction src="../db/TradeManagerData.sql" />
-		</sql>
-	</target>
-	<target name="all" depends="test">
-		<junit fork="yes">
-			<jvmarg value="-Duser.timezone=America/New_York" />
-		</junit>
-	</target>
+	<target name="all" depends="test" />
 </project>
 
