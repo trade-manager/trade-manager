@@ -11,5 +11,3 @@ ALTER TABLE tradeprod.contract ADD CONSTRAINT contract_tradePosition_fk
     ON UPDATE NO ACTION;
 
 ALTER TABLE tradeprod.contract ADD UNIQUE INDEX contract_tradePosition_uq (idTradePosition ASC);
-
-ALTER TABLE tradeprod.tradestrategy ADD UNIQUE INDEX tradeStrategy_version_uq (idTradeStrategy ASC, version ASC);

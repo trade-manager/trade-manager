@@ -215,7 +215,6 @@ CREATE  TABLE IF NOT EXISTS tradestrategy (
   idStrategy INT NOT NULL ,
   idPortfolio INT NOT NULL ,
   PRIMARY KEY (idTradeStrategy) ,
- UNIQUE INDEX tradeStrategy_version_uq (idTradeStrategy ASC, version ASC),
   INDEX tradeStrategy_TradingDay_idx (idTradingDay ASC) ,
   INDEX tradeStrategy_Contract_idx  (idContract ASC) ,
   INDEX tradeStrategy_Stategy_idx  (idStrategy ASC) ,
