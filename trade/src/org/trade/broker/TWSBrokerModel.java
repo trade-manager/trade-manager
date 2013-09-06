@@ -1280,6 +1280,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 
 			if (changed) {
+				transientInstance.setLastUpdateDate(TradingCalendar
+						.getDate((new Date()).getTime()));
 				transientInstance.setStatus(status.toUpperCase());
 				transientInstance.setWhyHeld(whyHeld);
 				_log.info("Order Status changed. Status: " + status);
@@ -2821,7 +2823,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				changed = true;
 			}
 			if (changed)
-				order.setLastUpdateDate(new Date());
+				order.setLastUpdateDate(TradingCalendar.getDate((new Date())
+						.getTime()));
 		}
 		return changed;
 	}

@@ -98,7 +98,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 *            Contract
 	 */
 	public Candle(Contract contract, Tradingday tradingday,
-			RegularTimePeriod period) {
+			RegularTimePeriod period, Date lastUpdateDate) {
 		this.setTradingday(tradingday);
 		this.setContract(contract);
 		this.setPeriod(period.toString());
@@ -107,6 +107,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 		int barSize = (int) ((period.getEnd().getTime() - period.getStart()
 				.getTime()) / 1000) + 1;
 		this.setBarSize(barSize);
+		this.setLastUpdateDate(lastUpdateDate);
 	}
 
 	/**
@@ -200,7 +201,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 			RegularTimePeriod period, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
 			Date lastUpdateDate) {
-		this(contract, tradingday, period);
+		this(contract, tradingday, period, lastUpdateDate);
 		this.setOpen(new BigDecimal(open));
 		this.setClose(new BigDecimal(close));
 		this.setHigh(new BigDecimal(high));

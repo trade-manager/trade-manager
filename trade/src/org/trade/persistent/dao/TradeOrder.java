@@ -281,7 +281,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			Integer overrideConstraints, Integer parentId, Integer permId,
 			Integer quantity, String timeInForce, String status,
 			BigDecimal stopPrice, Boolean transmit, Integer triggerMethod,
-			String warningMessage, String whyHeld, Date updateDate,
+			String warningMessage, String whyHeld, Date lastUpdateDate,
 			List<TradeOrderfill> tradeOrderfills) {
 		this.tradePosition = tradePosition;
 		this.action = action;
@@ -316,7 +316,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.triggerMethod = triggerMethod;
 		this.warningMessage = warningMessage;
 		this.whyHeld = whyHeld;
-		this.lastUpdateDate = updateDate;
+		this.lastUpdateDate = lastUpdateDate;
 		this.tradeOrderfills = tradeOrderfills;
 	}
 

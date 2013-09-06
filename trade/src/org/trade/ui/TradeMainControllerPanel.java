@@ -521,6 +521,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						if (!openTradeOrders.containsKey(todayTradeOrder
 								.getOrderKey())) {
 							todayTradeOrder.setStatus(OrderStatus.CANCELLED);
+							todayTradeOrder.setLastUpdateDate(TradingCalendar
+									.getDate((new Date()).getTime()));
 							m_tradePersistentModel
 									.persistTradeOrder(todayTradeOrder);
 						}

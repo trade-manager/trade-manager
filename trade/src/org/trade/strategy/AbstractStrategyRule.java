@@ -723,8 +723,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 							side, action, 0.01);
 				}
 			}
-			tradeOrder.setLastUpdateDate(this.getCurrentCandle()
-					.getLastUpdateDate());
+			tradeOrder.setLastUpdateDate(TradingCalendar.getDate((new Date())
+					.getTime()));
 			tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
 			tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
 			if (quantity > 0)
@@ -1219,6 +1219,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 							&& tradeOrder.isActive()) {
 						if (OrderType.STP.equals(tradeOrder.getOrderType())
 								&& null != tradeOrder.getOcaGroupName()) {
+							tradeOrder.setLastUpdateDate(TradingCalendar
+									.getDate((new Date()).getTime()));
 							tradeOrder.setAuxPrice(stopPrice
 									.getBigDecimalValue());
 							tradeOrder.setTransmit(transmit);
@@ -1342,6 +1344,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throws StrategyRuleException {
 		try {
 			this.getPositionOrders().setStatus(status);
+			this.getPositionOrders().setLastUpdateDate(
+					TradingCalendar.getDate((new Date()).getTime()));
 			this.tradePersistentModel.persistAspect(this.getPositionOrders());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 400,

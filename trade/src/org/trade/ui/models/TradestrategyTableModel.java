@@ -433,6 +433,8 @@ public class TradestrategyTableModel extends TableModel {
 		default: {
 		}
 		}
+		element.setLastUpdateDate(TradingCalendar
+				.getDate((new java.util.Date()).getTime()));
 		element.setDirty(true);
 	}
 

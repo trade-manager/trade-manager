@@ -885,6 +885,8 @@ public class TradePersistentModel implements PersistentModel {
 										: Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
 						positionOrders.setStatus(TradestrategyStatus.OPEN);
+						positionOrders.setLastUpdateDate(TradingCalendar
+								.getDate((new Date()).getTime()));
 						this.persistAspect(positionOrders);
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = this.persistAspect(tradePosition);
@@ -997,6 +999,8 @@ public class TradePersistentModel implements PersistentModel {
 						&& !TradestrategyStatus.CLOSED.equals(positionOrders
 								.getStatus())) {
 					positionOrders.setStatus(TradestrategyStatus.CLOSED);
+					positionOrders.setLastUpdateDate(TradingCalendar
+							.getDate((new Date()).getTime()));
 					this.persistAspect(positionOrders);
 				}
 
@@ -1013,6 +1017,8 @@ public class TradePersistentModel implements PersistentModel {
 						if (null == positionOrders.getStatus()) {
 							positionOrders
 									.setStatus(TradestrategyStatus.CANCELLED);
+							positionOrders.setLastUpdateDate(TradingCalendar
+									.getDate((new Date()).getTime()));
 							this.persistAspect(positionOrders);
 						}
 					}
@@ -1082,6 +1088,8 @@ public class TradePersistentModel implements PersistentModel {
 					tradeOrder.setAverageFilledPrice(avgFillPrice);
 					tradeOrder.setFilledQuantity(filledQuantity);
 					tradeOrder.setFilledDate(filledDate);
+					tradeOrder.setLastUpdateDate(TradingCalendar
+							.getDate((new Date()).getTime()));
 				}
 			}
 			return persistTradeOrder(tradeOrder);

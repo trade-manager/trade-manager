@@ -56,6 +56,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
+import org.trade.core.util.TradingCalendar;
 
 /**
  */
@@ -90,7 +91,8 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	public Portfolio(String name, String description) {
 		this.name = name;
 		this.description = description;
-		this.lastUpdateDate = new Date();
+		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())
+				.getTime());
 	}
 
 	/**

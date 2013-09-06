@@ -61,6 +61,7 @@ import javax.persistence.Version;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.CoreUtils;
+import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
@@ -134,7 +135,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		this.side = side;
 		this.tier = tier;
 		this.trade = trade;
-		this.lastUpdateDate = new Date();
+		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())
+				.getTime());
 		super.setDirty(true);
 	}
 
