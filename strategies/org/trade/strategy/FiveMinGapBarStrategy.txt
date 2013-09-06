@@ -2,10 +2,10 @@
 5min bars open. Use a STPLMT order with a range from the Entry Limit
 table.
 2/ Bar must be within the Entry Limit table % Range Bar. i.e in this case 2%
-3/ If the position is not filled by 10:50 cancel the order.
+3/ If the position is not filled by 11:30 cancel the order.
 4/ Add 1c to the entry price and round over/under whole/half numbers in
 the direction of the trade, same for stop price.
-5/ After 9:35 and before 10:50 if the Vwap falls below the H/L 
+5/ After 9:35 and before 11:30 if the Vwap falls below the H/L 
 before open position filled cancel open position. 
 6/ If 9:35 bars body is less than 10% of the H/L and Vwap is with O/C close strategy
 i.e. Doji bar.

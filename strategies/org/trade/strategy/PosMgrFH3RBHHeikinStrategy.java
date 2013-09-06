@@ -152,8 +152,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
-				 * and stop orders for the open quantity. Two targets at 4R and
-				 * 7R Stop and 2X actual stop this will be managed to 1R below
+				 * and stop orders for the open quantity. Two targets at 2R and
+				 * 2R Stop and 2X actual stop this will be managed to 1R below
 				 * 
 				 * Make the stop -2R and manage to the Vwap MA of the opening
 				 * bar.
@@ -183,7 +183,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Manage the stop orders if the current bars Vwap crosses the Vwap
 			 * of the first 5min bar then move the stop price ( currently -2R)
 			 * to the average fill price i.e. break even. This allows for tails
-			 * that break the 5min high/low between 9:40 thru 10:30.
+			 * that break the 5min high/low between 9:40 thru 15:30.
 			 */
 
 			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
@@ -226,7 +226,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			}
 
 			/*
-			 * At 10:30 Move stop order to b.e. i.e. the average fill price of
+			 * At 15:30 Move stop order to b.e. i.e. the average fill price of
 			 * the open order.
 			 */
 			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
