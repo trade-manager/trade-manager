@@ -95,6 +95,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private TradestrategyStatus tradestrategyStatus = new TradestrategyStatus();
 
 	public Tradestrategy() {
+		this.lastUpdateDate = TradingCalendar.getDate((new Date()).getTime());
 	}
 
 	/**

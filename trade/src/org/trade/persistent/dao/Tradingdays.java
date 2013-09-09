@@ -540,8 +540,6 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			case 1: {
 				if ("DES".equals(token.toUpperCase())) {
 					tradestrategy = new Tradestrategy();
-					tradestrategy.setLastUpdateDate(TradingCalendar
-							.getDate((new Date()).getTime()));
 					contract = new Contract();
 					contract.setCurrency(Currency.USD);
 					tradestrategy.setContract(contract);

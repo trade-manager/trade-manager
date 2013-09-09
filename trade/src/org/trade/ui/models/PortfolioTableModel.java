@@ -174,6 +174,8 @@ public class PortfolioTableModel extends AspectTableModel {
 		default: {
 		}
 		}
+		element.setLastUpdateDate(TradingCalendar
+				.getDate((new java.util.Date()).getTime()));
 		element.setDirty(true);
 	}
 
@@ -202,8 +204,6 @@ public class PortfolioTableModel extends AspectTableModel {
 
 	public void addRow() {
 		final Portfolio element = new Portfolio();
-		element.setLastUpdateDate(TradingCalendar
-				.getDate((new java.util.Date()).getTime()));
 		getData().getAspect().add(element);
 
 		final Vector<Object> newRow = new Vector<Object>();

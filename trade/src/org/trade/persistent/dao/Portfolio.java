@@ -78,6 +78,8 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 			0);
 
 	public Portfolio() {
+		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())
+				.getTime());
 	}
 
 	/**
