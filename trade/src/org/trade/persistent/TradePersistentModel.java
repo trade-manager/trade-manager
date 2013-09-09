@@ -54,8 +54,6 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CandleHome;
-import org.trade.persistent.dao.CodeType;
-import org.trade.persistent.dao.CodeTypeHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
@@ -100,7 +98,6 @@ public class TradePersistentModel implements PersistentModel {
 	private CandleHome m_candleHome = null;
 	private AspectHome m_aspectHome = null;
 	private RuleHome m_ruleHome = null;
-	private CodeTypeHome m_codeTypeHome = null;
 
 	private static final int SCALE = 5;
 
@@ -118,7 +115,6 @@ public class TradePersistentModel implements PersistentModel {
 		m_candleHome = new CandleHome();
 		m_aspectHome = new AspectHome();
 		m_ruleHome = new RuleHome();
-		m_codeTypeHome = new CodeTypeHome();
 	}
 
 	/**
@@ -1191,8 +1187,8 @@ public class TradePersistentModel implements PersistentModel {
 
 			if ("org.trade.persistent.dao.Strategy".equals(aspectClassName)) {
 				/*
-				 * TODO Eager does not work on the relationship Strategy ->
-				 * IndicatorSeries so hack needed.
+				 * Relationship Strategy -> IndicatorSeries is LAZY so we need
+				 * to call size() on Rule/IndicatorSeries.
 				 */
 				List<Strategy> items = m_strategyHome.findAll();
 				Aspects aspects = new Aspects();
@@ -1204,23 +1200,10 @@ public class TradePersistentModel implements PersistentModel {
 			} else if ("org.trade.persistent.dao.Portfolio"
 					.equals(aspectClassName)) {
 				/*
-				 * TODO Eager does not work on the relationship Portfolio ->
-				 * PortfilioAccount so hack needed.
+				 * Relationship Portfolio -> PortfilioAccount iis LAZY so we
+				 * need to call size() on PortfolioAccount.
 				 */
 				List<Portfolio> items = m_portfolioHome.findAll();
-				Aspects aspects = new Aspects();
-				for (Object item : items) {
-					aspects.add((Aspect) item);
-				}
-				aspects.setDirty(false);
-				return aspects;
-			} else if ("org.trade.persistent.dao.CodeType"
-					.equals(aspectClassName)) {
-				/*
-				 * TODO Eager does not work on the relationship CodeType ->
-				 * CodeAttribute so hack needed.
-				 */
-				List<CodeType> items = m_codeTypeHome.findAll();
 				Aspects aspects = new Aspects();
 				for (Object item : items) {
 					aspects.add((Aspect) item);

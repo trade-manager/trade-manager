@@ -303,8 +303,6 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Method getIndicatorSeries.
 	 * 
-	 * TODO would like this to be EAGER but EAGER fails to let the entity
-	 * manager be created.
 	 * 
 	 * @return List<IndicatorSeries>
 	 */

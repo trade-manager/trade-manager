@@ -674,6 +674,10 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Method getTradestrategies.
 	 * 
+	 * Note this relationship is not used except in a local way to monitor
+	 * tradestrategies that are submitted via the broker interface hence the use
+	 * of Transient. This allows us to add to the collection.
+	 * 
 	 * @return List<Tradestrategy>
 	 */
 	// @OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)

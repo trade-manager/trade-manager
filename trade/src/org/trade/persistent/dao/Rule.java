@@ -158,7 +158,7 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Strategy
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idStrategy", nullable = false)
 	public Strategy getStrategy() {
 		return this.strategy;
