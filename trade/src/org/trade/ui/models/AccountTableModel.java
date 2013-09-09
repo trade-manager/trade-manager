@@ -38,6 +38,7 @@ package org.trade.ui.models;
 import java.util.Vector;
 
 import org.trade.core.util.CoreUtils;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.AccountType;
@@ -226,6 +227,8 @@ public class AccountTableModel extends TableModel {
 	public void addRow() {
 		final Account account = new Account();
 		account.setCurrency(Currency.USD);
+		account.setLastUpdateDate(TradingCalendar
+				.getDate((new java.util.Date()).getTime()));
 		final PortfolioAccount element = new PortfolioAccount(getData(),
 				account);
 		getData().getPortfolioAccounts().add(element);

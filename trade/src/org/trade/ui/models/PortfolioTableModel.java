@@ -40,6 +40,7 @@ import java.util.Vector;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.AllocationMethod;
@@ -201,6 +202,8 @@ public class PortfolioTableModel extends AspectTableModel {
 
 	public void addRow() {
 		final Portfolio element = new Portfolio();
+		element.setLastUpdateDate(TradingCalendar
+				.getDate((new java.util.Date()).getTime()));
 		getData().getAspect().add(element);
 
 		final Vector<Object> newRow = new Vector<Object>();
