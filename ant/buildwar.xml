@@ -44,8 +44,8 @@
 		<fileset dir="${pathname.library.external}" id="fileset.external.library.dist">
 			<include name="jsyntaxpane-0.9.5-b29.jar" />
 			<include name="tws-9.67.jar" />
-			<include name="jfreechart-1.0.14.jar" />
-			<include name="jcommon-1.0.17.jar" />
+			<include name="jfreechart-1.0.15.jar" />
+			<include name="jcommon-1.0.18.jar" />
 			<include name="swt.jar" />
 			<include name="c3p0-0.9.1.1.jar" />
 			<include name="hibernate-c3p0-4.2.3.Final.jar" />
@@ -153,8 +153,8 @@
 			<fileset dir="${pathname.library.external}">
 				<include name="jsyntaxpane-0.9.5-b29.jar" />
 				<include name="tws-9.67.jar" />
-				<include name="jfreechart-1.0.14.jar" />
-				<include name="jcommon-1.0.17.jar" />
+				<include name="jfreechart-1.0.15.jar" />
+				<include name="jcommon-1.0.18.jar" />
 				<include name="swt.jar" />
 				<include name="c3p0-0.9.1.1.jar" />
 				<include name="hibernate-c3p0-4.2.3.Final.jar" />
@@ -191,8 +191,8 @@
 		<signjar jar="${pathname.component.documentroot}/app/lib/${component.name.server.jar}" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/jsyntaxpane-0.9.5-b29.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/tws-9.67.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/jcommon-1.0.17.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
-		<signjar jar="${pathname.component.documentroot}/app/lib/jfreechart-1.0.14.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jcommon-1.0.18.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
+		<signjar jar="${pathname.component.documentroot}/app/lib/jfreechart-1.0.15.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/swt.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/c3p0-0.9.2.1.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
 		<signjar jar="${pathname.component.documentroot}/app/lib/hibernate-c3p0-4.2.3.Final.jar" alias="trademgr" storepass="ledzepplin" keystore="${pathname.component.config}/trademanager"/>
