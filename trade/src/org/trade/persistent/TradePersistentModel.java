@@ -954,27 +954,9 @@ public class TradePersistentModel implements PersistentModel {
 					|| CoreUtils.nullSafeComparator(new Integer(
 							totalSellQuantity), tradePosition
 							.getTotalSellQuantity()) != 0) {
-				tradePosition
-						.setOpenQuantity((totalBuyQuantity - totalSellQuantity));
 
-				if ((totalBuyQuantity - totalSellQuantity) > 0)
-					tradePosition.setSide(Side.BOT);
-				if ((totalBuyQuantity - totalSellQuantity) < 0)
-					tradePosition.setSide(Side.SLD);
-
-				if (tradePosition.equals(tradePosition.getContract()
-						.getTradePosition())) {
-					if ((totalBuyQuantity - totalSellQuantity) == 0) {
-						tradePosition.setPositionCloseDate(tradeOrder
-								.getFilledDate());
-						tradePosition.getContract().setTradePosition(null);
-						this.persistAspect(tradePosition.getContract());
-					}
-				} else {
-					tradePosition.getContract().setTradePosition(tradePosition);
-					this.persistAspect(tradePosition.getContract());
-				}
-
+				int openQuantity = totalBuyQuantity - totalSellQuantity;
+				tradePosition.setOpenQuantity(openQuantity);
 				tradePosition.setTotalBuyQuantity(totalBuyQuantity);
 				tradePosition.setTotalBuyValue((new BigDecimal(totalBuyValue))
 						.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN));
@@ -986,6 +968,27 @@ public class TradePersistentModel implements PersistentModel {
 						- totalBuyValue)).setScale(SCALE,
 						BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalCommission(comms.getBigDecimalValue());
+				if (openQuantity > 0)
+					tradePosition.setSide(Side.BOT);
+				if (openQuantity < 0)
+					tradePosition.setSide(Side.SLD);
+
+				/*
+				 * Position should be closed if openQuantity = 0
+				 */
+				if (tradePosition.equals(tradePosition.getContract()
+						.getTradePosition())) {
+					if (openQuantity == 0) {
+						tradePosition.setPositionCloseDate(tradeOrder
+								.getFilledDate());
+						tradePosition.getContract().setTradePosition(null);
+						this.persistAspect(tradePosition.getContract());
+					}
+				} else {
+					tradePosition.getContract().setTradePosition(tradePosition);
+					this.persistAspect(tradePosition.getContract());
+				}
+
 				// Partial fills case.
 				if (null == positionOrders)
 					positionOrders = this
