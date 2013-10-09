@@ -129,7 +129,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					return;
 				}
 
-				// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
+				// AbstractStrategyRule.logCandle(this,
+				// currentCandleItem.getCandle());
 
 				CandleItem prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
@@ -255,7 +256,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 
 				if (!startPeriod.before(TradingCalendar.getSpecificTime(
 						startPeriod, 11, 30))) {
-					_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
+					_log.info("Rule 11:30:00 bar, time out unfilled open position Symbol: "
 							+ getSymbol() + " Time: " + startPeriod);
 					if (!this.isThereOpenPosition()
 							&& !TradestrategyStatus.CANCELLED
@@ -263,7 +264,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						updateTradestrategyStatus(TradestrategyStatus.TO);
 						this.cancelAllOrders();
 						// No trade we timed out
-						_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
+						_log.info("Rule 11:30:00 bar, time out unfilled open position Symbol: "
 								+ getSymbol() + " Time: " + startPeriod);
 					}
 					this.cancel();

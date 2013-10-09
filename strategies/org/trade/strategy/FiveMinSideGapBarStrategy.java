@@ -132,7 +132,8 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 					return;
 				}
 
-				// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
+				// AbstractStrategyRule.logCandle(this,
+				// currentCandleItem.getCandle());
 
 				CandleItem prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);

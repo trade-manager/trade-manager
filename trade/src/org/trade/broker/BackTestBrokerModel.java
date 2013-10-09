@@ -40,7 +40,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.ListIterator;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -83,7 +82,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 	// Candle series this is listened to by the chart panel and main controller
 	// for updates.
-	private static final ConcurrentHashMap<Integer, Contract> m_historyDataRequests = new ConcurrentHashMap<Integer, Contract>();
+	private static final ConcurrentHashMap<Integer, Tradestrategy> m_historyDataRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
 	private static final ConcurrentHashMap<Integer, Contract> m_realTimeBarsRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_contractRequests = new ConcurrentHashMap<Integer, Contract>();
 	private PersistentModel m_tradePersistentModel = null;
@@ -127,10 +126,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	/**
 	 * Method getHistoricalData.
 	 * 
-	 * @return ConcurrentHashMap<Integer,Contract>
+	 * @return ConcurrentHashMap<Integer,Tradestrategy>
 	 * @see org.trade.broker.BrokerModel#getHistoricalData()
 	 */
-	public ConcurrentHashMap<Integer, Contract> getHistoricalData() {
+	public ConcurrentHashMap<Integer, Tradestrategy> getHistoricalData() {
 		return m_historyDataRequests;
 	}
 
@@ -343,8 +342,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	/**
 	 * Method onBrokerData.
 	 * 
-	 * @param contract
-	 *            Contract
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @param Date
 	 *            startDate
 	 * @param Date
@@ -357,25 +356,29 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
 	 *      )
 	 */
-	public void onBrokerData(Contract contract, Date endDate, Integer barSize,
-			Integer chartDays) throws BrokerModelException {
+	public void onBrokerData(Tradestrategy tradestrategy, Date endDate)
+			throws BrokerModelException {
 
 		try {
-			if (this.isHistoricalDataRunning(contract)) {
-				throw new BrokerModelException(contract.getIdContract(), 3010,
+			if (this.isHistoricalDataRunning(tradestrategy)) {
+				throw new BrokerModelException(
+						tradestrategy.getIdTradeStrategy(), 3010,
 						"Data request is already in progress for: "
-								+ contract.getSymbol()
+								+ tradestrategy.getContract().getSymbol()
 								+ " Please wait or cancel.");
 			}
 			synchronized (m_historyDataRequests) {
-				m_historyDataRequests.put(contract.getIdContract(), contract);
+				m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
+						tradestrategy);
 			}
+
 			if (this.isBrokerDataOnly()) {
 				/*
 				 * This will use the Yahoo API to get the data.
 				 */
 				synchronized (m_contractRequests) {
-					m_contractRequests.put(contract.getIdContract(), contract);
+					m_contractRequests.put(tradestrategy.getContract()
+							.getIdContract(), tradestrategy.getContract());
 				}
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
@@ -383,29 +386,36 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 				String endDateTime = m_sdfGMT.format(endDate);
 
-				_log.info("onBrokerData Symbol: " + contract.getSymbol()
+				_log.info("onBrokerData Symbol: "
+						+ tradestrategy.getContract().getSymbol()
 						+ " end Time: " + endDateTime + " Period length: "
-						+ chartDays + " Bar size: " + barSize + " WhatToShow: "
+						+ tradestrategy.getChartDays() + " Bar size: "
+						+ tradestrategy.getBarSize() + " WhatToShow: "
 						+ backfillWhatToShow + " Regular Trading Hrs: "
 						+ backfillUseRTH + " Date format: "
 						+ backfillDateFormat);
 
-				m_client.reqHistoricalData(contract.getIdContract(), contract,
-						endDateTime, ChartDays.newInstance(chartDays)
-								.getDisplayName(), BarSize.newInstance(barSize)
+				m_client.reqHistoricalData(tradestrategy.getIdTradeStrategy(),
+						tradestrategy, endDateTime,
+						ChartDays.newInstance(tradestrategy.getChartDays())
+								.getDisplayName(),
+						BarSize.newInstance(tradestrategy.getBarSize())
 								.getDisplayName(), backfillWhatToShow,
 						backfillUseRTH, backfillDateFormat);
 			} else {
-				m_client.reqHistoricalData(contract.getIdContract(), contract,
-						null,
-						ChartDays.newInstance(chartDays).getDisplayName(),
-						BarSize.newInstance(barSize).getDisplayName(),
-						backfillWhatToShow, backfillUseRTH, backfillDateFormat);
+				m_client.reqHistoricalData(tradestrategy.getIdTradeStrategy(),
+						tradestrategy, null,
+						ChartDays.newInstance(tradestrategy.getChartDays())
+								.getDisplayName(),
+						BarSize.newInstance(tradestrategy.getBarSize())
+								.getDisplayName(), backfillWhatToShow,
+						backfillUseRTH, backfillDateFormat);
 			}
 
 		} catch (Throwable ex) {
-			throw new BrokerModelException(contract.getIdContract(), 3020,
-					"Error broker data Symbol: " + contract.getSymbol()
+			throw new BrokerModelException(tradestrategy.getIdTradeStrategy(),
+					3020, "Error broker data Symbol: "
+							+ tradestrategy.getContract().getSymbol()
 							+ " Msg: " + ex.getMessage());
 		}
 	}
@@ -419,8 +429,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#isHistoricalDataRunning(Contract)
 	 */
 	public boolean isHistoricalDataRunning(Contract contract) {
-		if (m_historyDataRequests.containsKey(contract.getIdContract())) {
-			return true;
+		for (Tradestrategy item : m_historyDataRequests.values()) {
+			if (contract.equals(item.getContract())) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -433,15 +445,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @return boolean
 	 */
 	public boolean isHistoricalDataRunning(Tradestrategy tradestrategy) {
-		if (m_historyDataRequests.containsKey(tradestrategy.getContract()
-				.getIdContract())) {
-			Contract contract = m_historyDataRequests.get(tradestrategy
-					.getContract().getIdContract());
-			for (Tradestrategy item : contract.getTradestrategies()) {
-				if (item.equals(tradestrategy)) {
-					return true;
-				}
-			}
+		if (m_historyDataRequests.containsKey(tradestrategy
+				.getIdTradeStrategy())) {
+			return true;
 		}
 		return false;
 	}
@@ -550,22 +556,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	}
 
 	/**
-	 * Method onCancelRealtimeBars.
-	 * 
-	 * @param contract
-	 *            Contract
-	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
-	 */
-	public void onCancelBrokerData(Contract contract) {
-		synchronized (m_historyDataRequests) {
-			if (m_historyDataRequests.containsKey(contract.getIdContract())) {
-				m_historyDataRequests.remove(contract.getIdContract());
-				m_historyDataRequests.notifyAll();
-			}
-		}
-	}
-
-	/**
 	 * Method onCancelBrokerData.
 	 * 
 	 * @param tradestrategy
@@ -573,16 +563,39 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public void onCancelBrokerData(Tradestrategy tradestrategy) {
 		synchronized (m_historyDataRequests) {
-			if (m_historyDataRequests.containsKey(tradestrategy.getContract()
-					.getIdContract())) {
-				Contract contract = m_historyDataRequests.get(tradestrategy
-						.getContract().getIdContract());
-				contract.removeTradestrategy(tradestrategy);
-				if (contract.getTradestrategies().isEmpty())
-					onCancelBrokerData(contract);
+			if (m_historyDataRequests.containsKey(tradestrategy
+					.getIdTradeStrategy())) {
+				tradestrategy.getContract().removeTradestrategy(tradestrategy);
+				m_historyDataRequests
+						.remove(tradestrategy.getIdTradeStrategy());
+				m_historyDataRequests.notifyAll();
+
 			}
 		}
 		m_client.removeBackTestBroker(tradestrategy.getIdTradeStrategy());
+	}
+
+	/**
+	 * Method onCancelBrokerData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @see org.trade.broker.BrokerModel#onCancelRealtimeBars(Contract)
+	 */
+	public void onCancelBrokerData(Contract contract) {
+		synchronized (m_historyDataRequests) {
+			for (Tradestrategy tradestrategy : m_historyDataRequests.values()) {
+				if (contract.equals(tradestrategy.getContract())) {
+					contract.removeTradestrategy(tradestrategy);
+					m_client.removeBackTestBroker(tradestrategy
+							.getIdTradeStrategy());
+					m_historyDataRequests.remove(tradestrategy
+							.getIdTradeStrategy());
+					m_historyDataRequests.notifyAll();
+
+				}
+			}
+		}
 	}
 
 	/**
@@ -1010,7 +1023,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			}
 		}
 		if (m_historyDataRequests.containsKey(id)) {
-			symbol = m_historyDataRequests.get(id).getSymbol();
+			symbol = m_historyDataRequests.get(id).getContract().getSymbol();
 			synchronized (m_historyDataRequests) {
 				m_historyDataRequests.remove(id);
 				m_historyDataRequests.notifyAll();
@@ -1159,52 +1172,43 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			 * selected to trade and that the market is open
 			 */
 			if (m_historyDataRequests.containsKey(reqId)) {
-				Contract contract = m_historyDataRequests.get(reqId);
+				Tradestrategy tradestrategy = m_historyDataRequests.get(reqId);
+
 				if (dateString.contains("finished-")) {
 
 					/*
 					 * The last one has arrived the reqId is the
 					 * tradeStrategyId. Remove this from the processing vector.
 					 */
-					Tradestrategy tradestrategy = contract.getTradestrategies()
-							.get(0);
 					CandleSeries candleSeries = tradestrategy
 							.getDatasetContainer().getBaseCandleSeries();
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
-					_log.info("HistoricalData complete Req Id: " + reqId
-							+ " Symbol: " + contract.getSymbol()
+					_log.info("HistoricalData complete Req Id: "
+							+ reqId
+							+ " Symbol: "
+							+ tradestrategy.getContract().getSymbol()
 							+ " Tradingday: "
 							+ tradestrategy.getTradingday().getOpen()
 							+ " candles to saved: "
 							+ candleSeries.getItemCount()
 							+ " Contract Tradestrategies size:: "
-							+ contract.getTradestrategies().size());
+							+ tradestrategy.getContract().getTradestrategies()
+									.size());
 
 					/*
 					 * Check to see if the trading day is today and this
 					 * strategy is selected to trade and that the market is open
 					 */
-					synchronized (contract.getTradestrategies()) {
-						for (ListIterator<Tradestrategy> iterItem = contract
-								.getTradestrategies().listIterator(); iterItem
-								.hasNext();) {
-							Tradestrategy item = iterItem.next();
-							if (item.getTrade() && !this.isBrokerDataOnly()) {
-								this.fireHistoricalDataComplete(item);
-							} else {
-								if (iterItem.equals(tradestrategy))
-									iterItem.remove();
-							}
-						}
-					}
-					if (contract.getTradestrategies().isEmpty()) {
+
+					if (tradestrategy.getTrade() && !this.isBrokerDataOnly()) {
+						this.fireHistoricalDataComplete(tradestrategy);
+					} else {
 						synchronized (m_historyDataRequests) {
 							m_historyDataRequests.remove(reqId);
 							m_historyDataRequests.notifyAll();
 						}
 					}
-
 				} else {
 
 					Date date = null;
@@ -1221,42 +1225,35 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						date = TradingCalendar.getDate(Long
 								.parseLong(dateString) * 1000);
 					}
+					/*
+					 * For daily bars set the time to the open time.
+					 */
+					if (tradestrategy.getBarSize() > 3600) {
+						date = TradingCalendar.getSpecificTime(tradestrategy
+								.getTradingday().getOpen(), date);
+					}
+					if (tradestrategy.getTradingday().getClose().after(date)) {
+						if (backfillUseRTH == 1
+								&& !TradingCalendar.isMarketHours(tradestrategy
+										.getTradingday().getOpen(),
+										tradestrategy.getTradingday()
+												.getClose(), date))
+							return;
 
-					for (Tradestrategy tradestrategy : contract
-							.getTradestrategies()) {
-						/*
-						 * For daily bars set the time to the open time.
-						 */
-						if (tradestrategy.getBarSize() > 3600) {
-							date = TradingCalendar.getSpecificTime(
-									tradestrategy.getTradingday().getOpen(),
-									date);
-						}
-						if (tradestrategy.getTradingday().getClose()
-								.after(date)) {
-							if (backfillUseRTH == 1
-									&& !TradingCalendar.isMarketHours(
-											tradestrategy.getTradingday()
-													.getOpen(),
-											tradestrategy.getTradingday()
-													.getClose(), date))
-								return;
-
-							tradestrategy.getDatasetContainer().buildCandle(
-									date, open, high, low, close, volume, vwap,
-									tradeCount, 1, null);
-							BigDecimal price = (new BigDecimal(close))
-									.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
-							tradestrategy.getDatasetContainer()
-									.getBaseCandleSeries().getContract()
-									.setLastAskPrice(price);
-							tradestrategy.getDatasetContainer()
-									.getBaseCandleSeries().getContract()
-									.setLastBidPrice(price);
-							tradestrategy.getDatasetContainer()
-									.getBaseCandleSeries().getContract()
-									.setLastPrice(price);
-						}
+						tradestrategy.getDatasetContainer().buildCandle(date,
+								open, high, low, close, volume, vwap,
+								tradeCount, 1, null);
+						BigDecimal price = (new BigDecimal(close)).setScale(
+								SCALE, BigDecimal.ROUND_HALF_EVEN);
+						tradestrategy.getDatasetContainer()
+								.getBaseCandleSeries().getContract()
+								.setLastAskPrice(price);
+						tradestrategy.getDatasetContainer()
+								.getBaseCandleSeries().getContract()
+								.setLastBidPrice(price);
+						tradestrategy.getDatasetContainer()
+								.getBaseCandleSeries().getContract()
+								.setLastPrice(price);
 					}
 				}
 			}

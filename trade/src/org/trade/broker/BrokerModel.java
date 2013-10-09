@@ -195,20 +195,15 @@ public interface BrokerModel {
 	/**
 	 * Method onBrokerData.
 	 * 
-	 * @param contract
-	 *            Contract
-	 * @param Date
-	 *            startDate
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 * @param Date
 	 *            endDate
-	 * @param Integer
-	 *            barSize
-	 * @param Integer
-	 *            chartDays
+	 * 
 	 * @throws BrokerModelException
 	 */
-	public void onBrokerData(Contract contract, Date endDate, Integer barSize,
-			Integer chartDays) throws BrokerModelException;
+	public void onBrokerData(Tradestrategy tradestrategy, Date endDate)
+			throws BrokerModelException;
 
 	/**
 	 * Method onReqRealTimeBars.
@@ -372,9 +367,9 @@ public interface BrokerModel {
 	/**
 	 * Method getHistoricalData.
 	 * 
-	 * @return ConcurrentHashMap<Integer,Contract>
+	 * @return ConcurrentHashMap<Integer,Tradestrategy>
 	 */
-	ConcurrentHashMap<Integer, Contract> getHistoricalData();
+	ConcurrentHashMap<Integer, Tradestrategy> getHistoricalData();
 
 	/**
 	 * Method onPlaceOrder.

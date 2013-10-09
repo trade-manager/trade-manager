@@ -52,7 +52,6 @@ import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
-import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
@@ -265,15 +264,14 @@ public class BrokerModelTest extends TestCase {
 	public void testOnBrokerData() {
 
 		try {
-			tradestrategy.getContract().addTradestrategy(tradestrategy);
+
 			StrategyData.doDummyData(this.tradestrategy.getDatasetContainer()
 					.getCandleDataset().getSeries(0),
 					tradestrategy.getTradingday(),
 					tradestrategy.getChartDays(), tradestrategy.getBarSize(),
 					true, 0);
-			m_brokerModel.onBrokerData(tradestrategy.getContract(),
-					tradestrategy.getTradingday().getClose(),
-					tradestrategy.getBarSize(), tradestrategy.getChartDays());
+			m_brokerModel.onBrokerData(tradestrategy, tradestrategy
+					.getTradingday().getClose());
 
 			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
 					.getCandleDataset().getSeries(0).isEmpty());
@@ -621,7 +619,7 @@ public class BrokerModelTest extends TestCase {
 	public void testGetHistoricalData() {
 
 		try {
-			ConcurrentHashMap<Integer, Contract> historicalDataList = m_brokerModel
+			ConcurrentHashMap<Integer, Tradestrategy> historicalDataList = m_brokerModel
 					.getHistoricalData();
 			TestCase.assertNotNull(historicalDataList);
 		} catch (Exception ex) {

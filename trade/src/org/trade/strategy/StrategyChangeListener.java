@@ -51,20 +51,25 @@ public interface StrategyChangeListener extends EventListener {
 	/**
 	 * Receives notification of an strategRule change event.
 	 * 
-	 * 
+	 * @param strategyClassName
+	 *            String
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
 
-	public void strategyComplete(String key, Tradestrategy tradestrategy);
+	public void strategyComplete(String strategyClassName,
+			Tradestrategy tradestrategy);
 
 	/**
 	 * Method strategyStarted.
 	 * 
+	 * @param strategyClassName
+	 *            String
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
-	public void strategyStarted(Tradestrategy tradestrategy);
+	public void strategyStarted(String strategyClassName,
+			Tradestrategy tradestrategy);
 
 	/**
 	 * Method ruleComplete.

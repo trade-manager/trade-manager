@@ -73,7 +73,7 @@ public class ClientSocket {
 	 *            int
 	 * @throws BrokerModelException
 	 */
-	public void reqHistoricalData(int reqId, Contract contract,
+	public void reqHistoricalData(int reqId, Tradestrategy tradestrategy,
 			String endDateTime, String durationStr, String barSizeSetting,
 			String whatToShow, int useRTH, int formatDateInteger)
 			throws BrokerModelException {
@@ -82,23 +82,22 @@ public class ClientSocket {
 
 			if (null != endDateTime) {
 
-				YahooBroker yahooBroker = new YahooBroker(contract,
-						endDateTime, durationStr, barSizeSetting, m_client);
-				m_backTestBroker.put(contract.getIdContract(), yahooBroker);
+				YahooBroker yahooBroker = new YahooBroker(
+						tradestrategy.getContract(), endDateTime, durationStr,
+						barSizeSetting, m_client);
+				m_backTestBroker.put(tradestrategy.getContract()
+						.getIdContract(), yahooBroker);
 				yahooBroker.execute();
 
 			} else {
-				for (Tradestrategy tradestrategy : contract
-						.getTradestrategies()) {
-					if (tradestrategy.getTrade()) {
-						BackTestBroker backTestBroker = new BackTestBroker(
-								tradestrategy.getDatasetContainer(),
-								tradestrategy.getIdTradeStrategy(), m_client);
-						m_backTestBroker.put(
-								tradestrategy.getIdTradeStrategy(),
-								backTestBroker);
-						backTestBroker.execute();
-					}
+
+				if (tradestrategy.getTrade()) {
+					BackTestBroker backTestBroker = new BackTestBroker(
+							tradestrategy.getDatasetContainer(),
+							tradestrategy.getIdTradeStrategy(), m_client);
+					m_backTestBroker.put(tradestrategy.getIdTradeStrategy(),
+							backTestBroker);
+					backTestBroker.execute();
 				}
 				m_client.historicalData(reqId,
 						"finished- at yyyyMMdd HH:mm:ss", 0, 0, 0, 0, 0, 0, 0,

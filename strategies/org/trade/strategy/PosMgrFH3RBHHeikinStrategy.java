@@ -119,14 +119,18 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			/*
 			 * Get the current candle
 			 */
-			CandleItem currentCandle = this.getCurrentCandle();
+			CandleItem currentCandleItem = this.getCurrentCandle();
 			CandleItem prevCandleItem = null;
-			Date startPeriod = currentCandle.getPeriod().getStart();
+			Date startPeriod = currentCandleItem.getPeriod().getStart();
 			if (newBar && getCurrentCandleCount() > 0) {
 				prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
-				AbstractStrategyRule.logCandle(prevCandleItem.getCandle());
+				// AbstractStrategyRule.logCandle(this,
+				// prevCandleItem.getCandle());
 			}
+
+			// AbstractStrategyRule.logCandle(this,
+			// currentCandleItem.getCandle());
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
@@ -196,7 +200,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 								.getTradingday().getOpen(), startPeriod));
 
 				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
-					if (currentCandle.getVwap() < firstCandle.getVwap()) {
+					if (currentCandleItem.getVwap() < firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(this
 								.getOpenPositionOrder().getAverageFilledPrice()
 								.doubleValue(), getOpenTradePosition()
@@ -206,11 +210,11 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 								+ getSymbol() + " Time:" + startPeriod
 								+ " Price: " + stopPrice + " first bar Vwap: "
 								+ firstCandle.getVwap() + " Curr Vwap: "
-								+ currentCandle.getVwap());
+								+ currentCandleItem.getVwap());
 					}
 				} else {
 
-					if (currentCandle.getVwap() > firstCandle.getVwap()) {
+					if (currentCandleItem.getVwap() > firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(this
 								.getOpenPositionOrder().getAverageFilledPrice()
 								.doubleValue(), getOpenTradePosition()
@@ -220,7 +224,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 								+ getSymbol() + " Time:" + startPeriod
 								+ " Price: " + stopPrice + " first bar Vwap: "
 								+ firstCandle.getVwap() + " Curr Vwap: "
-								+ currentCandle.getVwap());
+								+ currentCandleItem.getVwap());
 					}
 				}
 			}
@@ -305,7 +309,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			if (this.getTradeOrder(targetOneOrderKey).getIsFilled()) {
 
 				Money newStop = getOneMinuteTrailStop(candleSeries,
-						this.getStopPriceMinUnfilled(), currentCandle);
+						this.getStopPriceMinUnfilled(), currentCandleItem);
 				if (!newStop.equals(new Money(this.getStopPriceMinUnfilled()))) {
 					_log.info("PositionManagerStrategy OneMinuteTrail: "
 							+ getSymbol() + " Trail Price: " + newStop
@@ -319,9 +323,9 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandle.getLastUpdateDate().before(
+			if (!currentCandleItem.getLastUpdateDate().before(
 					TradingCalendar.getSpecificTime(
-							currentCandle.getLastUpdateDate(), 15, 58))) {
+							currentCandleItem.getLastUpdateDate(), 15, 58))) {
 				cancelOrdersClosePosition(true);
 				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

@@ -128,11 +128,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	/**
 	 * Method strategyComplete.
 	 * 
+	 * @param strategyClassName
+	 *            String
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
 	 */
-	public synchronized void strategyComplete(String key,
+	public synchronized void strategyComplete(String strategyClassName,
 			Tradestrategy tradestrategy) {
 		synchronized (lockBackTestWorker) {
 			strategiesRunning.getAndDecrement();
@@ -143,11 +145,14 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	/**
 	 * Method strategyStarted.
 	 * 
+	 * @param strategyClassName
+	 *            String
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyStarted(Tradestrategy)
 	 */
-	public synchronized void strategyStarted(Tradestrategy tradestrategy) {
+	public synchronized void strategyStarted(String strategyClassName,
+			Tradestrategy tradestrategy) {
 		synchronized (lockBackTestWorker) {
 			strategiesRunning.getAndIncrement();
 			lockBackTestWorker.notifyAll();

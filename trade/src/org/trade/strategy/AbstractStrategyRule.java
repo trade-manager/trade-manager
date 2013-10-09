@@ -235,12 +235,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Tradestrategy
 	 * @see #addChangeListener(StrategyChangeListener)
 	 */
-	protected void fireStrategyStarted(Tradestrategy tradestrategy) {
+	protected void fireStrategyStarted(String strategyClassName,
+			Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == StrategyChangeListener.class) {
-				((StrategyChangeListener) listeners[i + 1])
-						.strategyStarted(tradestrategy);
+				((StrategyChangeListener) listeners[i + 1]).strategyStarted(
+						strategyClassName, tradestrategy);
 			}
 		}
 	}
@@ -290,6 +291,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 			this.tradestrategy.setDatasetContainer(this.datasetContainer);
 			this.symbol = this.tradestrategy.getContract().getSymbol();
 
+			_log.info("Starting: " + this.getClass().getName()
+					+ " engine doInBackground Symbol: " + this.symbol
+					+ " idTradestrategy: " + this.idTradestrategy);
+
 			/*
 			 * Process the current candle if there is one on startup.
 			 */
@@ -298,10 +303,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 					.getItemCount() - 1;
 
 			seriesChanged = true;
-
-			_log.info(this.getClass().getName()
-					+ " engine doInBackground Symbol: " + this.symbol
-					+ " idTradestrategy: " + this.idTradestrategy);
 
 			reFreshPositionOrders();
 
@@ -392,8 +393,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 * Tell the worker if listening. Note only for back
 						 * testing that the strategy is running.
 						 */
-						this.fireStrategyStarted(this.tradestrategy);
+						this.fireStrategyStarted(this.getClass()
+								.getSimpleName(), this.tradestrategy);
 						listeningCandles = true;
+
+						_log.info("Started: " + this.getClass().getName()
+								+ " engine doInBackground Symbol: "
+								+ this.symbol + " idTradestrategy: "
+								+ this.idTradestrategy);
 					} else {
 						this.fireRuleComplete(this.tradestrategy);
 					}
@@ -1581,8 +1588,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param candle
 	 *            Candle
 	 */
-	public static void logCandle(Candle candle) {
-		_log.info("AbstractStrategyRule Symbol: "
+	public static void logCandle(AbstractStrategyRule context, Candle candle) {
+		_log.info(context.getClass().getSimpleName() + " Symbol: "
 				+ candle.getContract().getSymbol() + " startPeriod: "
 				+ candle.getStartPeriod() + " endPeriod: "
 				+ candle.getEndPeriod() + " Open: "

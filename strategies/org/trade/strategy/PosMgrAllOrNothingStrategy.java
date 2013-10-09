@@ -109,7 +109,8 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			CandleItem currentCandle = this.getCurrentCandle();
 			Date startPeriod = currentCandle.getPeriod().getStart();
 
-			// AbstractStrategyRule.logCandle(currentCandleItem.getCandle());
+			// AbstractStrategyRule.logCandle(this,
+			// currentCandleItem.getCandle());
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy

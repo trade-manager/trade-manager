@@ -461,12 +461,9 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 				for (Tradestrategy tradestrategy : this.getTradestrategies()) {
 					if (currTradestrategy.getIdTradeStrategy().equals(
 							tradestrategy.getIdTradeStrategy())) {
-						if (!currTradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().isEmpty()) {
-							tradestrategy.setDatasetContainer(currTradestrategy
-									.getDatasetContainer());
-							break;
-						}
+						tradestrategy.setDatasetContainer(currTradestrategy
+								.getDatasetContainer());
+						break;
 					}
 				}
 			}
