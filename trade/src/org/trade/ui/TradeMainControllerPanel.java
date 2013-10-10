@@ -2513,9 +2513,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 												.getIdTradeStrategy(),
 										indicatorTradestrategy);
 								this.grandTotal++;
-								// indicatorTradestrategy.getContract()
-								// .addTradestrategy(
-								// indicatorTradestrategy);
 								totalSumbitted = submitBrokerRequest(
 										indicatorTradestrategy,
 										tradingday.getClose(), totalSumbitted);
@@ -2609,7 +2606,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							reProcessTradingday.addTradestrategy(tradestrategy);
 					} else {
 						currContract = tradestrategy.getContract();
-						// currContract.addTradestrategy(tradestrategy);
 						toProcessTradingday.addTradestrategy(tradestrategy);
 					}
 				}
