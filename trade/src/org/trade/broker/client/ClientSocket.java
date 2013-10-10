@@ -82,7 +82,7 @@ public class ClientSocket {
 
 			if (null != endDateTime) {
 
-				YahooBroker yahooBroker = new YahooBroker(
+				YahooBroker yahooBroker = new YahooBroker(reqId,
 						tradestrategy.getContract(), endDateTime, durationStr,
 						barSizeSetting, m_client);
 				m_backTestBroker.put(tradestrategy.getContract()
@@ -95,8 +95,7 @@ public class ClientSocket {
 					BackTestBroker backTestBroker = new BackTestBroker(
 							tradestrategy.getDatasetContainer(),
 							tradestrategy.getIdTradeStrategy(), m_client);
-					m_backTestBroker.put(tradestrategy.getIdTradeStrategy(),
-							backTestBroker);
+					m_backTestBroker.put(reqId, backTestBroker);
 					backTestBroker.execute();
 				}
 				m_client.historicalData(reqId,

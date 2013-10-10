@@ -67,6 +67,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	private final static Logger _log = LoggerFactory
 			.getLogger(YahooBroker.class);
 
+	private Integer reqId = null;
 	private Contract contract = null;
 	private String durationStr = null;
 	private String barSizeSetting = null;
@@ -88,8 +89,9 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	 *            ClientWrapper
 	 * 
 	 */
-	public YahooBroker(Contract contract, String endDateTime,
+	public YahooBroker(Integer reqId, Contract contract, String endDateTime,
 			String durationStr, String barSizeSetting, ClientWrapper brokerModel) {
+		this.reqId = reqId;
 		this.contract = contract;
 		this.barSizeSetting = barSizeSetting;
 		this.durationStr = durationStr;
@@ -106,7 +108,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	public Void doInBackground() {
 
 		try {
-			setYahooContractDetails(contract.getIdContract(), contract);
+			setYahooContractDetails(contract);
 
 			this.brokerModel
 					.contractDetails(contract.getIdContract(), contract);
@@ -130,10 +132,10 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 					+ barSize.getCode() + " ChartDays: " + chartDays.getCode());
 
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
-				this.setYahooPriceDataDay(this.contract.getIdContract(),
+				this.setYahooPriceDataDay(this.reqId,
 						this.contract.getSymbol(), startDate, endDate);
 			} else {
-				this.setYahooPriceDataIntraday(this.contract.getIdContract(),
+				this.setYahooPriceDataIntraday(this.reqId,
 						this.contract.getSymbol(),
 						Integer.parseInt(chartDays.getCode()), startDate,
 						endDate);
@@ -165,8 +167,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	 * @return ContractDetails
 	 * @throws IOException
 	 */
-	private void setYahooContractDetails(int reqId, Contract contract)
-			throws IOException {
+	private void setYahooContractDetails(Contract contract) throws IOException {
 
 		/*
 		 * Yahoo finance http://finance.yahoo.com/d/quotes.csv?s=XOM&f=n
