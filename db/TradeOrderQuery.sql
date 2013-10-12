@@ -19,8 +19,9 @@ from
 candle inner join contract on candle.idContract = contract.idContract
  inner join tradingday on candle.idtradingday = tradingday.idtradingday
  inner join tradestrategy on tradestrategy.idContract = Contract.idContract
-where tradestrategy.trade = 1
-and tradestrategy.idtradingday = tradingday.idtradingday
+where 
+tradestrategy.trade = 1 and 
+tradestrategy.idtradingday = tradingday.idtradingday
 group by
 candle.idtradingday,
 candle.idcontract,
