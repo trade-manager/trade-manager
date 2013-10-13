@@ -155,7 +155,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private BrokerModel m_brokerModel = null;
 	private PersistentModel m_tradePersistentModel = null;
 	private BrokerDataRequestProgressMonitor brokerDataRequestProgressMonitor = null;
-	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
+	private static final ConcurrentHashMap<Integer, Tradestrategy> _tradestrategyRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
 
 	private TradingdayPanel tradingdayPanel = null;
 	private ContractPanel contractPanel = null;
@@ -1122,7 +1122,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					brokerDataRequestProgressMonitor.cancel(true);
 				}
 				m_brokerModel.onDisconnect();
-				_indicatorTradestrategy.clear();
+				_tradestrategyRequests.clear();
 				refreshTradingdays(m_tradingdays);
 			} else {
 				tradingdayPanel.setConnected(false);
@@ -1397,7 +1397,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			brokerDataRequestProgressMonitor.cancel(true);
 		}
 		tradingdayPanel.killAllStrategyWorker();
-		_indicatorTradestrategy.clear();
+		_tradestrategyRequests.clear();
 		refreshTradingdays(m_tradingdays);
 		this.setStatusBarMessage(
 				"Strategies and live data have been cancelled.",
@@ -2373,7 +2373,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				CloneNotSupportedException {
 
 			Tradestrategy indicatorTradestrategy = null;
-			for (Tradestrategy indicator : _indicatorTradestrategy.values()) {
+			for (Tradestrategy indicator : _tradestrategyRequests.values()) {
 				if (indicator.getContract().equals(series.getContract())
 						&& indicator.getTradingday().equals(
 								tradestrategy.getTradingday())
@@ -2436,11 +2436,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * Remove those that are not running as these do not need to be
 			 * shared.
 			 */
-			for (Tradestrategy tradestrategy : _indicatorTradestrategy.values()) {
+			for (Tradestrategy tradestrategy : _tradestrategyRequests.values()) {
 				if (!this.brokerModel.isRealtimeBarsRunning(tradestrategy)
 						&& !this.brokerModel
-								.isHistoricalDataRunning(tradestrategy)) {
-					_indicatorTradestrategy.remove(tradestrategy
+								.isHistoricalDataRunning(tradestrategy)
+						&& !tradestrategy.getTradingday().equals(tradingday)) {
+					_tradestrategyRequests.remove(tradestrategy
 							.getIdTradeStrategy());
 				}
 			}
@@ -2449,7 +2450,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 				if (null == prevTradestrategy) {
 					prevTradestrategy = tradestrategy;
-					_indicatorTradestrategy.put(
+					_tradestrategyRequests.put(
 							tradestrategy.getIdTradeStrategy(), tradestrategy);
 				}
 				/*
@@ -2474,7 +2475,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						totalSumbitted = submitBrokerRequest(prevTradestrategy,
 								tradingday.getClose(), totalSumbitted);
 						prevTradestrategy = tradestrategy;
-						_indicatorTradestrategy.put(
+						_tradestrategyRequests.put(
 								tradestrategy.getIdTradeStrategy(),
 								tradestrategy);
 					}
@@ -2503,12 +2504,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						candleDataset.setSeries(seriesIndex,
 								indicatorTradestrategy.getDatasetContainer()
 										.getBaseCandleSeries());
-						if (!_indicatorTradestrategy
+						if (!_tradestrategyRequests
 								.containsKey(indicatorTradestrategy
 										.getIdTradeStrategy())) {
 							if (this.brokerModel.isConnected()
 									|| this.brokerModel.isBrokerDataOnly()) {
-								_indicatorTradestrategy.put(
+								_tradestrategyRequests.put(
 										indicatorTradestrategy
 												.getIdTradeStrategy(),
 										indicatorTradestrategy);
