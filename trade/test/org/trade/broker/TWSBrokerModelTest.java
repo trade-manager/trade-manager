@@ -226,12 +226,12 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	@Test
-	public void testMarch2013OnBrokerData() {
+	public void testGappersOneMonthOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
 			if (this.brokerManagerModel.isConnected()) {
 
-				String fileName = "trade/test/org/trade/broker/GappersMarch2013.csv";
+				String fileName = "trade/test/org/trade/broker/GappersOneMonth.csv";
 				Date tradingDay = new Date();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
