@@ -155,7 +155,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private BrokerModel m_brokerModel = null;
 	private PersistentModel m_tradePersistentModel = null;
 	private BrokerDataRequestProgressMonitor brokerDataRequestProgressMonitor = null;
-	private static final ConcurrentHashMap<Integer, Tradestrategy> _tradestrategyRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
+	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
 
 	private TradingdayPanel tradingdayPanel = null;
 	private ContractPanel contractPanel = null;
@@ -1122,7 +1122,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					brokerDataRequestProgressMonitor.cancel(true);
 				}
 				m_brokerModel.onDisconnect();
-				_tradestrategyRequests.clear();
+				_indicatorRequests.clear();
 				refreshTradingdays(m_tradingdays);
 			} else {
 				tradingdayPanel.setConnected(false);
@@ -1397,7 +1397,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			brokerDataRequestProgressMonitor.cancel(true);
 		}
 		tradingdayPanel.killAllStrategyWorker();
-		_tradestrategyRequests.clear();
+		_indicatorRequests.clear();
 		refreshTradingdays(m_tradingdays);
 		this.setStatusBarMessage(
 				"Strategies and live data have been cancelled.",
@@ -2373,7 +2373,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				CloneNotSupportedException {
 
 			Tradestrategy indicatorTradestrategy = null;
-			for (Tradestrategy indicator : _tradestrategyRequests.values()) {
+			for (Tradestrategy indicator : _indicatorRequests.values()) {
 				if (indicator.getContract().equals(series.getContract())
 						&& indicator.getTradingday().equals(
 								tradestrategy.getTradingday())
@@ -2434,57 +2434,36 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				return totalSumbitted;
 			/*
 			 * Remove those that are not running as these do not need to be
-			 * shared.
+			 * shared. Do not remove those for the current tradingday.
 			 */
-			for (Tradestrategy tradestrategy : _tradestrategyRequests.values()) {
+			for (Tradestrategy tradestrategy : _indicatorRequests.values()) {
 				if (!this.brokerModel.isRealtimeBarsRunning(tradestrategy)
 						&& !this.brokerModel
 								.isHistoricalDataRunning(tradestrategy)
 						&& !tradestrategy.getTradingday().equals(tradingday)) {
-					_tradestrategyRequests.remove(tradestrategy
+					_indicatorRequests.remove(tradestrategy
 							.getIdTradeStrategy());
 				}
 			}
-			Tradestrategy prevTradestrategy = null;
-			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 
-				if (null == prevTradestrategy) {
-					prevTradestrategy = tradestrategy;
-					_tradestrategyRequests.put(
-							tradestrategy.getIdTradeStrategy(), tradestrategy);
-				}
-				/*
-				 * Refresh the data set container as these may have changed.
-				 */
-				tradestrategy.setDatasetContainer(null);
+			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 
 				if (!this.brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 
+					/*
+					 * Refresh the data set container as these may have changed.
+					 */
+					tradestrategy.setDatasetContainer(null);
 					/*
 					 * Fire all the requests to TWS to get chart data After data
 					 * has been retrieved save the data Only allow a maximum of
 					 * 60 requests in a 10min period to avoid TWS pacing errors
 					 */
-
-					if (!prevTradestrategy.getContract().equals(
-							tradestrategy.getContract())
-							|| !prevTradestrategy.getBarSize().equals(
-									tradestrategy.getBarSize())
-							|| !prevTradestrategy.getChartDays().equals(
-									tradestrategy.getChartDays())) {
-						totalSumbitted = submitBrokerRequest(prevTradestrategy,
-								tradingday.getClose(), totalSumbitted);
-						prevTradestrategy = tradestrategy;
-						_tradestrategyRequests.put(
-								tradestrategy.getIdTradeStrategy(),
-								tradestrategy);
-					}
+					totalSumbitted = submitBrokerRequest(tradestrategy,
+							tradingday.getClose(), totalSumbitted);
 				}
 			}
-			if (null != prevTradestrategy) {
-				totalSumbitted = submitBrokerRequest(prevTradestrategy,
-						tradingday.getClose(), totalSumbitted);
-			}
+
 			/*
 			 * Now process the indicators that are candle based.
 			 */
@@ -2504,14 +2483,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						candleDataset.setSeries(seriesIndex,
 								indicatorTradestrategy.getDatasetContainer()
 										.getBaseCandleSeries());
-						if (!_tradestrategyRequests
+						if (!_indicatorRequests
 								.containsKey(indicatorTradestrategy
 										.getIdTradeStrategy())) {
 							if (this.brokerModel.isConnected()
 									|| this.brokerModel.isBrokerDataOnly()) {
-								_tradestrategyRequests.put(
-										indicatorTradestrategy
-												.getIdTradeStrategy(),
+								_indicatorRequests.put(indicatorTradestrategy
+										.getIdTradeStrategy(),
 										indicatorTradestrategy);
 								this.grandTotal++;
 								totalSumbitted = submitBrokerRequest(
