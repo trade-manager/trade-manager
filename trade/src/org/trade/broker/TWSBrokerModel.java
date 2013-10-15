@@ -519,7 +519,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				}
 			} else {
 				throw new BrokerModelException(contract.getIdContract(), 3080,
-						"Not conected to TWS historical data cannot be retrieved");
+						"Not conected to TWS contract data cannot be retrieved");
 			}
 		} catch (Exception ex) {
 			throw new BrokerModelException(contract.getIdContract(), 3090,
@@ -563,11 +563,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					tradestrategy.getDatasetContainer().execute();
 				m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
 						tradestrategy);
-
-				/*
-				 * Get the contract details.
-				 */
-				this.onContractDetails(tradestrategy.getContract());
 
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar

@@ -373,13 +373,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			}
 
 			if (this.isBrokerDataOnly()) {
-				/*
-				 * This will use the Yahoo API to get the data.
-				 */
-				synchronized (m_contractRequests) {
-					m_contractRequests.put(tradestrategy.getContract()
-							.getIdContract(), tradestrategy.getContract());
-				}
+
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
 								.addBusinessDays(endDate, backfillOffsetDays)));
@@ -543,6 +537,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public void onContractDetails(Contract contract)
 			throws BrokerModelException {
+		/*
+		 * This will use the Yahoo API to get the data.
+		 */
+		synchronized (m_contractRequests) {
+			m_contractRequests.put(contract.getIdContract(), contract);
+		}
 	}
 
 	/**

@@ -1984,6 +1984,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private AtomicInteger timerRunning = null;
 		private final Object lockCoreUtilsTest = new Object();
 		private Timer timer = null;
+		private final ConcurrentHashMap<String, Contract> contractRequests = new ConcurrentHashMap<String, Contract>();
 
 		/**
 		 * Constructor for BrokerDataRequestProgressMonitor.
@@ -2027,6 +2028,29 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			try {
 
 				for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
+					for (Tradestrategy tradestrategy : tradingday
+							.getTradestrategies()) {
+						CandleDataset candleDataset = (CandleDataset) tradestrategy
+								.getDatasetContainer().getIndicatorByType(
+										IndicatorSeries.CandleSeries);
+
+						if (null != candleDataset) {
+							for (int seriesIndex = 0; seriesIndex < candleDataset
+									.getSeriesCount(); seriesIndex++) {
+								CandleSeries series = candleDataset
+										.getSeries(seriesIndex);
+								Contract contract = series.getContract();
+								if (!contractRequests.containsKey(contract
+										.getSymbol()))
+									contractRequests.put(contract.getSymbol(),
+											contract);
+							}
+						}
+						if (!contractRequests.containsKey(tradestrategy
+								.getContract().getSymbol()))
+							contractRequests.put(tradestrategy.getContract()
+									.getSymbol(), tradestrategy.getContract());
+					}
 					this.grandTotal = this.getGrandTotal()
 							+ tradingday.getTradestrategies().size();
 					/*
@@ -2175,6 +2199,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			totalSumbitted++;
 			hasSubmittedInSeconds(totalSumbitted);
+			/*
+			 * Get the contract details.
+			 */
+			if (contractRequests.containsKey(tradestrategy.getContract()
+					.getSymbol())) {
+				this.brokerModel.onContractDetails(tradestrategy.getContract());
+				contractRequests
+						.remove(tradestrategy.getContract().getSymbol());
+			}
+
 			this.brokerModel.onBrokerData(tradestrategy, endDate);
 			int percent = (int) (((double) (totalSumbitted - this.brokerModel
 					.getHistoricalData().size()) / getGrandTotal()) * 100d);
@@ -2343,6 +2377,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 
 		public void done() {
+			contractRequests.clear();
 			refreshTradingdays(this.tradingdays);
 			String message = "Completed Historical data total contracts processed: "
 					+ this.getGrandTotal()
