@@ -110,18 +110,18 @@ public class CandlePeriodTest extends TestCase {
 							this.tradestrategy.getBarSize());
 
 			if (candles.isEmpty()) {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						Tradingday.newInstance(prevTradingday), 2,
-						BarSize.FIVE_MIN, true, 0);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), Tradingday
+						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
+						true, 0);
 			} else {
 				CandleDataset.populateSeries(
-						this.tradestrategy.getDatasetContainer(), candles);
+						this.tradestrategy.getStrategyData(), candles);
 			}
-			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
+			TestCase.assertFalse(this.tradestrategy.getStrategyData()
 					.getBaseCandleSeries().isEmpty());
 			Candle candle = this.tradestrategy
-					.getDatasetContainer()
+					.getStrategyData()
 					.getBaseCandleSeries()
 					.getBar(TradingCalendar.getSpecificTime(this.tradestrategy
 							.getTradingday().getOpen(), TradingCalendar
@@ -159,18 +159,18 @@ public class CandlePeriodTest extends TestCase {
 							this.tradestrategy.getTradingday().getOpen(),
 							this.tradestrategy.getBarSize());
 			if (candles.isEmpty()) {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						Tradingday.newInstance(prevTradingday), 2,
-						BarSize.FIVE_MIN, true, 0);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), Tradingday
+						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
+						true, 0);
 			} else {
 				CandleDataset.populateSeries(
-						this.tradestrategy.getDatasetContainer(), candles);
+						this.tradestrategy.getStrategyData(), candles);
 			}
-			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
+			TestCase.assertFalse(this.tradestrategy.getStrategyData()
 					.getBaseCandleSeries().isEmpty());
 			Candle candle = this.tradestrategy
-					.getDatasetContainer()
+					.getStrategyData()
 					.getBaseCandleSeries()
 					.getAverageBar(
 							TradingCalendar.getSpecificTime(this.tradestrategy
@@ -189,7 +189,7 @@ public class CandlePeriodTest extends TestCase {
 					+ candle.getVwap() + " Volume: " + candle.getVolume());
 
 			candle = this.tradestrategy
-					.getDatasetContainer()
+					.getStrategyData()
 					.getBaseCandleSeries()
 					.getAverageBar(
 							TradingCalendar.getSpecificTime(this.tradestrategy

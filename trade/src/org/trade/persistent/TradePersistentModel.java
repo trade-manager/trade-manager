@@ -289,7 +289,7 @@ public class TradePersistentModel implements PersistentModel {
 					"Tradestrategy not found for id: "
 							+ tradestrategy.getIdTradeStrategy());
 
-		instance.setDatasetContainer(tradestrategy.getDatasetContainer());
+		instance.setStrategyData(tradestrategy.getStrategyData());
 		return instance;
 	}
 
@@ -1362,7 +1362,7 @@ public class TradePersistentModel implements PersistentModel {
 						.equals(fromStrategy.getIdStrategy())) {
 					item.setStrategy(toStrategy);
 					item.setDirty(true);
-					item.setDatasetContainer(null);
+					item.setStrategyData(null);
 					m_aspectHome.persist(item);
 				}
 			}

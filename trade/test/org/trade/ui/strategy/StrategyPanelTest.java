@@ -196,7 +196,7 @@ public class StrategyPanelTest extends TestCase {
 
 			Vector<Object> parm = new Vector<Object>(0);
 			parm.add(m_brokerManagerModel);
-			parm.add(this.tradestrategy.getDatasetContainer());
+			parm.add(this.tradestrategy.getStrategyData());
 			parm.add(this.tradestrategy.getIdTradeStrategy());
 			_log.info("Ready to create Strategy");
 			DynamicCode dynacode = new DynamicCode();
@@ -215,10 +215,10 @@ public class StrategyPanelTest extends TestCase {
 				_log.info(" Thread interupt: " + e.getMessage());
 			}
 
-			StrategyData.doDummyData(tradestrategy.getDatasetContainer()
+			StrategyData.doDummyData(tradestrategy.getStrategyData()
 					.getBaseCandleSeries(), Tradingday.newInstance(new Date()),
 					1, BarSize.FIVE_MIN, true, 1);
-			TestCase.assertFalse(tradestrategy.getDatasetContainer()
+			TestCase.assertFalse(tradestrategy.getStrategyData()
 					.getBaseCandleSeries().isEmpty());
 			strategyProxy.cancel();
 
@@ -236,7 +236,7 @@ public class StrategyPanelTest extends TestCase {
 
 			Vector<Object> parm = new Vector<Object>(0);
 			parm.add(m_brokerManagerModel);
-			parm.add(this.tradestrategy.getDatasetContainer());
+			parm.add(this.tradestrategy.getStrategyData());
 			parm.add(this.tradestrategy.getIdTradeStrategy());
 			Strategy strategy = this.tradePersistentModel
 					.findStrategyById(this.tradestrategy.getStrategy()

@@ -199,7 +199,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			this.tradestrategy = this.tradePersistentModel
 					.findTradestrategyById(this.idTradestrategy);
 			this.datasetContainer.clearBaseCandleDataset();
-			this.tradestrategy.setDatasetContainer(this.datasetContainer);
+			this.tradestrategy.setStrategyData(this.datasetContainer);
 			List<Candle> candles = null;
 			Date endDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getClose(), TradingCalendar
@@ -268,7 +268,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				 */
 
 				ruleComplete.set(0);
-				this.tradestrategy.getDatasetContainer().buildCandle(
+				this.tradestrategy.getStrategyData().buildCandle(
 						candle.getStartPeriod(),
 						candle.getOpen().doubleValue(),
 						candle.getHigh().doubleValue(),
@@ -278,11 +278,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						this.tradestrategy.getBarSize() / candle.getBarSize(),
 						candle.getLastUpdateDate());
 
-				this.tradestrategy.getDatasetContainer().getBaseCandleSeries()
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
 						.getContract().setLastAskPrice(candle.getClose());
-				this.tradestrategy.getDatasetContainer().getBaseCandleSeries()
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
 						.getContract().setLastBidPrice(candle.getClose());
-				this.tradestrategy.getDatasetContainer().getBaseCandleSeries()
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
 						.getContract().setLastPrice(candle.getClose());
 
 				/*
@@ -343,14 +343,14 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						}
 					}
 					if (positionOrders.hasOpenTradePosition()) {
-						if (!this.tradestrategy.getDatasetContainer()
+						if (!this.tradestrategy.getStrategyData()
 								.getBaseCandleSeries().isEmpty()) {
 							CandleItem candleItem = (CandleItem) this.tradestrategy
-									.getDatasetContainer()
+									.getStrategyData()
 									.getBaseCandleSeries()
 									.getDataItem(
 											this.tradestrategy
-													.getDatasetContainer()
+													.getStrategyData()
 													.getBaseCandleSeries()
 													.getItemCount() - 1);
 							if (!candleItem.isSide(positionOrders
@@ -397,8 +397,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		brokerModel.onCancelRealtimeBars(this.tradestrategy);
 		brokerModel.onCancelBrokerData(this.tradestrategy);
 		// Free some memory!!
-		this.tradestrategy.getDatasetContainer().clearBaseCandleDataset();
-		this.tradestrategy.setDatasetContainer(null);
+		this.tradestrategy.getStrategyData().clearBaseCandleDataset();
+		this.tradestrategy.setStrategyData(null);
 		_log.info("BackTestBroker done for: "
 				+ tradestrategy.getContract().getSymbol()
 				+ " idTradestrategy: "
@@ -680,7 +680,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			Date startDate, Date endDate) throws PersistentModelException {
 
 		CandleDataset candleDataset = (CandleDataset) tradestrategy
-				.getDatasetContainer().getIndicatorByType(
+				.getStrategyData().getIndicatorByType(
 						IndicatorSeries.CandleSeries);
 		if (null != candleDataset) {
 			for (int seriesIndex = 0; seriesIndex < candleDataset
@@ -712,12 +712,12 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 							+ childTradestrategy.getContract().getSymbol());
 				} else {
 					CandleDataset.populateSeries(
-							childTradestrategy.getDatasetContainer(),
+							childTradestrategy.getStrategyData(),
 							indicatorCandles);
 					indicatorCandles.clear();
 
 					CandleSeries childSeries = childTradestrategy
-							.getDatasetContainer().getBaseCandleSeries();
+							.getStrategyData().getBaseCandleSeries();
 					childSeries.setDisplaySeries(series.getDisplaySeries());
 					childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
 					childSeries.setSymbol(series.getSymbol());

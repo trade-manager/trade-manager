@@ -360,7 +360,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 		boolean trail = false;
 
 		HeikinAshiDataset dataset = (HeikinAshiDataset) getTradestrategy()
-				.getDatasetContainer().getIndicatorByType(
+				.getStrategyData().getIndicatorByType(
 						IndicatorSeries.HeikinAshiSeries);
 		if (null == dataset) {
 			throw new StrategyRuleException(1, 110,

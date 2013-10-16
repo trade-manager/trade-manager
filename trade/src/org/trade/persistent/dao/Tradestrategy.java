@@ -91,7 +91,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private Boolean trade = new Boolean(false);
 	private Date lastUpdateDate;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
-	private StrategyData datasetContainer = null;
+	private StrategyData strategyData = null;
 	private TradestrategyStatus tradestrategyStatus = new TradestrategyStatus();
 
 	public Tradestrategy() {
@@ -492,37 +492,36 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getDatasetContainer.
+	 * Method getStrategyData.
 	 * 
 	 * @return StrategyData
 	 */
 	@Transient
-	public StrategyData getDatasetContainer() {
+	public StrategyData getStrategyData() {
 		/*
 		 * Add the dataset container if non exists. If tradestrategy is dirty we
 		 * do not want to create a StrategyData object as Strategy/Contract have
 		 * not yet been fully populated.
 		 */
-		if (null == this.datasetContainer) {
+		if (null == this.strategyData) {
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries(getContract()
 					.getSymbol(), getContract(), getBarSize(), this
 					.getTradingday().getOpen(), this.getTradingday().getClose());
 			candleDataset.addSeries(candleSeries);
-			this.datasetContainer = new StrategyData(getStrategy(),
-					candleDataset);
+			this.strategyData = new StrategyData(getStrategy(), candleDataset);
 		}
-		return this.datasetContainer;
+		return this.strategyData;
 	}
 
 	/**
-	 * Method setDatasetContainer.
+	 * Method setStrategyData.
 	 * 
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 */
-	public void setDatasetContainer(StrategyData datasetContainer) {
-		this.datasetContainer = datasetContainer;
+	public void setStrategyData(StrategyData strategyData) {
+		this.strategyData = strategyData;
 	}
 
 	/**

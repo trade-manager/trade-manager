@@ -676,7 +676,7 @@ public class TWSBrokerModelTest extends TestCase implements
 			indicatorTradestrategy.setDirty(false);
 		}
 
-		CandleSeries childSeries = indicatorTradestrategy.getDatasetContainer()
+		CandleSeries childSeries = indicatorTradestrategy.getStrategyData()
 				.getBaseCandleSeries();
 		childSeries.setDisplaySeries(series.getDisplaySeries());
 		childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
@@ -718,7 +718,7 @@ public class TWSBrokerModelTest extends TestCase implements
 			/*
 			 * Refresh the data set container as these may have changed.
 			 */
-			tradestrategy.setDatasetContainer(null);
+			tradestrategy.setStrategyData(null);
 
 			if (!this.brokerManagerModel.isRealtimeBarsRunning(tradestrategy)) {
 
@@ -751,7 +751,7 @@ public class TWSBrokerModelTest extends TestCase implements
 		 */
 		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 			CandleDataset candleDataset = (CandleDataset) tradestrategy
-					.getDatasetContainer().getIndicatorByType(
+					.getStrategyData().getIndicatorByType(
 							IndicatorSeries.CandleSeries);
 
 			if (null != candleDataset) {
@@ -762,7 +762,7 @@ public class TWSBrokerModelTest extends TestCase implements
 					Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
 							tradestrategy, series);
 					candleDataset.setSeries(seriesIndex, indicatorTradestrategy
-							.getDatasetContainer().getBaseCandleSeries());
+							.getStrategyData().getBaseCandleSeries());
 					if (!_indicatorTradestrategy
 							.containsKey(indicatorTradestrategy
 									.getIdTradeStrategy())) {

@@ -265,7 +265,7 @@ public class BrokerModelTest extends TestCase {
 
 		try {
 
-			StrategyData.doDummyData(this.tradestrategy.getDatasetContainer()
+			StrategyData.doDummyData(this.tradestrategy.getStrategyData()
 					.getCandleDataset().getSeries(0),
 					tradestrategy.getTradingday(),
 					tradestrategy.getChartDays(), tradestrategy.getBarSize(),
@@ -273,25 +273,22 @@ public class BrokerModelTest extends TestCase {
 			m_brokerModel.onBrokerData(tradestrategy, tradestrategy
 					.getTradingday().getClose());
 
-			TestCase.assertFalse(this.tradestrategy.getDatasetContainer()
+			TestCase.assertFalse(this.tradestrategy.getStrategyData()
 					.getCandleDataset().getSeries(0).isEmpty());
 
-			IndicatorSeries candleseries = this.tradestrategy
-					.getDatasetContainer().getCandleDataset().getSeries(0);
-			IndicatorSeries sma1Series = this.tradestrategy
-					.getDatasetContainer()
+			IndicatorSeries candleseries = this.tradestrategy.getStrategyData()
+					.getCandleDataset().getSeries(0);
+			IndicatorSeries sma1Series = this.tradestrategy.getStrategyData()
 					.getIndicatorByType(IndicatorSeries.MovingAverageSeries)
 					.getSeries(0);
-			IndicatorSeries sma2Series = this.tradestrategy
-					.getDatasetContainer()
+			IndicatorSeries sma2Series = this.tradestrategy.getStrategyData()
 					.getIndicatorByType(IndicatorSeries.MovingAverageSeries)
 					.getSeries(1);
-			IndicatorSeries vwapSeries = this.tradestrategy
-					.getDatasetContainer()
+			IndicatorSeries vwapSeries = this.tradestrategy.getStrategyData()
 					.getIndicatorByType(IndicatorSeries.VwapSeries)
 					.getSeries(0);
 			IndicatorSeries heikinAshiSeries = this.tradestrategy
-					.getDatasetContainer()
+					.getStrategyData()
 					.getIndicatorByType(IndicatorSeries.HeikinAshiSeries)
 					.getSeries(0);
 

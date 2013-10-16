@@ -1842,13 +1842,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							+ " Key: "
 							+ key
 							+ " seriesCount: "
-							+ tradestrategy.getDatasetContainer()
+							+ tradestrategy.getStrategyData()
 									.getBaseCandleSeries().getItemCount());
 		}
 
 		Vector<Object> parm = new Vector<Object>(0);
 		parm.add(m_brokerModel);
-		parm.add(tradestrategy.getDatasetContainer());
+		parm.add(tradestrategy.getStrategyData());
 		parm.add(tradestrategy.getIdTradeStrategy());
 
 		StrategyRule strategy = (StrategyRule) dynacode.newProxyInstance(
@@ -1872,7 +1872,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				+ " Symbol: "
 				+ tradestrategy.getContract().getSymbol()
 				+ " seriesCount: "
-				+ tradestrategy.getDatasetContainer().getBaseCandleSeries()
+				+ tradestrategy.getStrategyData().getBaseCandleSeries()
 						.getItemCount());
 	}
 
@@ -2031,7 +2031,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
 						CandleDataset candleDataset = (CandleDataset) tradestrategy
-								.getDatasetContainer().getIndicatorByType(
+								.getStrategyData().getIndicatorByType(
 										IndicatorSeries.CandleSeries);
 
 						if (null != candleDataset) {
@@ -2448,8 +2448,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				indicatorTradestrategy.setDirty(false);
 			}
 
-			CandleSeries childSeries = indicatorTradestrategy
-					.getDatasetContainer().getBaseCandleSeries();
+			CandleSeries childSeries = indicatorTradestrategy.getStrategyData()
+					.getBaseCandleSeries();
 			childSeries.setDisplaySeries(series.getDisplaySeries());
 			childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
 			childSeries.setSubChart(series.getSubChart());
@@ -2488,7 +2488,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					/*
 					 * Refresh the data set container as these may have changed.
 					 */
-					tradestrategy.setDatasetContainer(null);
+					tradestrategy.setStrategyData(null);
 					/*
 					 * Fire all the requests to TWS to get chart data After data
 					 * has been retrieved save the data Only allow a maximum of
@@ -2504,7 +2504,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 				CandleDataset candleDataset = (CandleDataset) tradestrategy
-						.getDatasetContainer().getIndicatorByType(
+						.getStrategyData().getIndicatorByType(
 								IndicatorSeries.CandleSeries);
 
 				if (null != candleDataset) {
@@ -2516,7 +2516,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
 								tradestrategy, series);
 						candleDataset.setSeries(seriesIndex,
-								indicatorTradestrategy.getDatasetContainer()
+								indicatorTradestrategy.getStrategyData()
 										.getBaseCandleSeries());
 						if (!_indicatorRequests
 								.containsKey(indicatorTradestrategy

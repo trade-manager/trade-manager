@@ -604,10 +604,10 @@ public class TradestrategyTableModel extends TableModel {
 		 * hibernate and Eager fetch.
 		 */
 		if (null != element.getIdTradeStrategy()) {
-			newRow.addElement(element.getDatasetContainer()
-					.getBaseCandleSeries().getPercentChangeFromClose());
-			newRow.addElement(element.getDatasetContainer()
-					.getBaseCandleSeries().getPercentChangeFromOpen());
+			newRow.addElement(element.getStrategyData().getBaseCandleSeries()
+					.getPercentChangeFromClose());
+			newRow.addElement(element.getStrategyData().getBaseCandleSeries()
+					.getPercentChangeFromOpen());
 		} else {
 			newRow.addElement(new Percent(0));
 			newRow.addElement(new Percent(0));

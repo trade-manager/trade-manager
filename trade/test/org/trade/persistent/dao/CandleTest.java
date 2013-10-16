@@ -128,20 +128,20 @@ public class CandleTest extends TestCase {
 				Date prevTradingday = TradingCalendar.addDays(tradestrategy
 						.getTradingday().getOpen(), (-1 * (tradestrategy
 						.getChartDays() - 1)));
-				StrategyData.doDummyData(tradestrategy.getDatasetContainer()
+				StrategyData.doDummyData(tradestrategy.getStrategyData()
 						.getBaseCandleSeries(), Tradingday
 						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
 						true, 0);
-				TestCase.assertFalse(tradestrategy.getDatasetContainer()
+				TestCase.assertFalse(tradestrategy.getStrategyData()
 						.getBaseCandleSeries().isEmpty());
-				candleHome.persistCandleSeries(tradestrategy
-						.getDatasetContainer().getBaseCandleSeries());
+				candleHome.persistCandleSeries(tradestrategy.getStrategyData()
+						.getBaseCandleSeries());
 
 				_log.info("testAddCandle IdTradeStrategy: "
 						+ tradestrategy.getIdTradeStrategy());
 				TestCase.assertNotNull(((CandleItem) tradestrategy
-						.getDatasetContainer().getBaseCandleSeries()
-						.getDataItem(0)).getCandle().getIdCandle());
+						.getStrategyData().getBaseCandleSeries().getDataItem(0))
+						.getCandle().getIdCandle());
 
 			}
 

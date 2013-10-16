@@ -644,11 +644,11 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 			if (null != currentTab && !this.isConnected()) {
 				if (!newPeriod.equals(currentTab.getTradestrategy()
-						.getDatasetContainer().getCandleDataset().getSeries(0)
+						.getStrategyData().getCandleDataset().getSeries(0)
 						.getBarSize())) {
 					if (newPeriod.compareTo(currentTab.getTradestrategy()
 							.getBarSize()) > -1) {
-						currentTab.getTradestrategy().getDatasetContainer()
+						currentTab.getTradestrategy().getStrategyData()
 								.changeCandleSeriesPeriod(newPeriod);
 						this.clearStatusBarMessage();
 					} else {
@@ -684,7 +684,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		Date startDate = null;
 		Date endDate = null;
 
-		if (tradestrategy.getDatasetContainer().getBaseCandleSeries().isEmpty()) {
+		if (tradestrategy.getStrategyData().getBaseCandleSeries().isEmpty()) {
 			endDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getClose(), TradingCalendar
 					.getMostRecentTradingDay(TradingCalendar.addBusinessDays(
@@ -705,8 +705,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						BasePanel.INFORMATION);
 			} else {
 				// Populate the candle series.
-				CandleDataset.populateSeries(
-						tradestrategy.getDatasetContainer(), candles);
+				CandleDataset.populateSeries(tradestrategy.getStrategyData(),
+						candles);
 				candles.clear();
 				populateIndicatorCandleSeries(tradestrategy, startDate, endDate);
 			}
@@ -734,7 +734,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			Date startDate, Date endDate) throws PersistentModelException {
 
 		CandleDataset candleDataset = (CandleDataset) tradestrategy
-				.getDatasetContainer().getIndicatorByType(
+				.getStrategyData().getIndicatorByType(
 						IndicatorSeries.CandleSeries);
 		if (null != candleDataset) {
 			for (int seriesIndex = 0; seriesIndex < candleDataset
@@ -766,12 +766,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 								BasePanel.INFORMATION);
 					} else {
 						CandleDataset.populateSeries(
-								childTradestrategy.getDatasetContainer(),
+								childTradestrategy.getStrategyData(),
 								indicatorCandles);
 						indicatorCandles.clear();
 
 						CandleSeries childSeries = childTradestrategy
-								.getDatasetContainer().getBaseCandleSeries();
+								.getStrategyData().getBaseCandleSeries();
 						childSeries.setDisplaySeries(series.getDisplaySeries());
 						childSeries.setSeriesRGBColor(series
 								.getSeriesRGBColor());
@@ -978,9 +978,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				}
 
 				unRealizedPL = position.getUnRealizedProfit(
-						tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getContract()
-								.getLastPrice()).doubleValue();
+						tradestrategy.getStrategyData().getBaseCandleSeries()
+								.getContract().getLastPrice()).doubleValue();
 				realizedPL = position.getRealizedProfit().doubleValue();
 				netValue = position.getNetValue().doubleValue();
 				commision = position.getCommision().doubleValue();
@@ -1133,7 +1132,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					+ (tradestrategy.getContract().getDescription() == null ? "Contract details not available."
 							: tradestrategy.getContract().getDescription());
 			this.candlestickChart = new CandlestickChart(ledgend,
-					tradestrategy.getDatasetContainer(),
+					tradestrategy.getStrategyData(),
 					tradestrategy.getTradingday());
 			this.candlestickChart.setName(tradestrategy.getContract()
 					.getSymbol());

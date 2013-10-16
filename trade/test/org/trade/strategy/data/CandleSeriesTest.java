@@ -45,10 +45,10 @@ public class CandleSeriesTest extends TestCase {
 	public void testCandleSeriessClone() {
 		try {
 
-			CandleSeries candleSeries = this.tradestrategy
-					.getDatasetContainer().getBaseCandleSeries();
+			CandleSeries candleSeries = this.tradestrategy.getStrategyData()
+					.getBaseCandleSeries();
 			CandleSeries series = (CandleSeries) this.tradestrategy
-					.getDatasetContainer().getBaseCandleSeries().clone();
+					.getStrategyData().getBaseCandleSeries().clone();
 			if (candleSeries.equals(series)) {
 				_log.info("CandleSeries: " + series.toString());
 			}

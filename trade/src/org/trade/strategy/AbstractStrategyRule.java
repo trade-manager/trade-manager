@@ -288,7 +288,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			// Get an instances for this thread.
 			this.tradestrategy = this.tradePersistentModel
 					.findTradestrategyById(this.idTradestrategy);
-			this.tradestrategy.setDatasetContainer(this.datasetContainer);
+			this.tradestrategy.setStrategyData(this.datasetContainer);
 			this.symbol = this.tradestrategy.getContract().getSymbol();
 
 			_log.info("Starting: " + this.getClass().getName()
@@ -330,7 +330,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					 * so shut down the strategy.
 					 */
 					CandleSeries candleSeries = this.tradestrategy
-							.getDatasetContainer().getBaseCandleSeries();
+							.getStrategyData().getBaseCandleSeries();
 
 					boolean newCandle = false;
 					if ((candleSeries.getItemCount() - 1) > currentCandleCount) {
@@ -1305,7 +1305,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		CandleItem currentCandleItem = null;
 		if (getCurrentCandleCount() > -1) {
 			CandleSeries candleSeries = this.getTradestrategy()
-					.getDatasetContainer().getBaseCandleSeries();
+					.getStrategyData().getBaseCandleSeries();
 			currentCandleItem = (CandleItem) candleSeries
 					.getDataItem(getCurrentCandleCount());
 		}
@@ -1322,8 +1322,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public CandleItem getCandle(Date startPeriod) throws StrategyRuleException {
 		CandleItem candle = null;
-		CandleSeries baseCandleSeries = getTradestrategy()
-				.getDatasetContainer().getBaseCandleSeries();
+		CandleSeries baseCandleSeries = getTradestrategy().getStrategyData()
+				.getBaseCandleSeries();
 		CandlePeriod period = new CandlePeriod(startPeriod,
 				baseCandleSeries.getBarSize());
 		int index = baseCandleSeries.indexOf(period);

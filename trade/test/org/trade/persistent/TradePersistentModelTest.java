@@ -773,10 +773,9 @@ public class TradePersistentModelTest extends TestCase {
 		try {
 
 			CandleSeries candleSeries = new CandleSeries(this.tradestrategy
-					.getDatasetContainer().getBaseCandleSeries(),
-					BarSize.FIVE_MIN, this.tradestrategy.getTradingday()
-							.getOpen(), this.tradestrategy.getTradingday()
-							.getClose());
+					.getStrategyData().getBaseCandleSeries(), BarSize.FIVE_MIN,
+					this.tradestrategy.getTradingday().getOpen(),
+					this.tradestrategy.getTradingday().getClose());
 			StrategyData.doDummyData(candleSeries,
 					this.tradestrategy.getTradingday(), 5, BarSize.FIVE_MIN,
 					true, 0);
@@ -1330,7 +1329,7 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 			for (IndicatorDataset indicator : this.tradestrategy
-					.getDatasetContainer().getIndicators()) {
+					.getStrategyData().getIndicators()) {
 				IndicatorSeries series = indicator.getSeries(0);
 				String indicatorName = series.getType().substring(0,
 						series.getType().indexOf("Series"));

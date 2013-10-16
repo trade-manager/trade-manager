@@ -116,7 +116,7 @@ public class AbstractStrategyTest extends TestCase {
 			TestCase.assertNotNull(this.tradestrategy);
 
 			this.strategyProxy = new StrategyRuleTest(m_brokerModel,
-					this.tradestrategy.getDatasetContainer(),
+					this.tradestrategy.getStrategyData(),
 					this.tradestrategy.getIdTradeStrategy());
 			TestCase.assertNotNull(this.strategyProxy);
 			strategyProxy.execute();
@@ -153,7 +153,7 @@ public class AbstractStrategyTest extends TestCase {
 			tradestrategy.setTrade(true);
 			Vector<Object> parm = new Vector<Object>(0);
 			parm.add(m_brokerModel);
-			parm.add(this.tradestrategy.getDatasetContainer());
+			parm.add(this.tradestrategy.getStrategyData());
 			parm.add(this.tradestrategy.getIdTradeStrategy());
 			DynamicCode dynacode = new DynamicCode();
 			dynacode.addSourceDir(new File(m_strategyDir));
@@ -171,15 +171,13 @@ public class AbstractStrategyTest extends TestCase {
 				_log.info(" Thread interupt: " + e.getMessage());
 			}
 			if (Side.BOT.equals(this.tradestrategy.getSide())) {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						this.tradestrategy.getTradingday(), 1,
-						BarSize.FIVE_MIN, true, 0);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), this.tradestrategy
+						.getTradingday(), 1, BarSize.FIVE_MIN, true, 0);
 			} else {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						this.tradestrategy.getTradingday(), 1,
-						BarSize.FIVE_MIN, false, 0);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), this.tradestrategy
+						.getTradingday(), 1, BarSize.FIVE_MIN, false, 0);
 			}
 			strategyProxy.cancel();
 
@@ -245,15 +243,13 @@ public class AbstractStrategyTest extends TestCase {
 			}
 
 			if (Side.BOT.equals(this.tradestrategy.getSide())) {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						this.tradestrategy.getTradingday(), 1,
-						BarSize.FIVE_MIN, true, 0);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), this.tradestrategy
+						.getTradingday(), 1, BarSize.FIVE_MIN, true, 0);
 			} else {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						this.tradestrategy.getTradingday(), 1,
-						BarSize.FIVE_MIN, false, 0);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), this.tradestrategy
+						.getTradingday(), 1, BarSize.FIVE_MIN, false, 0);
 			}
 			strategyProxy.cancel();
 
@@ -652,16 +648,14 @@ public class AbstractStrategyTest extends TestCase {
 	public void testGetCurrentCandleCount() {
 		try {
 			if (Side.BOT.equals(this.tradestrategy.getSide())) {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						this.tradestrategy.getTradingday(), 1,
-						BarSize.HOUR_MIN, true, 1);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), this.tradestrategy
+						.getTradingday(), 1, BarSize.HOUR_MIN, true, 1);
 
 			} else {
-				StrategyData.doDummyData(this.tradestrategy
-						.getDatasetContainer().getBaseCandleSeries(),
-						this.tradestrategy.getTradingday(), 1,
-						BarSize.HOUR_MIN, false, 1);
+				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
+						.getBaseCandleSeries(), this.tradestrategy
+						.getTradingday(), 1, BarSize.HOUR_MIN, false, 1);
 
 			}
 			int count = this.strategyProxy.getCurrentCandleCount();
@@ -675,7 +669,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetCandle() {
 		try {
-			this.tradestrategy.getDatasetContainer().buildCandle(
+			this.tradestrategy.getStrategyData().buildCandle(
 					this.tradestrategy.getTradingday().getOpen(), 100d, 101d,
 					99d, 100d, 100000l, 100d, 100, 1, null);
 			CandleItem candleItem = this.strategyProxy

@@ -559,8 +559,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 * and all indicator updates. That reduces the delay to the
 				 * broker interface thread for messages coming in.
 				 */
-				if (!tradestrategy.getDatasetContainer().isRunning())
-					tradestrategy.getDatasetContainer().execute();
+				if (!tradestrategy.getStrategyData().isRunning())
+					tradestrategy.getStrategyData().execute();
 				m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
 						tradestrategy);
 
@@ -1461,9 +1461,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				for (Tradestrategy tradestrategy : contract
 						.getTradestrategies()) {
-					Contract seriesContract = tradestrategy
-							.getDatasetContainer().getBaseCandleSeries()
-							.getContract();
+					Contract seriesContract = tradestrategy.getStrategyData()
+							.getBaseCandleSeries().getContract();
 
 					switch (field) {
 					case TickType.ASK: {
@@ -1619,14 +1618,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.getTradestrategies()) {
 
 						Contract seriesContract = tradestrategy
-								.getDatasetContainer().getBaseCandleSeries()
+								.getStrategyData().getBaseCandleSeries()
 								.getContract();
-						int index = tradestrategy.getDatasetContainer()
+						int index = tradestrategy.getStrategyData()
 								.getBaseCandleSeries().indexOf(time);
 						if (index < 0)
 							return;
 						CandleItem candleItem = (CandleItem) tradestrategy
-								.getDatasetContainer().getBaseCandleSeries()
+								.getStrategyData().getBaseCandleSeries()
 								.getDataItem(index);
 						if (seriesContract.getLastAskPrice().doubleValue() > 0
 								&& seriesContract.getLastBidPrice()
@@ -1649,7 +1648,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								 * synchronized in the strategy when the stock
 								 * is fast running.
 								 */
-								tradestrategy.getDatasetContainer()
+								tradestrategy.getStrategyData()
 										.getBaseCandleSeries()
 										.fireSeriesChanged();
 								// _log.info("TickString Symbol: "
@@ -2192,8 +2191,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				if (dateString.contains("finished-")) {
 
-					CandleSeries candleSeries = tradestrategy
-							.getDatasetContainer().getBaseCandleSeries();
+					CandleSeries candleSeries = tradestrategy.getStrategyData()
+							.getBaseCandleSeries();
 
 					_log.info("HistoricalData complete Req Id: "
 							+ reqId
@@ -2281,20 +2280,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 												.getClose(), date))
 							return;
 
-						tradestrategy.getDatasetContainer().buildCandle(date,
-								open, high, low, close, volume, vwap,
-								tradeCount, 1, null);
+						tradestrategy.getStrategyData().buildCandle(date, open,
+								high, low, close, volume, vwap, tradeCount, 1,
+								null);
 						BigDecimal price = (new BigDecimal(close)).setScale(
 								SCALE, BigDecimal.ROUND_HALF_EVEN);
-						tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getContract()
-								.setLastAskPrice(price);
-						tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getContract()
-								.setLastBidPrice(price);
-						tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getContract()
-								.setLastPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries()
+								.getContract().setLastAskPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries()
+								.getContract().setLastBidPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries()
+								.getContract().setLastPrice(price);
 					}
 				}
 			}
@@ -2394,7 +2390,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					for (Tradestrategy tradestrategy : contract
 							.getTradestrategies()) {
 						StrategyData datasetContainer = tradestrategy
-								.getDatasetContainer();
+								.getStrategyData();
 
 						if (TradingCalendar.isMarketHours(tradestrategy
 								.getTradingday().getOpen(), tradestrategy

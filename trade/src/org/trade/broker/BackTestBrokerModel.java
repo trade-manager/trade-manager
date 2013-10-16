@@ -1180,8 +1180,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					 * The last one has arrived the reqId is the
 					 * tradeStrategyId. Remove this from the processing vector.
 					 */
-					CandleSeries candleSeries = tradestrategy
-							.getDatasetContainer().getBaseCandleSeries();
+					CandleSeries candleSeries = tradestrategy.getStrategyData()
+							.getBaseCandleSeries();
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
 					_log.info("HistoricalData complete Req Id: "
@@ -1240,20 +1240,17 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 												.getClose(), date))
 							return;
 
-						tradestrategy.getDatasetContainer().buildCandle(date,
-								open, high, low, close, volume, vwap,
-								tradeCount, 1, null);
+						tradestrategy.getStrategyData().buildCandle(date, open,
+								high, low, close, volume, vwap, tradeCount, 1,
+								null);
 						BigDecimal price = (new BigDecimal(close)).setScale(
 								SCALE, BigDecimal.ROUND_HALF_EVEN);
-						tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getContract()
-								.setLastAskPrice(price);
-						tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getContract()
-								.setLastBidPrice(price);
-						tradestrategy.getDatasetContainer()
-								.getBaseCandleSeries().getContract()
-								.setLastPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries()
+								.getContract().setLastAskPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries()
+								.getContract().setLastBidPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries()
+								.getContract().setLastPrice(price);
 					}
 				}
 			}

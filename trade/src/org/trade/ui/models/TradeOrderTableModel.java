@@ -171,7 +171,7 @@ public class TradeOrderTableModel extends TableModel {
 								.equals(OrderType.STPLMT)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() == 0) {
 						Money price = new Money(this.getData()
-								.getDatasetContainer().getBaseCandleSeries()
+								.getStrategyData().getBaseCandleSeries()
 								.getContract().getLastPrice());
 						this.setValueAt(price, row, column);
 						return price;
@@ -198,7 +198,7 @@ public class TradeOrderTableModel extends TableModel {
 								.equals(OrderType.STPLMT)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() == 0) {
 						Money price = new Money(this.getData()
-								.getDatasetContainer().getBaseCandleSeries()
+								.getStrategyData().getBaseCandleSeries()
 								.getContract().getLastPrice());
 						this.setValueAt(price, row, column);
 						return price;
@@ -406,7 +406,7 @@ public class TradeOrderTableModel extends TableModel {
 		double risk = tradestrategy.getRiskAmount().doubleValue();
 		double stop = 1.0d;
 
-		Money price = new Money(tradestrategy.getDatasetContainer()
+		Money price = new Money(tradestrategy.getStrategyData()
 				.getBaseCandleSeries().getContract().getLastPrice());
 
 		Date createDate = new Date(new java.util.Date());

@@ -93,7 +93,7 @@ public class ClientSocket {
 
 				if (tradestrategy.getTrade()) {
 					BackTestBroker backTestBroker = new BackTestBroker(
-							tradestrategy.getDatasetContainer(),
+							tradestrategy.getStrategyData(),
 							tradestrategy.getIdTradeStrategy(), m_client);
 					m_backTestBroker.put(reqId, backTestBroker);
 					backTestBroker.execute();
