@@ -738,7 +738,8 @@ public class CandleSeries extends IndicatorSeries {
 			double open, double high, double low, double close, long volume,
 			int tradeCount, double vwap, Date lastUpdateDate) {
 
-		if (rollupInterval != this.rollingCandle.rollupInterval) {
+		if (rollupInterval != this.rollingCandle.rollupInterval
+				|| this.isEmpty()) {
 
 			/*
 			 * Going to a lower period i.e say we were 5 min bars now going to
@@ -902,7 +903,8 @@ public class CandleSeries extends IndicatorSeries {
 					.addFirst((RollingCandle) this.rollingCandle.clone());
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error("Error updateRollingCandle cannot clone candle Msg: "
+					+ e.getMessage());
 		}
 	}
 

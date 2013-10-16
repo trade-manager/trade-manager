@@ -397,6 +397,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		brokerModel.onCancelRealtimeBars(this.tradestrategy);
 		brokerModel.onCancelBrokerData(this.tradestrategy);
 		// Free some memory!!
+		this.tradestrategy.getDatasetContainer().clearBaseCandleDataset();
 		this.tradestrategy.setDatasetContainer(null);
 		_log.info("BackTestBroker done for: "
 				+ tradestrategy.getContract().getSymbol()
