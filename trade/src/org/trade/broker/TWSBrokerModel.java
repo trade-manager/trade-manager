@@ -2389,7 +2389,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					boolean updateCandleDB = true;
 					for (Tradestrategy tradestrategy : contract
 							.getTradestrategies()) {
-						StrategyData datasetContainer = tradestrategy
+						StrategyData strategyData = tradestrategy
 								.getStrategyData();
 
 						if (TradingCalendar.isMarketHours(tradestrategy
@@ -2400,26 +2400,25 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								BigDecimal price = (new BigDecimal(close))
 										.setScale(SCALE,
 												BigDecimal.ROUND_HALF_EVEN);
-								datasetContainer.getBaseCandleSeries()
+								strategyData.getBaseCandleSeries()
 										.getContract().setLastAskPrice(price);
-								datasetContainer.getBaseCandleSeries()
+								strategyData.getBaseCandleSeries()
 										.getContract().setLastBidPrice(price);
-								datasetContainer.getBaseCandleSeries()
+								strategyData.getBaseCandleSeries()
 										.getContract().setLastPrice(price);
 							}
 							Date lastUpdateDate = new Date(
 									date.getTime() + 4999);
 
-							datasetContainer.buildCandle(date, open, high, low,
+							strategyData.buildCandle(date, open, high, low,
 									close, volume, vwap, tradeCount,
 									(tradestrategy.getBarSize() / 5),
 									lastUpdateDate);
 
-							if (!datasetContainer.getBaseCandleSeries()
-									.isEmpty()) {
-								CandleItem candleItem = (CandleItem) datasetContainer
+							if (!strategyData.getBaseCandleSeries().isEmpty()) {
+								CandleItem candleItem = (CandleItem) strategyData
 										.getBaseCandleSeries().getDataItem(
-												datasetContainer
+												strategyData
 														.getBaseCandleSeries()
 														.getItemCount() - 1);
 								if (updateCandleDB) {

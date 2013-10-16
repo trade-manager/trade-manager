@@ -65,15 +65,15 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 	 * 
 	 * @param brokerManagerModel
 	 *            BrokerModel
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 * @param idTradestrategy
 	 *            Integer
 	 */
 
 	public StrategyRuleTemplate(BrokerModel brokerManagerModel,
-			StrategyData datasetContainer, Integer idTradestrategy) {
-		super(brokerManagerModel, datasetContainer, idTradestrategy);
+			StrategyData strategyData, Integer idTradestrategy) {
+		super(brokerManagerModel, strategyData, idTradestrategy);
 	}
 
 	/*

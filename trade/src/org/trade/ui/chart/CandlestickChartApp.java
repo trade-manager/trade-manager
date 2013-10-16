@@ -93,11 +93,11 @@ public class CandlestickChartApp extends BasePanel {
 					// StrategyData data = CandlestickChartTest
 					// .getPriceDataSetYahooDay(symbol);
 					Integer numberOfDays = 2;
-					StrategyData data = CandlestickChartApp
+					StrategyData strategyData = CandlestickChartApp
 							.getPriceDataSetYahooIntraday(symbol, numberOfDays,
 									BarSize.FIVE_MIN);
-					CandlestickChart chart = new CandlestickChart(symbol, data,
-							Tradingday.newInstance(new Date()));
+					CandlestickChart chart = new CandlestickChart(symbol,
+							strategyData, Tradingday.newInstance(new Date()));
 					CandlestickChartApp panel = new CandlestickChartApp(chart);
 
 					frame.getContentPane().add(panel);
@@ -307,10 +307,10 @@ public class CandlestickChartApp extends BasePanel {
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
 					contract, daySeconds, startDate, today);
 			candleDataset.addSeries(candleSeries);
-			StrategyData datasetContainer = new StrategyData(strategy,
+			StrategyData strategyData = new StrategyData(strategy,
 					candleDataset);
-			CandleDataset.populateSeries(datasetContainer, candles);
-			return datasetContainer;
+			CandleDataset.populateSeries(strategyData, candles);
+			return strategyData;
 		} catch (Exception ex) {
 			_log.error("Error getting Yahoo data msg: " + ex.getMessage(), ex);
 		}
@@ -345,7 +345,7 @@ public class CandlestickChartApp extends BasePanel {
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
 					contract, periodSeconds, startDate, today);
 			candleDataset.addSeries(candleSeries);
-			StrategyData datasetContainer = new StrategyData(strategy,
+			StrategyData strategyData = new StrategyData(strategy,
 					candleDataset);
 
 			/*
@@ -383,7 +383,7 @@ public class CandlestickChartApp extends BasePanel {
 								+ " High: " + high + " Low: " + low
 								+ " Close: " + close + " Volume: " + volume);
 						if (startDate.before(time)) {
-							datasetContainer.buildCandle(time, open, high, low,
+							strategyData.buildCandle(time, open, high, low,
 									close, volume, (open + close) / 2,
 									((int) volume / 100), periodSeconds
 											/ BarSize.FIVE_MIN, null);
@@ -392,7 +392,7 @@ public class CandlestickChartApp extends BasePanel {
 				}
 			}
 			in.close();
-			return datasetContainer;
+			return strategyData;
 		} catch (Exception ex) {
 			_log.error("Error getting Yahoo data msg: " + ex.getMessage(), ex);
 		}

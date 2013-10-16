@@ -65,15 +65,15 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 	 * 
 	 * @param brokerManagerModel
 	 *            BrokerModel
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 * @param idTradestrategy
 	 *            Integer
 	 */
 
 	public PosMgrAll5MinBarStrategy(BrokerModel brokerManagerModel,
-			StrategyData datasetContainer, Integer idTradestrategy) {
-		super(brokerManagerModel, datasetContainer, idTradestrategy);
+			StrategyData strategyData, Integer idTradestrategy) {
+		super(brokerManagerModel, strategyData, idTradestrategy);
 	}
 
 	/*

@@ -107,27 +107,27 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	private ValueMarker valueMarker = null;
 	private XYTextAnnotation closePriceLine = null;
 	private XYTextAnnotation clickCrossHairs = null;
-	private StrategyData datasetContainer = null;
+	private StrategyData strategyData = null;
 
 	/**
 	 * A demonstration application showing a candlestick chart.
 	 * 
 	 * @param title
 	 *            the frame title.
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 */
-	public CandlestickChart(final String title, StrategyData datasetContainer,
+	public CandlestickChart(final String title, StrategyData strategyData,
 			Tradingday tradingday) {
 
-		this.datasetContainer = datasetContainer;
+		this.strategyData = strategyData;
 		this.setLayout(new BorderLayout());
 		// Used to mark the current price
 		stroke = new BasicStroke(1, BasicStroke.CAP_BUTT,
 				BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 3 }, 0);
 		valueMarker = new ValueMarker(0.00, Color.black, stroke);
 
-		this.chart = createChart(this.datasetContainer, title, tradingday);
+		this.chart = createChart(this.strategyData, title, tradingday);
 
 		BlockContainer container = new BlockContainer(new BorderArrangement());
 		container.add(titleLegend1, RectangleEdge.LEFT);
@@ -250,12 +250,12 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			}
 		});
 		this.add(chartPanel, null);
-		this.datasetContainer.getCandleDataset().getSeries(0)
+		this.strategyData.getCandleDataset().getSeries(0)
 				.addChangeListener(this);
 	}
 
 	public void removeChart() {
-		this.datasetContainer.getCandleDataset().getSeries(0)
+		this.strategyData.getCandleDataset().getSeries(0)
 				.removeChangeListener(this);
 		this.chart.getXYPlot().clearAnnotations();
 		this.chart.getXYPlot().clearDomainAxes();
@@ -276,13 +276,13 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	/**
 	 * Method createChart.
 	 * 
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 * @param title
 	 *            String
 	 * @return JFreeChart
 	 */
-	private JFreeChart createChart(StrategyData datasetContainer, String title,
+	private JFreeChart createChart(StrategyData strategyData, String title,
 			Tradingday tradingday) {
 
 		DateAxis dateAxis = new DateAxis("Date");
@@ -292,8 +292,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		NumberAxis priceAxis = new NumberAxis("Price");
 		priceAxis.setAutoRange(true);
 		priceAxis.setAutoRangeIncludesZero(false);
-		XYPlot pricePlot = new XYPlot(datasetContainer.getCandleDataset(),
-				dateAxis, priceAxis, datasetContainer.getCandleDataset()
+		XYPlot pricePlot = new XYPlot(strategyData.getCandleDataset(),
+				dateAxis, priceAxis, strategyData.getCandleDataset()
 						.getRenderer());
 		pricePlot.setOrientation(PlotOrientation.VERTICAL);
 		pricePlot.setDomainPannable(true);
@@ -321,16 +321,16 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		Date startDate = tradingday.getOpen();
 		Date endDate = tradingday.getClose();
 
-		if (!datasetContainer.getCandleDataset().getSeries(0).isEmpty()) {
-			startDate = ((CandleItem) datasetContainer.getCandleDataset()
+		if (!strategyData.getCandleDataset().getSeries(0).isEmpty()) {
+			startDate = ((CandleItem) strategyData.getCandleDataset()
 					.getSeries(0).getDataItem(0)).getPeriod().getStart();
 			startDate = TradingCalendar.getSpecificTime(tradingday.getOpen(),
 					startDate);
-			endDate = ((CandleItem) datasetContainer
+			endDate = ((CandleItem) strategyData
 					.getCandleDataset()
 					.getSeries(0)
 					.getDataItem(
-							datasetContainer.getCandleDataset().getSeries(0)
+							strategyData.getCandleDataset().getSeries(0)
 									.getItemCount() - 1)).getPeriod()
 					.getStart();
 			endDate = TradingCalendar.getSpecificTime(tradingday.getClose(),
@@ -355,12 +355,12 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		 * one in the list. The main chart must be plotted first.
 		 */
 		List<IndicatorDataset> indicators = new ArrayList<IndicatorDataset>(0);
-		for (IndicatorDataset item : datasetContainer.getIndicators()) {
+		for (IndicatorDataset item : strategyData.getIndicators()) {
 			if (IndicatorSeries.CandleSeries.equals(item.getType(0))) {
 				indicators.add(item);
 			}
 		}
-		for (IndicatorDataset item : datasetContainer.getIndicators()) {
+		for (IndicatorDataset item : strategyData.getIndicators()) {
 			if (!IndicatorSeries.CandleSeries.equals(item.getType(0))) {
 				indicators.add(item);
 			}

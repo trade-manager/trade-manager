@@ -93,7 +93,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	private BrokerModel brokerModel;
 	private PersistentModel tradePersistentModel;
 	private DAOEntryLimit entryLimits = new DAOEntryLimit();
-	private StrategyData datasetContainer = null;
+	private StrategyData strategyData = null;
 	private Tradestrategy tradestrategy = null;
 	private PositionOrders positionOrders = null;
 	private Integer idTradestrategy = null;
@@ -112,16 +112,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 * @param brokerManagerModel
 	 *            BrokerModel
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 * @param idTradestrategy
 	 *            Integer
 	 */
 	public AbstractStrategyRule(BrokerModel brokerManagerModel,
-			StrategyData datasetContainer, Integer idTradestrategy) {
+			StrategyData strategyData, Integer idTradestrategy) {
 		this.listenerList = new EventListenerList();
 		this.brokerModel = brokerManagerModel;
-		this.datasetContainer = datasetContainer;
+		this.strategyData = strategyData;
 		this.idTradestrategy = idTradestrategy;
 	}
 
@@ -288,7 +288,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			// Get an instances for this thread.
 			this.tradestrategy = this.tradePersistentModel
 					.findTradestrategyById(this.idTradestrategy);
-			this.tradestrategy.setStrategyData(this.datasetContainer);
+			this.tradestrategy.setStrategyData(this.strategyData);
 			this.symbol = this.tradestrategy.getContract().getSymbol();
 
 			_log.info("Starting: " + this.getClass().getName()
@@ -299,7 +299,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			 * Process the current candle if there is one on startup.
 			 */
 
-			currentCandleCount = this.datasetContainer.getBaseCandleSeries()
+			currentCandleCount = this.strategyData.getBaseCandleSeries()
 					.getItemCount() - 1;
 
 			seriesChanged = true;
@@ -387,7 +387,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						/*
 						 * Start listening for new candles and candle changes.
 						 */
-						this.datasetContainer.getBaseCandleSeries()
+						this.strategyData.getBaseCandleSeries()
 								.addChangeListener(this);
 						/*
 						 * Tell the worker if listening. Note only for back
@@ -466,7 +466,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		this.fireStrategyComplete(this.getClass().getSimpleName(),
 				this.tradestrategy);
 		removeAllMessageListener();
-		this.datasetContainer.getBaseCandleSeries().removeChangeListener(this);
+		this.strategyData.getBaseCandleSeries().removeChangeListener(this);
 		_log.info("Rule engine done: " + getSymbol() + " class: "
 				+ this.getClass().getSimpleName() + " idTradestrategy: "
 				+ this.tradestrategy.getIdTradeStrategy());

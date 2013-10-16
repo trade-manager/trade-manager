@@ -82,7 +82,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			.getLogger(BackTestBroker.class);
 
 	private PersistentModel tradePersistentModel = null;
-	private StrategyData datasetContainer = null;
+	private StrategyData strategyData = null;
 	private Tradestrategy tradestrategy = null;
 	private Integer idTradestrategy = null;
 	private ClientWrapper brokerModel = null;
@@ -100,18 +100,18 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	/**
 	 * Constructor for BackTestBroker.
 	 * 
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 * @param idTradestrategy
 	 *            Integer
 	 * @param brokerModel
 	 *            BrokerModel
 	 */
-	public BackTestBroker(StrategyData datasetContainer,
-			Integer idTradestrategy, ClientWrapper brokerModel) {
+	public BackTestBroker(StrategyData strategyData, Integer idTradestrategy,
+			ClientWrapper brokerModel) {
 		this.idTradestrategy = idTradestrategy;
 		this.brokerModel = brokerModel;
-		this.datasetContainer = datasetContainer;
+		this.strategyData = strategyData;
 		try {
 			localTimeZone = TimeZone.getTimeZone((ConfigProperties
 					.getPropAsString("trade.tws.timezone")));
@@ -198,8 +198,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 							this);
 			this.tradestrategy = this.tradePersistentModel
 					.findTradestrategyById(this.idTradestrategy);
-			this.datasetContainer.clearBaseCandleDataset();
-			this.tradestrategy.setStrategyData(this.datasetContainer);
+			this.strategyData.clearBaseCandleDataset();
+			this.tradestrategy.setStrategyData(this.strategyData);
 			List<Candle> candles = null;
 			Date endDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getClose(), TradingCalendar

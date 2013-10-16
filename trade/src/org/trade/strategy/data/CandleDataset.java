@@ -605,26 +605,25 @@ public class CandleDataset extends AbstractXYDataset implements
 	/**
 	 * Method populateSeries.
 	 * 
-	 * @param datasetContainer
+	 * @param strategyData
 	 *            StrategyData
 	 * @param candles
 	 *            List<Candle>
 	 */
-	public static void populateSeries(StrategyData datasetContainer,
+	public static void populateSeries(StrategyData strategyData,
 			List<Candle> candles) {
-		datasetContainer.clearBaseCandleDataset();
+		strategyData.clearBaseCandleDataset();
 		for (Candle candle : candles) {
-			datasetContainer.buildCandle(candle.getStartPeriod(), candle
-					.getOpen().doubleValue(), candle.getHigh().doubleValue(),
-					candle.getLow().doubleValue(), candle.getClose()
-							.doubleValue(), candle.getVolume(), candle
-							.getVwap().doubleValue(), candle.getTradeCount(),
-					1, null);
-			datasetContainer.getBaseCandleSeries().getContract()
+			strategyData.buildCandle(candle.getStartPeriod(), candle.getOpen()
+					.doubleValue(), candle.getHigh().doubleValue(), candle
+					.getLow().doubleValue(), candle.getClose().doubleValue(),
+					candle.getVolume(), candle.getVwap().doubleValue(), candle
+							.getTradeCount(), 1, null);
+			strategyData.getBaseCandleSeries().getContract()
 					.setLastAskPrice(candle.getClose());
-			datasetContainer.getBaseCandleSeries().getContract()
+			strategyData.getBaseCandleSeries().getContract()
 					.setLastBidPrice(candle.getClose());
-			datasetContainer.getBaseCandleSeries().getContract()
+			strategyData.getBaseCandleSeries().getContract()
 					.setLastPrice(candle.getClose());
 		}
 	}
