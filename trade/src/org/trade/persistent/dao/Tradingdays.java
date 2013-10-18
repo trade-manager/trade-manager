@@ -394,7 +394,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		 * Exchange, Expiration (yyyyMM, or yyyyMMdd opt),Strike
 		 * Price(opt),PUT/CALL
 		 * (opt),Multiplier(opt),|BOT/SLD(opt)|DATE(MM/dd/yyyy) (opt)|
-		 * Tier(Opt)| Mkt Bias(opt)| Mkt Bar(opt)| Mkt Gap(opt)");
+		 * Tier(Opt)| Mkt Gap(opt)| Mkt Bias(opt)| Mkt Bar(opt)");
 		 */
 		FileReader fileReader = null;
 		BufferedReader bufferedReader = null;
