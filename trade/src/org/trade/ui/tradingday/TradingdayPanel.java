@@ -559,7 +559,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 						&& !currTodayTradingday.getTradestrategies().isEmpty()
 						&& this.isConnected()) {
 					todayTradingday
-							.populateDatasetContainer(currTodayTradingday);
+							.populateStrategyData(currTodayTradingday);
 				}
 			}
 			m_tradingdays.getTradingdays().clear();
@@ -674,7 +674,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			if (null != tradingday && null != tradingday.getIdTradingDay()) {
 				Tradingday instance = m_tradePersistentModel
 						.findTradingdayById(tradingday.getIdTradingDay());
-				instance.populateDatasetContainer(tradingday);
+				instance.populateStrategyData(tradingday);
 				m_tradingdays.replaceTradingday(instance);
 				int selectedRow = m_tradingdayTable.getSelectedRow();
 				m_tradingdayModel.setData(m_tradingdays);

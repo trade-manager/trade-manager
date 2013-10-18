@@ -456,12 +456,13 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 						Tradingday currTradingday = this.getTradingday(
 								tradestrategy.getTradingday().getOpen(),
 								tradestrategy.getTradingday().getClose());
+
 						if (null != currTradingday) {
 							if (null != tradestrategy.getTradingday()
-									.getMarketBar()
-									&& null == currTradingday.getMarketBar()) {
-								currTradingday.setMarketBar(tradestrategy
-										.getTradingday().getMarketBar());
+									.getMarketGap()
+									&& null == currTradingday.getMarketGap()) {
+								currTradingday.setMarketGap(tradestrategy
+										.getTradingday().getMarketGap());
 							}
 							if (null != tradestrategy.getTradingday()
 									.getMarketBias()
@@ -470,10 +471,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 										.getTradingday().getMarketBias());
 							}
 							if (null != tradestrategy.getTradingday()
-									.getMarketGap()
-									&& null == currTradingday.getMarketGap()) {
-								currTradingday.setMarketGap(tradestrategy
-										.getTradingday().getMarketGap());
+									.getMarketBar()
+									&& null == currTradingday.getMarketBar()) {
+								currTradingday.setMarketBar(tradestrategy
+										.getTradingday().getMarketBar());
 							}
 							tradestrategy.setTradingday(currTradingday);
 						}

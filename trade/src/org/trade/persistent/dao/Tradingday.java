@@ -449,12 +449,12 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method populateDatasetContainer.
+	 * Method populateStrategyData.
 	 * 
 	 * @param tradingday
 	 *            Tradingday
 	 */
-	public void populateDatasetContainer(Tradingday tradingday) {
+	public void populateStrategyData(Tradingday tradingday) {
 		if (null != tradingday.getTradestrategies()) {
 			for (Tradestrategy currTradestrategy : tradingday
 					.getTradestrategies()) {
