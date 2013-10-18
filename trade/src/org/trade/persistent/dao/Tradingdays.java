@@ -630,15 +630,15 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 						break;
 					}
 					case 4: {
-						tradingday.setMarketBias(custToken.toUpperCase());
+						tradingday.setMarketGap(custToken.toUpperCase());						
 						break;
 					}
 					case 5: {
-						tradingday.setMarketBar(custToken.toUpperCase());
+						tradingday.setMarketBias(custToken.toUpperCase());
 						break;
 					}
 					case 6: {
-						tradingday.setMarketGap(custToken.toUpperCase());
+						tradingday.setMarketBar(custToken.toUpperCase());
 						break;
 					}
 					default: {
