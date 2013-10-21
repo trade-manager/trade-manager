@@ -115,6 +115,12 @@
 			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
 	</target>
+	<target name="deleteTransactionData" depends="initialise" description="Delete the database of all transaction data.">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" >
+			<classpath refid="build.classpath" />
+			<transaction src="../db/DeleteTransactionData.sql" />
+		</sql>
+	</target>
 	<target name="deleteTradeOrderData" depends="initialise" description="Delete the database of TradeOrders for testing.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />

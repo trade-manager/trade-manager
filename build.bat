@@ -47,6 +47,10 @@ rem Deletes all the data from the DB and reload the default data
 
 rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml resetDefaultData
 
+rem Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact.
+
+rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTransactionData
+
 rem Deletes all the orders from the database.
 
 rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
