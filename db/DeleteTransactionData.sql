@@ -3,19 +3,19 @@
 USE ${sql.database};
 
 UPDATE contract SET idTradePosition = null where idContract > 0;
-commit;
+COMMIT;
 DELETE FROM tradeorderfill WHERE idTradeOrderFill >='0';
-commit;
+COMMIT;
 DELETE FROM tradeorder WHERE idTradeOrder >='0';
-commit;
+COMMIT;
 DELETE FROM tradeposition WHERE idTradePosition >='0';
-commit;
+COMMIT;
 DELETE FROM tradestrategy WHERE idTradestrategy >='0';
-commit;
+COMMIT;
 DELETE FROM candle WHERE idCandle >='0';
-commit;
+COMMIT;
 DELETE FROM tradingday WHERE idTradingDay >='0';
-commit;
+COMMIT;
 DELETE FROM contract WHERE idContract >='0';
-commit;
+COMMIT;
 

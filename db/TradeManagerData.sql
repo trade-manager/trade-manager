@@ -3,25 +3,43 @@
 USE ${sql.database};
 
 DELETE FROM tradeorderfill WHERE idTradeOrderFill >='0';
+COMMIT;
 DELETE FROM tradeorder WHERE idTradeOrder>='0';
+COMMIT;
+UPDATE contract SET idTradePosition = null where idContract > 0;
+COMMIT;
 DELETE FROM tradeposition WHERE idTradePosition >='0';
+COMMIT;
 DELETE FROM candle WHERE idCandle >='0';
+COMMIT;
 DELETE FROM tradestrategy WHERE idTradestrategy >='0';
+COMMIT;
 DELETE FROM rule WHERE idRule >='0';
+COMMIT;
 DELETE FROM codevalue WHERE idcodeValue >='0';
+COMMIT;
 DELETE FROM portfolioaccount WHERE idPortfolioAccount >='0';
+COMMIT;
 DELETE FROM portfolio WHERE idPortfolio >='0';
+COMMIT;
 DELETE FROM account WHERE idAccount >='0';
+COMMIT;
 DELETE FROM indicatorseries WHERE idindicatorSeries >='0';
+COMMIT;
 DELETE FROM strategy WHERE idStrategyManager >='0';
+COMMIT;
 DELETE FROM strategy WHERE idStrategy >='0';
+COMMIT;
 DELETE FROM contract WHERE idContract >='0';
+COMMIT;
 DELETE FROM tradingday WHERE idTradingday >='0';
+COMMIT;
 DELETE FROM entrylimit WHERE idEntrylimit >='0';
+COMMIT;
 DELETE FROM codeattribute WHERE idCodeAttribute >='0';
+COMMIT;
 DELETE FROM codetype WHERE idCodeType >='0';
-
-commit;
+COMMIT;
 
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (50, 'FH=3R BH=3R+Heikin', 'Sets 3/5R Target with Heikin-Ashi trail over 3R', 'PosMgrFH3RBHHeikinStrategy',0);
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (51, '3R-AllOrNothing', 'Sets 3R Target', 'PosMgrAllOrNothingStrategy',0);
