@@ -24,6 +24,9 @@ if not exist config.properties (
 copy config\config.properties .
 echo Using default config.properties from /config dir.)
 
+SET ANT_BUILD_FILE=ant/build.xml
+rem SET ANT_BUILD_FILE=ant/buildtest.xml
+
 rem *******************************************************
 rem After application install TARGET 1/ AND 2/ must be run.
 rem *******************************************************
@@ -34,11 +37,11 @@ rem 3/ TARGET=resetDefaultData Deletes all the data from the DB and reload the d
 rem 4/ TARGET=deleteTransactionData Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact. 
 rem 5/ TARGET=deleteTradeOrderData Deletes all the orders from the database.
 rem 5/ TARGET=deleteAccountRuleData Delete the accounts and rules from the database. These will reload on login.
-rem 6/ TARGET=ant/buildtest.xml all Build and compile all test cases. This depends on 1/ 
+rem 6/ TARGET=all ANT_BUILD_FILE=ant/buildtest.xml Build and compile all test cases. This depends on 1/  
 
 SET TARGET=all
 
-java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml "%TARGET%"
+java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile "%ANT_BUILD_FILE%" "%TARGET%"
 
 pause
 

@@ -19,6 +19,9 @@ cp config/config.properties .
 echo "Using default config.properties from /config dir."
 fi
 
+ANT_BUILD_FILE=ant/build.xml
+# ANT_BUILD_FILE=ant/buildtest.xml
+
 # *******************************************************
 # After application install TARGET 1/ AND 2/ must be run.
 # *******************************************************
@@ -29,9 +32,9 @@ fi
 # 4/ TARGET=deleteTransactionData Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact. 
 # 5/ TARGET=deleteTradeOrderData Deletes all the orders from the database.
 # 5/ TARGET=deleteAccountRuleData Delete the accounts and rules from the database. These will reload on login.
-# 6/ TARGET=ant/buildtest.xml all Build and compile all test cases. This depends on 1/ 
+# 6/ TARGET=all ANT_BUILD_FILE=ant/buildtest.xml Build and compile all test cases. This depends on 1/ 
 
 TARGET=all
 
-java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml "$TARGET"
+java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile "$ANT_BUILD_FILE" "$TARGET"
 
