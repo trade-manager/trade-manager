@@ -2,6 +2,7 @@
 setlocal ENABLEDELAYEDEXPANSION
 
 rem ***************************************************
+rem See docs/Readme.txt for installation instructions.
 rem Change this dir to be the location for J2SE edition
 rem ***************************************************
 
@@ -15,14 +16,6 @@ PATH=%JAVA_HOME%/bin;%PATH%
 rem tools.jar is needed for the javac compiler
 SET CLASSPATH=.;%JAVA_HOME%/jre/lib/rt.jar;%JAVA_HOME%/lib/tools.jar;ant/lib/*;
 
-
-rem remember to change the /ant/build.properties to include MySQL root password.
-rem Target=all- Builds the application jar file 
-rem Target=dist - Builds the test cases
-rem Target=createDB - Drops and creates the database and users see file db/TradeManagerDDL.sql. 
-rem Target=cleanDB  cleans the database and adds the default data see file db/TradeManagerData.sql
-rem Target=cleanTradeOrdersDB  cleans the database of TradeOrders for back testing see file db/ClearTradeOrdersData.sql
-
 echo Path=%PATH%
 echo ClassPath=%CLASSPATH%
 
@@ -31,33 +24,21 @@ if not exist config.properties (
 copy config\config.properties .
 echo Using default config.properties from /config dir.)
 
-rem Build and compile the trademanager application
+rem *******************************************************
+rem After application install TARGET 1/ AND 2/ must be run.
+rem *******************************************************
 
-java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml all
+rem 1/ TARGET=all Build and compile the trademanager application.
+rem 2/ TARGET=createDB Create the database user and default data. 
+rem 3/ TARGET=resetDefaultData Deletes all the data from the DB and reload the default data. 
+rem 4/ TARGET=deleteTransactionData Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact. 
+rem 5/ TARGET=deleteTradeOrderData Deletes all the orders from the database.
+rem 5/ TARGET=deleteAccountRuleData Delete the accounts and rules from the database. These will reload on login.
+rem 6/ TARGET=ant/buildtest.xml all Build and compile all test cases. This depends on 1/ 
 
-rem Build and compile the test cases optional
+SET TARGET=all
 
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/buildtest.xml all
-
-rem Create the database user and default data
-
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml createDB
-
-rem Deletes all the data from the DB and reload the default data
-
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml resetDefaultData
-
-rem Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact.
-
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTransactionData
-
-rem Deletes all the orders from the database.
-
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
-
-rem Delete the accounts and rules from the database. These will reload on login.
-
-rem java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteAccountRuleData
+java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile ant/build.xml "%TARGET%"
 
 pause
 

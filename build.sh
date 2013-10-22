@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # ***************************************************
+# See docs/Readme.txt for installation instructions.
 # Change this dir to be the location for J2SE edition
 # ***************************************************
 
@@ -8,12 +9,6 @@ PATH="$JAVA_HOME/bin:$PATH"
 
 # tools.jar is needed for the javac compiler
 LOCALCLASSPATH="$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/tools.jar:ant/lib/*"
-
-# remember to change the /ant/build.properties to include MySQL root password.
-# Target=all- Builds the application jar file 
-# Target=dist - Builds the test cases
-# Target=createDB - Drops and creates the database and users see file db/TradeManagerDDL.sql. 
-# Target=cleanDB  cleans the database and adds the default data see file db/TradeManagerData.sql
 
 echo "PATH=$PATH"
 echo "CLASSPATH=$LOCALCLASSPATH"
@@ -24,26 +19,19 @@ cp config/config.properties .
 echo "Using default config.properties from /config dir."
 fi
 
-# Build and compile the trademanager application
+# *******************************************************
+# After application install TARGET 1/ AND 2/ must be run.
+# *******************************************************
 
-java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml all
+# 1/ TARGET=all Build and compile the trademanager application.
+# 2/ TARGET=createDB Create the database user and default data. 
+# 3/ TARGET=resetDefaultData Deletes all the data from the DB and reload the default data. 
+# 4/ TARGET=deleteTransactionData Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact. 
+# 5/ TARGET=deleteTradeOrderData Deletes all the orders from the database.
+# 5/ TARGET=deleteAccountRuleData Delete the accounts and rules from the database. These will reload on login.
+# 6/ TARGET=ant/buildtest.xml all Build and compile all test cases. This depends on 1/ 
 
-# Build and compile the test cases optional
+TARGET=all
 
-# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/buildtest.xml all
+java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml "$TARGET"
 
-# Create the database user and default data
-
-# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml createDB
-
-# Deletes all the data from the DB and reload the default data
-
-# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml resetDefaultData
-
-# Deletes all the orders from the DB and reload the default data
-
-# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteTradeOrderData
-
-# Delete the accounts and rules from the database. These will reload on login.
-
-# java -classpath "$LOCALCLASSPATH"  org.apache.tools.ant.Main -buildfile ant/build.xml deleteAccountRuleData
