@@ -2042,8 +2042,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								Contract contract = series.getContract();
 								if (!contractRequests.containsKey(contract
 										.getSymbol()))
-									contractRequests.put(contract.getSymbol(),
-											contract);
+									this.grandTotal++;
+								contractRequests.put(contract.getSymbol(),
+										contract);
 							}
 						}
 						if (!contractRequests.containsKey(tradestrategy
@@ -2051,7 +2052,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							contractRequests.put(tradestrategy.getContract()
 									.getSymbol(), tradestrategy.getContract());
 					}
-					this.grandTotal = this.getGrandTotal()
+					this.grandTotal = this.grandTotal
 							+ tradingday.getTradestrategies().size();
 					/*
 					 * Get the total for lower barsize timeframes.
@@ -2526,7 +2527,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								_indicatorRequests.put(indicatorTradestrategy
 										.getIdTradeStrategy(),
 										indicatorTradestrategy);
-								this.grandTotal++;
 								totalSumbitted = submitBrokerRequest(
 										indicatorTradestrategy,
 										tradingday.getClose(), totalSumbitted);
