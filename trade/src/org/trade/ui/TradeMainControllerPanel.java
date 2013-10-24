@@ -2612,6 +2612,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private Integer calculateTotalTradestrategiesToProcess(long startTime) {
 
 			Integer total = new Integer(0);
+			ConcurrentHashMap<String, Contract> contracts = new ConcurrentHashMap<String, Contract>();
+
 			for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
@@ -2625,21 +2627,20 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							CandleSeries series = candleDataset
 									.getSeries(seriesIndex);
 							Contract contract = series.getContract();
+							/*
+							 * Add the contract requests this allows us to only
+							 * request contract details once per contract in the
+							 * range of tradingdays to be processed.
+							 */
 							if (!contractRequests.containsKey(contract
-									.getSymbol())) {
-								/*
-								 * Total for indicator contracts
-								 */
-								total++;
-								/*
-								 * Add the contract requests this allows us to
-								 * only request contract details once per
-								 * contract in the range of tradingdays to be
-								 * processed.
-								 */
+									.getSymbol()))
 								contractRequests.put(contract.getSymbol(),
 										contract);
-							}
+							/*
+							 * Total for indicator contracts
+							 */
+							if (!contracts.containsKey(contract.getSymbol()))
+								contracts.put(contract.getSymbol(), contract);
 						}
 					}
 					/*
@@ -2653,6 +2654,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.getSymbol(), tradestrategy.getContract());
 
 				}
+				/*
+				 * Total for indicator contracts
+				 */
+				total = total + contracts.size();
+				contracts.clear();
 				/*
 				 * Total for tradestrategies.
 				 */
