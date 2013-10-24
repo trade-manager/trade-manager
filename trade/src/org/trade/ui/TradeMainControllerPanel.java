@@ -2019,52 +2019,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * @return Void
 		 */
 		public Void doInBackground() {
+
 			String message = null;
 			int totalSumbitted = 0;
 			int reSumbittedAt = 20;
 			ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
-			this.grandTotal = 0;
+			this.startTime = System.currentTimeMillis();
+			this.last6SubmittedTime = this.startTime;
+			// Initialize the progress bar
+			getProgressBar().setMaximum(100);
+			setProgress(0);
 
 			try {
-
-				for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
-					for (Tradestrategy tradestrategy : tradingday
-							.getTradestrategies()) {
-						CandleDataset candleDataset = (CandleDataset) tradestrategy
-								.getStrategyData().getIndicatorByType(
-										IndicatorSeries.CandleSeries);
-
-						if (null != candleDataset) {
-							for (int seriesIndex = 0; seriesIndex < candleDataset
-									.getSeriesCount(); seriesIndex++) {
-								CandleSeries series = candleDataset
-										.getSeries(seriesIndex);
-								Contract contract = series.getContract();
-								if (!contractRequests.containsKey(contract
-										.getSymbol()))
-									this.grandTotal++;
-								contractRequests.put(contract.getSymbol(),
-										contract);
-							}
-						}
-						if (!contractRequests.containsKey(tradestrategy
-								.getContract().getSymbol()))
-							contractRequests.put(tradestrategy.getContract()
-									.getSymbol(), tradestrategy.getContract());
-					}
-					this.grandTotal = this.grandTotal
-							+ tradingday.getTradestrategies().size();
-					/*
-					 * Get the total for lower barsize timeframes.
-					 */
-					this.grandTotal = this.grandTotal
-							+ getBackTestTotal(tradingday);
-				}
-				this.startTime = System.currentTimeMillis();
-				this.last6SubmittedTime = startTime;
-				// Initialize the progress bar
-				getProgressBar().setMaximum(100);
-				setProgress(0);
+				this.grandTotal = calculateTotalTradestrategiesToProcess(this.startTime);
 
 				Collections.sort(tradingdays.getTradingdays(),
 						Tradingday.DATE_ORDER_ASC);
@@ -2097,7 +2064,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							Tradingday.DATE_ORDER_ASC);
 					for (Tradingday itemTradingday : tradingdays
 							.getTradingdays()) {
-						if (getBackTestTotal(itemTradingday) > 0) {
+						if (TradingCalendar.isTradingDay(itemTradingday
+								.getOpen())
+								&& TradingCalendar
+										.sameDay(
+												itemTradingday.getOpen(),
+												TradingCalendar
+														.getDate(this.startTime))
+								&& TradingCalendar.isAfterHours(TradingCalendar
+										.getDate(this.startTime))) {
 
 							Tradingday tradingday = (Tradingday) itemTradingday
 									.clone();
@@ -2539,32 +2514,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 
 		/**
-		 * Method getBackTestTotal.
-		 * 
-		 * @param tradingday
-		 *            Tradingday
-		 * @return int
-		 */
-		private int getBackTestTotal(Tradingday tradingday) {
-			Date now = new Date();
-			int total = 0;
-			if (backTestBarSize > 0 && this.brokerModel.isBrokerDataOnly()) {
-				if (TradingCalendar.isTradingDay(tradingday.getOpen())
-						&& TradingCalendar.sameDay(tradingday.getOpen(),
-								TradingCalendar.getDate(now.getTime()))
-						&& !TradingCalendar.isAfterHours(TradingCalendar
-								.getDate(now.getTime())))
-					return 0;
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
-					if (backTestBarSize < tradestrategy.getBarSize())
-						total++;
-				}
-			}
-			return total;
-		}
-
-		/**
 		 * Method getGrandTotal.
 		 * 
 		 * @return int
@@ -2640,6 +2589,90 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						reProcessTradingday);
 			}
 			return toProcessTradingday;
+		}
+
+		/**
+		 * Method Calculate the total number of tradestrategies to be processed.
+		 * This will be all the tradestrategies plus all the indicators that are
+		 * of type candleSeries plus all the tradestrategies that are on a lower
+		 * timeframe. i.e trade.backtest.barSize is less than tradestrategy
+		 * barSize.
+		 * 
+		 * Also find all the unique contract symbols. This is used to insure we
+		 * only process contract details once per contract.
+		 * 
+		 * @param startTime
+		 *            long
+		 * 
+		 * @return Integer The total number of tradestrategies to process.
+		 */
+
+		private Integer calculateTotalTradestrategiesToProcess(long startTime) {
+
+			Integer total = new Integer(0);
+			for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
+				for (Tradestrategy tradestrategy : tradingday
+						.getTradestrategies()) {
+					CandleDataset candleDataset = (CandleDataset) tradestrategy
+							.getStrategyData().getIndicatorByType(
+									IndicatorSeries.CandleSeries);
+
+					if (null != candleDataset) {
+						for (int seriesIndex = 0; seriesIndex < candleDataset
+								.getSeriesCount(); seriesIndex++) {
+							CandleSeries series = candleDataset
+									.getSeries(seriesIndex);
+							Contract contract = series.getContract();
+							if (!contractRequests.containsKey(contract
+									.getSymbol())) {
+								/*
+								 * Total for indicator contracts
+								 */
+								total++;
+								/*
+								 * Add the contract requests this allows us to
+								 * only request contract details once per
+								 * contract in the range of tradingdays to be
+								 * processed.
+								 */
+								contractRequests.put(contract.getSymbol(),
+										contract);
+							}
+						}
+					}
+					/*
+					 * Add the contract requests this allows us to only request
+					 * contract details once per contract in the range of
+					 * tradingdays to be processed.
+					 */
+					if (!contractRequests.containsKey(tradestrategy
+							.getContract().getSymbol()))
+						contractRequests.put(tradestrategy.getContract()
+								.getSymbol(), tradestrategy.getContract());
+
+				}
+				/*
+				 * Total for tradestrategies.
+				 */
+				total = total + tradingday.getTradestrategies().size();
+				/*
+				 * Get the total for lower barsize timeframes.
+				 */
+				if (backTestBarSize > 0 && this.brokerModel.isBrokerDataOnly()) {
+					if (TradingCalendar.isTradingDay(tradingday.getOpen())
+							&& TradingCalendar.sameDay(tradingday.getOpen(),
+									TradingCalendar.getDate(startTime))
+							&& TradingCalendar.isAfterHours(TradingCalendar
+									.getDate(startTime))) {
+						for (Tradestrategy tradestrategy : tradingday
+								.getTradestrategies()) {
+							if (backTestBarSize < tradestrategy.getBarSize())
+								total++;
+						}
+					}
+				}
+			}
+			return total;
 		}
 	}
 }

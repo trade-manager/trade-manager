@@ -558,8 +558,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				if (null != currTodayTradingday
 						&& !currTodayTradingday.getTradestrategies().isEmpty()
 						&& this.isConnected()) {
-					todayTradingday
-							.populateStrategyData(currTodayTradingday);
+					todayTradingday.populateStrategyData(currTodayTradingday);
 				}
 			}
 			m_tradingdays.getTradingdays().clear();
