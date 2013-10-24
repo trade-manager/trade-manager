@@ -2071,30 +2071,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 												itemTradingday.getOpen(),
 												TradingCalendar
 														.getDate(this.startTime))
-								&& TradingCalendar.isAfterHours(TradingCalendar
-										.getDate(this.startTime))) {
+								&& !TradingCalendar
+										.isAfterHours(TradingCalendar
+												.getDate(this.startTime)))
+							continue;
 
-							Tradingday tradingday = (Tradingday) itemTradingday
-									.clone();
-							for (Tradestrategy itemTradestrategy : itemTradingday
-									.getTradestrategies()) {
-								if (backTestBarSize < itemTradestrategy
-										.getBarSize()) {
-									Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
-											.clone();
-									tradestrategy.setBarSize(backTestBarSize);
-									tradestrategy.setChartDays(1);
-									tradestrategy
-											.setIdTradeStrategy(this.brokerModel
-													.getNextRequestId());
-									tradingday.addTradestrategy(tradestrategy);
-								}
+						Tradingday tradingday = (Tradingday) itemTradingday
+								.clone();
+						for (Tradestrategy itemTradestrategy : itemTradingday
+								.getTradestrategies()) {
+							if (backTestBarSize < itemTradestrategy
+									.getBarSize()) {
+								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
+										.clone();
+								tradestrategy.setBarSize(backTestBarSize);
+								tradestrategy.setChartDays(1);
+								tradestrategy
+										.setIdTradeStrategy(this.brokerModel
+												.getNextRequestId());
+								tradingday.addTradestrategy(tradestrategy);
 							}
-							totalSumbitted = processTradingday(
-									getTradingdayToProcess(tradingday,
-											runningContractRequests),
-									totalSumbitted);
 						}
+						totalSumbitted = processTradingday(
+								getTradingdayToProcess(tradingday,
+										runningContractRequests),
+								totalSumbitted);
+
 					}
 				}
 
@@ -2662,13 +2664,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					if (TradingCalendar.isTradingDay(tradingday.getOpen())
 							&& TradingCalendar.sameDay(tradingday.getOpen(),
 									TradingCalendar.getDate(startTime))
-							&& TradingCalendar.isAfterHours(TradingCalendar
-									.getDate(startTime))) {
-						for (Tradestrategy tradestrategy : tradingday
-								.getTradestrategies()) {
-							if (backTestBarSize < tradestrategy.getBarSize())
-								total++;
-						}
+							&& !TradingCalendar.isAfterHours(TradingCalendar
+									.getDate(startTime)))
+						continue;
+
+					for (Tradestrategy tradestrategy : tradingday
+							.getTradestrategies()) {
+						if (backTestBarSize < tradestrategy.getBarSize())
+							total++;
+
 					}
 				}
 			}
