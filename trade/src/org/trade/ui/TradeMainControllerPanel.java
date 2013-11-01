@@ -2042,9 +2042,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							getTradingdayToProcess(tradingday,
 									runningContractRequests), totalSumbitted);
 					/*
-					 * Every reSumbittedAt value submitted contracts try to run
-					 * any that could not be run due to a conflict. Run then in
-					 * asc date order value.
+					 * Every reSumbittedAt value try to run any that could not
+					 * be run due to a conflict. Run them in asc date order.
 					 */
 					if (totalSumbitted > reSumbittedAt) {
 						reSumbittedAt = totalSumbitted + reSumbittedAt;
