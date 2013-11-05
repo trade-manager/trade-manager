@@ -333,10 +333,28 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * 
 	 * @param contract
 	 *            Contract
+	 * @param mktData
+	 *            boolean
 	 * @throws BrokerModelException
 	 */
 	public void onReqRealTimeBars(Contract contract, boolean mktData)
 			throws BrokerModelException {
+	}
+
+	/**
+	 * Method onReqMarketData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param genericTicklist
+	 *            String
+	 * @param snapshot
+	 *            boolean
+	 * @throws BrokerModelException
+	 */
+	public void onReqMarketData(Contract contract, String genericTicklist,
+			boolean snapshot) throws BrokerModelException {
+
 	}
 
 	/**

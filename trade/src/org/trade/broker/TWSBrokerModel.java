@@ -452,13 +452,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									+ contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
-				if (this.isMarketDataRunning(contract)) {
-					throw new BrokerModelException(contract.getIdContract(),
-							3030,
-							"MarketData request is already in progress for: "
-									+ contract.getSymbol()
-									+ " Please wait or cancel.");
-				}
 				m_realTimeBarsRequests.put(contract.getIdContract(), contract);
 
 				/*
@@ -470,16 +463,51 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						backfillWhatToShow, (backfillUseRTH > 0));
 
 				if (mktData) {
-					m_marketDataRequests
-							.put(contract.getIdContract(), contract);
-					m_client.reqMktData(contract.getIdContract(),
-							TWSBrokerModel.getIBContract(contract),
-							genericTicklist, false);
+					onReqMarketData(contract, genericTicklist, false);
 				}
 
 			} else {
 				throw new BrokerModelException(contract.getIdContract(), 3040,
 						"Not conected to TWS historical data cannot be retrieved");
+			}
+		} catch (Exception ex) {
+			throw new BrokerModelException(contract.getIdContract(), 3050,
+					"Error broker data Symbol: " + contract.getSymbol()
+							+ " Msg: " + ex.getMessage());
+		}
+	}
+
+	/**
+	 * Method onReqMarketData.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param genericTicklist
+	 *            String
+	 * @param snapshot
+	 *            boolean
+	 * @throws BrokerModelException
+	 */
+	public void onReqMarketData(Contract contract, String genericTicklist,
+			boolean snapshot) throws BrokerModelException {
+		try {
+			if (m_client.isConnected()) {
+				if (this.isMarketDataRunning(contract)) {
+					throw new BrokerModelException(contract.getIdContract(),
+							3030,
+							"MarketData request is already in progress for: "
+									+ contract.getSymbol()
+									+ " Please wait or cancel.");
+				}
+
+				m_marketDataRequests.put(contract.getIdContract(), contract);
+				m_client.reqMktData(contract.getIdContract(),
+						TWSBrokerModel.getIBContract(contract),
+						genericTicklist, snapshot);
+
+			} else {
+				throw new BrokerModelException(contract.getIdContract(), 3040,
+						"Not conected to TWS market data cannot be retrieved");
 			}
 		} catch (Exception ex) {
 			throw new BrokerModelException(contract.getIdContract(), 3050,
