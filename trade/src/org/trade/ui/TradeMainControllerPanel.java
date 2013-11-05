@@ -1781,8 +1781,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			this.getFrame().setCursor(
 					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			this.setStatusBarMessage("Runing strategy please wait ...",
-					BasePanel.INFORMATION);
+			if (brokerDataOnly) {
+				this.setStatusBarMessage(
+						"Runing data retrieval please wait ...",
+						BasePanel.INFORMATION);
+			} else {
+				this.setStatusBarMessage("Runing strategy please wait ...",
+						BasePanel.INFORMATION);
+			}
+
 			if (m_brokerModel.isConnected()) {
 				getMenu().setEnabledBrokerData(false);
 				getMenu().setEnabledRunStrategy(false);
@@ -1811,7 +1818,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			brokerDataRequestProgressMonitor.execute();
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error running Trade Strategies.",
+			this.setErrorMessage("Error running Strategies or Chart Data.",
 					ex.getMessage(), ex);
 		} finally {
 			this.getFrame().setCursor(Cursor.getDefaultCursor());
