@@ -2525,6 +2525,84 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
+	 * Method accountSummary.
+	 * 
+	 * @param reqId
+	 *            int The ID of the data request.
+	 * @param account
+	 *            String The account ID.
+	 * @param tag
+	 *            String The tag from the data request. Available tags are:
+	 * 
+	 *            AccountType TotalCashValue - Total cash including futures pnl
+	 *            SettledCash - For cash accounts, this is the same as
+	 *            TotalCashValue AccruedCash - Net accrued interest BuyingPower
+	 *            - The maximum amount of marginable US stocks the account can
+	 *            buy EquityWithLoanValue - Cash + stocks + bonds + mutual funds
+	 *            PreviousEquityWithLoanValue GrossPositionValue - The sum of
+	 *            the absolute value of all stock and equity option positions
+	 *            RegTEquity RegTMargin SMA - Special Memorandum Account
+	 *            InitMarginReq MaintMarginReq AvailableFunds ExcessLiquidity
+	 *            Cushion - Excess liquidity as a percentage of net liquidation
+	 *            value FullInitMarginReq FullMaintMarginReq FullAvailableFunds
+	 *            FullExcessLiquidity LookAheadNextChange - Time when look-ahead
+	 *            values take effect LookAheadInitMarginReq
+	 *            LookAheadMaintMarginReq LookAheadAvailableFunds
+	 *            LookAheadExcessLiquidity HighestSeverity - A measure of how
+	 *            close the account is to liquidation DayTradesRemaining - The
+	 *            Number of Open/Close trades a user could put on before Pattern
+	 *            Day Trading is detected. A value of "-1" means that the user
+	 *            can put on unlimited day trades. Leverage - GrossPositionValue
+	 *            / NetLiquidation
+	 * @param value
+	 *            String The value of the tag. currency
+	 * @param String
+	 *            The currency of the tag.
+	 */
+	public void accountSummary(int arg0, String arg1, String arg2, String arg3,
+			String arg4) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Method accountSummaryEnd.
+	 * 
+	 * @param reqId
+	 *            integer
+	 */
+	public void accountSummaryEnd(int reqId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Method position.
+	 * 
+	 * @param account
+	 *            String The account.
+	 * @param contract
+	 *            Contract This structure contains a full description of the
+	 *            contract that was executed.
+	 * @param pos
+	 *            double The position.
+	 */
+	public void position(String arg0, com.ib.client.Contract arg1, int arg2,
+			double arg3) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Method positionEnd.
+	 * 
+	 */
+	public void positionEnd() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
 	 * Method getIBContract.
 	 * 
 	 * @param contract
@@ -2956,9 +3034,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 			if (CoreUtils.nullSafeComparator(
 					transientContract.getTradingClass(),
-					contractDetails.m_tradingClass) != 0) {
+					contractDetails.m_summary.m_tradingClass) != 0) {
 				transientContract
-						.setTradingClass(contractDetails.m_tradingClass);
+						.setTradingClass(contractDetails.m_summary.m_tradingClass);
 				changed = true;
 			}
 		}
