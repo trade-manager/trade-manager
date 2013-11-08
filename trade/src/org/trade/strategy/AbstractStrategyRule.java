@@ -1657,7 +1657,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	private Date getOrderCreateDate() {
-		Date createDate = new Date();
+		Date createDate = TradingCalendar.getDate(new Date());
 		if (!brokerModel.isRealtimeBarsRunning(this.tradestrategy)) {
 			if (null != this.getCurrentCandle())
 				createDate = this.getCurrentCandle().getPeriod().getStart();

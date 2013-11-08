@@ -86,16 +86,27 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	private Tradestrategy tradestrategy = null;
 	private Integer idTradestrategy = null;
 	private ClientWrapper brokerModel = null;
-	private static TimeZone localTimeZone = null;
-	private static final SimpleDateFormat m_sdf = new SimpleDateFormat(
-			"yyyyMMdd HH:mm:ss");
-	private static final SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
-			"yyyyMMdd HH:mm:ss z");
+
 	private AtomicInteger ruleComplete = new AtomicInteger(0);
 	private AtomicInteger strategiesRunning = new AtomicInteger(0);
 	private final Object lockBackTestWorker = new Object();
 	private long execId = new Date().getTime();
-	private Integer backTestBarSize = 0;
+
+	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
+			"yyyyMMdd HH:mm:ss");
+	private static Integer backTestBarSize = 0;
+
+	static {
+		try {
+			_sdfLocal.setTimeZone(TimeZone.getTimeZone((ConfigProperties
+					.getPropAsString("trade.tws.timezone"))));
+			backTestBarSize = ConfigProperties
+					.getPropAsInt("trade.backtest.barSize");
+		} catch (IOException ex) {
+			throw new IllegalArgumentException(
+					"Error initializing BackTestBroker Msg: " + ex.getMessage());
+		}
+	}
 
 	/**
 	 * Constructor for BackTestBroker.
@@ -112,17 +123,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		this.idTradestrategy = idTradestrategy;
 		this.brokerModel = brokerModel;
 		this.strategyData = strategyData;
-		try {
-			localTimeZone = TimeZone.getTimeZone((ConfigProperties
-					.getPropAsString("trade.tws.timezone")));
-			m_sdf.setTimeZone(localTimeZone);
-			m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
-			backTestBarSize = ConfigProperties
-					.getPropAsInt("trade.backtest.barSize");
-		} catch (IOException ex) {
-			throw new IllegalArgumentException(
-					"Error initializing BackTestBroker Msg: " + ex.getMessage());
-		}
 	}
 
 	/**

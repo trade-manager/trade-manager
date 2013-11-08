@@ -47,7 +47,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.TimeZone;
 
 import javax.swing.SwingWorker;
 
@@ -73,6 +72,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	private String barSizeSetting = null;
 	private String endDateTime = null;
 	private ClientWrapper brokerModel = null;
+	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
+			"yyyyMMdd HH:mm:ss");
 
 	/**
 	 * Constructor for YahooBroker.
@@ -97,7 +98,6 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 		this.durationStr = durationStr;
 		this.endDateTime = endDateTime;
 		this.brokerModel = brokerModel;
-
 	}
 
 	/**
@@ -112,10 +112,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 
 			this.brokerModel
 					.contractDetails(contract.getIdContract(), contract);
-			SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
-					"yyyyMMdd HH:mm:ss z");
-			m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
-			Date endDate = m_sdfGMT.parse(this.endDateTime);
+
+			Date endDate = _sdfLocal.parse(this.endDateTime);
 			ChartDays chartDays = ChartDays.newInstance();
 			chartDays.setDisplayName(this.durationStr);
 

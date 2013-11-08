@@ -40,6 +40,7 @@ import java.util.Vector;
 import javax.swing.event.TableModelEvent;
 
 import org.trade.core.util.CoreUtils;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Decimal;
 import org.trade.core.valuetype.Money;
@@ -409,8 +410,6 @@ public class TradeOrderTableModel extends TableModel {
 		Money price = new Money(tradestrategy.getStrategyData()
 				.getBaseCandleSeries().getContract().getLastPrice());
 
-		Date createDate = new Date(new java.util.Date());
-
 		final Entrylimit entrylimit = DAOEntryLimit.newInstance().getValue(
 				price);
 
@@ -439,7 +438,8 @@ public class TradeOrderTableModel extends TableModel {
 
 		final TradeOrder tradeOrder = new TradeOrder(tradestrategy, action,
 				orderType, quantity, price.getBigDecimalValue(),
-				limitPrice.getBigDecimalValue(), createDate.getDate());
+				limitPrice.getBigDecimalValue(),
+				TradingCalendar.getDate(new java.util.Date()));
 		tradeOrder.setOcaGroupName("");
 		tradeOrder.setTransmit(true);
 		tradeOrder.setStatus(OrderStatus.UNSUBMIT);

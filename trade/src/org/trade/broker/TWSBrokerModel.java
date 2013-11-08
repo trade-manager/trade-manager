@@ -98,6 +98,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private final static Logger _log = LoggerFactory
 			.getLogger(TWSBrokerModel.class);
 
+	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
+			"yyyyMMdd HH:mm:ss");
+	private static final SimpleDateFormat _sdfExpiry = new SimpleDateFormat(
+			"yyyyMMdd");
+
 	// Candle series this is listened to by the chart panel
 	// and main controller for updates.
 	private static final ConcurrentHashMap<Integer, Tradestrategy> m_historyDataRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
@@ -117,6 +122,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	private static final int SCALE = 5;
 
+	private static final String AVAILABLE_FUNDS = "AvailableFunds";
+	private static final String ACCOUNTTYPE = "AccountType";
+	private static final String BUYING_POWER = "BuyingPower";
+	private static final String CASH_BALANCE = "CashBalance";
+	private static final String CURRENCY = "Currency";
+	private static final String GROSS_POSITION_VALUE = "GrossPositionValue";
+	private static final String REALIZED_P_L = "RealizedPnL";
+	private static final String UNREALIZED_P_L = "UnrealizedPnL";
+	private static final String STOCK_MKT_VALUE = "StockMarketValue";
+
 	/*
 	 * TWS socket values see config.properties
 	 * 
@@ -130,33 +145,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * since 1/1/1970 GMT.
 	 */
 
-	private Integer backfillDateFormat = 2;
-	private Integer backfillUseRTH = 1;
-	private String backfillWhatToShow;
-	private Integer backfillOffsetDays = 0;
-	private String genericTicklist = "233";
+	private static Integer backfillDateFormat = 2;
+	private static Integer backfillUseRTH = 1;
+	private static String backfillWhatToShow;
+	private static Integer backfillOffsetDays = 0;
+	private static String genericTicklist = "233";
 
-	private static final String AVAILABLE_FUNDS = "AvailableFunds";
-	private static final String ACCOUNTTYPE = "AccountType";
-	private static final String BUYING_POWER = "BuyingPower";
-	private static final String CASH_BALANCE = "CashBalance";
-	private static final String CURRENCY = "Currency";
-	private static final String GROSS_POSITION_VALUE = "GrossPositionValue";
-	private static final String REALIZED_P_L = "RealizedPnL";
-	private static final String UNREALIZED_P_L = "UnrealizedPnL";
-	private static final String STOCK_MKT_VALUE = "StockMarketValue";
-
-	private static final SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
-			"yyyyMMdd HH:mm:ss z");
-	private static final SimpleDateFormat m_sdfExpiry = new SimpleDateFormat(
-			"yyyyMMdd");
-
-	public TWSBrokerModel() {
+	static {
 		try {
-			m_client = new EClientSocket(this);
-			m_tradePersistentModel = (PersistentModel) ClassFactory
-					.getServiceForInterface(PersistentModel._persistentModel,
-							this);
 			backfillUseRTH = ConfigProperties
 					.getPropAsInt("trade.backfill.useRTH");
 			backfillWhatToShow = ConfigProperties
@@ -165,8 +161,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					.getPropAsInt("trade.backfill.offsetDays");
 			genericTicklist = ConfigProperties
 					.getPropAsString("trade.marketdata.genericTicklist");
-			Date date = new Date();
-			reqId = new AtomicInteger((int) (date.getTime() / 1000d));
+
+		} catch (Exception ex) {
+			throw new IllegalArgumentException(
+					"Error initializing BrokerModel Msg: " + ex.getMessage());
+		}
+	}
+
+	public TWSBrokerModel() {
+		try {
+			m_client = new EClientSocket(this);
+			m_tradePersistentModel = (PersistentModel) ClassFactory
+					.getServiceForInterface(PersistentModel._persistentModel,
+							this);
+			reqId = new AtomicInteger(
+					(int) (System.currentTimeMillis() / 1000d));
 
 		} catch (Exception ex) {
 			throw new IllegalArgumentException(
@@ -595,14 +604,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
 								.addBusinessDays(endDate, backfillOffsetDays)));
-				/*
-				 * TODO For some reason TWS has stopped recognizing EDT.
-				 */
-				if (TradingCalendar.inDaylightTime(endDate)) {
-					endDate = TradingCalendar.addHours(endDate, 1);
-				}
-				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
-				String endDateTime = m_sdfGMT.format(endDate);
+
+				String endDateTime = _sdfLocal.format(endDate);
 
 				/*
 				 * TWS API data has a limit of one calendar year of data. So
@@ -2630,8 +2633,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		}
 		if (null != contract.getExpiry()) {
 			if (SECType.FUTURE.equals(contract.getSecType())) {
-				m_sdfExpiry.setTimeZone(TimeZone.getTimeZone("GMT"));
-				ibContract.m_expiry = m_sdfExpiry.format(contract.getExpiry())
+				_sdfExpiry.setTimeZone(TimeZone.getTimeZone("GMT"));
+				ibContract.m_expiry = _sdfExpiry.format(contract.getExpiry())
 						.substring(0, 6);
 			}
 		}
@@ -2717,12 +2720,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != order.getHidden()) {
 			ibOrder.m_hidden = order.getHidden();
 		}
-		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 		if (null != order.getGoodAfterTime()) {
-			ibOrder.m_goodAfterTime = m_sdfGMT.format(order.getGoodAfterTime());
+			ibOrder.m_goodAfterTime = _sdfLocal
+					.format(order.getGoodAfterTime());
 		}
 		if (null != order.getGoodTillTime()) {
-			ibOrder.m_goodTillDate = m_sdfGMT.format(order.getGoodTillTime());
+			ibOrder.m_goodTillDate = _sdfLocal.format(order.getGoodTillTime());
 		}
 		if (null != order.getOverrideConstraints()) {
 			ibOrder.m_overridePercentageConstraints = (order
@@ -2769,7 +2772,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			throws ParseException {
 
 		boolean changed = false;
-		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 		if (CoreUtils
 				.nullSafeComparator(order.getOrderKey(), ibOrder.m_orderId) == 0) {
@@ -2880,7 +2882,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				changed = true;
 			}
 			if (null != ibOrder.m_goodAfterTime) {
-				Date goodAfterTime = m_sdfGMT.parse(ibOrder.m_goodAfterTime);
+				Date goodAfterTime = _sdfLocal.parse(ibOrder.m_goodAfterTime);
 				if (CoreUtils.nullSafeComparator(order.getGoodAfterTime(),
 						goodAfterTime) != 0) {
 					order.setGoodAfterTime(goodAfterTime);
@@ -2889,7 +2891,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 
 			if (null != ibOrder.m_goodTillDate) {
-				Date goodTillDate = m_sdfGMT.parse(ibOrder.m_goodTillDate);
+				Date goodTillDate = _sdfLocal.parse(ibOrder.m_goodTillDate);
 				if (CoreUtils.nullSafeComparator(order.getGoodTillTime(),
 						goodTillDate) != 0) {
 					order.setGoodTillTime(goodTillDate);
@@ -2959,8 +2961,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				changed = true;
 			}
 			if (null != contractDetails.m_summary.m_expiry) {
-				m_sdfExpiry.setTimeZone(TimeZone.getTimeZone("GMT"));
-				Date expiryDate = m_sdfExpiry
+				Date expiryDate = _sdfExpiry
 						.parse(contractDetails.m_summary.m_expiry);
 				if (CoreUtils.nullSafeComparator(transientContract.getExpiry(),
 						expiryDate) != 0) {
@@ -3095,8 +3096,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != symbol) {
 			executionFilter.m_symbol = symbol;
 		}
-		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
-		executionFilter.m_time = m_sdfGMT.format(mktOpen);
+		executionFilter.m_time = _sdfLocal.format(mktOpen);
 		executionFilter.m_clientId = clientId;
 		return executionFilter;
 	}

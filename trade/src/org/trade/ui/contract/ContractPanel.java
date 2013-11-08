@@ -158,6 +158,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private static final SimpleAttributeSet colorRedAttr = new SimpleAttributeSet();
 	private static final SimpleAttributeSet colorGreenAttr = new SimpleAttributeSet();
 
+	static {
+		StyleConstants.setBold(bold, true);
+		StyleConstants.setBackground(colorRedAttr, Color.RED);
+		StyleConstants.setBackground(colorGreenAttr, Color.GREEN);
+	}
+
 	/**
 	 * Constructor for ContractPanel.
 	 * 
@@ -180,10 +186,6 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradingdays = tradingdays;
 
 			currencyFormater.setMinimumFractionDigits(2);
-			StyleConstants.setBold(bold, true);
-			StyleConstants.setBackground(colorRedAttr, Color.RED);
-			StyleConstants.setBackground(colorGreenAttr, Color.GREEN);
-
 			backfillOffsetDays = ConfigProperties
 					.getPropAsInt("trade.backfill.offsetDays");
 			propertiesButton = new BaseButton(this,

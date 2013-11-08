@@ -40,7 +40,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -80,6 +79,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	private final static Logger _log = LoggerFactory
 			.getLogger(BackTestBrokerModel.class);
 
+	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
+			"yyyyMMdd HH:mm:ss");
+
 	// Candle series this is listened to by the chart panel and main controller
 	// for updates.
 	private static final ConcurrentHashMap<Integer, Tradestrategy> m_historyDataRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
@@ -93,13 +95,23 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 	private AtomicInteger orderKey = null;
 
-	private Integer backfillDateFormat = 2;
-	private String backfillWhatToShow;
-	private Integer backfillOffsetDays = 0;
-	private Integer backfillUseRTH = 1;
+	private static Integer backfillDateFormat = 2;
+	private static String backfillWhatToShow;
+	private static Integer backfillOffsetDays = 0;
+	private static Integer backfillUseRTH = 1;
 
-	private static final SimpleDateFormat m_sdfGMT = new SimpleDateFormat(
-			"yyyyMMdd HH:mm:ss z");
+	static {
+		try {
+			backfillWhatToShow = ConfigProperties
+					.getPropAsString("trade.backfill.whatToShow");
+			backfillUseRTH = ConfigProperties
+					.getPropAsInt("trade.backfill.useRTH");
+
+		} catch (Exception ex) {
+			throw new IllegalArgumentException(
+					"Error initializing BrokerModel Msg: " + ex.getMessage());
+		}
+	}
 
 	public BackTestBrokerModel() {
 
@@ -108,10 +120,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			m_tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
-			backfillWhatToShow = ConfigProperties
-					.getPropAsString("trade.backfill.whatToShow");
-			backfillUseRTH = ConfigProperties
-					.getPropAsInt("trade.backfill.useRTH");
 			int maxKey = m_tradePersistentModel.findTradeOrderByMaxKey();
 			if (maxKey < 100000) {
 				maxKey = 100000;
@@ -395,8 +403,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
 								.addBusinessDays(endDate, backfillOffsetDays)));
-				m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
-				String endDateTime = m_sdfGMT.format(endDate);
+				String endDateTime = _sdfLocal.format(endDate);
 
 				_log.info("onBrokerData Symbol: "
 						+ tradestrategy.getContract().getSymbol()
@@ -1338,7 +1345,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			throws ParseException {
 
 		boolean changed = false;
-		m_sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 		if (CoreUtils.nullSafeComparator(order.getOrderKey(),
 				clientOrder.getOrderKey()) == 0) {

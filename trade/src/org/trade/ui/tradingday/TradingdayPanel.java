@@ -130,7 +130,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private Tradingdays m_tradingdays = null;
 	private static final ConcurrentHashMap<String, StrategyRule> m_strategyWorkers = new ConcurrentHashMap<String, StrategyRule>();
 	private DeleteProgressMonitor deleteProgressMonitor = null;
-	private String m_defaultDir = null;
+	private static String m_defaultDir = null;
 	private BaseButton ordersButton = null;
 	private BaseButton deleteTradeOrderButton = null;
 	private BaseButton runStrategyButton = null;
@@ -156,6 +156,12 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private static final SimpleAttributeSet colorGreenAttr = new SimpleAttributeSet();
 
 	private static final String DATEFORMAT = "MM/dd/yyyy";
+
+	static {
+		StyleConstants.setBold(bold, true);
+		StyleConstants.setBackground(colorRedAttr, Color.RED);
+		StyleConstants.setBackground(colorGreenAttr, Color.GREEN);
+	}
 
 	/**
 	 * Constructor
@@ -183,9 +189,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 					.getPropAsString("trade.csv.default.dir");
 			currencyFormater.setMinimumFractionDigits(2);
 			dateFormater.setLenient(false);
-			StyleConstants.setBold(bold, true);
-			StyleConstants.setBackground(colorRedAttr, Color.RED);
-			StyleConstants.setBackground(colorGreenAttr, Color.GREEN);
 
 			// This allows the controller to listen to these events
 			transferButton = new BaseButton(controller,
