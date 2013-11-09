@@ -438,8 +438,7 @@ public class TradeOrderTableModel extends TableModel {
 
 		final TradeOrder tradeOrder = new TradeOrder(tradestrategy, action,
 				orderType, quantity, price.getBigDecimalValue(),
-				limitPrice.getBigDecimalValue(),
-				TradingCalendar.getDate(new java.util.Date()));
+				limitPrice.getBigDecimalValue(), TradingCalendar.getDate());
 		tradeOrder.setOcaGroupName("");
 		tradeOrder.setTransmit(true);
 		tradeOrder.setStatus(OrderStatus.UNSUBMIT);

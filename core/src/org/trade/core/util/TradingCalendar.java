@@ -498,6 +498,16 @@ public class TradingCalendar {
 	/**
 	 * Return the Day for this date
 	 * 
+	 * @return Date
+	 * @exception * @see
+	 */
+	public static Date getDate() {
+		return getDate(new Date());
+	}
+
+	/**
+	 * Return the Day for this date
+	 * 
 	 * @param millis
 	 *            long
 	 * @return Date

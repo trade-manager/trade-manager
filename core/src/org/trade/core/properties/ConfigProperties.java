@@ -468,7 +468,8 @@ public class ConfigProperties {
 			/*
 			 * The name of the Decodes to be renumbered. Copy the output BELOW
 			 * into the properties file and remember to set the _NumOfItems to
-			 * the last value. EACH new item should be number one greater that the current total.
+			 * the last value. EACH new item should be number one greater that
+			 * the current total.
 			 */
 			final String codeName = "CODE_DECODE";
 

@@ -640,11 +640,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					.getSelectedComponent();
 			Integer newPeriod = new Integer(((BarSize) e.getItem()).getCode());
 
-			if (newPeriod.equals(BarSize.DAY)) {
-				newPeriod = currentTab.getTradestrategy().getBarSize();
-			}
-
 			if (null != currentTab && !this.isConnected()) {
+				if (newPeriod.equals(BarSize.DAY)) {
+					newPeriod = currentTab.getTradestrategy().getBarSize();
+				}
 				if (!newPeriod.equals(currentTab.getTradestrategy()
 						.getStrategyData().getCandleDataset().getSeries(0)
 						.getBarSize())) {
