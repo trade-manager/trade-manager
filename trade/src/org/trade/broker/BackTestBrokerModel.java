@@ -1048,7 +1048,16 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			}
 		}
 		if (m_historyDataRequests.containsKey(id)) {
-			symbol = m_historyDataRequests.get(id).getContract().getSymbol();
+			Tradestrategy tradestrategy = m_historyDataRequests.get(id);
+			symbol = tradestrategy.getContract().getSymbol();
+			if (code == 162) {
+				symbol = tradestrategy.getContract().getSymbol()
+						+ " pacing violation Tradingday: "
+						+ tradestrategy.getTradingday().getOpen()
+						+ " BarSize: " + tradestrategy.getBarSize()
+						+ " ChartDays: " + tradestrategy.getChartDays();
+			}
+
 			synchronized (m_historyDataRequests) {
 				m_historyDataRequests.remove(id);
 				m_historyDataRequests.notifyAll();
