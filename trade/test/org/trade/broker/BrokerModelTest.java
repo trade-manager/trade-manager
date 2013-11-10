@@ -539,12 +539,25 @@ public class BrokerModelTest extends TestCase {
 	}
 
 	@Test
-	public void testIsHistoricalDataRunning() {
+	public void testIsHistoricalDataRunningTradestrategy() {
 
 		try {
 			m_brokerModel.onCancelBrokerData(this.tradestrategy);
 			TestCase.assertFalse(m_brokerModel
 					.isHistoricalDataRunning(this.tradestrategy));
+		} catch (Exception ex) {
+			TestCase.fail("Error testIsHistoricalDataRunning Msg: "
+					+ ex.getMessage());
+		}
+	}
+
+	@Test
+	public void testIsHistoricalDataRunningContract() {
+
+		try {
+			m_brokerModel.onCancelBrokerData(this.tradestrategy);
+			TestCase.assertFalse(m_brokerModel
+					.isHistoricalDataRunning(this.tradestrategy.getContract()));
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsHistoricalDataRunning Msg: "
 					+ ex.getMessage());

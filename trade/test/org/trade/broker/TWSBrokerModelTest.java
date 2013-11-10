@@ -436,7 +436,8 @@ public class TWSBrokerModelTest extends TestCase implements
 			int totalSumbitted) throws InterruptedException,
 			BrokerModelException {
 
-		if (this.brokerManagerModel.isHistoricalDataRunning(tradestrategy)) {
+		if (this.brokerManagerModel.isHistoricalDataRunning(tradestrategy
+				.getContract())) {
 			_log.error("submitBrokerRequest contract already running: "
 					+ tradestrategy.getContract().getSymbol() + " endDate: "
 					+ endDate + " barSize: " + tradestrategy.getBarSize());
@@ -701,7 +702,8 @@ public class TWSBrokerModelTest extends TestCase implements
 		for (Tradestrategy tradestrategy : _indicatorTradestrategy.values()) {
 			if (!this.brokerManagerModel.isRealtimeBarsRunning(tradestrategy)
 					&& !this.brokerManagerModel
-							.isHistoricalDataRunning(tradestrategy)) {
+							.isHistoricalDataRunning(tradestrategy
+									.getContract())) {
 				_indicatorTradestrategy.remove(tradestrategy
 						.getIdTradeStrategy());
 			}
