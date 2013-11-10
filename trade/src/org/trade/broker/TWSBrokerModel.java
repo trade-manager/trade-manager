@@ -598,8 +598,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 */
 				if (!tradestrategy.getStrategyData().isRunning())
 					tradestrategy.getStrategyData().execute();
-				m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
-						tradestrategy);
+				synchronized (m_historyDataRequests) {
+					m_historyDataRequests.put(
+							tradestrategy.getIdTradeStrategy(), tradestrategy);
+				}
 
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar
@@ -1381,7 +1383,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		}
 		if (m_historyDataRequests.containsKey(id)) {
-			symbol = m_historyDataRequests.get(id).getContract().getSymbol();
+			Tradestrategy tradestrategy = m_historyDataRequests.get(id);
+			symbol = tradestrategy.getContract().getSymbol();
+			if (code == 162) {
+				symbol = tradestrategy.getContract().getSymbol()
+						+ " pacing violation Tradingday: "
+						+ tradestrategy.getTradingday().getOpen()
+						+ " BarSize: " + tradestrategy.getBarSize()
+						+ " ChartDays: " + tradestrategy.getChartDays();
+			}
+
 			synchronized (m_historyDataRequests) {
 				m_historyDataRequests.remove(id);
 				m_historyDataRequests.notifyAll();
