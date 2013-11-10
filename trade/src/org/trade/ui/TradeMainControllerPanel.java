@@ -2167,8 +2167,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Date endDate, int totalSumbitted) throws InterruptedException,
 				BrokerModelException {
 
-			if (this.brokerModel.isHistoricalDataRunning(tradestrategy)
-					|| this.isCancelled()) {
+			if (this.brokerModel.isHistoricalDataRunning(tradestrategy
+					.getContract()) || this.isCancelled()) {
 				_log.error("submitBrokerRequest contract already running: "
 						+ tradestrategy.getContract().getSymbol()
 						+ " endDate: " + endDate + " barSize: "
@@ -2458,7 +2458,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			for (Tradestrategy tradestrategy : _indicatorRequests.values()) {
 				if (!this.brokerModel.isRealtimeBarsRunning(tradestrategy)
 						&& !this.brokerModel
-								.isHistoricalDataRunning(tradestrategy)
+								.isHistoricalDataRunning(tradestrategy
+										.getContract())
 						&& !tradestrategy.getTradingday().equals(tradingday)) {
 					_indicatorRequests.remove(tradestrategy
 							.getIdTradeStrategy());
