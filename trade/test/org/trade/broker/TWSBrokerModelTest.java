@@ -255,6 +255,22 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	@Test
+	public void testHasSubmittedInSeconds() {
+
+		try {
+			int i = 0;
+			while (i < 20) {
+				hasSubmittedInSeconds(i);
+				i++;
+			}
+
+		} catch (Exception ex) {
+			TestCase.fail("Error testHasSubmittedInSeconds Msg: "
+					+ ex.getMessage());
+		}
+	}
+
+	@Test
 	public void testOneSymbolTwoMths2013OnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
@@ -538,7 +554,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 				timer.stop();
 			}
-			this.last6SubmittedTime = currentTime;
+			this.last6SubmittedTime = System.currentTimeMillis();
 		}
 	}
 

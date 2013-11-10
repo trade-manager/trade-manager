@@ -598,10 +598,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 */
 				if (!tradestrategy.getStrategyData().isRunning())
 					tradestrategy.getStrategyData().execute();
-				synchronized (m_historyDataRequests) {
-					m_historyDataRequests.put(
-							tradestrategy.getIdTradeStrategy(), tradestrategy);
-				}
+
+				m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
+						tradestrategy);
 
 				endDate = TradingCalendar.getSpecificTime(endDate,
 						TradingCalendar.getMostRecentTradingDay(TradingCalendar

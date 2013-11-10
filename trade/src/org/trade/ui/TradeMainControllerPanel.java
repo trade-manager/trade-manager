@@ -2287,7 +2287,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 					timer.stop();
 				}
-				this.last6SubmittedTime = currentTime;
+				this.last6SubmittedTime = System.currentTimeMillis();
 			}
 		}
 

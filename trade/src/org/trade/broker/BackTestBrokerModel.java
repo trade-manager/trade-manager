@@ -393,10 +393,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								+ tradestrategy.getContract().getSymbol()
 								+ " Please wait or cancel.");
 			}
-			synchronized (m_historyDataRequests) {
-				m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
-						tradestrategy);
-			}
+
+			m_historyDataRequests.put(tradestrategy.getIdTradeStrategy(),
+					tradestrategy);
 
 			if (this.isBrokerDataOnly()) {
 
