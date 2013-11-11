@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
@@ -1986,11 +1987,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private Tradingdays tradingdays = null;
 		private int grandTotal = 0;
 		private long startTime = 0;
-		private long last6SubmittedTime = 0;
 		private Integer backTestBarSize = 0;
 		private AtomicInteger timerRunning = null;
 		private final Object lockCoreUtilsTest = new Object();
 		private Timer timer = null;
+		private LinkedList<Long> submitTimes = new LinkedList<Long>();
 		private final ConcurrentHashMap<String, Contract> contractRequests = new ConcurrentHashMap<String, Contract>();
 
 		/**
@@ -2032,7 +2033,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			int reSumbittedAt = 20;
 			ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 			this.startTime = System.currentTimeMillis();
-			this.last6SubmittedTime = this.startTime;
+			this.submitTimes.clear();
 			// Initialize the progress bar
 			getProgressBar().setMaximum(100);
 			setProgress(0);
@@ -2194,11 +2195,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 
 			this.brokerModel.onBrokerData(tradestrategy, endDate);
+
+			this.submitTimes.addFirst(new Long(System.currentTimeMillis()));
+
 			int percent = (int) (((double) (totalSumbitted - this.brokerModel
 					.getHistoricalData().size()) / getGrandTotal()) * 100d);
 			setProgress(percent);
 
-			_log.info("Total: " + getGrandTotal() + " totalSumbitted: "
+			_log.warn("Total: " + getGrandTotal() + " totalSumbitted: "
 					+ totalSumbitted);
 
 			/*
@@ -2224,6 +2228,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 				timer.stop();
+				_log.warn("Finished wait 10min wait");
 			}
 
 			/*
@@ -2267,13 +2272,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private void hasSubmittedInSeconds(int totalSumbitted)
 				throws InterruptedException {
 
-			if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
-					&& this.brokerModel.isConnected()) {
-				long currentTime = System.currentTimeMillis();
-				int waitTime = 5;
-				_log.info("hasSubmittedInSeconds 6 in: "
-						+ ((currentTime - this.last6SubmittedTime) / 1000d));
-				if ((currentTime - this.last6SubmittedTime) < (waitTime * 1000)) {
+			if (this.submitTimes.size() == 6 && this.brokerModel.isConnected()) {
+
+				int waitTime = 3;
+
+				if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (waitTime * 1000)) {
+					_log.warn("hasSubmittedInSeconds 6 in: "
+							+ ((this.submitTimes.getFirst() - this.submitTimes
+									.getLast()) / 1000d));
 					timerRunning = new AtomicInteger(0);
 					timer.start();
 					synchronized (lockCoreUtilsTest) {
@@ -2287,7 +2293,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 					timer.stop();
 				}
-				this.last6SubmittedTime = System.currentTimeMillis();
+				this.submitTimes.removeLast();
 			}
 		}
 
