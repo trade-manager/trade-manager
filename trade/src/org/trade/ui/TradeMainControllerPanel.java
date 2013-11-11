@@ -2196,8 +2196,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.brokerModel.onBrokerData(tradestrategy, endDate);
 
 			totalSumbitted++;
-			_log.warn("Total: " + getGrandTotal() + " totalSumbitted: "
-					+ totalSumbitted);
 			hasSubmittedInSeconds();
 
 			int percent = (int) (((double) (totalSumbitted - this.brokerModel
@@ -2273,7 +2271,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (this.submitTimes.size() == 5 && this.brokerModel.isConnected()) {
 
 				if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (TIME_BETWEEN_SUBMIT * 1000)) {
-					_log.warn("hasSubmittedInSeconds 5 in: "
+					_log.info("hasSubmittedInSeconds 5 in: "
 							+ ((this.submitTimes.getFirst() - this.submitTimes
 									.getLast()) / 1000d));
 					timerRunning = new AtomicInteger(0);
