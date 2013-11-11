@@ -98,10 +98,13 @@ public class TWSBrokerModelTest extends TestCase implements
 	private long startTime = 0;
 	private Timer timer = null;
 	private boolean connectionFailed = false;
+	
+	private final Integer TIME_BETWEEN_SUBMIT = new Integer(4);
 	private AtomicInteger timerRunning = null;
 	private final Object lockCoreUtilsTest = new Object();
 	private final static String _broker = BrokerModel._broker;
 	private LinkedList<Long> submitTimes = new LinkedList<Long>();
+	
 	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
 
 	public TWSBrokerModelTest() {
@@ -538,18 +541,16 @@ public class TWSBrokerModelTest extends TestCase implements
 		if (this.submitTimes.size() == 5
 				&& this.brokerManagerModel.isConnected()) {
 
-			int waitTime = 3;
-
-			if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (waitTime * 1000)) {
+			if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (TIME_BETWEEN_SUBMIT * 1000)) {
 				_log.warn("hasSubmittedInSeconds 5 in: "
 						+ ((this.submitTimes.getFirst() - this.submitTimes
 								.getLast()) / 1000d));
 				timerRunning = new AtomicInteger(0);
 				timer.start();
 				synchronized (lockCoreUtilsTest) {
-					while (timerRunning.get() < (waitTime * 1000)) {
+					while (timerRunning.get() < (TIME_BETWEEN_SUBMIT * 1000)) {
 						_log.info("Please wait "
-								+ (waitTime - (timerRunning.get() / 1000))
+								+ (TIME_BETWEEN_SUBMIT - (timerRunning.get() / 1000))
 								+ " seconds.");
 						lockCoreUtilsTest.wait();
 					}

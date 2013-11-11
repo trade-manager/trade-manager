@@ -1988,6 +1988,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		private int grandTotal = 0;
 		private long startTime = 0;
 		private Integer backTestBarSize = 0;
+		private final Integer TIME_BETWEEN_SUBMIT = new Integer(4);
 		private AtomicInteger timerRunning = null;
 		private final Object lockCoreUtilsTest = new Object();
 		private Timer timer = null;
@@ -2273,19 +2274,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			if (this.submitTimes.size() == 5 && this.brokerModel.isConnected()) {
 
-				int waitTime = 3;
-
-				if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (waitTime * 1000)) {
+				if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (TIME_BETWEEN_SUBMIT * 1000)) {
 					_log.warn("hasSubmittedInSeconds 5 in: "
 							+ ((this.submitTimes.getFirst() - this.submitTimes
 									.getLast()) / 1000d));
 					timerRunning = new AtomicInteger(0);
 					timer.start();
 					synchronized (lockCoreUtilsTest) {
-						while (timerRunning.get() < (waitTime * 1000)
+						while (timerRunning.get() < (TIME_BETWEEN_SUBMIT * 1000)
 								&& !this.isCancelled()) {
 							_log.info("Please wait "
-									+ (waitTime - (timerRunning.get() / 1000))
+									+ (TIME_BETWEEN_SUBMIT - (timerRunning.get() / 1000))
 									+ " seconds.");
 							lockCoreUtilsTest.wait();
 						}
