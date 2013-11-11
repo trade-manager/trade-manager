@@ -2204,8 +2204,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getHistoricalData().size()) / getGrandTotal()) * 100d);
 			setProgress(percent);
 
-
-
 			/*
 			 * Need to slow things down as limit is 60 including real time bars
 			 * requests. When connected to TWS. Note only TWSManager return true
@@ -2281,11 +2279,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					timerRunning = new AtomicInteger(0);
 					timer.start();
 					synchronized (lockCoreUtilsTest) {
-						while (timerRunning.get() < (TIME_BETWEEN_SUBMIT * 1000)
+						while (((this.submitTimes.getFirst() - this.submitTimes
+								.getLast()) + timerRunning.get()) < (TIME_BETWEEN_SUBMIT * 1000)
 								&& !this.isCancelled()) {
 							_log.info("Please wait "
-									+ (TIME_BETWEEN_SUBMIT - (timerRunning.get() / 1000))
-									+ " seconds.");
+									+ (TIME_BETWEEN_SUBMIT - (timerRunning
+											.get() / 1000)) + " seconds.");
 							lockCoreUtilsTest.wait();
 						}
 					}
