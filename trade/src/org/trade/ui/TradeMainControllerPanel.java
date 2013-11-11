@@ -2182,8 +2182,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					+ endDate + " barSize: " + tradestrategy.getBarSize()
 					+ " chartDays:" + tradestrategy.getChartDays());
 
-			totalSumbitted++;
-			hasSubmittedInSeconds(totalSumbitted);
 			/*
 			 * Get the contract details.
 			 */
@@ -2196,14 +2194,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			this.brokerModel.onBrokerData(tradestrategy, endDate);
 
-			this.submitTimes.addFirst(new Long(System.currentTimeMillis()));
+			totalSumbitted++;
+			_log.warn("Total: " + getGrandTotal() + " totalSumbitted: "
+					+ totalSumbitted);
+			hasSubmittedInSeconds();
 
 			int percent = (int) (((double) (totalSumbitted - this.brokerModel
 					.getHistoricalData().size()) / getGrandTotal()) * 100d);
 			setProgress(percent);
 
-			_log.warn("Total: " + getGrandTotal() + " totalSumbitted: "
-					+ totalSumbitted);
+
 
 			/*
 			 * Need to slow things down as limit is 60 including real time bars
@@ -2265,19 +2265,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 * Do not make more than 60 historical data requests in any ten-minute
 		 * period.
 		 * 
-		 * @param totalSumbitted
-		 *            int
 		 * @throws InterruptedException
 		 */
-		private void hasSubmittedInSeconds(int totalSumbitted)
-				throws InterruptedException {
+		private void hasSubmittedInSeconds() throws InterruptedException {
 
-			if (this.submitTimes.size() == 6 && this.brokerModel.isConnected()) {
+			this.submitTimes.addFirst(new Long(System.currentTimeMillis()));
+
+			if (this.submitTimes.size() == 5 && this.brokerModel.isConnected()) {
 
 				int waitTime = 3;
 
 				if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (waitTime * 1000)) {
-					_log.warn("hasSubmittedInSeconds 6 in: "
+					_log.warn("hasSubmittedInSeconds 5 in: "
 							+ ((this.submitTimes.getFirst() - this.submitTimes
 									.getLast()) / 1000d));
 					timerRunning = new AtomicInteger(0);

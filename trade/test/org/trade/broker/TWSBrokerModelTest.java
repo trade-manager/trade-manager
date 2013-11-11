@@ -40,6 +40,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -93,7 +94,6 @@ public class TWSBrokerModelTest extends TestCase implements
 	private String host = null;
 	private int grandTotal = 0;
 	private int testCaseGrandTotal = 0;
-	private long last6SubmittedTime = 0;
 	private Integer backTestBarSize = 0;
 	private long startTime = 0;
 	private Timer timer = null;
@@ -101,6 +101,7 @@ public class TWSBrokerModelTest extends TestCase implements
 	private AtomicInteger timerRunning = null;
 	private final Object lockCoreUtilsTest = new Object();
 	private final static String _broker = BrokerModel._broker;
+	private LinkedList<Long> submitTimes = new LinkedList<Long>();
 	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
 
 	public TWSBrokerModelTest() {
@@ -260,7 +261,7 @@ public class TWSBrokerModelTest extends TestCase implements
 		try {
 			int i = 0;
 			while (i < 20) {
-				hasSubmittedInSeconds(i);
+				hasSubmittedInSeconds();
 				i++;
 			}
 
@@ -319,6 +320,7 @@ public class TWSBrokerModelTest extends TestCase implements
 		int reSumbittedAt = 20;
 		ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 		this.grandTotal = 0;
+		this.submitTimes.clear();
 
 		try {
 
@@ -327,7 +329,6 @@ public class TWSBrokerModelTest extends TestCase implements
 						+ tradingday.getTradestrategies().size();
 			}
 			this.startTime = System.currentTimeMillis();
-			this.last6SubmittedTime = startTime;
 			// Initialize the progress bar
 			// getProgressBar().setMaximum(100);
 			// setProgress(0);
@@ -463,10 +464,10 @@ public class TWSBrokerModelTest extends TestCase implements
 				+ tradestrategy.getContract().getSymbol() + " endDate: "
 				+ endDate);
 
-		totalSumbitted++;
-		hasSubmittedInSeconds(totalSumbitted);
 		this.brokerManagerModel.onBrokerData(tradestrategy, endDate);
 
+		totalSumbitted++;
+		hasSubmittedInSeconds();
 		_log.info("Total: " + getGrandTotal() + " totalSumbitted: "
 				+ totalSumbitted);
 		/*
@@ -528,25 +529,26 @@ public class TWSBrokerModelTest extends TestCase implements
 	 * Do not make more than 60 historical data requests in any ten-minute
 	 * period.
 	 * 
-	 * @param totalSumbitted
-	 *            int
 	 * @throws InterruptedException
 	 */
-	private void hasSubmittedInSeconds(int totalSumbitted)
-			throws InterruptedException {
+	private void hasSubmittedInSeconds() throws InterruptedException {
 
-		if (((Math.floor(totalSumbitted / 6d) == (totalSumbitted / 6d)) && (totalSumbitted > 0))
+		this.submitTimes.addFirst(new Long(System.currentTimeMillis()));
+
+		if (this.submitTimes.size() == 5
 				&& this.brokerManagerModel.isConnected()) {
-			long currentTime = System.currentTimeMillis();
-			int waitTime = 5;
-			_log.info("hasSubmittedInSeconds 6 in: "
-					+ ((currentTime - this.last6SubmittedTime) / 1000d));
-			if ((currentTime - this.last6SubmittedTime) < (waitTime * 1000)) {
+
+			int waitTime = 3;
+
+			if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (waitTime * 1000)) {
+				_log.warn("hasSubmittedInSeconds 5 in: "
+						+ ((this.submitTimes.getFirst() - this.submitTimes
+								.getLast()) / 1000d));
 				timerRunning = new AtomicInteger(0);
 				timer.start();
 				synchronized (lockCoreUtilsTest) {
 					while (timerRunning.get() < (waitTime * 1000)) {
-						_log.warn("Please wait "
+						_log.info("Please wait "
 								+ (waitTime - (timerRunning.get() / 1000))
 								+ " seconds.");
 						lockCoreUtilsTest.wait();
@@ -554,7 +556,7 @@ public class TWSBrokerModelTest extends TestCase implements
 				}
 				timer.stop();
 			}
-			this.last6SubmittedTime = System.currentTimeMillis();
+			this.submitTimes.removeLast();
 		}
 	}
 
