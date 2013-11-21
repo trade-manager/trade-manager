@@ -264,6 +264,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			if (candles.isEmpty()) {
 				_log.warn("No data available to run a backtest for "
 						+ this.tradestrategy.getContract().getSymbol());
+				/*
+				 * Poke the strategy this will kill it as there is no data.
+				 */
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
+						.fireSeriesChanged();
 			}
 
 			for (Candle candle : candles) {

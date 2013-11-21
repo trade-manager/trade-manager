@@ -355,8 +355,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 					} else if (currentCandleCount == (candleSeries
 							.getItemCount() - 1)) {
 						/*
-						 * We have an updated candle
+						 * We have an updated candle. If we are listening for
+						 * candles and none are arriving then close the
+						 * strategy.
 						 */
+						if (currentCandleCount == -1 && listeningCandles) {
+							this.cancel();
+						}
 					}
 
 					if (currentCandleCount > -1) {
