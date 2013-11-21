@@ -145,6 +145,10 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 
 				CandleItem openCandle = this.getCandle(this.getTradestrategy()
 						.getTradingday().getOpen());
+
+				if (null == getTradestrategy().getSide()) {
+					error(1, 101, "Error  tradestrategy side has not been set.");
+				}
 				if (!this.isThereOpenPosition()) {
 					if (Side.BOT.equals(getTradestrategy().getSide())) {
 						if (openCandle.getLow() > prevCandleItem.getLow()) {

@@ -170,7 +170,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					Money price = new Money(prevCandleItem.getHigh());
 					Money priceStop = new Money(prevCandleItem.getLow());
 					String action = Action.BUY;
-					if (this.side.equalsCode(Side.SLD)) {
+					if (Side.SLD.equals(this.side.getCode())) {
 						price = new Money(prevCandleItem.getLow());
 						priceStop = new Money(prevCandleItem.getHigh());
 						action = Action.SELL;
