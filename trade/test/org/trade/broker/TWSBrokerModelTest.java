@@ -98,13 +98,13 @@ public class TWSBrokerModelTest extends TestCase implements
 	private long startTime = 0;
 	private Timer timer = null;
 	private boolean connectionFailed = false;
-	
+
 	private final Integer TIME_BETWEEN_SUBMIT = new Integer(4);
 	private AtomicInteger timerRunning = null;
 	private final Object lockCoreUtilsTest = new Object();
 	private final static String _broker = BrokerModel._broker;
 	private LinkedList<Long> submitTimes = new LinkedList<Long>();
-	
+
 	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
 
 	public TWSBrokerModelTest() {

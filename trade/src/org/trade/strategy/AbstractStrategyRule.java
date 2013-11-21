@@ -361,6 +361,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 						 */
 						if (currentCandleCount == -1 && listeningCandles) {
 							this.cancel();
+							break;
 						}
 					}
 

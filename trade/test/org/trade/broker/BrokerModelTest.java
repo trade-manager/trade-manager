@@ -555,7 +555,7 @@ public class BrokerModelTest extends TestCase {
 	public void testIsHistoricalDataRunningContract() {
 
 		try {
-			m_brokerModel.onCancelBrokerData(this.tradestrategy);
+			m_brokerModel.onCancelBrokerData(this.tradestrategy.getContract());
 			TestCase.assertFalse(m_brokerModel
 					.isHistoricalDataRunning(this.tradestrategy.getContract()));
 		} catch (Exception ex) {
