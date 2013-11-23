@@ -231,6 +231,8 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 					_log.warn("No backTestBarSize = " + _backTestBarSize
 							+ " data available for "
 							+ this.tradestrategy.getContract().getSymbol()
+							+ " and Tradingday: "
+							+ this.tradestrategy.getTradingday().getOpen()
 							+ " will use barSize = "
 							+ this.tradestrategy.getBarSize()
 							+ "data if avaialble.");
@@ -730,7 +732,10 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 								childTradestrategy.getBarSize());
 				if (indicatorCandles.isEmpty()) {
 					_log.warn("No data available for "
-							+ childTradestrategy.getContract().getSymbol());
+							+ childTradestrategy.getContract().getSymbol()
+							+ " and Tradingday: " + startDate + " to "
+							+ endDate + " and barSize: "
+							+ childTradestrategy.getBarSize());
 				} else {
 					CandleDataset.populateSeries(
 							childTradestrategy.getStrategyData(),
