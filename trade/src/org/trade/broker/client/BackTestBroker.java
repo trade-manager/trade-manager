@@ -211,20 +211,21 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			startDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getOpen(), startDate);
 
+			List<Candle> candlesTradingday = new ArrayList<Candle>();
+			endDate = TradingCalendar.addBusinessDays(endDate, -1);
+			candles = this.getCandles(this.tradestrategy, startDate, endDate,
+					this.tradestrategy.getBarSize());
+
 			if (_backTestBarSize > 0) {
 
 				/*
 				 * Try and find the candles in the database with the matching
 				 * barSize or the next lowest.
 				 */
-				endDate = TradingCalendar.addBusinessDays(endDate, -1);
-				candles = this.getCandles(this.tradestrategy, startDate,
-						endDate, this.tradestrategy.getBarSize());
-
-				List<Candle> candlesTradingday = this.getCandles(
-						this.tradestrategy, this.tradestrategy.getTradingday()
-								.getOpen(), this.tradestrategy.getTradingday()
-								.getOpen(), _backTestBarSize);
+				candlesTradingday = this.getCandles(this.tradestrategy,
+						this.tradestrategy.getTradingday().getOpen(),
+						this.tradestrategy.getTradingday().getOpen(),
+						_backTestBarSize);
 
 				if (candlesTradingday.isEmpty()) {
 					_log.warn("No backTestBarSize = " + _backTestBarSize
@@ -239,25 +240,26 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 							this.tradestrategy.getBarSize());
 				}
 
-				if (candlesTradingday.isEmpty()) {
-					_log.warn("No data available to run a backtest for Symbol: "
-							+ this.tradestrategy.getContract().getSymbol()
-							+ " and Tradingday: "
-							+ this.tradestrategy.getTradingday().getOpen());
-					/*
-					 * Poke the strategy this will kill it as there is no data.
-					 */
-					this.tradestrategy.getStrategyData().getBaseCandleSeries()
-							.fireSeriesChanged();
-				}
-
+			} else {
+				candlesTradingday = this.getCandles(this.tradestrategy,
+						this.tradestrategy.getTradingday().getOpen(),
+						this.tradestrategy.getTradingday().getOpen(),
+						this.tradestrategy.getBarSize());
+			}
+			if (candlesTradingday.isEmpty()) {
+				_log.warn("No data available to run a backtest for Symbol: "
+						+ this.tradestrategy.getContract().getSymbol()
+						+ " and Tradingday: "
+						+ this.tradestrategy.getTradingday().getOpen());
+				/*
+				 * Poke the strategy this will kill it as there is no data.
+				 */
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
+						.fireSeriesChanged();
+			} else {
 				for (Candle candle : candlesTradingday) {
 					candles.add(candle);
 				}
-
-			} else {
-				candles = this.getCandles(this.tradestrategy, startDate,
-						endDate, this.tradestrategy.getBarSize());
 			}
 
 			/*
