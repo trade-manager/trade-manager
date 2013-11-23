@@ -94,13 +94,13 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
 			"yyyyMMdd HH:mm:ss");
-	private static Integer backTestBarSize = 0;
+	private static Integer _backTestBarSize = 0;
 
 	static {
 		try {
 			_sdfLocal.setTimeZone(TimeZone.getTimeZone((ConfigProperties
 					.getPropAsString("trade.tws.timezone"))));
-			backTestBarSize = ConfigProperties
+			_backTestBarSize = ConfigProperties
 					.getPropAsInt("trade.backtest.barSize");
 		} catch (IOException ex) {
 			throw new IllegalArgumentException(
@@ -211,7 +211,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			startDate = TradingCalendar.getSpecificTime(tradestrategy
 					.getTradingday().getOpen(), startDate);
 
-			if (backTestBarSize > 0) {
+			if (_backTestBarSize > 0) {
 
 				/*
 				 * Try and find the candles in the database with the matching
@@ -224,16 +224,33 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				List<Candle> candlesTradingday = this.getCandles(
 						this.tradestrategy, this.tradestrategy.getTradingday()
 								.getOpen(), this.tradestrategy.getTradingday()
-								.getOpen(), backTestBarSize);
+								.getOpen(), _backTestBarSize);
 
 				if (candlesTradingday.isEmpty()) {
-					_log.warn("No backTestBarSize data available for "
-							+ this.tradestrategy.getContract().getSymbol());
+					_log.warn("No backTestBarSize = " + _backTestBarSize
+							+ " data available for "
+							+ this.tradestrategy.getContract().getSymbol()
+							+ " will use barSize = "
+							+ this.tradestrategy.getBarSize()
+							+ "data if avaialble.");
 					candlesTradingday = this.getCandles(this.tradestrategy,
 							this.tradestrategy.getTradingday().getOpen(),
 							this.tradestrategy.getTradingday().getOpen(),
 							this.tradestrategy.getBarSize());
 				}
+
+				if (candlesTradingday.isEmpty()) {
+					_log.warn("No data available to run a backtest for Symbol: "
+							+ this.tradestrategy.getContract().getSymbol()
+							+ " and Tradingday: "
+							+ this.tradestrategy.getTradingday().getOpen());
+					/*
+					 * Poke the strategy this will kill it as there is no data.
+					 */
+					this.tradestrategy.getStrategyData().getBaseCandleSeries()
+							.fireSeriesChanged();
+				}
+
 				for (Candle candle : candlesTradingday) {
 					candles.add(candle);
 				}
@@ -259,16 +276,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				while (strategiesRunning.get() < 1) {
 					lockBackTestWorker.wait();
 				}
-			}
-
-			if (candles.isEmpty()) {
-				_log.warn("No data available to run a backtest for "
-						+ this.tradestrategy.getContract().getSymbol());
-				/*
-				 * Poke the strategy this will kill it as there is no data.
-				 */
-				this.tradestrategy.getStrategyData().getBaseCandleSeries()
-						.fireSeriesChanged();
 			}
 
 			for (Candle candle : candles) {
