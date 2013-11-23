@@ -262,25 +262,25 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				for (Candle candle : candlesTradingday) {
 					candles.add(candle);
 				}
-			}
 
-			/*
-			 * Populate any child datasets.
-			 */
-			populateIndicatorCandleSeries(tradestrategy, this.tradestrategy
-					.getTradingday().getOpen(), this.tradestrategy
-					.getTradingday().getOpen());
+				/*
+				 * Populate any child datasets.
+				 */
+				populateIndicatorCandleSeries(tradestrategy, this.tradestrategy
+						.getTradingday().getOpen(), this.tradestrategy
+						.getTradingday().getOpen());
 
-			PositionOrders positionOrders = null;
-
-			/*
-			 * Wait for the strategy to start.
-			 */
-			synchronized (lockBackTestWorker) {
-				while (strategiesRunning.get() < 1) {
-					lockBackTestWorker.wait();
+				/*
+				 * Wait for the strategy to start.
+				 */
+				synchronized (lockBackTestWorker) {
+					while (strategiesRunning.get() < 1) {
+						lockBackTestWorker.wait();
+					}
 				}
 			}
+
+			PositionOrders positionOrders = null;
 
 			for (Candle candle : candles) {
 				/*
