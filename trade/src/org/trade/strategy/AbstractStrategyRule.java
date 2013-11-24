@@ -747,8 +747,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 				tradeOrder.setOrderType(orderType);
 
 			tradeOrder.setTransmit(transmit);
-			return getBrokerManager().onPlaceOrder(
+			tradeOrder = getBrokerManager().onPlaceOrder(
 					getTradestrategy().getContract(), tradeOrder);
+
+			this.reFreshPositionOrders();
+
+			return tradeOrder;
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 510,
 					"Error submitting updated tradeOrder to broker: "
@@ -1218,31 +1222,41 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            boolean
 	 * @throws StrategyRuleException
 	 */
-	public void moveStopOCAPrice(Money stopPrice, boolean transmit)
+	public void moveStopOCAPrice(Money stopPrice, Boolean transmit)
 			throws StrategyRuleException {
 
 		_log.info("Strategy  moveStopOCAPrice symbol: " + symbol
 				+ " Stop Price: " + stopPrice);
 		try {
 			if (this.isThereOpenPosition()) {
-				// Cancel the tgt and stop orders i.e. OCA
+				// If the StP order has changed send the update and refresh the
+				// position.
+				boolean changed = false;
 				for (TradeOrder tradeOrder : this.getPositionOrders()
 						.getTradeOrders()) {
 					if (!tradeOrder.getIsOpenPosition()
 							&& tradeOrder.isActive()) {
 						if (OrderType.STP.equals(tradeOrder.getOrderType())
 								&& null != tradeOrder.getOcaGroupName()) {
-							tradeOrder.setLastUpdateDate(TradingCalendar
-									.getDate((new Date()).getTime()));
-							tradeOrder.setAuxPrice(stopPrice
-									.getBigDecimalValue());
-							tradeOrder.setTransmit(transmit);
-							tradeOrder = getBrokerManager().onPlaceOrder(
-									getTradestrategy().getContract(),
-									tradeOrder);
+							if (!tradeOrder.getAuxPrice().equals(
+									stopPrice.getBigDecimalValue())
+									|| !tradeOrder.getTransmit().equals(
+											transmit)) {
+								tradeOrder.setLastUpdateDate(TradingCalendar
+										.getDate((new Date()).getTime()));
+								tradeOrder.setAuxPrice(stopPrice
+										.getBigDecimalValue());
+								tradeOrder.setTransmit(transmit);
+								this.getBrokerManager().onPlaceOrder(
+										getTradestrategy().getContract(),
+										tradeOrder);
+								changed = true;
+							}
 						}
 					}
 				}
+				if (changed)
+					this.reFreshPositionOrders();
 			}
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 560,
