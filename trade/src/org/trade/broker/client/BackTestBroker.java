@@ -235,7 +235,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 							+ this.tradestrategy.getTradingday().getOpen()
 							+ " will use barSize = "
 							+ this.tradestrategy.getBarSize()
-							+ "data if avaialble.");
+							+ " data if avaialble.");
 					candlesTradingday = this.getCandles(this.tradestrategy,
 							this.tradestrategy.getTradingday().getOpen(),
 							this.tradestrategy.getTradingday().getOpen(),
