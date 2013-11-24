@@ -248,6 +248,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						this.tradestrategy.getTradingday().getOpen(),
 						this.tradestrategy.getBarSize());
 			}
+
+			/*
+			 * Wait for the strategy to start.
+			 */
+			synchronized (lockBackTestWorker) {
+				while (strategiesRunning.get() < 1) {
+					lockBackTestWorker.wait();
+				}
+			}
 			if (candlesTradingday.isEmpty()) {
 				_log.warn("No data available to run a backtest for Symbol: "
 						+ this.tradestrategy.getContract().getSymbol()
@@ -262,7 +271,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				for (Candle candle : candlesTradingday) {
 					candles.add(candle);
 				}
-
 				/*
 				 * Populate any child datasets.
 				 */
@@ -270,14 +278,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						.getTradingday().getOpen(), this.tradestrategy
 						.getTradingday().getOpen());
 
-				/*
-				 * Wait for the strategy to start.
-				 */
-				synchronized (lockBackTestWorker) {
-					while (strategiesRunning.get() < 1) {
-						lockBackTestWorker.wait();
-					}
-				}
 			}
 
 			PositionOrders positionOrders = null;
