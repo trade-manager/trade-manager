@@ -747,11 +747,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 				tradeOrder.setOrderType(orderType);
 
 			tradeOrder.setTransmit(transmit);
-			tradeOrder = getBrokerManager().onPlaceOrder(
+			TradeOrder tradeOrderUpdate = getBrokerManager().onPlaceOrder(
 					getTradestrategy().getContract(), tradeOrder);
 
-			this.reFreshPositionOrders();
-
+			tradeOrder.setVersion(tradeOrderUpdate.getVersion());
 			return tradeOrder;
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 510,
@@ -1230,8 +1229,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		try {
 			if (this.isThereOpenPosition()) {
 				// If the StP order has changed send the update and refresh the
-				// position.
-				boolean changed = false;
+				// version of the order.
 				for (TradeOrder tradeOrder : this.getPositionOrders()
 						.getTradeOrders()) {
 					if (!tradeOrder.getIsOpenPosition()
@@ -1247,16 +1245,17 @@ public abstract class AbstractStrategyRule extends Worker implements
 								tradeOrder.setAuxPrice(stopPrice
 										.getBigDecimalValue());
 								tradeOrder.setTransmit(transmit);
-								this.getBrokerManager().onPlaceOrder(
-										getTradestrategy().getContract(),
-										tradeOrder);
-								changed = true;
+								TradeOrder tradeOrderBE = this
+										.getBrokerManager().onPlaceOrder(
+												getTradestrategy()
+														.getContract(),
+												tradeOrder);
+								tradeOrder
+										.setVersion(tradeOrderBE.getVersion());
 							}
 						}
 					}
 				}
-				if (changed)
-					this.reFreshPositionOrders();
 			}
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 560,
