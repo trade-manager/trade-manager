@@ -87,8 +87,6 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrFH3RBHHeikinStrategy.class);
 
-	private Integer targetOneOrderKey = new Integer(0);
-
 	/**
 	 * Default Constructor Note if you use class variables remember these will
 	 * need to be initialized if the strategy is restarted i.e. if they are
@@ -107,14 +105,6 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	public PosMgrFH3RBHHeikinStrategy(BrokerModel brokerManagerModel,
 			StrategyData strategyData, Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
-
-		/*
-		 * Initialize the class variable side this is needed for any strategy
-		 * restarts during the trading day.
-		 */
-		if (null != getTargetOneOrder()) {
-			this.targetOneOrderKey = getTargetOneOrder().getOrderKey();
-		}
 	}
 
 	/**
@@ -182,10 +172,8 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				Integer tgt2Qty = quantity - tgt1Qty;
 				// Integer tgt3Qty = quantity - (tgt1Qty + tgt2Qty);
 
-				TradeOrder orderTarget = createStopAndTargetOrder(
-						getOpenPositionOrder(), 2, 2, tgt1Qty, true);
-
-				targetOneOrderKey = orderTarget.getOrderKey();
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 2, tgt1Qty,
+						true);
 
 				createStopAndTargetOrder(getOpenPositionOrder(), 2, 2, tgt2Qty,
 						true);
@@ -281,20 +269,22 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * Move stock to b.e. when target one hit.
 			 */
 
-			if (this.getTradeOrder(targetOneOrderKey).getIsFilled() && newBar) {
+			if (null != getTargetOneOrder()) {
+				if (this.getTargetOneOrder().getIsFilled() && newBar) {
 
-				_log.info("Rule move stop to b.e. after target one hit Symbol: "
-						+ getSymbol() + " Time: " + startPeriod);
-				String action = Action.SELL;
-				if (Side.SLD.equals(getOpenTradePosition().getSide()))
-					action = Action.BUY;
-				Money newStop = addPennyAndRoundStop(
-						this.getTradeOrder(targetOneOrderKey)
-								.getAverageFilledPrice().doubleValue(),
-						getOpenTradePosition().getSide(), action, 0.01);
+					_log.info("Rule move stop to b.e. after target one hit Symbol: "
+							+ getSymbol() + " Time: " + startPeriod);
+					String action = Action.SELL;
+					if (Side.SLD.equals(getOpenTradePosition().getSide()))
+						action = Action.BUY;
+					Money newStop = addPennyAndRoundStop(this
+							.getTargetOneOrder().getAverageFilledPrice()
+							.doubleValue(), getOpenTradePosition().getSide(),
+							action, 0.01);
 
-				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
-					// moveStopOCAPrice(newStop, true);
+					if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+						// moveStopOCAPrice(newStop, true);
+					}
 				}
 			}
 
@@ -302,16 +292,17 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * We have sold the first half of the position try to trail BH on
 			 * Heikin-Ashi above target 1 with a two bar trail.
 			 */
-
-			if (this.getTradeOrder(targetOneOrderKey).getIsFilled() && newBar) {
-				Money newStop = getHiekinAshiTrailStop(
-						this.getStopPriceMinUnfilled(), 2);
-				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
-					_log.info("PositionManagerStrategy HiekinAshiTrail: "
-							+ getSymbol() + " Trail Price: " + newStop
-							+ " Time: " + startPeriod + " Side: "
-							+ this.getOpenTradePosition().getSide());
-					// moveStopOCAPrice(newStop, true);
+			if (null != getTargetOneOrder()) {
+				if (this.getTargetOneOrder().getIsFilled() && newBar) {
+					Money newStop = getHiekinAshiTrailStop(
+							this.getStopPriceMinUnfilled(), 2);
+					if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+						_log.info("PositionManagerStrategy HiekinAshiTrail: "
+								+ getSymbol() + " Trail Price: " + newStop
+								+ " Time: " + startPeriod + " Side: "
+								+ this.getOpenTradePosition().getSide());
+						// moveStopOCAPrice(newStop, true);
+					}
 				}
 			}
 
@@ -319,17 +310,19 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 * We have sold the first half of the position try to trail BH on
 			 * one minute bars.
 			 */
+			if (null != getTargetOneOrder()) {
+				if (this.getTargetOneOrder().getIsFilled()) {
 
-			if (this.getTradeOrder(targetOneOrderKey).getIsFilled()) {
-
-				Money newStop = getOneMinuteTrailStop(candleSeries,
-						this.getStopPriceMinUnfilled(), currentCandleItem);
-				if (!newStop.equals(new Money(this.getStopPriceMinUnfilled()))) {
-					_log.info("PositionManagerStrategy OneMinuteTrail: "
-							+ getSymbol() + " Trail Price: " + newStop
-							+ " Time: " + startPeriod + " Side: "
-							+ this.getOpenTradePosition().getSide());
-					// moveStopOCAPrice(newStop, true);
+					Money newStop = getOneMinuteTrailStop(candleSeries,
+							this.getStopPriceMinUnfilled(), currentCandleItem);
+					if (!newStop.equals(new Money(this
+							.getStopPriceMinUnfilled()))) {
+						_log.info("PositionManagerStrategy OneMinuteTrail: "
+								+ getSymbol() + " Trail Price: " + newStop
+								+ " Time: " + startPeriod + " Side: "
+								+ this.getOpenTradePosition().getSide());
+						// moveStopOCAPrice(newStop, true);
+					}
 				}
 			}
 

@@ -47,7 +47,6 @@ import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Entrylimit;
-import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -85,8 +84,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinGapBarStrategy.class);
 
-	private Side side = null;
-
 	/**
 	 * Default Constructor Note if you use class variables remember these will
 	 * need to be initialized if the strategy is restarted i.e. if they are
@@ -105,21 +102,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 	public FiveMinGapBarStrategy(BrokerModel brokerManagerModel,
 			StrategyData strategyData, Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
-
-		/*
-		 * Initialize the class variable side this is needed for any strategy
-		 * restarts during the trading day.
-		 */
-		if (null == this.side) {
-			TradeOrder openTradeOrder = this.getOpenPositionOrder();
-			if (null != openTradeOrder && openTradeOrder.getIsOpenPosition()) {
-				if (!openTradeOrder.getIsFilled()) {
-					this.side = Side.newInstance(Side.SLD);
-					if (Action.BUY.equals(openTradeOrder.getAction()))
-						this.side = Side.newInstance(Side.BOT);
-				}
-			}
-		}
 	}
 
 	/**
@@ -183,14 +165,14 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						}
 					}
 
-					this.side = Side.newInstance(Side.SLD);
+					Side side = Side.newInstance(Side.SLD);
 					if (prevCandleItem.isSide(Side.BOT)) {
-						this.side = Side.newInstance(Side.BOT);
+						side = Side.newInstance(Side.BOT);
 					}
 					Money price = new Money(prevCandleItem.getHigh());
 					Money priceStop = new Money(prevCandleItem.getLow());
 					String action = Action.BUY;
-					if (Side.SLD.equals(this.side.getCode())) {
+					if (Side.SLD.equals(side.getCode())) {
 						price = new Money(prevCandleItem.getLow());
 						priceStop = new Money(prevCandleItem.getHigh());
 						action = Action.SELL;
@@ -249,7 +231,7 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 										.getTradestrategy().getTradingday()
 										.getOpen(), startPeriod));
 
-						if (Side.BOT.equals(this.side.getCode())) {
+						if (firstCandle.getSide()) {
 							if (currentCandleItem.getVwap() < firstCandle
 									.getLow()) {
 								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
