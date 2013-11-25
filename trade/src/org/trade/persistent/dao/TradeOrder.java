@@ -1454,6 +1454,21 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		}
 	};
 
+	public static final Comparator<TradeOrder> ORDER_KEY = new Comparator<TradeOrder>() {
+		public int compare(TradeOrder o1, TradeOrder o2) {
+			m_ascending = true;
+			int returnVal = 0;
+
+			returnVal = CoreUtils.nullSafeComparator(o1.getOrderKey(),
+					o2.getOrderKey());
+
+			if (m_ascending.equals(Boolean.FALSE)) {
+				returnVal = returnVal * -1;
+			}
+			return returnVal;
+		}
+	};
+
 	/**
 	 * Method toString.
 	 * 

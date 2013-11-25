@@ -35,6 +35,7 @@
  */
 package org.trade.strategy;
 
+import java.util.Collections;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ import org.trade.broker.BrokerModel;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
+import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
@@ -101,6 +103,14 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	public PosMgrFH3RBHHeikinStrategy(BrokerModel brokerManagerModel,
 			StrategyData strategyData, Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
+
+		/*
+		 * Initialize the class variable side this is needed for any strategy
+		 * restarts during the trading day.
+		 */
+		if (null != getTargetOneOrder()) {
+			this.targetOneOrderKey = getTargetOneOrder().getOrderKey();
+		}
 	}
 
 	/**
@@ -398,6 +408,32 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	}
 
 	/**
+	 * Method getTargetOneOrder.
+	 * 
+	 * This method is used to get target one order.
+	 * 
+	 * @return TradeOrder target one tradeOrder.
+	 * @throws StrategyRuleException
+	 */
+
+	public TradeOrder getTargetOneOrder() {
+		if (this.isThereOpenPosition()) {
+			Collections.sort(this.getPositionOrders().getTradeOrders(),
+					TradeOrder.ORDER_KEY);
+			for (TradeOrder tradeOrder : this.getPositionOrders()
+					.getTradeOrders()) {
+				if (!tradeOrder.getIsOpenPosition()) {
+					if (OrderType.LMT.equals(tradeOrder.getOrderType())
+							&& null != tradeOrder.getOcaGroupName()) {
+						return tradeOrder;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Method getOneMinuteTrailStop.
 	 * 
 	 * This method is used to trail on one minute bars over the first target.
@@ -409,7 +445,6 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 	 * @return Money new stop or orginal if not trail.
 	 * @throws StrategyRuleException
 	 */
-	Money candleHighLow = null;
 
 	public Money getOneMinuteTrailStop(CandleSeries candleSeries,
 			Money stopPrice, CandleItem currentCandle)

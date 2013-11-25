@@ -47,6 +47,7 @@ import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Entrylimit;
+import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -100,6 +101,21 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 	public FiveMinGapBarStrategy(BrokerModel brokerManagerModel,
 			StrategyData strategyData, Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
+
+		/*
+		 * Initialize the class variable side this is needed for any strategy
+		 * restarts during the trading day.
+		 */
+		if (null == this.side) {
+			TradeOrder openTradeOrder = this.getOpenPositionOrder();
+			if (null != openTradeOrder && openTradeOrder.getIsOpenPosition()) {
+				if (!openTradeOrder.getIsFilled()) {
+					this.side = Side.newInstance(Side.SLD);
+					if (Action.BUY.equals(openTradeOrder.getAction()))
+						this.side = Side.newInstance(Side.BOT);
+				}
+			}
+		}
 	}
 
 	/**
