@@ -2198,6 +2198,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			totalSumbitted++;
 			hasSubmittedInSeconds();
 
+			/*
+			 * This can happen if there is the same indicator contract but in
+			 * different barSize/duration.
+			 */
+
+			if (totalSumbitted > getGrandTotal())
+				incrementGrandTotal();
+
 			int percent = (int) (((double) (totalSumbitted - this.brokerModel
 					.getHistoricalData().size()) / getGrandTotal()) * 100d);
 
@@ -2531,6 +2539,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		 */
 		private int getGrandTotal() {
 			return this.grandTotal;
+		}
+
+		/**
+		 * Method incrementGrandTotal.
+		 * 
+		 */
+		private void incrementGrandTotal() {
+			this.grandTotal++;
 		}
 
 		/**
