@@ -1221,7 +1221,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            boolean
 	 * @throws StrategyRuleException
 	 */
-	public void moveStopOCAPrice(Money stopPrice, Boolean transmit)
+	public void moveStopOCAPrice(Money stopPrice, boolean transmit)
 			throws StrategyRuleException {
 
 		_log.info("Strategy  moveStopOCAPrice symbol: " + symbol
