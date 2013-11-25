@@ -65,7 +65,11 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 			.getLogger(Vwap5MinSideGapBarStrategy.class);
 
 	/**
-	 * Default Constructor
+	 * Default Constructor Note if you use class variables remember these will
+	 * need to be initialized if the strategy is restarted i.e. if they are
+	 * created on startup under a constraint you must find a way to populate
+	 * that value if the strategy were to be restarted and the constraint is not
+	 * met.
 	 * 
 	 * @param brokerManagerModel
 	 *            BrokerModel
