@@ -2200,6 +2200,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			int percent = (int) (((double) (totalSumbitted - this.brokerModel
 					.getHistoricalData().size()) / getGrandTotal()) * 100d);
+
 			setProgress(percent);
 
 			/*
@@ -2662,6 +2663,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.getSymbol(), tradestrategy.getContract());
 
 				}
+
 				/*
 				 * Total for indicator contracts
 				 */
@@ -2687,7 +2689,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						if (backTestBarSize < tradestrategy.getBarSize())
 							total++;
 
+						CandleDataset candleDataset = (CandleDataset) tradestrategy
+								.getStrategyData().getIndicatorByType(
+										IndicatorSeries.CandleSeries);
+
+						if (null != candleDataset) {
+							for (int seriesIndex = 0; seriesIndex < candleDataset
+									.getSeriesCount(); seriesIndex++) {
+								CandleSeries series = candleDataset
+										.getSeries(seriesIndex);
+								Contract contract = series.getContract();
+
+								/*
+								 * Total for indicator contracts
+								 */
+								if (!contracts
+										.containsKey(contract.getSymbol()))
+									contracts.put(contract.getSymbol(),
+											contract);
+							}
+						}
 					}
+					/*
+					 * Total for indicator contracts
+					 */
+					total = total + contracts.size();
+					contracts.clear();
 				}
 			}
 			return total;
