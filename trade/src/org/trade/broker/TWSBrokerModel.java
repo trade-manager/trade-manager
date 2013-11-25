@@ -1388,10 +1388,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				symbol = tradestrategy.getContract().getSymbol()
 						+ " pacing violation Tradingday: "
 						+ tradestrategy.getTradingday().getOpen()
-						+ " BarSize: " + tradestrategy.getBarSize()
-						+ " ChartDays: " + tradestrategy.getChartDays();
-			}
+						+ " BarSize: "
+						+ tradestrategy.getBarSize()
+						+ " ChartDays: "
+						+ tradestrategy.getChartDays()
+						+ "The following conditions can cause a pacing violation: \n"
+						+ "1/ Making identical historical data requests within 15 seconds. \n"
+						+ "2/ Making six or more historical data requests for the same Contract, Exchange and Tick Type within two seconds. \n"
+						+ "3/ Do not make more than 60 historical data requests in any ten-minute period.";
 
+			}
 			synchronized (m_historyDataRequests) {
 				m_historyDataRequests.remove(id);
 				m_historyDataRequests.notifyAll();
