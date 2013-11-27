@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -106,6 +107,28 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 						.getDataItem(getCurrentCandleCount());
 				Date startPeriod = currentCandleItem.getPeriod().getStart();
 
+				/*
+				 * Trade is open kill this Strategy as its job is done.
+				 */
+				if (this.isThereOpenPosition()) {
+					_log.info("Strategy complete open position filled symbol: "
+							+ getSymbol() + " startPeriod: " + startPeriod);
+					this.cancel();
+					return;
+				}
+
+				/*
+				 * Open position order was cancelled kill this Strategy as its
+				 * job is done.
+				 */
+				if (null != this.getOpenPositionOrder()
+						&& !this.getOpenPositionOrder().isActive()) {
+					_log.info("Strategy complete open position cancelled symbol: "
+							+ getSymbol() + " startPeriod: " + startPeriod);
+					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
+					this.cancel();
+					return;
+				}
 				// _log.info(getTradestrategy().getStrategy().getClassName()
 				// + " symbol: " + getSymbol() + " startPeriod: "
 				// + startPeriod);

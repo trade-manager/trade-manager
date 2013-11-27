@@ -117,7 +117,7 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 				 * Trade is open kill this Strategy as its job is done.
 				 */
 				if (this.isThereOpenPosition()) {
-					_log.info("Vwap5MinSideGapBarStrategy complete open position filled symbol: "
+					_log.info("Strategy complete open position filled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					this.cancel();
 					return;
@@ -129,7 +129,7 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 				 */
 				if (null != this.getOpenPositionOrder()
 						&& !this.getOpenPositionOrder().isActive()) {
-					_log.error("FiveMinGapBarStrategy complete open position cancelled symbol: "
+					_log.info("Strategy complete open position cancelled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
 					this.cancel();
