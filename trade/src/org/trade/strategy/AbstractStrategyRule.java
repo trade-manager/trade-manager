@@ -845,6 +845,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					limitPrice.getBigDecimalValue(), this.getOrderCreateDate());
 
 			tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
+			tradeOrder.setIsOpenPosition(true);
 			tradeOrder.setTransmit(transmit);
 			if (FAProfile != null) {
 				tradeOrder.setFAProfile(FAProfile);

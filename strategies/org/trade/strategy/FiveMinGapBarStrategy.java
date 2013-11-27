@@ -131,6 +131,19 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 					return;
 				}
 
+				/*
+				 * Open position order was cancelled kill this Strategy as its
+				 * job is done.
+				 */
+				if (null != this.getOpenPositionOrder()
+						&& !this.getOpenPositionOrder().isActive()) {
+					_log.error("FiveMinGapBarStrategy complete open position cancelled symbol: "
+							+ getSymbol() + " startPeriod: " + startPeriod);
+					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
+					this.cancel();
+					return;
+				}
+
 				// AbstractStrategyRule.logCandle(this,
 				// currentCandleItem.getCandle());
 
