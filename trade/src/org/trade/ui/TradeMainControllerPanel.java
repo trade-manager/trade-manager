@@ -2471,8 +2471,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.isHistoricalDataRunning(tradestrategy
 										.getContract())
 						&& !tradestrategy.getTradingday().equals(tradingday)) {
-					// _indicatorRequests.remove(tradestrategy
-					// .getIdTradeStrategy());
+
+					if (!tradestrategy.getStrategyData().getBaseCandleSeries()
+							.isEmpty())
+						_indicatorRequests.remove(tradestrategy
+								.getIdTradeStrategy());
 				}
 			}
 
