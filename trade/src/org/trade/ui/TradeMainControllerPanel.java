@@ -2010,9 +2010,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.brokerModel = brokerModel;
 			this.tradePersistentModel = tradePersistentModel;
 			this.tradingdays = tradingdays;
-			backTestBarSize = ConfigProperties
+			this.backTestBarSize = ConfigProperties
 					.getPropAsInt("trade.backtest.barSize");
-			timer = new Timer(250, new ActionListener() {
+			this.timer = new Timer(250, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					synchronized (lockCoreUtilsTest) {
 						timerRunning.addAndGet(250);
@@ -2174,7 +2174,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				_log.error("submitBrokerRequest contract already running: "
 						+ tradestrategy.getContract().getSymbol()
 						+ " endDate: " + endDate + " barSize: "
-						+ tradestrategy.getBarSize() + " chartDays:"
+						+ tradestrategy.getBarSize() + " chartDays: "
 						+ tradestrategy.getChartDays());
 				return totalSumbitted;
 			}
@@ -2471,8 +2471,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.isHistoricalDataRunning(tradestrategy
 										.getContract())
 						&& !tradestrategy.getTradingday().equals(tradingday)) {
-					_indicatorRequests.remove(tradestrategy
-							.getIdTradeStrategy());
+					// _indicatorRequests.remove(tradestrategy
+					// .getIdTradeStrategy());
 				}
 			}
 
