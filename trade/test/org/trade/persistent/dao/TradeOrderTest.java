@@ -255,7 +255,7 @@ public class TradeOrderTest extends TestCase {
 				if (tradeOrder.getIsOpenPosition()) {
 
 					TradeOrderfill orderfill = new TradeOrderfill(tradeOrder,
-							tradeOrder.getLimitPrice(),
+							"Paper", tradeOrder.getLimitPrice(),
 							tradeOrder.getQuantity() / 2, "ISLAND", "1234",
 							tradeOrder.getLimitPrice(),
 							tradeOrder.getQuantity() / 2,
@@ -264,7 +264,7 @@ public class TradeOrderTest extends TestCase {
 					tradeOrder.addTradeOrderfill(orderfill);
 
 					TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrder,
-							tradeOrder.getLimitPrice(),
+							"Paper", tradeOrder.getLimitPrice(),
 							tradeOrder.getQuantity() / 2, "ISLAND", "12345",
 							tradeOrder.getLimitPrice(),
 							tradeOrder.getQuantity() / 2,
@@ -286,7 +286,8 @@ public class TradeOrderTest extends TestCase {
 						if (OrderType.STP.equals(tradeOrder.getOrderType())) {
 
 							TradeOrderfill orderfill = new TradeOrderfill(
-									tradeOrder, tradeOrder.getAuxPrice(),
+									tradeOrder, "Paper",
+									tradeOrder.getAuxPrice(),
 									tradeOrder.getQuantity(), "ISLAND",
 									"12345", tradeOrder.getAuxPrice(),
 									tradeOrder.getQuantity(),
@@ -311,7 +312,8 @@ public class TradeOrderTest extends TestCase {
 						if (OrderType.LMT.equals(tradeOrder.getOrderType())) {
 
 							TradeOrderfill orderfill = new TradeOrderfill(
-									tradeOrder, tradeOrder.getLimitPrice(),
+									tradeOrder, "Paper",
+									tradeOrder.getLimitPrice(),
 									tradeOrder.getQuantity() / 2, "ISLAND",
 									"12345", tradeOrder.getLimitPrice(),
 									tradeOrder.getQuantity() / 2,
@@ -319,7 +321,8 @@ public class TradeOrderTest extends TestCase {
 									TradingCalendar.addMinutes(filledDate, 5));
 							tradeOrder.addTradeOrderfill(orderfill);
 							TradeOrderfill orderfill1 = new TradeOrderfill(
-									tradeOrder, tradeOrder.getLimitPrice(),
+									tradeOrder, "Paper",
+									tradeOrder.getLimitPrice(),
 									tradeOrder.getQuantity() / 2, "ISLAND",
 									"12345", tradeOrder.getLimitPrice(),
 									tradeOrder.getQuantity() / 2,

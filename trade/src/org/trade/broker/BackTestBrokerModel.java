@@ -1544,16 +1544,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					changed = true;
 				}
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getSecTypeId(),
-					contractDetails.getSecTypeId()) != 0) {
-				transientContract.setSecTypeId(contractDetails.getSecTypeId());
+			if (CoreUtils.nullSafeComparator(transientContract.getSecIdType(),
+					contractDetails.getSecIdType()) != 0) {
+				transientContract.setSecIdType(contractDetails.getSecIdType());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getDescription(),
-					contractDetails.getDescription()) != 0) {
-				transientContract.setDescription(contractDetails
-						.getDescription());
+			if (CoreUtils.nullSafeComparator(transientContract.getLongName(),
+					contractDetails.getLongName()) != 0) {
+				transientContract.setLongName(contractDetails.getLongName());
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(transientContract.getCurrency(),
@@ -1718,13 +1716,13 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				+ contract.getExchange() + " Con Id: "
 				+ contract.getIdContractIB() + " Currency: "
 				+ contract.getCurrency() + " SecIdType: "
-				+ contract.getSecTypeId() + " Primary Exch: "
+				+ contract.getSecIdType() + " Primary Exch: "
 				+ contract.getPrimaryExchange() + " Local Symbol: "
 				+ contract.getLocalSymbol() + " Multiplier: "
 				+ contract.getPriceMultiplier() + " Expiry: "
 				+ contract.getExpiry() + " Category: " + contract.getCategory()
-				+ " Industry: " + contract.getIndustry() + " Description: "
-				+ contract.getDescription());
+				+ " Industry: " + contract.getIndustry() + " LongName: "
+				+ contract.getLongName());
 	}
 
 	/**

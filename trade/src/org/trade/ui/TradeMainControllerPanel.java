@@ -2472,8 +2472,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 										.getContract())
 						&& !tradestrategy.getTradingday().equals(tradingday)) {
 
-				//	_indicatorRequests.remove(tradestrategy
-				//			.getIdTradeStrategy());
+					// _indicatorRequests.remove(tradestrategy
+					// .getIdTradeStrategy());
 				}
 			}
 

@@ -69,6 +69,7 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 		Cloneable {
 
 	private static final long serialVersionUID = -4345234694835258864L;
+	private String accountNumber;
 	private BigDecimal averagePrice;
 	private Integer cumulativeQuantity;
 	private String execId;
@@ -87,6 +88,8 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	 * 
 	 * @param tradeOrder
 	 *            TradeOrder
+	 * @param accountNumber
+	 *            String
 	 * @param averagePrice
 	 *            BigDecimal
 	 * @param cumulativeQuantity
@@ -104,10 +107,12 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	 * @param time
 	 *            Date
 	 */
-	public TradeOrderfill(TradeOrder tradeOrder, BigDecimal averagePrice,
-			Integer cumulativeQuantity, String exchange, String execId,
-			BigDecimal price, Integer quantity, String side, Date time) {
+	public TradeOrderfill(TradeOrder tradeOrder, String accountNumber,
+			BigDecimal averagePrice, Integer cumulativeQuantity,
+			String exchange, String execId, BigDecimal price, Integer quantity,
+			String side, Date time) {
 		this.tradeOrder = tradeOrder;
+		this.accountNumber = accountNumber;
 		this.averagePrice = averagePrice;
 		this.cumulativeQuantity = cumulativeQuantity;
 		this.execId = execId;
@@ -149,6 +154,26 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	@JoinColumn(name = "idTradeOrder", insertable = true, updatable = true, nullable = false)
 	public TradeOrder getTradeOrder() {
 		return this.tradeOrder;
+	}
+
+	/**
+	 * Method getAccountNumber.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "accountNumber", length = 20)
+	public String getAccountNumber() {
+		return this.accountNumber;
+	}
+
+	/**
+	 * Method setAccountNumber.
+	 * 
+	 * @param accountNumber
+	 *            String
+	 */
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 
 	/**

@@ -1130,8 +1130,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			String ledgend = "("
 					+ tradestrategy.getContract().getSymbol()
 					+ ") "
-					+ (tradestrategy.getContract().getDescription() == null ? "Contract details not available."
-							: tradestrategy.getContract().getDescription());
+					+ (tradestrategy.getContract().getLongName() == null ? "Contract details not available."
+							: tradestrategy.getContract().getLongName());
 			this.candlestickChart = new CandlestickChart(ledgend,
 					tradestrategy.getStrategyData(),
 					tradestrategy.getTradingday());

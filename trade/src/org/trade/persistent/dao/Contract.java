@@ -78,26 +78,54 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5691902477608387034L;
+
+	/*
+	 * Contract
+	 */
 	private String currency;
-	private String category;
-	private String description;
+	private String comboLegDescription;
 	private String exchange;
 	private Date expiry;
 	private Integer idContractIB;
+	private Boolean includeExpired;
+	private String localSymbol;
+	private BigDecimal priceMultiplier;
+	private String primaryExchange; // pick a non-aggregate (ie not the SMART
+									// exchange) exchange that the contract
+									// trades on. DO NOT SET TO SMART.
+	private String validOptionType;
+	private String symbol;
+	private String secId;
+	private String secIdType; // CUSIP;SEDOL;ISIN;RIC
+	private String secType;
+	private BigDecimal strike;
+	private String tradingClass;
+
+	/*
+	 * Contract Details
+	 */
+
+	private String category;
+	private String contractMonth;
+	private String longName;
 	private String industry;
+	private String liquidHours;
+	private String marketName;
+	private String orderTypes;
+	private BigDecimal minTick;
+	private BigDecimal priceMagnifier;
+	private String subCategory;
+	private String timeZoneId;
+	private String tradingHours;
+	private Integer underConId;
+	private String validExchanges;
+	private String evRule;
+	private BigDecimal evMultiplier;
+
 	private BigDecimal lastAskPrice = new BigDecimal(0);
 	private BigDecimal lastBidPrice = new BigDecimal(0);
 	private BigDecimal lastPrice = new BigDecimal(0);
-	private String localSymbol;
-	private BigDecimal minTick;
-	private BigDecimal priceMagnifier;
-	private BigDecimal priceMultiplier;
-	private String primaryExchange;
-	private String symbol;
-	private String secType;
-	private String secTypeId;
-	private String subCategory;
-	private String tradingClass;
+
 	private TradePosition tradePosition;
 	private List<Tradestrategy> tradestrategies = Collections
 			.synchronizedList(new ArrayList<Tradestrategy>(0));
@@ -129,74 +157,6 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 		this.secType = secType;
 		this.expiry = expiry;
 		this.priceMultiplier = priceMultiplier;
-	}
-
-	/**
-	 * Constructor for Contract.
-	 * 
-	 * @param currency
-	 *            String
-	 * @param description
-	 *            String
-	 * @param exchange
-	 *            String
-	 * @param expiry
-	 *            Date
-	 * @param localSymbol
-	 *            String
-	 * @param primaryExchange
-	 *            String
-	 * @param symbol
-	 *            String
-	 * @param secType
-	 *            String
-	 * @param secTypeId
-	 *            String
-	 * @param idContractIB
-	 *            Integer
-	 * @param category
-	 *            String
-	 * @param industry
-	 *            String
-	 * @param subCategory
-	 *            String
-	 * @param tradingClass
-	 *            String
-	 * @param minTick
-	 *            BigDecimal
-	 * @param priceMagnifier
-	 *            BigDecimal
-	 * @param tradestrategies
-	 *            List<Tradestrategy>
-	 * @param candles
-	 *            List<Candle>
-	 */
-	public Contract(String currency, String description, String exchange,
-			Date expiry, String localSymbol, String primaryExchange,
-			String symbol, String secType, String secTypeId,
-			Integer idContractIB, String category, String industry,
-			String subCategory, String tradingClass, BigDecimal minTick,
-			BigDecimal priceMagnifier, List<Tradestrategy> tradestrategies,
-			List<Candle> candles) {
-		this.category = category;
-		this.currency = currency;
-		this.description = description;
-		this.exchange = exchange;
-		this.expiry = expiry;
-		this.idContractIB = idContractIB;
-		this.industry = industry;
-		this.localSymbol = localSymbol;
-		this.minTick = minTick;
-		this.priceMagnifier = priceMagnifier;
-		this.primaryExchange = primaryExchange;
-		this.symbol = symbol;
-		this.secType = secType;
-		this.secTypeId = secTypeId;
-		this.subCategory = subCategory;
-		this.tradingClass = tradingClass;
-		this.tradestrategies = tradestrategies;
-		this.candles = candles;
-
 	}
 
 	/**
@@ -262,23 +222,103 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getDescription.
+	 * Method getComboLegDescription.
 	 * 
 	 * @return String
 	 */
-	@Column(name = "description", length = 80)
-	public String getDescription() {
-		return this.description;
+	@Column(name = "comboLegDescription", nullable = false, length = 30)
+	public String getComboLegDescription() {
+		return this.comboLegDescription;
 	}
 
 	/**
-	 * Method setDescription.
+	 * Method setComboLegDescription.
 	 * 
-	 * @param description
+	 * @param comboLegDescription
 	 *            String
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setComboLegDescription(String comboLegDescription) {
+		this.comboLegDescription = comboLegDescription;
+	}
+
+	/**
+	 * Method getContractMonth.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "contractMonth", length = 6)
+	public String getContractMonth() {
+		return this.contractMonth;
+	}
+
+	/**
+	 * Method setContractMonth.
+	 * 
+	 * @param contractMonth
+	 *            String
+	 */
+	public void setContractMonth(String contractMonth) {
+		this.contractMonth = contractMonth;
+	}
+
+	/**
+	 * Method getLongName.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "longName", length = 80)
+	public String getLongName() {
+		return this.longName;
+	}
+
+	/**
+	 * Method setLongName.
+	 * 
+	 * @param longName
+	 *            String
+	 */
+	public void setLongName(String longName) {
+		this.longName = longName;
+	}
+
+	/**
+	 * Method getEvMultiplier.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "evMultiplier", precision = 10)
+	public BigDecimal getEvMultiplier() {
+		return this.evMultiplier;
+	}
+
+	/**
+	 * Method setEvMultiplier.
+	 * 
+	 * @param evMultiplier
+	 *            BigDecimal
+	 */
+	public void setEvMultiplier(BigDecimal evMultiplier) {
+		this.evMultiplier = evMultiplier;
+	}
+
+	/**
+	 * Method getEvRule.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "evRule", length = 80)
+	public String getEvRule() {
+		return this.evRule;
+	}
+
+	/**
+	 * Method setEvRule.
+	 * 
+	 * @param evRule
+	 *            String
+	 */
+	public void setEvRule(String evRule) {
+		this.evRule = evRule;
 	}
 
 	/**
@@ -343,6 +383,26 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
+	 * Method getIncludeExpired.
+	 * 
+	 * @return Boolean
+	 */
+	@Column(name = "includeExpired")
+	public Boolean getIncludeExpired() {
+		return this.includeExpired;
+	}
+
+	/**
+	 * Method setIncludeExpired.
+	 * 
+	 * @param includeExpired
+	 *            Boolean
+	 */
+	public void setIncludeExpired(Boolean includeExpired) {
+		this.includeExpired = includeExpired;
+	}
+
+	/**
 	 * Method getIndustry.
 	 * 
 	 * @return String
@@ -360,6 +420,26 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setIndustry(String industry) {
 		this.industry = industry;
+	}
+
+	/**
+	 * Method getLiquidHours.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "liquidHours", length = 50)
+	public String getLiquidHours() {
+		return this.liquidHours;
+	}
+
+	/**
+	 * Method setLiquidHours.
+	 * 
+	 * @param liquidHours
+	 *            String
+	 */
+	public void setLiquidHours(String liquidHours) {
+		this.liquidHours = liquidHours;
 	}
 
 	/**
@@ -443,6 +523,26 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
+	 * Method getMarketName.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "marketName", length = 80)
+	public String getMarketName() {
+		return this.marketName;
+	}
+
+	/**
+	 * Method setMarketName.
+	 * 
+	 * @param marketName
+	 *            String
+	 */
+	public void setMarketName(String marketName) {
+		this.marketName = marketName;
+	}
+
+	/**
 	 * Method getMinTick.
 	 * 
 	 * @return BigDecimal
@@ -460,6 +560,26 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setMinTick(BigDecimal minTick) {
 		this.minTick = minTick;
+	}
+
+	/**
+	 * Method getOrderTypes.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "orderTypes", length = 50)
+	public String getOrderTypes() {
+		return this.orderTypes;
+	}
+
+	/**
+	 * Method setOrderTypes.
+	 * 
+	 * @param orderTypes
+	 *            String
+	 */
+	public void setOrderTypes(String orderTypes) {
+		this.orderTypes = orderTypes;
 	}
 
 	/**
@@ -523,6 +643,26 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
+	 * Method getValidOptionType .
+	 * 
+	 * @return validOptionType
+	 */
+	@Column(name = "validOptionType ", length = 3)
+	public String getValidOptionType() {
+		return this.validOptionType;
+	}
+
+	/**
+	 * Method setValidOptionType.
+	 * 
+	 * @param validOptionType
+	 *            String
+	 */
+	public void setValidOptionType(String validOptionType) {
+		this.validOptionType = validOptionType;
+	}
+
+	/**
 	 * Method getSymbol.
 	 * 
 	 * @return String
@@ -540,6 +680,46 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+
+	/**
+	 * Method getSecId.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "secId", length = 10)
+	public String getSecId() {
+		return this.secId;
+	}
+
+	/**
+	 * Method setSecId.
+	 * 
+	 * @param secId
+	 *            String
+	 */
+	public void setSecId(String secId) {
+		this.secId = secId;
+	}
+
+	/**
+	 * Method getSecIdType.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "secIdType", length = 5)
+	public String getSecIdType() {
+		return this.secIdType;
+	}
+
+	/**
+	 * Method setSecIdType.
+	 * 
+	 * @param secIdType
+	 *            String
+	 */
+	public void setSecIdType(String secIdType) {
+		this.secIdType = secIdType;
 	}
 
 	/**
@@ -563,23 +743,23 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getSecTypeId.
+	 * Method getStrike.
 	 * 
-	 * @return String
+	 * @return BigDecimal
 	 */
-	@Column(name = "secTypeId", length = 5)
-	public String getSecTypeId() {
-		return this.secTypeId;
+	@Column(name = "strike", precision = 10)
+	public BigDecimal getStrike() {
+		return this.strike;
 	}
 
 	/**
-	 * Method setSecTypeId.
+	 * Method setStrike.
 	 * 
-	 * @param secTypeId
-	 *            String
+	 * @param strike
+	 *            BigDecimal
 	 */
-	public void setSecTypeId(String secTypeId) {
-		this.secTypeId = secTypeId;
+	public void setStrike(BigDecimal strike) {
+		this.strike = strike;
 	}
 
 	/**
@@ -620,6 +800,86 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setTradingClass(String tradingClass) {
 		this.tradingClass = tradingClass;
+	}
+
+	/**
+	 * Method getTradingHours.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "tradingHours", length = 50)
+	public String getTradingHours() {
+		return this.tradingHours;
+	}
+
+	/**
+	 * Method setTradingHours.
+	 * 
+	 * @param tradingHours
+	 *            String
+	 */
+	public void setTradingHours(String tradingHours) {
+		this.tradingHours = tradingHours;
+	}
+
+	/**
+	 * Method setTimeZoneId.
+	 * 
+	 * @param timeZoneId
+	 *            String
+	 */
+	public void setTimeZoneId(String timeZoneId) {
+		this.timeZoneId = timeZoneId;
+	}
+
+	/**
+	 * Method getTimeZoneId.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "timeZoneId", length = 3)
+	public String getTimeZoneId() {
+		return this.timeZoneId;
+	}
+
+	/**
+	 * Method setUnderConId.
+	 * 
+	 * @param underConId
+	 *            Integer
+	 */
+	public void setUnderConId(Integer underConId) {
+		this.underConId = underConId;
+	}
+
+	/**
+	 * Method getUnderConId.
+	 * 
+	 * @return Integer
+	 */
+	@Column(name = "underConId", length = 3)
+	public Integer getUnderConId() {
+		return this.underConId;
+	}
+
+	/**
+	 * Method setValidExchanges.
+	 * 
+	 * @param validExchanges
+	 *            String
+	 */
+	public void setValidExchanges(String validExchanges) {
+		this.validExchanges = validExchanges;
+	}
+
+	/**
+	 * Method getValidExchanges.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "validExchanges", length = 200)
+	public String getValidExchanges() {
+		return this.validExchanges;
 	}
 
 	/**

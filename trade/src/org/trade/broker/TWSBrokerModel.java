@@ -2661,8 +2661,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != contract.getLocalSymbol()) {
 			ibContract.m_localSymbol = contract.getLocalSymbol();
 		}
-		if (null != contract.getSecTypeId()) {
-			ibContract.m_secIdType = contract.getSecTypeId();
+		if (null != contract.getSecIdType()) {
+			ibContract.m_secIdType = contract.getSecIdType();
 		}
 
 		return ibContract;
@@ -2985,16 +2985,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					changed = true;
 				}
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getSecTypeId(),
+			if (CoreUtils.nullSafeComparator(transientContract.getSecIdType(),
 					contractDetails.m_summary.m_secIdType) != 0) {
 				transientContract
-						.setSecTypeId(contractDetails.m_summary.m_secIdType);
+						.setSecIdType(contractDetails.m_summary.m_secIdType);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getDescription(),
+			if (CoreUtils.nullSafeComparator(transientContract.getLongName(),
 					contractDetails.m_longName) != 0) {
-				transientContract.setDescription(contractDetails.m_longName);
+				transientContract.setLongName(contractDetails.m_longName);
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(transientContract.getCurrency(),
@@ -3056,6 +3055,117 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						.setTradingClass(contractDetails.m_summary.m_tradingClass);
 				changed = true;
 			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getComboLegDescription(),
+					contractDetails.m_summary.m_comboLegsDescrip) != 0) {
+				transientContract
+						.setComboLegDescription(contractDetails.m_summary.m_comboLegsDescrip);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getContractMonth(),
+					contractDetails.m_contractMonth) != 0) {
+				transientContract
+						.setContractMonth(contractDetails.m_contractMonth);
+				changed = true;
+			}
+			Money evMultiplier = new Money(contractDetails.m_evMultiplier);
+			if (CoreUtils.nullSafeComparator(evMultiplier, new Money(
+					Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(
+							transientContract.getEvMultiplier(),
+							evMultiplier.getBigDecimalValue()) != 0) {
+				transientContract.setEvMultiplier(evMultiplier
+						.getBigDecimalValue());
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getEvRule(),
+					contractDetails.m_evRule) != 0) {
+				transientContract.setEvRule(contractDetails.m_evRule);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract
+					.getIncludeExpired(), new Boolean(
+					contractDetails.m_summary.m_includeExpired)) != 0) {
+				transientContract.setIncludeExpired(new Boolean(
+						contractDetails.m_summary.m_includeExpired));
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getLiquidHours(),
+					contractDetails.m_liquidHours) != 0) {
+				transientContract.setLiquidHours(contractDetails.m_liquidHours);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getMarketName(),
+					contractDetails.m_marketName) != 0) {
+				transientContract.setMarketName(contractDetails.m_marketName);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getOrderTypes(),
+					contractDetails.m_orderTypes) != 0) {
+				String orderTypes = "MKT";
+				if (contractDetails.m_orderTypes.contains("STP")) {
+					orderTypes = orderTypes + ",STP";
+					changed = true;
+				}
+				if (contractDetails.m_orderTypes.contains("STPLMT")) {
+					orderTypes = orderTypes + ",STPLMT";
+					changed = true;
+				}
+				if (contractDetails.m_orderTypes.contains("LMT")) {
+					orderTypes = orderTypes + ",LMT";
+					changed = true;
+				}
+				transientContract.setOrderTypes(orderTypes);
+
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getSecId(),
+					contractDetails.m_summary.m_secId) != 0) {
+				transientContract.setSecId(contractDetails.m_summary.m_secId);
+				changed = true;
+			}
+			Money strike = new Money(contractDetails.m_summary.m_strike);
+			if (CoreUtils.nullSafeComparator(strike,
+					new Money(Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(
+							transientContract.getStrike(),
+							strike.getBigDecimalValue()) != 0) {
+				transientContract.setStrike(strike.getBigDecimalValue());
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getTimeZoneId(),
+					contractDetails.m_timeZoneId) != 0) {
+				transientContract.setTimeZoneId(contractDetails.m_timeZoneId);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getTradingHours(),
+					contractDetails.m_tradingHours) != 0) {
+				transientContract
+						.setTradingHours(contractDetails.m_tradingHours);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(transientContract.getUnderConId(),
+					new Integer(contractDetails.m_underConId)) != 0) {
+				transientContract.setUnderConId(new Integer(
+						contractDetails.m_underConId));
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getValidExchanges(),
+					contractDetails.m_validExchanges) != 0) {
+				transientContract
+						.setValidExchanges(contractDetails.m_validExchanges);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(
+					transientContract.getValidOptionType(),
+					contractDetails.m_summary.m_right) != 0) {
+				transientContract
+						.setValidOptionType(contractDetails.m_summary.m_right);
+				changed = true;
+			}
 		}
 
 		return changed;
@@ -3085,6 +3195,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		tradeOrderfill.setQuantity(execution.m_shares);
 		tradeOrderfill.setPrice(new BigDecimal(execution.m_price));
 		tradeOrderfill.setAveragePrice(new BigDecimal(execution.m_avgPrice));
+		tradeOrderfill.setAccountNumber(execution.m_acctNumber);
 		tradeOrderfill.setCumulativeQuantity(execution.m_cumQty);
 		tradeOrderfill.setExecId(execution.m_execId);
 	}

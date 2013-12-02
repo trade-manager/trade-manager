@@ -205,8 +205,8 @@ public class TradestrategyTable extends Table {
 				result = new StringBuilder("<html>");
 				result.append("<b>Symbol: </b> ").append(contract.getSymbol())
 						.append("<br/>");
-				result.append("<b>Descrption: </b> ")
-						.append(contract.getDescription()).append("<br/>");
+				result.append("<b>LongName: </b> ")
+						.append(contract.getLongName()).append("<br/>");
 				result.append("<b>Primary Exch: </b> ")
 						.append(contract.getPrimaryExchange()).append("<br/>");
 				result.append("<b>Category: </b> ")

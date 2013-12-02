@@ -467,7 +467,7 @@ public class AbstractStrategyTest extends TestCase {
 
 			TestCase.assertEquals(400, openOrder.getQuantity(), 0);
 
-			TradeOrderfill orderFill = new TradeOrderfill(openOrder,
+			TradeOrderfill orderFill = new TradeOrderfill(openOrder, "Paper",
 					new BigDecimal(45.74), openOrder.getQuantity(),
 					this.tradestrategy.getContract().getExchange(), "1234567",
 					new BigDecimal(45.74), openOrder.getQuantity(), Side.SLD,

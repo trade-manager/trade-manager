@@ -582,9 +582,9 @@ public class TradePersistentModelTest extends TestCase {
 			tradeOrderBuy = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderBuy);
 
-			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy, price,
-					tradeOrderBuy.getQuantity() / 2, "ISLAND", "1a", price,
-					tradeOrderBuy.getQuantity() / 2,
+			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy,
+					"Paper", price, tradeOrderBuy.getQuantity() / 2, "ISLAND",
+					"1a", price, tradeOrderBuy.getQuantity() / 2,
 					this.tradestrategy.getSide(), new Date());
 			tradeOrderBuy.addTradeOrderfill(orderfill);
 
@@ -592,8 +592,9 @@ public class TradePersistentModelTest extends TestCase {
 					.persistTradeOrderfill(tradeOrderBuy);
 
 			TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrderBuy,
-					tradeOrderBuy.getLimitPrice(), tradeOrderBuy.getQuantity(),
-					"BATS", "1b", tradeOrderBuy.getLimitPrice(),
+					"Paper", tradeOrderBuy.getLimitPrice(),
+					tradeOrderBuy.getQuantity(), "BATS", "1b",
+					tradeOrderBuy.getLimitPrice(),
 					tradeOrderBuy.getQuantity() / 2,
 					this.tradestrategy.getSide(), new Date());
 			tradeOrderBuy.addTradeOrderfill(orderfill1);
@@ -614,7 +615,7 @@ public class TradePersistentModelTest extends TestCase {
 					.persistTradeOrder(tradeOrderSell);
 
 			TradeOrderfill orderfill2 = new TradeOrderfill(tradeOrderSell,
-					tradeOrderSell.getLimitPrice(),
+					"Paper", tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity() / 2, "ISLAND", "2a",
 					tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity() / 2,
@@ -624,7 +625,7 @@ public class TradePersistentModelTest extends TestCase {
 					.persistTradeOrderfill(tradeOrderSell);
 
 			TradeOrderfill orderfill3 = new TradeOrderfill(tradeOrderSell,
-					tradeOrderSell.getLimitPrice(),
+					"Paper", tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity(), "BATS", "2b",
 					tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity() / 2,
@@ -676,9 +677,9 @@ public class TradePersistentModelTest extends TestCase {
 			tradeOrderBuy = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderBuy);
 
-			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy, price,
-					tradeOrderBuy.getQuantity() / 2, "ISLAND", "1a", price,
-					tradeOrderBuy.getQuantity() / 2,
+			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy,
+					"Paper", price, tradeOrderBuy.getQuantity() / 2, "ISLAND",
+					"1a", price, tradeOrderBuy.getQuantity() / 2,
 					this.tradestrategy.getSide(), new Date());
 			tradeOrderBuy.addTradeOrderfill(orderfill);
 
@@ -686,8 +687,9 @@ public class TradePersistentModelTest extends TestCase {
 					.persistTradeOrderfill(tradeOrderBuy);
 
 			TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrderBuy,
-					tradeOrderBuy.getLimitPrice(), tradeOrderBuy.getQuantity(),
-					"BATS", "1b", tradeOrderBuy.getLimitPrice(),
+					"Paper", tradeOrderBuy.getLimitPrice(),
+					tradeOrderBuy.getQuantity(), "BATS", "1b",
+					tradeOrderBuy.getLimitPrice(),
 					tradeOrderBuy.getQuantity() / 2,
 					this.tradestrategy.getSide(), new Date());
 			tradeOrderBuy.addTradeOrderfill(orderfill1);
@@ -708,7 +710,7 @@ public class TradePersistentModelTest extends TestCase {
 					.persistTradeOrder(tradeOrderSell);
 
 			TradeOrderfill orderfill2 = new TradeOrderfill(tradeOrderSell,
-					tradeOrderSell.getLimitPrice(),
+					"Paper", tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity() / 2, "ISLAND", "2a",
 					tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity() / 2,
@@ -718,7 +720,7 @@ public class TradePersistentModelTest extends TestCase {
 					.persistTradeOrderfill(tradeOrderSell);
 
 			TradeOrderfill orderfill3 = new TradeOrderfill(tradeOrderSell,
-					tradeOrderSell.getLimitPrice(),
+					"Paper", tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity(), "BATS", "2b",
 					tradeOrderSell.getLimitPrice(),
 					tradeOrderSell.getQuantity() / 2,
@@ -1093,9 +1095,9 @@ public class TradePersistentModelTest extends TestCase {
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());
 			TradeOrderfill tradeOrderfill = new TradeOrderfill(tradeOrder,
-					new BigDecimal(100.23), new Integer(1000), Exchange.SMART,
-					"123efgr567", new BigDecimal(100.23), new Integer(1000),
-					Side.BOT, new Date());
+					"Paper", new BigDecimal(100.23), new Integer(1000),
+					Exchange.SMART, "123efgr567", new BigDecimal(100.23),
+					new Integer(1000), Side.BOT, new Date());
 			tradeOrder.addTradeOrderfill(tradeOrderfill);
 			TradeOrder resultTradeOrder = this.tradePersistentModel
 					.persistTradeOrder(tradeOrder);
