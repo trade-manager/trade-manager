@@ -42,7 +42,7 @@ ALTER TABLE tradeprod.contract
 CHANGE COLUMN marketName marketName VARCHAR(50) NULL DEFAULT NULL AFTER longName;
 
 ALTER TABLE tradeprod.contract 
-CHANGE COLUMN orderTypes orderTypes VARCHAR(20) NULL DEFAULT NULL AFTER minTick;
+CHANGE COLUMN orderTypes orderTypes VARCHAR(50) NULL DEFAULT NULL AFTER minTick;
 
 ALTER TABLE tradeprod.contract 
 CHANGE COLUMN secId secId VARCHAR(10) NULL DEFAULT NULL AFTER symbol;
@@ -63,7 +63,7 @@ ALTER TABLE tradeprod.contract
 CHANGE COLUMN underConId underConId INT(11) NULL DEFAULT NULL AFTER tradingHours;
 
 ALTER TABLE tradeprod.contract 
-CHANGE COLUMN validExchanges validExchanges VARCHAR(30) NULL DEFAULT NULL AFTER underConId;
+CHANGE COLUMN validExchanges validExchanges VARCHAR(200) NULL DEFAULT NULL AFTER underConId;
 
 ALTER TABLE tradeprod.contract 
 CHANGE COLUMN validOptionType validOptionType VARCHAR(3) NULL DEFAULT NULL AFTER validExchanges;
