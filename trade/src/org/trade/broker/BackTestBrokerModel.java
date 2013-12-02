@@ -1637,6 +1637,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		tradeOrderfill.setSide(execution.getSide());
 		tradeOrderfill.setQuantity(execution.getQuantity());
 		tradeOrderfill.setPrice(execution.getPrice());
+		tradeOrderfill.setAccountNumber(execution.getAccountNumber());
 		tradeOrderfill.setAveragePrice(execution.getAveragePrice());
 		tradeOrderfill.setCumulativeQuantity(execution.getCumulativeQuantity());
 		tradeOrderfill.setExecId(execution.getExecId());
