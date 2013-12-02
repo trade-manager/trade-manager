@@ -28,11 +28,12 @@ ANT_BUILD_FILE=ant/build.xml
 
 # 1/ TARGET=all Build and compile the trademanager application.
 # 2/ TARGET=createDB Create the database user and default data. 
-# 3/ TARGET=resetDefaultData Deletes all the data from the DB and reload the default data. 
-# 4/ TARGET=deleteTransactionData Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact. 
-# 5/ TARGET=deleteTradeOrderData Deletes all the orders from the database.
-# 5/ TARGET=deleteAccountRuleData Delete the accounts and rules from the database. These will reload on login.
-# 6/ TARGET=all ANT_BUILD_FILE=ant/buildtest.xml Build and compile all test cases. This depends on 1/ 
+# 3/ TARGET=upgradeDB Upgrade the database to the latest version see reamme.txt. 
+# 4/ TARGET=resetDefaultData Deletes all the data from the DB and reload the default data. 
+# 5/ TARGET=deleteTransactionData Deletes all the Contract/Candle/Tradestrategies from the database. Leaves configuration in tact. 
+# 6/ TARGET=deleteTradeOrderData Deletes all the orders from the database.
+# 7/ TARGET=deleteAccountRuleData Delete the accounts and rules from the database. These will reload on login.
+# 8/ TARGET=all ANT_BUILD_FILE=ant/buildtest.xml Build and compile all test cases. This depends on 1/ 
 
 TARGET=all
 
