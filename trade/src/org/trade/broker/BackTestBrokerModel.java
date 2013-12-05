@@ -1154,7 +1154,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					}
 				} else {
 					error(reqId, 3220, "Contract details not found for reqId: "
-							+ reqId);
+							+ reqId + " Symbol: " + contractDetails.getSymbol());
 				}
 			}
 		} catch (Exception ex) {
@@ -1169,6 +1169,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 *            int
 	 */
 	public void contractDetailsEnd(int reqId) {
+		synchronized (m_contractRequests) {
+			if (m_contractRequests.containsKey(reqId)) {
+				m_contractRequests.remove(reqId);
+			}
+		}
 	}
 
 	/**

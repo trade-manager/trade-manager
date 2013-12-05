@@ -1996,11 +1996,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							transientInstance)) {
 						m_tradePersistentModel
 								.persistContract(transientInstance);
-						m_contractRequests.remove(reqId);
 					}
 				} else {
 					error(reqId, 3220, "Contract details not found for reqId: "
-							+ reqId);
+							+ reqId + " Symbol: "
+							+ contractDetails.m_summary.m_symbol);
 				}
 			}
 		} catch (Exception ex) {
@@ -2029,6 +2029,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#contractDetailsEnd(int)
 	 */
 	public void contractDetailsEnd(int reqId) {
+		synchronized (m_contractRequests) {
+			if (m_contractRequests.containsKey(reqId)) {
+				m_contractRequests.remove(reqId);
+			}
+		}
 	}
 
 	/**
