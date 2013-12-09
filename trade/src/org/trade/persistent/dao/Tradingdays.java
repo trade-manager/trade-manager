@@ -438,7 +438,15 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			while ((strLine = bufferedReader.readLine()) != null) {
 				Tradestrategy tradestrategy = Tradingdays
 						.parseContractLine(strLine);
+
 				if (null != tradestrategy) {
+					/*
+					 * Do not load tradestrategies for trading holidays.
+					 */
+					if (TradingCalendar.isHoliday(tradestrategy.getTradingday()
+							.getOpen())) {
+						continue;
+					}
 
 					Contract contract = this.getContract(tradestrategy
 							.getContract().getSymbol());
