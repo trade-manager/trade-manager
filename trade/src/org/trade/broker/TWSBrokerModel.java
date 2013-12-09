@@ -1611,6 +1611,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 * trade time;total volume;vwap;single trade flag
 			 */
 
+			// _log.info("tickString reqId: " + reqId + " field: " + field
+			// + " value: " + value);
+
 			synchronized (value) {
 
 				if (!m_marketDataRequests.containsKey(new Integer(reqId)))
@@ -1618,6 +1621,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				switch (field) {
 				case TickType.RT_VOLUME: {
+					/*
+					 * If there is no price ignore this value.
+					 */
+					if (value.startsWith(";"))
+						return;
+
 					StringTokenizer st = new StringTokenizer(value, ";");
 					int tokenNumber = 0;
 					BigDecimal price = new BigDecimal(0);
