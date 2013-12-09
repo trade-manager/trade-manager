@@ -2047,8 +2047,22 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 
+					Tradingday toProcessTradingday = (Tradingday) tradingday
+							.clone();
+					for (Tradestrategy tradestrategy : tradingday
+							.getTradestrategies()) {
+						/*
+						 * Refresh the data set container as these may have
+						 * changed.
+						 */
+						tradestrategy.setStrategyData(null);
+						toProcessTradingday.addTradestrategy(tradestrategy);
+						addIndicatorTradestrategyToTradingday(
+								toProcessTradingday, tradestrategy);
+					}
+
 					totalSumbitted = processTradingday(
-							getTradingdayToProcess(tradingday,
+							getTradingdayToProcess(toProcessTradingday,
 									runningContractRequests), totalSumbitted);
 					/*
 					 * Every reSumbittedAt value try to run any that could not
@@ -2060,6 +2074,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								runningContractRequests, totalSumbitted);
 					}
 				}
+
 				/*
 				 * If we are getting data for back testing and the
 				 * backTestBarSize is set. Then get the candles for the
@@ -2097,7 +2112,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								tradestrategy
 										.setIdTradeStrategy(this.brokerModel
 												.getNextRequestId());
+								/*
+								 * Refresh the data set container as these may
+								 * have changed.
+								 */
+								tradestrategy.setStrategyData(null);
 								tradingday.addTradestrategy(tradestrategy);
+								addIndicatorTradestrategyToTradingday(
+										tradingday, tradestrategy);
 							}
 						}
 						totalSumbitted = processTradingday(
@@ -2234,7 +2256,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 				timer.stop();
-				_log.warn("Finished wait 10min wait");
+				_log.info("Finished wait 10min wait");
 			}
 
 			/*
@@ -2249,6 +2271,58 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 			return totalSumbitted;
+		}
+
+		/**
+		 * Method addIndicatorTradestrategyToTradingday. For the tradingday find
+		 * all the indicators and share them across like tradestrategies add the
+		 * unique ones to the tradeingday for processing.
+		 * 
+		 * @param tradingday
+		 *            Tradingday
+		 * @param tradestrategy
+		 *            Tradestrategy
+		 * 
+		 * @return boolean
+		 * @throws BrokerModelException
+		 * @throws PersistentModelException
+		 * @throws CloneNotSupportedException
+		 */
+		private boolean addIndicatorTradestrategyToTradingday(
+				Tradingday tradingday, Tradestrategy tradestrategy)
+				throws BrokerModelException, PersistentModelException,
+				CloneNotSupportedException {
+
+			boolean addedIndicator = false;
+			CandleDataset candleDataset = (CandleDataset) tradestrategy
+					.getStrategyData().getIndicatorByType(
+							IndicatorSeries.CandleSeries);
+
+			if (null != candleDataset) {
+				for (int seriesIndex = 0; seriesIndex < candleDataset
+						.getSeriesCount(); seriesIndex++) {
+
+					CandleSeries series = candleDataset.getSeries(seriesIndex);
+					Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
+							tradestrategy, series);
+					candleDataset.setSeries(seriesIndex, indicatorTradestrategy
+							.getStrategyData().getBaseCandleSeries());
+					if (!_indicatorRequests.containsKey(indicatorTradestrategy
+							.getIdTradeStrategy())) {
+						if (this.brokerModel.isConnected()
+								|| this.brokerModel.isBrokerDataOnly()) {
+							_indicatorRequests
+									.put(indicatorTradestrategy
+											.getIdTradeStrategy(),
+											indicatorTradestrategy);
+							tradingday.addTradestrategy(indicatorTradestrategy);
+							addedIndicator = true;
+						}
+					}
+				}
+			}
+
+			return addedIndicator;
 		}
 
 		/**
@@ -2455,36 +2529,27 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			return indicatorTradestrategy;
 		}
 
+		/**
+		 * Method processTradingday.
+		 * 
+		 * @param tradingday
+		 *            Tradingday
+		 * @param totalSumbitted
+		 *            int
+		 * @return int
+		 * @throws InterruptedException
+		 * @throws BrokerModelException
+		 */
 		private int processTradingday(Tradingday tradingday, int totalSumbitted)
-				throws BrokerModelException, InterruptedException,
-				CloneNotSupportedException, PersistentModelException {
+				throws BrokerModelException, InterruptedException {
 
 			if (tradingday.getTradestrategies().isEmpty())
 				return totalSumbitted;
-			/*
-			 * Remove those that are not running as these do not need to be
-			 * shared. Do not remove those for the current tradingday.
-			 */
-			for (Tradestrategy tradestrategy : _indicatorRequests.values()) {
-				if (!this.brokerModel.isRealtimeBarsRunning(tradestrategy)
-						&& !this.brokerModel
-								.isHistoricalDataRunning(tradestrategy
-										.getContract())
-						&& !tradestrategy.getTradingday().equals(tradingday)) {
-
-					// _indicatorRequests.remove(tradestrategy
-					// .getIdTradeStrategy());
-				}
-			}
 
 			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 
 				if (!this.brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 
-					/*
-					 * Refresh the data set container as these may have changed.
-					 */
-					tradestrategy.setStrategyData(null);
 					/*
 					 * Fire all the requests to TWS to get chart data After data
 					 * has been retrieved save the data Only allow a maximum of
@@ -2495,41 +2560,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 
-			/*
-			 * Now process the indicators that are candle based.
-			 */
-			for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-				CandleDataset candleDataset = (CandleDataset) tradestrategy
-						.getStrategyData().getIndicatorByType(
-								IndicatorSeries.CandleSeries);
-
-				if (null != candleDataset) {
-					for (int seriesIndex = 0; seriesIndex < candleDataset
-							.getSeriesCount(); seriesIndex++) {
-
-						CandleSeries series = candleDataset
-								.getSeries(seriesIndex);
-						Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
-								tradestrategy, series);
-						candleDataset.setSeries(seriesIndex,
-								indicatorTradestrategy.getStrategyData()
-										.getBaseCandleSeries());
-						if (!_indicatorRequests
-								.containsKey(indicatorTradestrategy
-										.getIdTradeStrategy())) {
-							if (this.brokerModel.isConnected()
-									|| this.brokerModel.isBrokerDataOnly()) {
-								_indicatorRequests.put(indicatorTradestrategy
-										.getIdTradeStrategy(),
-										indicatorTradestrategy);
-								totalSumbitted = submitBrokerRequest(
-										indicatorTradestrategy,
-										tradingday.getClose(), totalSumbitted);
-							}
-						}
-					}
-				}
-			}
 			return totalSumbitted;
 		}
 
