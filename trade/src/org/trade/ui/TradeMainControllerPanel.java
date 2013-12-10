@@ -71,6 +71,7 @@ import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.Action;
@@ -669,16 +670,29 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	public void tradeOrderCancelled(final TradeOrder tradeOrder) {
 		if (m_brokerModel.isConnected() && contractPanel.isSelected()) {
+
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
+
+						/*
+						 * If a partial filled order is cancelled mark the order
+						 * as filled and run tradeOrder filled.
+						 */
+						if (OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
+								&& CoreUtils.nullSafeComparator(
+										tradeOrder.getFilledQuantity(),
+										new Integer(0)) == 1) {
+							tradeOrderFilled(tradeOrder);
+						}
+
 						Tradestrategy tradestrategy = m_tradingdays
 								.getTradestrategy(tradeOrder
 										.getTradestrategyId()
 										.getIdTradeStrategy());
 						if (null == tradestrategy) {
 							setStatusBarMessage(
-									"Warning position opened but Tradestrategy not found for Order Key: "
+									"Warning position cancelled but Tradestrategy not found for Order Key: "
 											+ tradeOrder.getOrderKey()
 											+ " in the current Tradingday Tab selection.",
 									BasePanel.WARNING);
