@@ -1601,18 +1601,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Double
 	 * @param riskamount
 	 *            Money
-	 * @param filledQuantity
+	 * @param quantity
 	 *            Integer
 	 * @param averageFilledPrice
 	 *            BigDecimal
 	 * @return boolean
 	 */
 	public boolean isRiskViolated(Double currentPrice, BigDecimal riskamount,
-			Integer filledQuantity, BigDecimal averageFilledPrice) {
+			Integer quantity, BigDecimal averageFilledPrice) {
 
 		BigDecimal currentRiskAmount = new BigDecimal(Math.abs(currentPrice
 				- averageFilledPrice.doubleValue())
-				* filledQuantity);
+				* quantity);
 		if (CoreUtils.nullSafeComparator(currentRiskAmount, riskamount) == 1)
 			return true;
 		return false;

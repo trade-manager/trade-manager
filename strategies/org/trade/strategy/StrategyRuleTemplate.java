@@ -123,9 +123,8 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 							.getOpenPositionOrder().getStatus())) {
 						if (isRiskViolated(currentCandleItem.getClose(), this
 								.getTradestrategy().getRiskAmount(), this
-								.getOpenPositionOrder().getFilledQuantity(),
-								this.getOpenPositionOrder()
-										.getAverageFilledPrice())) {
+								.getOpenPositionOrder().getQuantity(), this
+								.getOpenPositionOrder().getAverageFilledPrice())) {
 							this.cancelOrder(this.getOpenPositionOrder());
 						}
 					}
