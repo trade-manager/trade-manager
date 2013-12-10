@@ -833,6 +833,17 @@ public class TradePersistentModel implements PersistentModel {
 				tradeOrder.setStatus(OrderStatus.FILLED);
 			}
 
+			/*
+			 * If a partial filled order is cancelled mark the order as filled.
+			 */
+			if (OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
+					&& !tradeOrder.getIsFilled()
+					&& CoreUtils.nullSafeComparator(
+							tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
+				tradeOrder.setIsFilled(true);
+				tradeOrder.setStatus(OrderStatus.FILLED);
+			}
+
 			Integer tradestrategyId = null;
 			if (null == tradeOrder.getTradestrategyId()) {
 				tradestrategyId = tradeOrder.getTradestrategy()
