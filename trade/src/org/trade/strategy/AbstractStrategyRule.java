@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.broker.BrokerModelException;
 import org.trade.core.factory.ClassFactory;
+import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
@@ -1590,6 +1591,30 @@ public abstract class AbstractStrategyRule extends Worker implements
 						.getOpen(), dateTime)) {
 			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * Method isRiskViolated.
+	 * 
+	 * @param currentPrice
+	 *            Double
+	 * @param riskamount
+	 *            Money
+	 * @param filledQuantity
+	 *            Integer
+	 * @param averageFilledPrice
+	 *            BigDecimal
+	 * @return boolean
+	 */
+	public boolean isRiskViolated(Double currentPrice, BigDecimal riskamount,
+			Integer filledQuantity, BigDecimal averageFilledPrice) {
+
+		BigDecimal currentRiskAmount = new BigDecimal(Math.abs(currentPrice
+				- averageFilledPrice.doubleValue())
+				* filledQuantity);
+		if (CoreUtils.nullSafeComparator(currentRiskAmount, riskamount) == 1)
+			return true;
 		return false;
 	}
 

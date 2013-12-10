@@ -43,6 +43,7 @@ import org.trade.broker.BrokerModel;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
+import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Candle;
@@ -134,6 +135,21 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 				if (this.isThereOpenPosition()) {
 					_log.info("Strategy complete open position filled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
+					/*
+					 * If the order is partial filled chaeck and if the risk
+					 * goes beyond 1 risk unit cancel the openPositionOrder this
+					 * will cause it to be marked as filled.
+					 */
+					if (OrderStatus.PARTIALFILLED.equals(this
+							.getOpenPositionOrder().getStatus())) {
+						if (isRiskViolated(currentCandleItem.getClose(), this
+								.getTradestrategy().getRiskAmount(), this
+								.getOpenPositionOrder().getFilledQuantity(),
+								this.getOpenPositionOrder()
+										.getAverageFilledPrice())) {
+							this.cancelOrder(this.getOpenPositionOrder());
+						}
+					}
 					this.cancel();
 					return;
 				}
