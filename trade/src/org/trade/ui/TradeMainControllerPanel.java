@@ -2672,71 +2672,22 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			ConcurrentHashMap<String, Contract> contracts = new ConcurrentHashMap<String, Contract>();
 
 			for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
-					CandleDataset candleDataset = (CandleDataset) tradestrategy
-							.getStrategyData().getIndicatorByType(
-									IndicatorSeries.CandleSeries);
 
-					if (null != candleDataset) {
-						for (int seriesIndex = 0; seriesIndex < candleDataset
-								.getSeriesCount(); seriesIndex++) {
-							CandleSeries series = candleDataset
-									.getSeries(seriesIndex);
-							Contract contract = series.getContract();
-							/*
-							 * Add the contract requests this allows us to only
-							 * request contract details once per contract in the
-							 * range of tradingdays to be processed.
-							 */
-							if (!contractRequests.containsKey(contract
-									.getSymbol()))
-								contractRequests.put(contract.getSymbol(),
-										contract);
-							/*
-							 * Total for indicator contracts
-							 */
-							if (!contracts.containsKey(contract.getSymbol()))
-								contracts.put(contract.getSymbol(), contract);
-						}
-					}
-					/*
-					 * Add the contract requests this allows us to only request
-					 * contract details once per contract in the range of
-					 * tradingdays to be processed.
-					 */
-					if (!contractRequests.containsKey(tradestrategy
-							.getContract().getSymbol()))
-						contractRequests.put(tradestrategy.getContract()
-								.getSymbol(), tradestrategy.getContract());
-
-				}
-
-				/*
-				 * Total for indicator contracts
-				 */
-				total = total + contracts.size();
-				contracts.clear();
 				/*
 				 * Total for tradestrategies.
 				 */
 				total = total + tradingday.getTradestrategies().size();
-				/*
-				 * Get the total for lower barsize timeframes.
-				 */
-				if (backTestBarSize > 0 && this.brokerModel.isBrokerDataOnly()) {
-					if (TradingCalendar.isTradingDay(tradingday.getOpen())
-							&& TradingCalendar.sameDay(tradingday.getOpen(),
-									TradingCalendar.getDate(startTime))
-							&& !TradingCalendar.isAfterHours(TradingCalendar
-									.getDate(startTime)))
-						continue;
 
+				if (this.brokerModel.isBrokerDataOnly()
+						|| this.brokerModel.isConnected()) {
+					/*
+					 * If we are getting broker data only () or we are connected
+					 * (to a broker interface)we will have indicators to get,
+					 * contract details and data on lower time frames if the
+					 * backTestBarSize is greater than zero.
+					 */
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
-						if (backTestBarSize < tradestrategy.getBarSize())
-							total++;
-
 						CandleDataset candleDataset = (CandleDataset) tradestrategy
 								.getStrategyData().getIndicatorByType(
 										IndicatorSeries.CandleSeries);
@@ -2747,7 +2698,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								CandleSeries series = candleDataset
 										.getSeries(seriesIndex);
 								Contract contract = series.getContract();
-
+								/*
+								 * Add the contract requests this allows us to
+								 * only request contract details once per
+								 * contract in the range of tradingdays to be
+								 * processed.
+								 */
+								if (!contractRequests.containsKey(contract
+										.getSymbol()))
+									contractRequests.put(contract.getSymbol(),
+											contract);
 								/*
 								 * Total for indicator contracts
 								 */
@@ -2757,13 +2717,70 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 											contract);
 							}
 						}
+						/*
+						 * Add the contract requests this allows us to only
+						 * request contract details once per contract in the
+						 * range of tradingdays to be processed.
+						 */
+						if (!contractRequests.containsKey(tradestrategy
+								.getContract().getSymbol()))
+							contractRequests.put(tradestrategy.getContract()
+									.getSymbol(), tradestrategy.getContract());
+
 					}
+
 					/*
 					 * Total for indicator contracts
 					 */
 					total = total + contracts.size();
 					contracts.clear();
+					/*
+					 * Get the total for lower barsize timeframes.
+					 */
+					if (backTestBarSize > 0) {
+						if (TradingCalendar.isTradingDay(tradingday.getOpen())
+								&& TradingCalendar.sameDay(
+										tradingday.getOpen(),
+										TradingCalendar.getDate(startTime))
+								&& !TradingCalendar
+										.isAfterHours(TradingCalendar
+												.getDate(startTime)))
+							continue;
+
+						for (Tradestrategy tradestrategy : tradingday
+								.getTradestrategies()) {
+							if (backTestBarSize < tradestrategy.getBarSize())
+								total++;
+
+							CandleDataset candleDataset = (CandleDataset) tradestrategy
+									.getStrategyData().getIndicatorByType(
+											IndicatorSeries.CandleSeries);
+
+							if (null != candleDataset) {
+								for (int seriesIndex = 0; seriesIndex < candleDataset
+										.getSeriesCount(); seriesIndex++) {
+									CandleSeries series = candleDataset
+											.getSeries(seriesIndex);
+									Contract contract = series.getContract();
+
+									/*
+									 * Total for indicator contracts
+									 */
+									if (!contracts.containsKey(contract
+											.getSymbol()))
+										contracts.put(contract.getSymbol(),
+												contract);
+								}
+							}
+						}
+						/*
+						 * Total for indicator contracts
+						 */
+						total = total + contracts.size();
+						contracts.clear();
+					}
 				}
+
 			}
 			return total;
 		}
