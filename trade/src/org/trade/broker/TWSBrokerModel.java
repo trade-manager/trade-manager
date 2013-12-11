@@ -1415,34 +1415,36 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 * historical data query found for ticker id) are error code for no
 		 * market or historical data found.
 		 * 
-		 * Error code 202, Order rejected 201 Order cancelled
+		 * Error code 202, Order cancelled 201, Order rejected
 		 * 
 		 * Error code 321 Error validating request:-'jd' : cause - FA data
 		 * operations ignored for non FA customers.
+		 * 
+		 * Error code 502, Couldn't connect to TWS. Confirm that API is enabled
+		 * in TWS via the Configure>API menu command.
 		 */
+		String errorMsg = "Req/Order Id: " + id + " Code: " + code
+				+ " Symbol: " + symbol + " Msg: " + msg;
+
 		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
 				|| (code == 366) || (code == 162) || (code == 321)
 				|| (code == 3170)) {
+
 			if (((code > 1999) && (code < 3000))) {
-				_log.info("BrokerModel Req Id: " + id + " Code: " + code
-						+ " Msg: " + msg);
+				_log.info(errorMsg);
 				brokerModelException = new BrokerModelException(3, code,
-						"Code: " + code + " " + msg);
+						errorMsg);
 			} else if (code == 202 || code == 201 || code == 3170) {
-				_log.warn("BrokerModel Order Id: " + id + " Code: " + code
-						+ " Msg: " + msg);
+				_log.warn(errorMsg);
 				brokerModelException = new BrokerModelException(2, code,
-						"Order Id: " + id + " Code: " + code + " " + msg);
+						errorMsg);
 			} else if (code == 321) {
-				_log.info("BrokerModel Req Id: " + id + " Code: " + code
-						+ " Msg: " + msg);
+				_log.info(errorMsg);
 				return;
 			} else {
-				_log.warn("BrokerModel symbol: " + symbol + " Req Id: " + id
-						+ " Code: " + code + " Msg: " + msg);
+				_log.warn(errorMsg);
 				brokerModelException = new BrokerModelException(2, code,
-						"Req Id: " + id + " Code: " + code + " Symbol: "
-								+ symbol + " " + msg);
+						errorMsg);
 			}
 
 		} else {
@@ -1465,12 +1467,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 */
 			if (code == 502)
 				this.fireConnectionClosed(false);
-			_log.error("BrokerModel symbol: " + symbol + " Req Id: " + id
-					+ " Code: " + code + " Msg: " + msg);
 
-			brokerModelException = new BrokerModelException(1, code, "Req Id: "
-					+ id + " Error Code: " + code + " Symbol: " + symbol + " "
-					+ msg);
+			_log.error(errorMsg);
+			brokerModelException = new BrokerModelException(1, code, errorMsg);
 		}
 		this.fireBrokerError(brokerModelException);
 	}
