@@ -57,6 +57,8 @@ INSERT INTO codetype (idCodeType, name, description, version) VALUES(4,'AverageT
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(5,'RelativeStrengthIndex','Relative Strength Index',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(6,'CommodityChannelIndex','Commodity Channel Index',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(7,'BollingerBands','Bollinger Bands',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(8,'StochasticOscillator','Stochastic Oscillator',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(9,'WilliamsPercentR','Williams %R',0);
 
 COMMIT;
 
@@ -77,6 +79,9 @@ INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, cla
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(15,'RollingCandle','Use rolling candle values','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 6,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(16,'Length','The length of the Moving Average','20','java.lang.Integer',null,7,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(17,'NumberOfSTD','Number of STDs','2.0','java.math.BigDecimal', null,7,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(18,'Length','The length of the Stochastic Oscillator','14','java.lang.Integer',null, 8,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(19,'SMALength','The length of the SMA','3','java.lang.Integer',null, 8,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(20,'Length','The length of the Williams %R','14','java.lang.Integer',null, 9,0) ;
 
 COMMIT;
 
