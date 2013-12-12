@@ -48,13 +48,13 @@ import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.ObjectUtilities;
-import org.trade.strategy.data.williamspercentr.IWilliamsPercentRDataset;
-import org.trade.strategy.data.williamspercentr.WilliamsPercentRItem;
+import org.trade.strategy.data.williamspercentr.IPercentRDataset;
+import org.trade.strategy.data.williamspercentr.PercentRItem;
 
 /**
  */
-public class WilliamsPercentRDataset extends AbstractXYDataset implements
-		IndicatorDataset, IWilliamsPercentRDataset, Serializable {
+public class PercentRDataset extends AbstractXYDataset implements
+		IndicatorDataset, IPercentRDataset, Serializable {
 
 	/**
 	 * 
@@ -69,7 +69,7 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 	/**
 	 * Creates a new instance of <code>OHLCSeriesCollection</code>.
 	 */
-	public WilliamsPercentRDataset() {
+	public PercentRDataset() {
 		this.data = new ArrayList<IndicatorSeries>();
 	}
 
@@ -188,11 +188,11 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 	 *             <code>getSeriesCount() - 1</code>.
 	 * @see org.trade.strategy.data.IndicatorDataset#getSeries(int)
 	 */
-	public WilliamsPercentRSeries getSeries(int series) {
+	public PercentRSeries getSeries(int series) {
 		if ((series < 0) || (series >= getSeriesCount())) {
 			throw new IllegalArgumentException("Series index out of bounds");
 		}
-		return (WilliamsPercentRSeries) this.data.get(series);
+		return (PercentRSeries) this.data.get(series);
 	}
 
 	/**
@@ -261,9 +261,8 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 	 * @see org.jfree.data.xy.XYDataset#getXValue(int, int)
 	 */
 	public double getXValue(int series, int item) {
-		WilliamsPercentRSeries s = (WilliamsPercentRSeries) this.data
-				.get(series);
-		WilliamsPercentRItem di = (WilliamsPercentRItem) s.getDataItem(item);
+		PercentRSeries s = (PercentRSeries) this.data.get(series);
+		PercentRItem di = (PercentRItem) s.getDataItem(item);
 		RegularTimePeriod period = di.getPeriod();
 		return getX(period);
 	}
@@ -296,9 +295,8 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 	 * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
-		WilliamsPercentRSeries s = (WilliamsPercentRSeries) this.data
-				.get(series);
-		WilliamsPercentRItem di = (WilliamsPercentRItem) s.getDataItem(item);
+		PercentRSeries s = (PercentRSeries) this.data.get(series);
+		PercentRItem di = (PercentRItem) s.getDataItem(item);
 		return new Double(di.getY());
 	}
 
@@ -311,18 +309,17 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 	 *            the item index.
 	 * 
 	 * @return The WilliamsPercentR.
-	 * @see org.trade.strategy.data.williamspercentr.IWilliamsPercentRDataset
-	 *      #getWilliamsPercentRValue(int, int)
+	 * @see org.trade.strategy.data.percentr.IPercentRDataset
+	 *      #getPercentRValue(int, int)
 	 */
-	public double getWilliamsPercentRValue(int series, int item) {
-		WilliamsPercentRSeries s = (WilliamsPercentRSeries) this.data
-				.get(series);
-		WilliamsPercentRItem di = (WilliamsPercentRItem) s.getDataItem(item);
-		return di.getWilliamsPercentR();
+	public double getPercentRValue(int series, int item) {
+		PercentRSeries s = (PercentRSeries) this.data.get(series);
+		PercentRItem di = (PercentRItem) s.getDataItem(item);
+		return di.getPercentR();
 	}
 
 	/**
-	 * Returns the WilliamsPercentR for an item within a series.
+	 * Returns the PercentR for an item within a series.
 	 * 
 	 * @param series
 	 *            the series index.
@@ -330,11 +327,11 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 	 *            the item index.
 	 * 
 	 * @return The Pivot.
-	 * @see org.trade.strategy.data.williamspercentr.IWilliamsPercentRDataset
-	 *      #getWilliamsPercentR(int, int)
+	 * @see org.trade.strategy.data.percentr.IPercentRDataset #getPercentR(int,
+	 *      int)
 	 */
-	public Number getWilliamsPercentR(int series, int item) {
-		return new Double(getWilliamsPercentRValue(series, item));
+	public Number getPercentR(int series, int item) {
+		return new Double(getPercentRValue(series, item));
 	}
 
 	/**
@@ -349,10 +346,10 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 		if (obj == this) {
 			return true;
 		}
-		if (!(obj instanceof WilliamsPercentRDataset)) {
+		if (!(obj instanceof PercentRDataset)) {
 			return false;
 		}
-		WilliamsPercentRDataset that = (WilliamsPercentRDataset) obj;
+		PercentRDataset that = (PercentRDataset) obj;
 		if (!this.xPosition.equals(that.xPosition)) {
 			return false;
 		}
@@ -368,7 +365,7 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 	 */
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
-		WilliamsPercentRDataset clone = (WilliamsPercentRDataset) super.clone();
+		PercentRDataset clone = (PercentRDataset) super.clone();
 		clone.data = (List<IndicatorSeries>) ObjectUtilities
 				.deepClone(this.data);
 		return clone;
@@ -393,7 +390,7 @@ public class WilliamsPercentRDataset extends AbstractXYDataset implements
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
-			WilliamsPercentRSeries series = this.getSeries(x);
+			PercentRSeries series = this.getSeries(x);
 			series.updateSeries(source.getSeries(seriesIndex), source
 					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 		}

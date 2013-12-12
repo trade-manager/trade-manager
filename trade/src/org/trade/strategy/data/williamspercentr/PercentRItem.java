@@ -47,7 +47,7 @@ import org.jfree.data.time.RegularTimePeriod;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class WilliamsPercentRItem extends ComparableObjectItem {
+public class PercentRItem extends ComparableObjectItem {
 
 	/**
 	 * 
@@ -60,12 +60,11 @@ public class WilliamsPercentRItem extends ComparableObjectItem {
 	 * @param period
 	 *            the time period.
 	 * 
-	 * @param williamsPercentR
+	 * @param percentR
 	 *            BigDecimal
 	 */
-	public WilliamsPercentRItem(RegularTimePeriod period,
-			BigDecimal williamsPercentR) {
-		super(period, new WilliamsPercentR(williamsPercentR));
+	public PercentRItem(RegularTimePeriod period, BigDecimal percentR) {
+		super(period, new PercentR(percentR));
 	}
 
 	/**
@@ -83,35 +82,35 @@ public class WilliamsPercentRItem extends ComparableObjectItem {
 	 * @return The y-value.
 	 */
 	public double getY() {
-		return getWilliamsPercentR();
+		return getPercentR();
 	}
 
 	/**
-	 * Set the WilliamsPercentR value.
+	 * Set the PercentR value.
 	 * 
-	 * @param williamsPercentR
+	 * @param percentR
 	 *            double
 	 */
-	public void setWilliamsPercentR(double williamsPercentR) {
-		WilliamsPercentR dataItem = (WilliamsPercentR) getObject();
+	public void setPercentR(double percentR) {
+		PercentR dataItem = (PercentR) getObject();
 		if (dataItem != null) {
-			dataItem.setWilliamsPercentR(new BigDecimal(williamsPercentR));
+			dataItem.setPercentR(new BigDecimal(percentR));
 		}
 
 	}
 
 	/**
-	 * Returns the Williams Percent R value.
+	 * Returns the Percent R value.
 	 * 
-	 * @return The WilliamsPercentR value.
+	 * @return The PercentR value.
 	 */
-	public double getWilliamsPercentR() {
-		WilliamsPercentR dataItem = (WilliamsPercentR) getObject();
+	public double getPercentR() {
+		PercentR dataItem = (PercentR) getObject();
 		if (dataItem != null) {
-			if (null == dataItem.getWilliamsPercentR()) {
+			if (null == dataItem.getPercentR()) {
 				return 0;
 			}
-			return dataItem.getWilliamsPercentR().doubleValue();
+			return dataItem.getPercentR().doubleValue();
 		} else {
 			return 0;
 		}

@@ -36,6 +36,7 @@
 package org.trade.strategy.data;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -68,9 +69,11 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 
 	public static final String LENGTH = "Length";
 	public static final String SMA_LENGTH = "SMALength";
+	public static final String SMOOTHING = "Smoothing";
 
 	private Integer length;
 	private Integer SMALength;
+	private Integer smoothing;
 	/*
 	 * Vales used to calculate StochasticOscillator. These need to be reset when
 	 * the series is cleared.
@@ -300,6 +303,32 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getSmoothing.
+	 * 
+	 * @return Integer
+	 */
+	@Transient
+	public Integer getSmoothing() {
+		try {
+			if (null == this.smoothing)
+				this.smoothing = (Integer) this.getValueCode(SMOOTHING);
+		} catch (Exception e) {
+			this.smoothing = null;
+		}
+		return this.smoothing;
+	}
+
+	/**
+	 * Method setSmoothing.
+	 * 
+	 * @param smoothing
+	 *            Integer
+	 */
+	public void setSmoothing(Integer smoothing) {
+		this.smoothing = smoothing;
+	}
+	
+	/**
 	 * Method createSeries.
 	 * 
 	 * @param source
@@ -373,19 +402,29 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 						this.yyValues.addFirst(candleItem.getClose());
 
 					}
+
 				}
 
 				if (this.yyValues.size() == getLength()) {
-					double ma = sum / getLength();
+
+					double high = Collections.max(this.yyValues);
+
+					double low = Collections.min(this.yyValues);
+
+					// Stochastic = (Close - Low)/(High - Low)*100
+
+					double stochastic = ((candleItem.getClose() - low) / (high - low)) * 100;
+
 					if (newBar) {
 						StochasticOscillatorItem dataItem = new StochasticOscillatorItem(
-								candleItem.getPeriod(), new BigDecimal(ma));
+								candleItem.getPeriod(), new BigDecimal(
+										stochastic));
 						this.add(dataItem, false);
 
 					} else {
 						StochasticOscillatorItem dataItem = (StochasticOscillatorItem) this
 								.getDataItem(this.getItemCount() - 1);
-						dataItem.setStochasticOscillator(ma);
+						dataItem.setStochasticOscillator(stochastic);
 					}
 				}
 			}

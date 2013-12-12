@@ -35,39 +35,56 @@
  */
 package org.trade.strategy.data.williamspercentr;
 
-import org.jfree.data.xy.XYDataset;
+// Generated Feb 21, 2011 12:43:33 PM by Hibernate Tools 3.4.0.CR1
+
+import java.math.BigDecimal;
 
 /**
- * An interface that defines data in the form of (x, high, low, open, close)
- * tuples.
+ * WilliamsPercentR
  * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public interface IWilliamsPercentRDataset extends XYDataset {
+
+public class PercentR implements java.io.Serializable {
 
 	/**
-	 * Returns the Williams %R for an item within a series.
 	 * 
-	 * @param series
-	 *            the series index.
-	 * @param item
-	 *            the item index.
-	 * 
-	 * @return The WilliamsPercentR.
 	 */
-	public double getWilliamsPercentRValue(int series, int item);
+	private static final long serialVersionUID = 7644763985378994305L;
+
+	private BigDecimal percentR;
+
+	public PercentR() {
+	}
 
 	/**
-	 * Returns the Williams Percent R for an item within a series.
+	 * Constructor for PercentR.
 	 * 
-	 * @param series
-	 *            the series index.
-	 * @param item
-	 *            the item index.
-	 * 
-	 * @return The WilliamsPercentR.
+	 * @param percentR
+	 *            BigDecimal
 	 */
-	public Number getWilliamsPercentR(int series, int item);
+	public PercentR(BigDecimal percentR) {
+		this.percentR = percentR;
+	}
+
+	/**
+	 * Method getPercentR.
+	 * 
+	 * @return BigDecimal
+	 */
+	public BigDecimal getPercentR() {
+		return this.percentR;
+	}
+
+	/**
+	 * Method setPercentR.
+	 * 
+	 * @param percentR
+	 *            BigDecimal
+	 */
+	public void setPercentR(BigDecimal percentR) {
+		this.percentR = percentR;
+	}
 
 }

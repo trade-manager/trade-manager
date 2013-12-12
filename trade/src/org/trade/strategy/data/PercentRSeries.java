@@ -36,6 +36,7 @@
 package org.trade.strategy.data;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -48,7 +49,7 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
-import org.trade.strategy.data.williamspercentr.WilliamsPercentRItem;
+import org.trade.strategy.data.williamspercentr.PercentRItem;
 
 /**
  * A list of (RegularTimePeriod, open, high, low, close) data items.
@@ -61,8 +62,8 @@ import org.trade.strategy.data.williamspercentr.WilliamsPercentRItem;
  */
 
 @Entity
-@DiscriminatorValue("WilliamsPercentRSeries")
-public class WilliamsPercentRSeries extends IndicatorSeries {
+@DiscriminatorValue("PercentRSeries")
+public class PercentRSeries extends IndicatorSeries {
 
 	private static final long serialVersionUID = 20183087035446657L;
 
@@ -70,8 +71,8 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 
 	private Integer length;
 	/*
-	 * Vales used to calculate WilliamsPercentR. These need to be reset when the
-	 * series is cleared.
+	 * Vales used to calculate PercentR. These need to be reset when the series
+	 * is cleared.
 	 */
 	private double sum = 0.0;
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
@@ -80,8 +81,6 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 * Creates a new empty series. By default, items added to the series will be
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
-	 * 
-	 * 
 	 * 
 	 * @param strategy
 	 *            Strategy
@@ -98,7 +97,7 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public WilliamsPercentRSeries(Strategy strategy, String name, String type,
+	public PercentRSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
 			Boolean subChart) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
@@ -106,7 +105,7 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Constructor for WilliamsPercentRSeries.
+	 * Constructor for PercentRSeries.
 	 * 
 	 * @param strategy
 	 *            Strategy
@@ -125,7 +124,7 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public WilliamsPercentRSeries(Strategy strategy, String name, String type,
+	public PercentRSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
 			Boolean subChart, Integer length) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
@@ -133,8 +132,8 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 		this.length = length;
 	}
 
-	public WilliamsPercentRSeries() {
-		super(IndicatorSeries.WilliamsPercentRSeries);
+	public PercentRSeries() {
+		super(IndicatorSeries.PercentRSeries);
 	}
 
 	/**
@@ -144,7 +143,7 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 * @throws CloneNotSupportedException
 	 */
 	public Object clone() throws CloneNotSupportedException {
-		WilliamsPercentRSeries clone = (WilliamsPercentRSeries) super.clone();
+		PercentRSeries clone = (PercentRSeries) super.clone();
 		clone.yyValues = new LinkedList<Double>();
 		return clone;
 	}
@@ -170,7 +169,7 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 * @return The time period.
 	 */
 	public RegularTimePeriod getPeriod(int index) {
-		final WilliamsPercentRItem item = (WilliamsPercentRItem) getDataItem(index);
+		final PercentRItem item = (PercentRItem) getDataItem(index);
 		return item.getPeriod();
 	}
 
@@ -184,14 +183,13 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 */
 	public void add(RegularTimePeriod period, BigDecimal williamsPercentR) {
 		if (!this.isEmpty()) {
-			WilliamsPercentRItem item0 = (WilliamsPercentRItem) this
-					.getDataItem(0);
+			PercentRItem item0 = (PercentRItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
 						"Can't mix RegularTimePeriod class types.");
 			}
 		}
-		super.add(new WilliamsPercentRItem(period, williamsPercentR), true);
+		super.add(new PercentRItem(period, williamsPercentR), true);
 	}
 
 	/**
@@ -203,10 +201,9 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 * @param dataItem
 	 *            WilliamsPercentRItem
 	 */
-	public void add(WilliamsPercentRItem dataItem, boolean notify) {
+	public void add(PercentRItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
-			WilliamsPercentRItem item0 = (WilliamsPercentRItem) this
-					.getDataItem(0);
+			PercentRItem item0 = (PercentRItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -228,8 +225,7 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
-			WilliamsPercentRItem item = (WilliamsPercentRItem) this.data
-					.get(i - 1);
+			PercentRItem item = (PercentRItem) this.data.get(i - 1);
 			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
 				break;
 			}
@@ -344,16 +340,24 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 				}
 
 				if (this.yyValues.size() == getLength()) {
-					double ma = sum / getLength();
+					double high = Collections.max(this.yyValues);
+
+					double low = Collections.min(this.yyValues);
+
+					// percentR = (High - Close)/(high - low)* -100
+
+					double percentR = ((high - candleItem.getClose()) / (high - low)) * 100;
+
 					if (newBar) {
-						WilliamsPercentRItem dataItem = new WilliamsPercentRItem(
-								candleItem.getPeriod(), new BigDecimal(ma));
+						PercentRItem dataItem = new PercentRItem(
+								candleItem.getPeriod(),
+								new BigDecimal(percentR));
 						this.add(dataItem, false);
 
 					} else {
-						WilliamsPercentRItem dataItem = (WilliamsPercentRItem) this
+						PercentRItem dataItem = (PercentRItem) this
 								.getDataItem(this.getItemCount() - 1);
-						dataItem.setWilliamsPercentR(ma);
+						dataItem.setPercentR(percentR);
 					}
 				}
 			}
@@ -366,11 +370,10 @@ public class WilliamsPercentRSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			WilliamsPercentRItem dataItem = (WilliamsPercentRItem) this
-					.getDataItem(i);
+			PercentRItem dataItem = (PercentRItem) this.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " MA: "
-					+ dataItem.getWilliamsPercentR());
+					+ dataItem.getPercentR());
 		}
 	}
 
