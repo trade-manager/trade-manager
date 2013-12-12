@@ -49,7 +49,7 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
-import org.trade.strategy.data.williamspercentr.PercentRItem;
+import org.trade.strategy.data.percentr.PercentRItem;
 
 /**
  * A list of (RegularTimePeriod, open, high, low, close) data items.

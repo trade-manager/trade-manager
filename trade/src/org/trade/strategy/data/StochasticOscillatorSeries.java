@@ -327,7 +327,7 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	public void setSmoothing(Integer smoothing) {
 		this.smoothing = smoothing;
 	}
-	
+
 	/**
 	 * Method createSeries.
 	 * 

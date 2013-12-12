@@ -33,7 +33,7 @@
  * -------
  *
  */
-package org.trade.strategy.data.williamspercentr;
+package org.trade.strategy.data.percentr;
 
 import org.jfree.data.xy.XYDataset;
 

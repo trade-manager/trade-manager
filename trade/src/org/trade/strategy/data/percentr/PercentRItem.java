@@ -33,58 +33,86 @@
  * -------
  *
  */
-package org.trade.strategy.data.williamspercentr;
-
-// Generated Feb 21, 2011 12:43:33 PM by Hibernate Tools 3.4.0.CR1
+package org.trade.strategy.data.percentr;
 
 import java.math.BigDecimal;
 
+import org.jfree.data.ComparableObjectItem;
+import org.jfree.data.time.RegularTimePeriod;
+
 /**
- * WilliamsPercentR
+ * An item representing data in the form (period, open, high, low, close).
  * 
+ * @since 1.0.4
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-
-public class PercentR implements java.io.Serializable {
+public class PercentRItem extends ComparableObjectItem {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7644763985378994305L;
-
-	private BigDecimal percentR;
-
-	public PercentR() {
-	}
+	private static final long serialVersionUID = -3888996139640449109L;
 
 	/**
-	 * Constructor for PercentR.
+	 * Creates a new instance of <code>CandleItem</code>.
+	 * 
+	 * @param period
+	 *            the time period.
 	 * 
 	 * @param percentR
 	 *            BigDecimal
 	 */
-	public PercentR(BigDecimal percentR) {
-		this.percentR = percentR;
+	public PercentRItem(RegularTimePeriod period, BigDecimal percentR) {
+		super(period, new PercentR(percentR));
 	}
 
 	/**
-	 * Method getPercentR.
+	 * Returns the period.
 	 * 
-	 * @return BigDecimal
+	 * @return The period (never <code>null</code>).
 	 */
-	public BigDecimal getPercentR() {
-		return this.percentR;
+	public RegularTimePeriod getPeriod() {
+		return (RegularTimePeriod) getComparable();
 	}
 
 	/**
-	 * Method setPercentR.
+	 * Returns the y-value.
+	 * 
+	 * @return The y-value.
+	 */
+	public double getY() {
+		return getPercentR();
+	}
+
+	/**
+	 * Set the PercentR value.
 	 * 
 	 * @param percentR
-	 *            BigDecimal
+	 *            double
 	 */
-	public void setPercentR(BigDecimal percentR) {
-		this.percentR = percentR;
+	public void setPercentR(double percentR) {
+		PercentR dataItem = (PercentR) getObject();
+		if (dataItem != null) {
+			dataItem.setPercentR(new BigDecimal(percentR));
+		}
+
 	}
 
+	/**
+	 * Returns the Percent R value.
+	 * 
+	 * @return The PercentR value.
+	 */
+	public double getPercentR() {
+		PercentR dataItem = (PercentR) getObject();
+		if (dataItem != null) {
+			if (null == dataItem.getPercentR()) {
+				return 0;
+			}
+			return dataItem.getPercentR().doubleValue();
+		} else {
+			return 0;
+		}
+	}
 }

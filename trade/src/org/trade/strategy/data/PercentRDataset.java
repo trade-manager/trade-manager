@@ -48,8 +48,8 @@ import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.ObjectUtilities;
-import org.trade.strategy.data.williamspercentr.IPercentRDataset;
-import org.trade.strategy.data.williamspercentr.PercentRItem;
+import org.trade.strategy.data.percentr.IPercentRDataset;
+import org.trade.strategy.data.percentr.PercentRItem;
 
 /**
  */
