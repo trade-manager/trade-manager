@@ -51,7 +51,20 @@ import org.trade.strategy.data.bollingerbands.BollingerBandsItem;
 import org.trade.strategy.data.candle.CandleItem;
 
 /**
- * A list of (RegularTimePeriod, open, high, low, close) data items.
+ * Developed by John Bollinger, Bollinger Bands® are volatility bands placed
+ * above and below a moving average. Volatility is based on the standard
+ * deviation, which changes as volatility increases and decreases. The bands
+ * automatically widen when volatility increases and narrow when volatility
+ * decreases. This dynamic nature of Bollinger Bands also means they can be used
+ * on different securities with the standard settings. For signals, Bollinger
+ * Bands can be used to identify M-Tops and W-Bottoms or to determine the
+ * strength of the trend.
+ * 
+ * Middle Band = 20-day simple moving average (SMA)
+ * 
+ * Upper Band = 20-day SMA + (20-day standard deviation of price x 2)
+ * 
+ * Lower Band = 20-day SMA - (20-day standard deviation of price x 2)
  * 
  * @since 1.0.4
  * 

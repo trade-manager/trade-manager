@@ -51,7 +51,27 @@ import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.cci.CommodityChannelIndexItem;
 
 /**
- * A list of (RegularTimePeriod, open, high, low, close) data items.
+ * Developed by Donald Lambert and featured in Commodities magazine in 1980, the
+ * Commodity Channel Index (CCI) is a versatile indicator that can be used to
+ * identify a new trend or warn of extreme conditions. Lambert originally
+ * developed CCI to identify cyclical turns in commodities, but the indicator
+ * can successfully applied to indices, ETFs, stocks and other securities. In
+ * general, CCI measures the current price level relative to an average price
+ * level over a given period of time. CCI is relatively high when prices are far
+ * above their average. CCI is relatively low when prices are far below their
+ * average. In this manner, CCI can be used to identify overbought and oversold
+ * levels.
+ * 
+ * CCI = (Typical Price - 20-period SMA of TP) / (.015 x Mean Deviation)
+ * 
+ * Typical Price (TP) = (High + Low + Close)/3
+ * 
+ * Constant = .015
+ * 
+ * There are four steps to calculating the Mean Deviation. First, subtract the
+ * most recent 20-period average of the typical price from each period's typical
+ * price. Second, take the absolute values of these numbers. Third, sum the
+ * absolute values. Fourth, divide by the total number of periods (20).
  * 
  * @since 1.0.4
  * 

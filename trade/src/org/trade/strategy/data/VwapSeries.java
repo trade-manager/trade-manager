@@ -47,7 +47,14 @@ import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.vwap.VwapItem;
 
 /**
- * A list of (RegularTimePeriod, open, high, low, close) data items.
+ * Volume-Weighted Average Price (VWAP) is exactly what it sounds like: the
+ * average price weighted by volume. VWAP equals the dollar value of all trading
+ * periods divided by the total trading volume for the current day. Calculation
+ * starts when trading opens and ends when trading closes. Because it is good
+ * for the current trading day only, intraday periods and data are used in the
+ * calculation.
+ * 
+ * Cumulative(Volume x Typical Price)/Cumulative(Volume)
  * 
  * @since 1.0.4
  * 

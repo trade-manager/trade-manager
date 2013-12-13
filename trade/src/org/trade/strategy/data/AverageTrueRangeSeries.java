@@ -50,7 +50,20 @@ import org.trade.strategy.data.atr.AverageTrueRangeItem;
 import org.trade.strategy.data.candle.CandleItem;
 
 /**
- * A list of (RegularTimePeriod, open, high, low, close) data items.
+ * Typically, the Average True Range (ATR) is based on 14 periods and can be
+ * calculated on an intraday, daily, weekly or monthly basis. For this example,
+ * the ATR will be based on daily data. Because there must be a beginning, the
+ * first TR value is simply the High minus the Low, and the first 14-day ATR is
+ * the average of the daily TR values for the last 14 days. After that, Wilder
+ * sought to smooth the data by incorporating the previous period's ATR value.
+ * 
+ * Current ATR = [(Prior ATR x 13) + Current TR] / 14
+ * 
+ * - Multiply the previous 14-day ATR by 13.
+ * 
+ * - Add the most recent day's TR value.
+ * 
+ * - Divide the total by 14
  * 
  * @since 1.0.4
  * 

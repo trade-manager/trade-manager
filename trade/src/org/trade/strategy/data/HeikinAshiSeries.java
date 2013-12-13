@@ -48,7 +48,47 @@ import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.heikinashi.HeikinAshiItem;
 
 /**
- * A list of (RegularTimePeriod, open, high, low, close) data items.
+ * Heikin-Ashi Candlesticks are an offshoot from Japanese candlesticks.
+ * Heikin-Ashi Candlesticks use the open-close data from the prior period and
+ * the open-high-low-close data from the current period to create a combo
+ * candlestick. The resulting candlestick filters out some noise in an effort to
+ * better capture the trend. In Japanese, Heikin means "average" and "ashi"
+ * means "pace" (EUDict.com). Taken together, Heikin-Ashi represents the
+ * average-pace of prices. Heikin-Ashi Candlesticks are not used like normal
+ * candlesticks. Dozens of bullish or bearish reversal patterns consisting of
+ * 1-3 candlesticks are not to be found. Instead, these candlesticks can be used
+ * to identify trending periods, potential reversal points and classic technical
+ * analysis patterns.
+ * 
+ * 
+ * Heikin-Ashi Candlesticks are based on price data from the current
+ * open-high-low-close, the current Heikin-Ashi values and the prior Heikin-Ashi
+ * values. Yes, it is a bit complicated. In the formula below, a "(0)" denotes
+ * the current period. A "(-1)" denotes the prior period. "HA" refers to
+ * Heikin-Ashi. Let's take each data point one at a time.
+ * 
+ * 
+ * 1. The Heikin-Ashi Close is simply an average of the open, high, low and
+ * close for the current period.
+ * 
+ * HA-Close = (Open(0) + High(0) + Low(0) + Close(0)) / 4
+ * 
+ * 2. The Heikin-Ashi Open is the average of the prior Heikin-Ashi candlestick
+ * open plus the close of the prior Heikin-Ashi candlestick.
+ * 
+ * HA-Open = (HA-Open(-1) + HA-Close(-1)) / 2
+ * 
+ * 3. The Heikin-Ashi High is the maximum of three data points: the current
+ * period's high, the current Heikin-Ashi candlestick open or the current
+ * Heikin-Ashi candlestick close.
+ * 
+ * HA-High = Maximum of the High(0), HA-Open(0) or HA-Close(0)
+ * 
+ * 4. The Heikin-Ashi low is the minimum of three data points: the current
+ * period's low, the current Heikin-Ashi candlestick open or the current
+ * Heikin-Ashi candlestick close.
+ * 
+ * HA-Low = Minimum of the Low(0), HA-Open(0) or HA-Close(0)
  * 
  * @since 1.0.4
  * 
