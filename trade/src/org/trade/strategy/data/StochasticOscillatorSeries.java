@@ -80,10 +80,10 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	 * Vales used to calculate StochasticOscillator. These need to be reset when
 	 * the series is cleared.
 	 */
-	private double sumFullKValues = 0.0;
+	private double sumFullKRValues = 0.0;
 	private double sumFullDValues = 0.0;
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
-	private LinkedList<Double> fullKValues = new LinkedList<Double>();
+	private LinkedList<Double> fullKRValues = new LinkedList<Double>();
 	private LinkedList<Double> fullDValues = new LinkedList<Double>();
 
 	/**
@@ -164,7 +164,7 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 		StochasticOscillatorSeries clone = (StochasticOscillatorSeries) super
 				.clone();
 		clone.yyValues = new LinkedList<Double>();
-		clone.fullKValues = new LinkedList<Double>();
+		clone.fullKRValues = new LinkedList<Double>();
 		clone.fullDValues = new LinkedList<Double>();
 		return clone;
 	}
@@ -176,10 +176,10 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	 */
 	public void clear() {
 		super.clear();
-		sumFullKValues = 0.0;
+		sumFullKRValues = 0.0;
 		sumFullDValues = 0.0;
 		yyValues.clear();
-		fullKValues.clear();
+		fullKRValues.clear();
 		fullDValues.clear();
 	}
 
@@ -456,7 +456,7 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 								* -100;
 					}
 
-					if (this.fullKValues.size() == this.getSMALength()) {
+					if (this.fullKRValues.size() == this.getSMALength()) {
 						/*
 						 * If the item does not exist in the series then this is
 						 * a new time period and so we need to remove the last
@@ -466,30 +466,30 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 						 * of values each time.
 						 */
 						if (newBar) {
-							sumFullKValues = sumFullKValues
-									- this.fullKValues.getLast() + fastKR;
-							this.fullKValues.removeLast();
-							this.fullKValues.addFirst(fastKR);
+							sumFullKRValues = sumFullKRValues
+									- this.fullKRValues.getLast() + fastKR;
+							this.fullKRValues.removeLast();
+							this.fullKRValues.addFirst(fastKR);
 						} else {
-							sumFullKValues = sumFullKValues
-									- this.fullKValues.getFirst() + fastKR;
-							this.fullKValues.removeFirst();
-							this.fullKValues.addFirst(fastKR);
+							sumFullKRValues = sumFullKRValues
+									- this.fullKRValues.getFirst() + fastKR;
+							this.fullKRValues.removeFirst();
+							this.fullKRValues.addFirst(fastKR);
 						}
 					} else {
 						if (newBar) {
-							sumFullKValues = sumFullKValues + fastKR;
-							this.fullKValues.addFirst(fastKR);
+							sumFullKRValues = sumFullKRValues + fastKR;
+							this.fullKRValues.addFirst(fastKR);
 						} else {
-							sumFullKValues = sumFullKValues + fastKR
-									- this.fullKValues.getFirst();
-							this.fullKValues.removeFirst();
-							this.fullKValues.addFirst(fastKR);
+							sumFullKRValues = sumFullKRValues + fastKR
+									- this.fullKRValues.getFirst();
+							this.fullKRValues.removeFirst();
+							this.fullKRValues.addFirst(fastKR);
 						}
 					}
-					if (this.fullKValues.size() == this.getSMALength()) {
+					if (this.fullKRValues.size() == this.getSMALength()) {
 
-						double fullKR = sumFullKValues / this.getSMALength();
+						double fullKR = sumFullKRValues / this.getSMALength();
 
 						if (this.fullDValues.size() == this.getSmoothing()) {
 							/*
