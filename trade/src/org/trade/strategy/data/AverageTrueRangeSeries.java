@@ -413,7 +413,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 			AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
 					.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " ATR: "
+					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getAverageTrueRange());
 		}
 	}

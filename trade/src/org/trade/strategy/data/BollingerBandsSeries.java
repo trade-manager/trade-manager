@@ -462,7 +462,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 			BollingerBandsItem dataItem = (BollingerBandsItem) this
 					.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " BollingerBand: "
+					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getBollingerBands());
 		}
 	}

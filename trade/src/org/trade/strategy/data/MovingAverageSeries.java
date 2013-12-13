@@ -409,7 +409,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 			MovingAverageItem dataItem = (MovingAverageItem) this
 					.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " MA: "
+					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getMovingAverage());
 		}
 	}

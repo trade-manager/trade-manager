@@ -70,16 +70,21 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	public static final String LENGTH = "Length";
 	public static final String SMA_LENGTH = "SMALength";
 	public static final String SMOOTHING = "Smoothing";
+	public static final String INVERSE = "Inverse";
 
 	private Integer length;
 	private Integer SMALength;
 	private Integer smoothing;
+	private Boolean inverse;
 	/*
 	 * Vales used to calculate StochasticOscillator. These need to be reset when
 	 * the series is cleared.
 	 */
-	private double sum = 0.0;
+	private double sumFullKValues = 0.0;
+	private double sumFullDValues = 0.0;
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
+	private LinkedList<Double> fullKValues = new LinkedList<Double>();
+	private LinkedList<Double> fullDValues = new LinkedList<Double>();
 
 	/**
 	 * Creates a new empty series. By default, items added to the series will be
@@ -129,15 +134,20 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	 *            Boolean
 	 * @param length
 	 *            Integer
+	 * @param SMALength
+	 *            Integer
+	 * @param smoothing
+	 *            Integer
 	 */
 	public StochasticOscillatorSeries(Strategy strategy, String name,
 			String type, String description, Boolean displayOnChart,
 			Integer chartRGBColor, Boolean subChart, Integer length,
-			Integer SMALength) {
+			Integer SMALength, Integer smoothing) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
 				subChart);
 		this.length = length;
 		this.SMALength = SMALength;
+		this.smoothing = smoothing;
 	}
 
 	public StochasticOscillatorSeries() {
@@ -154,6 +164,8 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 		StochasticOscillatorSeries clone = (StochasticOscillatorSeries) super
 				.clone();
 		clone.yyValues = new LinkedList<Double>();
+		clone.fullKValues = new LinkedList<Double>();
+		clone.fullDValues = new LinkedList<Double>();
 		return clone;
 	}
 
@@ -164,8 +176,11 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	 */
 	public void clear() {
 		super.clear();
-		sum = 0.0;
+		sumFullKValues = 0.0;
+		sumFullDValues = 0.0;
 		yyValues.clear();
+		fullKValues.clear();
+		fullDValues.clear();
 	}
 
 	/**
@@ -260,8 +275,10 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 		try {
 			if (null == this.length)
 				this.length = (Integer) this.getValueCode(LENGTH);
+			if (this.length < 1)
+				this.length = 1;
 		} catch (Exception e) {
-			this.length = null;
+			this.length = 1;
 		}
 		return this.length;
 	}
@@ -286,8 +303,10 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 		try {
 			if (null == this.SMALength)
 				this.SMALength = (Integer) this.getValueCode(SMA_LENGTH);
+			if (this.SMALength < 1)
+				this.SMALength = 1;
 		} catch (Exception e) {
-			this.SMALength = null;
+			this.SMALength = 1;
 		}
 		return this.SMALength;
 	}
@@ -312,8 +331,10 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 		try {
 			if (null == this.smoothing)
 				this.smoothing = (Integer) this.getValueCode(SMOOTHING);
+			if (this.smoothing < 1)
+				this.smoothing = 1;
 		} catch (Exception e) {
-			this.smoothing = null;
+			this.smoothing = 1;
 		}
 		return this.smoothing;
 	}
@@ -326,6 +347,32 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	 */
 	public void setSmoothing(Integer smoothing) {
 		this.smoothing = smoothing;
+	}
+
+	/**
+	 * Method getInverse.
+	 * 
+	 * @return Boolean
+	 */
+	@Transient
+	public Boolean getInverse() {
+		try {
+			if (null == this.inverse)
+				this.inverse = (Boolean) this.getValueCode(INVERSE);
+		} catch (Exception e) {
+			this.inverse = null;
+		}
+		return this.inverse;
+	}
+
+	/**
+	 * Method setInverse.
+	 * 
+	 * @param inverse
+	 *            Boolean
+	 */
+	public void setInverse(Boolean inverse) {
+		this.inverse = inverse;
 	}
 
 	/**
@@ -364,7 +411,7 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 		}
 		if (getLength() == null || getLength() < 1) {
 			throw new IllegalArgumentException(
-					"MA period must be greater than zero.");
+					"SMA period must be greater than zero.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -381,50 +428,115 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 					 * each time.
 					 */
 					if (newBar) {
-						sum = sum - this.yyValues.getLast()
-								+ candleItem.getClose();
 						this.yyValues.removeLast();
 						this.yyValues.addFirst(candleItem.getClose());
 					} else {
-						sum = sum - this.yyValues.getFirst()
-								+ candleItem.getClose();
 						this.yyValues.removeFirst();
 						this.yyValues.addFirst(candleItem.getClose());
 					}
 				} else {
 					if (newBar) {
-						sum = sum + candleItem.getClose();
 						this.yyValues.addFirst(candleItem.getClose());
 					} else {
-						sum = sum + candleItem.getClose()
-								- this.yyValues.getFirst();
 						this.yyValues.removeFirst();
 						this.yyValues.addFirst(candleItem.getClose());
-
 					}
-
 				}
 
 				if (this.yyValues.size() == getLength()) {
 
 					double high = Collections.max(this.yyValues);
-
 					double low = Collections.min(this.yyValues);
 
-					// Stochastic = (Close - Low)/(High - Low)*100
+					// fastK = (Close - Low)/(High - Low)*100
+					double fastKR = ((candleItem.getClose() - low) / (high - low)) * 100;
+					if (this.getInverse()) {
+						// fastR = (High - Close )/(High - Low)*-100
+						fastKR = ((high - candleItem.getClose()) / (high - low))
+								* -100;
+					}
 
-					double stochastic = ((candleItem.getClose() - low) / (high - low)) * 100;
-
-					if (newBar) {
-						StochasticOscillatorItem dataItem = new StochasticOscillatorItem(
-								candleItem.getPeriod(), new BigDecimal(
-										stochastic));
-						this.add(dataItem, false);
-
+					if (this.fullKValues.size() == this.getSMALength()) {
+						/*
+						 * If the item does not exist in the series then this is
+						 * a new time period and so we need to remove the last
+						 * in the set and add the new periods values. Otherwise
+						 * we just update the last value in the set. Sum is just
+						 * used for performance save having to sum the last set
+						 * of values each time.
+						 */
+						if (newBar) {
+							sumFullKValues = sumFullKValues
+									- this.fullKValues.getLast() + fastKR;
+							this.fullKValues.removeLast();
+							this.fullKValues.addFirst(fastKR);
+						} else {
+							sumFullKValues = sumFullKValues
+									- this.fullKValues.getFirst() + fastKR;
+							this.fullKValues.removeFirst();
+							this.fullKValues.addFirst(fastKR);
+						}
 					} else {
-						StochasticOscillatorItem dataItem = (StochasticOscillatorItem) this
-								.getDataItem(this.getItemCount() - 1);
-						dataItem.setStochasticOscillator(stochastic);
+						if (newBar) {
+							sumFullKValues = sumFullKValues + fastKR;
+							this.fullKValues.addFirst(fastKR);
+						} else {
+							sumFullKValues = sumFullKValues + fastKR
+									- this.fullKValues.getFirst();
+							this.fullKValues.removeFirst();
+							this.fullKValues.addFirst(fastKR);
+						}
+					}
+					if (this.fullKValues.size() == this.getSMALength()) {
+
+						double fullKR = sumFullKValues / this.getSMALength();
+
+						if (this.fullDValues.size() == this.getSmoothing()) {
+							/*
+							 * If the item does not exist in the series then
+							 * this is a new time period and so we need to
+							 * remove the last in the set and add the new
+							 * periods values. Otherwise we just update the last
+							 * value in the set. Sum is just used for
+							 * performance save having to sum the last set of
+							 * values each time.
+							 */
+							if (newBar) {
+								sumFullDValues = sumFullDValues
+										- this.fullDValues.getLast() + fullKR;
+								this.fullDValues.removeLast();
+								this.fullDValues.addFirst(fullKR);
+							} else {
+								sumFullDValues = sumFullDValues
+										- this.fullDValues.getFirst() + fullKR;
+								this.fullDValues.removeFirst();
+								this.fullDValues.addFirst(fullKR);
+							}
+						} else {
+							if (newBar) {
+								sumFullDValues = sumFullDValues + fullKR;
+								this.fullDValues.addFirst(fullKR);
+							} else {
+								sumFullDValues = sumFullDValues + fullKR
+										- this.fullDValues.getFirst();
+								this.fullDValues.removeFirst();
+								this.fullDValues.addFirst(fullKR);
+							}
+						}
+						if (this.fullDValues.size() == this.getSmoothing()) {
+							double fullD = sumFullDValues / this.getSmoothing();
+							if (newBar) {
+								StochasticOscillatorItem dataItem = new StochasticOscillatorItem(
+										candleItem.getPeriod(), new BigDecimal(
+												fullD));
+								this.add(dataItem, false);
+
+							} else {
+								StochasticOscillatorItem dataItem = (StochasticOscillatorItem) this
+										.getDataItem(this.getItemCount() - 1);
+								dataItem.setStochasticOscillator(fullD);
+							}
+						}
 					}
 				}
 			}
@@ -440,9 +552,8 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 			StochasticOscillatorItem dataItem = (StochasticOscillatorItem) this
 					.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " MA: "
+					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getStochasticOscillator());
 		}
 	}
-
 }

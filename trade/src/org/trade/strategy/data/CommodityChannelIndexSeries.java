@@ -322,7 +322,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 			CommodityChannelIndexItem dataItem = (CommodityChannelIndexItem) this
 					.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " CCI: "
+					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getCommodityChannelIndex());
 		}
 	}

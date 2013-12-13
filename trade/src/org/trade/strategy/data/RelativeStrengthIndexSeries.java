@@ -456,7 +456,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 			RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
 					.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " RSI: "
+					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getRelativeStrengthIndex());
 		}
 	}
