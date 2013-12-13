@@ -51,7 +51,7 @@ import org.trade.strategy.data.bollingerbands.BollingerBandsItem;
 import org.trade.strategy.data.candle.CandleItem;
 
 /**
- * Developed by John Bollinger, Bollinger Bands® are volatility bands placed
+ * Developed by John Bollinger, Bollinger Bands are volatility bands placed
  * above and below a moving average. Volatility is based on the standard
  * deviation, which changes as volatility increases and decreases. The bands
  * automatically widen when volatility increases and narrow when volatility
