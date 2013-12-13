@@ -52,7 +52,64 @@ import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.stochasticoscillator.StochasticOscillatorItem;
 
 /**
- * A list of (RegularTimePeriod, open, high, low, close) data items.
+ * Fast, Slow or Full
+ * 
+ * There are three versions of the Stochastic Oscillator available on
+ * SharpCharts. The Fast Stochastic Oscillator is based on George Lane's
+ * original formulas for %K and %D. %K in the fast version that appears rather
+ * choppy. %D is the 3-day SMA of %K. In fact, Lane used %D to generate buy or
+ * sell signals based on bullish and bearish divergences. Lane asserts that a %D
+ * divergence is the "only signal which will cause you to buy or sell." Because
+ * %D in the Fast Stochastic Oscillator is used for signals, the Slow Stochastic
+ * Oscillator was introduced to reflect this emphasis. The Slow Stochastic
+ * Oscillator smooths %K with a 3-day SMA, which is exactly what %D is in the
+ * Fast Stochastic Oscillator. Notice that %K in the Slow Stochastic Oscillator
+ * equals %D in the Fast Stochastic Oscillator (chart 2).
+ * 
+ * 
+ * Fast Stochastic Oscillator:
+ * 
+ * Fast %K = %K basic calculation
+ * 
+ * Fast %D = 3-period SMA of Fast %K
+ * 
+ * Slow Stochastic Oscillator:
+ * 
+ * Slow %K = Fast %K smoothed with 3-period SMA
+ * 
+ * Slow %D = 3-period SMA of Slow
+ * 
+ * %K The Full Stochastic Oscillator is a fully customizable version of the Slow
+ * Stochastic Oscillator. Users can set the look-back period, the number of
+ * periods to slow %K and the number of periods for the %D moving average. The
+ * default parameters were used in these examples: Fast Stochastic Oscillator
+ * (14,3), Slow Stochastic Oscillator (14,3) and Full Stochastic Oscillator
+ * (14,3,3).
+ * 
+ * Full Stochastic Oscillator:
+ * 
+ * Full %K = Fast %K smoothed with X-period SMA Full %D = X-period SMA of Full
+ * %K
+ * 
+ * 
+ * Developed by Larry Williams, Williams %R is a momentum indicator that is the
+ * inverse of the Fast Stochastic Oscillator. Also referred to as %R, Williams
+ * %R reflects the level of the close relative to the highest high for the
+ * look-back period. In contrast, the Stochastic Oscillator reflects the level
+ * of the close relative to the lowest low. %R corrects for the inversion by
+ * multiplying the raw value by -100. As a result, the Fast Stochastic
+ * Oscillator and Williams %R produce the exact same lines, only the scaling is
+ * different. Williams %R oscillates from 0 to -100. Readings from 0 to -20 are
+ * considered overbought. Readings from -80 to -100 are considered oversold.
+ * Unsurprisingly, signals derived from the Stochastic Oscillator are also
+ * applicable to Williams %R.
+ * 
+ * %R = (Highest High - Close)/(Highest High - Lowest Low) * -100
+ * 
+ * Lowest Low = lowest low for the look-back period Highest High = highest high
+ * for the look-back period %R is multiplied by -100 correct the inversion and
+ * move the decimal.
+ * 
  * 
  * @since 1.0.4
  * 
@@ -448,10 +505,27 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 					double high = Collections.max(this.yyValues);
 					double low = Collections.min(this.yyValues);
 
-					// fastK = (Close - Low)/(High - Low)*100
+					/*
+					 * %K = (Current Close - Lowest Low)/(Highest High - Lowest
+					 * Low) * 100
+					 * 
+					 * %D = 3-day SMA of %K
+					 * 
+					 * Lowest Low = lowest low for the look-back period Highest
+					 * High = highest high for the look-back period %K is
+					 * multiplied by 100 to move the decimal point two places
+					 */
 					double fastKR = ((candleItem.getClose() - low) / (high - low)) * 100;
 					if (this.getInverse()) {
-						// fastR = (High - Close )/(High - Low)*-100
+						/*
+						 * %R = (Highest High - Close)/(Highest High - Lowest
+						 * Low) * -100
+						 * 
+						 * Lowest Low = lowest low for the look-back period
+						 * Highest High = highest high for the look-back period
+						 * %R is multiplied by -100 correct the inversion and
+						 * move the decimal.
+						 */
 						fastKR = ((high - candleItem.getClose()) / (high - low))
 								* -100;
 					}
