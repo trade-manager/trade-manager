@@ -72,3 +72,15 @@ ALTER TABLE tradeprod.tradeorderfill add column accountNumber VARCHAR(20) NULL;
 
 ALTER TABLE tradeprod.tradeorderfill 
 CHANGE COLUMN accountNumber accountNumber VARCHAR(20) NULL AFTER idTradeOrderFill;
+
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(8,'StochasticOscillator','Stochastic Oscillator',0);
+
+COMMIT;
+
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(18,'Length','The length of the %K','14','java.lang.Integer',null, 8,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(19,'SMALength','The length of the %D','3','java.lang.Integer',null, 8,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(20,'Smoothing','The smoothing of the %D','1','java.lang.Integer',null, 8,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(21,'Inverse','Stochastic or Percent R','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 8,0) ;
+
+COMMIT;
+
