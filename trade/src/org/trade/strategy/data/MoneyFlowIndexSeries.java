@@ -89,8 +89,10 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	private static final long serialVersionUID = 20183087035446657L;
 
 	public static final String LENGTH = "Length";
+	public static final String ROLLING_CANDLE = "RollingCandle";
 
 	private Integer length;
+	private Boolean rollingCandle;
 
 	private double positiveSum = 0.0;
 	private double negativeSum = 0.0;
@@ -289,6 +291,33 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getRollingCandle.
+	 * 
+	 * @return Boolean
+	 */
+	@Transient
+	public Boolean getRollingCandle() {
+		try {
+			if (null == this.rollingCandle)
+				this.rollingCandle = (Boolean) this
+						.getValueCode(ROLLING_CANDLE);
+		} catch (Exception e) {
+			this.rollingCandle = null;
+		}
+		return this.rollingCandle;
+	}
+
+	/**
+	 * Method setRollingCandle.
+	 * 
+	 * @param rollingCandle
+	 *            Boolean
+	 */
+	public void setRollingCandle(Boolean rollingCandle) {
+		this.rollingCandle = rollingCandle;
+	}
+
+	/**
 	 * Method createSeries.
 	 * 
 	 * @param source
@@ -329,22 +358,46 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 
 		if (source.getItemCount() > skip) {
 			if (source.getItemCount() > 1) {
+
+				// Get the current data item...
+				CandleItem candleItem = (CandleItem) source.getDataItem(skip);
+				// Get the previous candle.
 				CandleItem prevCandleItem = (CandleItem) source
 						.getDataItem(skip - 1);
+
 				double prevTypicalPrice = (prevCandleItem.getHigh()
 						+ prevCandleItem.getLow() + prevCandleItem.getClose()) / 3;
+				if (this.getRollingCandle()) {
+					prevTypicalPrice = (source.getPreviousRollingCandle()
+							.getClose()
+							+ source.getPreviousRollingCandle().getHigh() + source
+							.getPreviousRollingCandle().getLow()) / 3;
+				}
 
-				// get the current data item...
-				CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 				if (0 != candleItem.getClose()) {
 
-					double typicalPrice = (candleItem.getHigh()
-							+ candleItem.getLow() + candleItem.getClose()) / 3;
-					int multipler = 1;
-					if (typicalPrice > prevTypicalPrice) {
-						multipler = -1;
-					}
+					double typicalPrice = (candleItem.getClose()
+							+ candleItem.getHigh() + candleItem.getLow()) / 3;
 					double value = typicalPrice * candleItem.getVolume();
+					if (typicalPrice < prevTypicalPrice)
+						value = typicalPrice * candleItem.getVolume() * -1;
+
+					if (this.getRollingCandle()) {
+						typicalPrice = (source.getRollingCandle().getClose()
+								+ source.getRollingCandle().getHigh() + source
+								.getRollingCandle().getLow()) / 3;
+						value = typicalPrice
+								* source.getRollingCandle().getVolume();
+						if (typicalPrice < prevTypicalPrice)
+							value = typicalPrice
+									* source.getRollingCandle().getVolume()
+									* -1;
+					}
+					if (value > 0) {
+						positiveSum = positiveSum + value;
+					} else {
+						negativeSum = negativeSum + Math.abs(value);
+					}
 					if (this.yyValues.size() == getLength()) {
 						/*
 						 * If the item does not exist in the series then this is
@@ -354,65 +407,45 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 						 * used for performance save having to sum the last set
 						 * of values each time.
 						 */
+
 						if (newBar) {
-							if (typicalPrice > prevTypicalPrice) {
-								positiveSum = positiveSum + value;
-							} else {
-								negativeSum = negativeSum + value;
-							}
 							if (this.yyValues.getLast() > 0) {
 								positiveSum = positiveSum
 										- this.yyValues.getLast();
 							} else {
 								negativeSum = negativeSum
-										- this.yyValues.getLast();
+										- Math.abs(this.yyValues.getLast());
 							}
 
 							this.yyValues.removeLast();
-							this.yyValues.addFirst(value * multipler);
+							this.yyValues.addFirst(value);
 							this.volValues.removeLast();
 							this.volValues.addFirst(candleItem.getVolume());
 						} else {
-							if (typicalPrice > prevTypicalPrice) {
-								positiveSum = positiveSum + value;
-							} else {
-								negativeSum = negativeSum + value;
-							}
 							if (this.yyValues.getFirst() > 0) {
 								positiveSum = positiveSum
 										- this.yyValues.getFirst();
 							} else {
 								negativeSum = negativeSum
-										- this.yyValues.getFirst();
+										- Math.abs(this.yyValues.getFirst());
 							}
 							this.yyValues.removeFirst();
-							this.yyValues.addFirst(value * multipler);
+							this.yyValues.addFirst(value);
 						}
 					} else {
 						if (newBar) {
-							if (typicalPrice > prevTypicalPrice) {
-								positiveSum = positiveSum + value;
-							} else {
-								negativeSum = negativeSum + value;
-							}
-
-							this.yyValues.addFirst(value * multipler);
+							this.yyValues.addFirst(value);
 							this.volValues.addFirst(candleItem.getVolume());
 						} else {
-							if (typicalPrice > prevTypicalPrice) {
-								positiveSum = positiveSum + value;
-							} else {
-								negativeSum = negativeSum + value;
-							}
 							if (this.yyValues.getFirst() > 0) {
 								positiveSum = positiveSum
 										- this.yyValues.getFirst();
 							} else {
 								negativeSum = negativeSum
-										- this.yyValues.getFirst();
+										- Math.abs(this.yyValues.getFirst());
 							}
 							this.yyValues.removeFirst();
-							this.yyValues.addFirst(value * multipler);
+							this.yyValues.addFirst(value);
 							this.volValues.removeFirst();
 							this.volValues.addFirst(candleItem.getVolume());
 						}
