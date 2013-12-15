@@ -33,57 +33,58 @@
  * -------
  *
  */
-package org.trade.strategy.data.movingaverage;
+package org.trade.strategy.data.mfi;
 
 // Generated Feb 21, 2011 12:43:33 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 
 /**
- * MovingAverage
+ * MoneyFlowIndex
  * 
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
 
-public class MovingAverage implements java.io.Serializable {
+public class MoneyFlowIndex implements java.io.Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7644763985378994305L;
 
-	private BigDecimal movingAverage;
+	private BigDecimal moneyFlowIndex;
 
-	public MovingAverage() {
+	public MoneyFlowIndex() {
 	}
 
 	/**
-	 * Constructor for MovingAverage.
+	 * Constructor for MoneyFlowIndex.
 	 * 
-	 * @param movingAverage
+	 * @param moneyFlowIndex
 	 *            BigDecimal
 	 */
-	public MovingAverage(BigDecimal movingAverage) {
-		this.movingAverage = movingAverage;
+	public MoneyFlowIndex(BigDecimal moneyFlowIndex) {
+		this.moneyFlowIndex = moneyFlowIndex;
 	}
 
 	/**
-	 * Method getMovingAverage.
+	 * Method getMoneyFlowIndex.
 	 * 
 	 * @return BigDecimal
 	 */
-	public BigDecimal getMovingAverage() {
-		return this.movingAverage;
+	public BigDecimal getMoneyFlowIndex() {
+		return this.moneyFlowIndex;
 	}
 
 	/**
-	 * Method setMovingAverage.
+	 * Method setMoneyFlowIndex.
 	 * 
-	 * @param movingAverage
+	 * @param moneyFlowIndex
 	 *            BigDecimal
 	 */
-	public void setMovingAverage(BigDecimal movingAverage) {
-		this.movingAverage = movingAverage;
+	public void setMoneyFlowIndex(BigDecimal moneyFlowIndex) {
+		this.moneyFlowIndex = moneyFlowIndex;
 	}
+
 }

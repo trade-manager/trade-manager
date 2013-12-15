@@ -67,7 +67,6 @@ public interface IMovingAverageDataset extends XYDataset {
 	 * @param item
 	 *            the item index.
 	 * 
-	 * 
 	 * @return The Moving Average.
 	 */
 	public Number getMovingAverage(int series, int item);

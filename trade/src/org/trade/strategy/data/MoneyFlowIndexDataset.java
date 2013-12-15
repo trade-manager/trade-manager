@@ -48,13 +48,13 @@ import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.ObjectUtilities;
-import org.trade.strategy.data.movingaverage.IMovingAverageDataset;
-import org.trade.strategy.data.movingaverage.MovingAverageItem;
+import org.trade.strategy.data.mfi.IMoneyFlowIndexDataset;
+import org.trade.strategy.data.mfi.MoneyFlowIndexItem;
 
 /**
  */
-public class MovingAverageDataset extends AbstractXYDataset implements
-		IndicatorDataset, IMovingAverageDataset, Serializable {
+public class MoneyFlowIndexDataset extends AbstractXYDataset implements
+		IndicatorDataset, IMoneyFlowIndexDataset, Serializable {
 
 	/**
 	 * 
@@ -69,7 +69,7 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 	/**
 	 * Creates a new instance of <code>OHLCSeriesCollection</code>.
 	 */
-	public MovingAverageDataset() {
+	public MoneyFlowIndexDataset() {
 		this.data = new ArrayList<IndicatorSeries>();
 	}
 
@@ -169,8 +169,8 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 	/**
 	 * Returns the number of series in the collection.
 	 * 
-	 * @return The series count.
-	 * @see org.jfree.data.general.SeriesDataset#getSeriesCount()
+	 * @return The series count. * @see
+	 *         org.jfree.data.general.SeriesDataset#getSeriesCount()
 	 */
 	public int getSeriesCount() {
 		return this.data.size();
@@ -188,11 +188,11 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 	 *             <code>getSeriesCount() - 1</code>.
 	 * @see org.trade.strategy.data.IndicatorDataset#getSeries(int)
 	 */
-	public MovingAverageSeries getSeries(int series) {
+	public MoneyFlowIndexSeries getSeries(int series) {
 		if ((series < 0) || (series >= getSeriesCount())) {
 			throw new IllegalArgumentException("Series index out of bounds");
 		}
-		return (MovingAverageSeries) this.data.get(series);
+		return (MoneyFlowIndexSeries) this.data.get(series);
 	}
 
 	/**
@@ -261,8 +261,8 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 	 * @see org.jfree.data.xy.XYDataset#getXValue(int, int)
 	 */
 	public double getXValue(int series, int item) {
-		MovingAverageSeries s = (MovingAverageSeries) this.data.get(series);
-		MovingAverageItem di = (MovingAverageItem) s.getDataItem(item);
+		MoneyFlowIndexSeries s = (MoneyFlowIndexSeries) this.data.get(series);
+		MoneyFlowIndexItem di = (MoneyFlowIndexItem) s.getDataItem(item);
 		RegularTimePeriod period = di.getPeriod();
 		return getX(period);
 	}
@@ -294,31 +294,31 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 	 * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
-		MovingAverageSeries s = (MovingAverageSeries) this.data.get(series);
-		MovingAverageItem di = (MovingAverageItem) s.getDataItem(item);
+		MoneyFlowIndexSeries s = (MoneyFlowIndexSeries) this.data.get(series);
+		MoneyFlowIndexItem di = (MoneyFlowIndexItem) s.getDataItem(item);
 		return new Double(di.getY());
 	}
 
 	/**
-	 * Returns the Moving Average for an item within a series.
+	 * Returns the Money Flow Index for an item within a series.
 	 * 
 	 * @param series
 	 *            the series index.
 	 * @param item
 	 *            the item index.
 	 * 
-	 * @return The Moving Average.
-	 * @see org.trade.strategy.data.movingaverage.IMovingAverageDataset
-	 *      #getMovingAverageValue(int, int)
+	 * @return The Money Flow Index.
+	 * @see org.trade.strategy.data.mfi.IMoneyFlowIndexDataset
+	 *      #getMoneyFlowIndexValue(int, int)
 	 */
-	public double getMovingAverageValue(int series, int item) {
-		MovingAverageSeries s = (MovingAverageSeries) this.data.get(series);
-		MovingAverageItem di = (MovingAverageItem) s.getDataItem(item);
-		return di.getMovingAverage();
+	public double getMoneyFlowIndexValue(int series, int item) {
+		MoneyFlowIndexSeries s = (MoneyFlowIndexSeries) this.data.get(series);
+		MoneyFlowIndexItem di = (MoneyFlowIndexItem) s.getDataItem(item);
+		return di.getMoneyFlowIndex();
 	}
 
 	/**
-	 * Returns the Moving Average for an item within a series.
+	 * Returns the Money Flow Index for an item within a series.
 	 * 
 	 * @param series
 	 *            the series index.
@@ -326,11 +326,11 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 	 *            the item index.
 	 * 
 	 * @return The Pivot.
-	 * @see org.trade.strategy.data.movingaverage.IMovingAverageDataset
-	 *      #getMovingAverage(int, int)
+	 * @see org.trade.strategy.data.mfi.IMoneyFlowIndexDataset
+	 *      #getMoneyFlowIndex(int, int)
 	 */
-	public Number getMovingAverage(int series, int item) {
-		return new Double(getMovingAverageValue(series, item));
+	public Number getMoneyFlowIndex(int series, int item) {
+		return new Double(getMoneyFlowIndexValue(series, item));
 	}
 
 	/**
@@ -345,10 +345,10 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 		if (obj == this) {
 			return true;
 		}
-		if (!(obj instanceof MovingAverageDataset)) {
+		if (!(obj instanceof MoneyFlowIndexDataset)) {
 			return false;
 		}
-		MovingAverageDataset that = (MovingAverageDataset) obj;
+		MoneyFlowIndexDataset that = (MoneyFlowIndexDataset) obj;
 		if (!this.xPosition.equals(that.xPosition)) {
 			return false;
 		}
@@ -364,7 +364,7 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 	 */
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
-		MovingAverageDataset clone = (MovingAverageDataset) super.clone();
+		MoneyFlowIndexDataset clone = (MoneyFlowIndexDataset) super.clone();
 		clone.data = (List<IndicatorSeries>) ObjectUtilities
 				.deepClone(this.data);
 		return clone;
@@ -389,7 +389,7 @@ public class MovingAverageDataset extends AbstractXYDataset implements
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
-			MovingAverageSeries series = this.getSeries(x);
+			MoneyFlowIndexSeries series = this.getSeries(x);
 			series.updateSeries(source.getSeries(seriesIndex), source
 					.getSeries(seriesIndex).getItemCount() - 1, newBar);
 		}

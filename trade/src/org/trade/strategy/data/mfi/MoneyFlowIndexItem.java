@@ -33,7 +33,7 @@
  * -------
  *
  */
-package org.trade.strategy.data.movingaverage;
+package org.trade.strategy.data.mfi;
 
 import java.math.BigDecimal;
 
@@ -47,7 +47,7 @@ import org.jfree.data.time.RegularTimePeriod;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class MovingAverageItem extends ComparableObjectItem {
+public class MoneyFlowIndexItem extends ComparableObjectItem {
 
 	/**
 	 * 
@@ -60,15 +60,17 @@ public class MovingAverageItem extends ComparableObjectItem {
 	 * @param period
 	 *            the time period.
 	 * 
-	 * @param movingAverage
+	 * @param moneyFlowIndex
 	 *            BigDecimal
 	 */
-	public MovingAverageItem(RegularTimePeriod period, BigDecimal movingAverage) {
-		super(period, new MovingAverage(movingAverage));
+	public MoneyFlowIndexItem(RegularTimePeriod period,
+			BigDecimal moneyFlowIndex) {
+		super(period, new MoneyFlowIndex(moneyFlowIndex));
 	}
 
 	/**
 	 * Returns the period.
+	 * 
 	 * 
 	 * @return The period (never <code>null</code>).
 	 */
@@ -83,34 +85,36 @@ public class MovingAverageItem extends ComparableObjectItem {
 	 * @return The y-value.
 	 */
 	public double getY() {
-		return getMovingAverage();
+		return getMoneyFlowIndex();
 	}
 
 	/**
-	 * Set the moving Average value.
+	 * Set the Money Flow Index value.
 	 * 
-	 * @param movingAverage
+	 * 
+	 * @param moneyFlowIndex
 	 *            double
 	 */
-	public void setMovingAverage(double movingAverage) {
-		MovingAverage dataItem = (MovingAverage) getObject();
+	public void setMoneyFlowIndex(double moneyFlowIndex) {
+		MoneyFlowIndex dataItem = (MoneyFlowIndex) getObject();
 		if (dataItem != null) {
-			dataItem.setMovingAverage(new BigDecimal(movingAverage));
+			dataItem.setMoneyFlowIndex(new BigDecimal(moneyFlowIndex));
 		}
+
 	}
 
 	/**
-	 * Returns the moving Average value.
+	 * Returns the Money Flow Index.
 	 * 
-	 * @return The moving Average value.
+	 * @return The Money Flow Index value.
 	 */
-	public double getMovingAverage() {
-		MovingAverage dataItem = (MovingAverage) getObject();
+	public double getMoneyFlowIndex() {
+		MoneyFlowIndex dataItem = (MoneyFlowIndex) getObject();
 		if (dataItem != null) {
-			if (null == dataItem.getMovingAverage()) {
+			if (null == dataItem.getMoneyFlowIndex()) {
 				return 0;
 			}
-			return dataItem.getMovingAverage().doubleValue();
+			return dataItem.getMoneyFlowIndex().doubleValue();
 		} else {
 			return 0;
 		}

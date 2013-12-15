@@ -46,10 +46,9 @@ import javax.persistence.Transient;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.trade.dictionary.valuetype.CalculationType;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
-import org.trade.strategy.data.movingaverage.MovingAverageItem;
+import org.trade.strategy.data.mfi.MoneyFlowIndexItem;
 
 /**
  * A list of (RegularTimePeriod, open, high, low, close) data items.
@@ -62,22 +61,19 @@ import org.trade.strategy.data.movingaverage.MovingAverageItem;
  */
 
 @Entity
-@DiscriminatorValue("MovingAverageSeries")
-public class MovingAverageSeries extends IndicatorSeries {
+@DiscriminatorValue("MoneyFlowIndexSeries")
+public class MoneyFlowIndexSeries extends IndicatorSeries {
 
 	private static final long serialVersionUID = 20183087035446657L;
 
 	public static final String LENGTH = "Length";
-	public static final String MA_TYPE = "MAType";
 
-	private String MAType;
 	private Integer length;
 	/*
 	 * Vales used to calculate MA's. These need to be reset when the series is
 	 * cleared.
 	 */
 	private double sum = 0.0;
-	private double multiplyer = 0;
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
 	private LinkedList<Long> volValues = new LinkedList<Long>();
 
@@ -85,6 +81,8 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * Creates a new empty series. By default, items added to the series will be
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
+	 * 
+	 * 
 	 * 
 	 * @param strategy
 	 *            Strategy
@@ -101,7 +99,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public MovingAverageSeries(Strategy strategy, String name, String type,
+	public MoneyFlowIndexSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
 			Boolean subChart) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
@@ -125,22 +123,19 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 *            Integer
 	 * @param subChart
 	 *            Boolean
-	 * @param MAType
-	 *            String
 	 * @param length
 	 *            Integer
 	 */
-	public MovingAverageSeries(Strategy strategy, String name, String type,
+	public MoneyFlowIndexSeries(Strategy strategy, String name, String type,
 			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, String MAType, Integer length) {
+			Boolean subChart, Integer length) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
 				subChart);
-		this.MAType = MAType;
 		this.length = length;
 	}
 
-	public MovingAverageSeries() {
-		super(IndicatorSeries.MovingAverageSeries);
+	public MoneyFlowIndexSeries() {
+		super(IndicatorSeries.MoneyFlowIndexSeries);
 	}
 
 	/**
@@ -150,7 +145,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * @throws CloneNotSupportedException
 	 */
 	public Object clone() throws CloneNotSupportedException {
-		MovingAverageSeries clone = (MovingAverageSeries) super.clone();
+		MoneyFlowIndexSeries clone = (MoneyFlowIndexSeries) super.clone();
 		clone.yyValues = new LinkedList<Double>();
 		clone.volValues = new LinkedList<Long>();
 		return clone;
@@ -164,7 +159,6 @@ public class MovingAverageSeries extends IndicatorSeries {
 	public void clear() {
 		super.clear();
 		sum = 0.0;
-		multiplyer = 0;
 		yyValues.clear();
 		volValues.clear();
 	}
@@ -175,10 +169,11 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * @param index
 	 *            the item index.
 	 * 
+	 * 
 	 * @return The time period.
 	 */
 	public RegularTimePeriod getPeriod(int index) {
-		final MovingAverageItem item = (MovingAverageItem) getDataItem(index);
+		final MoneyFlowIndexItem item = (MoneyFlowIndexItem) getDataItem(index);
 		return item.getPeriod();
 	}
 
@@ -187,31 +182,32 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * 
 	 * @param period
 	 *            the period.
-	 * @param movingAverage
-	 *            the movingAverage.
+	 * @param moneyFlowIndex
+	 *            the moneyFlowIndex.
 	 */
-	public void add(RegularTimePeriod period, BigDecimal movingAverage) {
+	public void add(RegularTimePeriod period, BigDecimal moneyFlowIndex) {
 		if (!this.isEmpty()) {
-			MovingAverageItem item0 = (MovingAverageItem) this.getDataItem(0);
+			MoneyFlowIndexItem item0 = (MoneyFlowIndexItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
 						"Can't mix RegularTimePeriod class types.");
 			}
 		}
-		super.add(new MovingAverageItem(period, movingAverage), true);
+		super.add(new MoneyFlowIndexItem(period, moneyFlowIndex), true);
 	}
 
 	/**
 	 * Adds a data item to the series.
 	 * 
+	 * 
 	 * @param notify
 	 *            the notify listeners.
 	 * @param dataItem
-	 *            MovingAverageItem
+	 *            MoneyFlowIndexItem
 	 */
-	public void add(MovingAverageItem dataItem, boolean notify) {
+	public void add(MoneyFlowIndexItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
-			MovingAverageItem item0 = (MovingAverageItem) this.getDataItem(0);
+			MoneyFlowIndexItem item0 = (MoneyFlowIndexItem) this.getDataItem(0);
 			if (!dataItem.getPeriod().getClass()
 					.equals(item0.getPeriod().getClass())) {
 				throw new IllegalArgumentException(
@@ -227,12 +223,13 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 * @param date
 	 *            the date for which we want a period.
 	 * 
+	 * 
 	 * @return exists
 	 */
 	public int indexOf(Date date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
-			MovingAverageItem item = (MovingAverageItem) this.data.get(i - 1);
+			MoneyFlowIndexItem item = (MoneyFlowIndexItem) this.data.get(i - 1);
 			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
 				break;
 			}
@@ -240,6 +237,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
 				return i - 1;
 			}
+
 		}
 		return -1;
 	}
@@ -268,32 +266,6 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 */
 	public void setLength(Integer length) {
 		this.length = length;
-	}
-
-	/**
-	 * Method getMAType.
-	 * 
-	 * @return String
-	 */
-	@Transient
-	public String getMAType() {
-		try {
-			if (null == this.MAType)
-				this.MAType = (String) this.getValueCode(MA_TYPE);
-		} catch (Exception e) {
-			this.MAType = null;
-		}
-		return this.MAType;
-	}
-
-	/**
-	 * Method setMAType.
-	 * 
-	 * @param MAType
-	 *            String
-	 */
-	public void setMAType(String MAType) {
-		this.MAType = MAType;
 	}
 
 	/**
@@ -376,18 +348,17 @@ public class MovingAverageSeries extends IndicatorSeries {
 					}
 				}
 
-				if (this.yyValues.size() == getLength()) {
-					double ma = calculateMA(this.getMAType(), this.yyValues,
-							this.volValues, sum);
+				if (this.yyValues.size() == this.getLength()) {
+					double mfi = sum / this.getLength();
 					if (newBar) {
-						MovingAverageItem dataItem = new MovingAverageItem(
-								candleItem.getPeriod(), new BigDecimal(ma));
+						MoneyFlowIndexItem dataItem = new MoneyFlowIndexItem(
+								candleItem.getPeriod(), new BigDecimal(mfi));
 						this.add(dataItem, false);
 
 					} else {
-						MovingAverageItem dataItem = (MovingAverageItem) this
+						MoneyFlowIndexItem dataItem = (MoneyFlowIndexItem) this
 								.getDataItem(this.getItemCount() - 1);
-						dataItem.setMovingAverage(ma);
+						dataItem.setMoneyFlowIndex(mfi);
 					}
 				}
 			}
@@ -400,74 +371,12 @@ public class MovingAverageSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			MovingAverageItem dataItem = (MovingAverageItem) this
+			MoneyFlowIndexItem dataItem = (MoneyFlowIndexItem) this
 					.getDataItem(i);
 			_log.info("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Value: "
-					+ dataItem.getMovingAverage());
+					+ dataItem.getMoneyFlowIndex());
 		}
 	}
 
-	/**
-	 * Method calculateMA.
-	 * 
-	 * @param calcType
-	 *            String
-	 * @param yyValues
-	 *            LinkedList<Double>
-	 * @param volValues
-	 *            LinkedList<Long>
-	 * @param sum
-	 *            Double
-	 * @return double
-	 */
-	private double calculateMA(String calcType, LinkedList<Double> yyValues,
-			LinkedList<Long> volValues, Double sum) {
-
-		double ma = 0;
-		if (CalculationType.LINEAR.equals(calcType)) {
-			ma = sum / getLength();
-		} else if (CalculationType.EXPONENTIAL.equals(calcType)) {
-			/*
-			 * Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818
-			 * (18.18%). EMA: {Close - EMA(previous day)} x * multiplier +
-			 * EMA(previous day).
-			 */
-			if (multiplyer == 0) {
-				ma = sum / getLength();
-				multiplyer = 2 / (getLength() + 1.0d);
-			} else {
-				ma = ((yyValues.getFirst() - yyValues.get(1)) * multiplyer)
-						+ yyValues.get(1);
-			}
-			/*
-			 * Use the EMA in the stored values as we need the previous one for
-			 * the calc.
-			 */
-			yyValues.removeFirst();
-			yyValues.addFirst(ma);
-
-		} else if (CalculationType.WEIGHTED.equals(calcType)) {
-
-			double sumYY = 0;
-			int count = 0;
-			for (int i = yyValues.size(); i > 0; i--) {
-				count = count + (getLength() + 1 - i);
-				sumYY = sumYY + (yyValues.get(i - 1) * (getLength() + 1 - i));
-			}
-			ma = sumYY / count;
-
-		} else if (CalculationType.WEIGHTED_VOLUME.equals(calcType)) {
-
-			double sumYY = 0;
-			double count = 0;
-			for (int i = yyValues.size(); i > 0; i--) {
-				count = count + ((getLength() + 1 - i) * volValues.get(i - 1));
-				sumYY = sumYY
-						+ (yyValues.get(i - 1) * volValues.get(i - 1) * (getLength() + 1 - i));
-			}
-			ma = sumYY / count;
-		}
-		return ma;
-	}
 }
