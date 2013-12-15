@@ -51,7 +51,29 @@ import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.mfi.MoneyFlowIndexItem;
 
 /**
- * A list of (RegularTimePeriod, open, high, low, close) data items.
+ * The Money Flow Index (MFI) is an oscillator that uses both price and volume
+ * to measure buying and selling pressure. Created by Gene Quong and Avrum
+ * Soudack, MFI is also known as volume-weighted RSI. MFI starts with the
+ * typical price for each period. Money flow is positive when the typical price
+ * rises (buying pressure) and negative when the typical price declines (selling
+ * pressure). A ratio of positive and negative money flow is then plugged into
+ * an RSI formula to create an oscillator that moves between zero and one
+ * hundred. As a momentum oscillator tied to volume, the Money Flow Index (MFI)
+ * is best suited to identify reversals and price extremes with a variety of
+ * signals.
+ * 
+ * There are a several steps involved in the Money Flow Index calculation. The
+ * example below is based on a 14-period Money Flow Index, which is the default
+ * setting in SharpCharts and the setting recommended by the creators.
+ * 
+ * 1. Typical Price = (High + Low + Close)/3
+ * 
+ * 2. Raw Money Flow = Typical Price x Volume
+ * 
+ * 3. Money Flow Ratio = (14-period Positive Money Flow)/(14-period Negative
+ * Money Flow)
+ * 
+ * 4. Money Flow Index = 100 - 100/(1 + Money Flow Ratio)
  * 
  * @since 1.0.4
  * 
@@ -69,11 +91,10 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	public static final String LENGTH = "Length";
 
 	private Integer length;
-	/*
-	 * Vales used to calculate MA's. These need to be reset when the series is
-	 * cleared.
-	 */
-	private double sum = 0.0;
+
+	private double positiveSum = 0.0;
+	private double negativeSum = 0.0;
+
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
 	private LinkedList<Long> volValues = new LinkedList<Long>();
 
@@ -81,8 +102,6 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	 * Creates a new empty series. By default, items added to the series will be
 	 * sorted into ascending order by period, and duplicate periods will not be
 	 * allowed.
-	 * 
-	 * 
 	 * 
 	 * @param strategy
 	 *            Strategy
@@ -158,7 +177,8 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	 */
 	public void clear() {
 		super.clear();
-		sum = 0.0;
+		positiveSum = 0.0;
+		negativeSum = 0.0;
 		yyValues.clear();
 		volValues.clear();
 	}
@@ -308,57 +328,110 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 		}
 
 		if (source.getItemCount() > skip) {
-			// get the current data item...
-			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			if (0 != candleItem.getClose()) {
-				if (this.yyValues.size() == getLength()) {
-					/*
-					 * If the item does not exist in the series then this is a
-					 * new time period and so we need to remove the last in the
-					 * set and add the new periods values. Otherwise we just
-					 * update the last value in the set. Sum is just used for
-					 * performance save having to sum the last set of values
-					 * each time.
-					 */
-					if (newBar) {
-						sum = sum - this.yyValues.getLast()
-								+ candleItem.getClose();
-						this.yyValues.removeLast();
-						this.yyValues.addFirst(candleItem.getClose());
-						this.volValues.removeLast();
-						this.volValues.addFirst(candleItem.getVolume());
-					} else {
-						sum = sum - this.yyValues.getFirst()
-								+ candleItem.getClose();
-						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
-					}
-				} else {
-					if (newBar) {
-						sum = sum + candleItem.getClose();
-						this.yyValues.addFirst(candleItem.getClose());
-						this.volValues.addFirst(candleItem.getVolume());
-					} else {
-						sum = sum + candleItem.getClose()
-								- this.yyValues.getFirst();
-						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
-						this.volValues.removeFirst();
-						this.volValues.addFirst(candleItem.getVolume());
-					}
-				}
+			if (source.getItemCount() > 1) {
+				CandleItem prevCandleItem = (CandleItem) source
+						.getDataItem(skip - 1);
+				double prevTypicalPrice = (prevCandleItem.getHigh()
+						+ prevCandleItem.getLow() + prevCandleItem.getClose()) / 3;
 
-				if (this.yyValues.size() == this.getLength()) {
-					double mfi = sum / this.getLength();
-					if (newBar) {
-						MoneyFlowIndexItem dataItem = new MoneyFlowIndexItem(
-								candleItem.getPeriod(), new BigDecimal(mfi));
-						this.add(dataItem, false);
+				// get the current data item...
+				CandleItem candleItem = (CandleItem) source.getDataItem(skip);
+				if (0 != candleItem.getClose()) {
 
+					double typicalPrice = (candleItem.getHigh()
+							+ candleItem.getLow() + candleItem.getClose()) / 3;
+					int multipler = 1;
+					if (typicalPrice > prevTypicalPrice) {
+						multipler = -1;
+					}
+					double value = typicalPrice * candleItem.getVolume();
+					if (this.yyValues.size() == getLength()) {
+						/*
+						 * If the item does not exist in the series then this is
+						 * a new time period and so we need to remove the last
+						 * in the set and add the new periods values. Otherwise
+						 * we just update the last value in the set. Sum is just
+						 * used for performance save having to sum the last set
+						 * of values each time.
+						 */
+						if (newBar) {
+							if (typicalPrice > prevTypicalPrice) {
+								positiveSum = positiveSum + value;
+							} else {
+								negativeSum = negativeSum + value;
+							}
+							if (this.yyValues.getLast() > 0) {
+								positiveSum = positiveSum
+										- this.yyValues.getLast();
+							} else {
+								negativeSum = negativeSum
+										- this.yyValues.getLast();
+							}
+
+							this.yyValues.removeLast();
+							this.yyValues.addFirst(value * multipler);
+							this.volValues.removeLast();
+							this.volValues.addFirst(candleItem.getVolume());
+						} else {
+							if (typicalPrice > prevTypicalPrice) {
+								positiveSum = positiveSum + value;
+							} else {
+								negativeSum = negativeSum + value;
+							}
+							if (this.yyValues.getFirst() > 0) {
+								positiveSum = positiveSum
+										- this.yyValues.getFirst();
+							} else {
+								negativeSum = negativeSum
+										- this.yyValues.getFirst();
+							}
+							this.yyValues.removeFirst();
+							this.yyValues.addFirst(value * multipler);
+						}
 					} else {
-						MoneyFlowIndexItem dataItem = (MoneyFlowIndexItem) this
-								.getDataItem(this.getItemCount() - 1);
-						dataItem.setMoneyFlowIndex(mfi);
+						if (newBar) {
+							if (typicalPrice > prevTypicalPrice) {
+								positiveSum = positiveSum + value;
+							} else {
+								negativeSum = negativeSum + value;
+							}
+
+							this.yyValues.addFirst(value * multipler);
+							this.volValues.addFirst(candleItem.getVolume());
+						} else {
+							if (typicalPrice > prevTypicalPrice) {
+								positiveSum = positiveSum + value;
+							} else {
+								negativeSum = negativeSum + value;
+							}
+							if (this.yyValues.getFirst() > 0) {
+								positiveSum = positiveSum
+										- this.yyValues.getFirst();
+							} else {
+								negativeSum = negativeSum
+										- this.yyValues.getFirst();
+							}
+							this.yyValues.removeFirst();
+							this.yyValues.addFirst(value * multipler);
+							this.volValues.removeFirst();
+							this.volValues.addFirst(candleItem.getVolume());
+						}
+					}
+
+					if (this.yyValues.size() == this.getLength()) {
+						if (negativeSum == 0)
+							negativeSum = 1;
+						double mfi = 100 - (100 / (1 + (positiveSum / negativeSum)));
+						if (newBar) {
+							MoneyFlowIndexItem dataItem = new MoneyFlowIndexItem(
+									candleItem.getPeriod(), new BigDecimal(mfi));
+							this.add(dataItem, false);
+
+						} else {
+							MoneyFlowIndexItem dataItem = (MoneyFlowIndexItem) this
+									.getDataItem(this.getItemCount() - 1);
+							dataItem.setMoneyFlowIndex(mfi);
+						}
 					}
 				}
 			}
