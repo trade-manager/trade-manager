@@ -517,7 +517,7 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 					 * multiplied by 100 to move the decimal point two places
 					 */
 					double fastKR = 0;
-					if ((high - low) != 0)
+					if ((high - low) > 0)
 						fastKR = ((candleItem.getClose() - low) / (high - low)) * 100;
 
 					if (this.getInverse()) {
