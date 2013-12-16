@@ -66,6 +66,7 @@ import org.trade.strategy.data.stochasticoscillator.StochasticOscillatorItem;
  * Fast Stochastic Oscillator. Notice that %K in the Slow Stochastic Oscillator
  * equals %D in the Fast Stochastic Oscillator (chart 2).
  * 
+ * %K = (Current Close - Lowest Low)/(Highest High - Lowest Low) * 100
  * 
  * Fast Stochastic Oscillator:
  * 
