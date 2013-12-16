@@ -516,7 +516,10 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 					 * High = highest high for the look-back period %K is
 					 * multiplied by 100 to move the decimal point two places
 					 */
-					double fastKR = ((candleItem.getClose() - low) / (high - low)) * 100;
+					double fastKR = 0;
+					if ((high - low) != 0)
+						fastKR = ((candleItem.getClose() - low) / (high - low)) * 100;
+
 					if (this.getInverse()) {
 						/*
 						 * %R = (Highest High - Close)/(Highest High - Lowest
