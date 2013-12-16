@@ -125,13 +125,13 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	private static final long serialVersionUID = 20183087035446657L;
 
 	public static final String LENGTH = "Length";
-	public static final String SMA_LENGTH = "SMALength";
-	public static final String SMOOTHING = "Smoothing";
+	public static final String PERCENT_D = "PercentD";
+	public static final String KSMOOTHING = "KSmoothing";
 	public static final String INVERSE = "Inverse";
 
 	private Integer length;
-	private Integer SMALength;
-	private Integer smoothing;
+	private Integer percentD;
+	private Integer kSmoothing;
 	private Boolean inverse;
 	/*
 	 * Vales used to calculate StochasticOscillator. These need to be reset when
@@ -191,20 +191,20 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	 *            Boolean
 	 * @param length
 	 *            Integer
-	 * @param SMALength
-	 *            Integer
 	 * @param smoothing
+	 *            Integer
+	 * @param percentD
 	 *            Integer
 	 */
 	public StochasticOscillatorSeries(Strategy strategy, String name,
 			String type, String description, Boolean displayOnChart,
 			Integer chartRGBColor, Boolean subChart, Integer length,
-			Integer SMALength, Integer smoothing) {
+			Integer kSmoothing, Integer percentD) {
 		super(strategy, name, type, description, displayOnChart, chartRGBColor,
 				subChart);
 		this.length = length;
-		this.SMALength = SMALength;
-		this.smoothing = smoothing;
+		this.kSmoothing = kSmoothing;
+		this.percentD = percentD;
 	}
 
 	public StochasticOscillatorSeries() {
@@ -351,59 +351,59 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Method getSMALength.
+	 * Method getPercentD.
 	 * 
 	 * @return Integer
 	 */
 	@Transient
-	public Integer getSMALength() {
+	public Integer getPercentD() {
 		try {
-			if (null == this.SMALength)
-				this.SMALength = (Integer) this.getValueCode(SMA_LENGTH);
-			if (this.SMALength < 1)
-				this.SMALength = 1;
+			if (null == this.percentD)
+				this.percentD = (Integer) this.getValueCode(PERCENT_D);
+			if (this.percentD < 1)
+				this.percentD = 1;
 		} catch (Exception e) {
-			this.SMALength = 1;
+			this.percentD = 1;
 		}
-		return this.SMALength;
+		return this.percentD;
 	}
 
 	/**
-	 * Method setSMALength.
+	 * Method setPercentD.
 	 * 
-	 * @param SMALength
+	 * @param percentD
 	 *            Integer
 	 */
-	public void setSMALength(Integer SMALength) {
-		this.SMALength = SMALength;
+	public void setPercentD(Integer percentD) {
+		this.percentD = percentD;
 	}
 
 	/**
-	 * Method getSmoothing.
+	 * Method getKSmoothing.
 	 * 
 	 * @return Integer
 	 */
 	@Transient
-	public Integer getSmoothing() {
+	public Integer getKSmoothing() {
 		try {
-			if (null == this.smoothing)
-				this.smoothing = (Integer) this.getValueCode(SMOOTHING);
-			if (this.smoothing < 1)
-				this.smoothing = 1;
+			if (null == this.kSmoothing)
+				this.kSmoothing = (Integer) this.getValueCode(KSMOOTHING);
+			if (this.kSmoothing < 1)
+				this.kSmoothing = 1;
 		} catch (Exception e) {
-			this.smoothing = 1;
+			this.kSmoothing = 1;
 		}
-		return this.smoothing;
+		return this.kSmoothing;
 	}
 
 	/**
-	 * Method setSmoothing.
+	 * Method setKSmoothing.
 	 * 
-	 * @param smoothing
+	 * @param kSmoothing
 	 *            Integer
 	 */
-	public void setSmoothing(Integer smoothing) {
-		this.smoothing = smoothing;
+	public void setSmoothing(Integer kSmoothing) {
+		this.kSmoothing = kSmoothing;
 	}
 
 	/**
@@ -530,7 +530,7 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 								* -100;
 					}
 
-					if (this.fullKRValues.size() == this.getSMALength()) {
+					if (this.fullKRValues.size() == this.getKSmoothing()) {
 						/*
 						 * If the item does not exist in the series then this is
 						 * a new time period and so we need to remove the last
@@ -561,11 +561,11 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 							this.fullKRValues.addFirst(fastKR);
 						}
 					}
-					if (this.fullKRValues.size() == this.getSMALength()) {
+					if (this.fullKRValues.size() == this.getKSmoothing()) {
 
-						double fullKR = sumFullKRValues / this.getSMALength();
+						double fullKR = sumFullKRValues / this.getKSmoothing();
 
-						if (this.fullDValues.size() == this.getSmoothing()) {
+						if (this.fullDValues.size() == this.getPercentD()) {
 							/*
 							 * If the item does not exist in the series then
 							 * this is a new time period and so we need to
@@ -597,8 +597,8 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 								this.fullDValues.addFirst(fullKR);
 							}
 						}
-						if (this.fullDValues.size() == this.getSmoothing()) {
-							double fullD = sumFullDValues / this.getSmoothing();
+						if (this.fullDValues.size() == this.getPercentD()) {
+							double fullD = sumFullDValues / this.getPercentD();
 							if (newBar) {
 								StochasticOscillatorItem dataItem = new StochasticOscillatorItem(
 										candleItem.getPeriod(), new BigDecimal(
