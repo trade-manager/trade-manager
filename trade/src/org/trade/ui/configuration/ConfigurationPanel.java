@@ -590,6 +590,7 @@ public class ConfigurationPanel extends BasePanel {
 				int i = 0;
 				for (CodeAttribute codeAttribute : codeType.getCodeAttribute()) {
 					JLabel jLabel = new JLabel(codeAttribute.getName());
+					jLabel.setToolTipText(codeAttribute.getDescription());
 					JComponent field = null;
 					if (null == codeAttribute.getEditorClassName()) {
 						field = new JFormattedTextField();
@@ -602,6 +603,7 @@ public class ConfigurationPanel extends BasePanel {
 								break;
 							}
 						}
+
 						if (null == ((JFormattedTextField) field).getValue()) {
 							Vector<Object> parm = new Vector<Object>();
 							parm.add(codeAttribute.getDefaultValue());

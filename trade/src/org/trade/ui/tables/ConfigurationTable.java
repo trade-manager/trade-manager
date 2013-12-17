@@ -101,7 +101,12 @@ public class ConfigurationTable extends Table {
 					Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				if (value instanceof Decode) {
-					setToolTipText(((Decode) value).getDisplayName());
+					String indicatorName = ((Decode) value).getCode()
+							.substring(
+									0,
+									((Decode) value).getCode()
+											.indexOf("Series"));
+					setToolTipText(indicatorName);
 					value = ((Decode) value).getDisplayName();
 				} else {
 					setToolTipText(null);
