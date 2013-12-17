@@ -35,11 +35,15 @@
  */
 package org.trade.ui.tables;
 
+import java.awt.Component;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
@@ -87,10 +91,29 @@ public class ConfigurationTable extends Table {
 		DecodeTableEditor dataTypeEditor = new DecodeTableEditor(
 				new JComboBox<Decode>(
 						(Vector<Decode>) (new DataType()).getCodesDecodes()));
+
+		JComboBox<Decode> indicatorComboBoxEditor = new JComboBox<Decode>(
+				(Vector<Decode>) (new IndicatorSeries()).getCodesDecodes());
+		ListCellRenderer<Object> indicatorRenderer = new DefaultListCellRenderer() {
+			private static final long serialVersionUID = -3146015541332720784L;
+
+			public Component getListCellRendererComponent(JList<?> list,
+					Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				if (value instanceof Decode) {
+					setToolTipText(((Decode) value).getDisplayName());
+					value = ((Decode) value).getDisplayName();
+				} else {
+					setToolTipText(null);
+				}
+				return super.getListCellRendererComponent(list, value, index,
+						isSelected, cellHasFocus);
+			}
+		};
+		indicatorComboBoxEditor.setRenderer(indicatorRenderer);
 		DecodeTableEditor indicatorSeriesEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new IndicatorSeries())
-								.getCodesDecodes()));
+				indicatorComboBoxEditor);
+
 		JComboBox<Decode> strategyManagerComboBox = new JComboBox<Decode>(
 				(Vector<Decode>) (new DAOStrategyManager()).getCodesDecodes());
 		DecodeTableEditor dAOStrategyManagerEditor = new DecodeTableEditor(

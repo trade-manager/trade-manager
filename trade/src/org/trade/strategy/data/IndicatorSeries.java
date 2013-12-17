@@ -460,7 +460,8 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 *            the name of the attribute.
 	 * 
 	 * 
-	 * @return The value of the attribute. * @throws Exception
+	 * @return The value of the attribute.
+	 * @throws Exception
 	 */
 
 	@Transient
@@ -496,7 +497,6 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * 
 	 * @param index
 	 *            the item index.
-	 * 
 	 * 
 	 * @return The data item.
 	 */
