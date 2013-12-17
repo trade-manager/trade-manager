@@ -95,7 +95,6 @@ public class ConfigurationTable extends Table {
 		JComboBox<Decode> indicatorComboBoxEditor = new JComboBox<Decode>(
 				(Vector<Decode>) (new IndicatorSeries()).getCodesDecodes());
 		ListCellRenderer<Object> indicatorRenderer = new DefaultListCellRenderer() {
-			
 			private static final long serialVersionUID = -3146015541332720784L;
 
 			public Component getListCellRendererComponent(JList<?> list,
