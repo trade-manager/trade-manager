@@ -1374,7 +1374,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 			this.getPositionOrders().setStatus(status);
 			this.getPositionOrders().setLastUpdateDate(
 					TradingCalendar.getDate((new Date()).getTime()));
-			this.tradePersistentModel.persistAspect(this.getPositionOrders());
+			this.positionOrders = this.tradePersistentModel.persistAspect(this
+					.getPositionOrders());
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 400,
 					"Error updating tradestrategy status: " + ex.getMessage());
