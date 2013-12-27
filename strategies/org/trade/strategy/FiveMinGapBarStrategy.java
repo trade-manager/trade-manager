@@ -263,23 +263,23 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						if (firstCandle.getSide()) {
 							if (currentCandleItem.getVwap() < firstCandle
 									.getLow()) {
-								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
-								this.cancelAllOrders();
-								// No trade we timed out
-								_log.info("Rule 5min low broker Symbol: "
-										+ getSymbol() + " Time: " + startPeriod);
-								this.cancel();
+								// updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
+								// this.cancelAllOrders();
+								// // No trade we timed out
+								// _log.info("Rule 5min low broker Symbol: "
+								// + getSymbol() + " Time: " + startPeriod);
+								// this.cancel();
 							}
 						} else {
 
 							if (currentCandleItem.getVwap() > firstCandle
 									.getHigh()) {
-								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
-								this.cancelAllOrders();
-								// No trade we timed out
-								_log.info("Rule 5min high broker Symbol: "
-										+ getSymbol() + " Time: " + startPeriod);
-								this.cancel();
+								// updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
+								// this.cancelAllOrders();
+								// // No trade we timed out
+								// _log.info("Rule 5min high broker Symbol: "
+								// + getSymbol() + " Time: " + startPeriod);
+								// this.cancel();
 							}
 						}
 					}
