@@ -391,9 +391,10 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testCreateOrder() {
 		try {
-			TradeOrder result = this.strategyProxy.createOrder(Action.BUY,
-					OrderType.STPLMT, new Money(100.04), new Money(100.01),
-					1000, null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
+			TradeOrder result = this.strategyProxy.createOrder(
+					tradestrategy.getContract(), Action.BUY, OrderType.STPLMT,
+					new Money(100.04), new Money(100.01), 1000, null,
+					TriggerMethod.DEFAULT, OverrideConstraints.YES,
 					TimeInForce.DAY, true, true, null, null, null, null);
 			TestCase.assertNotNull(result);
 		} catch (Exception ex) {
@@ -780,9 +781,10 @@ public class AbstractStrategyTest extends TestCase {
 			tradePersistentModel.removeTradestrategyTradeOrders(strategyProxy
 					.getTradestrategy());
 		}
-		TradeOrder tradeOrder = this.strategyProxy.createOrder(Action.BUY,
-				OrderType.STPLMT, price, price.subtract(new Money(0.2)), 1000,
-				null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
+		TradeOrder tradeOrder = this.strategyProxy.createOrder(
+				tradestrategy.getContract(), Action.BUY, OrderType.STPLMT,
+				price, price.subtract(new Money(0.2)), 1000, null,
+				TriggerMethod.DEFAULT, OverrideConstraints.YES,
 				TimeInForce.DAY, true, true, null, null, null, null);
 
 		if (fillOpenPosition) {

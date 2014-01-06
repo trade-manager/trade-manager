@@ -61,6 +61,7 @@ import org.trade.dictionary.valuetype.TimeInForce;
 import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Candle;
+import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.PositionOrders;
 import org.trade.persistent.dao.TradePosition;
@@ -518,11 +519,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 					action = Action.SELL;
 				}
 
-				return this.createOrder(action, OrderType.MKT, null, null,
-						openQuantity, null, TriggerMethod.DEFAULT,
-						OverrideConstraints.YES, TimeInForce.DAY, false,
-						transmit, this.getOpenPositionOrder().getFAProfile(),
-						this.getOpenPositionOrder().getFAGroup(), this
+				return this.createOrder(this.getTradestrategy().getContract(),
+						action, OrderType.MKT, null, null, openQuantity, null,
+						TriggerMethod.DEFAULT, OverrideConstraints.YES,
+						TimeInForce.DAY, false, transmit, this
+								.getOpenPositionOrder().getFAProfile(), this
+								.getOpenPositionOrder().getFAGroup(), this
 								.getOpenPositionOrder().getFAMethod(), this
 								.getOpenPositionOrder().getFAPercent());
 			}
@@ -536,6 +538,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * This method creates an open position order for the Trade. The order is
 	 * persisted and transmitted via the broker interface to the market.
 	 * 
+	 * @param contract
+	 *            Contract
 	 * @param action
 	 *            String
 	 * @param orderType
@@ -555,13 +559,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder createOrder(String action, String orderType,
-			Money limitPrice, Money auxPrice, int quantity,
+	public TradeOrder createOrder(Contract contract, String action,
+			String orderType, Money limitPrice, Money auxPrice, int quantity,
 			String ocaGroupName, boolean roundPrice, boolean transmit)
 			throws StrategyRuleException {
-		return createOrder(action, orderType, limitPrice, auxPrice, quantity,
-				ocaGroupName, TriggerMethod.DEFAULT, OverrideConstraints.YES,
-				TimeInForce.DAY, roundPrice, transmit, null, null, null, null);
+		return createOrder(contract, action, orderType, limitPrice, auxPrice,
+				quantity, ocaGroupName, TriggerMethod.DEFAULT,
+				OverrideConstraints.YES, TimeInForce.DAY, roundPrice, transmit,
+				null, null, null, null);
 	}
 
 	/**
@@ -570,7 +575,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * This method creates an open position order for the Trade. The order is
 	 * persisted and transmitted via the broker interface to the market.
 	 * 
-	 * 
+	 * @param contract
+	 *            Contract
 	 * @param action
 	 *            String
 	 * @param orderType
@@ -596,21 +602,24 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder createOrder(String action, String orderType,
-			Money limitPrice, Money auxPrice, int quantity,
+	public TradeOrder createOrder(Contract contract, String action,
+			String orderType, Money limitPrice, Money auxPrice, int quantity,
 			String ocaGroupName, int triggerMethod, int overrideConstraints,
 			String timeInForce, boolean roundPrice, boolean transmit,
 			String FAProfile, String FAGroup, String FAMethod,
 			BigDecimal FAPercent) throws StrategyRuleException {
 
+		if (null == contract)
+			throw new StrategyRuleException(1, 200, "Contract cannot be null");
+
 		if (null == orderType)
-			throw new StrategyRuleException(1, 200, "Order Type cannot be null");
+			throw new StrategyRuleException(1, 201, "Order Type cannot be null");
 
 		if (null == action)
-			throw new StrategyRuleException(1, 201, "Action cannot be null");
+			throw new StrategyRuleException(1, 202, "Action cannot be null");
 
 		if (quantity == 0)
-			throw new StrategyRuleException(1, 202, "Quantity cannot be zero");
+			throw new StrategyRuleException(1, 203, "Quantity cannot be zero");
 
 		if (OrderType.LMT.equals(orderType) && null == limitPrice)
 			throw new StrategyRuleException(1, 203,
@@ -666,8 +675,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					}
 				}
 			}
-			tradeOrder = getBrokerManager().onPlaceOrder(
-					getTradestrategy().getContract(), tradeOrder);
+			tradeOrder = getBrokerManager().onPlaceOrder(contract, tradeOrder);
 			this.getPositionOrders().addTradeOrder(tradeOrder);
 			return tradeOrder;
 		} catch (BrokerModelException ex) {
