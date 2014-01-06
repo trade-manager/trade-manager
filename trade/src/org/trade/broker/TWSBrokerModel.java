@@ -3173,10 +3173,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(
-					transientContract.getValidOptionType(),
+					transientContract.getOptionType(),
 					contractDetails.m_summary.m_right) != 0) {
 				transientContract
-						.setValidOptionType(contractDetails.m_summary.m_right);
+						.setOptionType(contractDetails.m_summary.m_right);
 				changed = true;
 			}
 		}

@@ -93,7 +93,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	private String primaryExchange; // pick a non-aggregate (ie not the SMART
 									// exchange) exchange that the contract
 									// trades on. DO NOT SET TO SMART.
-	private String validOptionType;
+	private String optionType; // P=Put, C=CALL
 	private String symbol;
 	private String secId;
 	private String secIdType; // CUSIP;SEDOL;ISIN;RIC
@@ -643,23 +643,23 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Method getValidOptionType .
+	 * Method getOptionType .
 	 * 
-	 * @return validOptionType
+	 * @return optionType
 	 */
-	@Column(name = "validOptionType ", length = 3)
-	public String getValidOptionType() {
-		return this.validOptionType;
+	@Column(name = "optionType ", length = 1)
+	public String getOptionType() {
+		return this.optionType;
 	}
 
 	/**
-	 * Method setValidOptionType.
+	 * Method setOptionType.
 	 * 
-	 * @param validOptionType
+	 * @param optionType
 	 *            String
 	 */
-	public void setValidOptionType(String validOptionType) {
-		this.validOptionType = validOptionType;
+	public void setOptionType(String optionType) {
+		this.optionType = optionType;
 	}
 
 	/**
