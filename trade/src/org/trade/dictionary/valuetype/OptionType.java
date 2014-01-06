@@ -49,7 +49,6 @@ public class OptionType extends Decode {
 	public static final String PUT = "P";
 	public static final String CALL = "C";
 
-
 	public OptionType() {
 		super(DECODE);
 	}
