@@ -52,6 +52,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.jfree.data.time.RegularTimePeriod;
@@ -542,6 +543,17 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 */
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	/**
+	 * Set the bars side true is green false is red.
+	 * 
+	 * 
+	 * @return boolean The side of the bar true is green false is red.
+	 */
+	@Transient
+	public boolean getSide() {
+		return this.getClose().doubleValue() >= this.getOpen().doubleValue();
 	}
 
 	/**
