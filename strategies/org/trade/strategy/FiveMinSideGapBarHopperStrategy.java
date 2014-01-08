@@ -61,7 +61,8 @@ import org.trade.strategy.data.candle.CandleItem;
 public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 
 	/**
-	 * 1/ Enter in the oposite direction of the previous day bar over the first 5 min bar.
+	 * 1/ Enter in the opposite direction of the previous day bar over the first
+	 * 5 min bar.
 	 * 
 	 * 2/ Size with a stop at the first 5min bars Low (so for Long position
 	 * Quantity= Risk/(High-Low) include rounding). Use a STPLMT order with a
@@ -206,7 +207,6 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 							&& openCandle.getOpen() < prevDayCandle.getLow()
 									.doubleValue()) {
 						side = Side.SLD;
-
 					}
 
 					if (!prevDayCandle.getSide()
@@ -239,25 +239,25 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 							- prevCandleItem.getLow())
 							/ prevCandleItem.getClose();
 					// If the candle less than the entry limit %
-					if (percentChange < entrylimit.getPercentOfPrice()
-							.doubleValue()) {
-						// TODO add the tails as a % of the body.
-						_log.info(" We have a trade!!  Symbol: " + getSymbol()
-								+ " Time: " + startPeriod);
+					// if (percentChange < entrylimit.getPercentOfPrice()
+					// .doubleValue()) {
+					// TODO add the tails as a % of the body.
+					_log.info(" We have a trade!!  Symbol: " + getSymbol()
+							+ " Time: " + startPeriod);
 
-						/*
-						 * Create an open position.
-						 */
-						createRiskOpenPosition(action, price, priceStop, true,
-								null, null, null, null);
+					/*
+					 * Create an open position.
+					 */
+					createRiskOpenPosition(action, price, priceStop, true,
+							null, null, null, null);
 
-					} else {
-						_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
-								+ getSymbol() + " Time: " + startPeriod);
-						updateTradestrategyStatus(TradestrategyStatus.PERCENT);
-						// Kill this process we are done!
-						this.cancel();
-					}
+					// } else {
+					// _log.info("Rule 9:35 5min bar outside % limits. Symbol: "
+					// + getSymbol() + " Time: " + startPeriod);
+					// updateTradestrategyStatus(TradestrategyStatus.PERCENT);
+					// // Kill this process we are done!
+					// this.cancel();
+					// }
 
 				} else {
 
