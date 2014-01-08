@@ -1102,15 +1102,19 @@ public abstract class AbstractStrategyRule extends Worker implements
 			}
 
 			// Add a penny to the stop and target
-			Money stopPrice = addPennyAndRoundStop(openPosition
-					.getAverageFilledPrice().doubleValue()
-					+ (riskAmount * stopRiskUnits * buySellMultipliter), this
+			double stop = openPosition.getAverageFilledPrice().doubleValue()
+					+ (riskAmount * stopRiskUnits * buySellMultipliter);
+			if (stop < 0)
+				stop = 0.02;
+			Money stopPrice = addPennyAndRoundStop(stop, this
 					.getOpenTradePosition().getSide(), action, 0.01);
 
-			Money targetPrice = addPennyAndRoundStop(openPosition
-					.getAverageFilledPrice().doubleValue()
-					+ (riskAmount * targetRiskUnits * buySellMultipliter * -1),
-					this.getOpenTradePosition().getSide(), action, 0.01);
+			double target = openPosition.getAverageFilledPrice().doubleValue()
+					+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
+			if (target < 0)
+				target = 0.02;
+			Money targetPrice = addPennyAndRoundStop(target, this
+					.getOpenTradePosition().getSide(), action, 0.01);
 
 			String ocaID = new String(Integer.toString((new BigDecimal(Math
 					.random() * 1000000)).intValue()));
@@ -1307,6 +1311,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public Money addPennyAndRoundStop(double price, String side, String action,
 			double dollars) throws StrategyRuleException {
+		if (price < 0) {
+			throw new StrategyRuleException(1, 223,
+					"Error rounding price cannot be less than zero price: "
+							+ price);
+		}
 		double roundPrice = 0;
 		if (Side.BOT.equals(side)) {
 			roundPrice = roundPrice(price + dollars, action);

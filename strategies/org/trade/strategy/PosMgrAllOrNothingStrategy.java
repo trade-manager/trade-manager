@@ -134,7 +134,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 
 				_log.info("Open position submit Stop/Tgt orders Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
-				createStopAndTargetOrder(getOpenPositionOrder(), 1, 3, this
+				createStopAndTargetOrder(getOpenPositionOrder(), 1, 20, this
 						.getOpenPositionOrder().getFilledQuantity(), true);
 			}
 
