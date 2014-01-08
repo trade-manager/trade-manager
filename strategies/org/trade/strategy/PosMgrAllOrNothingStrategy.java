@@ -129,7 +129,7 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 
 				/*
 				 * Position has been opened and not covered submit the target
-				 * and stop orders for the open quantity. One target at 3R.
+				 * and stop orders for the open quantity. One target at xR.
 				 */
 
 				_log.info("Open position submit Stop/Tgt orders Symbol: "
