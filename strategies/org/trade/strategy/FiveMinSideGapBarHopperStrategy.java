@@ -47,7 +47,6 @@ import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Candle;
-import org.trade.persistent.dao.Entrylimit;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -231,17 +230,6 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 						action = Action.SELL;
 					}
 
-					Money priceClose = new Money(prevCandleItem.getClose());
-					Entrylimit entrylimit = getEntryLimit()
-							.getValue(priceClose);
-
-					double percentChange = Math.abs(prevCandleItem.getHigh()
-							- prevCandleItem.getLow())
-							/ prevCandleItem.getClose();
-					// If the candle less than the entry limit %
-					// if (percentChange < entrylimit.getPercentOfPrice()
-					// .doubleValue()) {
-					// TODO add the tails as a % of the body.
 					_log.info(" We have a trade!!  Symbol: " + getSymbol()
 							+ " Time: " + startPeriod);
 
@@ -250,14 +238,6 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 					 */
 					createRiskOpenPosition(action, price, priceStop, true,
 							null, null, null, null);
-
-					// } else {
-					// _log.info("Rule 9:35 5min bar outside % limits. Symbol: "
-					// + getSymbol() + " Time: " + startPeriod);
-					// updateTradestrategyStatus(TradestrategyStatus.PERCENT);
-					// // Kill this process we are done!
-					// this.cancel();
-					// }
 
 				} else {
 
