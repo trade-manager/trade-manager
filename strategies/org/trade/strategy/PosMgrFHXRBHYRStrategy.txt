@@ -1,0 +1,19 @@
+1/ If the open position is filled create a STP and 2 Targets (LMT) OCA
+orders at 2R and 2R with 50% of the filled quantity for each. Use the
+open position fill quantity, price and stop price to determine the target
+price. The STP orders take an initial risk of 2R.
+
+2/ Target/Stop prices should be round over/under whole/half numbers when
+ever they are calculated..
+
+3/ After 9:35 and before 15:30 if the current VWAP crosses the 9:35
+candles VWAP move the STP price on each of the STP order to break even.
+
+4/ At 15:30 move the STP order to the average fill price of the filled
+open order.
+
+5/ Move stop to B.E when target one hit (Optional see code).
+
+6/ When target one hit trail BH on 1min bars (Optional).
+
+7/ Close any open positions at 15:58.
