@@ -91,6 +91,8 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinSideGapBarHopperStrategy.class);
 
+	private String side = null;
+
 	/**
 	 * Default Constructor Note if you use class variables remember these will
 	 * need to be initialized if the strategy is restarted i.e. if they are
@@ -189,14 +191,18 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 							.getPrevTradingDay(this.getTradestrategy()
 									.getTradingday().getOpen());
 
-					Candle prevDayCandle = candleSeries
-							.getAverageBar(TradingCalendar
-									.getBusinessDayStart(preTradingDate),
-									TradingCalendar
-											.getBusinessDayEnd(preTradingDate),
-									false);
+					Date prevDayStart = TradingCalendar
+							.getBusinessDayStart(preTradingDate);
+					Date prevDayEnd = TradingCalendar
+							.getBusinessDayEnd(preTradingDate);
+					// _log.error("prevDayStart: " + prevDayStart
+					// + " prevDayEnd: " + prevDayEnd);
 
-					String side = null;
+					Candle prevDayCandle = candleSeries.getBar(prevDayStart,
+							prevDayEnd);
+
+					AbstractStrategyRule.logCandle(this, prevDayCandle);
+
 					if (prevDayCandle.getSide()
 							&& openCandle.getOpen() < prevDayCandle.getLow()
 									.doubleValue()) {
@@ -255,17 +261,14 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 					}
 
 				} else {
+
 					if (startPeriod.before(TradingCalendar.getSpecificTime(
 							startPeriod, 15, 30))
 							&& startPeriod.after(TradingCalendar
 									.getSpecificTime(startPeriod, 9, 35))) {
 
-						if (null == getTradestrategy().getSide()) {
-							error(1, 101,
-									"Error  tradestrategy side has not been set.");
-						}
 						if (!this.isThereOpenPosition()) {
-							if (Side.BOT.equals(getTradestrategy().getSide())) {
+							if (Side.BOT.equals(this.side)) {
 								if (openCandle.getLow() > prevCandleItem
 										.getLow()) {
 									_log.info("Rule 5min low broken. Symbol: "
@@ -277,7 +280,8 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 									return;
 
 								}
-							} else {
+							}
+							if (Side.SLD.equals(this.side)) {
 								if (openCandle.getHigh() < prevCandleItem
 										.getHigh()) {
 									_log.info("Rule 5min high broken. Symbol: "
@@ -290,8 +294,23 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 								}
 							}
 						}
-						this.cancel();
 					}
+				}
+
+				if (!startPeriod.before(TradingCalendar.getSpecificTime(
+						startPeriod, 15, 30))) {
+					_log.info("Rule 15:30:00 bar, time out unfilled open position Symbol: "
+							+ getSymbol() + " Time: " + startPeriod);
+					if (!this.isThereOpenPosition()
+							&& !TradestrategyStatus.CANCELLED
+									.equals(getTradestrategy().getStatus())) {
+						updateTradestrategyStatus(TradestrategyStatus.TO);
+						this.cancelAllOrders();
+						// No trade we timed out
+						_log.info("Rule 11:30:00 bar, time out unfilled open position Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+					}
+					this.cancel();
 				}
 			}
 

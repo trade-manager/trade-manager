@@ -923,6 +923,7 @@ public class CandleSeries extends IndicatorSeries {
 
 		int itemCount = this.getItemCount() - 1;
 		long sumVolume = 0;
+		int sunTradeCount = 0;
 		double sunHighPriceXVolume = 0;
 		double sunLowPriceXVolume = 0;
 		double sunOpenPriceXVolume = 0;
@@ -955,6 +956,7 @@ public class CandleSeries extends IndicatorSeries {
 				sunClosePriceXVolumeVwap = sunClosePriceXVolumeVwap
 						+ (candle.getVolume() * candle.getClose());
 				sumVolume = sumVolume + candle.getVolume();
+				sunTradeCount = sunTradeCount + candle.getCount();
 			}
 		}
 		if (numberOfCandles > 0 && sumVolume > 0) {
@@ -977,6 +979,7 @@ public class CandleSeries extends IndicatorSeries {
 			avgCandle.setVwap(new BigDecimal(sunClosePriceXVolumeVwap
 					/ sumVolume));
 			avgCandle.setVolume(sumVolume);
+			avgCandle.setTradeCount(sunTradeCount);
 			return avgCandle;
 		}
 		return null;
@@ -1004,6 +1007,7 @@ public class CandleSeries extends IndicatorSeries {
 
 		int itemCount = this.getItemCount() - 1;
 		long sumVolume = 0;
+		int sumTradeCount = 0;
 		double sunClosePriceXVolumeVwap = 0;
 		CandleItem candle = null;
 		for (int i = itemCount; i > -1; i--) {
@@ -1030,11 +1034,13 @@ public class CandleSeries extends IndicatorSeries {
 				sunClosePriceXVolumeVwap = sunClosePriceXVolumeVwap
 						+ (candle.getVolume() * candle.getClose());
 				sumVolume = sumVolume + candle.getVolume();
+				sumTradeCount = sumTradeCount + candle.getCount();
 			}
 		}
 		if (null != candle) {
 			this.candleBar.setStartPeriod(candle.getPeriod().getStart());
 			this.candleBar.setOpen(new BigDecimal(candle.getOpen()));
+			this.candleBar.setTradeCount(sumTradeCount);
 			if (sumVolume > 0) {
 				this.candleBar.setVwap(new BigDecimal(sunClosePriceXVolumeVwap
 						/ sumVolume));
