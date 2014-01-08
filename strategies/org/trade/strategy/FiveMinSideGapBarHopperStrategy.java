@@ -61,8 +61,7 @@ import org.trade.strategy.data.candle.CandleItem;
 public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 
 	/**
-	 * 1/ Enter in the direction of the Tradingday Tab Side field when the first
-	 * 5min bar direction co-inside.
+	 * 1/ Enter in the oposite direction of the previous day bar over the first 5 min bar.
 	 * 
 	 * 2/ Size with a stop at the first 5min bars Low (so for Long position
 	 * Quantity= Risk/(High-Low) include rounding). Use a STPLMT order with a
