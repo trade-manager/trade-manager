@@ -168,18 +168,14 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 				double stop = this.getOpenPositionOrder()
 						.getAverageFilledPrice().doubleValue()
 						+ (riskAmount * 1 * buySellMultipliter);
-				if (stop < 0)
-					stop = 0.02;
+
 				Money auxPrice = addPennyAndRoundStop(stop, this
 						.getOpenTradePosition().getSide(), action, -0.01);
 
 				this.createOrder(this.getTradestrategy().getContract(), action,
 						OrderType.STP, null, auxPrice, this
 								.getOpenPositionOrder().getFilledQuantity(),
-						null, true, true);
-
-				createStopAndTargetOrder(getOpenPositionOrder(), 1, 20, this
-						.getOpenPositionOrder().getFilledQuantity(), true);
+						null, false, true);
 			}
 
 			/*

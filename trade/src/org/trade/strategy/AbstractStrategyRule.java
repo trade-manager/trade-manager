@@ -654,9 +654,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 			}
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
 					action, this.getOrderCreateDate(), orderType, quantity,
-					auxPrice.getBigDecimalValue(),
-					limitPrice.getBigDecimalValue(), overrideConstraints,
-					timeInForce, triggerMethod);
+					(null == auxPrice ? null : auxPrice.getBigDecimalValue()),
+					(null == limitPrice ? null : limitPrice
+							.getBigDecimalValue()),
+					overrideConstraints, timeInForce, triggerMethod);
 			tradeOrder.setOcaGroupName(ocaGroupName);
 			tradeOrder.setTransmit(transmit);
 			if (FAProfile != null) {
@@ -747,8 +748,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 			}
 			tradeOrder.setLastUpdateDate(TradingCalendar.getDate((new Date())
 					.getTime()));
-			tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
-			tradeOrder.setAuxPrice(auxPrice.getBigDecimalValue());
+			tradeOrder.setLimitPrice((null == limitPrice ? null : limitPrice
+					.getBigDecimalValue()));
+			tradeOrder.setAuxPrice((null == auxPrice ? null : auxPrice
+					.getBigDecimalValue()));
+
 			if (quantity > 0)
 				tradeOrder.setQuantity(quantity);
 
