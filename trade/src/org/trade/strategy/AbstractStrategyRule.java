@@ -1107,14 +1107,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 			if (stop < 0)
 				stop = 0.02;
 			Money stopPrice = addPennyAndRoundStop(stop, this
-					.getOpenTradePosition().getSide(), action, 0.01);
+					.getOpenTradePosition().getSide(), action, -0.01);
 
 			double target = openPosition.getAverageFilledPrice().doubleValue()
 					+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
 			if (target < 0)
 				target = 0.02;
 			Money targetPrice = addPennyAndRoundStop(target, this
-					.getOpenTradePosition().getSide(), action, 0.01);
+					.getOpenTradePosition().getSide(), action, 0);
 
 			String ocaID = new String(Integer.toString((new BigDecimal(Math
 					.random() * 1000000)).intValue()));
