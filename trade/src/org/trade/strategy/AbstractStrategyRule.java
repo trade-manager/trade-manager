@@ -622,12 +622,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throw new StrategyRuleException(1, 203, "Quantity cannot be zero");
 
 		if (OrderType.LMT.equals(orderType) && null == limitPrice)
-			throw new StrategyRuleException(1, 203,
+			throw new StrategyRuleException(1, 204,
 					"Limit price cannot be null");
 
 		if (OrderType.STPLMT.equals(orderType)
 				&& (null == limitPrice || null == auxPrice))
-			throw new StrategyRuleException(1, 204,
+			throw new StrategyRuleException(1, 205,
 					"Limit/Aux price cannot be null");
 		try {
 			if (OrderType.MKT.equals(orderType)) {
@@ -728,6 +728,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			if (null == action)
 				throw new StrategyRuleException(1, 201, "Action cannot be null");
+			
+			if (OrderType.LMT.equals(orderType) && null == limitPrice)
+				throw new StrategyRuleException(1, 204,
+						"Limit price cannot be null");
+
+			if (OrderType.STPLMT.equals(orderType)
+					&& (null == limitPrice || null == auxPrice))
+				throw new StrategyRuleException(1, 205,
+						"Limit/Aux price cannot be null");
 
 			if (roundPrice) {
 				String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
