@@ -41,6 +41,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.core.util.TradingCalendar;
+import org.trade.core.valuetype.Money;
+import org.trade.dictionary.valuetype.Action;
+import org.trade.dictionary.valuetype.OrderType;
+import org.trade.dictionary.valuetype.Side;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -134,6 +138,46 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 
 				_log.info("Open position submit Stop/Tgt orders Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
+
+				/*
+				 * Risk amount is based of the average filled price and actual
+				 * stop price not the rounded quantity. But if the stop price is
+				 * not set use Risk Amount/Quantity.
+				 */
+				double riskAmount = 0;
+				if (null == this.getOpenPositionOrder().getStopPrice()) {
+					riskAmount = Math.abs(this.getTradestrategy()
+							.getRiskAmount().doubleValue()
+							/ this.getOpenPositionOrder().getFilledQuantity()
+									.doubleValue());
+				} else {
+					riskAmount = Math.abs(this.getOpenPositionOrder()
+							.getAverageFilledPrice().doubleValue()
+							- this.getOpenPositionOrder().getStopPrice()
+									.doubleValue());
+				}
+
+				String action = Action.BUY;
+				int buySellMultipliter = 1;
+				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+					action = Action.SELL;
+					buySellMultipliter = -1;
+				}
+
+				// Add a penny to the stop and target
+				double stop = this.getOpenPositionOrder()
+						.getAverageFilledPrice().doubleValue()
+						+ (riskAmount * 1 * buySellMultipliter);
+				if (stop < 0)
+					stop = 0.02;
+				Money auxPrice = addPennyAndRoundStop(stop, this
+						.getOpenTradePosition().getSide(), action, -0.01);
+
+				this.createOrder(this.getTradestrategy().getContract(), action,
+						OrderType.STP, null, auxPrice, this
+								.getOpenPositionOrder().getFilledQuantity(),
+						null, true, true);
+
 				createStopAndTargetOrder(getOpenPositionOrder(), 1, 20, this
 						.getOpenPositionOrder().getFilledQuantity(), true);
 			}
