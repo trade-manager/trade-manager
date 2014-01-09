@@ -728,7 +728,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 			if (null == action)
 				throw new StrategyRuleException(1, 201, "Action cannot be null");
-			
+
 			if (OrderType.LMT.equals(orderType) && null == limitPrice)
 				throw new StrategyRuleException(1, 204,
 						"Limit price cannot be null");
@@ -1083,8 +1083,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createStopAndTargetOrder(TradeOrder openPosition,
-			int stopRiskUnits, int targetRiskUnits, Integer quantity,
-			boolean stopTransmit) throws StrategyRuleException {
+			int stopRiskUnits, double stopAddAmount, int targetRiskUnits,
+			double targetAddAmount, Integer quantity, boolean stopTransmit)
+			throws StrategyRuleException {
 
 		if (!this.isThereOpenPosition()) {
 			throw new StrategyRuleException(1, 209,
@@ -1120,14 +1121,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 			if (stop < 0)
 				stop = 0.02;
 			Money stopPrice = addPennyAndRoundStop(stop, this
-					.getOpenTradePosition().getSide(), action, 0.01);
+					.getOpenTradePosition().getSide(), action, stopAddAmount);
 
 			double target = openPosition.getAverageFilledPrice().doubleValue()
 					+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
 			if (target < 0)
 				target = 0.02;
 			Money targetPrice = addPennyAndRoundStop(target, this
-					.getOpenTradePosition().getSide(), action, 0.01);
+					.getOpenTradePosition().getSide(), action, targetAddAmount);
 
 			String ocaID = new String(Integer.toString((new BigDecimal(Math
 					.random() * 1000000)).intValue()));

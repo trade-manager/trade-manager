@@ -172,14 +172,13 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 				Integer tgt2Qty = quantity - tgt1Qty;
 				// Integer tgt3Qty = quantity - (tgt1Qty + tgt2Qty);
 
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 2, tgt1Qty,
-						true);
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 2,
+						0.01, tgt1Qty, true);
 
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 2, tgt2Qty,
-						true);
-				// createStopAndTargetOrder(getOpenPositionOrder(), 2, 4,
-				// tgt3Qty,
-				// true);
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 2,
+						0.01, tgt2Qty, true);
+				// createStopAndTargetOrder(getOpenPositionOrder(),
+				// 2,0.01,4,0.01, tgt3Qty, true);
 				_log.info("Open position submit Stop/Tgt orders created Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 
