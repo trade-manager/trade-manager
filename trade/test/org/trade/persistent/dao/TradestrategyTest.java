@@ -200,7 +200,7 @@ public class TradestrategyTest extends TestCase {
 					.getMostRecentTradingDay(new Date()));
 			tradingdays.add(instance);
 
-			String fileName = "db/GappersToDay10Test.csv";
+			String fileName = "db/LoadFile10Stocks.csv";
 			tradingdays.populateDataFromFile(fileName, instance);
 			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
@@ -231,7 +231,7 @@ public class TradestrategyTest extends TestCase {
 					.getMostRecentTradingDay(new Date()));
 			tradingdays.add(instance);
 
-			String fileName = "db/GapperstodayJust1Test.csv";
+			String fileName = "db/LoadFile1Stock.csv";
 
 			tradingdays.populateDataFromFile(fileName, instance);
 			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());

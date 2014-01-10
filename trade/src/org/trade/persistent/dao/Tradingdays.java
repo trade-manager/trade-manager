@@ -440,13 +440,6 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 						.parseContractLine(strLine);
 
 				if (null != tradestrategy) {
-					/*
-					 * Do not load tradestrategies for trading holidays.
-					 */
-					if (TradingCalendar.isHoliday(tradestrategy.getTradingday()
-							.getOpen())) {
-						continue;
-					}
 
 					Contract contract = this.getContract(tradestrategy
 							.getContract().getSymbol());
@@ -486,6 +479,13 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 							}
 							tradestrategy.setTradingday(currTradingday);
 						}
+					}
+					/*
+					 * Do not load tradestrategies for trading holidays.
+					 */
+					if (TradingCalendar.isHoliday(tradestrategy.getTradingday()
+							.getOpen())) {
+						continue;
 					}
 					tradestrategy.setRiskAmount(new BigDecimal(riskAmount));
 					tradestrategy.setBarSize(barSize);
