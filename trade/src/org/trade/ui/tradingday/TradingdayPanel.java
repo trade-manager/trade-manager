@@ -422,7 +422,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 
 	public void doDelete() {
 		try {
-
 			int result = JOptionPane.showConfirmDialog(this.getFrame(),
 					"Are you sure you want to delete all Trade Orders?",
 					"Warning", JOptionPane.YES_NO_OPTION);
@@ -612,6 +611,13 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	public void doReAssign(List<Strategy> strategies) {
 
 		try {
+
+			if (m_tradingdays.isDirty()) {
+				this.setStatusBarMessage(
+						"Please save or refresh before running strategy ...\n",
+						BasePanel.WARNING);
+				return;
+			}
 			/*
 			 * Check to see if any of the selected trading days has open
 			 * positions. If they do kill the strategy worker before deleting
