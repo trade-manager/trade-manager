@@ -41,10 +41,10 @@ COMMIT;
 DELETE FROM codetype WHERE idCodeType >='0';
 COMMIT;
 
-INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (50, 'FH=xR BH=yR+Heikin', 'Sets x/yR Target with Heikin-Ashi trail over xR', 'PosMgrFH3RBHHeikinStrategy',0);
-INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (51, 'AllOrNothing', 'Sets xR Target and closes open any open position at 15:58', 'PosMgrAllOrNothingStrategy',0);
-INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (52, 'All5MinBar', 'Trails whole pos on 5min bars after 9:40', 'PosMgrAll5MinBarStrategy',0);
-INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (53, 'FHxRBHyR', 'Sets target 1 at xR and target 2 at yR', 'PosMgrFHXRBHYRStrategy',0);
+INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (50, 'FH=xR BH=yR+Heikin', 'Sell front/back half at x/yR or trail BH with Heikin-Ashi bars over xR', 'PosMgrFH3RBHHeikinStrategy',0);
+INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (51, 'All Or Nothing', 'Sell all at xR or close any open position at 15:58', 'PosMgrAllOrNothingStrategy',0);
+INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (52, 'All 5Min Bar', 'Trails whole pos on 5min bars after 9:40', 'PosMgrAll5MinBarStrategy',0);
+INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (53, 'Front Half xR Back Half yR', 'Sell front half at xR and bacl half at yR', 'PosMgrFHXRBHYRStrategy',0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (1, '5min bar gap', 'Enter a tier 1-3 gap in first 5min bar direction, and stop @ 5min high/low',1, 'FiveMinGapBarStrategy',50,0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (2, '5min Side bar gap', 'Enter a tier 1-3 gap via expectd Side after first 5min bar and stop @ 5min high/low',1, 'FiveMinSideGapBarStrategy',50,0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (3, '5min WRB bar gap', 'Enter a tier 1-3 gap in first 5min WRB bar direction, and stop @ 55% of high/low',1, 'FiveMinWRBGapBarStrategy',52,0);
