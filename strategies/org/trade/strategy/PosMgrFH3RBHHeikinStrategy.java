@@ -61,7 +61,7 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 
 	/**
 	 * 1/ If the open position is filled create a STP and 2 Targets (LMT) OCA
-	 * orders at 4R and 7R with 50% of the filled quantity for each. Use the
+	 * orders at xR and yR with 50% of the filled quantity for each. Use the
 	 * open position fill quantity, price and stop price to determine the target
 	 * price. The STP orders take an initial risk of 2R.
 	 * 

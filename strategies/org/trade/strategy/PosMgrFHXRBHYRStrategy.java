@@ -57,7 +57,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 
 	/**
 	 * 1/ If the open position is filled create a STP and 2 Targets (LMT) OCA
-	 * orders at 2R and 2R with 50% of the filled quantity for each. Use the
+	 * orders at xR and yR with 50% of the filled quantity for each. Use the
 	 * open position fill quantity, price and stop price to determine the target
 	 * price. The STP orders take an initial risk of 2R.
 	 * 
@@ -72,7 +72,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 	 * 
 	 * 5/ Move stop to B.E when target one hit (Optional see code).
 	 * 
-	 * 6/ When target one hit trail BH on 1min bars (Optional).
+	 * 6/ When target one hit trail back half(BH) on 1min bars (Optional).
 	 * 
 	 * 7/ Close any open positions at 15:58.
 	 * 
