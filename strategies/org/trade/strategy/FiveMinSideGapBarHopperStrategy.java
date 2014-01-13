@@ -67,15 +67,12 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 	 * Quantity= Risk/(High-Low) include rounding). Use a STPLMT order with a
 	 * range from the Entry Limit table.
 	 * 
-	 * 3/ Bar must be within the Entry Limit table % Range Bar. i.e in this case
-	 * 2%
+	 * 3/ If the position is not filled by 15:30 cancel the order.
 	 * 
-	 * 4/ If the position is not filled by 10:30 cancel the order.
-	 * 
-	 * 5/ If the first 5min bar High/Low is broken (so for Side=Long a break of
+	 * 4/ If the first 5min bar High/Low is broken (so for Side=Long a break of
 	 * the Low) before entry, cancel the open order position.
 	 * 
-	 * 6/ Add 1c to the entry price and round over/under whole/half numbers in
+	 * 5/ Add 1c to the entry price and round over/under whole/half numbers in
 	 * the direction of the trade, same for stop price.
 	 * 
 	 * E.g. If first 5min bar is H=21.50 L=21.15 Open= 21.2 Close=21.40 and the

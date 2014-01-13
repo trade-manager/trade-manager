@@ -1,0 +1,20 @@
+1/ Enter in the opposite direction of the previous day bar over the first
+5 min bar.
+ 
+2/ Size with a stop at the first 5min bars Low (so for Long position
+Quantity= Risk/(High-Low) include rounding). Use a STPLMT order with a
+range from the Entry Limit table.
+
+3/ If the position is not filled by 15:30 cancel the order.
+
+4/ If the first 5min bar High/Low is broken (so for Side=Long a break of
+the Low) before entry, cancel the open order position.
+ 
+5/ Add 1c to the entry price and round over/under whole/half numbers in
+the direction of the trade, same for stop price.
+
+E.g. If first 5min bar is H=21.50 L=21.15 Open= 21.2 Close=21.40 and the
+Side is Long, then position order will be Buy STPLMT=21.51-21.55 (STPLMT
+range 0.04 from EntryLimit table and as we are at 21.5 we also buy
+over/under whole/half numbers), Quantity=Risk/(21.51-21.2) rounded to
++/-100 shares (see EntryLimit table).
