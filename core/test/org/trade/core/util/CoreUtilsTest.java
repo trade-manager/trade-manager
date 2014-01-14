@@ -92,9 +92,15 @@ public class CoreUtilsTest extends TestCase {
 
 			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.24d, 12.23d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
+			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.26d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
+			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.20d));
+
+			TestCase.assertTrue(CoreUtils.isBetween(12.24d, 12.20d, 12.23d));
+
+			TestCase.assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.26d));
+
+			TestCase.assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.20d));
 
 			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
 			TestCase.assertFalse(CoreUtils.isBetween(12, 14, 11));

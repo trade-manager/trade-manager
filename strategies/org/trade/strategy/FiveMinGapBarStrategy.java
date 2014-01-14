@@ -223,8 +223,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						 * Check that the entry - stop is greater than 2* the
 						 * STPLMT amount.
 						 */
-						if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
-								.getLimitAmount().doubleValue() * 2)) {
+						//if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
+						//		.getLimitAmount().doubleValue() * 2)) {
 
 							/*
 							 * Create an open position.
@@ -234,13 +234,13 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 							createRiskOpenPosition(action, price, priceStop,
 									true, null, null, null, null);
 
-						} else {
-							_log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-							updateTradestrategyStatus(TradestrategyStatus.NBB);
-							// Kill this process we are done!
-							this.cancel();
-						}
+						// } else {
+						// _log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
+						// + getSymbol() + " Time: " + startPeriod);
+						// updateTradestrategyStatus(TradestrategyStatus.NBB);
+						// // Kill this process we are done!
+						// this.cancel();
+						// }
 
 					} else {
 						_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
