@@ -82,7 +82,7 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String DATE = "Date*";
 	private static final String SIDE = "Side";
 	private static final String TIER = "Tier";
-	private static final String STRATEGY =     "   Strategy*   ";
+	private static final String STRATEGY = "   Strategy*   ";
 	private static final String STRATEGY_MGR = " Strategy Mgr  ";
 	private static final String PORTFOLIO = "Portfolio*";
 	private static final String BAR_SIZE = "Bar Size*";

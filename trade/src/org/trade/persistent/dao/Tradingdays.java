@@ -36,11 +36,15 @@
 package org.trade.persistent.dao;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Scanner;
@@ -663,4 +667,150 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		scanLine.close();
 		return tradestrategy;
 	}
+
+	/**
+	 * Method main.
+	 * 
+	 * @param args
+	 *            String[]
+	 */
+	public static void main(String[] args) {
+		String inputFileDef = "db/CreateLoadFileDef.csv";
+		String outPutFileName = "C:\\Temp\\CCILoadFile.csv";
+		Tradingdays.createLoadFile(inputFileDef, outPutFileName);
+
+	}
+
+	/**
+	 * Method createLoadFile. Create a file that cn be inported into the
+	 * tradeManager for the symbols specified in the input file.
+	 * 
+	 * CSV file format CSV file format is: 01/01/2013 (From date),01/01/2014 (To
+	 * Date),DES, Underlying, Sec Type, Exchange, AAPL, AMZN e.t.c comma
+	 * separated list of stocks.
+	 * 
+	 * @param inputFileDef
+	 *            String
+	 * @param outPutFileName
+	 *            String
+	 */
+	private static void createLoadFile(String inputFileDef,
+			String outPutFileName) {
+		/*
+		 * CSV file format CSV file format is: 01/01/2013 (From date),01/01/2014
+		 * (To Date),DES, Underlying, Sec Type, Exchange, AAPL, AMZN e.t.c comma
+		 * separated list of stocks.
+		 */
+		FileReader fileReader = null;
+		BufferedReader bufferedReader = null;
+
+		try {
+
+			if ((inputFileDef == null) || inputFileDef.equals("")) {
+				return;
+			}
+			fileReader = new FileReader(inputFileDef);
+			bufferedReader = new BufferedReader(fileReader);
+
+			String csvLine = "";
+			// read comma separated file line by line
+			LinkedList<String> contracts = new LinkedList<String>();
+			Date startDate = null;
+			Date endDate = null;
+			String des = null;
+			String secType = null;
+			String exchange = null;
+			while ((csvLine = bufferedReader.readLine()) != null) {
+
+				// break comma separated line using ","
+				Scanner scanLine = new Scanner(csvLine);
+				scanLine.useDelimiter("\\,");
+				int tokenNumber = 0;
+
+				while (scanLine.hasNext()) {
+					// display csv values
+					tokenNumber++;
+					String token = scanLine.next().trim();
+					if (token.length() == 0)
+						continue;
+
+					switch (tokenNumber) {
+					case 1: {
+						if (token.length() == 10) {
+							startDate = TradingCalendar.getFormattedDate(token,
+									"MM/dd/yyyy");
+						}
+						break;
+					}
+					case 2: {
+						if (token.length() == 10) {
+							endDate = TradingCalendar.getFormattedDate(token,
+									"MM/dd/yyyy");
+						}
+						break;
+					}
+					case 3: {
+						des = token.toUpperCase();
+						break;
+					}
+					case 4: {
+						secType = token.toUpperCase();
+						break;
+					}
+					case 5: {
+						exchange = token.toUpperCase();
+						break;
+					}
+					default: {
+						contracts.add(token.toUpperCase());
+					}
+					}
+				}
+				scanLine.close();
+			}
+			StringBuffer outPutFile = new StringBuffer();
+			while (startDate
+					.before(TradingCalendar.addBusinessDays(endDate, 1))) {
+
+				if (TradingCalendar.isTradingDay(startDate)) {
+					for (String symbol : contracts) {
+						outPutFile.append(des
+								+ ","
+								+ symbol
+								+ ","
+								+ secType
+								+ ","
+								+ exchange
+								+ ",,,,,,||"
+								+ TradingCalendar.getFormattedDate(startDate,
+										"MM/dd/yyyy") + "|\n");
+					}
+				}
+
+				startDate = TradingCalendar.getNextTradingDay(startDate);
+			}
+			if (null != outPutFileName) {
+				OutputStream out = new FileOutputStream(outPutFileName);
+				out.write(outPutFile.toString().getBytes());
+				out.flush();
+				out.close();
+			}
+		} catch (Exception ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+
+		} finally {
+			if (null != fileReader)
+				try {
+					fileReader.close();
+					if (null != bufferedReader)
+						bufferedReader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+		}
+	}
+
 }

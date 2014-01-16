@@ -42,7 +42,7 @@ DELETE FROM codetype WHERE idCodeType >='0';
 COMMIT;
 
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (50, 'FHxRBHyR+Heikin', 'Sell front/back half at x/yR or trail BH with Heikin-Ashi bars over xR', 'PosMgrFH3RBHHeikinStrategy',0);
-INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (51, 'AllOrNothing', 'Sell all at xR or close any open position at 15:58', 'PosMgrAllOrNothingStrategy',0);
+INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (51, 'AllOrNothing', 'Close open position at 15:58 with stop 1R', 'PosMgrAllOrNothingStrategy',0);
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (52, 'All5MinBar', 'Trails whole pos on 5min bars after 9:40', 'PosMgrAll5MinBarStrategy',0);
 INSERT INTO strategy (idStrategy, name, description, className, version) VALUES (53, 'FHxRBHyR', 'Sell front half at xR and bacl half at yR', 'PosMgrFHXRBHYRStrategy',0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (1, '5minBarGap', 'Enter a tier 1-3 gap in first 5min bar direction, and stop @ 5min high/low',1, 'FiveMinGapBarStrategy',50,0);
