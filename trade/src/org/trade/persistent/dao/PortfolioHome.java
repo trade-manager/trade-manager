@@ -385,10 +385,9 @@ public class PortfolioHome {
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			if (null != accountNumber) {
-				Join<PortfolioAccount, Account> strategies = from
-						.join("account");
+				Join<PortfolioAccount, Account> account = from.join("account");
 				Predicate predicate = builder.equal(
-						strategies.get("accountNumber"), accountNumber);
+						account.get("accountNumber"), accountNumber);
 				predicates.add(predicate);
 			}
 			if (null != portfolioName) {

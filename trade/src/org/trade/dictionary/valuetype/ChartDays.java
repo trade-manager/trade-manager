@@ -50,6 +50,10 @@ public class ChartDays extends Decode {
 		super(DECODE);
 	}
 
+	public ChartDays(boolean optional) {
+		super(DECODE, optional);
+	}
+
 	/**
 	 * Method newInstance.
 	 * 

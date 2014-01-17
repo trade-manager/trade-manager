@@ -86,7 +86,7 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String STRATEGY_MGR = " Strategy Mgr  ";
 	private static final String PORTFOLIO = "Portfolio*";
 	private static final String BAR_SIZE = "Bar Size*";
-	private static final String CHART_HISTORY = "Chart Hist*";
+	private static final String CHART_DAYS = "Chart Days*";
 	private static final String RISK_AMOUNT = "Risk Amt";
 	private static final String PERCENTCHGFRCLOSE = "%Chg Close";
 	private static final String PERCENTCHGFROPEN = "%Chg Open";
@@ -146,7 +146,7 @@ public class TradestrategyTableModel extends TableModel {
 		columnNames[6] = STRATEGY_MGR;
 		columnNames[7] = PORTFOLIO;
 		columnNames[8] = BAR_SIZE;
-		columnNames[9] = CHART_HISTORY;
+		columnNames[9] = CHART_DAYS;
 		columnNames[10] = RISK_AMOUNT;
 		columnNames[11] = PERCENTCHGFRCLOSE;
 		columnNames[12] = PERCENTCHGFROPEN;
@@ -258,7 +258,7 @@ public class TradestrategyTableModel extends TableModel {
 				return barSize;
 			}
 		}
-		if (columnNames[column] == CHART_HISTORY
+		if (columnNames[column] == CHART_DAYS
 				&& null != super.getValueAt(row, column)) {
 			Integer barSize = new Integer(
 					((BarSize) super.getValueAt(row, 8)).getCode());

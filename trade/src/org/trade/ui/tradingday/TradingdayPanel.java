@@ -88,8 +88,6 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
-import org.trade.dictionary.valuetype.BarSize;
-import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.DAOStrategyManager;
@@ -112,7 +110,6 @@ import org.trade.ui.models.TradingdayTableModel;
 import org.trade.ui.tables.TradestrategyTable;
 import org.trade.ui.tables.TradingdayTable;
 import org.trade.ui.widget.DAODecodeComboBoxEditor;
-import org.trade.ui.widget.DecodeComboBoxEditor;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
 import org.trade.ui.widget.DecodeTableEditor;
 
@@ -145,10 +142,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	private BaseButton transferButton = null;
 	private DAODecodeComboBoxEditor strategyFromEditorComboBox = null;
 	private DAODecodeComboBoxEditor strategyToEditorComboBox = null;
-	private DAODecodeComboBoxEditor strategyFilterEditorComboBox = null;
-	private DecodeComboBoxEditor chartDaysFilterEditorComboBox = null;
-	private DecodeComboBoxEditor barSizeFilterEditorComboBox = null;
-
 	private JSpinner spinnerStart = new JSpinner();
 	private JSpinner spinnerEnd = new JSpinner();
 	private Boolean connected = new Boolean(false);
@@ -253,7 +246,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			JPanel jPanel3 = new JPanel(new BorderLayout());
 			JPanel jPanel4 = new JPanel(new BorderLayout());
 
-			JLabel fromStrategy = new JLabel("Transfer From Strategy:");
+			JLabel fromStrategy = new JLabel("From Strategy:");
 			strategyFromEditorComboBox = new DAODecodeComboBoxEditor(
 					(new DAOStrategy()).getCodesDecodes());
 			strategyFromEditorComboBox
@@ -295,30 +288,11 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			portfolioLabel.setEditable(false);
 
 			JPanel jPanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-			JLabel dateStartLabel = new JLabel("Filter From Date:");
+			JLabel dateStartLabel = new JLabel("From Date:");
 			JLabel dateEndLabel = new JLabel("To Date:");
-			JLabel strategyFilterLabel = new JLabel("Strategy:");
-			JLabel chartDaysFilterLabel = new JLabel("Chart Days:");
-			JLabel barSizeFilterLabel = new JLabel("BarSize:");
-			strategyFilterEditorComboBox = new DAODecodeComboBoxEditor(
-					(new DAOStrategy()).getCodesDecodes());
-			strategyFilterEditorComboBox
-					.setRenderer(new DecodeComboBoxRenderer());
-			strategyFilterEditorComboBox.setEditable(true);
-			chartDaysFilterEditorComboBox = new DecodeComboBoxEditor(
-					(new ChartDays()).getCodesDecodes());
-			chartDaysFilterEditorComboBox
-					.setRenderer(new DecodeComboBoxRenderer());
-			chartDaysFilterEditorComboBox.setEditable(true);
-			barSizeFilterEditorComboBox = new DecodeComboBoxEditor(
-					(new BarSize()).getCodesDecodes());
-			barSizeFilterEditorComboBox
-					.setRenderer(new DecodeComboBoxRenderer());
-			barSizeFilterEditorComboBox.setEditable(true);
-
 			jPanel5.add(brokerDataButton, null);
 			jPanel5.add(testStrategyButton, null);
 			jPanel5.add(runStrategyButton, null);
@@ -334,14 +308,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel6.add(spinnerStart, null);
 			jPanel6.add(dateEndLabel, null);
 			jPanel6.add(spinnerEnd, null);
-			jPanel6.add(strategyFilterLabel, null);
-			jPanel6.add(strategyFilterEditorComboBox, null);
-			jPanel6.add(chartDaysFilterLabel, null);
-			jPanel6.add(chartDaysFilterEditorComboBox, null);
-			jPanel6.add(barSizeFilterLabel, null);
-			jPanel6.add(barSizeFilterEditorComboBox, null);
 			jPanel6.setBorder(new BevelBorder(BevelBorder.RAISED));
-
 			jPanel7.add(fromStrategy, null);
 			jPanel7.add(strategyFromEditorComboBox, null);
 			jPanel7.add(toStrategy, null);
@@ -350,9 +317,9 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			jPanel7.add(ordersButton, null);
 			jPanel7.setBorder(new BevelBorder(BevelBorder.RAISED));
 
-			jPanel3.add(jPanel6, BorderLayout.NORTH);
-			jPanel3.add(jPanel7, BorderLayout.SOUTH);
 			jPanel3.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			jPanel3.add(jPanel6, BorderLayout.WEST);
+			jPanel3.add(jPanel7, BorderLayout.EAST);
 
 			jPanel4.add(jToolBar1, BorderLayout.NORTH);
 			jPanel4.add(jScrollPane, BorderLayout.CENTER);
@@ -575,15 +542,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
 				spinnerStart.setValue(startDate);
 			}
-
-			Strategy filterStrategy = ((Strategy) ((DAOStrategy) strategyFilterEditorComboBox
-					.getSelectedItem()).getObject());
-
-			String filterChartDays = ((String) ((ChartDays) chartDaysFilterEditorComboBox
-					.getSelectedItem()).getObject());
-
-			String filterBarSize = ((String) ((BarSize) barSizeFilterEditorComboBox
-					.getSelectedItem()).getObject());
 			/*
 			 * Check to see if in the new search criteria do we have todays
 			 * trading day if we do and todays tradingday is in the previous
