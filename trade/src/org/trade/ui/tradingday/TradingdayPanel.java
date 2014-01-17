@@ -308,19 +308,16 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			strategyFilterEditorComboBox
 					.setRenderer(new DecodeComboBoxRenderer());
 			strategyFilterEditorComboBox.setEditable(true);
-			strategyFilterEditorComboBox.addItemListener(this);
 			chartDaysFilterEditorComboBox = new DecodeComboBoxEditor(
 					(new ChartDays()).getCodesDecodes());
 			chartDaysFilterEditorComboBox
 					.setRenderer(new DecodeComboBoxRenderer());
 			chartDaysFilterEditorComboBox.setEditable(true);
-			chartDaysFilterEditorComboBox.addItemListener(this);
 			barSizeFilterEditorComboBox = new DecodeComboBoxEditor(
 					(new BarSize()).getCodesDecodes());
 			barSizeFilterEditorComboBox
 					.setRenderer(new DecodeComboBoxRenderer());
 			barSizeFilterEditorComboBox.setEditable(true);
-			barSizeFilterEditorComboBox.addItemListener(this);
 
 			jPanel5.add(brokerDataButton, null);
 			jPanel5.add(testStrategyButton, null);
@@ -578,6 +575,15 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 				startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
 				spinnerStart.setValue(startDate);
 			}
+
+			Strategy filterStrategy = ((Strategy) ((DAOStrategy) strategyFilterEditorComboBox
+					.getSelectedItem()).getObject());
+
+			String filterChartDays = ((String) ((ChartDays) chartDaysFilterEditorComboBox
+					.getSelectedItem()).getObject());
+
+			String filterBarSize = ((String) ((BarSize) barSizeFilterEditorComboBox
+					.getSelectedItem()).getObject());
 			/*
 			 * Check to see if in the new search criteria do we have todays
 			 * trading day if we do and todays tradingday is in the previous
