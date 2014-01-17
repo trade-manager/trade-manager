@@ -298,7 +298,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			JPanel jPanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel jPanel7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-			JLabel dateStartLabel = new JLabel("From Date:");
+			JLabel dateStartLabel = new JLabel("Filter From Date:");
 			JLabel dateEndLabel = new JLabel("To Date:");
 			JLabel strategyFilterLabel = new JLabel("Strategy:");
 			JLabel chartDaysFilterLabel = new JLabel("Chart Days:");
