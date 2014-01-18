@@ -41,8 +41,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -50,7 +48,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -115,7 +112,7 @@ import org.trade.ui.widget.DecodeTableEditor;
 
 /**
  */
-public class TradingdayPanel extends BasePanel implements ItemListener {
+public class TradingdayPanel extends BasePanel {
 
 	private static final long serialVersionUID = 8543984162821384818L;
 
@@ -252,14 +249,12 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			strategyFromEditorComboBox
 					.setRenderer(new DecodeComboBoxRenderer());
 			strategyFromEditorComboBox.setEditable(true);
-			strategyFromEditorComboBox.addItemListener(this);
 
 			JLabel toStrategy = new JLabel("To Strategy:");
 			strategyToEditorComboBox = new DAODecodeComboBoxEditor(
 					(new DAOStrategy()).getCodesDecodes());
 			strategyToEditorComboBox.setRenderer(new DecodeComboBoxRenderer());
 			strategyToEditorComboBox.setEditable(true);
-			strategyToEditorComboBox.addItemListener(this);
 
 			JScrollPane jScrollPane = new JScrollPane();
 			jScrollPane.getViewport().add(m_tradestrategyTable,
@@ -608,7 +603,7 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 	 *            List<Strategy>
 	 */
 
-	public void doReAssign(List<Strategy> strategies) {
+	public void doReAssign() {
 
 		try {
 
@@ -645,9 +640,14 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 			if (result == JOptionPane.YES_OPTION) {
 				this.setStatusBarMessage("Reassign in progress ...\n",
 						BasePanel.INFORMATION);
+				Strategy fromStrategy = ((Strategy) ((DAOStrategy) strategyFromEditorComboBox
+						.getSelectedItem()).getObject());
+				Strategy toStrategy = ((Strategy) ((DAOStrategy) strategyToEditorComboBox
+						.getSelectedItem()).getObject());
+
 				final ReAssignProgressMonitor reAssignProgressMonitor = new ReAssignProgressMonitor(
-						m_tradePersistentModel, m_tradingdays,
-						strategies.get(0), strategies.get(1));
+						m_tradePersistentModel, m_tradingdays, fromStrategy,
+						toStrategy);
 				reAssignProgressMonitor
 						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 							public void propertyChange(PropertyChangeEvent evt) {
@@ -808,28 +808,6 @@ public class TradingdayPanel extends BasePanel implements ItemListener {
 		} catch (Exception ex) {
 			this.setErrorMessage("Exception while reading csv file.",
 					ex.getMessage(), ex);
-		}
-	}
-
-	/**
-	 * This is fired from the dropdown Strategy list is selected.
-	 * 
-	 * 
-	 * @param e
-	 *            ItemEvent
-	 * @see java.awt.event.ItemListener#itemStateChanged(ItemEvent)
-	 */
-	public void itemStateChanged(ItemEvent e) {
-
-		if (e.getStateChange() == ItemEvent.SELECTED) {
-			Strategy fromStrategy = ((Strategy) ((DAOStrategy) strategyFromEditorComboBox
-					.getSelectedItem()).getObject());
-			Strategy toStrategy = ((Strategy) ((DAOStrategy) strategyToEditorComboBox
-					.getSelectedItem()).getObject());
-			List<Strategy> item = new ArrayList<Strategy>();
-			item.add(fromStrategy);
-			item.add(toStrategy);
-			reAssignButton.setTransferObject(item);
 		}
 	}
 
