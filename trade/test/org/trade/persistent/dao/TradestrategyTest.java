@@ -37,6 +37,7 @@ package org.trade.persistent.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -377,6 +378,28 @@ public class TradestrategyTest extends TestCase {
 				.getName());
 		for (Aspect aspect : tradingdays.getAspect()) {
 			aspectHome.remove(aspect);
+		}
+	}
+
+	@Test
+	public void testFindTradestrategyDistinctByDateRange() {
+		try {
+			Tradestrategy tradestrategy = TradestrategyTest
+					.getTestTradestrategy(symbol);
+			TestCase.assertNotNull(tradestrategy);
+			_log.info("testTradingdaysSave IdTradeStrategy:"
+					+ tradestrategy.getIdTradeStrategy());
+			List<String> results = tradestrategyHome
+					.findTradestrategyDistinctByDateRange(tradestrategy
+							.getTradingday().getOpen(), tradestrategy
+							.getTradingday().getOpen());
+			for (String value : results) {
+				_log.error("Value: " + value);
+			}
+			TestCase.assertNotNull(results);
+
+		} catch (Exception e) {
+			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
 }

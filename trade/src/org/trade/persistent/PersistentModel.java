@@ -264,6 +264,17 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
+	 * Method findTradestrategyDistinctByDateRange.
+	 * 
+	 * @param fromOpen
+	 *            Date
+	 * @param toOpen
+	 *            Date
+	 * @return List<String>
+	 */
+	List<String> findTradestrategyDistinctByDateRange(Date fromOpen, Date toOpen);
+
+	/**
 	 * Method findAllTradestrategies.
 	 * 
 	 * @return List<Tradestrategy>

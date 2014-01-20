@@ -49,6 +49,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
+import org.trade.dictionary.valuetype.BarSize;
+import org.trade.dictionary.valuetype.ChartDays;
 
 /**
  */
@@ -287,6 +289,76 @@ public class TradestrategyHome {
 				return items.get(0);
 			}
 			return null;
+
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
+	 * Method findTradestrategyDistinctByDateRange.
+	 * 
+	 * @param fromOpen
+	 *            Date
+	 * @param toOpen
+	 *            Date
+	 * @return List<String>
+	 */
+	public List<String> findTradestrategyDistinctByDateRange(Date fromOpen,
+			Date toOpen) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Tradestrategy> query = builder
+					.createQuery(Tradestrategy.class);
+			Root<Tradestrategy> from = query.from(Tradestrategy.class);
+			query.select(from);
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			// Query query =
+			// entityManager.createQuery("select s.id,s.pbyte from SimpleBean s ");
+			// List listExpected = query.getResultList();
+			if (null != fromOpen) {
+				Join<Tradestrategy, Tradingday> tradingday = from
+						.join("tradingday");
+				Predicate predicate = builder.equal(tradingday.get("open"),
+						fromOpen);
+				predicates.add(predicate);
+			}
+			if (null != toOpen) {
+				Join<Tradestrategy, Tradingday> tradingday = from
+						.join("tradingday");
+				Predicate predicate = builder.equal(tradingday.get("open"),
+						toOpen);
+				predicates.add(predicate);
+			}
+
+			query.multiselect(from.get("barSize"), from.get("chartDays"),
+					from.join("strategy")).distinct(true);
+
+			query.where(predicates.toArray(new Predicate[] {}));
+			TypedQuery<Tradestrategy> typedQuery = entityManager
+					.createQuery(query);
+			List<Tradestrategy> items = typedQuery.getResultList();
+			List<String> result = new ArrayList<String>();
+			for (Tradestrategy tradestrategy : items) {
+				String value = tradestrategy.getStrategy().getName()
+						+ " "
+						+ BarSize.newInstance(tradestrategy.getBarSize())
+								.getDisplayName()
+						+ " "
+						+ ChartDays.newInstance(tradestrategy.getChartDays())
+								.getDisplayName();
+				result.add(value);
+			}
+			entityManager.getTransaction().commit();
+			return result;
 
 		} catch (RuntimeException re) {
 			EntityManagerHelper.rollback();

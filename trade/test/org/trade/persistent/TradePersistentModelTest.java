@@ -1167,6 +1167,21 @@ public class TradePersistentModelTest extends TestCase {
 	}
 
 	@Test
+	public void testFindTradestrategyDistinctByDateRange() {
+
+		try {
+			List<String> result = this.tradePersistentModel
+					.findTradestrategyDistinctByDateRange(this.tradestrategy
+							.getTradingday().getOpen(), this.tradestrategy
+							.getTradingday().getOpen());
+			TestCase.assertNotNull(result);
+		} catch (Exception e) {
+			TestCase.fail("Error testFindTradestrategyDistinctByDateRange Msg: "
+					+ e.getMessage());
+		}
+	}
+
+	@Test
 	public void testFindTradelogReport() {
 
 		try {

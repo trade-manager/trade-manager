@@ -110,6 +110,7 @@ import org.trade.ui.contract.ContractPanel;
 import org.trade.ui.portfolio.PortfolioPanel;
 import org.trade.ui.strategy.StrategyPanel;
 import org.trade.ui.tradingday.ConnectionPane;
+import org.trade.ui.tradingday.FilterTradestrategyPane;
 import org.trade.ui.tradingday.TradingdayPanel;
 
 /**
@@ -1788,6 +1789,30 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						"Runing data retrieval please wait ...",
 						BasePanel.INFORMATION);
 			} else {
+
+				Collections.sort(m_tradingdays.getTradingdays(),
+						Tradingday.DATE_ORDER_DESC);
+				Date fromOpen = m_tradingdays.getTradingdays().get(0).getOpen();
+				Date toOpen = m_tradingdays.getTradingdays()
+						.get(m_tradingdays.getTradingdays().size() - 1)
+						.getOpen();
+				List<String> results = m_tradePersistentModel
+						.findTradestrategyDistinctByDateRange(fromOpen, toOpen);
+				if (results.size() > 1) {
+					FilterTradestrategyPane filterTradestrategyPane = new FilterTradestrategyPane(
+							results);
+					TextDialog dialog = new TextDialog(
+							this.getFrame(),
+							"Multiple Strategy cominations please select one to run",
+							true, filterTradestrategyPane);
+					dialog.getCancelButton().setText("Cancel");
+					dialog.getOKButton().setText("Connect");
+					dialog.setLocationRelativeTo(this);
+					dialog.setVisible(true);
+
+					if (!dialog.getCancel()) {
+					}
+				}
 				this.setStatusBarMessage("Runing strategy please wait ...",
 						BasePanel.INFORMATION);
 			}
