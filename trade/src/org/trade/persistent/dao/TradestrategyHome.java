@@ -319,21 +319,18 @@ public class TradestrategyHome {
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
-			// Query query =
-			// entityManager.createQuery("select s.id,s.pbyte from SimpleBean s ");
-			// List listExpected = query.getResultList();
 			if (null != fromOpen) {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
-				Predicate predicate = builder.equal(tradingday.get("open"),
-						fromOpen);
+				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
+						.get("open").as(Date.class), fromOpen);
 				predicates.add(predicate);
 			}
 			if (null != toOpen) {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
-				Predicate predicate = builder.equal(tradingday.get("open"),
-						toOpen);
+				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
+						.get("open").as(Date.class), toOpen);
 				predicates.add(predicate);
 			}
 
