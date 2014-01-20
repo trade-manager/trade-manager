@@ -39,7 +39,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JLabel;
@@ -48,6 +47,7 @@ import javax.swing.SwingConstants;
 
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
+import org.trade.persistent.dao.Tradestrategy;
 import org.trade.ui.widget.DecodeComboBoxEditor;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
 
@@ -59,14 +59,10 @@ public class FilterTradestrategyPane extends JPanel {
 
 	private DecodeComboBoxEditor editorComboBox = null;
 
-	public FilterTradestrategyPane(List<String> values)
+	public FilterTradestrategyPane(Vector<Decode> values)
 			throws ValueTypeException {
 
-		Vector<Decode> model = new Vector<Decode>();
-		for (String value : values) {
-			model.add(new Decode(value));
-		}
-		editorComboBox = new DecodeComboBoxEditor(model);
+		editorComboBox = new DecodeComboBoxEditor(values);
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());
 		editorComboBox.setEditable(true);
 
@@ -88,12 +84,12 @@ public class FilterTradestrategyPane extends JPanel {
 	}
 
 	/**
-	 * Method getBarSize
+	 * Method getSelectedValue
 	 * 
-	 * @return Integer
+	 * @return Tradestrategy
 	 */
-	public String getSelectedValue() {
-		String tradestrategy = ((String) ((Decode) editorComboBox
+	public Tradestrategy getSelectedValue() {
+		Tradestrategy tradestrategy = ((Tradestrategy) ((Decode) editorComboBox
 				.getSelectedItem()).getObject());
 		return tradestrategy;
 	}

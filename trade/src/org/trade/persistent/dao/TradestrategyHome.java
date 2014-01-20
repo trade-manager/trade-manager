@@ -38,6 +38,7 @@ package org.trade.persistent.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -49,6 +50,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
+import org.trade.core.valuetype.Decode;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 
@@ -305,9 +307,9 @@ public class TradestrategyHome {
 	 *            Date
 	 * @param toOpen
 	 *            Date
-	 * @return List<String>
+	 * @return Vector<Decode>
 	 */
-	public List<String> findTradestrategyDistinctByDateRange(Date fromOpen,
+	public Vector<Decode> findTradestrategyDistinctByDateRange(Date fromOpen,
 			Date toOpen) {
 
 		try {
@@ -346,16 +348,20 @@ public class TradestrategyHome {
 			TypedQuery<Tradestrategy> typedQuery = entityManager
 					.createQuery(query);
 			List<Tradestrategy> items = typedQuery.getResultList();
-			List<String> result = new ArrayList<String>();
-			for (Tradestrategy tradestrategy : items) {
-				String value = tradestrategy.getStrategy().getName()
+			Vector<Decode> result = new Vector<Decode>();
+			for (Tradestrategy item : items) {
+
+				String value = item.getStrategy().getName()
 						+ " "
-						+ BarSize.newInstance(tradestrategy.getBarSize())
+						+ BarSize.newInstance(item.getBarSize())
 								.getDisplayName()
 						+ " "
-						+ ChartDays.newInstance(tradestrategy.getChartDays())
+						+ ChartDays.newInstance(item.getChartDays())
 								.getDisplayName();
-				result.add(value);
+				Decode decode = new Decode();
+				decode.setDisplayName(value);
+				decode.setValue(item);
+				result.add(decode);
 			}
 			entityManager.getTransaction().commit();
 			return result;

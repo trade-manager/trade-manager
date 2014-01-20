@@ -73,6 +73,7 @@ import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
+import org.trade.core.valuetype.Decode;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -447,13 +448,66 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 
 	public void doTest() {
-		if (m_tradingdays.isDirty()) {
-			this.setStatusBarMessage(
-					"Please save before running strategy ...\n",
-					BasePanel.WARNING);
-		} else {
-			contractPanel.doCloseAll();
-			runStrategy(m_tradingdays, false);
+		try {
+			if (m_tradingdays.isDirty()) {
+				this.setStatusBarMessage(
+						"Please save before running strategy ...\n",
+						BasePanel.WARNING);
+			} else {
+				contractPanel.doCloseAll();
+				Collections.sort(m_tradingdays.getTradingdays(),
+						Tradingday.DATE_ORDER_DESC);
+				Date fromOpen = m_tradingdays.getTradingdays().get(0).getOpen();
+				Date toOpen = m_tradingdays.getTradingdays()
+						.get(m_tradingdays.getTradingdays().size() - 1)
+						.getOpen();
+				Vector<Decode> results = m_tradePersistentModel
+						.findTradestrategyDistinctByDateRange(fromOpen, toOpen);
+				if (results.size() > 1) {
+					FilterTradestrategyPane filterTradestrategyPane = new FilterTradestrategyPane(
+							results);
+					TextDialog dialog = new TextDialog(
+							this.getFrame(),
+							"Multiple Strategy cominations please select one to run",
+							true, filterTradestrategyPane);
+					dialog.getCancelButton().setText("Cancel");
+					dialog.getOKButton().setText("Connect");
+					dialog.setLocationRelativeTo(this);
+					dialog.setVisible(true);
+
+					if (!dialog.getCancel()) {
+						Tradestrategy tradestrategy = filterTradestrategyPane
+								.getSelectedValue();
+						Tradingdays tradingdays = new Tradingdays();
+						for (Tradingday itemTradingday : m_tradingdays
+								.getTradingdays()) {
+							Tradingday tradingday = (Tradingday) itemTradingday
+									.clone();
+							for (Tradestrategy item : tradingday
+									.getTradestrategies()) {
+								if (tradestrategy.getBarSize().equals(
+										item.getBarSize())
+										&& tradestrategy.getChartDays().equals(
+												item.getChartDays())
+										&& tradestrategy.getStrategy().equals(
+												item.getStrategy())) {
+									tradingday.addTradestrategy(item);
+								}
+							}
+							if (!tradingday.getTradestrategies().isEmpty()) {
+								tradingdays.add(tradingday);
+							}
+						}
+						runStrategy(tradingdays, false);
+					}
+				} else {
+					runStrategy(m_tradingdays, false);
+				}
+
+			}
+		} catch (Exception ex) {
+			this.setErrorMessage("Error reconciling open orders.",
+					ex.getMessage(), ex);
 		}
 	}
 
@@ -1789,30 +1843,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						"Runing data retrieval please wait ...",
 						BasePanel.INFORMATION);
 			} else {
-
-				Collections.sort(m_tradingdays.getTradingdays(),
-						Tradingday.DATE_ORDER_DESC);
-				Date fromOpen = m_tradingdays.getTradingdays().get(0).getOpen();
-				Date toOpen = m_tradingdays.getTradingdays()
-						.get(m_tradingdays.getTradingdays().size() - 1)
-						.getOpen();
-				List<String> results = m_tradePersistentModel
-						.findTradestrategyDistinctByDateRange(fromOpen, toOpen);
-				if (results.size() > 1) {
-					FilterTradestrategyPane filterTradestrategyPane = new FilterTradestrategyPane(
-							results);
-					TextDialog dialog = new TextDialog(
-							this.getFrame(),
-							"Multiple Strategy cominations please select one to run",
-							true, filterTradestrategyPane);
-					dialog.getCancelButton().setText("Cancel");
-					dialog.getOKButton().setText("Connect");
-					dialog.setLocationRelativeTo(this);
-					dialog.setVisible(true);
-
-					if (!dialog.getCancel()) {
-					}
-				}
 				this.setStatusBarMessage("Runing strategy please wait ...",
 						BasePanel.INFORMATION);
 			}

@@ -37,7 +37,7 @@ package org.trade.persistent.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -48,6 +48,7 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.TradingCalendar;
+import org.trade.core.valuetype.Decode;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
@@ -389,12 +390,12 @@ public class TradestrategyTest extends TestCase {
 			TestCase.assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
-			List<String> results = tradestrategyHome
+			Vector<Decode> results = tradestrategyHome
 					.findTradestrategyDistinctByDateRange(tradestrategy
 							.getTradingday().getOpen(), tradestrategy
 							.getTradingday().getOpen());
-			for (String value : results) {
-				_log.error("Value: " + value);
+			for (Decode value : results) {
+				_log.error("Value: " + value.getDisplayName());
 			}
 			TestCase.assertNotNull(results);
 
