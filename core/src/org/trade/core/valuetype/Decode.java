@@ -490,7 +490,6 @@ public class Decode extends ValueType implements Comparator<Decode>,
 			try {
 				setCode((String) JavaTypeTranslator
 						.convert(String.class, value));
-
 			} catch (final Exception ex) {
 
 			}
@@ -586,7 +585,6 @@ public class Decode extends ValueType implements Comparator<Decode>,
 				m_badValue = displayName;
 			}
 		} catch (Exception ex) {
-
 			m_badValue = displayName;
 		}
 	}

@@ -38,11 +38,9 @@ package org.trade.persistent;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
-import org.trade.core.valuetype.Decode;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
@@ -272,9 +270,9 @@ public interface PersistentModel {
 	 *            Date
 	 * @param toOpen
 	 *            Date
-	 * @return Vector<Decode>
+	 * @return List<Tradestrategy>
 	 */
-	Vector<Decode> findTradestrategyDistinctByDateRange(Date fromOpen,
+	List<Tradestrategy> findTradestrategyDistinctByDateRange(Date fromOpen,
 			Date toOpen);
 
 	/**

@@ -39,7 +39,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
 import javax.persistence.OptimisticLockException;
 
@@ -48,7 +47,6 @@ import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
-import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -504,10 +502,10 @@ public class TradePersistentModel implements PersistentModel {
 	 *            Date
 	 * @param toOpen
 	 *            Date
-	 * @return Vector<Decode>
+	 * @return List<Tradestrategy>
 	 */
-	public Vector<Decode> findTradestrategyDistinctByDateRange(Date fromOpen,
-			Date toOpen) {
+	public List<Tradestrategy> findTradestrategyDistinctByDateRange(
+			Date fromOpen, Date toOpen) {
 		return m_tradestrategyHome.findTradestrategyDistinctByDateRange(
 				fromOpen, toOpen);
 

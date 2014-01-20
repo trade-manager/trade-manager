@@ -73,7 +73,6 @@ import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
-import org.trade.core.valuetype.Decode;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -461,7 +460,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Date toOpen = m_tradingdays.getTradingdays()
 						.get(m_tradingdays.getTradingdays().size() - 1)
 						.getOpen();
-				Vector<Decode> results = m_tradePersistentModel
+				List<Tradestrategy> results = m_tradePersistentModel
 						.findTradestrategyDistinctByDateRange(fromOpen, toOpen);
 				if (results.size() > 1) {
 					FilterTradestrategyPane filterTradestrategyPane = new FilterTradestrategyPane(
@@ -470,8 +469,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							this.getFrame(),
 							"Multiple Strategy cominations please select one to run",
 							true, filterTradestrategyPane);
-					dialog.getCancelButton().setText("Cancel");
-					dialog.getOKButton().setText("Connect");
 					dialog.setLocationRelativeTo(this);
 					dialog.setVisible(true);
 
@@ -483,7 +480,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.getTradingdays()) {
 							Tradingday tradingday = (Tradingday) itemTradingday
 									.clone();
-							for (Tradestrategy item : tradingday
+							for (Tradestrategy item : itemTradingday
 									.getTradestrategies()) {
 								if (tradestrategy.getBarSize().equals(
 										item.getBarSize())

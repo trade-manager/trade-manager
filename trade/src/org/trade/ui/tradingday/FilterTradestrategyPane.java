@@ -39,16 +39,19 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 import java.util.Vector;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
+import org.trade.dictionary.valuetype.BarSize;
+import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.persistent.dao.Tradestrategy;
-import org.trade.ui.widget.DecodeComboBoxEditor;
+import org.trade.ui.widget.ComboItem;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
 
 /**
@@ -57,14 +60,24 @@ public class FilterTradestrategyPane extends JPanel {
 
 	private static final long serialVersionUID = -4696247761711464150L;
 
-	private DecodeComboBoxEditor editorComboBox = null;
+	private JComboBox<ComboItem> comboBox = null;
 
-	public FilterTradestrategyPane(Vector<Decode> values)
+	public FilterTradestrategyPane(List<Tradestrategy> values)
 			throws ValueTypeException {
-
-		editorComboBox = new DecodeComboBoxEditor(values);
-		editorComboBox.setRenderer(new DecodeComboBoxRenderer());
-		editorComboBox.setEditable(true);
+		Vector<ComboItem> items = new Vector<ComboItem>();
+		for (Tradestrategy item : values) {
+			String label = item.getStrategy().getName()
+					+ " "
+					+ BarSize.newInstance(item.getBarSize()).getDisplayName()
+					+ " "
+					+ ChartDays.newInstance(item.getChartDays())
+							.getDisplayName();
+			ComboItem comboItem = new ComboItem(item, label);
+			items.add(comboItem);
+		}
+		comboBox = new JComboBox<ComboItem>(items);
+		comboBox.setRenderer(new DecodeComboBoxRenderer());
+		comboBox.setEditable(true);
 
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
@@ -77,8 +90,8 @@ public class FilterTradestrategyPane extends JPanel {
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(1,
 						1, 0, 0), 20, 5));
 
-		jPanel1.add(editorComboBox, new GridBagConstraints(1, 0, 1, 1, 1.0,
-				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+		jPanel1.add(comboBox, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
 				new Insets(0, 0, 0, 43), 196, 0));
 		this.add(jPanel1);
 	}
@@ -89,8 +102,8 @@ public class FilterTradestrategyPane extends JPanel {
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy getSelectedValue() {
-		Tradestrategy tradestrategy = ((Tradestrategy) ((Decode) editorComboBox
-				.getSelectedItem()).getObject());
+		Tradestrategy tradestrategy = ((Tradestrategy) ((ComboItem) comboBox
+				.getSelectedItem()).getValue());
 		return tradestrategy;
 	}
 }

@@ -38,7 +38,6 @@ package org.trade.persistent;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -52,7 +51,6 @@ import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
-import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.BarSize;
@@ -1172,7 +1170,7 @@ public class TradePersistentModelTest extends TestCase {
 	public void testFindTradestrategyDistinctByDateRange() {
 
 		try {
-			Vector<Decode> result = this.tradePersistentModel
+			List<Tradestrategy> result = this.tradePersistentModel
 					.findTradestrategyDistinctByDateRange(this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getOpen());
