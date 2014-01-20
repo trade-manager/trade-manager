@@ -404,6 +404,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								.addBusinessDays(endDate, backfillOffsetDays)));
 				String endDateTime = _sdfLocal.format(endDate);
 
+				m_contractRequests.put(tradestrategy.getContract()
+						.getIdContract(), tradestrategy.getContract());
+
 				_log.info("onBrokerData Symbol: "
 						+ tradestrategy.getContract().getSymbol()
 						+ " end Time: " + endDateTime + " Period length: "

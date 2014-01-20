@@ -454,6 +454,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						BasePanel.WARNING);
 			} else {
 				contractPanel.doCloseAll();
+				/*
+				 * If multiple Strategy/BarSize/ChartDays combination exist in
+				 * the selected date range force the user to select one to
+				 * process.
+				 * 
+				 * These must be run one at a time and will require orders to be
+				 * deleted between runs.
+				 */
 				Collections.sort(m_tradingdays.getTradingdays(),
 						Tradingday.DATE_ORDER_DESC);
 				Date fromOpen = m_tradingdays.getTradingdays().get(0).getOpen();
@@ -467,7 +475,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							results);
 					TextDialog dialog = new TextDialog(
 							this.getFrame(),
-							"Multiple Strategy cominations please select one to run",
+							"Multiple Strategy/BarSize/ChartDays combinations exist. Please select one",
 							true, filterTradestrategyPane);
 					dialog.setLocationRelativeTo(this);
 					dialog.setVisible(true);
@@ -500,7 +508,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				} else {
 					runStrategy(m_tradingdays, false);
 				}
-
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error reconciling open orders.",

@@ -72,8 +72,6 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	private String barSizeSetting = null;
 	private String endDateTime = null;
 	private ClientWrapper brokerModel = null;
-	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
-			"yyyyMMdd HH:mm:ss");
 
 	/**
 	 * Constructor for YahooBroker.
@@ -108,12 +106,14 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	public Void doInBackground() {
 
 		try {
+
+			SimpleDateFormat _sdfLocal = new SimpleDateFormat(
+					"yyyyMMdd HH:mm:ss");
 			setYahooContractDetails(contract);
 
 			this.brokerModel
 					.contractDetails(contract.getIdContract(), contract);
 			this.brokerModel.contractDetailsEnd(contract.getIdContract());
-
 			Date endDate = _sdfLocal.parse(this.endDateTime);
 			ChartDays chartDays = ChartDays.newInstance();
 			chartDays.setDisplayName(this.durationStr);
