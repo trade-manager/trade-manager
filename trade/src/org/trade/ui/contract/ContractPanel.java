@@ -97,7 +97,7 @@ import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PositionOrders;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.Tradestrategy;
@@ -881,7 +881,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		try {
 			this.clearStatusBarMessage();
 			Tradestrategy tradestrategy = null;
-			PositionOrders position = null;
+			TradestrategyOrders position = null;
 			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
 					.getSelectedComponent();
 			if (null == currentTab) {

@@ -44,7 +44,7 @@ import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PositionOrders;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradePosition;
@@ -229,8 +229,8 @@ public interface PersistentModel {
 	 * @return PositionOrders
 	 * @throws PersistentModelException
 	 */
-	PositionOrders findPositionOrdersByTradestrategyId(Integer idTradestrategy)
-			throws PersistentModelException;
+	TradestrategyOrders findPositionOrdersByTradestrategyId(
+			Integer idTradestrategy) throws PersistentModelException;
 
 	/**
 	 * Method refreshPositionOrdersByTradestrategyId.
@@ -242,8 +242,8 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	PositionOrders refreshPositionOrdersByTradestrategyId(
-			PositionOrders positionOrders) throws PersistentModelException;
+	TradestrategyOrders refreshPositionOrdersByTradestrategyId(
+			TradestrategyOrders positionOrders) throws PersistentModelException;
 
 	/**
 	 * Method findTradestrategyByUniqueKeys.

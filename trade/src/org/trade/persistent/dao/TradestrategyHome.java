@@ -138,15 +138,15 @@ public class TradestrategyHome {
 	 * @return PositionOrders
 	 */
 
-	public synchronized PositionOrders findPositionOrdersByTradestrategyId(
+	public synchronized TradestrategyOrders findPositionOrdersByTradestrategyId(
 			Integer idTradestrategy) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
 					.getEntityManager();
 			entityManager.getTransaction().begin();
-			PositionOrders instance = entityManager.find(PositionOrders.class,
-					idTradestrategy);
+			TradestrategyOrders instance = entityManager.find(
+					TradestrategyOrders.class, idTradestrategy);
 			/*
 			 * If we have an open position get all the orders for that position.
 			 * Note the position could have been opened by a different

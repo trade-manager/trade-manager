@@ -335,9 +335,9 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 
 	public TradeOrder getTargetOneOrder() {
 		if (this.isThereOpenPosition()) {
-			Collections.sort(this.getPositionOrders().getTradeOrders(),
+			Collections.sort(this.getTradestrategyOrders().getTradeOrders(),
 					TradeOrder.ORDER_KEY);
-			for (TradeOrder tradeOrder : this.getPositionOrders()
+			for (TradeOrder tradeOrder : this.getTradestrategyOrders()
 					.getTradeOrders()) {
 				if (!tradeOrder.getIsOpenPosition()) {
 					if (OrderType.LMT.equals(tradeOrder.getOrderType())

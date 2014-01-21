@@ -67,7 +67,7 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
-import org.trade.persistent.dao.PositionOrders;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradePosition;
@@ -183,7 +183,7 @@ public class TradePersistentModelTest extends TestCase {
 
 		try {
 
-			PositionOrders positionOrders = this.tradePersistentModel
+			TradestrategyOrders positionOrders = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
 			if (!positionOrders.hasOpenTradePosition()) {
@@ -390,7 +390,7 @@ public class TradePersistentModelTest extends TestCase {
 			 * Update Stop/target orders to Submitted.
 			 */
 
-			PositionOrders positionOrders = this.tradePersistentModel
+			TradestrategyOrders positionOrders = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
 			for (TradeOrder tradeOrderOca : positionOrders.getTradeOrders()) {
@@ -955,7 +955,7 @@ public class TradePersistentModelTest extends TestCase {
 			this.tradePersistentModel.persistAspect(resultTrade.getContract());
 
 			TestCase.assertNotNull(resultTrade);
-			PositionOrders result = this.tradePersistentModel
+			TradestrategyOrders result = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
 			TestCase.assertNotNull(result);
@@ -977,7 +977,7 @@ public class TradePersistentModelTest extends TestCase {
 			TradePosition resultTrade = this.tradePersistentModel
 					.persistAspect(tradePosition);
 			TestCase.assertNotNull(resultTrade);
-			PositionOrders positionOrders = this.tradePersistentModel
+			TradestrategyOrders positionOrders = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
 
@@ -986,7 +986,7 @@ public class TradePersistentModelTest extends TestCase {
 					+ positionOrders.getVersion());
 
 			positionOrders.setLastUpdateDate(new Date());
-			PositionOrders result = this.tradePersistentModel
+			TradestrategyOrders result = this.tradePersistentModel
 					.persistAspect(positionOrders);
 
 			_log.info("testFindVersionById IdTradeStrategy:"

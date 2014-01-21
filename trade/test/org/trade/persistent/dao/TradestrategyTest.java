@@ -115,7 +115,7 @@ public class TradestrategyTest extends TestCase {
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 
-			PositionOrders positionOrders = tradestrategyHome
+			TradestrategyOrders positionOrders = tradestrategyHome
 					.findPositionOrdersByTradestrategyId(tradestrategy
 							.getIdTradeStrategy());
 			TestCase.assertNotNull(positionOrders);

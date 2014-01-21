@@ -58,7 +58,7 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioHome;
-import org.trade.persistent.dao.PositionOrders;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
 import org.trade.persistent.dao.Strategy;
@@ -303,8 +303,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	public PositionOrders refreshPositionOrdersByTradestrategyId(
-			PositionOrders positionOrders) throws PersistentModelException {
+	public TradestrategyOrders refreshPositionOrdersByTradestrategyId(
+			TradestrategyOrders positionOrders) throws PersistentModelException {
 
 		Integer version = m_tradestrategyHome.findVersionById(positionOrders
 				.getIdTradeStrategy());
@@ -312,7 +312,7 @@ public class TradePersistentModel implements PersistentModel {
 		if (positionOrders.getVersion().equals(version)) {
 			return positionOrders;
 		} else {
-			PositionOrders instance = m_tradestrategyHome
+			TradestrategyOrders instance = m_tradestrategyHome
 					.findPositionOrdersByTradestrategyId(positionOrders
 							.getIdTradeStrategy());
 			if (null == instance)
@@ -333,10 +333,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	public PositionOrders findPositionOrdersByTradestrategyId(
+	public TradestrategyOrders findPositionOrdersByTradestrategyId(
 			Integer idTradestrategy) throws PersistentModelException {
 
-		PositionOrders instance = m_tradestrategyHome
+		TradestrategyOrders instance = m_tradestrategyHome
 				.findPositionOrdersByTradestrategyId(idTradestrategy);
 		if (null == instance)
 			throw new PersistentModelException(
@@ -874,7 +874,7 @@ public class TradePersistentModel implements PersistentModel {
 			 * one.
 			 */
 			TradePosition tradePosition = null;
-			PositionOrders positionOrders = null;
+			TradestrategyOrders positionOrders = null;
 
 			if (!tradeOrder.hasTradePosition()) {
 				if (CoreUtils.nullSafeComparator(

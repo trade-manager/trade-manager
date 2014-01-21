@@ -60,7 +60,7 @@ import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.PositionOrders;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -280,7 +280,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 			}
 
-			PositionOrders positionOrders = null;
+			TradestrategyOrders positionOrders = null;
 
 			for (Candle candle : candles) {
 				/*
@@ -441,7 +441,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 * @throws Exception
 	 */
 	private boolean filledOrders(Contract contract,
-			PositionOrders positionOrders, Candle candle) throws Exception {
+			TradestrategyOrders positionOrders, Candle candle) throws Exception {
 
 		boolean orderfilled = false;
 		for (TradeOrder order : positionOrders.getTradeOrders()) {

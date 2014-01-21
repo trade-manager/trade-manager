@@ -87,7 +87,7 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
-import org.trade.persistent.dao.PositionOrders;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Account;
@@ -1526,7 +1526,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (null == tradestrategy.getIdTradeStrategy()) {
 				return;
 			}
-			PositionOrders positionOrders = m_tradePersistentModel
+			TradestrategyOrders positionOrders = m_tradePersistentModel
 					.findPositionOrdersByTradestrategyId(tradestrategy
 							.getIdTradeStrategy());
 			tradestrategy = m_tradePersistentModel
