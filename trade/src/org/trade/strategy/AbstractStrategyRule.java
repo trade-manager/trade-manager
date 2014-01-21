@@ -1549,8 +1549,22 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 */
 	public TradeOrder getOpenPositionOrder() {
+
+		/*
+		 * First try the TradePosition orders to see if we have a filled
+		 * Ordered. Note this could have been created by a different
+		 * tradestrategy.
+		 */
 		for (TradeOrder tradeOrder : this.getOpenTradePosition()
 				.getTradeOrders()) {
+			if (tradeOrder.getIsOpenPosition())
+				return tradeOrder;
+		}
+		/*
+		 * Try the current tradestrategy orders if we have an open position
+		 * order here then it will be unfilled.
+		 */
+		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
 			if (tradeOrder.getIsOpenPosition())
 				return tradeOrder;
 		}
