@@ -142,7 +142,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void error(int id, int errorCode, String errorMsg) {
 
 		if (id > 0) {
-			_log.error("StrategyWorkerError symbol: " + symbol + " Error Id: "
+			_log.info("StrategyWorkerError symbol: " + symbol + " Error Id: "
 					+ id + " Error Code: " + errorCode + " Error Msg: "
 					+ errorMsg);
 		}
@@ -293,9 +293,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 			this.tradestrategy.setStrategyData(this.strategyData);
 			this.symbol = this.tradestrategy.getContract().getSymbol();
 
-			_log.info("Starting: " + this.getClass().getName()
+			_log.error("Starting: " + this.getClass().getName()
 					+ " engine doInBackground Symbol: " + this.symbol
-					+ " idTradestrategy: " + this.idTradestrategy);
+					+ " idTradestrategy: " + this.idTradestrategy
+					+ " Tradingday Date: "
+					+ this.tradestrategy.getTradingday().getOpen());
 
 			/*
 			 * Process the current candle if there is one on startup.
@@ -477,7 +479,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 		this.strategyData.getBaseCandleSeries().removeChangeListener(this);
 		_log.info("Rule engine done: " + getSymbol() + " class: "
 				+ this.getClass().getSimpleName() + " idTradestrategy: "
-				+ this.tradestrategy.getIdTradeStrategy());
+				+ this.tradestrategy.getIdTradeStrategy()
+				+ " Tradingday Date: "
+				+ this.tradestrategy.getTradingday().getOpen());
 	}
 
 	/**
