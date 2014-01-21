@@ -293,7 +293,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			this.tradestrategy.setStrategyData(this.strategyData);
 			this.symbol = this.tradestrategy.getContract().getSymbol();
 
-			_log.error("Starting: " + this.getClass().getName()
+			_log.info("Starting: " + this.getClass().getName()
 					+ " engine doInBackground Symbol: " + this.symbol
 					+ " idTradestrategy: " + this.idTradestrategy
 					+ " Tradingday Date: "
@@ -1549,7 +1549,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * 
 	 */
 	public TradeOrder getOpenPositionOrder() {
-		for (TradeOrder tradeOrder : this.getPositionOrders().getTradeOrders()) {
+		for (TradeOrder tradeOrder : this.getOpenTradePosition()
+				.getTradeOrders()) {
 			if (tradeOrder.getIsOpenPosition())
 				return tradeOrder;
 		}

@@ -147,6 +147,13 @@ public class TradestrategyHome {
 			entityManager.getTransaction().begin();
 			PositionOrders instance = entityManager.find(PositionOrders.class,
 					idTradestrategy);
+			/*
+			 * If we have an open position get all the orders for that position.
+			 * Note the position could have been opened by a different
+			 * tradestrategy. So this set of orders is for the position.
+			 */
+			if (instance.hasOpenTradePosition())
+				instance.getOpenTradePosition().getTradeOrders().size();
 			entityManager.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {
