@@ -276,6 +276,18 @@ public interface PersistentModel {
 			Date toOpen);
 
 	/**
+	 * Method findTradestrategyContractDistinctByDateRange.
+	 * 
+	 * @param fromOpen
+	 *            Date
+	 * @param toOpen
+	 *            Date
+	 * @return List<Tradestrategy>
+	 */
+	List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
+			Date fromOpen, Date toOpen);
+
+	/**
 	 * Method findAllTradestrategies.
 	 * 
 	 * @return List<Tradestrategy>

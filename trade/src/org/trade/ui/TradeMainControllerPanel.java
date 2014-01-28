@@ -110,7 +110,7 @@ import org.trade.ui.contract.ContractPanel;
 import org.trade.ui.portfolio.PortfolioPanel;
 import org.trade.ui.strategy.StrategyPanel;
 import org.trade.ui.tradingday.ConnectionPane;
-import org.trade.ui.tradingday.FilterTradestrategyPane;
+import org.trade.ui.tradingday.FilterBackTestPane;
 import org.trade.ui.tradingday.TradingdayPanel;
 
 /**
@@ -468,45 +468,58 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				Date toOpen = m_tradingdays.getTradingdays()
 						.get(m_tradingdays.getTradingdays().size() - 1)
 						.getOpen();
-				List<Tradestrategy> results = m_tradePersistentModel
+				List<Tradestrategy> strategyBarSizeChartHistItems = m_tradePersistentModel
 						.findTradestrategyDistinctByDateRange(fromOpen, toOpen);
-				if (results.size() > 1) {
-					FilterTradestrategyPane filterTradestrategyPane = new FilterTradestrategyPane(
-							results);
-					TextDialog dialog = new TextDialog(
-							this.getFrame(),
-							"Multiple Strategy/BarSize/ChartDays combinations exist. Please select one",
-							true, filterTradestrategyPane);
-					dialog.setLocationRelativeTo(this);
-					dialog.setVisible(true);
 
-					if (!dialog.getCancel()) {
-						Tradestrategy tradestrategy = filterTradestrategyPane
-								.getSelectedValue();
-						Tradingdays tradingdays = new Tradingdays();
-						for (Tradingday itemTradingday : m_tradingdays
-								.getTradingdays()) {
-							Tradingday tradingday = (Tradingday) itemTradingday
-									.clone();
-							for (Tradestrategy item : itemTradingday
-									.getTradestrategies()) {
-								if (tradestrategy.getBarSize().equals(
-										item.getBarSize())
-										&& tradestrategy.getChartDays().equals(
-												item.getChartDays())
-										&& tradestrategy.getStrategy().equals(
-												item.getStrategy())) {
+				List<Tradestrategy> contractsItems = m_tradePersistentModel
+						.findTradestrategyContractDistinctByDateRange(fromOpen,
+								toOpen);
+
+				FilterBackTestPane filterTradestrategyPane = new FilterBackTestPane(
+						strategyBarSizeChartHistItems, contractsItems);
+				TextDialog dialog = new TextDialog(this.getFrame(),
+						"Run back test for the following", true,
+						filterTradestrategyPane);
+				dialog.setLocationRelativeTo(this);
+				dialog.setVisible(true);
+
+				if (!dialog.getCancel()) {
+					Tradestrategy tradestrategy = filterTradestrategyPane
+							.getSelectedStrategyBarSizeChartHist();
+
+					List<Contract> contracts = filterTradestrategyPane
+							.getSelectedContracts();
+
+					Tradingdays tradingdays = new Tradingdays();
+					for (Tradingday itemTradingday : m_tradingdays
+							.getTradingdays()) {
+						Tradingday tradingday = (Tradingday) itemTradingday
+								.clone();
+						for (Tradestrategy item : itemTradingday
+								.getTradestrategies()) {
+							if (tradestrategy.getBarSize().equals(
+									item.getBarSize())
+									&& tradestrategy.getChartDays().equals(
+											item.getChartDays())
+									&& tradestrategy.getStrategy().equals(
+											item.getStrategy())) {
+								if (contracts.isEmpty()) {
 									tradingday.addTradestrategy(item);
+								} else {
+									for (Contract contract : contracts) {
+										if (contract.equals(item.getContract())) {
+											tradingday.addTradestrategy(item);
+											break;
+										}
+									}
 								}
 							}
-							if (!tradingday.getTradestrategies().isEmpty()) {
-								tradingdays.add(tradingday);
-							}
 						}
-						runStrategy(tradingdays, false);
+						if (!tradingday.getTradestrategies().isEmpty()) {
+							tradingdays.add(tradingday);
+						}
 					}
-				} else {
-					runStrategy(m_tradingdays, false);
+					runStrategy(tradingdays, false);
 				}
 			}
 		} catch (Exception ex) {

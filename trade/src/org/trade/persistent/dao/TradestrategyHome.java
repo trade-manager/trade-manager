@@ -358,4 +358,59 @@ public class TradestrategyHome {
 			EntityManagerHelper.close();
 		}
 	}
+
+	/**
+	 * Method findTradestrategyContractDistinctByDateRange.
+	 * 
+	 * @param fromOpen
+	 *            Date
+	 * @param toOpen
+	 *            Date
+	 * @return Vector<ComboItem>
+	 */
+	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
+			Date fromOpen, Date toOpen) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Tradestrategy> query = builder
+					.createQuery(Tradestrategy.class);
+			Root<Tradestrategy> from = query.from(Tradestrategy.class);
+			query.select(from);
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (null != fromOpen) {
+				Join<Tradestrategy, Tradingday> tradingday = from
+						.join("tradingday");
+				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
+						.get("open").as(Date.class), fromOpen);
+				predicates.add(predicate);
+			}
+			if (null != toOpen) {
+				Join<Tradestrategy, Tradingday> tradingday = from
+						.join("tradingday");
+				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
+						.get("open").as(Date.class), toOpen);
+				predicates.add(predicate);
+			}
+
+			query.multiselect(from.join("contract")).distinct(true);
+
+			query.where(predicates.toArray(new Predicate[] {}));
+			TypedQuery<Tradestrategy> typedQuery = entityManager
+					.createQuery(query);
+			List<Tradestrategy> items = typedQuery.getResultList();
+			entityManager.getTransaction().commit();
+			return items;
+
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
 }

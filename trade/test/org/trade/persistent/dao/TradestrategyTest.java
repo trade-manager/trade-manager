@@ -404,4 +404,26 @@ public class TradestrategyTest extends TestCase {
 			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
+
+	@Test
+	public void testFindTradestrategyContractDistinctByDateRange() {
+		try {
+			Tradestrategy tradestrategy = TradestrategyTest
+					.getTestTradestrategy(symbol);
+			TestCase.assertNotNull(tradestrategy);
+			_log.info("testTradingdaysSave IdTradeStrategy:"
+					+ tradestrategy.getIdTradeStrategy());
+			List<Tradestrategy> results = tradestrategyHome
+					.findTradestrategyContractDistinctByDateRange(tradestrategy
+							.getTradingday().getOpen(), tradestrategy
+							.getTradingday().getOpen());
+			for (Tradestrategy value : results) {
+				_log.info("Contract: " + value.getContract().getSymbol());
+			}
+			TestCase.assertNotNull(results);
+
+		} catch (Exception e) {
+			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		}
+	}
 }

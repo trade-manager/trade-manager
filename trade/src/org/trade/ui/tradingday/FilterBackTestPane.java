@@ -39,6 +39,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -50,22 +51,27 @@ import javax.swing.SwingConstants;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
+import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.ui.widget.ComboItem;
 import org.trade.ui.widget.DecodeComboBoxRenderer;
 
 /**
  */
-public class FilterTradestrategyPane extends JPanel {
+public class FilterBackTestPane extends JPanel {
 
 	private static final long serialVersionUID = -4696247761711464150L;
 
-	private JComboBox<ComboItem> comboBox = null;
+	private JComboBox<ComboItem> strategyBarSizeChartHistComboBox = null;
+	private JComboBox<ComboItem> contractsHistComboBox = null;
+	private ComboItem comboItemAll = new ComboItem(null, "All");
 
-	public FilterTradestrategyPane(List<Tradestrategy> values)
-			throws ValueTypeException {
+	public FilterBackTestPane(
+			List<Tradestrategy> strategyBarSizeChartHistItems,
+			List<Tradestrategy> contractItems) throws ValueTypeException {
+
 		Vector<ComboItem> items = new Vector<ComboItem>();
-		for (Tradestrategy item : values) {
+		for (Tradestrategy item : strategyBarSizeChartHistItems) {
 			String label = item.getStrategy().getName()
 					+ " "
 					+ BarSize.newInstance(item.getBarSize()).getDisplayName()
@@ -75,9 +81,23 @@ public class FilterTradestrategyPane extends JPanel {
 			ComboItem comboItem = new ComboItem(item, label);
 			items.add(comboItem);
 		}
-		comboBox = new JComboBox<ComboItem>(items);
-		comboBox.setRenderer(new DecodeComboBoxRenderer());
-		comboBox.setEditable(true);
+
+		Vector<ComboItem> contracts = new Vector<ComboItem>();
+
+		contracts.add(comboItemAll);
+		for (Tradestrategy item : contractItems) {
+			String label = item.getContract().getSymbol();
+			ComboItem comboItem = new ComboItem(item, label);
+			contracts.add(comboItem);
+		}
+		strategyBarSizeChartHistComboBox = new JComboBox<ComboItem>(items);
+		strategyBarSizeChartHistComboBox
+				.setRenderer(new DecodeComboBoxRenderer());
+		strategyBarSizeChartHistComboBox.setEditable(true);
+
+		contractsHistComboBox = new JComboBox<ComboItem>(contracts);
+		contractsHistComboBox.setRenderer(new DecodeComboBoxRenderer());
+		contractsHistComboBox.setEditable(true);
 
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
@@ -85,25 +105,56 @@ public class FilterTradestrategyPane extends JPanel {
 		JLabel jLabel1 = new JLabel("Combinations:");
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setHorizontalTextPosition(SwingConstants.RIGHT);
+		JLabel jLabel2 = new JLabel("Contracts:");
+		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel2.setHorizontalTextPosition(SwingConstants.RIGHT);
 
 		jPanel1.add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(1,
 						1, 0, 0), 20, 5));
 
-		jPanel1.add(comboBox, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 43), 196, 0));
+		jPanel1.add(jLabel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+						1, 0, 0), 20, 5));
+
+		jPanel1.add(strategyBarSizeChartHistComboBox, new GridBagConstraints(1,
+				0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 196, 0));
+
+		jPanel1.add(contractsHistComboBox, new GridBagConstraints(1, 1, 1, 1,
+				1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(1, 0, 0, 43), 196, 0));
 		this.add(jPanel1);
 	}
 
 	/**
-	 * Method getSelectedValue
+	 * Method getSelectedStrategyBarSizeChartHist
 	 * 
 	 * @return Tradestrategy
 	 */
-	public Tradestrategy getSelectedValue() {
-		Tradestrategy tradestrategy = ((Tradestrategy) ((ComboItem) comboBox
+	public Tradestrategy getSelectedStrategyBarSizeChartHist() {
+		Tradestrategy tradestrategy = ((Tradestrategy) ((ComboItem) strategyBarSizeChartHistComboBox
 				.getSelectedItem()).getValue());
 		return tradestrategy;
+	}
+
+	/**
+	 * Method getSelectedStrategyBarSizeChartHist
+	 * 
+	 * @return List<Contract>
+	 */
+	public List<Contract> getSelectedContracts() {
+		List<Contract> contracts = new ArrayList<Contract>(0);
+		ComboItem comboItem = (ComboItem) contractsHistComboBox
+				.getSelectedItem();
+
+		if (null == comboItem)
+			return contracts;
+		if (comboItemAll.equals(comboItem))
+			return contracts;
+
+		Tradestrategy tradestrategy = ((Tradestrategy) comboItem.getValue());
+		contracts.add(tradestrategy.getContract());
+		return contracts;
 	}
 }

@@ -508,7 +508,21 @@ public class TradePersistentModel implements PersistentModel {
 			Date fromOpen, Date toOpen) {
 		return m_tradestrategyHome.findTradestrategyDistinctByDateRange(
 				fromOpen, toOpen);
+	}
 
+	/**
+	 * Method findTradestrategyContractDistinctByDateRange.
+	 * 
+	 * @param fromOpen
+	 *            Date
+	 * @param toOpen
+	 *            Date
+	 * @return List<Tradestrategy>
+	 */
+	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
+			Date fromOpen, Date toOpen) {
+		return m_tradestrategyHome
+				.findTradestrategyContractDistinctByDateRange(fromOpen, toOpen);
 	}
 
 	/**

@@ -101,7 +101,6 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Constructor for Tradestrategy.
 	 * 
-	 * 
 	 * @param chartDays
 	 *            Integer
 	 * @param barSize
@@ -113,6 +112,17 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		this.setBarSize(barSize);
 		this.chartDays = chartDays;
 		this.strategy = strategy;
+		super.setDirty(true);
+	}
+
+	/**
+	 * Constructor for Tradestrategy.
+	 * 
+	 * @param contract
+	 *            Contract
+	 */
+	public Tradestrategy(Contract contract) {
+		this.contract = contract;
 		super.setDirty(true);
 	}
 
