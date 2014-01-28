@@ -36,6 +36,7 @@
 package org.trade.ui.tradingday;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -43,9 +44,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import org.trade.core.valuetype.ValueTypeException;
@@ -63,7 +68,7 @@ public class FilterBackTestPane extends JPanel {
 	private static final long serialVersionUID = -4696247761711464150L;
 
 	private JComboBox<ComboItem> strategyBarSizeChartHistComboBox = null;
-	private JComboBox<ComboItem> contractsHistComboBox = null;
+	private JList<ComboItem> contractsHistComboBox = null;
 	private ComboItem comboItemAll = new ComboItem(null, "All");
 
 	public FilterBackTestPane(
@@ -82,22 +87,29 @@ public class FilterBackTestPane extends JPanel {
 			items.add(comboItem);
 		}
 
-		Vector<ComboItem> contracts = new Vector<ComboItem>();
+		DefaultListModel<ComboItem> listModel = new DefaultListModel<ComboItem>();
 
-		contracts.add(comboItemAll);
+		listModel.addElement(comboItemAll);
 		for (Tradestrategy item : contractItems) {
 			String label = item.getContract().getSymbol();
 			ComboItem comboItem = new ComboItem(item, label);
-			contracts.add(comboItem);
+			listModel.addElement(comboItem);
 		}
+
 		strategyBarSizeChartHistComboBox = new JComboBox<ComboItem>(items);
 		strategyBarSizeChartHistComboBox
 				.setRenderer(new DecodeComboBoxRenderer());
 		strategyBarSizeChartHistComboBox.setEditable(true);
 
-		contractsHistComboBox = new JComboBox<ComboItem>(contracts);
-		contractsHistComboBox.setRenderer(new DecodeComboBoxRenderer());
-		contractsHistComboBox.setEditable(true);
+		contractsHistComboBox = new JList<ComboItem>(listModel);
+		contractsHistComboBox
+				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		contractsHistComboBox.setLayoutOrientation(JList.VERTICAL);
+		contractsHistComboBox.setVisibleRowCount(-1);
+		contractsHistComboBox.setCellRenderer(new DecodeComboBoxRenderer());
+
+		JScrollPane listScroller = new JScrollPane(contractsHistComboBox);
+		listScroller.setPreferredSize(new Dimension(250, 80));
 
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
@@ -121,9 +133,9 @@ public class FilterBackTestPane extends JPanel {
 				0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 196, 0));
 
-		jPanel1.add(contractsHistComboBox, new GridBagConstraints(1, 1, 1, 1,
-				1.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(1, 0, 0, 43), 196, 0));
+		jPanel1.add(listScroller, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(1, 0, 0, 43), 196, 0));
 		this.add(jPanel1);
 	}
 
@@ -145,16 +157,18 @@ public class FilterBackTestPane extends JPanel {
 	 */
 	public List<Contract> getSelectedContracts() {
 		List<Contract> contracts = new ArrayList<Contract>(0);
-		ComboItem comboItem = (ComboItem) contractsHistComboBox
-				.getSelectedItem();
+		List<ComboItem> comboItems = contractsHistComboBox
+				.getSelectedValuesList();
 
-		if (null == comboItem)
+		if (null == comboItems)
 			return contracts;
-		if (comboItemAll.equals(comboItem))
-			return contracts;
+		for (ComboItem item : comboItems) {
+			if (comboItemAll.equals(item))
+				return new ArrayList<Contract>(0);
+			Tradestrategy tradestrategy = (Tradestrategy) item.getValue();
+			contracts.add(tradestrategy.getContract());
+		}
 
-		Tradestrategy tradestrategy = ((Tradestrategy) comboItem.getValue());
-		contracts.add(tradestrategy.getContract());
 		return contracts;
 	}
 }
