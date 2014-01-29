@@ -116,30 +116,30 @@ public class ConnectionPane extends JPanel {
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
 		this.setLayout(new BorderLayout());
-		JLabel jLabel1 = new JLabel("Host:");
+		JLabel jLabel1 = new JLabel("Host: ");
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setHorizontalTextPosition(SwingConstants.RIGHT);
-		JLabel jLabel2 = new JLabel("Port:");
+		JLabel jLabel2 = new JLabel("Port: ");
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setHorizontalTextPosition(SwingConstants.RIGHT);
-		JLabel jLabel3 = new JLabel("Client Id:");
+		JLabel jLabel3 = new JLabel("Client Id: ");
 		jLabel3.setHorizontalTextPosition(SwingConstants.RIGHT);
 		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
-		JLabel jLabel4 = new JLabel("Portfolio:");
+		JLabel jLabel4 = new JLabel("Portfolio: ");
 		jLabel4.setHorizontalTextPosition(SwingConstants.RIGHT);
 		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		jPanel1.add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(1,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(1,
 						1, 0, 0), 20, 5));
 		jPanel1.add(jLabel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 		jPanel1.add(jLabel3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 		jPanel1.add(jLabel4, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 
 		jPanel1.add(hostTextField, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,

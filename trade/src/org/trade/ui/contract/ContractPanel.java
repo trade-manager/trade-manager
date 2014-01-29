@@ -64,6 +64,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.border.BevelBorder;
@@ -1194,10 +1195,18 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			this.setBorder(BorderFactory.createCompoundBorder(
 					BorderFactory.createTitledBorder("Select Profile or Group"),
 					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
-			JLabel profileLabel = new JLabel("Profile");
-			JLabel groupLabel = new JLabel("Group");
-			JLabel mthodLabel = new JLabel("Method");
-			JLabel percentLabel = new JLabel("Percent");
+			JLabel profileLabel = new JLabel("Profile: ");
+			profileLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+			profileLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			JLabel groupLabel = new JLabel("Group: ");
+			groupLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+			groupLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			JLabel mthodLabel = new JLabel("Method: ");
+			mthodLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+			mthodLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			JLabel percentLabel = new JLabel("Percent: ");
+			percentLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+			percentLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 			DecodeComboBoxEditor profileEditorComboBox = new DecodeComboBoxEditor(
 					DAOProfile.newInstance().getCodesDecodes());
@@ -1287,34 +1296,34 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						}
 					});
 			this.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					GridBagConstraints.EAST, GridBagConstraints.NONE,
 					new Insets(1, 1, 0, 0), 20, 5));
 			this.add(groupLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					GridBagConstraints.EAST, GridBagConstraints.NONE,
 					new Insets(1, 1, 0, 0), 20, 5));
 			this.add(mthodLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					GridBagConstraints.EAST, GridBagConstraints.NONE,
 					new Insets(1, 1, 0, 0), 20, 5));
 			this.add(percentLabel, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
-					GridBagConstraints.WEST, GridBagConstraints.NONE,
+					GridBagConstraints.EAST, GridBagConstraints.NONE,
 					new Insets(1, 1, 0, 0), 20, 5));
 
 			this.add(profileEditorComboBox, new GridBagConstraints(1, 1, 1, 1,
 					1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
-					196, 0));
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+					5));
 			this.add(groupEditorComboBox, new GridBagConstraints(1, 2, 1, 1,
 					1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
-					196, 0));
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+					5));
 			this.add(methodEditorComboBox, new GridBagConstraints(1, 3, 1, 1,
 					1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
-					196, 0));
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+					5));
 			this.add(percentTextField, new GridBagConstraints(1, 4, 1, 1, 1.0,
 					0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43),
-					196, 0));
+					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+					5));
 		}
 	}
 }

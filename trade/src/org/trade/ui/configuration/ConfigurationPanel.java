@@ -62,6 +62,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -589,8 +590,10 @@ public class ConfigurationPanel extends BasePanel {
 				this.setLayout(gridBagLayout1);
 				int i = 0;
 				for (CodeAttribute codeAttribute : codeType.getCodeAttribute()) {
-					JLabel jLabel = new JLabel(codeAttribute.getName());
+					JLabel jLabel = new JLabel(codeAttribute.getName() + ": ");
 					jLabel.setToolTipText(codeAttribute.getDescription());
+					jLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+					jLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 					JComponent field = null;
 					if (null == codeAttribute.getEditorClassName()) {
 						field = new JFormattedTextField();
@@ -647,13 +650,13 @@ public class ConfigurationPanel extends BasePanel {
 
 					fields.put(codeAttribute.getName(), field);
 					this.add(jLabel, new GridBagConstraints(0, i, 1, 1, 0.0,
-							0.0, GridBagConstraints.WEST,
+							0.0, GridBagConstraints.EAST,
 							GridBagConstraints.NONE, new Insets(1, 1, 0, 0),
 							20, 5));
 					this.add(field, new GridBagConstraints(1, i, 1, 1, 1.0,
 							0.0, GridBagConstraints.WEST,
 							GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0,
-									43), 196, 0));
+									43), 20, 5));
 					i++;
 				}
 			}

@@ -72,7 +72,7 @@ public class FilterBackTestPane extends JPanel {
 	private static final long serialVersionUID = -4696247761711464150L;
 
 	private JComboBox<ComboItem> strategyBarSizeChartHistComboBox = null;
-	private JList<ComboItem> contractsHistComboBox = null;
+	private JList<ComboItem> contractsHistList = null;
 	private JSpinner spinnerStart = new JSpinner();
 	private JSpinner spinnerEnd = new JSpinner();
 
@@ -105,16 +105,16 @@ public class FilterBackTestPane extends JPanel {
 			listModel.addElement(comboItem);
 		}
 
-		JLabel dateStartLabel = new JLabel("From Date:");
+		JLabel dateStartLabel = new JLabel("From Date: ");
 		dateStartLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dateStartLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-		JLabel dateEndLabel = new JLabel("To Date:");
+		JLabel dateEndLabel = new JLabel("To Date: ");
 		dateEndLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dateEndLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-		JLabel jLabel1 = new JLabel("Combinations:");
+		JLabel jLabel1 = new JLabel("Combinations: ");
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setHorizontalTextPosition(SwingConstants.RIGHT);
-		JLabel jLabel2 = new JLabel("Contracts:");
+		JLabel jLabel2 = new JLabel("Contracts: ");
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setHorizontalTextPosition(SwingConstants.RIGHT);
 
@@ -135,31 +135,30 @@ public class FilterBackTestPane extends JPanel {
 				.setRenderer(new DecodeComboBoxRenderer());
 		strategyBarSizeChartHistComboBox.setEditable(true);
 
-		contractsHistComboBox = new JList<ComboItem>(listModel);
-		contractsHistComboBox
+		contractsHistList = new JList<ComboItem>(listModel);
+		contractsHistList
 				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		contractsHistComboBox.setLayoutOrientation(JList.VERTICAL);
-		contractsHistComboBox.setVisibleRowCount(-1);
-		contractsHistComboBox.setCellRenderer(new DecodeComboBoxRenderer());
+		contractsHistList.setLayoutOrientation(JList.VERTICAL);
+		contractsHistList.setVisibleRowCount(-1);
+		contractsHistList.setCellRenderer(new DecodeComboBoxRenderer());
 
-		JScrollPane listScroller = new JScrollPane(contractsHistComboBox);
+		JScrollPane listScroller = new JScrollPane(contractsHistList);
 		listScroller.setPreferredSize(new Dimension(50, 150));
 
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
 
 		jPanel1.add(dateStartLabel, new GridBagConstraints(0, 0, 1, 1, 0.0,
-				0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
 				new Insets(1, 1, 0, 0), 20, 5));
-
 		jPanel1.add(dateEndLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 		jPanel1.add(jLabel1, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(1,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(1,
 						1, 0, 0), 20, 5));
 		jPanel1.add(jLabel2, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 
 		jPanel1.add(spinnerStart, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
@@ -196,8 +195,7 @@ public class FilterBackTestPane extends JPanel {
 	 */
 	public List<Contract> getSelectedContracts() {
 		List<Contract> contracts = new ArrayList<Contract>(0);
-		List<ComboItem> comboItems = contractsHistComboBox
-				.getSelectedValuesList();
+		List<ComboItem> comboItems = contractsHistList.getSelectedValuesList();
 
 		if (null == comboItems)
 			return contracts;
