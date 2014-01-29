@@ -126,11 +126,11 @@ public class TextDialog extends JDialog {
 
 		jPanel1.add(okButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
-						5, 5, 5), 20, 5));
+						5, 5, 5), 5, 5));
 
 		jPanel1.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 5, 5, 20), 20, 5));
+				new Insets(5, 5, 5, 5), 5, 5));
 
 		detailArea.getViewport().add(m_component, null);
 		jPanel2.add(detailArea, BorderLayout.CENTER);
