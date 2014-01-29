@@ -37,7 +37,9 @@ package org.trade.ui.base;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -63,8 +65,8 @@ public class TextDialog extends JDialog {
 	private String m_text = null;
 	private boolean m_cancel = true;
 	private JComponent m_component = null;
-	private JButton buttonOk = new JButton();
-	private JButton buttonCancel = new JButton();
+	private JButton okButton = new JButton("OK");
+	private JButton cancelButton = new JButton("Cancel");
 
 	/**
 	 * Constructor for TextDialog.
@@ -77,19 +79,32 @@ public class TextDialog extends JDialog {
 	 *            boolean
 	 * @param component
 	 *            JComponent
+	 * 
+	 * @param oKButtonText
+	 *            String
+	 * @param cancelButtonText
+	 *            String
 	 */
 	public TextDialog(Frame frame, String title, boolean modal,
-			JComponent component) {
+			JComponent component, String oKButtonText, String cancelButtonText) {
 		super(frame, title, modal);
+		if (null != oKButtonText)
+			okButton.setText(oKButtonText);
+		if (null != cancelButtonText)
+			cancelButton.setText(cancelButtonText);
 
+		if (okButton.getText().length() > cancelButton.getText().length()) {
+			cancelButton.setPreferredSize(okButton.getPreferredSize());
+		} else {
+			okButton.setPreferredSize(cancelButton.getPreferredSize());
+		}
 		if (component == null) {
 			m_component = new JTextArea();
 		} else {
 			m_component = component;
 		}
 		JScrollPane detailArea = new JScrollPane();
-		buttonOk.setText("OK");
-		buttonOk.addActionListener(new ActionListener() {
+		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (m_component instanceof JTextArea) {
 					setText(((JTextArea) m_component).getText().trim());
@@ -98,8 +113,7 @@ public class TextDialog extends JDialog {
 				dispose();
 			}
 		});
-		buttonCancel.setText("Cancel");
-		buttonCancel.addActionListener(new ActionListener() {
+		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setCancel(true);
 				dispose();
@@ -109,8 +123,15 @@ public class TextDialog extends JDialog {
 		JPanel jPanel1 = new JPanel();
 		JPanel jPanel2 = new JPanel(new BorderLayout());
 		JPanel jPanel3 = new JPanel(new GridLayout());
-		jPanel3.add(buttonOk, null);
-		jPanel3.add(buttonCancel, null);
+
+		jPanel1.add(okButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 20, 5));
+
+		jPanel1.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 20), 20, 5));
+
 		detailArea.getViewport().add(m_component, null);
 		jPanel2.add(detailArea, BorderLayout.CENTER);
 		jPanel1.add(jPanel3, BorderLayout.CENTER);
@@ -127,9 +148,26 @@ public class TextDialog extends JDialog {
 	 *            Frame
 	 * @param title
 	 *            String
+	 * @param modal
+	 *            boolean
+	 * @param component
+	 *            JComponent
+	 */
+	public TextDialog(Frame frame, String title, boolean modal,
+			JComponent component) {
+		this(frame, title, false, component, null, null);
+	}
+
+	/**
+	 * Constructor for TextDialog.
+	 * 
+	 * @param frame
+	 *            Frame
+	 * @param title
+	 *            String
 	 */
 	public TextDialog(Frame frame, String title) {
-		this(frame, title, false, null);
+		this(frame, title, false, null, null, null);
 	}
 
 	/**
@@ -139,7 +177,7 @@ public class TextDialog extends JDialog {
 	 *            Frame
 	 */
 	public TextDialog(Frame frame) {
-		this(frame, "", false, null);
+		this(frame, "", false, null, null, null);
 	}
 
 	/**
@@ -182,30 +220,12 @@ public class TextDialog extends JDialog {
 	}
 
 	/**
-	 * Method getOKButton.
-	 * 
-	 * @return JButton
-	 */
-	public JButton getOKButton() {
-		return buttonOk;
-	}
-
-	/**
-	 * Method getCancelButton.
-	 * 
-	 * @return JButton
-	 */
-	public JButton getCancelButton() {
-		return buttonCancel;
-	}
-
-	/**
 	 * Method setCancel.
 	 * 
 	 * @param cancel
 	 *            boolean
 	 */
-	public void setCancel(boolean cancel) {
+	private void setCancel(boolean cancel) {
 		m_cancel = cancel;
 	}
 }

@@ -1091,9 +1091,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 			ConnectionPane connectionPane = new ConnectionPane();
 			TextDialog dialog = new TextDialog(this.getFrame(),
-					"Connect to TWS", true, connectionPane);
-			dialog.getCancelButton().setText("Cancel");
-			dialog.getOKButton().setText("Connect");
+					"Connect to TWS", true, connectionPane, "Connect", "Cancel");
 			dialog.setLocationRelativeTo(this);
 			dialog.setVisible(true);
 			/*
