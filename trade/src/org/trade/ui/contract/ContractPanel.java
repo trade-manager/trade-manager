@@ -1298,16 +1298,16 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					});
 			jPanel1.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0,
 					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 20), 20, 5));
+					new Insets(2, 2, 2, 2), 20, 5));
 			jPanel1.add(groupLabel, new GridBagConstraints(0, 2, 1, 1, 0.0,
 					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 20), 20, 5));
+					new Insets(2, 2, 2, 2), 20, 5));
 			jPanel1.add(mthodLabel, new GridBagConstraints(0, 3, 1, 1, 0.0,
 					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 20), 20, 5));
+					new Insets(2, 2, 2, 2), 20, 5));
 			jPanel1.add(percentLabel, new GridBagConstraints(0, 4, 1, 1, 0.0,
 					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 20), 20, 5));
+					new Insets(2, 2, 2, 2), 20, 5));
 
 			jPanel1.add(profileEditorComboBox, new GridBagConstraints(1, 1, 1,
 					1, 0.0, 0.0, GridBagConstraints.WEST,

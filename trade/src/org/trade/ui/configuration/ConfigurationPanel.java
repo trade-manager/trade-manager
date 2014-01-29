@@ -652,7 +652,7 @@ public class ConfigurationPanel extends BasePanel {
 					fields.put(codeAttribute.getName(), field);
 					jPanel1.add(jLabel, new GridBagConstraints(0, i, 1, 1, 0.0,
 							0.0, GridBagConstraints.EAST,
-							GridBagConstraints.NONE, new Insets(2, 2, 2, 20),
+							GridBagConstraints.NONE, new Insets(2, 2, 2, 2),
 							20, 5));
 					jPanel1.add(field, new GridBagConstraints(1, i, 1, 1, 1.0,
 							0.0, GridBagConstraints.WEST,

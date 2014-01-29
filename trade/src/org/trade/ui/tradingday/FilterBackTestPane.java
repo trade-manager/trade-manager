@@ -151,16 +151,16 @@ public class FilterBackTestPane extends JPanel {
 
 		jPanel1.add(dateStartLabel, new GridBagConstraints(0, 0, 1, 1, 0.0,
 				0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-				new Insets(2, 2, 2, 20), 20, 5));
+				new Insets(2, 2, 2, 2), 20, 5));
 		jPanel1.add(dateEndLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
-						2, 2, 20), 20, 5));
+						2, 2, 2), 20, 5));
 		jPanel1.add(jLabel1, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
-						2, 2, 20), 20, 5));
+						2, 2, 2), 20, 5));
 		jPanel1.add(jLabel2, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
-						2, 2, 20), 20, 5));
+						2, 2, 2), 20, 5));
 
 		jPanel1.add(spinnerStart, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
