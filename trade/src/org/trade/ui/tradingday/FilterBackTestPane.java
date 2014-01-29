@@ -147,33 +147,33 @@ public class FilterBackTestPane extends JPanel {
 
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
+		this.setLayout(new BorderLayout());
 
 		jPanel1.add(dateStartLabel, new GridBagConstraints(0, 0, 1, 1, 0.0,
 				0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-				new Insets(1, 1, 0, 0), 20, 5));
+				new Insets(2, 2, 2, 20), 20, 5));
 		jPanel1.add(dateEndLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
-						1, 0, 0), 20, 5));
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 20), 20, 5));
 		jPanel1.add(jLabel1, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(1,
-						1, 0, 0), 20, 5));
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 20), 20, 5));
 		jPanel1.add(jLabel2, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
-						1, 0, 0), 20, 5));
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 20), 20, 5));
 
-		jPanel1.add(spinnerStart, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
+		jPanel1.add(spinnerStart, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 43), 20, 5));
-		jPanel1.add(spinnerEnd, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
+				new Insets(2, 2, 2, 20), 20, 5));
+		jPanel1.add(spinnerEnd, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(1, 0, 0, 43), 20, 5));
+				new Insets(2, 2, 2, 20), 20, 5));
 		jPanel1.add(strategyBarSizeChartHistComboBox, new GridBagConstraints(1,
-				2, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20, 5));
-		jPanel1.add(listScroller, new GridBagConstraints(1, 3, 1, 1, 1.0, 0.0,
+				2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
+		jPanel1.add(listScroller, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(1, 0, 0, 43), 20, 5));
-		this.setLayout(new BorderLayout());
+				new Insets(2, 2, 2, 20), 20, 5));
 		this.add(jPanel1);
 	}
 
@@ -183,8 +183,12 @@ public class FilterBackTestPane extends JPanel {
 	 * @return Tradestrategy
 	 */
 	public Tradestrategy getSelectedStrategyBarSizeChartHist() {
-		Tradestrategy tradestrategy = ((Tradestrategy) ((ComboItem) strategyBarSizeChartHistComboBox
-				.getSelectedItem()).getValue());
+		ComboItem comboItem = (ComboItem) strategyBarSizeChartHistComboBox
+				.getSelectedItem();
+		if (null == comboItem)
+			return null;
+
+		Tradestrategy tradestrategy = ((Tradestrategy) comboItem.getValue());
 		return tradestrategy;
 	}
 

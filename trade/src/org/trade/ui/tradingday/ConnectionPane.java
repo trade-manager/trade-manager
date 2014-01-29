@@ -130,30 +130,30 @@ public class ConnectionPane extends JPanel {
 		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		jPanel1.add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(1,
-						1, 0, 0), 20, 5));
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 2), 20, 5));
 		jPanel1.add(jLabel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
-						1, 0, 0), 20, 5));
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 2), 20, 5));
 		jPanel1.add(jLabel3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
-						1, 0, 0), 20, 5));
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 2), 20, 5));
 		jPanel1.add(jLabel4, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,
-						1, 0, 0), 20, 5));
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 2), 20, 5));
 
-		jPanel1.add(hostTextField, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
+		jPanel1.add(hostTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 43), 20, 5));
-		jPanel1.add(portTextField, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
+				new Insets(2, 2, 2, 20), 20, 5));
+		jPanel1.add(portTextField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(1, 0, 0, 43), 20, 5));
-		jPanel1.add(clientIdTextField, new GridBagConstraints(1, 2, 1, 1, 1.0,
+				new Insets(2, 2, 2, 20), 20, 5));
+		jPanel1.add(clientIdTextField, new GridBagConstraints(1, 2, 1, 1, 0.0,
 				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 43), 20, 5));
+				new Insets(2, 2, 2, 20), 20, 5));
 		jPanel1.add(portfolioEditorComboBox, new GridBagConstraints(1, 3, 1, 1,
-				1.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20, 5));
+				0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
 		this.add(jPanel1);
 	}
 

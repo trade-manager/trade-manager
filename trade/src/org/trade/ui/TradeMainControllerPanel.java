@@ -464,6 +464,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 */
 				Collections.sort(m_tradingdays.getTradingdays(),
 						Tradingday.DATE_ORDER_DESC);
+				if (m_tradingdays.getTradingdays().isEmpty()) {
+					return;
+				}
 				Date fromOpen = m_tradingdays.getTradingdays().get(0).getOpen();
 				Date toOpen = m_tradingdays.getTradingdays()
 						.get(m_tradingdays.getTradingdays().size() - 1)
@@ -487,6 +490,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				if (!dialog.getCancel()) {
 					Tradestrategy tradestrategy = filterTradestrategyPane
 							.getSelectedStrategyBarSizeChartHist();
+					if (null == tradestrategy)
+						return;
 
 					List<Contract> contracts = filterTradestrategyPane
 							.getSelectedContracts();

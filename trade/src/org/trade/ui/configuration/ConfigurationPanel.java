@@ -583,11 +583,12 @@ public class ConfigurationPanel extends BasePanel {
 		 */
 		public CodeAttributesPanel(Aspects aspects, IndicatorSeries series)
 				throws Exception {
-
+			GridBagLayout gridBagLayout1 = new GridBagLayout();
+			JPanel jPanel1 = new JPanel(gridBagLayout1);
+			this.setLayout(new BorderLayout());
 			for (Aspect aspect : aspects.getAspect()) {
 				CodeType codeType = (CodeType) aspect;
-				GridBagLayout gridBagLayout1 = new GridBagLayout();
-				this.setLayout(gridBagLayout1);
+
 				int i = 0;
 				for (CodeAttribute codeAttribute : codeType.getCodeAttribute()) {
 					JLabel jLabel = new JLabel(codeAttribute.getName() + ": ");
@@ -649,17 +650,18 @@ public class ConfigurationPanel extends BasePanel {
 					}
 
 					fields.put(codeAttribute.getName(), field);
-					this.add(jLabel, new GridBagConstraints(0, i, 1, 1, 0.0,
+					jPanel1.add(jLabel, new GridBagConstraints(0, i, 1, 1, 0.0,
 							0.0, GridBagConstraints.EAST,
-							GridBagConstraints.NONE, new Insets(1, 1, 0, 0),
+							GridBagConstraints.NONE, new Insets(2, 2, 2, 20),
 							20, 5));
-					this.add(field, new GridBagConstraints(1, i, 1, 1, 1.0,
+					jPanel1.add(field, new GridBagConstraints(1, i, 1, 1, 1.0,
 							0.0, GridBagConstraints.WEST,
-							GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0,
-									43), 20, 5));
+							GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2,
+									20), 20, 5));
 					i++;
 				}
 			}
+			this.add(jPanel1);
 		}
 
 		/**

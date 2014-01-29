@@ -1191,7 +1191,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				throws Exception {
 
 			GridBagLayout gridBagLayout1 = new GridBagLayout();
-			this.setLayout(gridBagLayout1);
+			JPanel jPanel1 = new JPanel(gridBagLayout1);
+			this.setLayout(new BorderLayout());
 			this.setBorder(BorderFactory.createCompoundBorder(
 					BorderFactory.createTitledBorder("Select Profile or Group"),
 					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
@@ -1295,35 +1296,36 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							}
 						}
 					});
-			this.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(1, 1, 0, 0), 20, 5));
-			this.add(groupLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(1, 1, 0, 0), 20, 5));
-			this.add(mthodLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-					GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(1, 1, 0, 0), 20, 5));
-			this.add(percentLabel, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
-					GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(1, 1, 0, 0), 20, 5));
+			jPanel1.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0,
+					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+					new Insets(2, 2, 2, 20), 20, 5));
+			jPanel1.add(groupLabel, new GridBagConstraints(0, 2, 1, 1, 0.0,
+					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+					new Insets(2, 2, 2, 20), 20, 5));
+			jPanel1.add(mthodLabel, new GridBagConstraints(0, 3, 1, 1, 0.0,
+					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+					new Insets(2, 2, 2, 20), 20, 5));
+			jPanel1.add(percentLabel, new GridBagConstraints(0, 4, 1, 1, 0.0,
+					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+					new Insets(2, 2, 2, 20), 20, 5));
 
-			this.add(profileEditorComboBox, new GridBagConstraints(1, 1, 1, 1,
-					1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+			jPanel1.add(profileEditorComboBox, new GridBagConstraints(1, 1, 1,
+					1, 0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
 					5));
-			this.add(groupEditorComboBox, new GridBagConstraints(1, 2, 1, 1,
-					1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+			jPanel1.add(groupEditorComboBox, new GridBagConstraints(1, 2, 1, 1,
+					0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
 					5));
-			this.add(methodEditorComboBox, new GridBagConstraints(1, 3, 1, 1,
-					1.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+			jPanel1.add(methodEditorComboBox, new GridBagConstraints(1, 3, 1,
+					1, 0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
 					5));
-			this.add(percentTextField, new GridBagConstraints(1, 4, 1, 1, 1.0,
-					0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20,
+			jPanel1.add(percentTextField, new GridBagConstraints(1, 4, 1, 1,
+					0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
 					5));
+			this.add(jPanel1);
 		}
 	}
 }
