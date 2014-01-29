@@ -144,16 +144,16 @@ public class ConnectionPane extends JPanel {
 
 		jPanel1.add(hostTextField, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 43), 196, 0));
+				new Insets(0, 0, 0, 43), 20, 5));
 		jPanel1.add(portTextField, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(1, 0, 0, 43), 196, 0));
+				new Insets(1, 0, 0, 43), 20, 5));
 		jPanel1.add(clientIdTextField, new GridBagConstraints(1, 2, 1, 1, 1.0,
 				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 43), 196, 0));
+				new Insets(0, 0, 0, 43), 20, 5));
 		jPanel1.add(portfolioEditorComboBox, new GridBagConstraints(1, 3, 1, 1,
 				1.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 196, 0));
+				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20, 5));
 		this.add(jPanel1);
 	}
 

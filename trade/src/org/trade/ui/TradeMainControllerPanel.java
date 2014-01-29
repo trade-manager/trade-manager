@@ -476,7 +476,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								toOpen);
 
 				FilterBackTestPane filterTradestrategyPane = new FilterBackTestPane(
-						strategyBarSizeChartHistItems, contractsItems);
+						fromOpen, toOpen, strategyBarSizeChartHistItems,
+						contractsItems);
 				TextDialog dialog = new TextDialog(this.getFrame(),
 						"Run back test for the following", true,
 						filterTradestrategyPane);
@@ -493,6 +494,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					Tradingdays tradingdays = new Tradingdays();
 					for (Tradingday itemTradingday : m_tradingdays
 							.getTradingdays()) {
+						if (filterTradestrategyPane.getSelectedStartDate()
+								.before(itemTradingday.getOpen())
+								|| filterTradestrategyPane.getSelectedEndDate()
+										.after(itemTradingday.getOpen())) {
+							continue;
+						}
 						Tradingday tradingday = (Tradingday) itemTradingday
 								.clone();
 						for (Tradestrategy item : itemTradingday

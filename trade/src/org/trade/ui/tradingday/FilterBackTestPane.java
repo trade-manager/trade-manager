@@ -41,6 +41,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -50,9 +51,12 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
@@ -69,9 +73,14 @@ public class FilterBackTestPane extends JPanel {
 
 	private JComboBox<ComboItem> strategyBarSizeChartHistComboBox = null;
 	private JList<ComboItem> contractsHistComboBox = null;
+	private JSpinner spinnerStart = new JSpinner();
+	private JSpinner spinnerEnd = new JSpinner();
+
 	private ComboItem comboItemAll = new ComboItem(null, "All");
 
-	public FilterBackTestPane(
+	private static final String DATEFORMAT = "MM/dd/yyyy";
+
+	public FilterBackTestPane(Date startDate, Date endDate,
 			List<Tradestrategy> strategyBarSizeChartHistItems,
 			List<Tradestrategy> contractItems) throws ValueTypeException {
 
@@ -83,7 +92,7 @@ public class FilterBackTestPane extends JPanel {
 					+ " "
 					+ ChartDays.newInstance(item.getChartDays())
 							.getDisplayName();
-			ComboItem comboItem = new ComboItem(item, label);
+			ComboItem comboItem = new ComboItem(item, label.trim());
 			items.add(comboItem);
 		}
 
@@ -95,6 +104,31 @@ public class FilterBackTestPane extends JPanel {
 			ComboItem comboItem = new ComboItem(item, label);
 			listModel.addElement(comboItem);
 		}
+
+		JLabel dateStartLabel = new JLabel("From Date:");
+		dateStartLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dateStartLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+		JLabel dateEndLabel = new JLabel("To Date:");
+		dateEndLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dateEndLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+		JLabel jLabel1 = new JLabel("Combinations:");
+		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel1.setHorizontalTextPosition(SwingConstants.RIGHT);
+		JLabel jLabel2 = new JLabel("Contracts:");
+		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel2.setHorizontalTextPosition(SwingConstants.RIGHT);
+
+		spinnerStart.setModel(new SpinnerDateModel());
+		JSpinner.DateEditor de = new JSpinner.DateEditor(spinnerStart,
+				DATEFORMAT);
+		spinnerStart.setEditor(de);
+		spinnerStart.setValue(startDate);
+
+		spinnerEnd.setModel(new SpinnerDateModel());
+		JSpinner.DateEditor de1 = new JSpinner.DateEditor(spinnerEnd,
+				DATEFORMAT);
+		spinnerEnd.setEditor(de1);
+		spinnerEnd.setValue(endDate);
 
 		strategyBarSizeChartHistComboBox = new JComboBox<ComboItem>(items);
 		strategyBarSizeChartHistComboBox
@@ -109,33 +143,38 @@ public class FilterBackTestPane extends JPanel {
 		contractsHistComboBox.setCellRenderer(new DecodeComboBoxRenderer());
 
 		JScrollPane listScroller = new JScrollPane(contractsHistComboBox);
-		listScroller.setPreferredSize(new Dimension(250, 80));
+		listScroller.setPreferredSize(new Dimension(50, 150));
 
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
-		this.setLayout(new BorderLayout());
-		JLabel jLabel1 = new JLabel("Combinations:");
-		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel1.setHorizontalTextPosition(SwingConstants.RIGHT);
-		JLabel jLabel2 = new JLabel("Contracts:");
-		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel2.setHorizontalTextPosition(SwingConstants.RIGHT);
 
-		jPanel1.add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+		jPanel1.add(dateStartLabel, new GridBagConstraints(0, 0, 1, 1, 0.0,
+				0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				new Insets(1, 1, 0, 0), 20, 5));
+
+		jPanel1.add(dateEndLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+						1, 0, 0), 20, 5));
+		jPanel1.add(jLabel1, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(1,
 						1, 0, 0), 20, 5));
-
-		jPanel1.add(jLabel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+		jPanel1.add(jLabel2, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
 						1, 0, 0), 20, 5));
 
-		jPanel1.add(strategyBarSizeChartHistComboBox, new GridBagConstraints(1,
-				0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 196, 0));
-
-		jPanel1.add(listScroller, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
+		jPanel1.add(spinnerStart, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(1, 0, 0, 43), 196, 0));
+				new Insets(0, 0, 0, 43), 20, 5));
+		jPanel1.add(spinnerEnd, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(1, 0, 0, 43), 20, 5));
+		jPanel1.add(strategyBarSizeChartHistComboBox, new GridBagConstraints(1,
+				2, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 43), 20, 5));
+		jPanel1.add(listScroller, new GridBagConstraints(1, 3, 1, 1, 1.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(1, 0, 0, 43), 20, 5));
+		this.setLayout(new BorderLayout());
 		this.add(jPanel1);
 	}
 
@@ -151,7 +190,7 @@ public class FilterBackTestPane extends JPanel {
 	}
 
 	/**
-	 * Method getSelectedStrategyBarSizeChartHist
+	 * Method getSelectedContracts
 	 * 
 	 * @return List<Contract>
 	 */
@@ -170,5 +209,41 @@ public class FilterBackTestPane extends JPanel {
 		}
 
 		return contracts;
+	}
+
+	/**
+	 * Method getSelectedStartDate
+	 * 
+	 * @return Date
+	 */
+	public Date getSelectedStartDate() {
+		Date startDate = TradingCalendar.getSpecificTime(
+				(Date) spinnerStart.getValue(), 0, 0, 0);
+		Date endDate = TradingCalendar.getSpecificTime(
+				(Date) spinnerEnd.getValue(), 23, 59, 59);
+		if (endDate.before(startDate)) {
+			startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
+			spinnerStart.setValue(startDate);
+		}
+
+		return startDate;
+	}
+
+	/**
+	 * Method getSelectedEndDate
+	 * 
+	 * @return Date
+	 */
+	public Date getSelectedEndDate() {
+		Date startDate = TradingCalendar.getSpecificTime(
+				(Date) spinnerStart.getValue(), 0, 0, 0);
+		Date endDate = TradingCalendar.getSpecificTime(
+				(Date) spinnerEnd.getValue(), 23, 59, 59);
+		if (endDate.before(startDate)) {
+			startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
+			spinnerStart.setValue(startDate);
+		}
+
+		return endDate;
 	}
 }
