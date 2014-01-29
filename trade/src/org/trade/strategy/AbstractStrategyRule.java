@@ -554,6 +554,39 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Money
 	 * @param quantity
 	 *            int
+	 * @param roundPrice
+	 *            boolean
+	 * @param transmit
+	 *            boolean
+	 * @return TradeOrder
+	 * @throws StrategyRuleException
+	 */
+	public TradeOrder createOrder(Contract contract, String action,
+			String orderType, Money limitPrice, Money auxPrice, int quantity,
+			boolean roundPrice, boolean transmit) throws StrategyRuleException {
+		return createOrder(contract, action, orderType, limitPrice, auxPrice,
+				quantity, null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
+				TimeInForce.DAY, roundPrice, transmit, null, null, null, null);
+	}
+
+	/**
+	 * Method createOrder.
+	 * 
+	 * This method creates an open position order for the Trade. The order is
+	 * persisted and transmitted via the broker interface to the market.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param action
+	 *            String
+	 * @param orderType
+	 *            String
+	 * @param limitPrice
+	 *            Money
+	 * @param auxPrice
+	 *            Money
+	 * @param quantity
+	 *            int
 	 * @param ocaGroupName
 	 *            String
 	 * @param roundPrice
@@ -571,6 +604,49 @@ public abstract class AbstractStrategyRule extends Worker implements
 				quantity, ocaGroupName, TriggerMethod.DEFAULT,
 				OverrideConstraints.YES, TimeInForce.DAY, roundPrice, transmit,
 				null, null, null, null);
+	}
+
+	/**
+	 * Method createOrder.
+	 * 
+	 * This method creates an open position order for the Trade. The order is
+	 * persisted and transmitted via the broker interface to the market.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @param action
+	 *            String
+	 * @param orderType
+	 *            String
+	 * @param limitPrice
+	 *            Money
+	 * @param auxPrice
+	 *            Money
+	 * @param quantity
+	 *            int
+	 * @param ocaGroupName
+	 *            String
+	 * @param triggerMethod
+	 *            Integer
+	 * @param overrideConstraints
+	 *            Integer
+	 * @param timeInForce
+	 *            String
+	 * @param roundPrice
+	 *            boolean
+	 * @param transmit
+	 *            boolean
+	 * @return TradeOrder
+	 * @throws StrategyRuleException
+	 */
+	public TradeOrder createOrder(Contract contract, String action,
+			String orderType, Money limitPrice, Money auxPrice, int quantity,
+			String ocaGroupName, Integer triggerMethod,
+			Integer overrideConstraints, String timeInForce,
+			boolean roundPrice, boolean transmit) throws StrategyRuleException {
+		return createOrder(contract, action, orderType, limitPrice, auxPrice,
+				quantity, ocaGroupName, triggerMethod, overrideConstraints,
+				timeInForce, roundPrice, transmit, null, null, null, null);
 	}
 
 	/**
