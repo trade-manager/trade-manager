@@ -98,8 +98,8 @@ contract.symbol,
 tradeposition.idTradePosition
 ) as data
 order by
-data.symbol asc,
 data.idTradePosition desc,
+data.symbol asc,
 data.sortCol asc,
 data.open asc,
 data.isOpenPosition desc,
