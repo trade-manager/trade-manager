@@ -155,7 +155,7 @@ public class TextDialog extends JDialog {
 	 */
 	public TextDialog(Frame frame, String title, boolean modal,
 			JComponent component) {
-		this(frame, title, false, component, null, null);
+		this(frame, title, modal, component, null, null);
 	}
 
 	/**

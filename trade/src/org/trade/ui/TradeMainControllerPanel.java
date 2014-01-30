@@ -499,12 +499,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					Tradingdays tradingdays = new Tradingdays();
 					for (Tradingday itemTradingday : m_tradingdays
 							.getTradingdays()) {
-						if (filterTradestrategyPane.getSelectedStartDate()
-								.before(itemTradingday.getOpen())
-								|| filterTradestrategyPane.getSelectedEndDate()
-										.after(itemTradingday.getOpen())) {
+						
+						if (!TradingCalendar.between(itemTradingday.getOpen(),
+								filterTradestrategyPane.getSelectedStartDate(),
+								filterTradestrategyPane.getSelectedEndDate()))
 							continue;
-						}
+
 						Tradingday tradingday = (Tradingday) itemTradingday
 								.clone();
 						for (Tradestrategy item : itemTradingday
