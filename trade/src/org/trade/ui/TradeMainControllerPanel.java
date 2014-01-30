@@ -467,8 +467,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				if (m_tradingdays.getTradingdays().isEmpty()) {
 					return;
 				}
-				Date fromOpen = m_tradingdays.getTradingdays().get(0).getOpen();
-				Date toOpen = m_tradingdays.getTradingdays()
+				Date toOpen = m_tradingdays.getTradingdays().get(0).getOpen();
+				Date fromOpen = m_tradingdays.getTradingdays()
 						.get(m_tradingdays.getTradingdays().size() - 1)
 						.getOpen();
 				List<Tradestrategy> strategyBarSizeChartHistItems = m_tradePersistentModel
@@ -499,7 +499,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					Tradingdays tradingdays = new Tradingdays();
 					for (Tradingday itemTradingday : m_tradingdays
 							.getTradingdays()) {
-						
+
 						if (!TradingCalendar.between(itemTradingday.getOpen(),
 								filterTradestrategyPane.getSelectedStartDate(),
 								filterTradestrategyPane.getSelectedEndDate()))
