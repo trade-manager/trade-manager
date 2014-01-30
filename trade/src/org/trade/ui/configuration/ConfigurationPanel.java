@@ -583,9 +583,11 @@ public class ConfigurationPanel extends BasePanel {
 		 */
 		public CodeAttributesPanel(Aspects aspects, IndicatorSeries series)
 				throws Exception {
+
 			GridBagLayout gridBagLayout1 = new GridBagLayout();
 			JPanel jPanel1 = new JPanel(gridBagLayout1);
 			this.setLayout(new BorderLayout());
+
 			for (Aspect aspect : aspects.getAspect()) {
 				CodeType codeType = (CodeType) aspect;
 

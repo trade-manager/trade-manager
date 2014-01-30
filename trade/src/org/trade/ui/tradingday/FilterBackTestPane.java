@@ -141,6 +141,7 @@ public class FilterBackTestPane extends JPanel {
 		contractsHistList.setLayoutOrientation(JList.VERTICAL);
 		contractsHistList.setVisibleRowCount(-1);
 		contractsHistList.setCellRenderer(new DecodeComboBoxRenderer());
+		contractsHistList.setSelectedValue(comboItemAll, true);
 
 		JScrollPane listScroller = new JScrollPane(contractsHistList);
 		listScroller.setPreferredSize(new Dimension(50, 150));
