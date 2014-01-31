@@ -12,7 +12,7 @@ dataAll.lossAmount as lossAmount,
 cast(dataAll.winCount as signed integer)  as winCount,
 cast(dataAll.lossCount as signed integer)  as lossCount,
 cast(dataAll.positionCount as signed integer)  as positionCount,
-cast(dataAll.tradestrategyCount/dataAll.positionCount  as signed integer)  as tradestrategyCount
+cast(dataAll.tradestrategyCount as signed integer)  as tradestrategyCount
 from (select
 dataC.period as period,
 sum(dataC.quantity) as quantity,
@@ -87,8 +87,7 @@ tradeposition.idTradeposition,
 0 as positionCount,
 (select count(tradestrategy.idTradestrategy)
 from tradestrategy
-inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday
-where tradingday.open between :start and :end) as tradestrategyCount
+where tradestrategy.idContract = contract.idContract) as tradestrategyCount
 from contract 
 left outer join tradeposition  on contract.idContract = tradeposition.idContract
 left outer join tradeorder  on tradeposition.idTradePosition = tradeorder.idTradePosition 
@@ -170,8 +169,7 @@ tradeposition.idTradePosition,
 0 as positionCount,
 (select count(tradestrategy.idTradestrategy)
 from tradestrategy
-inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday
-where tradingday.open between :start and :end) as tradestrategyCount
+where tradestrategy.idContract = contract.idContract) as tradestrategyCount
 from contract 
 left outer join tradeposition  on contract.idContract = tradeposition.idContract
 left outer join tradeorder  on tradeposition.idTradePosition = tradeorder.idTradePosition 

@@ -336,8 +336,8 @@ public class TradestrategyHome {
 			if (null != toOpen) {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
-				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
-						.get("open").as(Date.class), toOpen);
+				Predicate predicate = builder.lessThanOrEqualTo(
+						tradingday.get("open").as(Date.class), toOpen);
 				predicates.add(predicate);
 			}
 
@@ -394,8 +394,8 @@ public class TradestrategyHome {
 			if (null != toOpen) {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
-				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
-						.get("open").as(Date.class), toOpen);
+				Predicate predicate = builder.lessThanOrEqualTo(
+						tradingday.get("open").as(Date.class), toOpen);
 				predicates.add(predicate);
 			}
 
