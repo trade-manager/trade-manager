@@ -52,7 +52,7 @@ inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradestrategy.trade = 1
 and tradeposition.openQuantity = 0
-and (1 = :filter or tradeorder.isFilled = 1)
+and (0 = :filter and  tradeorder.isFilled = 1)
 and (isnull(:symbol) or contract.symbol = :symbol)
 and tradeposition.positionCloseDate between :start and :end
 and portfolio.idPortfolio = :idPortfolio
@@ -89,13 +89,50 @@ inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradestrategy.trade = 1
 and tradeposition.openQuantity = 0
-and (1 = :filter or tradeorder.isFilled = 1)
+and (0 = :filter and tradeorder.isFilled = 1)
 and (isnull(:symbol) or contract.symbol = :symbol)
 and tradeposition.positionCloseDate between :start and :end
 and portfolio.idPortfolio = :idPortfolio
 group by
 contract.symbol,
 tradeposition.idTradePosition
+union all
+select 
+'A' as sortCol,
+date_format(tradingday.open, '%Y/%m/%d') as open,
+contract.symbol as symbol,
+tradestrategy.idTradeStrategy as idTradeStrategy,
+tradestrategy.side as longShort,
+tradestrategy.tier as tier,
+tradingday.marketBias as marketBias,
+tradingday.marketBar as marketBar,
+strategy.name as name,
+tradestrategy.status as status,
+0 as idTradePosition,
+"" as side,
+1 as isOpenPosition,
+"" as action,
+"" as stopPrice,
+"" as orderStatus,
+null as filledDate,
+"" as quantity,
+"" as averageFilledPrice,
+"" as commission,
+"" as profitLoss
+from 
+tradestrategy 
+inner join contract on contract.idContract = tradestrategy.idContract 
+inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
+inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
+inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
+where tradestrategy.trade = 1
+and tradestrategy.idTradestrategy not in (select tradeOrder.idTradestrategy
+from tradeOrder where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy
+and tradeOrder.isFilled = true)
+and (1 = :filter )
+and (isnull(:symbol) or contract.symbol = :symbol)
+and tradingday.open between :start and :end
+and portfolio.idPortfolio = :idPortfolio
 ) as data
 order by
 data.idTradePosition desc,
