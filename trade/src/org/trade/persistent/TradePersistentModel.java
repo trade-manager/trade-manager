@@ -888,18 +888,18 @@ public class TradePersistentModel implements PersistentModel {
 			 * one.
 			 */
 			TradePosition tradePosition = null;
-			TradestrategyOrders positionOrders = null;
+			TradestrategyOrders tradestrategyOrders = null;
 
 			if (!tradeOrder.hasTradePosition()) {
 				if (CoreUtils.nullSafeComparator(
 						tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
 
-					positionOrders = this
+					tradestrategyOrders = this
 							.findPositionOrdersByTradestrategyId(tradestrategyId);
 
-					if (positionOrders.hasOpenTradePosition()) {
+					if (tradestrategyOrders.hasOpenTradePosition()) {
 						tradePosition = this
-								.findTradePositionById(positionOrders
+								.findTradePositionById(tradestrategyOrders
 										.getContract().getTradePosition()
 										.getIdTradePosition());
 						if (!tradePosition.containsTradeOrder(tradeOrder))
@@ -916,15 +916,14 @@ public class TradePersistentModel implements PersistentModel {
 							positionOpenDate = TradingCalendar
 									.getDate((new Date()).getTime());
 						tradePosition = new TradePosition(
-								positionOrders.getContract(),
-								positionOpenDate,
-								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
-										: Side.SLD));
+								tradestrategyOrders.getContract(),
+								positionOpenDate, (Action.BUY.equals(tradeOrder
+										.getAction()) ? Side.BOT : Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
-						positionOrders.setStatus(TradestrategyStatus.OPEN);
-						positionOrders.setLastUpdateDate(TradingCalendar
+						tradestrategyOrders.setStatus(TradestrategyStatus.OPEN);
+						tradestrategyOrders.setLastUpdateDate(TradingCalendar
 								.getDate((new Date()).getTime()));
-						this.persistAspect(positionOrders);
+						this.persistAspect(tradestrategyOrders);
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = this.persistAspect(tradePosition);
 					}
@@ -1031,17 +1030,35 @@ public class TradePersistentModel implements PersistentModel {
 				}
 
 				// Partial fills case.
-				if (null == positionOrders)
-					positionOrders = this
+				if (null == tradestrategyOrders)
+					tradestrategyOrders = this
 							.findPositionOrdersByTradestrategyId(tradestrategyId);
 
 				if (!tradePosition.isOpen()
-						&& !TradestrategyStatus.CLOSED.equals(positionOrders
-								.getStatus())) {
-					positionOrders.setStatus(TradestrategyStatus.CLOSED);
-					positionOrders.setLastUpdateDate(TradingCalendar
+						&& !TradestrategyStatus.CLOSED
+								.equals(tradestrategyOrders.getStatus())) {
+					/*
+					 * Now update all the tradestrategies as there could be many
+					 * if the position is across multiple days.
+					 */
+					for (TradeOrder item : tradePosition.getTradeOrders()) {
+						if (!item
+								.getTradestrategyId()
+								.getIdTradeStrategy()
+								.equals(tradestrategyOrders
+										.getIdTradeStrategy())) {
+							item.getTradestrategyId().setStatus(
+									TradestrategyStatus.CLOSED);
+							item.getTradestrategyId().setLastUpdateDate(
+									TradingCalendar.getDate((new Date())
+											.getTime()));
+							this.persistAspect(item.getTradestrategyId());
+						}
+					}
+					tradestrategyOrders.setStatus(TradestrategyStatus.CLOSED);
+					tradestrategyOrders.setLastUpdateDate(TradingCalendar
 							.getDate((new Date()).getTime()));
-					this.persistAspect(positionOrders);
+					this.persistAspect(tradestrategyOrders);
 				}
 
 				tradePosition.setLastUpdateDate(new Date());
@@ -1049,17 +1066,18 @@ public class TradePersistentModel implements PersistentModel {
 
 			} else {
 				if (allOrdersCancelled) {
-					if (null == positionOrders)
-						positionOrders = this
+					if (null == tradestrategyOrders)
+						tradestrategyOrders = this
 								.findPositionOrdersByTradestrategyId(tradestrategyId);
-					if (!TradestrategyStatus.CANCELLED.equals(positionOrders
-							.getStatus())) {
-						if (null == positionOrders.getStatus()) {
-							positionOrders
+					if (!TradestrategyStatus.CANCELLED
+							.equals(tradestrategyOrders.getStatus())) {
+						if (null == tradestrategyOrders.getStatus()) {
+							tradestrategyOrders
 									.setStatus(TradestrategyStatus.CANCELLED);
-							positionOrders.setLastUpdateDate(TradingCalendar
-									.getDate((new Date()).getTime()));
-							this.persistAspect(positionOrders);
+							tradestrategyOrders
+									.setLastUpdateDate(TradingCalendar
+											.getDate((new Date()).getTime()));
+							this.persistAspect(tradestrategyOrders);
 						}
 					}
 				}
