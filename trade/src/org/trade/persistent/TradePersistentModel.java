@@ -553,13 +553,14 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 
 		try {
+			/*
+			 * Refresh the trade strategy as orders across tradePosition could
+			 * have been deleted if this is a bulk delete of tradestrategies.
+			 */
+			transientInstance = m_tradestrategyHome.findById(transientInstance
+					.getIdTradeStrategy());
 			transientInstance.setStatus(null);
 			m_aspectHome.persist(transientInstance);
-
-			if (null != transientInstance.getContract().getTradePosition()) {
-				transientInstance.getContract().setTradePosition(null);
-				m_aspectHome.persist(transientInstance.getContract());
-			}
 
 			Hashtable<Integer, TradePosition> tradePositions = new Hashtable<Integer, TradePosition>();
 			for (TradeOrder tradeOrder : transientInstance.getTradeOrders()) {
@@ -569,13 +570,21 @@ public class TradePersistentModel implements PersistentModel {
 							.getTradePosition());
 
 				if (null != tradeOrder.getIdTradeOrder()) {
-					Aspect instance = m_aspectHome.findById(tradeOrder);
-					m_aspectHome.remove(instance);
+					m_aspectHome.remove(tradeOrder);
 				}
 			}
 			for (TradePosition tradePosition : tradePositions.values()) {
 				tradePosition = this.findTradePositionById(tradePosition
 						.getIdTradePosition());
+				/*
+				 * Remove the open trade position from contract if this is a
+				 * tradePosition to be deleted.
+				 */
+				if (tradePosition.equals(transientInstance.getContract()
+						.getTradePosition())) {
+					transientInstance.getContract().setTradePosition(null);
+					m_aspectHome.persist(transientInstance.getContract());
+				}
 				m_aspectHome.remove(tradePosition);
 			}
 
