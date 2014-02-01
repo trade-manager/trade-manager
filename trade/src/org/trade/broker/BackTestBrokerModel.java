@@ -407,7 +407,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				m_contractRequests.put(tradestrategy.getContract()
 						.getIdContract(), tradestrategy.getContract());
 
-				_log.info("onBrokerData Symbol: "
+				_log.info("onBrokerData ReqId: "
+						+ tradestrategy.getIdTradeStrategy() + " Symbol: "
 						+ tradestrategy.getContract().getSymbol()
 						+ " end Time: " + endDateTime + " Period length: "
 						+ tradestrategy.getChartDays() + " Bar size: "
@@ -1281,6 +1282,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								.getContract().setLastPrice(price);
 					}
 				}
+			} else {
+				_log.error("HistoricalData request not found for Req Id: "
+						+ reqId + " Date: " + dateString);
 			}
 		} catch (Exception ex) {
 			error(reqId, 3260, ex.getMessage());

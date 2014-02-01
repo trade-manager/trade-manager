@@ -126,10 +126,6 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
 			startDate = TradingCalendar.getSpecificTime(startDate, 0, 0);
 
-			_log.info("YahooBroker.doInBackground Start Date: " + startDate
-					+ " End Date: " + endDate + " BarSize: "
-					+ barSize.getCode() + " ChartDays: " + chartDays.getCode());
-
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
 				this.setYahooPriceDataDay(this.reqId,
 						this.contract.getSymbol(), startDate, endDate);
@@ -139,7 +135,12 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 						Integer.parseInt(chartDays.getCode()), startDate,
 						endDate);
 			}
-			this.brokerModel.historicalData(this.contract.getIdContract(),
+			_log.info("YahooBroker.doInBackground finished ReqId: "
+					+ this.reqId + " Symbol: " + this.contract.getSymbol()
+					+ " Start Date: " + startDate + " End Date: " + endDate
+					+ " BarSize: " + barSize.getCode() + " ChartDays: "
+					+ chartDays.getCode());
+			this.brokerModel.historicalData(this.reqId,
 					"finished- at yyyyMMdd HH:mm:ss", 0, 0, 0, 0, 0, 0, 0,
 					false);
 
@@ -151,8 +152,6 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	}
 
 	public void done() {
-		brokerModel.onCancelRealtimeBars(this.contract);
-		brokerModel.onCancelBrokerData(this.contract);
 		_log.info("YahooBroker done for: " + contract.getSymbol());
 	}
 
