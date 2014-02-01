@@ -198,7 +198,6 @@ CREATE  TABLE IF NOT EXISTS strategy (
   version INT NULL,
   PRIMARY KEY (idStrategy) ,
   UNIQUE INDEX strategy_name_uq (name ASC) ,
-  UNIQUE INDEX strategy_class_name_uq (className ASC) ,
   INDEX strategy_Strategy_idx (idStrategyManager ASC) ,
   CONSTRAINT strategy_Strategy_fk
     FOREIGN KEY (idStrategyManager )
