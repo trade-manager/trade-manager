@@ -179,10 +179,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 				url.openStream()));
 		String inputLine;
 		while ((inputLine = in.readLine()) != null) {
-			StringTokenizer scanLine = new StringTokenizer(inputLine, ",");
-			while (scanLine.hasMoreTokens()) {
-				contract.setLongName(scanLine.nextToken().replaceAll("\"", ""));
-			}
+			contract.setLongName(inputLine.replaceAll("\"", ""));
+			break;
 		}
 		in.close();
 	}
