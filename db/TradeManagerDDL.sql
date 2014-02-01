@@ -193,11 +193,12 @@ CREATE  TABLE IF NOT EXISTS strategy (
   name VARCHAR(45) NOT NULL ,
   description VARCHAR(240) NULL ,
   marketData TINYINT(1)  NULL ,
-  className VARCHAR(100) NULL ,
+  className VARCHAR(100) NOT NULL ,
   idStrategyManager INT NULL ,
   version INT NULL,
   PRIMARY KEY (idStrategy) ,
   UNIQUE INDEX strategy_name_uq (name ASC) ,
+  UNIQUE INDEX strategy_class_name_uq (className ASC) ,
   INDEX strategy_Strategy_idx (idStrategyManager ASC) ,
   CONSTRAINT strategy_Strategy_fk
     FOREIGN KEY (idStrategyManager )

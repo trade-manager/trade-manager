@@ -174,7 +174,7 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "className", unique = true, length = 100)
+	@Column(name = "className", unique = true, nullable = false, length = 100)
 	public String getClassName() {
 		return this.className;
 	}
