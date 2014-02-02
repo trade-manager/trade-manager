@@ -80,7 +80,7 @@ public class StrategyTest extends TestCase {
 			_log.debug("Adding Strategy");
 			AspectHome aspectHome = new AspectHome();
 			StrategyHome strategyHome = new StrategyHome();
-			String name = "5minGapEntry";
+			String name = "TestStrategy";
 			Strategy transientInstance = strategyHome.findByName(name);
 			if (null == transientInstance) {
 				transientInstance = new Strategy(name);
@@ -89,6 +89,7 @@ public class StrategyTest extends TestCase {
 			_log.info("Strategy added Id = "
 					+ transientInstance.getIdStrategy());
 			TestCase.assertNotNull(transientInstance.getIdStrategy());
+			aspectHome.remove(transientInstance);
 
 		} catch (Exception e) {
 			TestCase.fail("Error adding row " + e.getMessage());

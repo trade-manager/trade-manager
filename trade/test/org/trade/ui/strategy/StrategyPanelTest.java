@@ -80,7 +80,6 @@ public class StrategyPanelTest extends TestCase {
 				String fileName = m_strategyDir + "/"
 						+ StrategyRule.PACKAGE.replace('.', '/')
 						+ strategy.getClassName() + ".java";
-
 				String content = readFile(fileName);
 				TestCase.assertNotNull(content);
 				if (strategy.getRules().isEmpty()) {

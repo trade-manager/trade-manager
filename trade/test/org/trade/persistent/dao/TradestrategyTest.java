@@ -37,6 +37,7 @@ package org.trade.persistent.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -300,20 +301,40 @@ public class TradestrategyTest extends TestCase {
 					open, strategy.getName(), contract.getIdContract(),
 					portfolio.getName());
 			if (null != tradestrategy) {
-				tradestrategy = tradestrategyHome.findById(tradestrategy
-						.getIdTradeStrategy());
+				Tradestrategy transientInstance = tradestrategyHome
+						.findById(tradestrategy.getIdTradeStrategy());
+				transientInstance.setStatus(null);
+				aspectHome.persist(transientInstance);
 
-				for (TradeOrder tradeOrder : tradestrategy.getTradeOrders()) {
-					aspectHome.remove(tradeOrder);
+				Hashtable<Integer, TradePosition> tradePositions = new Hashtable<Integer, TradePosition>();
+				for (TradeOrder tradeOrder : transientInstance.getTradeOrders()) {
+					if (tradeOrder.hasTradePosition())
+						tradePositions.put(tradeOrder.getTradePosition()
+								.getIdTradePosition(), tradeOrder
+								.getTradePosition());
+
+					if (null != tradeOrder.getIdTradeOrder()) {
+						aspectHome.remove(tradeOrder);
+					}
 				}
-				for (TradePosition tradePosition : tradestrategy.getContract()
-						.getTradePositions()) {
+
+				for (TradePosition tradePosition : tradePositions.values()) {
+					tradePosition = (TradePosition) aspectHome
+							.findById(tradePosition);
+					/*
+					 * Remove the open trade position from contract if this is a
+					 * tradePosition to be deleted.
+					 */
+					if (tradePosition.equals(transientInstance.getContract()
+							.getTradePosition())) {
+						transientInstance.getContract().setTradePosition(null);
+						aspectHome.persist(transientInstance.getContract());
+					}
 					aspectHome.remove(tradePosition);
 				}
-				tradestrategy.setStatus(null);
-				tradestrategy.getTradeOrders().clear();
-				tradestrategy = aspectHome.persist(tradestrategy);
-				return tradestrategy;
+
+				transientInstance.getTradeOrders().clear();
+				return transientInstance;
 			}
 		}
 		TradingdayHome tradingdayHome = new TradingdayHome();
