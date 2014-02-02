@@ -47,7 +47,7 @@
 				<include name="slf4j-log4j12-1.6.1.jar" />
 				<include name="log4j-1.2.16.jar" />
 				<include name="commons-collections-3.2.1.jar" />
-				<include name="junit-4.8.2.jar" />
+				<include name="junit-4.10.jar" />
 				<include name="validation-api-1.1.0.Final.jar" />
 			</fileset>
 			<fileset dir="${env.JAVA_HOME}/lib">
@@ -146,7 +146,6 @@
 			<transaction src="../db/DeleteAccountRuleData.sql" />
 		</sql>
 	</target>
-
 	<target name="all" depends="compile" description="Compiles and package in jar files all the Trade Manager related code.">
 	</target>
 </project>

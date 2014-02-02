@@ -75,19 +75,19 @@ public class StrategyPanelTest extends TestCase {
 			TestCase.assertNotNull(this.tradestrategy);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
+			TestCase.assertNotNull(strategies);
 			for (Strategy strategy : strategies) {
-				if (null != strategy.getClassName()) {
-					String fileName = m_strategyDir + "/"
-							+ StrategyRule.PACKAGE.replace('.', '/')
-							+ strategy.getClassName() + ".java";
+				String fileName = m_strategyDir + "/"
+						+ StrategyRule.PACKAGE.replace('.', '/')
+						+ strategy.getClassName() + ".java";
 
-					String content = readFile(fileName);
-					if (strategy.getRules().isEmpty()) {
-						Rule nextRule = new Rule(strategy, 1, null, new Date(),
-								content.getBytes(), new Date());
-						strategy.add(nextRule);
-						this.tradePersistentModel.persistAspect(nextRule);
-					}
+				String content = readFile(fileName);
+				TestCase.assertNotNull(content);
+				if (strategy.getRules().isEmpty()) {
+					Rule nextRule = new Rule(strategy, 1, null, new Date(),
+							content.getBytes(), new Date());
+					strategy.add(nextRule);
+					this.tradePersistentModel.persistAspect(nextRule);
 				}
 			}
 		} catch (Exception ex) {

@@ -99,6 +99,21 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	 */
 	public Strategy(String name) {
 		this.name = name;
+		this.className = name;
+	}
+
+	/**
+	 * Constructor for Strategy.
+	 * 
+	 * @param name
+	 *            String
+	 * 
+	 * @param className
+	 *            String
+	 */
+	public Strategy(String name, String className) {
+		this.name = name;
+		this.className = className;
 	}
 
 	/**

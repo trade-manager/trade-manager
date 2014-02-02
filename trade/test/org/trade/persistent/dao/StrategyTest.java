@@ -80,7 +80,7 @@ public class StrategyTest extends TestCase {
 			_log.debug("Adding Strategy");
 			AspectHome aspectHome = new AspectHome();
 			StrategyHome strategyHome = new StrategyHome();
-			String name = "5min Gap Entry";
+			String name = "5minGapEntry";
 			Strategy transientInstance = strategyHome.findByName(name);
 			if (null == transientInstance) {
 				transientInstance = new Strategy(name);

@@ -798,11 +798,13 @@ public class TradePersistentModelTest extends TestCase {
 	public void testPersistCandle() {
 
 		try {
+
+			Date date = TradingCalendar.getTodayBusinessDayStart();
 			CandleItem candleItem = new CandleItem(
 					this.tradestrategy.getContract(),
-					this.tradestrategy.getTradingday(), new CandlePeriod(),
-					100.23, 100.23, 100.23, 100.23, 10000000L, 100.23, 100,
-					new Date());
+					this.tradestrategy.getTradingday(), new CandlePeriod(date,
+							300), 100.23, 100.23, 100.23, 100.23, 10000000L,
+					100.23, 100, date);
 			Candle candle = this.tradePersistentModel.persistCandle(candleItem
 					.getCandle());
 			TestCase.assertNotNull(candle.getIdCandle());

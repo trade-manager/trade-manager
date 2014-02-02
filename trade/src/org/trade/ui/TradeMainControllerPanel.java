@@ -73,6 +73,7 @@ import org.trade.core.lookup.DBTableLookupServiceProvider;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -1315,7 +1316,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 					if (null == account) {
 						account = new Account(accountNumber, accountNumber,
-								Currency.USD);
+								Currency.USD, AccountType.INDIVIDUAL);
 					}
 					/*
 					 * If there is only one account in the incoming string and

@@ -48,6 +48,7 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
@@ -274,7 +275,8 @@ public class TradestrategyTest extends TestCase {
 				.getObject();
 		portfolio = portfolioHome.findByName(portfolio.getName());
 		if (portfolio.getPortfolioAccounts().isEmpty()) {
-			Account account = new Account("Test", "T123456", Currency.USD);
+			Account account = new Account("Test", "T123456", Currency.USD,
+					AccountType.INDIVIDUAL);
 			account.setAvailableFunds(new BigDecimal(25000));
 			account.setBuyingPower(new BigDecimal(100000));
 			account.setCashBalance(new BigDecimal(25000));

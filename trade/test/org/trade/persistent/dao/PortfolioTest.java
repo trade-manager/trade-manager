@@ -43,6 +43,7 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
 
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.ui.TradeAppLoadConfig;
@@ -82,7 +83,8 @@ public class PortfolioTest extends TestCase {
 			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 					.getObject();
 			portfolio = portfolioHome.findByName(portfolio.getName());
-			Account account = new Account("Test", "T123456", Currency.USD);
+			Account account = new Account("Test", "T123456", Currency.USD,
+					AccountType.INDIVIDUAL);
 			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
 					account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);

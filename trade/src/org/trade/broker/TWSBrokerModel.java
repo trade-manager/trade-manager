@@ -61,6 +61,7 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
@@ -2157,7 +2158,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.findAccountByNumber(item.getAccountNumber());
 					if (null == account) {
 						account = new Account(item.getAccountNumber(),
-								item.getAccountNumber(), Currency.USD);
+								item.getAccountNumber(), Currency.USD,
+								AccountType.INDIVIDUAL);
 					}
 					account.setAlias(item.getAlias());
 					account.setLastUpdateDate(new Date());

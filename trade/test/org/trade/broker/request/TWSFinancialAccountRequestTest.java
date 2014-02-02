@@ -44,6 +44,7 @@ import org.junit.Test;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Account;
@@ -135,7 +136,8 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 						.findAccountByNumber(item.getAccountNumber());
 				if (null == account) {
 					account = new Account(item.getAccountNumber(),
-							item.getAccountNumber(), Currency.USD);
+							item.getAccountNumber(), Currency.USD,
+							AccountType.INDIVIDUAL);
 				}
 				account.setAlias(item.getAlias());
 				account.setLastUpdateDate(new Date());
@@ -163,7 +165,8 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 						.findAccountByNumber(item.getAccountNumber());
 				if (null == account) {
 					account = new Account(item.getAccountNumber(),
-							item.getAccountNumber(), Currency.USD);
+							item.getAccountNumber(), Currency.USD,
+							AccountType.INDIVIDUAL);
 				}
 				account.setAlias(item.getAlias());
 				account.setLastUpdateDate(new Date());
@@ -240,7 +243,8 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 		try {
 			Aspects aspects = new Aspects();
 			Portfolio portfolio = new Portfolio("pf_eq_daily", "pf_eq_daily");
-			Account account = new Account("DU12345", "DU12345", Currency.USD);
+			Account account = new Account("DU12345", "DU12345", Currency.USD,
+					AccountType.INDIVIDUAL);
 			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
 					account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);

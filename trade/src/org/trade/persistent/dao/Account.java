@@ -62,6 +62,7 @@ import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.TradingCalendar;
+import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 
 /**
@@ -100,6 +101,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 			0);
 
 	public Account() {
+		this.accountType = AccountType.INDIVIDUAL;
 		this.currency = Currency.USD;
 		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())
 				.getTime());
@@ -114,11 +116,15 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 *            String
 	 * @param currency
 	 *            String
+	 * @param accountType
+	 *            String
 	 * @param isDefault
 	 *            Boolean
 	 */
-	public Account(String name, String accountNumber, String currency) {
+	public Account(String name, String accountNumber, String currency,
+			String accountType) {
 		this.accountNumber = accountNumber;
+		this.accountType = accountType;
 		this.name = name;
 		this.currency = currency;
 		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())

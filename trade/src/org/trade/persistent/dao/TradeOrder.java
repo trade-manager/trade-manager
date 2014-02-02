@@ -93,7 +93,6 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private BigDecimal averageFilledPrice;
 	private Boolean allOrNothing = new Boolean(false);
 	private BigDecimal auxPrice;
-	@NotNull
 	private Integer clientId;
 	private BigDecimal commission;
 	private Date createDate;
