@@ -54,6 +54,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.jfree.data.time.RegularTimePeriod;
 import org.trade.core.dao.Aspect;
@@ -72,7 +74,10 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7644763985378994305L;
+
+	@NotNull
 	private Tradingday tradingday;
+	@NotNull
 	private Contract contract;
 	private BigDecimal close;
 	private BigDecimal high;
@@ -84,6 +89,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 	private Integer tradeCount;
 	private Long volume;
 	private BigDecimal vwap;
+	@Min(30)
 	private Integer barSize;
 	private Date lastUpdateDate;
 

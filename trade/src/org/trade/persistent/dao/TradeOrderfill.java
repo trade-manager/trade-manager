@@ -53,6 +53,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.valuetype.Money;
@@ -69,12 +71,15 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 		Cloneable {
 
 	private static final long serialVersionUID = -4345234694835258864L;
+
 	private String accountNumber;
 	private BigDecimal averagePrice;
 	private Integer cumulativeQuantity;
 	private String execId;
 	private TradeOrder tradeOrder;
+	@NotNull
 	private BigDecimal price;
+	@Min(1)
 	private Integer quantity;
 	private String side;
 	private String exchange;

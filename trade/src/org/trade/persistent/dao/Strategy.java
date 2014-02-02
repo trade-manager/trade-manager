@@ -55,6 +55,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.strategy.data.IndicatorSeries;
@@ -73,7 +74,10 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5704206226348654910L;
+
+	@NotNull
 	private String className;
+	@NotNull
 	private String name;
 	private String description;
 	private Boolean marketData = new Boolean(false);

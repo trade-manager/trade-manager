@@ -60,6 +60,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.CoreUtils;
@@ -81,14 +83,17 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		Cloneable {
 
 	private static final long serialVersionUID = -832064631322873796L;
+
 	private TradePosition tradePosition;
 	private Tradestrategy tradestrategy;
 	private TradestrategyLite tradestrategyId;
+	@NotNull
 	private String action;
 	private String accountNumber;
 	private BigDecimal averageFilledPrice;
 	private Boolean allOrNothing = new Boolean(false);
 	private BigDecimal auxPrice;
+	@NotNull
 	private Integer clientId;
 	private BigDecimal commission;
 	private Date createDate;
@@ -107,12 +112,15 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private BigDecimal limitPrice;
 	private String ocaGroupName;
 	private Integer ocaType;
+	@Min(1)
 	private Integer orderKey;
 	private String orderReference;
+	@NotNull
 	private String orderType;
 	private Integer overrideConstraints;
 	private Integer permId;
 	private Integer parentId;
+	@Min(0)
 	private Integer quantity;
 	private String timeInForce;
 	private String status;

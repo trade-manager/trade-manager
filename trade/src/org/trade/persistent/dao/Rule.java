@@ -54,6 +54,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.CoreUtils;
@@ -75,6 +76,7 @@ public class Rule extends Aspect implements java.io.Serializable {
 	private static final long serialVersionUID = 2273276207080568947L;
 	private Strategy strategy;
 	private String comment;
+	@NotNull
 	private Date createDate;
 	private Date lastUpdateDate;
 	private byte[] rule;

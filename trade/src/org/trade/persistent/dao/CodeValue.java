@@ -45,6 +45,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.strategy.data.IndicatorSeries;
@@ -58,6 +59,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	private static final long serialVersionUID = 2273276207080568947L;
 
 	private String codeValue;
+	@NotNull
 	private CodeAttribute codeAttribute;
 	private IndicatorSeries indicatorSeries;
 

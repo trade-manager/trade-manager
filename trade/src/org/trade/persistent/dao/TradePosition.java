@@ -58,6 +58,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.valuetype.Money;
@@ -86,10 +87,13 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 
 	private static final long serialVersionUID = 715993951200025530L;
+
+	@NotNull
 	private ContractLite contract;
 	private Integer openQuantity = new Integer(0);
 	private Date positionOpenDate;
 	private Date positionCloseDate;
+	@NotNull
 	private String side;
 	private BigDecimal totalCommission;
 	private Integer totalBuyQuantity;

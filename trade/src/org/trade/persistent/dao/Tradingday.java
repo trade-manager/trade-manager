@@ -59,6 +59,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.CoreUtils;
@@ -78,7 +79,10 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3388042483785305102L;
+
+	@NotNull
 	private Date open;
+	@NotNull
 	private Date close;
 	private String marketBias;
 	private String marketGap;

@@ -49,6 +49,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 
@@ -60,6 +61,7 @@ public class CodeType extends Aspect implements java.io.Serializable {
 
 	private static final long serialVersionUID = 2273276207080568947L;
 
+	@NotNull
 	private String name;
 	private String description;
 	private List<CodeAttribute> codeAttributes = new ArrayList<CodeAttribute>(0);

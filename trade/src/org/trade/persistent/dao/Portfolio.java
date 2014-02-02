@@ -54,6 +54,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.TradingCalendar;
@@ -66,6 +67,7 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 2273276207080568947L;
 
+	@NotNull
 	private String name;
 	private String alias;
 	private String allocationMethod;

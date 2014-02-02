@@ -36,6 +36,7 @@
 package org.trade.core.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -43,6 +44,9 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.validation.ConstraintViolation;
+import javax.validation.Path;
+import javax.validation.Path.Node;
 
 /**
  */
@@ -73,12 +77,16 @@ public class AspectHome {
 	 *            boolean
 	 * @return Aspect
 	 */
+
 	public synchronized <T extends Aspect> T persist(T transientInstance,
 			boolean overrideVersion) {
 
 		try {
+
+			validate(transientInstance);
 			EntityManager entityManager = EntityManagerHelper
 					.getEntityManager();
+
 			entityManager.getTransaction().begin();
 			if (null == transientInstance.getId()) {
 				entityManager.persist(transientInstance);
@@ -245,5 +253,33 @@ public class AspectHome {
 		} finally {
 			EntityManagerHelper.close();
 		}
+	}
+
+	/**
+	 * Method validate.
+	 * 
+	 * @param transientInstance
+	 *            Aspect
+	 * @return boolean
+	 */
+
+	public boolean validate(Aspect transientInstance) {
+
+		Set<ConstraintViolation<Aspect>> constraintViolations = EntityManagerHelper
+				.getValidator().validate(transientInstance);
+
+		if (!constraintViolations.isEmpty()) {
+			String errorMsg = "";
+			for (ConstraintViolation<Aspect> error : constraintViolations) {
+				Path path = error.getPropertyPath();
+				for (Node node : path) {
+					errorMsg = errorMsg + " Column: " + node.getName()
+							+ " Value: " + error.getInvalidValue();
+				}
+				errorMsg = errorMsg + " " + error.getMessage();
+			}
+			throw new RuntimeException(errorMsg);
+		}
+		return true;
 	}
 }

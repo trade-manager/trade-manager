@@ -1351,10 +1351,10 @@ public class TradePersistentModel implements PersistentModel {
 			throw new PersistentModelException("Error saving "
 					+ transientInstance.getClass().getSimpleName()
 					+ " please refresh before save.");
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			throw new PersistentModelException("Error saving  "
 					+ transientInstance.getClass().getSimpleName() + " : "
-					+ e.getMessage());
+					+ ex.getMessage());
 		}
 	}
 

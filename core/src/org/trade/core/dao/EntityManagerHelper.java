@@ -40,6 +40,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,12 +75,14 @@ public class EntityManagerHelper {
 	static final String PERSISTENCE_UNIT = "dbresource";
 
 	private static final EntityManagerFactory factory;
+	private static ValidatorFactory validatorFactory;
 	private static final ThreadLocal<EntityManager> threadLocal;
 	private final static Logger _log = LoggerFactory
 			.getLogger(EntityManagerHelper.class);
 
 	static {
 		factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+		validatorFactory = Validation.buildDefaultValidatorFactory();
 		threadLocal = new ThreadLocal<EntityManager>();
 	}
 
@@ -217,4 +222,14 @@ public class EntityManagerHelper {
 			getEntityManager().getTransaction().rollback();
 		}
 	}
+
+	/**
+	 * Method getValidator
+	 * 
+	 * @return Validator
+	 */
+	public static Validator getValidator() {
+		return validatorFactory.getValidator();
+	}
+
 }

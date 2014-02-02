@@ -58,6 +58,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.TradingCalendar;
@@ -78,14 +79,19 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 */
 
 	private static final long serialVersionUID = 5891080561163346464L;
+
+	@NotNull
 	private String accountNumber;
+	@NotNull
 	private String accountType;
 	private String alias;
 	private BigDecimal availableFunds = new BigDecimal(0);
 	private BigDecimal buyingPower = new BigDecimal(0);
 	private BigDecimal cashBalance = new BigDecimal(0);
+	@NotNull
 	private String currency;
 	private BigDecimal grossPositionValue = new BigDecimal(0);
+	@NotNull
 	private String name;
 	private BigDecimal realizedPnL = new BigDecimal(0);
 	private BigDecimal unrealizedPnL = new BigDecimal(0);

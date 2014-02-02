@@ -61,6 +61,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
 
@@ -82,8 +83,10 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	/*
 	 * Contract
 	 */
+	@NotNull
 	private String currency;
 	private String comboLegDescription;
+	@NotNull
 	private String exchange;
 	private Date expiry;
 	private Integer idContractIB;
@@ -94,9 +97,11 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 									// exchange) exchange that the contract
 									// trades on. DO NOT SET TO SMART.
 	private String optionType; // P=Put, C=CALL
+	@NotNull
 	private String symbol;
 	private String secId;
 	private String secIdType; // CUSIP;SEDOL;ISIN;RIC
+	@NotNull
 	private String secType;
 	private BigDecimal strike;
 	private String tradingClass;
