@@ -256,8 +256,9 @@ public class ConfigurationPanel extends BasePanel {
 			for (Aspect currAspect : aspects.getAspect()) {
 				boolean exists = false;
 				for (Aspect aspect : m_aspects.getAspect()) {
-					if (aspect.getId().equals(currAspect.getId())) {
+					if (currAspect.getId().equals(aspect.getId())) {
 						exists = true;
+						break;
 					}
 				}
 				if (!exists)

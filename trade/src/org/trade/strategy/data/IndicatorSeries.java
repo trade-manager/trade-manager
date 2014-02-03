@@ -59,6 +59,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.jfree.data.ComparableObjectItem;
 import org.jfree.data.ComparableObjectSeries;
@@ -100,11 +101,16 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	public static final String MoneyFlowIndexSeries = "MoneyFlowIndexSeries";
 
 	private Integer idIndicatorSeries;
+	@NotNull
 	private String name;
+	@NotNull
 	private String type;
 	private String description;
+	@NotNull
 	private Boolean displaySeries;
+	@NotNull
 	private Integer seriesRGBColor;
+	@NotNull
 	private Boolean subChart;
 	private Strategy strategy;
 	protected Integer version;
