@@ -38,7 +38,7 @@ tradeorder.action as action,
 tradeorder.stopPrice as stopPrice,
 tradeorder.status as orderStatus,
 tradeorder.filledDate as filledDate,
-((if( tradeorder.action = 'BUY',  1 , -1)) *tradeorder.quantity) as quantity,
+((if(tradeorder.action = 'BUY',  1 , -1)) * tradeorder.quantity) as quantity,
 tradeorder.averageFilledPrice as averageFilledPrice,
 ifnull(tradeorder.commission,0)  as commission,
 tradeposition.totalNetValue as profitLoss
@@ -126,9 +126,9 @@ inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradestrategy.trade = 1
-and tradestrategy.idTradestrategy not in (select tradeOrder.idTradestrategy
-from tradeOrder where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy
-and tradeOrder.isFilled = true)
+and tradestrategy.idTradestrategy not in (select tradeorder.idTradestrategy
+from tradeorder where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy
+and tradeorder.isFilled = true)
 and (1 = :filter )
 and (isnull(:symbol) or contract.symbol = :symbol)
 and tradingday.open between :start and :end
