@@ -127,7 +127,7 @@ inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradestrategy.trade = 1
 and tradestrategy.idTradestrategy not in (select tradeorder.idTradestrategy
-from tradeorder where tradeOrder.idTradestrategy = tradestrategy.idTradestrategy
+from tradeorder where tradeorder.idTradestrategy = tradestrategy.idTradestrategy
 and tradeorder.isFilled = true)
 and (1 = :filter )
 and (isnull(:symbol) or contract.symbol = :symbol)
