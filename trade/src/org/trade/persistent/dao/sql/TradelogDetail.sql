@@ -20,7 +20,7 @@ cast(data.quantity as signed integer) as quantity,
 data.averageFilledPrice,
 data.commission,
 if(data.quantity = 0,data.profitLoss,0) as profitLoss
-from (select 
+from (select
 'A' as sortCol,
 date_format(tradingday.open, '%Y/%m/%d') as open,
 contract.symbol as symbol,
@@ -43,11 +43,11 @@ tradeorder.averageFilledPrice as averageFilledPrice,
 ifnull(tradeorder.commission,0)  as commission,
 tradeposition.totalNetValue as profitLoss
 from 
-contract 
+contract
 left outer join tradeposition  on contract.idContract = tradeposition.idContract
-left outer join tradeorder  on tradeposition.idTradePosition = tradeorder.idTradePosition 
-inner join tradestrategy on tradestrategy.idTradestrategy = tradeorder.idTradestrategy 
-inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
+left outer join tradeorder  on tradeposition.idTradePosition = tradeorder.idTradePosition
+inner join tradestrategy on tradestrategy.idTradestrategy = tradeorder.idTradestrategy
+inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradestrategy.trade = 1
@@ -57,7 +57,7 @@ and (isnull(:symbol) or contract.symbol = :symbol)
 and tradeposition.positionCloseDate between :start and :end
 and portfolio.idPortfolio = :idPortfolio
 union all
-select 
+select
 'Total' as sortCol,
 date_format(tradingday.open, '%Y/%m/%d') as open,
 contract.symbol as symbol,
@@ -79,12 +79,12 @@ sum((if( tradeorder.action = 'BUY',  1 , -1)) * (if(tradeorder.isFilled =1, 1, 0
 (sum((if( tradeorder.action = 'BUY',  -1 , 1))* (if(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice  * tradeorder.quantity)/sum(((tradeorder.quantity/2)* (if(tradeorder.isFilled =1, 1, 0))))) as averageFilledPrice,
 sum(ifnull(tradeorder.commission,0)) as commission,
 (sum((if( tradeorder.action = 'BUY',  -1 , 1))* (if(tradeorder.isFilled =1, 1, 0)) * tradeorder.averageFilledPrice * tradeorder.quantity) - sum(ifnull(tradeorder.commission,0)))as profitLoss
-from 
-contract 
+from
+contract
 left outer join tradeposition  on contract.idContract = tradeposition.idContract
-left outer join tradeorder  on tradeposition.idTradePosition = tradeorder.idTradePosition 
-inner join tradestrategy on tradestrategy.idTradestrategy = tradeorder.idTradestrategy 
-inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
+left outer join tradeorder  on tradeposition.idTradePosition = tradeorder.idTradePosition
+inner join tradestrategy on tradestrategy.idTradestrategy = tradeorder.idTradestrategy
+inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradestrategy.trade = 1
@@ -97,7 +97,7 @@ group by
 contract.symbol,
 tradeposition.idTradePosition
 union all
-select 
+select
 'A' as sortCol,
 date_format(tradingday.open, '%Y/%m/%d') as open,
 contract.symbol as symbol,
@@ -119,10 +119,10 @@ null as filledDate,
 "" as averageFilledPrice,
 "" as commission,
 "" as profitLoss
-from 
-tradestrategy 
-inner join contract on contract.idContract = tradestrategy.idContract 
-inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday 
+from
+tradestrategy
+inner join contract on contract.idContract = tradestrategy.idContract
+inner join tradingday on tradestrategy.idTradingday = tradingday.idTradingday
 inner join strategy on tradestrategy.idStrategy = strategy.idStrategy
 inner join portfolio on tradestrategy.idPortfolio = portfolio.idPortfolio
 where tradestrategy.trade = 1
