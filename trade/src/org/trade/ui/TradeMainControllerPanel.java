@@ -729,9 +729,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				} else {
 					String key = tradestrategy.getStrategy().getClassName()
 							+ tradestrategy.getIdTradeStrategy();
-					StrategyRule strategy = tradingdayPanel
-							.getStrategyWorker(key);
-					strategy.tradeOrderFilled(tradeOrder);
+					if (tradingdayPanel.isStrategyWorkerRunning(key)) {
+						StrategyRule strategy = tradingdayPanel
+								.getStrategyWorker(key);
+						strategy.tradeOrderFilled(tradeOrder);
+					}
 				}
 			}
 			tradestrategy
