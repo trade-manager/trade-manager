@@ -96,7 +96,7 @@
 		<!-- With just specific files <zip destfile="${name}.zip" basedir="${base}"  /> 
 	      <zip destfile="${name}.zip" basedir="${base}"  excludes="src/**, test/**, config.properties, *.log*" />	
 		-->
-		<zip destfile="${name}.zip" basedir="${base}" excludes="reports/**, .classpath, .project, .git/**, .gitignore, config.properties, *.log*" />
+		<zip destfile="${name}.zip" basedir="${base}" excludes="reports/**, .git/**, .gitignore, config.properties, *.log*" />
 	</target>
 	<target name="createTables" depends="initialise">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
