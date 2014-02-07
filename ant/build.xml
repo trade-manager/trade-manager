@@ -94,7 +94,7 @@
 		<!-- delete the temp directory -->
 		<delete dir="${build}" />
 		<!-- With just specific files <zip destfile="${name}.zip" basedir="${base}"  /> 
-	      <zip destfile="${name}.zip" basedir="${base}"  excludes="src/**, test/**, .classpath, .project, config.properties, *.log*" />	
+	      <zip destfile="${name}.zip" basedir="${base}"  excludes="src/**, test/**, config.properties, *.log*" />	
 		-->
 		<zip destfile="${name}.zip" basedir="${base}" excludes="reports/**, .classpath, .project, .git/**, .gitignore, config.properties, *.log*" />
 	</target>
