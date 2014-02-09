@@ -586,6 +586,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				}
 			} else if (OrderType.LMT.equals(order.getOrderType())) {
 				if (candle.getHigh().compareTo(order.getLimitPrice()) > -1) {
+					if (candle.getOpen().compareTo(order.getLimitPrice()) > -1) {
+						return candle.getOpen();
+					}
 					return order.getLimitPrice();
 				}
 			}
@@ -618,6 +621,9 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 
 			} else if (OrderType.LMT.equals(order.getOrderType())) {
 				if (candle.getLow().compareTo(order.getLimitPrice()) < 1) {
+					if (candle.getOpen().compareTo(order.getLimitPrice()) < 1) {
+						return candle.getOpen();
+					}
 					return order.getLimitPrice();
 				}
 			}
