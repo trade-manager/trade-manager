@@ -947,7 +947,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 					limitPrice.getBigDecimalValue(), this.getOrderCreateDate());
 
 			tradeOrder.setStopPrice(stopPrice.getBigDecimalValue());
-			tradeOrder.setIsOpenPosition(true);
 			tradeOrder.setTransmit(transmit);
 			if (FAProfile != null) {
 				tradeOrder.setFAProfile(FAProfile);
@@ -1639,15 +1638,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 			}
 		}
 
-		/*
-		 * Try the current tradestrategy orders if we have an open position
-		 * order here then it will be unfilled.
-		 */
-		for (TradeOrder tradeOrder : this.getTradestrategyOrders()
-				.getTradeOrders()) {
-			if (tradeOrder.getIsOpenPosition())
-				return tradeOrder;
-		}
 		return null;
 	}
 
