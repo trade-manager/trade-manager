@@ -84,7 +84,25 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 	/**
 	 * Method runStrategy. Note the current candle is just forming Enter a tier
 	 * 1-3 gap in first 5min bar direction, with a 3R target and stop @ 5min
-	 * high/low
+	 * high/low.
+	 * 
+	 * TradeOrders create TradePositions that are associated to Contracts.
+	 * TradeOrders are associated to TradePositions and the Tradestrategy that
+	 * created them. A TradePosition may have TradeOrders from multiple
+	 * Tradestrategies.
+	 * 
+	 * TradePositions are created when there is no open TradePosition and a
+	 * TradeOrder is either filled or partially filled.
+	 * 
+	 * Note TradePositions are closed when the open quantity is zero. The new
+	 * TradePosition is associated to the Contract with the 1 to 1 relationship
+	 * from Contract to TradePosition. The TradeOrder that opened the
+	 * TradePosition is marked as the open order @see
+	 * org.trade.persistent.dao.TradeOrder.getIsOpenPosition()
+	 * 
+	 * TradePosition will have the Side set to either BOT/SLD i.e. Long/Short.
+	 * If an open position changes from Long to Short dues to an over Sell/Buy
+	 * order the side will switch.
 	 * 
 	 * 
 	 * @param candleSeries
