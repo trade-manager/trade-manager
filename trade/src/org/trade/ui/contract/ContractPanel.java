@@ -989,8 +989,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 									.getLastPrice()).doubleValue();
 					realizedPL = tradePosition.getRealizedProfit()
 							.doubleValue();
-					netValue = tradePosition.getNetValue().doubleValue();
-					commision = tradePosition.getCommision().doubleValue();
+					netValue = tradePosition.getTotalNetValue().doubleValue();
+					commision = tradePosition.getTotalCommission()
+							.doubleValue();
 				}
 			}
 

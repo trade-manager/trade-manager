@@ -635,65 +635,6 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method getCommision.
-	 * 
-	 * @return BigDecimal
-	 */
-	@Transient
-	public BigDecimal getCommision() {
-		double commision = 0;
-
-		Integer prevIdTradePosition = null;
-
-		for (TradeOrder order : getTradeOrders()) {
-
-			if (order.getIsFilled()) {
-				if (null == prevIdTradePosition
-						|| prevIdTradePosition != order.getTradePosition()
-								.getIdTradePosition()) {
-
-					commision = commision
-							+ order.getTradePosition().getTotalCommission()
-									.doubleValue();
-
-					prevIdTradePosition = order.getTradePosition()
-							.getIdTradePosition();
-				}
-			}
-		}
-		return new BigDecimal(commision);
-	}
-
-	/**
-	 * Method getNetValue.
-	 * 
-	 * @return BigDecimal
-	 */
-	@Transient
-	public BigDecimal getNetValue() {
-		double netValue = 0;
-
-		Integer prevIdTradePosition = null;
-
-		for (TradeOrder order : getTradeOrders()) {
-
-			if (order.getIsFilled()) {
-				if (null == prevIdTradePosition
-						|| prevIdTradePosition != order.getTradePosition()
-								.getIdTradePosition()) {
-					netValue = netValue
-							+ order.getTradePosition().getTotalNetValue()
-									.doubleValue();
-
-					prevIdTradePosition = order.getTradePosition()
-							.getIdTradePosition();
-				}
-			}
-		}
-		return new BigDecimal(netValue);
-	}
-
-	/**
 	 * Method toString.
 	 * 
 	 * @return String
