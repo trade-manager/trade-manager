@@ -35,6 +35,10 @@
  */
 package org.trade.core.util;
 
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 /**
  * 
  * @author Simon Allen
@@ -45,6 +49,49 @@ public final class MatrixFunctions {
 
 	public MatrixFunctions() {
 
+	}
+
+	/**
+	 * Method solve.
+	 * 
+	 * @param userDataVector
+	 *            Hashtable<Long,Pair>
+	 * @param polyOrder
+	 *            Integer
+	 * @return double[]
+	 */
+	public double[] solve(Hashtable<Long, Pair> userDataVector,
+			Integer polyOrder) {
+		int size = userDataVector.size();
+		if (size > 1) {
+
+			Collection<Pair> pairs = userDataVector.values();
+			Pair[] userData = pairs.toArray(new Pair[] {});
+			return getCalculatedCoeffients(userData, polyOrder);
+		}
+		return null;
+	}
+
+	/**
+	 * Method updateXYPairs.
+	 * 
+	 * @param userDataVector
+	 *            Hashtable<Long,Pair>
+	 * @param terms
+	 *            double[]
+	 * @return boolean
+	 */
+	public boolean updateXYPairs(Hashtable<Long, Pair> userDataVector,
+			double[] terms) {
+		boolean updated = false;
+		for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs
+				.hasMoreElements();) {
+			Pair pair = enumPairs.nextElement();
+			double y = MatrixFunctions.fx(pair.x, terms);
+			pair.y = y;
+			updated = true;
+		}
+		return updated;
 	}
 
 	/**
