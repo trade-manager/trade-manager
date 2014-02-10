@@ -41,6 +41,8 @@ package org.trade.core.util;
  */
 public final class MatrixFunctions {
 
+	private static int listingForm = 0;
+
 	public MatrixFunctions() {
 
 	}
@@ -251,5 +253,76 @@ public final class MatrixFunctions {
 			}
 			j++;
 		}
+	}
+
+	/**
+	 * Method toPrint.
+	 * 
+	 * @param polyOrder
+	 *            int
+	 * @param result_cc
+	 *            double
+	 * @param result_se
+	 *            double
+	 * @param terms
+	 *            double[]
+	 * @param dataPoints
+	 *            int
+	 * @return String
+	 */
+	public static String toPrint(int polyOrder, double result_cc,
+			double result_se, double[] terms, int dataPoints) {
+
+		String styleTag[] = { "", "pow", "Math.pow" };
+		int n = dataPoints;
+		String text = "Degree " + polyOrder + ", " + n + " x,y pairs. ";
+		text += "Corr. coeff. (r^2) = " + formatNum(result_cc, false) + ". ";
+		text += "SE = " + formatNum(result_se, false) + "\n\n";
+		text += (listingForm > 0) ? "double f(double x) {\n    return"
+				: "f(x) =";
+		for (int i = 0; i <= polyOrder; i++) {
+			double a = terms[i];
+			if (i > 0) {
+				if (listingForm > 0) {
+					text += "    ";
+				}
+				text += "     +";
+			}
+			text += formatNum(a, true);
+			if (i == 1) {
+				text += " * x";
+			}
+			if (i > 1) {
+				if (listingForm > 0) {
+					text += (" * " + styleTag[listingForm] + "(x," + i + ")");
+				} else {
+					text += (" * x^" + i);
+				}
+			}
+			if (i < polyOrder) {
+				text += "\n";
+			}
+		}
+		if (listingForm > 0) {
+			text += ";\n}";
+		}
+		if (polyOrder > (n - 1)) {
+			text += "\n\nWarning: Polynomial degree exceeds data size - 1.";
+		}
+		return text;
+	}
+
+	/**
+	 * Method formatNum.
+	 * 
+	 * @param n
+	 *            double
+	 * @param wide
+	 *            boolean
+	 * @return String
+	 */
+	private static String formatNum(double n, boolean wide) {
+		String w = (wide) ? "21" : "";
+		return String.format("%" + w + ".12e", n);
 	}
 }
