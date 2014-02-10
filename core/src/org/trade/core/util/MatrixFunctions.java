@@ -160,7 +160,7 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return double
 	 */
-	private double fx(double x, double[] terms) {
+	public static double fx(double x, double[] terms) {
 		double a = 0;
 		int e = 0;
 		for (double i : terms) {

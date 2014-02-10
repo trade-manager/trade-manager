@@ -81,7 +81,7 @@ public class PivotSeries extends IndicatorSeries {
 	private Boolean side;
 	private Boolean quadratic;
 
-	private PivotCalculator calcPivot = new PivotCalculator();
+	private PivotCalculator calcPivot = new PivotCalculator(2, 0.6);
 
 	public static final String BARS = "Bars";
 	public static final String QUADRATIC = "Quadratic";

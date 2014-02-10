@@ -49,14 +49,15 @@ import org.trade.core.util.Pair;
  */
 public class PivotCalculator {
 
-	private static final int _polyOrder = 2; // default order
-	private static final double _minCorrelationCoeff = 0.6;
+	private static int _polyOrder = 2; // default order
+	private static double _minCorrelationCoeff = 1;
 	private int listingForm = 0;
 	private MatrixFunctions m_matrixFunctions = new MatrixFunctions();
 	private String text = null;
 
-	public PivotCalculator() {
-
+	public PivotCalculator(int polyOrder, double minCorrelationCoeff) {
+		_polyOrder = polyOrder;
+		_minCorrelationCoeff = minCorrelationCoeff;
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class PivotCalculator {
 				for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs
 						.hasMoreElements();) {
 					Pair pair = enumPairs.nextElement();
-					double y = fx(pair.x, terms);
+					double y = MatrixFunctions.fx(pair.x, terms);
 					pair.y = y;
 				}
 			}
@@ -174,30 +175,5 @@ public class PivotCalculator {
 	private String formatNum(double n, boolean wide) {
 		String w = (wide) ? "21" : "";
 		return String.format("%" + w + ".12e", n);
-	}
-
-	// public void changeListingStyle() {
-	// listingForm++;
-	// listingForm %= 3;
-	// process();
-	// }
-
-	/**
-	 * Method fx.
-	 * 
-	 * @param x
-	 *            double
-	 * @param terms
-	 *            double[]
-	 * @return double
-	 */
-	private double fx(double x, double[] terms) {
-		double a = 0;
-		int e = 0;
-		for (double i : terms) {
-			a += i * Math.pow(x, e);
-			e++;
-		}
-		return a;
 	}
 }
