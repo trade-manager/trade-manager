@@ -123,7 +123,6 @@ public class TradeOrderTest extends TestCase {
 					.intValue());
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setTransmit(true);
-			tradeOrder.setIsOpenPosition(true);
 			tradeOrder.setStatus("SUBMITTED");
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
 			TestCase.assertNotNull(tradeOrder);
@@ -172,7 +171,6 @@ public class TradeOrderTest extends TestCase {
 			tradeOrder1.setClientId(clientId);
 			tradeOrder1.setOcaGroupName("");
 			tradeOrder1.setTransmit(true);
-			tradeOrder1.setIsOpenPosition(true);
 			tradeOrder1.setStatus("SUBMITTED");
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 			int buySellMultiplier = 1;

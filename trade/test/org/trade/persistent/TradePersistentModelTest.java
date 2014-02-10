@@ -232,8 +232,6 @@ public class TradePersistentModelTest extends TestCase {
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
 					Action.BUY, OrderType.STPLMT, quantity, price,
 					price.add(new BigDecimal(4)), createDate);
-
-			tradeOrder.setIsOpenPosition(true);
 			tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());

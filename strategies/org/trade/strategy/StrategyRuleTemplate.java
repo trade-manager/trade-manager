@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.OrderStatus;
-import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -82,22 +81,18 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 		super(brokerManagerModel, strategyData, idTradestrategy);
 	}
 
-	/*
-	 * Note the current candle is just forming Enter a tier 1-3 gap in first
-	 * 5min bar direction, with a 3R target and stop @ 5min high/low
-	 * 
-	 * @param candleSeries the series of candels that has been updated.
-	 * 
-	 * @param newBar has a new bar just started.
-	 */
 	/**
-	 * Method runStrategy.
+	 * Method runStrategy. Note the current candle is just forming Enter a tier
+	 * 1-3 gap in first 5min bar direction, with a 3R target and stop @ 5min
+	 * high/low
+	 * 
 	 * 
 	 * @param candleSeries
-	 *            CandleSeries
+	 *            CandleSeries the series of candles that has been updated.
 	 * @param newBar
-	 *            boolean
-	 * @see org.trade.strategy.StrategyRule#runStrategy(CandleSeries, boolean)
+	 *            boolean has a new bar just started.
+	 * @see org.trade.strategy.AbstractStrategyRule#runStrategy(CandleSeries,
+	 *      boolean)
 	 */
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
@@ -109,15 +104,19 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 				Date startPeriod = currentCandleItem.getPeriod().getStart();
 
 				/*
-				 * Trade is open kill this Strategy as its job is done.
+				 * Position is open kill this Strategy as its job is done. In
+				 * this example we would manage the position with a strategy
+				 * manager. This strategy is just used to create the order that
+				 * would open the position.
 				 */
 				if (this.isThereOpenPosition()) {
 					_log.info("Strategy complete open position filled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					/*
-					 * If the order is partial filled chaeck and if the risk
-					 * goes beyond 1 risk unit cancel the openPositionOrder this
-					 * will cause it to be marked as filled.
+					 * If the order is partial filled check if the risk goes
+					 * beyond 1 risk unit. If it does cancel the
+					 * openPositionOrder this will cause it to be marked as
+					 * filled.
 					 */
 					if (OrderStatus.PARTIALFILLED.equals(this
 							.getOpenPositionOrder().getStatus())) {
@@ -133,35 +132,17 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 				}
 
 				/*
-				 * Open position order was cancelled kill this Strategy as its
-				 * job is done.
+				 * Create code here to create orders based on your
+				 * conditions/rules.
 				 */
-				if (null != this.getOpenPositionOrder()
-						&& !this.getOpenPositionOrder().isActive()) {
-					_log.info("Strategy complete open position cancelled symbol: "
-							+ getSymbol() + " startPeriod: " + startPeriod);
-					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
-					this.cancel();
-					return;
-				}
-				// _log.info(getTradestrategy().getStrategy().getClassName()
-				// + " symbol: " + getSymbol() + " startPeriod: "
-				// + startPeriod);
 
-				// Is it the the 9:35 candle?
 				if (startPeriod.equals(TradingCalendar.getSpecificTime(
 						startPeriod, 9, 35)) && newBar) {
 
-				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
-
-				} else if (startPeriod.after(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
-					_log.info("Rule after 10:30:00 bar, close the "
-							+ getTradestrategy().getStrategy().getClassName()
-							+ " Symbol: " + getSymbol());
-					// Kill this process we are done!
-					this.cancel();
+					/*
+					 * Example On start of the 9:35 candle check the 9:30 candle
+					 * and buy over under in the direction of the bar.
+					 */
 				}
 
 				/*
