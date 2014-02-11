@@ -35,6 +35,8 @@
  */
 package org.trade.core.util;
 
+import java.util.Comparator;
+
 /**
  * 
  * @author Simon Allen
@@ -65,4 +67,10 @@ public final class Pair {
 	public String toString() {
 		return x + "," + y;
 	}
+
+	public static final Comparator<Pair> X_VALUE_ASC = new Comparator<Pair>() {
+		public int compare(Pair o1, Pair o2) {
+			return CoreUtils.nullSafeComparator(o1.x, o2.x);
+		}
+	};
 }

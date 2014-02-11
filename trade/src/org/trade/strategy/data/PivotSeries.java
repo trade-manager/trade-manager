@@ -36,6 +36,7 @@
 package org.trade.strategy.data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -394,7 +395,8 @@ public class PivotSeries extends IndicatorSeries {
 			 * Calculate the new y points with the curve.
 			 */
 			if (this.getQuadratic()) {
-				calcPivot.calculatePivot(userDataVector);
+				calcPivot.calculatePivot(new ArrayList<Pair>(userDataVector
+						.values()));
 			}
 
 			CandleItem prevCandle = null;

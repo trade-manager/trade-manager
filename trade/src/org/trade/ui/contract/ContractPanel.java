@@ -978,11 +978,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					}
 					prevTradeOrder = order;
 				}
-				if (null != prevTradeOrder
-						&& null != prevTradeOrder.getTradePosition()) {
+				if (null != prevIdTradePosition) {
 					TradePosition tradePosition = m_tradePersistentModel
-							.findTradePositionById(prevTradeOrder
-									.getTradePosition().getIdTradePosition());
+							.findTradePositionById(prevIdTradePosition);
 
 					unRealizedPL = tradePosition.getUnRealizedProfit(
 							tradestrategy.getStrategyData()

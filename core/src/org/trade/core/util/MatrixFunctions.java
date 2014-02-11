@@ -35,7 +35,6 @@
  */
 package org.trade.core.util;
 
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -60,14 +59,10 @@ public final class MatrixFunctions {
 	 *            Integer
 	 * @return double[]
 	 */
-	public double[] solve(Hashtable<Long, Pair> userDataVector,
-			Integer polyOrder) {
-		int size = userDataVector.size();
+	public double[] solve(Pair[] pairs, Integer polyOrder) {
+		int size = pairs.length;
 		if (size > 1) {
-
-			Collection<Pair> pairs = userDataVector.values();
-			Pair[] userData = pairs.toArray(new Pair[] {});
-			return getCalculatedCoeffients(userData, polyOrder);
+			return getCalculatedCoeffients(pairs, polyOrder);
 		}
 		return null;
 	}
@@ -317,14 +312,15 @@ public final class MatrixFunctions {
 	 *            int
 	 * @return String
 	 */
-	public static String toPrint(int polyOrder, double result_cc,
-			double result_se, double[] terms, int dataPoints) {
+	public static String toPrint(int polyOrder, double correlationCoeff,
+			double standardDeviation, double[] terms, int dataPoints) {
 
 		String styleTag[] = { "", "pow", "Math.pow" };
 		int n = dataPoints;
 		String text = "Degree " + polyOrder + ", " + n + " x,y pairs. ";
-		text += "Corr. coeff. (r^2) = " + formatNum(result_cc, false) + ". ";
-		text += "SE = " + formatNum(result_se, false) + "\n\n";
+		text += "Corr. coeff. (r^2) = " + formatNum(correlationCoeff, false)
+				+ ". ";
+		text += "SE = " + formatNum(standardDeviation, false) + "\n\n";
 		text += (listingForm > 0) ? "double f(double x) {\n    return"
 				: "f(x) =";
 		for (int i = 0; i <= polyOrder; i++) {

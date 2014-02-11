@@ -108,8 +108,8 @@ public class CoreUtilsTest extends TestCase {
 			TestCase.assertFalse(CoreUtils.isBetween(12, 14, 15));
 
 		} catch (Exception ex) {
-			_log.error("Error creating class: " + ex.getMessage(), ex);
-			fail("Error creating class: " + ex.getCause().getMessage());
+			_log.error("Error testIsBetween: " + ex.getMessage(), ex);
+			fail("Error testIsBetween: " + ex.getCause().getMessage());
 		}
 	}
 
@@ -151,13 +151,14 @@ public class CoreUtilsTest extends TestCase {
 			TestCase.assertEquals(1, returnVal);
 
 		} catch (Exception ex) {
-			_log.error("Error creating class: " + ex.getMessage(), ex);
-			fail("Error creating class: " + ex.getCause().getMessage());
+			_log.error("Error testNullSafe: " + ex.getMessage(), ex);
+			fail("Error testNullSafe: " + ex.getCause().getMessage());
 		}
 	}
 
 	@Test
 	public void testBigDecimalRounding() {
+
 		BigDecimal avgFillPrice = new BigDecimal("35.34567897").setScale(SCALE,
 				BigDecimal.ROUND_HALF_EVEN);
 		TestCase.assertEquals(new BigDecimal("35.34568"), avgFillPrice);
@@ -206,8 +207,8 @@ public class CoreUtilsTest extends TestCase {
 			}
 			timer.stop();
 		} catch (Exception ex) {
-			_log.error("Error : " + ex.getMessage(), ex);
-			fail("Error : " + ex.getCause().getMessage());
+			_log.error("Error test10MinTimer: " + ex.getMessage(), ex);
+			fail("Error test10MinTimer: " + ex.getCause().getMessage());
 		}
 	}
 
@@ -225,8 +226,8 @@ public class CoreUtilsTest extends TestCase {
 				}
 			}
 		} catch (Exception ex) {
-			_log.error("Error : " + ex.getMessage(), ex);
-			fail("Error : " + ex.getCause().getMessage());
+			_log.error("Error testIntRounding: " + ex.getMessage(), ex);
+			fail("Error testIntRounding: " + ex.getCause().getMessage());
 		}
 	}
 }

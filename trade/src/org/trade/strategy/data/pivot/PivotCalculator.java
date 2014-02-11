@@ -35,9 +35,8 @@
  */
 package org.trade.strategy.data.pivot;
 
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,7 @@ public class PivotCalculator {
 			.getLogger(PivotCalculator.class);
 
 	private static int _polyOrder = 2; // default order
-	private static double _minCorrelationCoeff = 1;
+	private static double _minCorrelationCoeff = 0.6;
 
 	private MatrixFunctions m_matrixFunctions = new MatrixFunctions();
 
@@ -71,14 +70,14 @@ public class PivotCalculator {
 	 *            Hashtable<Long,Pair>
 	 * @return boolean
 	 */
-	public boolean calculatePivot(Hashtable<Long, Pair> userDataVector) {
+	public boolean calculatePivot(List<Pair> pairs) {
 
 		boolean isPivot = false;
 
-		int size = userDataVector.size();
-		if (size > 1) {
+		Collections.sort(pairs, Pair.X_VALUE_ASC);
 
-			Collection<Pair> pairs = userDataVector.values();
+		int size = pairs.size();
+		if (size > 1) {
 			Pair[] userData = pairs.toArray(new Pair[] {});
 			double[] terms = m_matrixFunctions.getCalculatedCoeffients(
 					userData, _polyOrder);
@@ -92,9 +91,7 @@ public class PivotCalculator {
 						.toPrint(_polyOrder, correlationCoeff, standardError,
 								terms, userData.length);
 				_log.info("Pivot Calc: " + output);
-				for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs
-						.hasMoreElements();) {
-					Pair pair = enumPairs.nextElement();
+				for (Pair pair : pairs) {
 					double y = MatrixFunctions.fx(pair.x, terms);
 					pair.y = y;
 				}
