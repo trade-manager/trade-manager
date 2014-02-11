@@ -94,11 +94,11 @@ public class MatrixFunctionsTest extends TestCase {
 
 			for (int i = 0; i < 3; i++) {
 				vwap = vwap + (0.1 * longShort)
-						+ ( ((double) i * longShort / 10));
+						+ (((double) i * longShort / 10));
 				period = (CandlePeriod) period.next();
 				endPeriod = period.getStart().getTime();
 				pairs.add(new Pair(
-						((double) (endPeriod - startPeriod) / (1000 * 60 *60)),
+						((double) (endPeriod - startPeriod) / (1000 * 60 * 60)),
 						vwap));
 			}
 

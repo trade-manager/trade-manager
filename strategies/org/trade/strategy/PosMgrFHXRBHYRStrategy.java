@@ -35,17 +35,22 @@
  */
 package org.trade.strategy;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
+import org.trade.core.util.MatrixFunctions;
+import org.trade.core.util.Pair;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.Side;
+import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
@@ -81,6 +86,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 	private static final long serialVersionUID = -6717691162128305191L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrFHXRBHYRStrategy.class);
+
+	private MatrixFunctions matrixFunctions = new MatrixFunctions();
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -124,8 +131,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			if (newBar && getCurrentCandleCount() > 0) {
 				prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
-				// AbstractStrategyRule.logCandle(this,
-				// prevCandleItem.getCandle());
+				// AbstractStrategyRule
+				// .logCandle(this, prevCandleItem.getCandle());
 			}
 
 			// AbstractStrategyRule.logCandle(this,
@@ -177,6 +184,74 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 				_log.info("Open position submit Stop/Tgt orders created Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);
 
+			}
+
+			/*
+			 * TODO this check will plot the last three vwaps as y = a + bx +
+			 * cx^2 with a correlation coeff of 0.6 then extrapolate the next
+			 * vwap. If that is beyond the stop it will move the stop to b.e.
+			 * 
+			 * Note this is just an example need refining.
+			 */
+			if (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
+					9, 50)) && newBar) {
+
+				if (candleSeries.getItemCount() < 3)
+					return;
+
+				List<Pair> pairs = new ArrayList<Pair>();
+				int polyOrder = 2;
+				double _minCorrelationCoeff = 0.6;
+				int startBar = candleSeries.indexOf(prevCandleItem.getPeriod()) - 2;
+				Long startTime = ((CandleItem) candleSeries
+						.getDataItem(startBar)).getPeriod().getStart()
+						.getTime();
+
+				for (int i = startBar; i < (startBar + 3); i++) {
+					CandleItem candleItem = (CandleItem) candleSeries
+							.getDataItem(i);
+					pairs.add(new Pair(
+							((double) (candleItem.getPeriod().getStart()
+									.getTime() - startTime) / (1000 * 60 * 60)),
+							candleItem.getVwap()));
+				}
+				Collections.sort(pairs, Pair.X_VALUE_ASC);
+				Pair[] pairsArray = pairs.toArray(new Pair[] {});
+				double[] terms = matrixFunctions.solve(pairsArray, polyOrder);
+				double correlationCoeff = matrixFunctions
+						.getCorrelationCoefficient(pairsArray, terms);
+				if (correlationCoeff > _minCorrelationCoeff) {
+
+					Entrylimit entryLimit = this.getEntryLimit().getValue(
+							new Money(prevCandleItem.getVwap()));
+					Money pivotRange = new Money(
+							Math.abs((pairs.get(0).y - pairs.get(pairs.size() - 1).y)));
+					if (null != entryLimit
+							&& entryLimit.getPivotRange().doubleValue() <= pivotRange
+									.doubleValue()) {
+						double nextTime = (double) (currentCandleItem
+								.getPeriod().getStart().getTime() - startTime)
+								/ (1000 * 60 * 60);
+						double y = MatrixFunctions.fx(nextTime, terms);
+						double avgfillPrice = this.getOpenPositionOrder()
+								.getAverageFilledPrice().doubleValue();
+						// _log.error("avgfillPrice: " + avgfillPrice + " x: "
+						// + currentCandleItem.getPeriod().getStart()
+						// + " y: " + y);
+
+						if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+							if (y <= avgfillPrice) {
+								// moveStopOCAPrice(new Money(avgfillPrice),
+								// true);
+							}
+						} else {
+							if (y >= avgfillPrice) {
+								// moveStopOCAPrice(new Money(avgfillPrice),
+								// true);
+							}
+						}
+					}
+				}
 			}
 
 			/*
