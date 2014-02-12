@@ -90,7 +90,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 	private static final long serialVersionUID = -1629661431267666769L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinSideGapBarStrategy.class);
-	
+
 	private Integer openPositionOrderKey = null;
 
 	/**
@@ -241,8 +241,9 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 							/*
 							 * Create an open position.
 							 */
-							TradeOrder tradeOrder = createRiskOpenPosition(action,
-									price, priceStop, true, null, null, null, null);
+							TradeOrder tradeOrder = createRiskOpenPosition(
+									action, price, priceStop, true, null, null,
+									null, null);
 							openPositionOrderKey = tradeOrder.getOrderKey();
 
 						} else {

@@ -90,7 +90,6 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 
 	private String side = null;
 	private Integer openPositionOrderKey = null;
-	
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will

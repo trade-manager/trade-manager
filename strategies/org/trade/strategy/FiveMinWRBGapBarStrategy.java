@@ -91,9 +91,8 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 	private static final long serialVersionUID = -2517966650638318307L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinWRBGapBarStrategy.class);
-	
+
 	private Integer openPositionOrderKey = null;
-	
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
