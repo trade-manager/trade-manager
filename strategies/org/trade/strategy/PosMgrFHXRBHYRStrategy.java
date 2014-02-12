@@ -193,21 +193,23 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * 
 			 * Note this is just an example need refining.
 			 */
-			if (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
+/*			if (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
 					9, 50)) && newBar) {
 
-				if (candleSeries.getItemCount() < 3)
+				int barBack = 3;
+				if (candleSeries.getItemCount() < barBack)
 					return;
 
 				List<Pair> pairs = new ArrayList<Pair>();
-				int polyOrder = 2;
+				int polyOrder = 1;
 				double _minCorrelationCoeff = 0.6;
-				int startBar = candleSeries.indexOf(prevCandleItem.getPeriod()) - 2;
+				int startBar = candleSeries.indexOf(prevCandleItem.getPeriod())
+						- (barBack - 1);
 				Long startTime = ((CandleItem) candleSeries
 						.getDataItem(startBar)).getPeriod().getStart()
 						.getTime();
 
-				for (int i = startBar; i < (startBar + 3); i++) {
+				for (int i = startBar; i < (startBar + barBack); i++) {
 					CandleItem candleItem = (CandleItem) candleSeries
 							.getDataItem(i);
 					pairs.add(new Pair(
@@ -221,6 +223,12 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 				double correlationCoeff = matrixFunctions
 						.getCorrelationCoefficient(pairsArray, terms);
 				if (correlationCoeff > _minCorrelationCoeff) {
+
+					for (Pair pair : pairs) {
+						double y = MatrixFunctions.fx(pair.x, terms);
+						pair.y = y;
+						// _log.info("x: " + pair.x + " y: " + pair.y);
+					}
 
 					Entrylimit entryLimit = this.getEntryLimit().getValue(
 							new Money(prevCandleItem.getVwap()));
@@ -278,7 +286,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 					}
 				}
 			}
-
+*/
 			/*
 			 * Manage the stop orders if the current bars Vwap crosses the Vwap
 			 * of the first 5min bar then move the stop price ( currently -2R)

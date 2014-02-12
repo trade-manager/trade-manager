@@ -226,8 +226,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						 * Check that the entry - stop is greater than 2* the
 						 * STPLMT amount.
 						 */
-						if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
-								.getLimitAmount().doubleValue() * 2)) {
+				//		if (Math.abs(price.subtract(priceStop).doubleValue()) > (entrylimit
+				//				.getLimitAmount().doubleValue() * 2)) {
 
 							/*
 							 * Create an open position.
@@ -238,13 +238,13 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 									action, price, priceStop, true, null, null,
 									null, null);
 							openPositionOrderKey = tradeOrder.getOrderKey();
-						} else {
-							_log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-							updateTradestrategyStatus(TradestrategyStatus.NBB);
-							// Kill this process we are done!
-							this.cancel();
-						}
+//						} else {
+//							_log.info("Rule 9:35 5min bar less than 2 * stop limits. Symbol: "
+//									+ getSymbol() + " Time: " + startPeriod);
+//							updateTradestrategyStatus(TradestrategyStatus.NBB);
+//							// Kill this process we are done!
+//							this.cancel();
+//						}
 
 					} else {
 						_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
@@ -267,23 +267,23 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						if (firstCandle.getSide()) {
 							if (currentCandleItem.getVwap() < firstCandle
 									.getLow()) {
-								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
-								this.cancelAllOrders();
-								// No trade we timed out
-								_log.info("Rule 5min low broker Symbol: "
-										+ getSymbol() + " Time: " + startPeriod);
-								this.cancel();
+//								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
+//								this.cancelAllOrders();
+//								// No trade we timed out
+//								_log.info("Rule 5min low broker Symbol: "
+//										+ getSymbol() + " Time: " + startPeriod);
+//								this.cancel();
 							}
 						} else {
 
 							if (currentCandleItem.getVwap() > firstCandle
 									.getHigh()) {
-								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
-								this.cancelAllOrders();
-								// No trade we timed out
-								_log.info("Rule 5min high broker Symbol: "
-										+ getSymbol() + " Time: " + startPeriod);
-								this.cancel();
+//								updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
+//								this.cancelAllOrders();
+//								// No trade we timed out
+//								_log.info("Rule 5min high broker Symbol: "
+//										+ getSymbol() + " Time: " + startPeriod);
+//								this.cancel();
 							}
 						}
 					}
