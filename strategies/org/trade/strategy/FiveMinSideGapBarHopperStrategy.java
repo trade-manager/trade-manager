@@ -47,6 +47,7 @@ import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Candle;
+import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -88,6 +89,8 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 			.getLogger(FiveMinSideGapBarHopperStrategy.class);
 
 	private String side = null;
+	private Integer openPositionOrderKey = null;
+	
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -154,8 +157,8 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 				 * Open position order was cancelled kill this Strategy as its
 				 * job is done.
 				 */
-				if (null != this.getOpenPositionOrder()
-						&& !this.getOpenPositionOrder().isActive()) {
+				if (null != openPositionOrderKey
+						&& !this.getTradeOrder(openPositionOrderKey).isActive()) {
 					_log.info("Strategy complete open position cancelled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
@@ -233,8 +236,9 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 					/*
 					 * Create an open position.
 					 */
-					createRiskOpenPosition(action, price, priceStop, true,
-							null, null, null, null);
+					TradeOrder tradeOrder = createRiskOpenPosition(action,
+							price, priceStop, true, null, null, null, null);
+					openPositionOrderKey = tradeOrder.getOrderKey();
 
 				} else {
 

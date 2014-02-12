@@ -46,6 +46,7 @@ import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
+import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -64,6 +65,8 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 	private static final long serialVersionUID = -2138009534354123773L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(Vwap5MinSideGapBarStrategy.class);
+
+	private Integer openPositionOrderKey = null;
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -142,8 +145,8 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 				 * Open position order was cancelled kill this Strategy as its
 				 * job is done.
 				 */
-				if (null != this.getOpenPositionOrder()
-						&& !this.getOpenPositionOrder().isActive()) {
+				if (null != openPositionOrderKey
+						&& !this.getTradeOrder(openPositionOrderKey).isActive()) {
 					_log.info("Strategy complete open position cancelled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
@@ -189,8 +192,10 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 							/*
 							 * Create an open position order.
 							 */
-							createRiskOpenPosition(action, price, priceStop,
-									true, null, null, null, null);
+							TradeOrder tradeOrder = createRiskOpenPosition(
+									action, price, priceStop, true, null, null,
+									null, null);
+							openPositionOrderKey = tradeOrder.getOrderKey();
 
 						} else {
 							_log.info("Rule Vwap 5 min Side Gap bar. Vwap not in direction of side. Symbol: "

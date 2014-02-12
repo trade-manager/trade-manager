@@ -48,6 +48,7 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Entrylimit;
+import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -90,6 +91,9 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 	private static final long serialVersionUID = -2517966650638318307L;
 	private final static Logger _log = LoggerFactory
 			.getLogger(FiveMinWRBGapBarStrategy.class);
+	
+	private Integer openPositionOrderKey = null;
+	
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -157,8 +161,8 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 				 * Open position order was cancelled kill this Strategy as its
 				 * job is done.
 				 */
-				if (null != this.getOpenPositionOrder()
-						&& !this.getOpenPositionOrder().isActive()) {
+				if (null != openPositionOrderKey
+						&& !this.getTradeOrder(openPositionOrderKey).isActive()) {
 					_log.info("Strategy complete open position cancelled symbol: "
 							+ getSymbol() + " startPeriod: " + startPeriod);
 					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
@@ -240,8 +244,9 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 						/*
 						 * Create an open position.
 						 */
-						createRiskOpenPosition(action, price, priceStop, true,
-								null, null, null, null);
+						TradeOrder tradeOrder = createRiskOpenPosition(action,
+								price, priceStop, true, null, null, null, null);
+						openPositionOrderKey = tradeOrder.getOrderKey();
 
 					} else {
 						_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
