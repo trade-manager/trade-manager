@@ -227,29 +227,54 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 					Money pivotRange = new Money(
 							Math.abs((pairs.get(0).y - pairs.get(pairs.size() - 1).y)));
 					if (null != entryLimit
-							&& entryLimit.getPivotRange().doubleValue() <= pivotRange
+							&& (entryLimit.getPivotRange().doubleValue()) <= pivotRange
 									.doubleValue()) {
 						double nextTime = (double) (currentCandleItem
 								.getPeriod().getStart().getTime() - startTime)
 								/ (1000 * 60 * 60);
 						double y = MatrixFunctions.fx(nextTime, terms);
-						double avgfillPrice = this.getOpenPositionOrder()
-								.getAverageFilledPrice().doubleValue();
-						// _log.error("avgfillPrice: " + avgfillPrice + " x: "
-						// + currentCandleItem.getPeriod().getStart()
-						// + " y: " + y);
 
-						if (Side.BOT.equals(getOpenTradePosition().getSide())) {
-							if (y <= avgfillPrice) {
-								// moveStopOCAPrice(new Money(avgfillPrice),
-								// true);
+						pairs.add(new Pair(
+								((double) (currentCandleItem.getPeriod()
+										.getStart().getTime() - startTime) / (1000 * 60 * 60)),
+								y));
+
+						Pair prevPair = null;
+						double preDiff = 0;
+						boolean biggerDiff = true;
+						for (Pair pair : pairs) {
+							if (null != prevPair) {
+								double diff = Math.abs(prevPair.y - pair.y);
+								if (diff < preDiff) {
+									biggerDiff = false;
+									break;
+								}
+								preDiff = diff;
 							}
-						} else {
-							if (y >= avgfillPrice) {
-								// moveStopOCAPrice(new Money(avgfillPrice),
-								// true);
+							prevPair = pair;
+						}
+						if (biggerDiff) {
+							double avgfillPrice = this.getOpenPositionOrder()
+									.getAverageFilledPrice().doubleValue();
+							// _log.error("avgfillPrice: " + avgfillPrice +
+							// " x: "
+							// + currentCandleItem.getPeriod().getStart()
+							// + " y: " + y);
+
+							if (Side.BOT.equals(getOpenTradePosition()
+									.getSide())) {
+								if (y <= avgfillPrice) {
+									moveStopOCAPrice(new Money(avgfillPrice),
+											true);
+								}
+							} else {
+								if (y >= avgfillPrice) {
+									moveStopOCAPrice(new Money(avgfillPrice),
+											true);
+								}
 							}
 						}
+
 					}
 				}
 			}
