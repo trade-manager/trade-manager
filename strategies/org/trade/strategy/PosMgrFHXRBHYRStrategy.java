@@ -201,12 +201,13 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 						+ currentCandleItem.getVwap());
 
 				int barBack = 3;
+				int polyOrder = 2;
+				double _minCorrelationCoeff = 0.6;
 				if (candleSeries.getItemCount() < barBack)
 					return;
 
 				List<Pair> pairs = new ArrayList<Pair>();
-				int polyOrder = 1;
-				double _minCorrelationCoeff = 0.6;
+
 				int startBar = candleSeries.indexOf(prevCandleItem.getPeriod())
 						- (barBack - 1);
 				Long startTime = ((CandleItem) candleSeries
@@ -253,18 +254,23 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 
 						Pair prevPair = null;
 						boolean biggerDiff = true;
-						double diffLimit = entryLimit.getPivotRange()
-								.doubleValue();
-						if (Side.BOT.equals(getOpenTradePosition().getSide()))
-							diffLimit = diffLimit * -1;
+						// double diffAmt = entryLimit.getPivotRange()
+						// .doubleValue();
+						double diffAmt = Double.MAX_VALUE;
+						// if
+						// (Side.BOT.equals(getOpenTradePosition().getSide()))
+						// diffAmt = diffAmt * -1;
 
 						for (Pair pair : pairs) {
 							if (null != prevPair) {
-								double diff = prevPair.y - pair.y;
-								if (diff < diffLimit) {
-									biggerDiff = false;
-									break;
+								if (diffAmt != Double.MAX_VALUE) {
+									// double diff = prevPair.y - pair.y;
+									if (diffAmt > (prevPair.y - pair.y)) {
+										biggerDiff = false;
+										break;
+									}
 								}
+								diffAmt = prevPair.y - pair.y;
 							}
 							prevPair = pair;
 						}
