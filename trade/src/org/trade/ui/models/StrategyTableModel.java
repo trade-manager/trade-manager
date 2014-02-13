@@ -130,7 +130,7 @@ public class StrategyTableModel extends AspectTableModel {
 
 		switch (column) {
 		case 0: {
-			element.setName((String) value);
+			element.setName(((String) value).trim());
 			break;
 		}
 		case 1: {
@@ -138,7 +138,7 @@ public class StrategyTableModel extends AspectTableModel {
 			break;
 		}
 		case 2: {
-			element.setClassName((String) value);
+			element.setClassName(((String) value).trim());
 			break;
 		}
 		case 3: {

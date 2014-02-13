@@ -178,7 +178,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 			break;
 		}
 		case 2: {
-			element.setName((String) value);
+			element.setName(((String) value).trim());
 			break;
 		}
 		case 3: {

@@ -193,8 +193,12 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * 
 			 * Note this is just an example need refining.
 			 */
-/*			if (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
+			if (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
 					9, 50)) && newBar) {
+
+				_log.info("Symbol: " + this.getSymbol() + " Current Time: "
+						+ currentCandleItem.getPeriod().getStart() + " vwap: "
+						+ currentCandleItem.getVwap());
 
 				int barBack = 3;
 				if (candleSeries.getItemCount() < barBack)
@@ -208,7 +212,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 				Long startTime = ((CandleItem) candleSeries
 						.getDataItem(startBar)).getPeriod().getStart()
 						.getTime();
-
+				double prevY = Double.MAX_VALUE;
 				for (int i = startBar; i < (startBar + barBack); i++) {
 					CandleItem candleItem = (CandleItem) candleSeries
 							.getDataItem(i);
@@ -216,77 +220,97 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 							((double) (candleItem.getPeriod().getStart()
 									.getTime() - startTime) / (1000 * 60 * 60)),
 							candleItem.getVwap()));
+					_log.info("Symbol: "
+							+ this.getSymbol()
+							+ " Time: "
+							+ candleItem.getPeriod().getStart()
+							+ " vwap: "
+							+ candleItem.getVwap()
+							+ " diff: "
+							+ (prevY != Double.MAX_VALUE ? (candleItem
+									.getVwap() - prevY) : 0));
+					prevY = candleItem.getVwap();
 				}
 				Collections.sort(pairs, Pair.X_VALUE_ASC);
 				Pair[] pairsArray = pairs.toArray(new Pair[] {});
 				double[] terms = matrixFunctions.solve(pairsArray, polyOrder);
 				double correlationCoeff = matrixFunctions
 						.getCorrelationCoefficient(pairsArray, terms);
+				double standardError = matrixFunctions.getStandardError(
+						pairsArray, terms);
+				_log.info("Symbol: " + this.getSymbol() + " correlationCoeff: "
+						+ correlationCoeff + " standardError: " + standardError);
 				if (correlationCoeff > _minCorrelationCoeff) {
-
-					for (Pair pair : pairs) {
-						double y = MatrixFunctions.fx(pair.x, terms);
-						pair.y = y;
-						// _log.info("x: " + pair.x + " y: " + pair.y);
-					}
 
 					Entrylimit entryLimit = this.getEntryLimit().getValue(
 							new Money(prevCandleItem.getVwap()));
+
 					Money pivotRange = new Money(
 							Math.abs((pairs.get(0).y - pairs.get(pairs.size() - 1).y)));
 					if (null != entryLimit
 							&& (entryLimit.getPivotRange().doubleValue()) <= pivotRange
 									.doubleValue()) {
-						double nextTime = (double) (currentCandleItem
-								.getPeriod().getStart().getTime() - startTime)
-								/ (1000 * 60 * 60);
-						double y = MatrixFunctions.fx(nextTime, terms);
-
-						pairs.add(new Pair(
-								((double) (currentCandleItem.getPeriod()
-										.getStart().getTime() - startTime) / (1000 * 60 * 60)),
-								y));
 
 						Pair prevPair = null;
-						double preDiff = 0;
 						boolean biggerDiff = true;
+						double diffLimit = entryLimit.getPivotRange()
+								.doubleValue();
+						if (Side.BOT.equals(getOpenTradePosition().getSide()))
+							diffLimit = diffLimit * -1;
+
 						for (Pair pair : pairs) {
 							if (null != prevPair) {
-								double diff = Math.abs(prevPair.y - pair.y);
-								if (diff < preDiff) {
+								double diff = prevPair.y - pair.y;
+								if (diff < diffLimit) {
 									biggerDiff = false;
 									break;
 								}
-								preDiff = diff;
 							}
 							prevPair = pair;
 						}
 						if (biggerDiff) {
+							double nextTime = (double) (currentCandleItem
+									.getPeriod().getStart().getTime() - startTime)
+									/ (1000 * 60 * 60);
+							double nextY = MatrixFunctions.fx(nextTime, terms);
+
+							pairs.add(new Pair(
+									((double) (currentCandleItem.getPeriod()
+											.getStart().getTime() - startTime) / (1000 * 60 * 60)),
+									nextY));
+
+							for (Pair pair : pairs) {
+								double y = MatrixFunctions.fx(pair.x, terms);
+								pair.y = y;
+								_log.info("Symbol: " + this.getSymbol()
+										+ " New Values x: " + pair.x + " y: "
+										+ pair.y);
+							}
 							double avgfillPrice = this.getOpenPositionOrder()
 									.getAverageFilledPrice().doubleValue();
-							// _log.error("avgfillPrice: " + avgfillPrice +
-							// " x: "
-							// + currentCandleItem.getPeriod().getStart()
-							// + " y: " + y);
+							_log.info("*** Symbol: " + this.getSymbol()
+									+ " Move stop avgfillPrice: "
+									+ avgfillPrice + " x: "
+									+ currentCandleItem.getPeriod().getStart()
+									+ " nextY: " + nextY);
 
 							if (Side.BOT.equals(getOpenTradePosition()
 									.getSide())) {
-								if (y <= avgfillPrice) {
+								if (nextY <= avgfillPrice) {
 									moveStopOCAPrice(new Money(avgfillPrice),
 											true);
 								}
 							} else {
-								if (y >= avgfillPrice) {
+								if (nextY >= avgfillPrice) {
 									moveStopOCAPrice(new Money(avgfillPrice),
 											true);
 								}
 							}
 						}
-
 					}
 				}
 			}
-*/
+
 			/*
 			 * Manage the stop orders if the current bars Vwap crosses the Vwap
 			 * of the first 5min bar then move the stop price ( currently -2R)
