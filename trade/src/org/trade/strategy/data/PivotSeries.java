@@ -358,6 +358,7 @@ public class PivotSeries extends IndicatorSeries {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
+
 		PivotItem dataItem = null;
 		Hashtable<Long, Pair> userDataVector = new Hashtable<Long, Pair>();
 		DAOEntryLimit entryLimits = new DAOEntryLimit();
@@ -516,16 +517,17 @@ public class PivotSeries extends IndicatorSeries {
 					Money pivotRange = new Money(Math.abs((pivotRangeCandle
 							.getVwap() - pivotCandle.getVwap())));
 
-					// _log.info("Pivot Date: "
-					// + pivotCandle.getPeriod()
-					// + " Period Index: "
-					// + ((BarPeriod) pivotCandle.getPeriod())
-					// .getDaySerialIndex() + " Pivot Price: "
-					// + pivotCandle.getVwap() + " Pivot Range Date: "
-					// + pivotRangeCandle.getPeriod() + " Pivot H/L:"
-					// + pivotRangeCandle.getVwap() + " Pivot range: "
-					// + entryLimit.getPivotRange());
-					// _log.info(calcPivot.getPrint());
+					_log.error("Pivot Date: "
+							+ pivotCandle.getPeriod()
+							+ " Period Index: "
+							+ ((CandlePeriod) pivotCandle.getPeriod())
+									.getDaySerialIndex() + " Pivot Price: "
+							+ pivotCandle.getVwap() + " Pivot Range Date: "
+							+ pivotRangeCandle.getPeriod() + " Pivot H/L:"
+							+ pivotRangeCandle.getVwap() + " Pivot range: "
+							+ entryLimit.getPivotRange() + " Pivot Side: "
+							+ pivotSide);
+					_log.info("Pivot: " + calcPivot.toString());
 
 					if (null != entryLimit
 							&& entryLimit.getPivotRange().doubleValue() <= pivotRange

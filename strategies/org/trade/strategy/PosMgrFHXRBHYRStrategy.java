@@ -53,8 +53,15 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.strategy.data.CandleSeries;
+import org.trade.strategy.data.HeikinAshiDataset;
+import org.trade.strategy.data.HeikinAshiSeries;
+import org.trade.strategy.data.IndicatorSeries;
+import org.trade.strategy.data.PivotDataset;
+import org.trade.strategy.data.PivotSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
+import org.trade.strategy.data.heikinashi.HeikinAshiItem;
+import org.trade.strategy.data.pivot.PivotItem;
 
 /**
  */
@@ -174,10 +181,10 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 				Integer tgt2Qty = quantity - tgt1Qty;
 				// Integer tgt3Qty = quantity - (tgt1Qty + tgt2Qty);
 
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 2,
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 6,
 						0.01, tgt1Qty, true);
 
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 2,
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 6,
 						0.01, tgt2Qty, true);
 				// createStopAndTargetOrder(getOpenPositionOrder(),
 				// 2,0.01,4,0.01, tgt3Qty, true);
@@ -193,130 +200,193 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * 
 			 * Note this is just an example need refining.
 			 */
+
 			if (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
-					9, 50)) && newBar) {
+					9, 45)) && newBar) {
+				PivotDataset dataset = (PivotDataset) getTradestrategy()
+						.getStrategyData().getIndicatorByType(
+								IndicatorSeries.PivotSeries);
+				PivotSeries pivotSeries = dataset.getSeries(0);
+				// Start with the current bar and work back
+				int itemCount = pivotSeries.getItemCount() - 1;
 
-				_log.info("Symbol: " + this.getSymbol() + " Current Time: "
-						+ currentCandleItem.getPeriod().getStart() + " vwap: "
-						+ currentCandleItem.getVwap());
-
-				int barBack = 3;
-				int polyOrder = 2;
-				double _minCorrelationCoeff = 0.6;
-				if (candleSeries.getItemCount() < barBack)
-					return;
-
-				List<Pair> pairs = new ArrayList<Pair>();
-
-				int startBar = candleSeries.indexOf(prevCandleItem.getPeriod())
-						- (barBack - 1);
-				Long startTime = ((CandleItem) candleSeries
-						.getDataItem(startBar)).getPeriod().getStart()
-						.getTime();
-				double prevY = Double.MAX_VALUE;
-				for (int i = startBar; i < (startBar + barBack); i++) {
-					CandleItem candleItem = (CandleItem) candleSeries
-							.getDataItem(i);
-					pairs.add(new Pair(
-							((double) (candleItem.getPeriod().getStart()
-									.getTime() - startTime) / (1000 * 60 * 60)),
-							candleItem.getVwap()));
-					_log.info("Symbol: "
-							+ this.getSymbol()
-							+ " Time: "
-							+ candleItem.getPeriod().getStart()
-							+ " vwap: "
-							+ candleItem.getVwap()
-							+ " diff: "
-							+ (prevY != Double.MAX_VALUE ? (candleItem
-									.getVwap() - prevY) : 0));
-					prevY = candleItem.getVwap();
-				}
-				Collections.sort(pairs, Pair.X_VALUE_ASC);
-				Pair[] pairsArray = pairs.toArray(new Pair[] {});
-				double[] terms = matrixFunctions.solve(pairsArray, polyOrder);
-				double correlationCoeff = matrixFunctions
-						.getCorrelationCoefficient(pairsArray, terms);
-				double standardError = matrixFunctions.getStandardError(
-						pairsArray, terms);
-				_log.info("Symbol: " + this.getSymbol() + " correlationCoeff: "
-						+ correlationCoeff + " standardError: " + standardError);
-				if (correlationCoeff > _minCorrelationCoeff) {
-
-					Entrylimit entryLimit = this.getEntryLimit().getValue(
-							new Money(prevCandleItem.getVwap()));
-
-					Money pivotRange = new Money(
-							Math.abs((pairs.get(0).y - pairs.get(pairs.size() - 1).y)));
-					if (null != entryLimit
-							&& (entryLimit.getPivotRange().doubleValue()) <= pivotRange
-									.doubleValue()) {
-
-						Pair prevPair = null;
-						boolean biggerDiff = true;
-						// double diffAmt = entryLimit.getPivotRange()
-						// .doubleValue();
-						double diffAmt = Double.MAX_VALUE;
-						// if
-						// (Side.BOT.equals(getOpenTradePosition().getSide()))
-						// diffAmt = diffAmt * -1;
-
-						for (Pair pair : pairs) {
-							if (null != prevPair) {
-								if (diffAmt != Double.MAX_VALUE) {
-									// double diff = prevPair.y - pair.y;
-									if (diffAmt > (prevPair.y - pair.y)) {
-										biggerDiff = false;
-										break;
-									}
-								}
-								diffAmt = prevPair.y - pair.y;
-							}
-							prevPair = pair;
-						}
-						if (biggerDiff) {
-							double nextTime = (double) (currentCandleItem
-									.getPeriod().getStart().getTime() - startTime)
-									/ (1000 * 60 * 60);
-							double nextY = MatrixFunctions.fx(nextTime, terms);
-
-							pairs.add(new Pair(
-									((double) (currentCandleItem.getPeriod()
-											.getStart().getTime() - startTime) / (1000 * 60 * 60)),
-									nextY));
-
-							for (Pair pair : pairs) {
-								double y = MatrixFunctions.fx(pair.x, terms);
-								pair.y = y;
-								_log.info("Symbol: " + this.getSymbol()
-										+ " New Values x: " + pair.x + " y: "
-										+ pair.y);
-							}
+				if (itemCount > 0 && this.isThereOpenPosition()) {
+					for (int i = itemCount; i > 1; i--) {
+						PivotItem pivot = (PivotItem) pivotSeries.getDataItem(i);
+						if (pivot
+								.getPeriod()
+								.getStart()
+								.after(TradingCalendar.getSpecificTime(
+										startPeriod, 9, 45))
+								&& newBar) {
+							_log.error("startPeriod: "
+									+ startPeriod
+									+ " Pivot time: "
+									+ pivot.getPeriod().getStart()
+									+ " value: "
+									+ pivot.getPivotPrice()
+									+ " Time 9:45"
+									+ TradingCalendar.getSpecificTime(
+											startPeriod, 9, 45));
 							double avgfillPrice = this.getOpenPositionOrder()
 									.getAverageFilledPrice().doubleValue();
-							_log.info("*** Symbol: " + this.getSymbol()
-									+ " Move stop avgfillPrice: "
-									+ avgfillPrice + " x: "
-									+ currentCandleItem.getPeriod().getStart()
-									+ " nextY: " + nextY);
+
+							double stopPrice = this.getOpenPositionOrder()
+									.getStopPrice().doubleValue();
 
 							if (Side.BOT.equals(getOpenTradePosition()
 									.getSide())) {
-								if (nextY <= avgfillPrice) {
-									moveStopOCAPrice(new Money(avgfillPrice),
-											true);
+								if (pivot.getPivotPrice() > avgfillPrice
+										&& Side.SLD
+												.equals(pivot.getPivotSide())) {
+									moveStopOCAPrice(new Money(
+											currentCandleItem.getVwap()), true);
 								}
 							} else {
-								if (nextY >= avgfillPrice) {
-									moveStopOCAPrice(new Money(avgfillPrice),
-											true);
+								if (pivot.getPivotPrice() < avgfillPrice
+										&& Side.BOT
+												.equals(pivot.getPivotSide())) {
+									moveStopOCAPrice(new Money(
+											currentCandleItem.getVwap()), true);
 								}
 							}
+							break;
+						} else {
+							break;
 						}
 					}
 				}
 			}
 
+			// if
+			// (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
+			// 9, 50)) && newBar) {
+			//
+			// _log.info("Symbol: " + this.getSymbol() + " Current Time: "
+			// + currentCandleItem.getPeriod().getStart() + " vwap: "
+			// + currentCandleItem.getVwap());
+			//
+			// int barBack = 3;
+			// int polyOrder = 2;
+			// double _minCorrelationCoeff = 0.6;
+			// if (candleSeries.getItemCount() < barBack)
+			// return;
+			//
+			// List<Pair> pairs = new ArrayList<Pair>();
+			//
+			// int startBar = candleSeries.indexOf(prevCandleItem.getPeriod())
+			// - (barBack - 1);
+			// Long startTime = ((CandleItem) candleSeries
+			// .getDataItem(startBar)).getPeriod().getStart()
+			// .getTime();
+			// double prevY = Double.MAX_VALUE;
+			// for (int i = startBar; i < (startBar + barBack); i++) {
+			// CandleItem candleItem = (CandleItem) candleSeries
+			// .getDataItem(i);
+			// pairs.add(new Pair(
+			// ((double) (candleItem.getPeriod().getStart()
+			// .getTime() - startTime) / (1000 * 60 * 60)),
+			// candleItem.getVwap()));
+			// _log.info("Symbol: "
+			// + this.getSymbol()
+			// + " Time: "
+			// + candleItem.getPeriod().getStart()
+			// + " vwap: "
+			// + candleItem.getVwap()
+			// + " diff: "
+			// + (prevY != Double.MAX_VALUE ? (candleItem
+			// .getVwap() - prevY) : 0));
+			// prevY = candleItem.getVwap();
+			// }
+			// Collections.sort(pairs, Pair.X_VALUE_ASC);
+			// Pair[] pairsArray = pairs.toArray(new Pair[] {});
+			// double[] terms = matrixFunctions.solve(pairsArray, polyOrder);
+			// double correlationCoeff = matrixFunctions
+			// .getCorrelationCoefficient(pairsArray, terms);
+			// double standardError = matrixFunctions.getStandardError(
+			// pairsArray, terms);
+			// _log.info("Symbol: " + this.getSymbol() + " correlationCoeff: "
+			// + correlationCoeff + " standardError: " + standardError);
+			// if (correlationCoeff > _minCorrelationCoeff) {
+			//
+			// Entrylimit entryLimit = this.getEntryLimit().getValue(
+			// new Money(prevCandleItem.getVwap()));
+			//
+			// Money pivotRange = new Money(
+			// Math.abs((pairs.get(0).y - pairs.get(pairs.size() - 1).y)));
+			// if (null != entryLimit
+			// && (entryLimit.getPivotRange().doubleValue()) <= pivotRange
+			// .doubleValue()) {
+			//
+			// Pair prevPair = null;
+			// boolean biggerDiff = true;
+			// // double diffAmt = entryLimit.getPivotRange()
+			// // .doubleValue();
+			// double diffAmt = Double.MAX_VALUE;
+			// if (Side.BOT.equals(getOpenTradePosition().getSide()))
+			// diffAmt = diffAmt * -1;
+			//
+			// for (Pair pair : pairs) {
+			// if (null != prevPair) {
+			// if (diffAmt != Double.MAX_VALUE) {
+			// double diff = prevPair.y - pair.y;
+			// if (diffAmt > (prevPair.y - pair.y)) {
+			// biggerDiff = false;
+			// break;
+			// }
+			// }
+			// diffAmt = prevPair.y - pair.y;
+			// }
+			// prevPair = pair;
+			// }
+			// if (biggerDiff) {
+			// double nextTime = (double) (currentCandleItem
+			// .getPeriod().getStart().getTime() - startTime)
+			// / (1000 * 60 * 60);
+			// double nextY = MatrixFunctions.fx(nextTime, terms);
+			//
+			// pairs.add(new Pair(
+			// ((double) (currentCandleItem.getPeriod()
+			// .getStart().getTime() - startTime) / (1000 * 60 * 60)),
+			// nextY));
+			//
+			// for (Pair pair : pairs) {
+			// double y = MatrixFunctions.fx(pair.x, terms);
+			// pair.y = y;
+			// _log.info("Symbol: " + this.getSymbol()
+			// + " New Values x: " + pair.x + " y: "
+			// + pair.y);
+			// }
+			// double avgfillPrice = this.getOpenPositionOrder()
+			// .getAverageFilledPrice().doubleValue();
+			//
+			// double stopPrice = this.getOpenPositionOrder()
+			// .getStopPrice().doubleValue();
+			//
+			// _log.info("*** Symbol: " + this.getSymbol()
+			// + " Move stop avgfillPrice: "
+			// + avgfillPrice + " x: "
+			// + currentCandleItem.getPeriod().getStart()
+			// + " nextY: " + nextY);
+			//
+			// if (Side.BOT.equals(getOpenTradePosition()
+			// .getSide())) {
+			// if (nextY <= avgfillPrice) {
+			// moveStopOCAPrice(new Money(
+			// (avgfillPrice - stopPrice) / 2),
+			// true);
+			// }
+			// } else {
+			// if (nextY >= avgfillPrice) {
+			// moveStopOCAPrice(new Money(
+			// (stopPrice - avgfillPrice) / 2),
+			// true);
+			// }
+			// }
+			// }
+			// }
+			// }
+			// }
 			/*
 			 * Manage the stop orders if the current bars Vwap crosses the Vwap
 			 * of the first 5min bar then move the stop price ( currently -2R)
