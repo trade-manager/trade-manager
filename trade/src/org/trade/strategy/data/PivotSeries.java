@@ -520,17 +520,17 @@ public class PivotSeries extends IndicatorSeries {
 					Money pivotRange = new Money(Math.abs((pivotRangeCandle
 							.getVwap() - pivotCandle.getVwap())));
 
-					_log.error("Pivot Date: "
-							+ pivotCandle.getPeriod()
-							+ " Period Index: "
-							+ ((CandlePeriod) pivotCandle.getPeriod())
-									.getDaySerialIndex() + " Pivot Price: "
-							+ pivotCandle.getVwap() + " Pivot Range Date: "
-							+ pivotRangeCandle.getPeriod() + " Pivot H/L:"
-							+ pivotRangeCandle.getVwap() + " Pivot range: "
-							+ entryLimit.getPivotRange() + " Pivot Side: "
-							+ pivotSide);
-					_log.info("Pivot: " + calcPivot.toString());
+					// _log.info("Pivot Date: "
+					// + pivotCandle.getPeriod()
+					// + " Period Index: "
+					// + ((CandlePeriod) pivotCandle.getPeriod())
+					// .getDaySerialIndex() + " Pivot Price: "
+					// + pivotCandle.getVwap() + " Pivot Range Date: "
+					// + pivotRangeCandle.getPeriod() + " Pivot H/L:"
+					// + pivotRangeCandle.getVwap() + " Pivot range: "
+					// + entryLimit.getPivotRange() + " Pivot Side: "
+					// + pivotSide);
+					// _log.info("Pivot: " + calcPivot.toString());
 
 					if (null != entryLimit
 							&& entryLimit.getPivotRange().doubleValue() <= pivotRange
