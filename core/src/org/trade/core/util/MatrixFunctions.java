@@ -44,7 +44,7 @@ import java.util.Hashtable;
  */
 public final class MatrixFunctions {
 
-	private int listingForm = 0;
+	private static int listingForm = 0;
 
 	public MatrixFunctions() {
 
@@ -59,7 +59,7 @@ public final class MatrixFunctions {
 	 *            Integer
 	 * @return double[]
 	 */
-	public double[] solve(Pair[] pairs, Integer polyOrder) {
+	public static synchronized double[] solve(Pair[] pairs, Integer polyOrder) {
 		int size = pairs.length;
 		if (size > 1) {
 			return getCalculatedCoeffients(pairs, polyOrder);
@@ -76,13 +76,13 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return boolean
 	 */
-	public boolean updateXYPairs(Hashtable<Long, Pair> userDataVector,
-			double[] terms) {
+	public static synchronized boolean updateXYPairs(
+			Hashtable<Long, Pair> userDataVector, double[] terms) {
 		boolean updated = false;
 		for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs
 				.hasMoreElements();) {
 			Pair pair = enumPairs.nextElement();
-			double y = this.fx(pair.x, terms);
+			double y = fx(pair.x, terms);
 			pair.y = y;
 			updated = true;
 		}
@@ -98,7 +98,8 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return double
 	 */
-	public double getCorrelationCoefficient(Pair[] data, double[] terms) {
+	public static synchronized double getCorrelationCoefficient(Pair[] data,
+			double[] terms) {
 		double r = 0;
 		int n = data.length;
 		double sx = 0, sx2 = 0, sy = 0, sy2 = 0, sxy = 0;
@@ -129,7 +130,8 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return double
 	 */
-	public double getStandardError(Pair[] data, double[] terms) {
+	public static synchronized double getStandardError(Pair[] data,
+			double[] terms) {
 		double r = 0;
 		int n = data.length;
 		if (n > 2) {
@@ -151,7 +153,8 @@ public final class MatrixFunctions {
 	 *            int
 	 * @return double[]
 	 */
-	public double[] getCalculatedCoeffients(Pair[] data, int p) {
+	public static synchronized double[] getCalculatedCoeffients(Pair[] data,
+			int p) {
 		p += 1;
 		int n = data.length;
 		int r, c;
@@ -204,7 +207,7 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return double
 	 */
-	public double fx(double x, double[] terms) {
+	public static synchronized double fx(double x, double[] terms) {
 		double a = 0;
 		int e = 0;
 		for (double i : terms) {
@@ -226,7 +229,7 @@ public final class MatrixFunctions {
 	 * @param m
 	 *            int
 	 */
-	private void gj_divide(double[][] A, int i, int j, int m) {
+	private static synchronized void gj_divide(double[][] A, int i, int j, int m) {
 		for (int q = j + 1; q < m; q++) {
 			A[i][q] /= A[i][j];
 		}
@@ -247,7 +250,8 @@ public final class MatrixFunctions {
 	 * @param m
 	 *            int
 	 */
-	private void gj_eliminate(double[][] A, int i, int j, int n, int m) {
+	private static synchronized void gj_eliminate(double[][] A, int i, int j,
+			int n, int m) {
 		for (int k = 0; k < n; k++) {
 			if ((k != i) && (A[k][j] != 0)) {
 				for (int q = j + 1; q < m; q++) {
@@ -264,7 +268,7 @@ public final class MatrixFunctions {
 	 * @param A
 	 *            double[][]
 	 */
-	private void gj_echelonize(double[][] A) {
+	private static synchronized void gj_echelonize(double[][] A) {
 		int n = A.length;
 		int m = A[0].length;
 		int i = 0;
@@ -312,8 +316,9 @@ public final class MatrixFunctions {
 	 *            int
 	 * @return String
 	 */
-	public String toPrint(int polyOrder, double correlationCoeff,
-			double standardDeviation, double[] terms, int dataPoints) {
+	public static synchronized String toPrint(int polyOrder,
+			double correlationCoeff, double standardDeviation, double[] terms,
+			int dataPoints) {
 
 		String styleTag[] = { "", "pow", "Math.pow" };
 		int n = dataPoints;
@@ -364,7 +369,7 @@ public final class MatrixFunctions {
 	 *            boolean
 	 * @return String
 	 */
-	private String formatNum(double n, boolean wide) {
+	private static synchronized String formatNum(double n, boolean wide) {
 		String w = (wide) ? "21" : "";
 		return String.format("%" + w + ".12e", n);
 	}

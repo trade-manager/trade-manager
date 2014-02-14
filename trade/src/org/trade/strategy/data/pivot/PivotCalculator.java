@@ -53,7 +53,6 @@ public class PivotCalculator {
 	private final static Logger _log = LoggerFactory
 			.getLogger(PivotCalculator.class);
 
-	private MatrixFunctions matrixFunctions = new MatrixFunctions();
 	private static int _polyOrder = 2; // default order
 	private static double _minCorrelationCoeff = 0.6;
 
@@ -78,20 +77,20 @@ public class PivotCalculator {
 		int size = pairs.size();
 		if (size > 1) {
 			Pair[] userData = pairs.toArray(new Pair[] {});
-			double[] terms = matrixFunctions.getCalculatedCoeffients(userData,
+			double[] terms = MatrixFunctions.getCalculatedCoeffients(userData,
 					_polyOrder);
-			double correlationCoeff = matrixFunctions
+			double correlationCoeff = MatrixFunctions
 					.getCorrelationCoefficient(userData, terms);
-			double standardError = matrixFunctions.getStandardError(userData,
+			double standardError = MatrixFunctions.getStandardError(userData,
 					terms);
 			if (correlationCoeff > _minCorrelationCoeff) {
 				isPivot = true;
-				String output = matrixFunctions
+				String output = MatrixFunctions
 						.toPrint(_polyOrder, correlationCoeff, standardError,
 								terms, userData.length);
 				_log.info("Pivot Calc: " + output);
 				for (Pair pair : pairs) {
-					double y = matrixFunctions.fx(pair.x, terms);
+					double y = MatrixFunctions.fx(pair.x, terms);
 					pair.y = y;
 				}
 			}

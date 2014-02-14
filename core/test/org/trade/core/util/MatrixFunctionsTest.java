@@ -35,6 +35,8 @@
  */
 package org.trade.core.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import java.util.Collections;
@@ -59,15 +61,12 @@ public class MatrixFunctionsTest extends TestCase {
 	private final static Logger _log = LoggerFactory
 			.getLogger(MatrixFunctionsTest.class);
 
-	MatrixFunctions matrixFunctions = null;
-
 	/**
 	 * Method setUp.
 	 * 
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
-		matrixFunctions = new MatrixFunctions();
 	}
 
 	/**
@@ -84,7 +83,7 @@ public class MatrixFunctionsTest extends TestCase {
 			List<Pair> pairs = new ArrayList<Pair>();
 			int polyOrder = 2;
 			double vwap = 30.94;
-			int longShort = -1;
+			int longShort = 1;
 
 			CandlePeriod period = new CandlePeriod(
 					TradingCalendar.getBusinessDayStart(new Date()), 300);
@@ -104,30 +103,32 @@ public class MatrixFunctionsTest extends TestCase {
 
 			Collections.sort(pairs, Pair.X_VALUE_ASC);
 			for (Pair pair : pairs) {
-				_log.error("x: " + pair.x + " y: " + pair.y);
+				_log.info("x: " + pair.x + " y: " + pair.y);
 			}
 			Pair[] pairsArray = pairs.toArray(new Pair[] {});
-			double[] terms = matrixFunctions.solve(pairsArray, polyOrder);
-			double correlationCoeff = matrixFunctions
+			double[] terms = MatrixFunctions.solve(pairsArray, polyOrder);
+			double correlationCoeff = MatrixFunctions
 					.getCorrelationCoefficient(pairsArray, terms);
-			double standardError = matrixFunctions.getStandardError(pairsArray,
+			double standardError = MatrixFunctions.getStandardError(pairsArray,
 					terms);
-			String output = matrixFunctions.toPrint(polyOrder,
+			String output = MatrixFunctions.toPrint(polyOrder,
 					correlationCoeff, standardError, terms, pairsArray.length);
-			_log.error("Pivot Calc: " + output);
+			_log.info("Pivot Calc: " + output);
 
 			for (Pair pair : pairs) {
-				double y = matrixFunctions.fx(pair.x, terms);
+				double y = MatrixFunctions.fx(pair.x, terms);
 				pair.y = y;
-				_log.error("x: " + pair.x + " y: " + pair.y);
+				_log.info("x: " + pair.x + " y: " + pair.y);
 			}
 			Pair startXY = pairs.get(0);
 			Pair endXY = pairs.get(pairs.size() - 1);
-			double angle = Math.atan((endXY.y - startXY.y)
+			double atan = Math.atan((endXY.y - startXY.y)
 					/ ((endXY.x - startXY.x)));
-
-			_log.error("angle: " + (angle * 180) / Math.PI);
-			TestCase.assertFalse(false);
+			double angle = (atan * 180) / Math.PI;
+			_log.info("angle: " + angle);
+			TestCase.assertEquals(67.38,
+					new BigDecimal(angle).setScale(2, RoundingMode.HALF_UP)
+							.doubleValue());
 
 		} catch (Exception ex) {
 			_log.error("Error testAngle: " + ex.getMessage(), ex);
