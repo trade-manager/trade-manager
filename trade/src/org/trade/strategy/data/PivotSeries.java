@@ -359,6 +359,9 @@ public class PivotSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 
+		if (!newBar)
+			return;
+
 		PivotItem dataItem = null;
 		Hashtable<Long, Pair> userDataVector = new Hashtable<Long, Pair>();
 		DAOEntryLimit entryLimits = new DAOEntryLimit();
@@ -372,7 +375,7 @@ public class PivotSeries extends IndicatorSeries {
 		 * Start with the previous bar and work back
 		 */
 		int middleBar = (this.getBars() - 1) / 2;
-		int startBar = skip;
+		int startBar = skip - 1;
 		if ((startBar + 1) >= this.getBars()) {
 			// Get the x,y pairs
 			for (int i = startBar; i > (startBar - this.getBars()); i--) {
