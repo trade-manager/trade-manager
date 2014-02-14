@@ -35,7 +35,6 @@
  */
 package org.trade.strategy;
 
-
 import java.util.Collections;
 import java.util.Date;
 
@@ -181,9 +180,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			}
 
 			/*
-			 * TODO this check will plot the last three vwaps as y = a + bx +
-			 * cx^2 with a correlation coeff of 0.6 then extrapolate the next
-			 * vwap. If that is beyond the stop it will move the stop to b.e.
+			 * TODO We the first pivot as a point to take profits.
 			 * 
 			 * Note this is just an example need refining.
 			 */
@@ -246,6 +243,14 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			// }
 			// }
 
+			/*
+			 * TODO this check will plot the last three vwaps as y = a + bx +
+			 * cx^2 with a correlation coeff of 0.6 then extrapolate the next
+			 * vwap. If that is beyond the stop it will move the stop to b.e.
+			 * 
+			 * Note this is just an example need refining.
+			 */
+
 			// if
 			// (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
 			// 9, 50)) && newBar) {
@@ -253,7 +258,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			// _log.info("Symbol: " + this.getSymbol() + " Current Time: "
 			// + currentCandleItem.getPeriod().getStart() + " vwap: "
 			// + currentCandleItem.getVwap());
-			//  MatrixFunctions matrixFunctions = new MatrixFunctions();
+			// MatrixFunctions matrixFunctions = new MatrixFunctions();
 			// int barBack = 3;
 			// int polyOrder = 2;
 			// double _minCorrelationCoeff = 0.6;
