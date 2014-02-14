@@ -112,12 +112,12 @@ public class MatrixFunctionsTest extends TestCase {
 					.getCorrelationCoefficient(pairsArray, terms);
 			double standardError = matrixFunctions.getStandardError(pairsArray,
 					terms);
-			String output = MatrixFunctions.toPrint(polyOrder,
+			String output = matrixFunctions.toPrint(polyOrder,
 					correlationCoeff, standardError, terms, pairsArray.length);
 			_log.error("Pivot Calc: " + output);
 
 			for (Pair pair : pairs) {
-				double y = MatrixFunctions.fx(pair.x, terms);
+				double y = matrixFunctions.fx(pair.x, terms);
 				pair.y = y;
 				_log.error("x: " + pair.x + " y: " + pair.y);
 			}

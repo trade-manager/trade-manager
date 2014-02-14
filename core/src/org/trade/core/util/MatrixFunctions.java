@@ -44,7 +44,7 @@ import java.util.Hashtable;
  */
 public final class MatrixFunctions {
 
-	private static int listingForm = 0;
+	private int listingForm = 0;
 
 	public MatrixFunctions() {
 
@@ -82,7 +82,7 @@ public final class MatrixFunctions {
 		for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs
 				.hasMoreElements();) {
 			Pair pair = enumPairs.nextElement();
-			double y = MatrixFunctions.fx(pair.x, terms);
+			double y = this.fx(pair.x, terms);
 			pair.y = y;
 			updated = true;
 		}
@@ -204,7 +204,7 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return double
 	 */
-	public static double fx(double x, double[] terms) {
+	public double fx(double x, double[] terms) {
 		double a = 0;
 		int e = 0;
 		for (double i : terms) {
@@ -312,7 +312,7 @@ public final class MatrixFunctions {
 	 *            int
 	 * @return String
 	 */
-	public static String toPrint(int polyOrder, double correlationCoeff,
+	public String toPrint(int polyOrder, double correlationCoeff,
 			double standardDeviation, double[] terms, int dataPoints) {
 
 		String styleTag[] = { "", "pow", "Math.pow" };
@@ -364,7 +364,7 @@ public final class MatrixFunctions {
 	 *            boolean
 	 * @return String
 	 */
-	private static String formatNum(double n, boolean wide) {
+	private String formatNum(double n, boolean wide) {
 		String w = (wide) ? "21" : "";
 		return String.format("%" + w + ".12e", n);
 	}
