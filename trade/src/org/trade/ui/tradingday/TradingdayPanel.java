@@ -668,7 +668,7 @@ public class TradingdayPanel extends BasePanel {
 	}
 
 	/**
-	 * This is fired when the tool-bar Refresh button is pressed.
+	 * Method doRefresh. Refresh the tradingday from the database.
 	 * 
 	 * @param tradingday
 	 *            Tradingday the selected tradingday to be refreshed.
@@ -684,15 +684,7 @@ public class TradingdayPanel extends BasePanel {
 						.findTradingdayById(tradingday.getIdTradingDay());
 				instance.populateStrategyData(tradingday);
 				m_tradingdays.replaceTradingday(instance);
-				int selectedRow = m_tradingdayTable.getSelectedRow();
-				m_tradingdayModel.setData(m_tradingdays);
-				if (selectedRow > -1) {
-					m_tradingdayTable.setRowSelectionInterval(selectedRow,
-							selectedRow);
-				} else {
-					m_tradestrategyModel.setData(instance);
-					enableTradestrategyButtons(null);
-				}
+				doRefreshTable(tradingday);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(),
@@ -700,6 +692,12 @@ public class TradingdayPanel extends BasePanel {
 		}
 	}
 
+	/**
+	 * Method doRefresh. This is fired when the tool-bar Refresh button is
+	 * pressed.
+	 * 
+	 * 
+	 */
 	public void doRefresh() {
 		int row = m_tradingdayTable.getSelectedRow();
 		if (row > -1) {
@@ -716,8 +714,33 @@ public class TradingdayPanel extends BasePanel {
 	}
 
 	/**
-	 * This is fired when the menu-bar Contract Details is pressed from the
-	 * Action menu.
+	 * Method doRefreshTable. Refresh the tradingday from the database.
+	 * 
+	 * @param tradingday
+	 *            Tradingday the selected tradingday to be refreshed.
+	 * 
+	 */
+	public void doRefreshTable(Tradingday tradingday) {
+		try {
+			this.clearStatusBarMessage();
+			int selectedRow = m_tradingdayTable.getSelectedRow();
+			m_tradingdayModel.setData(m_tradingdays);
+			if (selectedRow > -1) {
+				m_tradingdayTable.setRowSelectionInterval(selectedRow,
+						selectedRow);
+			} else {
+				m_tradestrategyModel.setData(tradingday);
+				enableTradestrategyButtons(null);
+			}
+		} catch (Exception ex) {
+			this.setErrorMessage("Error refreshing Tradingday.",
+					ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 * Method doProperties. This is fired when the menu-bar Contract Details is
+	 * pressed from the Action menu.
 	 * 
 	 */
 

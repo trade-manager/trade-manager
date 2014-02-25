@@ -2637,6 +2637,71 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
+	 * Method validateBrokerData.
+	 * 
+	 * 1 Y 1 day
+	 * 
+	 * 6 M 1 day
+	 * 
+	 * 3 M 1 day
+	 * 
+	 * 1 M 1 day, 1 hour
+	 * 
+	 * 1 W 1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins,
+	 * 2 mins, 1 min
+	 * 
+	 * 1 D 1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs
+	 * 
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * 
+	 * @return boolean
+	 * @throws BrokerModelException
+	 */
+
+	public boolean validateBrokerData(Tradestrategy tradestrategy)
+			throws BrokerModelException {
+
+		boolean valid = true;
+		String errorMsg = "Symbol: "
+				+ tradestrategy.getContract().getSymbol()
+				+ " Bar Size/Chart Days combination was not valid for TWS API, these values have been updated.\n Please validate and save.";
+		if (tradestrategy.getChartDays() > 1
+				&& (tradestrategy.getBarSize() < 60)) {
+			tradestrategy.setBarSize(60);
+			valid = false;
+		} else if (tradestrategy.getChartDays() > 7
+				&& tradestrategy.getBarSize() < 3600) {
+			tradestrategy.setBarSize(3600);
+			valid = false;
+		} else if (tradestrategy.getChartDays() > 30) {
+			tradestrategy.setBarSize(1);
+			valid = false;
+		}
+
+		if (tradestrategy.getBarSize() == 30
+				&& tradestrategy.getChartDays() > 1) {
+			tradestrategy.setChartDays(1);
+			valid = false;
+		} else if (tradestrategy.getBarSize() <= 1800
+				&& tradestrategy.getChartDays() > 7) {
+			tradestrategy.setChartDays(7);
+			valid = false;
+		} else if (tradestrategy.getBarSize() == 3600
+				&& tradestrategy.getChartDays() > 30) {
+			tradestrategy.setChartDays(30);
+			valid = false;
+		}
+		if (!valid) {
+			tradestrategy.setDirty(true);
+			throw new BrokerModelException(1, 3901, errorMsg);
+		}
+
+		return valid;
+	}
+
+	/**
 	 * Method getIBContract.
 	 * 
 	 * @param contract
@@ -3381,65 +3446,5 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				+ execution.m_clientId + " PermId: " + execution.m_permId
 				+ " ExecId: " + execution.m_execId + " Time: "
 				+ execution.m_time + " CumQty: " + execution.m_cumQty);
-	}
-
-	/**
-	 * Method valicateHistoryBarSize.
-	 * 
-	 * 1 Y 1 day
-	 * 
-	 * 6 M 1 day
-	 * 
-	 * 3 M 1 day
-	 * 
-	 * 1 M 1 day, 1 hour
-	 * 
-	 * 1 W 1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins,
-	 * 2 mins, 1 min
-	 * 
-	 * 1 D 1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs
-	 * 
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * 
-	 * @return boolean
-	 */
-
-	public boolean valicateHistoryBarSize(Tradestrategy tradestrategy) {
-
-		boolean valid = true;
-		if (tradestrategy.getChartDays() > 1
-				&& (tradestrategy.getBarSize() < 60 && tradestrategy
-						.getBarSize() != 1)) {
-			tradestrategy.setBarSize(60);
-			valid = false;
-		} else if (tradestrategy.getChartDays() > 5
-				&& (tradestrategy.getBarSize() < 3600 && tradestrategy
-						.getBarSize() != 1)) {
-			tradestrategy.setBarSize(3600);
-			valid = false;
-		} else if (tradestrategy.getChartDays() > 30
-				&& tradestrategy.getBarSize() != 1) {
-			tradestrategy.setBarSize(1);
-			valid = false;
-		}
-
-		if (tradestrategy.getBarSize() == 30
-				&& tradestrategy.getChartDays() > 1) {
-			tradestrategy.setChartDays(1);
-			valid = false;
-		} else if ((tradestrategy.getBarSize() <= 1800 && tradestrategy
-				.getBarSize() != 1) && tradestrategy.getChartDays() > 5) {
-			tradestrategy.setChartDays(5);
-			valid = false;
-		} else if ((tradestrategy.getBarSize() == 3600 && tradestrategy
-				.getBarSize() != 1) && tradestrategy.getChartDays() > 30) {
-			tradestrategy.setChartDays(30);
-			valid = false;
-		}
-		if (!valid)
-			tradestrategy.setDirty(true);
-		return valid;
 	}
 }

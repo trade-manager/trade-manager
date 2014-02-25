@@ -425,14 +425,16 @@ public interface BrokerModel {
 	void setBrokerDataOnly(boolean brokerDataOnly);
 
 	/**
-	 * Method valicateHistoryBarSize.
+	 * Method validateBrokerData.
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * 
 	 * @return boolean
+	 * @throws BrokerModelException
 	 */
 
-	boolean valicateHistoryBarSize(Tradestrategy tradestrategy);
+	boolean validateBrokerData(Tradestrategy tradestrategy)
+			throws BrokerModelException;
 
 }

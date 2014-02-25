@@ -1319,6 +1319,55 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	}
 
 	/**
+	 * Method validateBrokerData.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * 
+	 * @return boolean
+	 * @throws BrokerModelException
+	 */
+
+	public boolean validateBrokerData(Tradestrategy tradestrategy)
+			throws BrokerModelException {
+
+		boolean valid = true;
+		String errorMsg = "Symbol: "
+				+ tradestrategy.getContract().getSymbol()
+				+ " Bar Size/Chart Days combination was not valid for Yahoo API, these values have been updated.\n Please validate and save.";
+		if (tradestrategy.getBarSize() < 60) {
+			tradestrategy.setBarSize(60);
+			valid = false;
+
+		} else if ((tradestrategy.getChartDays() > 1 && tradestrategy
+				.getChartDays() < 7) && tradestrategy.getBarSize() < 300) {
+			tradestrategy.setBarSize(300);
+			valid = false;
+
+		} else if (tradestrategy.getChartDays() > 30
+				&& (tradestrategy.getBarSize() <= 3600)) {
+			tradestrategy.setBarSize(1);
+			valid = false;
+		}
+
+		if ((tradestrategy.getBarSize() < 300)
+				&& tradestrategy.getChartDays() > 1) {
+			tradestrategy.setChartDays(1);
+			valid = false;
+		} else if (tradestrategy.getBarSize() <= 3600
+				&& tradestrategy.getChartDays() > 30) {
+			tradestrategy.setChartDays(7);
+			valid = false;
+		}
+		if (!valid) {
+			tradestrategy.setDirty(true);
+			throw new BrokerModelException(1, 3901, errorMsg);
+		}
+
+		return true;
+	}
+
+	/**
 	 * Method logOrderState.
 	 * 
 	 * @param orderState
@@ -1740,51 +1789,5 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				+ " AveragePrice: " + execution.getAveragePrice() + " Price: "
 				+ execution.getPrice() + " CumulativeQuantity: "
 				+ execution.getCumulativeQuantity());
-	}
-
-	/**
-	 * Method valicateHistoryBarSize.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * 
-	 * @return boolean
-	 */
-
-	public boolean valicateHistoryBarSize(Tradestrategy tradestrategy) {
-
-		boolean valid = true;
-		if (tradestrategy.getChartDays() > 1
-				&& (tradestrategy.getBarSize() < 60 && tradestrategy
-						.getBarSize() != 1)) {
-			tradestrategy.setBarSize(60);
-			valid = false;
-		} else if (tradestrategy.getChartDays() > 5
-				&& (tradestrategy.getBarSize() < 3600 && tradestrategy
-						.getBarSize() != 1)) {
-			tradestrategy.setBarSize(3600);
-			valid = false;
-		} else if (tradestrategy.getChartDays() > 30
-				&& tradestrategy.getBarSize() != 1) {
-			tradestrategy.setBarSize(1);
-			valid = false;
-		}
-
-		if (tradestrategy.getBarSize() == 30
-				&& tradestrategy.getChartDays() > 1) {
-			tradestrategy.setChartDays(1);
-			valid = false;
-		} else if ((tradestrategy.getBarSize() <= 1800 && tradestrategy
-				.getBarSize() != 1) && tradestrategy.getChartDays() > 5) {
-			tradestrategy.setChartDays(5);
-			valid = false;
-		} else if ((tradestrategy.getBarSize() == 3600 && tradestrategy
-				.getBarSize() != 1) && tradestrategy.getChartDays() > 30) {
-			tradestrategy.setChartDays(30);
-			valid = false;
-		}
-		if (!valid)
-			tradestrategy.setDirty(true);
-		return valid;
 	}
 }

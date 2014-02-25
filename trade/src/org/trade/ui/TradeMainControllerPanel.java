@@ -1769,9 +1769,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 											+ "\n"
 											+ "Chart Hist = 1 D, Bar Size >= 1min"
 											+ "\n"
-											+ "Chart Hist > 1 D to 1 W, Bar Size >= 5min"
+											+ "Chart Hist > 1 D to 1 M, Bar Size >= 5min"
 											+ "\n"
-											+ "Chart Hist > 1 D to 3 M, Bar Size = 1 day",
+											+ "Chart Hist > 1 M to 3 M, Bar Size = 1 day",
 									"Information", JOptionPane.YES_NO_OPTION);
 					if (result == JOptionPane.NO_OPTION) {
 						return;
@@ -1805,21 +1805,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
-						if (!m_brokerModel
-								.valicateHistoryBarSize(tradestrategy)) {
-							JOptionPane
-									.showConfirmDialog(
-											this.getFrame(),
-											"Symbol: "
-													+ tradestrategy
-															.getContract()
-															.getSymbol()
-													+ " Bar Size/Chart Days combination was not valid for TWS these values have been updated.\n Please validate and save.",
-											"Warning",
-											JOptionPane.OK_CANCEL_OPTION);
-							tradingdayPanel.doRefresh(tradingday);
+						try {
+							if (!m_brokerModel
+									.validateBrokerData(tradestrategy)) {
+								return;
+							}
+						} catch (BrokerModelException ex) {
+							tradingdayPanel.doRefreshTable(tradingday);
+							JOptionPane.showConfirmDialog(this.getFrame(),
+									ex.getMessage(), "Warning",
+									JOptionPane.OK_CANCEL_OPTION);
 							return;
 						}
+
 						if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 							int result = JOptionPane.showConfirmDialog(this
 									.getFrame(),
@@ -2207,21 +2205,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.getTradestrategies()) {
 							if (backTestBarSize < itemTradestrategy
 									.getBarSize()) {
-								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
-										.clone();
-								tradestrategy.setBarSize(backTestBarSize);
-								tradestrategy.setChartDays(1);
-								tradestrategy
-										.setIdTradeStrategy(this.brokerModel
-												.getNextRequestId());
-								/*
-								 * Refresh the data set container as these may
-								 * have changed.
-								 */
-								tradestrategy.setStrategyData(null);
-								tradingday.addTradestrategy(tradestrategy);
-								addIndicatorTradestrategyToTradingday(
-										tradingday, tradestrategy);
+								try {
+									Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
+											.clone();
+									tradestrategy.setBarSize(backTestBarSize);
+									tradestrategy.setChartDays(1);
+									tradestrategy
+											.setIdTradeStrategy(this.brokerModel
+													.getNextRequestId());
+									if (m_brokerModel
+											.validateBrokerData(tradestrategy)) {
+
+										/*
+										 * Refresh the data set container as
+										 * these may have changed.
+										 */
+										tradestrategy.setStrategyData(null);
+										tradingday
+												.addTradestrategy(tradestrategy);
+										addIndicatorTradestrategyToTradingday(
+												tradingday, tradestrategy);
+									}
+								} catch (BrokerModelException ex) {
+									// Do nothing the Barsize/Charts Days are
+									// not valid.
+									continue;
+								}
 							}
 						}
 						totalSumbitted = processTradingday(
