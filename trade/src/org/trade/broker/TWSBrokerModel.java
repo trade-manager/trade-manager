@@ -2666,7 +2666,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		boolean valid = true;
 		String errorMsg = "Symbol: "
 				+ tradestrategy.getContract().getSymbol()
-				+ " Bar Size/Chart Days combination was not valid for TWS API, these values have been updated.\n Please validate and save.";
+				+ " Bar Size/Chart Days combination was not valid for TWS API, these values have been updated.\n Please validate and save.\n "
+				+ "Note Chart Days/BarSize combinations for IB TWS:\n "
+				+ "Chart Hist/Bar Size 1 Y/1 day, 6 M/1 day, 3 M/1 day 1 M/(1 day, 1 hour)\n "
+				+ "Chart Hist 1 W/ Bar Size(1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins, 2 mins, 1 min)\n "
+				+ "Chart Hist 1 D/ Bar Size(1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs)\n ";
 		if (tradestrategy.getChartDays() > 1
 				&& (tradestrategy.getBarSize() < 60)) {
 			tradestrategy.setBarSize(60);

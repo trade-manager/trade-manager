@@ -112,10 +112,7 @@ public class TradestrategyTableModel extends TableModel {
 					+ "Note the default is set in the config.properties (<b>trade.strategy.default</b>)</html>",
 			null,
 			"Portfolio",
-			"<html>Bar size for strategy <br/>"
-					+ "<b>1 Y</b>(1 day), <b>6 M</b>(1 day), <b>3 M</b>(1 day) <b>1 M</b>(1 day, 1 hour)<br/>"
-					+ "<b>1 W</b>(1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins, 2 mins, 1 min)<br/>"
-					+ "<b>1 D</b>(1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs)<br>"
+			"<html>Bar size for strategy. Note Chart Days/BarSize combinations for IB:<br/>"
 					+ "Note the default is set in the config.properties (<b>trade.backfill.barsize</b>)</html>",
 			"<html>Historical data to pull in i.e 2D is today + yesterday<br>"
 					+ "Note the default is set in the config.properties (<b>trade.backfill.duration</b>)</html>",
