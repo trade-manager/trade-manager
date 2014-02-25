@@ -1805,6 +1805,21 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
+						if (!m_brokerModel
+								.valicateHistoryBarSize(tradestrategy)) {
+							JOptionPane
+									.showConfirmDialog(
+											this.getFrame(),
+											"Symbol: "
+													+ tradestrategy
+															.getContract()
+															.getSymbol()
+													+ " Bar Size/Chart Days combination was not valid for TWS these values have been updated.\n Please validate and save.",
+											"Warning",
+											JOptionPane.OK_CANCEL_OPTION);
+							tradingdayPanel.doRefresh(tradingday);
+							return;
+						}
 						if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 							int result = JOptionPane.showConfirmDialog(this
 									.getFrame(),
@@ -1820,6 +1835,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								return;
 							}
 						}
+
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
 							Date endDate = TradingCalendar
 									.getSpecificTime(

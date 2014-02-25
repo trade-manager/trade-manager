@@ -1741,4 +1741,50 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				+ execution.getPrice() + " CumulativeQuantity: "
 				+ execution.getCumulativeQuantity());
 	}
+
+	/**
+	 * Method valicateHistoryBarSize.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * 
+	 * @return boolean
+	 */
+
+	public boolean valicateHistoryBarSize(Tradestrategy tradestrategy) {
+
+		boolean valid = true;
+		if (tradestrategy.getChartDays() > 1
+				&& (tradestrategy.getBarSize() < 60 && tradestrategy
+						.getBarSize() != 1)) {
+			tradestrategy.setBarSize(60);
+			valid = false;
+		} else if (tradestrategy.getChartDays() > 5
+				&& (tradestrategy.getBarSize() < 3600 && tradestrategy
+						.getBarSize() != 1)) {
+			tradestrategy.setBarSize(3600);
+			valid = false;
+		} else if (tradestrategy.getChartDays() > 30
+				&& tradestrategy.getBarSize() != 1) {
+			tradestrategy.setBarSize(1);
+			valid = false;
+		}
+
+		if (tradestrategy.getBarSize() == 30
+				&& tradestrategy.getChartDays() > 1) {
+			tradestrategy.setChartDays(1);
+			valid = false;
+		} else if ((tradestrategy.getBarSize() <= 1800 && tradestrategy
+				.getBarSize() != 1) && tradestrategy.getChartDays() > 5) {
+			tradestrategy.setChartDays(5);
+			valid = false;
+		} else if ((tradestrategy.getBarSize() == 3600 && tradestrategy
+				.getBarSize() != 1) && tradestrategy.getChartDays() > 30) {
+			tradestrategy.setChartDays(30);
+			valid = false;
+		}
+		if (!valid)
+			tradestrategy.setDirty(true);
+		return valid;
+	}
 }

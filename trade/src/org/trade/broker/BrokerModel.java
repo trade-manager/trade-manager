@@ -424,4 +424,15 @@ public interface BrokerModel {
 	 */
 	void setBrokerDataOnly(boolean brokerDataOnly);
 
+	/**
+	 * Method valicateHistoryBarSize.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * 
+	 * @return boolean
+	 */
+
+	boolean valicateHistoryBarSize(Tradestrategy tradestrategy);
+
 }
