@@ -291,6 +291,14 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				 */
 
 				ruleComplete.set(0);
+
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
+						.getContract().setLastAskPrice(candle.getClose());
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
+						.getContract().setLastBidPrice(candle.getClose());
+				this.tradestrategy.getStrategyData().getBaseCandleSeries()
+						.getContract().setLastPrice(candle.getClose());
+
 				this.tradestrategy.getStrategyData().buildCandle(
 						candle.getStartPeriod(),
 						candle.getOpen().doubleValue(),
@@ -300,13 +308,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 						candle.getVwap().doubleValue(), candle.getTradeCount(),
 						this.tradestrategy.getBarSize() / candle.getBarSize(),
 						candle.getLastUpdateDate());
-
-				this.tradestrategy.getStrategyData().getBaseCandleSeries()
-						.getContract().setLastAskPrice(candle.getClose());
-				this.tradestrategy.getStrategyData().getBaseCandleSeries()
-						.getContract().setLastBidPrice(candle.getClose());
-				this.tradestrategy.getStrategyData().getBaseCandleSeries()
-						.getContract().setLastPrice(candle.getClose());
 
 				/*
 				 * Wait for the candle to be processed by the strategy.

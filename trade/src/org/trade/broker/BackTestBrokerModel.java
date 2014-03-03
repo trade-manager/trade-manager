@@ -1268,10 +1268,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 										tradestrategy.getTradingday()
 												.getClose(), date))
 							return;
-
-						tradestrategy.getStrategyData().buildCandle(date, open,
-								high, low, close, volume, vwap, tradeCount, 1,
-								null);
 						BigDecimal price = (new BigDecimal(close)).setScale(
 								SCALE, BigDecimal.ROUND_HALF_EVEN);
 						tradestrategy.getStrategyData().getBaseCandleSeries()
@@ -1280,6 +1276,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								.getContract().setLastBidPrice(price);
 						tradestrategy.getStrategyData().getBaseCandleSeries()
 								.getContract().setLastPrice(price);
+						tradestrategy.getStrategyData().buildCandle(date, open,
+								high, low, close, volume, vwap, tradeCount, 1,
+								null);
 					}
 				}
 			} else {
