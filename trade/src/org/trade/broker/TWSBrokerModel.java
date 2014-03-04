@@ -2341,10 +2341,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 										tradestrategy.getTradingday()
 												.getClose(), date))
 							return;
-
-						tradestrategy.getStrategyData().buildCandle(date, open,
-								high, low, close, volume, vwap, tradeCount, 1,
-								null);
 						BigDecimal price = (new BigDecimal(close)).setScale(
 								SCALE, BigDecimal.ROUND_HALF_EVEN);
 						tradestrategy.getStrategyData().getBaseCandleSeries()
@@ -2353,6 +2349,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								.getContract().setLastBidPrice(price);
 						tradestrategy.getStrategyData().getBaseCandleSeries()
 								.getContract().setLastPrice(price);
+						tradestrategy.getStrategyData().buildCandle(date, open,
+								high, low, close, volume, vwap, tradeCount, 1,
+								null);
 					}
 				}
 			}
