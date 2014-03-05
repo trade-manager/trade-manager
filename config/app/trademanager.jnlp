@@ -20,8 +20,8 @@
   	<jar href="lib/trademanager-2.1.jar"/>
 	<jar href="jsyntaxpane-0.9.5-b29.jar" />
 	<jar href="tws-9.69.jar" />
-	<jar href="jfreechart-1.0.15.jar" />
-	<jar href="jcommon-1.0.18.jar" />
+	<jar href="jfreechart-1.0.17.jar" />
+	<jar href="jcommon-1.0.21.jar" />
 	<jar href="swt.jar" />
 	<jar href="c3p0-0.9.2.1.jar" />
 	<jar href="classmate-1.0.0.jar" />
