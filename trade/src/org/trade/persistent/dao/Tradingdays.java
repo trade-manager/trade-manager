@@ -41,6 +41,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -530,9 +531,10 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            String
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
+	 * @throws ParseException
 	 */
 	public static Tradestrategy parseContractLine(String csvLine)
-			throws PersistentModelException {
+			throws PersistentModelException, ParseException {
 		Tradestrategy tradestrategy = null;
 		Contract contract = null;
 		Tradingday tradingday = null;
