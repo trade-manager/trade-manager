@@ -385,6 +385,14 @@ public abstract class AbstractStrategyRule extends Worker implements
 							 * gets the Orders/OpenPosition and Contract
 							 */
 							reFreshPositionOrders();
+							this.tradestrategy.getContract().setLastAskPrice(
+									candleSeries.getContract()
+											.getLastAskPrice());
+							this.tradestrategy.getContract().setLastBidPrice(
+									candleSeries.getContract()
+											.getLastBidPrice());
+							this.tradestrategy.getContract().setLastPrice(
+									candleSeries.getContract().getLastPrice());
 							runStrategy(candleSeries, newCandle);
 							strategyLastFired = new Date();
 						}
