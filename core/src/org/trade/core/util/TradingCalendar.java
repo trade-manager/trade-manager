@@ -626,26 +626,19 @@ public class TradingCalendar {
 	}
 
 	/**
-	 * Set the date in the standard CALENDAR_NY to the dtring date
+	 * Set the date in the standard CALENDAR_NY to the string date
 	 * 
 	 * @param date
 	 *            String
 	 * @param format
 	 *            String
 	 * @return Date
-	 * @exception * @see
+	 * @throws ParseException
 	 */
-	public static Date getFormattedDate(String date, String format) {
-		Date newDate = null;
-
-		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-			newDate = dateFormat.parse(date);
-		} catch (ParseException e) {
-			newDate = NULLDATE;
-		}
-
-		return newDate;
+	public static Date getFormattedDate(String date, String format)
+			throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		return dateFormat.parse(date);
 	}
 
 	/**
@@ -655,20 +648,14 @@ public class TradingCalendar {
 	 * @param date
 	 *            String
 	 * @return Date
+	 * @throws ParseException
 	 * @exception * @see
 	 */
-	public static Date getFormattedDate(String date) {
-		Date newDate = null;
-
-		try {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(dateFormat.parse(date));
-				newDate = CALENDAR_NY.getTime();
-			}
-		} catch (ParseException e) {
-			newDate = NULLDATE;
+	public static Date getFormattedDate(String date) throws ParseException {
+		synchronized (CALENDAR_NY) {
+			CALENDAR_NY.setTime(dateFormat.parse(date));
+			return CALENDAR_NY.getTime();
 		}
-		return newDate;
 	}
 
 	/**
