@@ -842,7 +842,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "timeZoneId", length = 3)
+	@Column(name = "timeZoneId", length = 40)
 	public String getTimeZoneId() {
 		return this.timeZoneId;
 	}
