@@ -492,8 +492,8 @@ public class MACDSeries extends IndicatorSeries {
 					double slowEMA = calculateEMA(this.slowYYValues, slowSum,
 							slowMultiplyer, this.getSlowLength());
 					double MACD = fastEMA - slowEMA;
-					if (this.slowYYValues.size() == (this.getSlowLength() + this
-							.getSignalSmoothing())) {
+					if (this.signalSmoothingYYValues.size() == this
+							.getSignalSmoothing()) {
 						/*
 						 * If the item does not exist in the series then this is
 						 * a new time period and so we need to remove the last
@@ -506,26 +506,26 @@ public class MACDSeries extends IndicatorSeries {
 						if (newBar) {
 							signalSmoothingSum = signalSmoothingSum
 									- this.signalSmoothingYYValues.getLast()
-									+ fastEMA;
+									+ MACD;
 							this.signalSmoothingYYValues.removeLast();
-							this.signalSmoothingYYValues.addFirst(fastEMA);
+							this.signalSmoothingYYValues.addFirst(MACD);
 
 						} else {
 							signalSmoothingSum = signalSmoothingSum
 									- this.signalSmoothingYYValues.getFirst()
-									+ fastEMA;
+									+ MACD;
 							this.signalSmoothingYYValues.removeFirst();
-							this.signalSmoothingYYValues.addFirst(fastEMA);
+							this.signalSmoothingYYValues.addFirst(MACD);
 						}
 					} else {
 						if (newBar) {
-							signalSmoothingSum = signalSmoothingSum + fastEMA;
-							this.signalSmoothingYYValues.addFirst(fastEMA);
+							signalSmoothingSum = signalSmoothingSum + MACD;
+							this.signalSmoothingYYValues.addFirst(MACD);
 						} else {
-							signalSmoothingSum = signalSmoothingSum + fastEMA
+							signalSmoothingSum = signalSmoothingSum + MACD
 									- this.signalSmoothingYYValues.getFirst();
 							this.signalSmoothingYYValues.removeFirst();
-							this.signalSmoothingYYValues.addFirst(fastEMA);
+							this.signalSmoothingYYValues.addFirst(MACD);
 						}
 					}
 					double signalLine = calculateEMA(
