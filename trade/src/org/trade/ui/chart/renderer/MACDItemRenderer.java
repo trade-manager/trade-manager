@@ -269,7 +269,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.BLACK);
+				minX, maxX, mACDDataset.getSeriesColor(0));
 
 		y1 = mACDItem.getSignalLine();
 		if (item != 0) {
@@ -277,14 +277,14 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		}
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.BLUE);
+				minX, maxX, Color.RED);
 		y1 = mACDItem.getMACDHistogram();
 		if (item != 0) {
 			y0 = prevMACDItem.getMACDHistogram();
 		}
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.RED);
+				minX, maxX, Color.BLUE);
 
 	}
 
@@ -306,6 +306,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 
 		PlotOrientation orientation = plot.getOrientation();
 		Paint paint = getItemPaint(series, item);
+		paint = color;
 		Stroke seriesStroke = getItemStroke(series, item);
 		g2.setPaint(paint);
 		g2.setStroke(seriesStroke);
