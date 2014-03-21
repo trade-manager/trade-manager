@@ -99,6 +99,10 @@ public class MACDSeries extends IndicatorSeries {
 	private double slowMultiplyer = 0;
 	private LinkedList<Double> slowYYValues = new LinkedList<Double>();
 
+	private double signalSmoothingSum = 0.0;
+	private double signalSmoothingMultiplyer = 0;
+	private LinkedList<Double> signalSmoothingYYValues = new LinkedList<Double>();
+
 	/**
 	 * Creates a new empty series. By default, items added to the series will be
 	 * sorted into ascending order by period, and duplicate periods will not be
@@ -189,6 +193,9 @@ public class MACDSeries extends IndicatorSeries {
 		slowSum = 0.0;
 		slowMultiplyer = 0;
 		slowYYValues.clear();
+		signalSmoothingSum = 0.0;
+		signalSmoothingMultiplyer = 0;
+		signalSmoothingYYValues.clear();
 	}
 
 	/**
@@ -485,16 +492,59 @@ public class MACDSeries extends IndicatorSeries {
 					double slowEMA = calculateEMA(this.slowYYValues, slowSum,
 							slowMultiplyer, this.getSlowLength());
 					double MACD = fastEMA - slowEMA;
+					if (this.slowYYValues.size() == (this.getSlowLength() + this
+							.getSignalSmoothing())) {
+						/*
+						 * If the item does not exist in the series then this is
+						 * a new time period and so we need to remove the last
+						 * in the set and add the new periods values. Otherwise
+						 * we just update the last value in the set. Sum is just
+						 * used for performance save having to sum the last set
+						 * of values each time.
+						 */
+
+						if (newBar) {
+							signalSmoothingSum = signalSmoothingSum
+									- this.signalSmoothingYYValues.getLast()
+									+ fastEMA;
+							this.signalSmoothingYYValues.removeLast();
+							this.signalSmoothingYYValues.addFirst(fastEMA);
+
+						} else {
+							signalSmoothingSum = signalSmoothingSum
+									- this.signalSmoothingYYValues.getFirst()
+									+ fastEMA;
+							this.signalSmoothingYYValues.removeFirst();
+							this.signalSmoothingYYValues.addFirst(fastEMA);
+						}
+					} else {
+						if (newBar) {
+							signalSmoothingSum = signalSmoothingSum + fastEMA;
+							this.signalSmoothingYYValues.addFirst(fastEMA);
+						} else {
+							signalSmoothingSum = signalSmoothingSum + fastEMA
+									- this.signalSmoothingYYValues.getFirst();
+							this.signalSmoothingYYValues.removeFirst();
+							this.signalSmoothingYYValues.addFirst(fastEMA);
+						}
+					}
+					double signalLine = calculateEMA(
+							this.signalSmoothingYYValues, signalSmoothingSum,
+							signalSmoothingMultiplyer,
+							this.getSignalSmoothing());
 					if (newBar) {
 						MACDItem dataItem = new MACDItem(
 								candleItem.getPeriod(), new BigDecimal(MACD),
-								new BigDecimal(MACD), new BigDecimal(MACD));
+								new BigDecimal(signalLine), new BigDecimal(MACD
+										- signalLine));
 						this.add(dataItem, false);
 
 					} else {
 						MACDItem dataItem = (MACDItem) this.getDataItem(this
 								.getItemCount() - 1);
 						dataItem.setMACD(MACD);
+						dataItem.setSignalLine(signalLine);
+						dataItem.setMACDHistogram(MACD - signalLine);
 					}
 				}
 			}
