@@ -60,6 +60,7 @@ INSERT INTO codetype (idCodeType, name, description, version) VALUES(6,'Commodit
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(7,'BollingerBands','Bollinger Bands',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(8,'StochasticOscillator','Stochastic Oscillator',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(9,'MoneyFlowIndex','Money Flow Index',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(10,'MACD','MACD',0);
 
 COMMIT;
 
@@ -86,8 +87,9 @@ INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, cla
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(21,'Inverse','Stochastic or Percent R','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 8,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(22,'Length','The length of the MFI','14','java.lang.Integer',null, 9,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(23,'RollingCandle','Use rolling candle values','false','java.lang.Boolean','org.trade.core.valuetype.YesNo', 9,0) ;
-
-
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(24,'Fast Length','The fast length of the EMA','12','java.lang.Integer',null, 10,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(25,'Slow Length','The slow length of the EMA','26','java.lang.Integer',null, 10,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(26,'Signal Smoothing','The EMA length of the MACD','9','java.lang.Integer',null, 10,0) ;
 COMMIT;
 
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(1,'SMA-20','MovingAverageSeries','Simple 20 period Moving Average',1,-52429,0,1,0) ;

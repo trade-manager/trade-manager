@@ -99,6 +99,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	public static final String BollingerBandsSeries = "BollingerBandsSeries";
 	public static final String StochasticOscillatorSeries = "StochasticOscillatorSeries";
 	public static final String MoneyFlowIndexSeries = "MoneyFlowIndexSeries";
+	public static final String MACDSeries = "MACDSeries";
 
 	private Integer idIndicatorSeries;
 	@NotNull
