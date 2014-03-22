@@ -92,14 +92,17 @@ public class MACDSeries extends IndicatorSeries {
 	private Integer signalSmoothing;
 
 	private double fastSum = 0.0;
+	private double prevFastEMA = 0;
 	private double fastMultiplyer = 0;
 	private LinkedList<Double> fastYYValues = new LinkedList<Double>();
 
 	private double slowSum = 0.0;
+	private double prevSlowEMA = 0;
 	private double slowMultiplyer = 0;
 	private LinkedList<Double> slowYYValues = new LinkedList<Double>();
 
 	private double signalSmoothingSum = 0.0;
+	private double prevSignalSmoothingEMA = 0;
 	private double signalSmoothingMultiplyer = 0;
 	private LinkedList<Double> signalSmoothingYYValues = new LinkedList<Double>();
 
@@ -196,6 +199,9 @@ public class MACDSeries extends IndicatorSeries {
 		signalSmoothingSum = 0.0;
 		signalSmoothingMultiplyer = 0;
 		signalSmoothingYYValues.clear();
+		prevFastEMA = 0;
+		prevSlowEMA = 0;
+		prevSignalSmoothingEMA = 0;
 	}
 
 	/**
@@ -484,13 +490,15 @@ public class MACDSeries extends IndicatorSeries {
 						this.slowYYValues.addFirst(yy.doubleValue());
 					}
 				}
-
+				double signalLine = Double.MAX_VALUE;
 				if (this.slowYYValues.size() == getSlowLength()) {
 
 					double fastEMA = calculateEMA(this.fastYYValues, fastSum,
-							fastMultiplyer, this.getFastLength());
+							fastMultiplyer, this.getFastLength(), prevFastEMA);
+					prevFastEMA = fastEMA;
 					double slowEMA = calculateEMA(this.slowYYValues, slowSum,
-							slowMultiplyer, this.getSlowLength());
+							slowMultiplyer, this.getSlowLength(), prevSlowEMA);
+					prevSlowEMA = slowEMA;
 					double MACD = fastEMA - slowEMA;
 					if (this.signalSmoothingYYValues.size() == this
 							.getSignalSmoothing()) {
@@ -517,6 +525,11 @@ public class MACDSeries extends IndicatorSeries {
 							this.signalSmoothingYYValues.removeFirst();
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
+						signalLine = calculateEMA(this.signalSmoothingYYValues,
+								signalSmoothingSum, signalSmoothingMultiplyer,
+								this.getSignalSmoothing(),
+								prevSignalSmoothingEMA);
+						prevSignalSmoothingEMA = signalLine;
 					} else {
 						if (newBar) {
 							signalSmoothingSum = signalSmoothingSum + MACD;
@@ -528,23 +541,24 @@ public class MACDSeries extends IndicatorSeries {
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
 					}
-					double signalLine = calculateEMA(
-							this.signalSmoothingYYValues, signalSmoothingSum,
-							signalSmoothingMultiplyer,
-							this.getSignalSmoothing());
+
 					if (newBar) {
 						MACDItem dataItem = new MACDItem(
 								candleItem.getPeriod(), new BigDecimal(MACD),
-								new BigDecimal(signalLine), new BigDecimal(MACD
-										- signalLine));
+								(signalLine == Double.MAX_VALUE ? null
+										: new BigDecimal(signalLine)),
+								(signalLine == Double.MAX_VALUE ? null
+										: new BigDecimal(MACD - signalLine)));
 						this.add(dataItem, false);
 
 					} else {
 						MACDItem dataItem = (MACDItem) this.getDataItem(this
 								.getItemCount() - 1);
 						dataItem.setMACD(MACD);
-						dataItem.setSignalLine(signalLine);
-						dataItem.setMACDHistogram(MACD - signalLine);
+						if (signalLine == Double.MAX_VALUE) {
+							dataItem.setSignalLine(signalLine);
+							dataItem.setMACDHistogram(MACD - signalLine);
+						}
 					}
 				}
 			}
@@ -561,8 +575,8 @@ public class MACDSeries extends IndicatorSeries {
 	 * @return double
 	 */
 	private double calculateEMA(LinkedList<Double> yyValues, double sum,
-			double multiplyer, Integer length) {
-		double ma = 0;
+			double multiplyer, Integer length, double preEMA) {
+		double ema = 0;
 
 		/*
 		 * Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818
@@ -570,20 +584,13 @@ public class MACDSeries extends IndicatorSeries {
 		 * EMA(previous day).
 		 */
 		if (multiplyer == 0) {
-			ma = sum / length;
+			ema = sum / length;
 			multiplyer = 2 / (length + 1.0d);
 		} else {
-			ma = ((yyValues.getFirst() - yyValues.get(1)) * multiplyer)
-					+ yyValues.get(1);
+			ema = (yyValues.getFirst() - preEMA * multiplyer) + preEMA;
 		}
-		/*
-		 * Use the EMA in the stored values as we need the previous one for the
-		 * calc.
-		 */
-		yyValues.removeFirst();
-		yyValues.addFirst(ma);
 
-		return ma;
+		return ema;
 	}
 
 	/**
