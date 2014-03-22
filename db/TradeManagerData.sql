@@ -90,6 +90,8 @@ INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, cla
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(24,'Fast Length','The fast length of the EMA','12','java.lang.Integer',null, 10,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(25,'Slow Length','The slow length of the EMA','26','java.lang.Integer',null, 10,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(26,'Signal Smoothing','The EMA length of the MACD','9','java.lang.Integer',null, 10,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(27,'Simple Smoothing MA','Use SMA for signal line smoothing','true','java.lang.Boolean','org.trade.core.valuetype.YesNo', 10,0) ;
+
 COMMIT;
 
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(1,'SMA-20','MovingAverageSeries','Simple 20 period Moving Average',1,-52429,0,1,0) ;

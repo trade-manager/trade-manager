@@ -86,7 +86,9 @@ public class MACDSeries extends IndicatorSeries {
 	public static final String FAST_LENGTH = "Fast Length";
 	public static final String SLOW_LENGTH = "Slow Length";
 	public static final String SIGNAL_SMOOTHING = "Signal Smoothing";
+	public static final String SMA_TYPE = "Simple Smoothing MA";
 
+	private Boolean simpleMAType;
 	private Integer fastLength;
 	private Integer slowLength;
 	private Integer signalSmoothing;
@@ -364,6 +366,32 @@ public class MACDSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getSimpleMAType.
+	 * 
+	 * @return Boolean
+	 */
+	@Transient
+	public Boolean getSimpleMAType() {
+		try {
+			if (null == this.simpleMAType)
+				this.simpleMAType = (Boolean) this.getValueCode(SMA_TYPE);
+		} catch (Exception e) {
+			this.simpleMAType = null;
+		}
+		return this.simpleMAType;
+	}
+
+	/**
+	 * Method setSimpleMAType.
+	 * 
+	 * @param simpleMAType
+	 *            Boolean
+	 */
+	public void setSimpleMAType(Boolean simpleMAType) {
+		this.simpleMAType = simpleMAType;
+	}
+
+	/**
 	 * Method createSeries.
 	 * 
 	 * @param source
@@ -551,21 +579,15 @@ public class MACDSeries extends IndicatorSeries {
 					}
 					double signalLine = Double.MAX_VALUE;
 					if (this.signalSmoothingYYValues.size() == getSignalSmoothing()) {
-						if (signalSmoothingMultiplyer == Double.MAX_VALUE) {
-							signalLine = signalSmoothingSum
-									/ this.getSignalSmoothing();
-							signalSmoothingMultiplyer = 2 / (this
-									.getSignalSmoothing() + 1.0d);
-						} else {
-							signalLine = ((this.signalSmoothingYYValues
-									.getFirst() - prevSignalSmoothingEMA) * signalSmoothingMultiplyer)
-									+ prevSignalSmoothingEMA;
-						}
+
+						signalLine = calculateSmoothingMA(
+								this.slowYYValues.getFirst(),
+								prevSignalSmoothingEMA, signalSmoothingSum);
 						prevSignalSmoothingEMA = signalLine;
-//						_log.error("Period: "
-//								+ candleItem.getPeriod().getStart() + "MACD: "
-//								+ MACD + " signalLine: " + signalLine
-//								+ " Histogram: " + (MACD - signalLine));
+						// _log.error("Period: "
+						// + candleItem.getPeriod().getStart() + "MACD: "
+						// + MACD + " signalLine: " + signalLine
+						// + " Histogram: " + (MACD - signalLine));
 					}
 					if (newBar) {
 						MACDItem dataItem = new MACDItem(
@@ -588,6 +610,43 @@ public class MACDSeries extends IndicatorSeries {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Method calculateMA.
+	 * 
+	 * @param calcType
+	 *            String
+	 * @param yyValues
+	 *            LinkedList<Double>
+	 * @param volValues
+	 *            LinkedList<Long>
+	 * @param sum
+	 *            Double
+	 * @return double
+	 */
+	private double calculateSmoothingMA(double close,
+			double prevSignalSmoothingEMA, Double sum) {
+
+		double ma = 0;
+		if (this.getSimpleMAType()) {
+			ma = sum / getSignalSmoothing();
+		} else {
+			/*
+			 * Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818
+			 * (18.18%). EMA: {Close - EMA(previous day)} x * multiplier +
+			 * EMA(previous day).
+			 */
+			if (signalSmoothingMultiplyer == Double.MAX_VALUE) {
+				ma = sum / getSignalSmoothing();
+				this.signalSmoothingMultiplyer = 2 / (getSignalSmoothing() + 1.0d);
+			} else {
+				ma = ((close - prevSignalSmoothingEMA) * this.signalSmoothingMultiplyer)
+						+ prevSignalSmoothingEMA;
+			}
+
+		}
+		return ma;
 	}
 
 	/**
