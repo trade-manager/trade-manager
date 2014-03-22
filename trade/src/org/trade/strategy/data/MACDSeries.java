@@ -93,17 +93,17 @@ public class MACDSeries extends IndicatorSeries {
 
 	private double fastSum = 0.0;
 	private double prevFastEMA = 0;
-	private double fastMultiplyer = 0;
+	private double fastMultiplyer = Double.MAX_VALUE;
 	private LinkedList<Double> fastYYValues = new LinkedList<Double>();
 
 	private double slowSum = 0.0;
 	private double prevSlowEMA = 0;
-	private double slowMultiplyer = 0;
+	private double slowMultiplyer = Double.MAX_VALUE;
 	private LinkedList<Double> slowYYValues = new LinkedList<Double>();
 
 	private double signalSmoothingSum = 0.0;
 	private double prevSignalSmoothingEMA = 0;
-	private double signalSmoothingMultiplyer = 0;
+	private double signalSmoothingMultiplyer = Double.MAX_VALUE;
 	private LinkedList<Double> signalSmoothingYYValues = new LinkedList<Double>();
 
 	/**
@@ -191,13 +191,13 @@ public class MACDSeries extends IndicatorSeries {
 	public void clear() {
 		super.clear();
 		fastSum = 0.0;
-		fastMultiplyer = 0;
+		fastMultiplyer = Double.MAX_VALUE;
 		fastYYValues.clear();
 		slowSum = 0.0;
-		slowMultiplyer = 0;
+		slowMultiplyer = Double.MAX_VALUE;
 		slowYYValues.clear();
 		signalSmoothingSum = 0.0;
-		signalSmoothingMultiplyer = 0;
+		signalSmoothingMultiplyer = Double.MAX_VALUE;
 		signalSmoothingYYValues.clear();
 		prevFastEMA = 0;
 		prevSlowEMA = 0;
@@ -490,16 +490,26 @@ public class MACDSeries extends IndicatorSeries {
 						this.slowYYValues.addFirst(yy.doubleValue());
 					}
 				}
-				double signalLine = Double.MAX_VALUE;
+
 				if (this.slowYYValues.size() == getSlowLength()) {
 
-					double fastEMA = calculateEMA(this.fastYYValues.getFirst(),
-							fastSum, fastMultiplyer, this.getFastLength(),
-							prevFastEMA);
+					double fastEMA = 0;
+					if (fastMultiplyer == Double.MAX_VALUE) {
+						fastEMA = fastSum / this.getFastLength();
+						fastMultiplyer = 2 / (this.getFastLength() + 1.0d);
+					} else {
+						fastEMA = ((this.fastYYValues.getFirst() - prevFastEMA) * fastMultiplyer)
+								+ prevFastEMA;
+					}
 					prevFastEMA = fastEMA;
-					double slowEMA = calculateEMA(this.slowYYValues.getFirst(),
-							slowSum, slowMultiplyer, this.getSlowLength(),
-							prevSlowEMA);
+					double slowEMA = 0;
+					if (slowMultiplyer == Double.MAX_VALUE) {
+						slowEMA = slowSum / this.getSlowLength();
+						slowMultiplyer = 2 / (this.getSlowLength() + 1.0d);
+					} else {
+						slowEMA = ((this.slowYYValues.getFirst() - prevSlowEMA) * slowMultiplyer)
+								+ prevSlowEMA;
+					}
 					prevSlowEMA = slowEMA;
 					double MACD = fastEMA - slowEMA;
 					if (this.signalSmoothingYYValues.size() == this
@@ -527,12 +537,7 @@ public class MACDSeries extends IndicatorSeries {
 							this.signalSmoothingYYValues.removeFirst();
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
-						signalLine = calculateEMA(
-								this.signalSmoothingYYValues.getFirst(),
-								signalSmoothingSum, signalSmoothingMultiplyer,
-								this.getSignalSmoothing(),
-								prevSignalSmoothingEMA);
-						prevSignalSmoothingEMA = signalLine;
+
 					} else {
 						if (newBar) {
 							signalSmoothingSum = signalSmoothingSum + MACD;
@@ -544,7 +549,24 @@ public class MACDSeries extends IndicatorSeries {
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
 					}
-
+					double signalLine = Double.MAX_VALUE;
+					if (this.signalSmoothingYYValues.size() == getSignalSmoothing()) {
+						if (signalSmoothingMultiplyer == Double.MAX_VALUE) {
+							signalLine = signalSmoothingSum
+									/ this.getSignalSmoothing();
+							signalSmoothingMultiplyer = 2 / (this
+									.getSignalSmoothing() + 1.0d);
+						} else {
+							signalLine = ((this.signalSmoothingYYValues
+									.getFirst() - prevSignalSmoothingEMA) * signalSmoothingMultiplyer)
+									+ prevSignalSmoothingEMA;
+						}
+						prevSignalSmoothingEMA = signalLine;
+//						_log.error("Period: "
+//								+ candleItem.getPeriod().getStart() + "MACD: "
+//								+ MACD + " signalLine: " + signalLine
+//								+ " Histogram: " + (MACD - signalLine));
+					}
 					if (newBar) {
 						MACDItem dataItem = new MACDItem(
 								candleItem.getPeriod(), new BigDecimal(MACD),
@@ -566,34 +588,6 @@ public class MACDSeries extends IndicatorSeries {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Method calculateEMA.
-	 * 
-	 * @param yyValues
-	 *            LinkedList<Double>
-	 * @param sum
-	 *            Double
-	 * @return double
-	 */
-	private double calculateEMA(double close, double sum, double multiplyer,
-			Integer length, double preEMA) {
-		double ema = 0;
-
-		/*
-		 * Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818
-		 * (18.18%). EMA: {Close - EMA(previous day)} x * multiplier +
-		 * EMA(previous day).
-		 */
-		if (multiplyer == 0) {
-			ema = sum / length;
-			multiplyer = 2 / (length + 1.0d);
-		} else {
-			ema = (close - preEMA * multiplyer) + preEMA;
-		}
-
-		return ema;
 	}
 
 	/**
