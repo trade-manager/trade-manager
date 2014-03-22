@@ -493,11 +493,13 @@ public class MACDSeries extends IndicatorSeries {
 				double signalLine = Double.MAX_VALUE;
 				if (this.slowYYValues.size() == getSlowLength()) {
 
-					double fastEMA = calculateEMA(this.fastYYValues, fastSum,
-							fastMultiplyer, this.getFastLength(), prevFastEMA);
+					double fastEMA = calculateEMA(this.fastYYValues.getFirst(),
+							fastSum, fastMultiplyer, this.getFastLength(),
+							prevFastEMA);
 					prevFastEMA = fastEMA;
-					double slowEMA = calculateEMA(this.slowYYValues, slowSum,
-							slowMultiplyer, this.getSlowLength(), prevSlowEMA);
+					double slowEMA = calculateEMA(this.slowYYValues.getFirst(),
+							slowSum, slowMultiplyer, this.getSlowLength(),
+							prevSlowEMA);
 					prevSlowEMA = slowEMA;
 					double MACD = fastEMA - slowEMA;
 					if (this.signalSmoothingYYValues.size() == this
@@ -525,7 +527,8 @@ public class MACDSeries extends IndicatorSeries {
 							this.signalSmoothingYYValues.removeFirst();
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
-						signalLine = calculateEMA(this.signalSmoothingYYValues,
+						signalLine = calculateEMA(
+								this.signalSmoothingYYValues.getFirst(),
 								signalSmoothingSum, signalSmoothingMultiplyer,
 								this.getSignalSmoothing(),
 								prevSignalSmoothingEMA);
@@ -574,8 +577,8 @@ public class MACDSeries extends IndicatorSeries {
 	 *            Double
 	 * @return double
 	 */
-	private double calculateEMA(LinkedList<Double> yyValues, double sum,
-			double multiplyer, Integer length, double preEMA) {
+	private double calculateEMA(double close, double sum, double multiplyer,
+			Integer length, double preEMA) {
 		double ema = 0;
 
 		/*
@@ -587,7 +590,7 @@ public class MACDSeries extends IndicatorSeries {
 			ema = sum / length;
 			multiplyer = 2 / (length + 1.0d);
 		} else {
-			ema = (yyValues.getFirst() - preEMA * multiplyer) + preEMA;
+			ema = (close - preEMA * multiplyer) + preEMA;
 		}
 
 		return ema;
