@@ -266,6 +266,9 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		int numX = mACDDataset.getItemCount(series);
 		double minX = mACDDataset.getXValue(series, 0);
 		double maxX = mACDDataset.getXValue(series, numX - 1);
+		/*
+		 * Draw MACD.
+		 */
 
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
@@ -275,16 +278,25 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		if (item != 0) {
 			y0 = prevMACDItem.getSignalLine();
 		}
+		/*
+		 * Draw MACD smoothing.
+		 */
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
 				minX, maxX, Color.RED, dataset);
 		y1 = mACDItem.getMACDHistogram();
 		if (item != 0) {
 			y0 = prevMACDItem.getMACDHistogram();
+
 		}
+		/*
+		 * Draw MACD histogram.
+		 */
+		y0 = 0;
+		x0 = x1;
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.BLUE, dataset);
+				minX, maxX, Color.BLACK, dataset);
 
 	}
 
