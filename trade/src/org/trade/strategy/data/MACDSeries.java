@@ -581,13 +581,10 @@ public class MACDSeries extends IndicatorSeries {
 					if (this.signalSmoothingYYValues.size() == getSignalSmoothing()) {
 
 						signalLine = calculateSmoothingMA(
-								this.slowYYValues.getFirst(),
-								prevSignalSmoothingEMA, signalSmoothingSum);
-						prevSignalSmoothingEMA = signalLine;
-						// _log.error("Period: "
-						// + candleItem.getPeriod().getStart() + "MACD: "
-						// + MACD + " signalLine: " + signalLine
-						// + " Histogram: " + (MACD - signalLine));
+								this.signalSmoothingYYValues.getFirst(),
+								this.prevSignalSmoothingEMA,
+								this.signalSmoothingSum);
+						this.prevSignalSmoothingEMA = signalLine;
 					}
 					if (newBar) {
 						MACDItem dataItem = new MACDItem(
@@ -637,7 +634,7 @@ public class MACDSeries extends IndicatorSeries {
 			 * (18.18%). EMA: {Close - EMA(previous day)} x * multiplier +
 			 * EMA(previous day).
 			 */
-			if (signalSmoothingMultiplyer == Double.MAX_VALUE) {
+			if (this.signalSmoothingMultiplyer == Double.MAX_VALUE) {
 				ma = sum / getSignalSmoothing();
 				this.signalSmoothingMultiplyer = 2 / (getSignalSmoothing() + 1.0d);
 			} else {
