@@ -255,10 +255,11 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		double x0 = 0;
 		double y0 = 0;
 		int lastItem = 0;
-		MACDItem prevMACDItem = (MACDItem) mACDDataset.getSeries(series)
-				.getDataItem(item);
+		MACDItem prevMACDItem = null;
 
 		if (item != 0) {
+			prevMACDItem = (MACDItem) mACDDataset.getSeries(series)
+					.getDataItem(item - 1);
 			x0 = mACDDataset.getXValue(series, item - 1);
 			y0 = prevMACDItem.getMACD();
 			lastItem = mACDDataset.getItemCount(series) - 1;
@@ -287,7 +288,6 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		y1 = mACDItem.getMACDHistogram();
 		if (item != 0) {
 			y0 = prevMACDItem.getMACDHistogram();
-
 		}
 		/*
 		 * Draw MACD histogram.

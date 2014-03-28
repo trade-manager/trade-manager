@@ -510,53 +510,34 @@ public class ConfigurationPanel extends BasePanel {
 				((IndicatorSeriesTableModel) m_tableModelChild)
 						.setData((Strategy) aspect);
 				m_tableChild = new ConfigurationTable(m_tableModelChild);
-				m_tableChild.setFont(new Font("Monospaced", Font.PLAIN, 12));
-				m_tableChild.setPreferredScrollableViewportSize(new Dimension(
-						300, 200));
-				m_tableChild.setFillsViewportHeight(true);
-				m_tableChild.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+
 				m_tableChild.getSelectionModel().addListSelectionListener(
 						new IndicatorSeriesTableRowListener());
 				m_tableChild.setDefaultRenderer(Aspects.class,
 						new ButtonRenderer(BaseUIPropertyCodes.PROPERTIES));
 				m_tableChild.setDefaultEditor(Aspects.class, new ButtonEditor(
 						propertiesButton));
-				m_jScrollPane1.getViewport().add(m_tableChild,
-						BorderLayout.CENTER);
-				m_jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			}
 			if (aspect instanceof CodeType) {
-
 				m_tableModelChild = new CodeAttributeTableModel();
 				((CodeAttributeTableModel) m_tableModelChild)
 						.setData((CodeType) aspect);
 				m_tableChild = new ConfigurationTable(m_tableModelChild);
-				m_tableChild.setFont(new Font("Monospaced", Font.PLAIN, 12));
-				m_tableChild.setPreferredScrollableViewportSize(new Dimension(
-						300, 200));
-				m_tableChild.setFillsViewportHeight(true);
-				m_tableChild.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-
-				m_jScrollPane1.getViewport().add(m_tableChild,
-						BorderLayout.CENTER);
-				m_jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			}
 			if (aspect instanceof Portfolio) {
-
 				m_tableModelChild = new AccountTableModel();
 				((AccountTableModel) m_tableModelChild)
 						.setData((Portfolio) aspect);
 				m_tableChild = new ConfigurationTable(m_tableModelChild);
-				m_tableChild.setFont(new Font("Monospaced", Font.PLAIN, 12));
-				m_tableChild.setPreferredScrollableViewportSize(new Dimension(
-						300, 200));
-				m_tableChild.setFillsViewportHeight(true);
-				m_tableChild.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-
-				m_jScrollPane1.getViewport().add(m_tableChild,
-						BorderLayout.CENTER);
-				m_jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			}
+			m_tableChild.setFont(new Font("Monospaced", Font.PLAIN, 12));
+			m_tableChild.setPreferredScrollableViewportSize(new Dimension(300,
+					200));
+			m_tableChild.setFillsViewportHeight(true);
+			m_tableChild.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+
+			m_jScrollPane1.getViewport().add(m_tableChild, BorderLayout.CENTER);
+			m_jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		} catch (Exception ex) {
 			this.setErrorMessage("Error deleting Strategy.", ex.getMessage(),
 					ex);
@@ -643,12 +624,14 @@ public class ConfigurationPanel extends BasePanel {
 									break;
 								}
 							}
-						}
-						if (!valueSet) {
-							((Decode) decode).setValue(codeAttribute
-									.getDefaultValue());
-							((DecodeComboBoxEditor) field)
-									.setItem((Decode) decode);
+							if (!valueSet) {
+								((Decode) decode).setValue(codeAttribute
+										.getDefaultValue());
+								((DecodeComboBoxEditor) field)
+										.setItem((Decode) decode);
+							}
+						} else {
+							continue;
 						}
 					}
 
