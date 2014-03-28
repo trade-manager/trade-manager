@@ -517,18 +517,18 @@ public class ConfigurationPanel extends BasePanel {
 						new ButtonRenderer(BaseUIPropertyCodes.PROPERTIES));
 				m_tableChild.setDefaultEditor(Aspects.class, new ButtonEditor(
 						propertiesButton));
-			}
-			if (aspect instanceof CodeType) {
+			} else if (aspect instanceof CodeType) {
 				m_tableModelChild = new CodeAttributeTableModel();
 				((CodeAttributeTableModel) m_tableModelChild)
 						.setData((CodeType) aspect);
 				m_tableChild = new ConfigurationTable(m_tableModelChild);
-			}
-			if (aspect instanceof Portfolio) {
+			} else if (aspect instanceof Portfolio) {
 				m_tableModelChild = new AccountTableModel();
 				((AccountTableModel) m_tableModelChild)
 						.setData((Portfolio) aspect);
 				m_tableChild = new ConfigurationTable(m_tableModelChild);
+			} else {
+				m_tableChild = new ConfigurationTable(null);
 			}
 			m_tableChild.setFont(new Font("Monospaced", Font.PLAIN, 12));
 			m_tableChild.setPreferredScrollableViewportSize(new Dimension(300,
