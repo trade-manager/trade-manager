@@ -86,21 +86,26 @@ public class MACDSeries extends IndicatorSeries {
 	public static final String FAST_LENGTH = "Fast Length";
 	public static final String SLOW_LENGTH = "Slow Length";
 	public static final String SIGNAL_SMOOTHING = "Signal Smoothing";
+	public static final String SMA_TYPE = "Simple Smoothing MA";
 
+	private Boolean simpleMAType;
 	private Integer fastLength;
 	private Integer slowLength;
 	private Integer signalSmoothing;
 
 	private double fastSum = 0.0;
-	private double fastMultiplyer = 0;
+	private double prevFastEMA = 0;
+	private double fastMultiplyer = Double.MAX_VALUE;
 	private LinkedList<Double> fastYYValues = new LinkedList<Double>();
 
 	private double slowSum = 0.0;
-	private double slowMultiplyer = 0;
+	private double prevSlowEMA = 0;
+	private double slowMultiplyer = Double.MAX_VALUE;
 	private LinkedList<Double> slowYYValues = new LinkedList<Double>();
 
 	private double signalSmoothingSum = 0.0;
-	private double signalSmoothingMultiplyer = 0;
+	private double prevSignalSmoothingEMA = 0;
+	private double signalSmoothingMultiplyer = Double.MAX_VALUE;
 	private LinkedList<Double> signalSmoothingYYValues = new LinkedList<Double>();
 
 	/**
@@ -188,14 +193,17 @@ public class MACDSeries extends IndicatorSeries {
 	public void clear() {
 		super.clear();
 		fastSum = 0.0;
-		fastMultiplyer = 0;
+		fastMultiplyer = Double.MAX_VALUE;
 		fastYYValues.clear();
 		slowSum = 0.0;
-		slowMultiplyer = 0;
+		slowMultiplyer = Double.MAX_VALUE;
 		slowYYValues.clear();
 		signalSmoothingSum = 0.0;
-		signalSmoothingMultiplyer = 0;
+		signalSmoothingMultiplyer = Double.MAX_VALUE;
 		signalSmoothingYYValues.clear();
+		prevFastEMA = 0;
+		prevSlowEMA = 0;
+		prevSignalSmoothingEMA = 0;
 	}
 
 	/**
@@ -358,6 +366,32 @@ public class MACDSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getSimpleMAType.
+	 * 
+	 * @return Boolean
+	 */
+	@Transient
+	public Boolean getSimpleMAType() {
+		try {
+			if (null == this.simpleMAType)
+				this.simpleMAType = (Boolean) this.getValueCode(SMA_TYPE);
+		} catch (Exception e) {
+			this.simpleMAType = null;
+		}
+		return this.simpleMAType;
+	}
+
+	/**
+	 * Method setSimpleMAType.
+	 * 
+	 * @param simpleMAType
+	 *            Boolean
+	 */
+	public void setSimpleMAType(Boolean simpleMAType) {
+		this.simpleMAType = simpleMAType;
+	}
+
+	/**
 	 * Method createSeries.
 	 * 
 	 * @param source
@@ -487,10 +521,24 @@ public class MACDSeries extends IndicatorSeries {
 
 				if (this.slowYYValues.size() == getSlowLength()) {
 
-					double fastEMA = calculateEMA(this.fastYYValues, fastSum,
-							fastMultiplyer, this.getFastLength());
-					double slowEMA = calculateEMA(this.slowYYValues, slowSum,
-							slowMultiplyer, this.getSlowLength());
+					double fastEMA = 0;
+					if (fastMultiplyer == Double.MAX_VALUE) {
+						fastEMA = fastSum / this.getFastLength();
+						fastMultiplyer = 2 / (this.getFastLength() + 1.0d);
+					} else {
+						fastEMA = ((this.fastYYValues.getFirst() - prevFastEMA) * fastMultiplyer)
+								+ prevFastEMA;
+					}
+					prevFastEMA = fastEMA;
+					double slowEMA = 0;
+					if (slowMultiplyer == Double.MAX_VALUE) {
+						slowEMA = slowSum / this.getSlowLength();
+						slowMultiplyer = 2 / (this.getSlowLength() + 1.0d);
+					} else {
+						slowEMA = ((this.slowYYValues.getFirst() - prevSlowEMA) * slowMultiplyer)
+								+ prevSlowEMA;
+					}
+					prevSlowEMA = slowEMA;
 					double MACD = fastEMA - slowEMA;
 					if (this.signalSmoothingYYValues.size() == this
 							.getSignalSmoothing()) {
@@ -517,6 +565,7 @@ public class MACDSeries extends IndicatorSeries {
 							this.signalSmoothingYYValues.removeFirst();
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
+
 					} else {
 						if (newBar) {
 							signalSmoothingSum = signalSmoothingSum + MACD;
@@ -528,23 +577,32 @@ public class MACDSeries extends IndicatorSeries {
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
 					}
-					double signalLine = calculateEMA(
-							this.signalSmoothingYYValues, signalSmoothingSum,
-							signalSmoothingMultiplyer,
-							this.getSignalSmoothing());
+					double signalLine = Double.MAX_VALUE;
+					if (this.signalSmoothingYYValues.size() == getSignalSmoothing()) {
+
+						signalLine = calculateSmoothingMA(
+								this.signalSmoothingYYValues.getFirst(),
+								this.prevSignalSmoothingEMA,
+								this.signalSmoothingSum);
+						this.prevSignalSmoothingEMA = signalLine;
+					}
 					if (newBar) {
 						MACDItem dataItem = new MACDItem(
 								candleItem.getPeriod(), new BigDecimal(MACD),
-								new BigDecimal(signalLine), new BigDecimal(MACD
-										- signalLine));
+								(signalLine == Double.MAX_VALUE ? null
+										: new BigDecimal(signalLine)),
+								(signalLine == Double.MAX_VALUE ? null
+										: new BigDecimal(MACD - signalLine)));
 						this.add(dataItem, false);
 
 					} else {
 						MACDItem dataItem = (MACDItem) this.getDataItem(this
 								.getItemCount() - 1);
 						dataItem.setMACD(MACD);
-						dataItem.setSignalLine(signalLine);
-						dataItem.setMACDHistogram(MACD - signalLine);
+						if (signalLine == Double.MAX_VALUE) {
+							dataItem.setSignalLine(signalLine);
+							dataItem.setMACDHistogram(MACD - signalLine);
+						}
 					}
 				}
 			}
@@ -552,37 +610,39 @@ public class MACDSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Method calculateEMA.
+	 * Method calculateMA.
 	 * 
+	 * @param calcType
+	 *            String
 	 * @param yyValues
 	 *            LinkedList<Double>
+	 * @param volValues
+	 *            LinkedList<Long>
 	 * @param sum
 	 *            Double
 	 * @return double
 	 */
-	private double calculateEMA(LinkedList<Double> yyValues, double sum,
-			double multiplyer, Integer length) {
+	private double calculateSmoothingMA(double close,
+			double prevSignalSmoothingEMA, Double sum) {
+
 		double ma = 0;
-
-		/*
-		 * Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818
-		 * (18.18%). EMA: {Close - EMA(previous day)} x * multiplier +
-		 * EMA(previous day).
-		 */
-		if (multiplyer == 0) {
-			ma = sum / length;
-			multiplyer = 2 / (length + 1.0d);
+		if (this.getSimpleMAType()) {
+			ma = sum / getSignalSmoothing();
 		} else {
-			ma = ((yyValues.getFirst() - yyValues.get(1)) * multiplyer)
-					+ yyValues.get(1);
-		}
-		/*
-		 * Use the EMA in the stored values as we need the previous one for the
-		 * calc.
-		 */
-		yyValues.removeFirst();
-		yyValues.addFirst(ma);
+			/*
+			 * Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818
+			 * (18.18%). EMA: {Close - EMA(previous day)} x * multiplier +
+			 * EMA(previous day).
+			 */
+			if (this.signalSmoothingMultiplyer == Double.MAX_VALUE) {
+				ma = sum / getSignalSmoothing();
+				this.signalSmoothingMultiplyer = 2 / (getSignalSmoothing() + 1.0d);
+			} else {
+				ma = ((close - prevSignalSmoothingEMA) * this.signalSmoothingMultiplyer)
+						+ prevSignalSmoothingEMA;
+			}
 
+		}
 		return ma;
 	}
 

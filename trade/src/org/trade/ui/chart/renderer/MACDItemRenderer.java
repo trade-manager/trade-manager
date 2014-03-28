@@ -266,25 +266,37 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		int numX = mACDDataset.getItemCount(series);
 		double minX = mACDDataset.getXValue(series, 0);
 		double maxX = mACDDataset.getXValue(series, numX - 1);
+		/*
+		 * Draw MACD.
+		 */
 
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.BLACK);
+				minX, maxX, mACDDataset.getSeriesColor(0), dataset);
 
 		y1 = mACDItem.getSignalLine();
 		if (item != 0) {
 			y0 = prevMACDItem.getSignalLine();
 		}
+		/*
+		 * Draw MACD smoothing.
+		 */
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.BLUE);
+				minX, maxX, Color.RED, dataset);
 		y1 = mACDItem.getMACDHistogram();
 		if (item != 0) {
 			y0 = prevMACDItem.getMACDHistogram();
+
 		}
+		/*
+		 * Draw MACD histogram.
+		 */
+		y0 = 0;
+		x0 = x1;
 		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
 				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.RED);
+				minX, maxX, Color.BLACK, dataset);
 
 	}
 
@@ -293,7 +305,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 			ValueAxis domainAxis, ValueAxis rangeAxis, double x0, double y0,
 			double x1, double y1, int lastItem, int series, int item,
 			CrosshairState crosshairState, int pass, int numX, double minX,
-			double maxX, Paint color) {
+			double maxX, Paint color, XYDataset dataset) {
 
 		boolean itemVisible = getItemVisible(series, item);
 
@@ -306,6 +318,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 
 		PlotOrientation orientation = plot.getOrientation();
 		Paint paint = getItemPaint(series, item);
+		paint = color;
 		Stroke seriesStroke = getItemStroke(series, item);
 		g2.setPaint(paint);
 		g2.setStroke(seriesStroke);
@@ -449,8 +462,8 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 
 		// draw the item label if there is one...
 		if (isItemLabelVisible(series, item)) {
-			// drawItemLabel(g2, orientation, dataset, series, item, xx, yy,
-			// (y1 < 0.0));
+			drawItemLabel(g2, orientation, dataset, series, item, xx, yy,
+					(y1 < 0.0));
 		}
 
 		int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
@@ -460,7 +473,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 
 		// add an entity for the item...
 		if (entities != null && isPointInRect(dataArea, xx, yy)) {
-			// addEntity(entities, entityArea, dataset, series, item, xx, yy);
+			addEntity(entities, entityArea, dataset, series, item, xx, yy);
 		}
 	}
 
