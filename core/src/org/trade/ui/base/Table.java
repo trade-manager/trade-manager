@@ -47,7 +47,6 @@ import java.awt.event.MouseListener;
 import java.awt.print.PrinterException;
 import java.util.Calendar;
 
-import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -145,7 +144,7 @@ public class Table extends JTable implements MouseListener, ActionListener {
 		QuantityEditor eQuantity = new QuantityEditor(new QuantityField());
 		DecodeTableRenderer decodeRenderer = new DecodeTableRenderer();
 
-		YesNoTableEditor eYesNoEditor = new YesNoTableEditor(new JCheckBox());
+		YesNoTableEditor eYesNoEditor = new YesNoTableEditor();
 		YesNoTableRenderer rYesNoRenderer = new YesNoTableRenderer();
 
 		this.setDefaultRenderer(Color.class, new ColorRenderer(true));

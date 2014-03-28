@@ -50,6 +50,10 @@ public class YesNoTableEditor extends DefaultCellEditor {
 	 */
 	private static final long serialVersionUID = 2148534921779125768L;
 
+	public YesNoTableEditor() {
+		this(new JCheckBox());
+	}
+
 	/**
 	 * Constructs a DefaultCellEditor object that uses a check box.
 	 * 
