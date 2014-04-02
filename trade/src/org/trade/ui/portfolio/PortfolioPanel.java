@@ -246,7 +246,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			});
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error During Initialization.",
+			this.setErrorMessage("Error during initialization.",
 					ex.getMessage(), ex);
 		}
 	}

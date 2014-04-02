@@ -104,7 +104,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 	public TradeMainPanelMenu(BasePanel basePanel) {
 		super(basePanel);
 
-		cancelButton.setToolTipText("Cancel Strategies & Data");
+		cancelButton.setToolTipText("Cancel strategies & data");
 		cancelButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(cancelButton.getMethod());
@@ -115,7 +115,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 				messageEvent(cancelMenu.getMethod());
 			}
 		});
-		closeAllButton.setToolTipText("Cancel Orders Close Positions");
+		closeAllButton.setToolTipText("Cancel orders close positions");
 		closeAllButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(closeAllButton.getMethod());
@@ -126,7 +126,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 				messageEvent(closeAllMenu.getMethod());
 			}
 		});
-		runStrategyButton.setToolTipText("Run Strategy");
+		runStrategyButton.setToolTipText("Run strategy");
 		runStrategyButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -139,7 +139,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 				messageEvent(runStrategyMenu.getMethod());
 			}
 		});
-		testStrategyButton.setToolTipText("Test Strategy");
+		testStrategyButton.setToolTipText("Test strategy");
 		testStrategyButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -152,7 +152,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 				messageEvent(testStrategyMenu.getMethod());
 			}
 		});
-		brokerDataButton.setToolTipText("Get Chart Data");
+		brokerDataButton.setToolTipText("Get chart data");
 		brokerDataButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(brokerDataButton.getMethod());
@@ -191,7 +191,7 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 				messageEvent(deleteMenu.getMethod());
 			}
 		});
-		deleteButton.setToolTipText("Delete all Orders");
+		deleteButton.setToolTipText("Delete all orders");
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(deleteButton.getMethod());

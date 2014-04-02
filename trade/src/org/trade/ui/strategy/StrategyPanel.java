@@ -152,7 +152,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			compileButton = new BaseButton(this,
 					UIPropertyCodes.newInstance(UIPropertyCodes.COMPILE));
 			newButton = new BaseButton(this, BaseUIPropertyCodes.NEW);
-			newButton.setToolTipText("Load Template");
+			newButton.setToolTipText("Load template");
 
 			JPanel jPanel1 = new JPanel(new FlowLayout());
 			jPanel1.add(newButton);
@@ -236,7 +236,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			}
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error During Initialization.",
+			this.setErrorMessage("Error during initialization.",
 					ex.getMessage(), ex);
 		}
 	}

@@ -198,21 +198,21 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			executeButton.addMessageListener(this);
 			brokerDataButton = new BaseButton(controller,
 					BaseUIPropertyCodes.DATA);
-			brokerDataButton.setToolTipText("Get Chart data");
+			brokerDataButton.setToolTipText("Get chart data");
 			cancelButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
-			cancelButton.setToolTipText("Cancel Order");
+			cancelButton.setToolTipText("Cancel order");
 			cancelButton.setTransferObject(new Aspects());
 			cancelButton.addMessageListener(this);
 			cancelStrategiesButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
-			cancelStrategiesButton.setToolTipText("Cancel Strategy");
+			cancelStrategiesButton.setToolTipText("Cancel strategy");
 			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
 			closeAllButton = new BaseButton(this, BaseUIPropertyCodes.CLOSE_ALL);
 			closeAllPositionsButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CLOSE_ALL);
 			closeAllPositionsButton
-					.setToolTipText("Cancel Orders Close Position");
+					.setToolTipText("Cancel orders close position");
 			m_tradeOrderModel = new TradeOrderTableModel();
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
@@ -324,7 +324,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_jTabbedPaneContract.addChangeListener(this);
 			this.reFreshTab();
 		} catch (Exception ex) {
-			this.setErrorMessage("Error During Initialization.",
+			this.setErrorMessage("Error during initialization.",
 					ex.getMessage(), ex);
 		}
 	}

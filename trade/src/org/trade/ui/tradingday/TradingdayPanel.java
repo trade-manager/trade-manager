@@ -191,26 +191,26 @@ public class TradingdayPanel extends BasePanel {
 			transferButton = new BaseButton(controller,
 					BaseUIPropertyCodes.TRANSFER);
 			ordersButton = new BaseButton(controller, BaseUIPropertyCodes.FETCH);
-			ordersButton.setToolTipText("Fetch Executed Orders");
+			ordersButton.setToolTipText("Fetch executions for orders");
 			deleteTradeOrderButton = new BaseButton(this,
 					BaseUIPropertyCodes.DELETE);
-			deleteTradeOrderButton.setToolTipText("Delete Orders");
+			deleteTradeOrderButton.setToolTipText("Delete orders");
 			cancelStrategiesButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
-			cancelStrategiesButton.setToolTipText("Cancel Strategy");
+			cancelStrategiesButton.setToolTipText("Cancel strategy");
 			runStrategyButton = new BaseButton(controller,
 					BaseUIPropertyCodes.RUN);
-			runStrategyButton.setToolTipText("Run Strategy");
+			runStrategyButton.setToolTipText("Run strategy");
 			testStrategyButton = new BaseButton(controller,
 					BaseUIPropertyCodes.TEST);
-			testStrategyButton.setToolTipText("Test Strategy");
+			testStrategyButton.setToolTipText("Test strategy");
 			brokerDataButton = new BaseButton(controller,
 					BaseUIPropertyCodes.DATA);
-			brokerDataButton.setToolTipText("Get Chart Data");
+			brokerDataButton.setToolTipText("Get chart data");
 			closeAllPositionsButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CLOSE_ALL);
 			closeAllPositionsButton
-					.setToolTipText("Cancel Orders Close Position");
+					.setToolTipText("Cancel orders close position");
 			reAssignButton = new BaseButton(this,
 					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));
 			m_tradestrategyModel = new TradestrategyTableModel();
@@ -346,7 +346,7 @@ public class TradingdayPanel extends BasePanel {
 			this.setPortfolioLabel(portfolio);
 			enableTradestrategyButtons(null);
 		} catch (Exception ex) {
-			this.setErrorMessage("Error During Initialization.",
+			this.setErrorMessage("Error during initialization.",
 					ex.getMessage(), ex);
 		}
 	}
