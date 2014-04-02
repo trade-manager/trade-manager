@@ -191,26 +191,26 @@ public class TradingdayPanel extends BasePanel {
 			transferButton = new BaseButton(controller,
 					BaseUIPropertyCodes.TRANSFER);
 			ordersButton = new BaseButton(controller, BaseUIPropertyCodes.FETCH);
-			ordersButton.setToolTipText("Fetch executions for orders");
+			ordersButton.setToolTipText("Fetch Executions for Orders");
 			deleteTradeOrderButton = new BaseButton(this,
 					BaseUIPropertyCodes.DELETE);
-			deleteTradeOrderButton.setToolTipText("Delete orders");
+			deleteTradeOrderButton.setToolTipText("Delete Orders");
 			cancelStrategiesButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
-			cancelStrategiesButton.setToolTipText("Cancel strategy");
+			cancelStrategiesButton.setToolTipText("Cancel Strategy");
 			runStrategyButton = new BaseButton(controller,
 					BaseUIPropertyCodes.RUN);
-			runStrategyButton.setToolTipText("Run strategy");
+			runStrategyButton.setToolTipText("Run Strategy");
 			testStrategyButton = new BaseButton(controller,
 					BaseUIPropertyCodes.TEST);
-			testStrategyButton.setToolTipText("Test strategy");
+			testStrategyButton.setToolTipText("Test Strategy");
 			brokerDataButton = new BaseButton(controller,
 					BaseUIPropertyCodes.DATA);
-			brokerDataButton.setToolTipText("Get chart data");
+			brokerDataButton.setToolTipText("Get Chart Data");
 			closeAllPositionsButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CLOSE_ALL);
 			closeAllPositionsButton
-					.setToolTipText("Cancel orders close position");
+					.setToolTipText("Cancel Orders & Close Position");
 			reAssignButton = new BaseButton(this,
 					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));
 			m_tradestrategyModel = new TradestrategyTableModel();

@@ -198,21 +198,21 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			executeButton.addMessageListener(this);
 			brokerDataButton = new BaseButton(controller,
 					BaseUIPropertyCodes.DATA);
-			brokerDataButton.setToolTipText("Get chart data");
+			brokerDataButton.setToolTipText("Get Chart Data");
 			cancelButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
-			cancelButton.setToolTipText("Cancel order");
+			cancelButton.setToolTipText("Cancel Order");
 			cancelButton.setTransferObject(new Aspects());
 			cancelButton.addMessageListener(this);
 			cancelStrategiesButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CANCEL);
-			cancelStrategiesButton.setToolTipText("Cancel strategy");
+			cancelStrategiesButton.setToolTipText("Cancel Strategy");
 			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
 			closeAllButton = new BaseButton(this, BaseUIPropertyCodes.CLOSE_ALL);
 			closeAllPositionsButton = new BaseButton(controller,
 					BaseUIPropertyCodes.CLOSE_ALL);
 			closeAllPositionsButton
-					.setToolTipText("Cancel orders close position");
+					.setToolTipText("Cancel Orders & Close Position");
 			m_tradeOrderModel = new TradeOrderTableModel();
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
 			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
