@@ -294,6 +294,7 @@ public class TradingdayPanel extends BasePanel {
 			jPanel5.add(cancelStrategiesButton, null);
 			jPanel5.add(deleteTradeOrderButton, null);
 			jPanel5.add(closeAllPositionsButton, null);
+			jPanel5.add(ordersButton, null);
 			jPanel5.setBorder(new BevelBorder(BevelBorder.RAISED));
 			JToolBar jToolBar1 = new JToolBar();
 			jToolBar1.setLayout(new BorderLayout());
@@ -309,7 +310,6 @@ public class TradingdayPanel extends BasePanel {
 			jPanel7.add(toStrategy, null);
 			jPanel7.add(strategyToEditorComboBox, null);
 			jPanel7.add(reAssignButton, null);
-			jPanel7.add(ordersButton, null);
 			jPanel7.setBorder(new BevelBorder(BevelBorder.RAISED));
 
 			jPanel3.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -329,10 +329,10 @@ public class TradingdayPanel extends BasePanel {
 			m_tradingdayTable
 					.setPreferredScrollableViewportSize(tradingdayTableDimension);
 
-			JPanel jPanel8 = new JPanel(new BorderLayout());
-			jPanel8.add(portfolioLabel, BorderLayout.NORTH);
-			jPanel8.add(jPanel3, BorderLayout.SOUTH);
-			jPanel2.add(jPanel8, BorderLayout.NORTH);
+			JPanel jPanel10 = new JPanel(new BorderLayout());
+			jPanel10.add(portfolioLabel, BorderLayout.NORTH);
+			jPanel10.add(jPanel3, BorderLayout.SOUTH);
+			jPanel2.add(jPanel10, BorderLayout.NORTH);
 			jPanel2.add(jScrollPane1, BorderLayout.CENTER);
 			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 					true, jPanel2, jPanel4);
@@ -1236,11 +1236,12 @@ public class TradingdayPanel extends BasePanel {
 		closeAllPositionsButton.setEnabled(enable);
 		testStrategyButton.setEnabled(enable);
 		brokerDataButton.setEnabled(enable);
-		ordersButton.setEnabled(enable);
+		ordersButton.setEnabled(false);
 		runStrategyButton.setEnabled(false);
 		if (this.isConnected() && null != transferObject) {
 			runStrategyButton.setEnabled(true);
 			testStrategyButton.setEnabled(false);
+			ordersButton.setEnabled(true);
 		}
 	}
 
