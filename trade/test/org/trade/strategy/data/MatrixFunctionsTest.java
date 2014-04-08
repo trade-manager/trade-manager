@@ -33,12 +33,11 @@
  * -------
  *
  */
-package org.trade.core.util;
+package org.trade.strategy.data;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +47,9 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.trade.core.util.MatrixFunctions;
+import org.trade.core.util.Pair;
+import org.trade.core.util.TradingCalendar;
 import org.trade.strategy.data.candle.CandlePeriod;
 
 /**
