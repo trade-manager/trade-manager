@@ -45,6 +45,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
@@ -178,5 +179,26 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 */
 	public void setIndicatorSeries(IndicatorSeries indicatorSeries) {
 		this.indicatorSeries = indicatorSeries;
+	}
+
+	/**
+	 * Method getVersion.
+	 * 
+	 * @return Integer
+	 */
+	@Version
+	@Column(name = "version")
+	public Integer getVersion() {
+		return this.version;
+	}
+
+	/**
+	 * Method setVersion.
+	 * 
+	 * @param version
+	 *            Integer
+	 */
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 }

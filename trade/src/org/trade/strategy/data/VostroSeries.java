@@ -46,7 +46,10 @@ import javax.persistence.Transient;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.trade.core.valuetype.Decode;
+import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.CalculationType;
+import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.vostro.VostroItem;
@@ -69,9 +72,13 @@ public class VostroSeries extends IndicatorSeries {
 
 	public static final String LENGTH = "Length";
 	public static final String MA_TYPE = "MAType";
+	public static final String VOSTRO_PERIOD = "Vostro Period";
+	public static final String PRICE_SOURCE = "Price Source";
 
 	private String MAType;
 	private Integer length;
+	private Integer vostroPeriod;
+	private Integer priceSource;
 	/*
 	 * Vales used to calculate MA's. These need to be reset when the series is
 	 * cleared.
@@ -245,6 +252,58 @@ public class VostroSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getPriceSource.
+	 * 
+	 * @return Integer
+	 */
+	@Transient
+	public Integer getPriceSource() {
+		try {
+			if (null == this.priceSource)
+				this.priceSource = (Integer) this.getValueCode(PRICE_SOURCE);
+		} catch (Exception e) {
+			this.priceSource = null;
+		}
+		return this.priceSource;
+	}
+
+	/**
+	 * Method setMAType.
+	 * 
+	 * @param priceSource
+	 *            Integer
+	 */
+	public void setPriceSource(Integer priceSource) {
+		this.priceSource = priceSource;
+	}
+
+	/**
+	 * Method getVostroPeriod.
+	 * 
+	 * @return Integer
+	 */
+	@Transient
+	public Integer getVostroPeriod() {
+		try {
+			if (null == this.vostroPeriod)
+				this.vostroPeriod = (Integer) this.getValueCode(VOSTRO_PERIOD);
+		} catch (Exception e) {
+			this.vostroPeriod = null;
+		}
+		return this.vostroPeriod;
+	}
+
+	/**
+	 * Method setCostroPeriod.
+	 * 
+	 * @param vostroPeriod
+	 *            Integer
+	 */
+	public void setVostroPeriod(Integer length) {
+		this.vostroPeriod = vostroPeriod;
+	}
+
+	/**
 	 * Method getLength.
 	 * 
 	 * @return Integer
@@ -338,7 +397,8 @@ public class VostroSeries extends IndicatorSeries {
 		if (source.getItemCount() > skip) {
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
-			if (0 != candleItem.getClose()) {
+			if (0 != this.getPrice(candleItem)) {
+				double price = this.getPrice(candleItem);
 				if (this.yyValues.size() == getLength()) {
 					/*
 					 * If the item does not exist in the series then this is a
@@ -348,29 +408,27 @@ public class VostroSeries extends IndicatorSeries {
 					 * performance save having to sum the last set of values
 					 * each time.
 					 */
+
 					if (newBar) {
-						sum = sum - this.yyValues.getLast()
-								+ candleItem.getClose();
+						sum = sum - this.yyValues.getLast() + price;
 						this.yyValues.removeLast();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(price);
 						this.volValues.removeLast();
 						this.volValues.addFirst(candleItem.getVolume());
 					} else {
-						sum = sum - this.yyValues.getFirst()
-								+ candleItem.getClose();
+						sum = sum - this.yyValues.getFirst() + price;
 						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(price);
 					}
 				} else {
 					if (newBar) {
-						sum = sum + candleItem.getClose();
-						this.yyValues.addFirst(candleItem.getClose());
+						sum = sum + price;
+						this.yyValues.addFirst(price);
 						this.volValues.addFirst(candleItem.getVolume());
 					} else {
-						sum = sum + candleItem.getClose()
-								- this.yyValues.getFirst();
+						sum = sum + price - this.yyValues.getFirst();
 						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(price);
 						this.volValues.removeFirst();
 						this.volValues.addFirst(candleItem.getVolume());
 					}
@@ -468,5 +526,119 @@ public class VostroSeries extends IndicatorSeries {
 			ma = sumYY / count;
 		}
 		return ma;
+	}
+
+	/**
+	 * Method get the priceSource.
+	 * 
+	 * @param calcType
+	 *            String
+	 * @param yyValues
+	 *            LinkedList<Double>
+	 * @param volValues
+	 *            LinkedList<Long>
+	 * @param sum
+	 *            Double
+	 * @return double
+	 */
+	private double getPrice(CandleItem candle) {
+
+		switch (this.getPriceSource()) {
+		case 1: {
+			return candle.getClose();
+		}
+		case 2: {
+			return candle.getOpen();
+		}
+		case 3: {
+			return candle.getHigh();
+		}
+		case 4: {
+			return candle.getLow();
+		}
+		case 5: {
+			return (candle.getHigh() + candle.getLow()) / 2.0d;
+		}
+		case 6: {
+			return (candle.getHigh() + candle.getLow() + candle.getClose()) / 3.0d;
+		}
+		case 7: {
+			return (candle.getOpen() + candle.getHigh() + candle.getLow() + candle
+					.getClose()) / 4.0d;
+		}
+		default: {
+			return candle.getClose();
+		}
+		}
+	}
+
+	double g_ibuf_108[];
+	double g_ibuf_112[];
+	double g_ibuf_116[];
+	double gd_120;
+	double gd_128; // average price of the last gi_144 median price entries
+	double gd_136; // 0.2 of the average of the High - Low of the last gi_144
+					// entries.
+	int gi_144 = 5; // Vostro calc periods
+	int gi_148;
+	int gi_152;
+	int g_period_156;
+	boolean Scalping = true;
+	int Bars = 100;
+	int MODE_LWMA = 1;
+
+	private double calculateVostro(double High[], double Low[]) {
+
+		if (Scalping)
+			g_period_156 = 100;
+		else
+			g_period_156 = 300;
+
+		for (gi_152 = 0; gi_152 < Bars; gi_152++) {
+			double wma = (High[gi_152] + Low[gi_152]) / 2.0;
+
+			gd_120 = 0;
+			for (gi_148 = gi_152; gi_148 < gi_144 + gi_152; gi_148++)
+				gd_120 += (High[gi_148] + Low[gi_148]) / 2.0;
+
+			gd_128 = gd_120 / gi_144;
+			gd_120 = 0;
+
+			for (gi_148 = gi_152; gi_148 < gi_144 + gi_152; gi_148++)
+				gd_120 += High[gi_148] - Low[gi_148];
+
+			gd_136 = 0.2 * (gd_120 / gi_144);
+
+			g_ibuf_116[gi_152] = (Low[gi_152] - gd_128) / gd_136;
+			g_ibuf_112[gi_152] = (High[gi_152] - gd_128) / gd_136;
+
+			if (g_ibuf_112[gi_152] > 8.0 && High[gi_152] > wma) {
+				g_ibuf_108[gi_152] = 90.0;
+			} else {
+				if (g_ibuf_116[gi_152] < -8.0 && Low[gi_152] < wma) {
+					g_ibuf_108[gi_152] = -90.0;
+				} else {
+					g_ibuf_108[gi_152] = 0.0;
+				}
+			}
+			if (g_ibuf_112[gi_152] > 8.0 && g_ibuf_112[gi_152 - 1] > 8.0) {
+				g_ibuf_108[gi_152] = 0;
+			}
+
+			if (g_ibuf_112[gi_152] > 8.0 && g_ibuf_112[gi_152 - 1] > 8.0
+					&& g_ibuf_112[gi_152 - 2] > 8.0) {
+				g_ibuf_108[gi_152] = 0;
+			}
+
+			if (g_ibuf_116[gi_152] < -8.0 && g_ibuf_116[gi_152 - 1] < -8.0) {
+				g_ibuf_108[gi_152] = 0;
+			}
+
+			if (g_ibuf_116[gi_152] < -8.0 && g_ibuf_116[gi_152 - 1] < -8.0
+					&& g_ibuf_116[gi_152 - 2] < -8.0) {
+				g_ibuf_108[gi_152] = 0;
+			}
+		}
+		return (0);
 	}
 }
