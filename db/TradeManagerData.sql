@@ -61,6 +61,7 @@ INSERT INTO codetype (idCodeType, name, description, version) VALUES(7,'Bollinge
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(8,'StochasticOscillator','Stochastic Oscillator',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(9,'MoneyFlowIndex','Money Flow Index',0);
 INSERT INTO codetype (idCodeType, name, description, version) VALUES(10,'MACD','MACD',0);
+INSERT INTO codetype (idCodeType, name, description, version) VALUES(11,'Vostro','Vostro Indicator',0);
 
 COMMIT;
 
@@ -91,6 +92,8 @@ INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, cla
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(25,'Slow Length','The slow length of the EMA','26','java.lang.Integer',null, 10,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(26,'Signal Smoothing','The EMA length of the MACD','9','java.lang.Integer',null, 10,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(27,'Simple Smoothing MA','Use SMA for signal line smoothing','true','java.lang.Boolean','org.trade.core.valuetype.YesNo', 10,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(28,'Length','The length of the Moving Average','5','java.lang.Integer',null, 11,0) ;
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(29,'MAType','Type of the Moving Average','WEIGHTED','java.lang.String', 'org.trade.dictionary.valuetype.CalculationType',11,0) ;
 
 COMMIT;
 
