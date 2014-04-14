@@ -46,10 +46,7 @@ import javax.persistence.Transient;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.trade.core.valuetype.Decode;
-import org.trade.core.valuetype.YesNo;
 import org.trade.dictionary.valuetype.CalculationType;
-import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.vostro.VostroItem;
@@ -83,10 +80,17 @@ public class VostroSeries extends IndicatorSeries {
 	 * Vales used to calculate MA's. These need to be reset when the series is
 	 * cleared.
 	 */
-	private double sum = 0.0;
+
 	private double multiplyer = 0;
+	private double sum = 0.0;
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
 	private LinkedList<Long> volValues = new LinkedList<Long>();
+	private double highPlusLowSum = 0.0;
+	private LinkedList<Double> highPlusLowValues = new LinkedList<Double>();
+	private double highLessLowSum = 0.0;
+	private LinkedList<Double> highLessLowValues = new LinkedList<Double>();
+	private LinkedList<Double> vostro1Values = new LinkedList<Double>();
+	private LinkedList<Double> vostro2Values = new LinkedList<Double>();
 
 	/**
 	 * Creates a new empty series. By default, items added to the series will be
@@ -159,7 +163,11 @@ public class VostroSeries extends IndicatorSeries {
 	public Object clone() throws CloneNotSupportedException {
 		VostroSeries clone = (VostroSeries) super.clone();
 		clone.yyValues = new LinkedList<Double>();
+		clone.highPlusLowValues = new LinkedList<Double>();
+		clone.highLessLowValues = new LinkedList<Double>();
 		clone.volValues = new LinkedList<Long>();
+		clone.vostro1Values = new LinkedList<Double>();
+		clone.vostro2Values = new LinkedList<Double>();
 		return clone;
 	}
 
@@ -170,10 +178,16 @@ public class VostroSeries extends IndicatorSeries {
 	 */
 	public void clear() {
 		super.clear();
-		sum = 0.0;
 		multiplyer = 0;
+		sum = 0.0;
 		yyValues.clear();
 		volValues.clear();
+		highPlusLowSum = 0.0;
+		highPlusLowValues.clear();
+		highLessLowSum = 0.0;
+		highLessLowValues.clear();
+		vostro1Values.clear();
+		vostro2Values.clear();
 	}
 
 	/**
@@ -299,7 +313,7 @@ public class VostroSeries extends IndicatorSeries {
 	 * @param vostroPeriod
 	 *            Integer
 	 */
-	public void setVostroPeriod(Integer length) {
+	public void setVostroPeriod(Integer vostroPeriod) {
 		this.vostroPeriod = vostroPeriod;
 	}
 
@@ -393,6 +407,14 @@ public class VostroSeries extends IndicatorSeries {
 			throw new IllegalArgumentException(
 					"MA period must be greater than zero.");
 		}
+		if (getVostroPeriod() == null || getVostroPeriod() < 1) {
+			throw new IllegalArgumentException(
+					"Vostro period must be greater than zero.");
+		}
+		if (getLength() < getVostroPeriod()) {
+			throw new IllegalArgumentException(
+					"MA period must be greater than Vostro period.");
+		}
 
 		if (source.getItemCount() > skip) {
 			// get the current data item...
@@ -433,19 +455,137 @@ public class VostroSeries extends IndicatorSeries {
 						this.volValues.addFirst(candleItem.getVolume());
 					}
 				}
+				if (this.highPlusLowValues.size() == getVostroPeriod()) {
+					/*
+					 * If the item does not exist in the series then this is a
+					 * new time period and so we need to remove the last in the
+					 * set and add the new periods values. Otherwise we just
+					 * update the last value in the set. Sum is just used for
+					 * performance save having to sum the last set of values
+					 * each time.
+					 */
+
+					if (newBar) {
+						highPlusLowSum = highPlusLowSum
+								- this.highPlusLowValues.getLast()
+								+ (candleItem.getHigh() + candleItem.getLow());
+						this.highPlusLowValues.removeLast();
+						this.highPlusLowValues
+								.addFirst((candleItem.getHigh() + candleItem
+										.getLow()));
+
+						highLessLowSum = highLessLowSum
+								- this.highLessLowValues.getLast()
+								+ (candleItem.getHigh() - candleItem.getLow());
+						this.highLessLowValues.removeLast();
+						this.highLessLowValues
+								.addFirst((candleItem.getHigh() - candleItem
+										.getLow()));
+					} else {
+						highPlusLowSum = highPlusLowSum
+								- this.highPlusLowValues.getFirst()
+								+ (candleItem.getHigh() + candleItem.getLow());
+						this.highPlusLowValues.removeFirst();
+						this.highPlusLowValues
+								.addFirst((candleItem.getHigh() + candleItem
+										.getLow()));
+
+						highLessLowSum = highLessLowSum
+								- this.highLessLowValues.getFirst()
+								+ (candleItem.getHigh() - candleItem.getLow());
+						this.highLessLowValues.removeFirst();
+						this.highLessLowValues
+								.addFirst((candleItem.getHigh() - candleItem
+										.getLow()));
+					}
+				} else {
+					if (newBar) {
+						highPlusLowSum = highPlusLowSum
+								+ (candleItem.getHigh() + candleItem.getLow());
+						this.highPlusLowValues
+								.addFirst((candleItem.getHigh() + candleItem
+										.getLow()));
+
+						highLessLowSum = highLessLowSum
+								+ (candleItem.getHigh() - candleItem.getLow());
+						this.highLessLowValues
+								.addFirst((candleItem.getHigh() - candleItem
+										.getLow()));
+					} else {
+						highPlusLowSum = highPlusLowSum
+								+ (candleItem.getHigh() + candleItem.getLow())
+								- this.highPlusLowValues.getFirst();
+						this.highPlusLowValues.removeFirst();
+						this.highPlusLowValues
+								.addFirst((candleItem.getHigh() + candleItem
+										.getLow()));
+
+						highLessLowSum = highLessLowSum
+								+ (candleItem.getHigh() - candleItem.getLow())
+								- this.highLessLowValues.getFirst();
+						this.highLessLowValues.removeFirst();
+						this.highLessLowValues
+								.addFirst((candleItem.getHigh() - candleItem
+										.getLow()));
+					}
+				}
 
 				if (this.yyValues.size() == getLength()) {
+
 					double ma = calculateMA(this.getMAType(), this.yyValues,
 							this.volValues, sum);
+
+					double gd_128 = highPlusLowSum / 2.0d
+							/ this.getVostroPeriod();
+
+					double gd_136 = 0.2 * (highLessLowSum / this
+							.getVostroPeriod());
+
+					double vostro1 = (candleItem.getLow() - gd_128) / gd_136;
+					vostro1Values.addFirst(vostro1);
+					double vostro2 = (candleItem.getHigh() - gd_128) / gd_136;
+					vostro2Values.addFirst(vostro2);
+					double vostro = 0;
+					if (vostro2 > 8.0 && candleItem.getHigh() > ma) {
+						vostro = 90.0;
+					} else {
+						if (vostro1 < -8.0 && candleItem.getLow() < ma) {
+							vostro = -90.0;
+						} else {
+							vostro = 0.0;
+						}
+					}
+					if (vostro2 > 8.0
+							&& vostro2Values.get(vostro2Values.size() - 1) > 8.0) {
+						vostro = 0;
+					}
+
+					if (vostro2 > 8.0
+							&& vostro2Values.get(vostro2Values.size() - 1) > 8.0
+							&& vostro2Values.get(vostro2Values.size() - 2) > 8.0) {
+						vostro = 0;
+					}
+
+					if (vostro1 < -8.0
+							&& vostro1Values.get(vostro1Values.size() - 1) < -8.0) {
+						vostro = 0;
+					}
+
+					if (vostro1 < -8.0
+							&& vostro1Values.get(vostro1Values.size() - 1) < -8.0
+							&& vostro1Values.get(vostro1Values.size() - 2) < -8.0) {
+						vostro = 0;
+					}
+
 					if (newBar) {
 						VostroItem dataItem = new VostroItem(
-								candleItem.getPeriod(), new BigDecimal(ma));
+								candleItem.getPeriod(), new BigDecimal(vostro));
 						this.add(dataItem, false);
 
 					} else {
 						VostroItem dataItem = (VostroItem) this
 								.getDataItem(this.getItemCount() - 1);
-						dataItem.setVostro(ma);
+						dataItem.setVostro(vostro);
 					}
 				}
 			}
@@ -570,75 +710,5 @@ public class VostroSeries extends IndicatorSeries {
 			return candle.getClose();
 		}
 		}
-	}
-
-	double g_ibuf_108[];
-	double g_ibuf_112[];
-	double g_ibuf_116[];
-	double gd_120;
-	double gd_128; // average price of the last gi_144 median price entries
-	double gd_136; // 0.2 of the average of the High - Low of the last gi_144
-					// entries.
-	int gi_144 = 5; // Vostro calc periods
-	int gi_148;
-	int gi_152;
-	int g_period_156;
-	boolean Scalping = true;
-	int Bars = 100;
-	int MODE_LWMA = 1;
-
-	private double calculateVostro(double High[], double Low[]) {
-
-		if (Scalping)
-			g_period_156 = 100;
-		else
-			g_period_156 = 300;
-
-		for (gi_152 = 0; gi_152 < Bars; gi_152++) {
-			double wma = (High[gi_152] + Low[gi_152]) / 2.0;
-
-			gd_120 = 0;
-			for (gi_148 = gi_152; gi_148 < gi_144 + gi_152; gi_148++)
-				gd_120 += (High[gi_148] + Low[gi_148]) / 2.0;
-
-			gd_128 = gd_120 / gi_144;
-			gd_120 = 0;
-
-			for (gi_148 = gi_152; gi_148 < gi_144 + gi_152; gi_148++)
-				gd_120 += High[gi_148] - Low[gi_148];
-
-			gd_136 = 0.2 * (gd_120 / gi_144);
-
-			g_ibuf_116[gi_152] = (Low[gi_152] - gd_128) / gd_136;
-			g_ibuf_112[gi_152] = (High[gi_152] - gd_128) / gd_136;
-
-			if (g_ibuf_112[gi_152] > 8.0 && High[gi_152] > wma) {
-				g_ibuf_108[gi_152] = 90.0;
-			} else {
-				if (g_ibuf_116[gi_152] < -8.0 && Low[gi_152] < wma) {
-					g_ibuf_108[gi_152] = -90.0;
-				} else {
-					g_ibuf_108[gi_152] = 0.0;
-				}
-			}
-			if (g_ibuf_112[gi_152] > 8.0 && g_ibuf_112[gi_152 - 1] > 8.0) {
-				g_ibuf_108[gi_152] = 0;
-			}
-
-			if (g_ibuf_112[gi_152] > 8.0 && g_ibuf_112[gi_152 - 1] > 8.0
-					&& g_ibuf_112[gi_152 - 2] > 8.0) {
-				g_ibuf_108[gi_152] = 0;
-			}
-
-			if (g_ibuf_116[gi_152] < -8.0 && g_ibuf_116[gi_152 - 1] < -8.0) {
-				g_ibuf_108[gi_152] = 0;
-			}
-
-			if (g_ibuf_116[gi_152] < -8.0 && g_ibuf_116[gi_152 - 1] < -8.0
-					&& g_ibuf_116[gi_152 - 2] < -8.0) {
-				g_ibuf_108[gi_152] = 0;
-			}
-		}
-		return (0);
 	}
 }
