@@ -466,7 +466,7 @@ public class VostroSeries extends IndicatorSeries {
 					 */
 
 					if (newBar) {
-						highPlusLowSum = highPlusLowSum
+						this.highPlusLowSum = this.highPlusLowSum
 								- this.highPlusLowValues.getLast()
 								+ (candleItem.getHigh() + candleItem.getLow());
 						this.highPlusLowValues.removeLast();
@@ -474,7 +474,7 @@ public class VostroSeries extends IndicatorSeries {
 								.addFirst((candleItem.getHigh() + candleItem
 										.getLow()));
 
-						highLessLowSum = highLessLowSum
+						this.highLessLowSum = this.highLessLowSum
 								- this.highLessLowValues.getLast()
 								+ (candleItem.getHigh() - candleItem.getLow());
 						this.highLessLowValues.removeLast();
@@ -482,7 +482,7 @@ public class VostroSeries extends IndicatorSeries {
 								.addFirst((candleItem.getHigh() - candleItem
 										.getLow()));
 					} else {
-						highPlusLowSum = highPlusLowSum
+						this.highPlusLowSum = this.highPlusLowSum
 								- this.highPlusLowValues.getFirst()
 								+ (candleItem.getHigh() + candleItem.getLow());
 						this.highPlusLowValues.removeFirst();
@@ -490,7 +490,7 @@ public class VostroSeries extends IndicatorSeries {
 								.addFirst((candleItem.getHigh() + candleItem
 										.getLow()));
 
-						highLessLowSum = highLessLowSum
+						this.highLessLowSum = this.highLessLowSum
 								- this.highLessLowValues.getFirst()
 								+ (candleItem.getHigh() - candleItem.getLow());
 						this.highLessLowValues.removeFirst();
@@ -500,19 +500,19 @@ public class VostroSeries extends IndicatorSeries {
 					}
 				} else {
 					if (newBar) {
-						highPlusLowSum = highPlusLowSum
+						this.highPlusLowSum = this.highPlusLowSum
 								+ (candleItem.getHigh() + candleItem.getLow());
 						this.highPlusLowValues
 								.addFirst((candleItem.getHigh() + candleItem
 										.getLow()));
 
-						highLessLowSum = highLessLowSum
+						this.highLessLowSum = this.highLessLowSum
 								+ (candleItem.getHigh() - candleItem.getLow());
 						this.highLessLowValues
 								.addFirst((candleItem.getHigh() - candleItem
 										.getLow()));
 					} else {
-						highPlusLowSum = highPlusLowSum
+						this.highPlusLowSum = this.highPlusLowSum
 								+ (candleItem.getHigh() + candleItem.getLow())
 								- this.highPlusLowValues.getFirst();
 						this.highPlusLowValues.removeFirst();
@@ -520,7 +520,7 @@ public class VostroSeries extends IndicatorSeries {
 								.addFirst((candleItem.getHigh() + candleItem
 										.getLow()));
 
-						highLessLowSum = highLessLowSum
+						this.highLessLowSum = this.highLessLowSum
 								+ (candleItem.getHigh() - candleItem.getLow())
 								- this.highLessLowValues.getFirst();
 						this.highLessLowValues.removeFirst();
@@ -535,10 +535,10 @@ public class VostroSeries extends IndicatorSeries {
 					double ma = calculateMA(this.getMAType(), this.yyValues,
 							this.volValues, sum);
 
-					double gd_128 = highPlusLowSum / 2.0d
+					double gd_128 = this.highPlusLowSum / 2.0d
 							/ this.getVostroPeriod();
 
-					double gd_136 = 0.2 * (highLessLowSum / this
+					double gd_136 = 0.2 * (this.highLessLowSum / this
 							.getVostroPeriod());
 
 					double vostro1 = (candleItem.getLow() - gd_128) / gd_136;
