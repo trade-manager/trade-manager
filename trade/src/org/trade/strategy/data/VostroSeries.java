@@ -669,16 +669,10 @@ public class VostroSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Method get the priceSource.
+	 * Method get the price.
 	 * 
-	 * @param calcType
-	 *            String
-	 * @param yyValues
-	 *            LinkedList<Double>
-	 * @param volValues
-	 *            LinkedList<Long>
-	 * @param sum
-	 *            Double
+	 * @param candle
+	 *            CandleItem
 	 * @return double
 	 */
 	private double getPrice(CandleItem candle) {

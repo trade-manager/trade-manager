@@ -96,6 +96,7 @@ INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, cla
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(29,'MAType','Type of the Moving Average','WEIGHTED','java.lang.String', 'org.trade.dictionary.valuetype.CalculationType',11,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(30,'Vostro Period','The number of periods for Vostro calc','5','java.lang.Integer',null, 11,0) ;
 INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(31,'Price Source','Price source used for calculations','5','java.lang.Integer', 'org.trade.dictionary.valuetype.PriceSource',11,0); 
+INSERT INTO codeattribute (idCodeAttribute, name, description, defaultValue, className, classEditorName, idcodeType, version) VALUES(32,'Price Source','Price source used for calculations','1','java.lang.Integer', 'org.trade.dictionary.valuetype.PriceSource',1,0); 
 
 COMMIT;
 
@@ -145,6 +146,12 @@ INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSerie
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(23,'USD',7,6,0);
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(24,'SMART',8,6,0);
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(25,'STK',9,6,0);
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(26,'1',32,1,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(27,'1',32,2,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(28,'1',32,8,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(29,'1',32,9,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(30,'1',32,14,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(31,'1',32,15,0) ;
 
 COMMIT;
 

@@ -69,7 +69,9 @@ public class MovingAverageSeries extends IndicatorSeries {
 
 	public static final String LENGTH = "Length";
 	public static final String MA_TYPE = "MAType";
+	public static final String PRICE_SOURCE = "Price Source";
 
+	private Integer priceSource;
 	private String MAType;
 	private Integer length;
 	/*
@@ -245,6 +247,32 @@ public class MovingAverageSeries extends IndicatorSeries {
 	}
 
 	/**
+	 * Method getPriceSource.
+	 * 
+	 * @return Integer
+	 */
+	@Transient
+	public Integer getPriceSource() {
+		try {
+			if (null == this.priceSource)
+				this.priceSource = (Integer) this.getValueCode(PRICE_SOURCE);
+		} catch (Exception e) {
+			this.priceSource = null;
+		}
+		return this.priceSource;
+	}
+
+	/**
+	 * Method setMAType.
+	 * 
+	 * @param priceSource
+	 *            Integer
+	 */
+	public void setPriceSource(Integer priceSource) {
+		this.priceSource = priceSource;
+	}
+
+	/**
 	 * Method getLength.
 	 * 
 	 * @return Integer
@@ -339,6 +367,7 @@ public class MovingAverageSeries extends IndicatorSeries {
 			// get the current data item...
 			CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 			if (0 != candleItem.getClose()) {
+				double price = this.getPrice(candleItem);
 				if (this.yyValues.size() == getLength()) {
 					/*
 					 * If the item does not exist in the series then this is a
@@ -349,28 +378,25 @@ public class MovingAverageSeries extends IndicatorSeries {
 					 * each time.
 					 */
 					if (newBar) {
-						sum = sum - this.yyValues.getLast()
-								+ candleItem.getClose();
+						sum = sum - this.yyValues.getLast() + price;
 						this.yyValues.removeLast();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(price);
 						this.volValues.removeLast();
 						this.volValues.addFirst(candleItem.getVolume());
 					} else {
-						sum = sum - this.yyValues.getFirst()
-								+ candleItem.getClose();
+						sum = sum - this.yyValues.getFirst() + price;
 						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(price);
 					}
 				} else {
 					if (newBar) {
-						sum = sum + candleItem.getClose();
-						this.yyValues.addFirst(candleItem.getClose());
+						sum = sum + price;
+						this.yyValues.addFirst(price);
 						this.volValues.addFirst(candleItem.getVolume());
 					} else {
-						sum = sum + candleItem.getClose()
-								- this.yyValues.getFirst();
+						sum = sum + price - this.yyValues.getFirst();
 						this.yyValues.removeFirst();
-						this.yyValues.addFirst(candleItem.getClose());
+						this.yyValues.addFirst(price);
 						this.volValues.removeFirst();
 						this.volValues.addFirst(candleItem.getVolume());
 					}
@@ -469,5 +495,43 @@ public class MovingAverageSeries extends IndicatorSeries {
 			ma = sumYY / count;
 		}
 		return ma;
+	}
+
+	/**
+	 * Method get the price.
+	 * 
+	 * @param candle
+	 *            CandleItem
+	 * @return double
+	 */
+	private double getPrice(CandleItem candle) {
+
+		switch (this.getPriceSource()) {
+		case 1: {
+			return candle.getClose();
+		}
+		case 2: {
+			return candle.getOpen();
+		}
+		case 3: {
+			return candle.getHigh();
+		}
+		case 4: {
+			return candle.getLow();
+		}
+		case 5: {
+			return (candle.getHigh() + candle.getLow()) / 2.0d;
+		}
+		case 6: {
+			return (candle.getHigh() + candle.getLow() + candle.getClose()) / 3.0d;
+		}
+		case 7: {
+			return (candle.getOpen() + candle.getHigh() + candle.getLow() + candle
+					.getClose()) / 4.0d;
+		}
+		default: {
+			return candle.getClose();
+		}
+		}
 	}
 }
