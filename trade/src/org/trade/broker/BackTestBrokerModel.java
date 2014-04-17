@@ -1334,7 +1334,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		String errorMsg = "Symbol: "
 				+ tradestrategy.getContract().getSymbol()
 				+ " Bar Size/Chart Days combination was not valid for Yahoo API, these values have been updated.\n Please validate and save.\n "
-				+ "Note Chart Days/BarSize combinations for IB TWS:\n "
+				+ "Note Chart Days/BarSize combinations for IB TWS: " + "\n"
 				+ "Chart Hist = 1 D, Bar Size >= 1min" + "\n"
 				+ "Chart Hist > 1 D to 1 M, Bar Size >= 5min" + "\n"
 				+ "Chart Hist > 1 M to 3 M, Bar Size = 1 day";
