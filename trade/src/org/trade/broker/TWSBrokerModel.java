@@ -151,6 +151,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private static String backfillWhatToShow;
 	private static Integer backfillOffsetDays = 0;
 	private static String genericTicklist = "233";
+	private static boolean marketUpdateOnClose = false;
 
 	static {
 		try {
@@ -162,6 +163,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					.getPropAsInt("trade.backfill.offsetDays");
 			genericTicklist = ConfigProperties
 					.getPropAsString("trade.marketdata.genericTicklist");
+			marketUpdateOnClose = ConfigProperties
+					.getPropAsBoolean("trade.marketdata.realtime.updateClose");
 
 		} catch (Exception ex) {
 			throw new IllegalArgumentException(
@@ -1691,29 +1694,50 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 										.doubleValue() >= seriesContract
 										.getLastBidPrice().doubleValue())) {
 
-							if (price.doubleValue() > 0
-									&& (price.doubleValue() > candleItem
-											.getHigh() || price.doubleValue() < candleItem
-											.getLow())) {
-								candleItem.setClose(price.doubleValue());
-								candleItem.setLastUpdateDate(time);
-								/*
-								 * Note if you want you can fire the series
-								 * change here this will fire runStrategy. Could
-								 * cause problems if the method is not
-								 * synchronized in the strategy when the stock
-								 * is fast running.
-								 */
-								tradestrategy.getStrategyData()
-										.getBaseCandleSeries()
-										.fireSeriesChanged();
-								// _log.info("TickString Symbol: "
-								// + seriesContract.getSymbol()
-								// + " Trade Time: " + time
-								// + " Price: " + price + " Bid: "
-								// + seriesContract.getLastBidPrice()
-								// + " Ask: "
-								// + seriesContract.getLastAskPrice());
+							if (marketUpdateOnClose) {
+								if (price.doubleValue() > 0
+										&& (price.doubleValue() != candleItem
+												.getClose())) {
+									candleItem.setClose(price.doubleValue());
+									candleItem.setLastUpdateDate(time);
+									/*
+									 * Note if you want you can fire the series
+									 * change here this will fire runStrategy.
+									 * Could cause problems if the method is not
+									 * synchronized in the strategy when the
+									 * stock is fast running.
+									 */
+									tradestrategy.getStrategyData()
+											.getBaseCandleSeries()
+											.fireSeriesChanged();
+								}
+							} else {
+								if (price.doubleValue() > 0
+
+										&& (price.doubleValue() > candleItem
+												.getHigh() || price
+												.doubleValue() < candleItem
+												.getLow())) {
+									candleItem.setClose(price.doubleValue());
+									candleItem.setLastUpdateDate(time);
+									/*
+									 * Note if you want you can fire the series
+									 * change here this will fire runStrategy.
+									 * Could cause problems if the method is not
+									 * synchronized in the strategy when the
+									 * stock is fast running.
+									 */
+									tradestrategy.getStrategyData()
+											.getBaseCandleSeries()
+											.fireSeriesChanged();
+									// _log.info("TickString Symbol: "
+									// + seriesContract.getSymbol()
+									// + " Trade Time: " + time
+									// + " Price: " + price + " Bid: "
+									// + seriesContract.getLastBidPrice()
+									// + " Ask: "
+									// + seriesContract.getLastAskPrice());
+								}
 							}
 						}
 					}
