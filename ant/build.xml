@@ -116,6 +116,12 @@
 			<transaction src="../db/Upgrade-2.1_11_to_2.1_12.sql" />
 		</sql>
 	</target>
+	<target name="addStrategyData" depends="initialise" description="Add a new strategy and associated data.">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+			<classpath refid="build.classpath" />
+			<transaction src="../db/StrategyData.sql" />
+		</sql>
+	</target>
 	<target name="createUser" depends="createTables">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" delimiter="//">
 			<classpath refid="build.classpath" />
