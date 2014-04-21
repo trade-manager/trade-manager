@@ -17,7 +17,7 @@
 			<pathelement location="${build}" />
 			<fileset dir="${component.base}/lib">
 				<include name="jsyntaxpane-1.0.0.jar" />
-				<include name="tws-9.69.jar" />
+				<include name="tws-9.70.jar" />
 				<include name="jfreechart-1.0.17.jar" />
 				<include name="jcommon-1.0.21.jar" />
 				<include name="swt.jar" />

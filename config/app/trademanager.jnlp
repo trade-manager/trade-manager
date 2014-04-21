@@ -19,7 +19,7 @@
    	<j2se version="1.6+" java-vm-args="-Duser.timezone=EST5EDT" initial-heap-size="512m" max-heap-size="512m"/> 
   	<jar href="lib/trademanager-2.1.jar"/>
 	<jar href="jsyntaxpane-1.0.0.jar" />
-	<jar href="tws-9.69.jar" />
+	<jar href="tws-9.70.jar" />
 	<jar href="jfreechart-1.0.17.jar" />
 	<jar href="jcommon-1.0.21.jar" />
 	<jar href="swt.jar" />
