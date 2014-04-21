@@ -124,7 +124,11 @@ public class CoreUtilsTest extends TestCase {
 			returnVal = CoreUtils
 					.nullSafeComparator(new BigDecimal(1.23), null);
 			TestCase.assertEquals(1, returnVal);
-
+			
+			returnVal = CoreUtils
+					.nullSafeComparator(new BigDecimal(-1.23), new BigDecimal(-1.24));
+			TestCase.assertEquals(1, returnVal);
+			
 			returnVal = CoreUtils.nullSafeComparator(null, null);
 			TestCase.assertEquals(0, returnVal);
 
