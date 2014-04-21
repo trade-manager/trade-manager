@@ -2740,7 +2740,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			throws IOException {
 		com.ib.client.Contract ibContract = new com.ib.client.Contract();
 		if (null != contract.getIdContractIB()) {
-			ibContract.m_conId = contract.getIdContractIB();
+//			ibContract.m_conId = contract.getIdContractIB();
 		}
 		if (null != contract.getSymbol()) {
 			ibContract.m_symbol = contract.getSymbol();
