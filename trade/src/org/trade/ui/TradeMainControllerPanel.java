@@ -1806,8 +1806,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					for (Tradestrategy tradestrategy : tradingday
 							.getTradestrategies()) {
 						try {
-							if (!m_brokerModel
-									.validateBrokerData(tradestrategy)) {
+							if (brokerDataOnly
+									&& !m_brokerModel
+											.validateBrokerData(tradestrategy)) {
 								return;
 							}
 						} catch (BrokerModelException ex) {
