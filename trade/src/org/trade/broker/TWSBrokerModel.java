@@ -1498,7 +1498,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			BigDecimal price = (new BigDecimal(value)).setScale(SCALE,
 					BigDecimal.ROUND_HALF_EVEN);
 			synchronized (price) {
-
+				// _log.warn("tickPrice Field: " + field + " value :" + value
+				// + " time: " + System.currentTimeMillis());
 				if (!m_marketDataRequests.containsKey(new Integer(reqId)))
 					return;
 				Contract contract = m_marketDataRequests.get(reqId);
@@ -1637,7 +1638,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					while (st.hasMoreTokens()) {
 						tokenNumber++;
 						String token = st.nextToken();
-
 						switch (tokenNumber) {
 						case 1: {
 							price = (new BigDecimal(Double.parseDouble(token)))
@@ -1698,6 +1698,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								if (price.doubleValue() > 0
 										&& (price.doubleValue() != candleItem
 												.getClose())) {
+
 									candleItem.setClose(price.doubleValue());
 									candleItem.setLastUpdateDate(time);
 									/*
@@ -1710,6 +1711,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									tradestrategy.getStrategyData()
 											.getBaseCandleSeries()
 											.fireSeriesChanged();
+									// _log.info("TickString Symbol: "
+									// + seriesContract.getSymbol()
+									// + " Trade Time: " + time
+									// + " Price: " + price + " Bid: "
+									// + seriesContract.getLastBidPrice()
+									// + " Ask: "
+									// + seriesContract.getLastAskPrice());
 								}
 							} else {
 								if (price.doubleValue() > 0
@@ -2740,7 +2748,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			throws IOException {
 		com.ib.client.Contract ibContract = new com.ib.client.Contract();
 		if (null != contract.getIdContractIB()) {
-//			ibContract.m_conId = contract.getIdContractIB();
+			// ibContract.m_conId = contract.getIdContractIB();
 		}
 		if (null != contract.getSymbol()) {
 			ibContract.m_symbol = contract.getSymbol();
