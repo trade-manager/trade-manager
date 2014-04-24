@@ -1570,9 +1570,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public Account getIndividualAccount() throws StrategyRuleException {
 		try {
-			return this.tradePersistentModel
-					.findAccountByNumber(getTradestrategy().getPortfolio()
-							.getIndividualAccount().getAccountNumber());
+			if (null != getTradestrategy().getPortfolio()
+					.getIndividualAccount()) {
+				return this.tradePersistentModel
+						.findAccountByNumber(getTradestrategy().getPortfolio()
+								.getIndividualAccount().getAccountNumber());
+			}
+			return null;
 		} catch (Exception ex) {
 			throw new StrategyRuleException(1, 420,
 					"Error finding individual accounts: " + ex.getMessage());
