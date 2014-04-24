@@ -3062,10 +3062,19 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			Contract transientContract) throws ParseException {
 
 		boolean changed = false;
+		/*
+		 * For stock the localsymbol must match. For futues they will not e.g
+		 * Symbol ES Local will be ES06. TODO Need to find out how to handle
+		 * same symbol different local symbols when using exchange SMART.
+		 */
 		if (CoreUtils.nullSafeComparator(transientContract.getSymbol(),
-				contractDetails.m_summary.m_symbol) == 0
-				&& CoreUtils.nullSafeComparator(transientContract.getSymbol(),
-						contractDetails.m_summary.m_localSymbol) == 0) {
+				contractDetails.m_summary.m_localSymbol) != 0
+				&& SECType.STOCK.equals(transientContract.getSecType())) {
+			return changed;
+
+		}
+		if (CoreUtils.nullSafeComparator(transientContract.getSymbol(),
+				contractDetails.m_summary.m_symbol) == 0) {
 			if (CoreUtils.nullSafeComparator(
 					transientContract.getLocalSymbol(),
 					contractDetails.m_summary.m_localSymbol) != 0) {

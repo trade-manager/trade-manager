@@ -67,7 +67,7 @@ CREATE  TABLE IF NOT EXISTS contract (
   subCategory VARCHAR(80) NULL ,
   timeZoneId VARCHAR(7) NULL ,
   tradingClass VARCHAR(80) NULL ,
-  tradingHours VARCHAR(50) NULL ,
+  tradingHours VARCHAR(100) NULL ,
   underConId INT NULL ,
   validExchanges VARCHAR(200) NULL ,  
   version INT NULL,
