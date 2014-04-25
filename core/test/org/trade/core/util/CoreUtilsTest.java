@@ -124,11 +124,11 @@ public class CoreUtilsTest extends TestCase {
 			returnVal = CoreUtils
 					.nullSafeComparator(new BigDecimal(1.23), null);
 			TestCase.assertEquals(1, returnVal);
-			
-			returnVal = CoreUtils
-					.nullSafeComparator(new BigDecimal(-1.23), new BigDecimal(-1.24));
+
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(-1.23),
+					new BigDecimal(-1.24));
 			TestCase.assertEquals(1, returnVal);
-			
+
 			returnVal = CoreUtils.nullSafeComparator(null, null);
 			TestCase.assertEquals(0, returnVal);
 
@@ -152,6 +152,27 @@ public class CoreUtilsTest extends TestCase {
 
 			returnVal = CoreUtils.nullSafeComparator(new Integer(1),
 					new Integer(0));
+			TestCase.assertEquals(1, returnVal);
+
+			BigDecimal avgFilledPrice = new BigDecimal(22.35);
+			BigDecimal lastPrice = new BigDecimal(22.31);
+			BigDecimal auxPrice = new BigDecimal(22.34);
+			
+			BigDecimal stopTriggerAmount = new BigDecimal(0.03);
+			int buySellMultiplier = -1;
+			returnVal = -1;
+			
+			if (CoreUtils.nullSafeComparator(auxPrice,
+					avgFilledPrice) == 1 * buySellMultiplier) {
+				if ((CoreUtils.nullSafeComparator(lastPrice, auxPrice
+						.add(stopTriggerAmount.multiply(new BigDecimal(
+								buySellMultiplier)))) == 1 * buySellMultiplier)
+						|| (CoreUtils.nullSafeComparator(lastPrice, auxPrice
+								.add(stopTriggerAmount.multiply(new BigDecimal(
+										buySellMultiplier)))) == 0)) {
+					returnVal = 1;
+				}
+			}
 			TestCase.assertEquals(1, returnVal);
 
 		} catch (Exception ex) {
