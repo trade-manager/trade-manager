@@ -47,6 +47,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.trade.core.valuetype.Money;
 
 /**
  * Some tests for the {@link TradingCalendar} class.
@@ -154,26 +155,95 @@ public class CoreUtilsTest extends TestCase {
 					new Integer(0));
 			TestCase.assertEquals(1, returnVal);
 
-			BigDecimal avgFilledPrice = new BigDecimal(22.35);
-			BigDecimal lastPrice = new BigDecimal(22.31);
-			BigDecimal auxPrice = new BigDecimal(22.34);
-			
-			BigDecimal stopTriggerAmount = new BigDecimal(0.03);
-			int buySellMultiplier = -1;
-			returnVal = -1;
-			
-			if (CoreUtils.nullSafeComparator(auxPrice,
-					avgFilledPrice) == 1 * buySellMultiplier) {
-				if ((CoreUtils.nullSafeComparator(lastPrice, auxPrice
-						.add(stopTriggerAmount.multiply(new BigDecimal(
-								buySellMultiplier)))) == 1 * buySellMultiplier)
-						|| (CoreUtils.nullSafeComparator(lastPrice, auxPrice
-								.add(stopTriggerAmount.multiply(new BigDecimal(
-										buySellMultiplier)))) == 0)) {
-					returnVal = 1;
+			Money avgFilledPrice = new Money(186.75);
+			Money lastPrice = new Money(186.78);
+			Money auxPrice = new Money(186.68);
+
+			Money stopTriggerAmount = new Money(0.03);
+			Money stopMoveAmount = new Money(0.02);
+
+			Money initialStopTriggerAmount = new Money(0.02);
+			Money initialStopMoveAmount = new Money(0.01);
+
+			int buySellMultiplier = 1;
+
+			if (CoreUtils.nullSafeComparator(auxPrice, avgFilledPrice) == -1
+					* buySellMultiplier) {
+				if ((CoreUtils.nullSafeComparator(
+						lastPrice.getBigDecimalValue(),
+						avgFilledPrice.getBigDecimalValue().add(
+								initialStopTriggerAmount.getBigDecimalValue()
+										.multiply(
+												new BigDecimal(
+														buySellMultiplier)))) == 1 * buySellMultiplier)
+						|| (CoreUtils
+								.nullSafeComparator(
+										lastPrice.getBigDecimalValue(),
+										avgFilledPrice
+												.getBigDecimalValue()
+												.add(initialStopTriggerAmount
+														.getBigDecimalValue()
+														.multiply(
+																new BigDecimal(
+																		buySellMultiplier)))) == 0)) {
+
+					auxPrice = new Money(
+							avgFilledPrice
+									.getBigDecimalValue()
+									.add(initialStopMoveAmount
+											.getBigDecimalValue().multiply(
+													new BigDecimal(
+															buySellMultiplier))));
+
 				}
 			}
-			TestCase.assertEquals(1, returnVal);
+			TestCase.assertEquals(
+					new Money(
+							avgFilledPrice
+									.getBigDecimalValue()
+									.add(initialStopMoveAmount
+											.getBigDecimalValue().multiply(
+													new BigDecimal(
+															buySellMultiplier)))),
+					auxPrice);
+
+			lastPrice = new Money(lastPrice.getBigDecimalValue().add(
+					stopTriggerAmount.getBigDecimalValue().multiply(
+							new BigDecimal(buySellMultiplier))));
+
+			if (CoreUtils.nullSafeComparator(auxPrice, avgFilledPrice) == 1 * buySellMultiplier) {
+				if ((CoreUtils.nullSafeComparator(
+						lastPrice.getBigDecimalValue(),
+						auxPrice.getBigDecimalValue().add(
+								stopTriggerAmount.getBigDecimalValue()
+										.multiply(
+												new BigDecimal(
+														buySellMultiplier)))) == 1 * buySellMultiplier)
+						|| (CoreUtils
+								.nullSafeComparator(
+										lastPrice.getBigDecimalValue(),
+										auxPrice.getBigDecimalValue()
+												.add(stopTriggerAmount
+														.getBigDecimalValue()
+														.multiply(
+																new BigDecimal(
+																		buySellMultiplier)))) == 0)) {
+					auxPrice = new Money(
+							lastPrice
+									.getBigDecimalValue()
+									.subtract(
+											stopMoveAmount
+													.getBigDecimalValue()
+													.multiply(
+															new BigDecimal(
+																	buySellMultiplier))));
+				}
+			}
+			TestCase.assertEquals(
+					new Money(lastPrice.getBigDecimalValue().subtract(
+							stopMoveAmount.getBigDecimalValue().multiply(
+									new BigDecimal(buySellMultiplier)))),
+					auxPrice);
 
 		} catch (Exception ex) {
 			_log.error("Error testNullSafe: " + ex.getMessage(), ex);
