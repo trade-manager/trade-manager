@@ -729,6 +729,7 @@ public class TradingdayPanel extends BasePanel {
 				m_tradingdayTable.setRowSelectionInterval(selectedRow,
 						selectedRow);
 			} else {
+				m_tradingdayTable.setRowSelectionInterval(0, 0);
 				m_tradestrategyModel.setData(tradingday);
 				enableTradestrategyButtons(null);
 			}
