@@ -125,7 +125,18 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 		try {
 			// Get the current candle
 			CandleItem currentCandleItem = this.getCurrentCandle();
+			// AbstractStrategyRule.logCandle(this,
+			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			CandleItem prevCandleItem = null;
+			if (newBar && getCurrentCandleCount() > 0) {
+				prevCandleItem = (CandleItem) candleSeries
+						.getDataItem(getCurrentCandleCount() - 1);
+				// AbstractStrategyRule
+				// .logCandle(this, prevCandleItem.getCandle());
+			} else {
+				return;
+			}
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -163,11 +174,6 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 				this.cancel();
 				return;
 			}
-			// AbstractStrategyRule.logCandle(this,
-			// currentCandleItem.getCandle());
-
-			CandleItem prevCandleItem = (CandleItem) candleSeries
-					.getDataItem(getCurrentCandleCount() - 1);
 
 			/*
 			 * If the 5min low is broken cancel orders as trade no longer valid.
@@ -181,7 +187,8 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 			 * position trade.
 			 */
 			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), 5))
+					.getTradestrategy().getTradingday().getOpen(), this
+					.getTradestrategy().getBarSize() / 60))
 					&& newBar) {
 
 				Date preTradingDate = TradingCalendar.getPrevTradingDay(this

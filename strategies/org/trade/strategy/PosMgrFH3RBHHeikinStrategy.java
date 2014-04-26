@@ -125,13 +125,15 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			 */
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
-			CandleItem prevCandleItem = null;
 
+			CandleItem prevCandleItem = null;
 			if (newBar && getCurrentCandleCount() > 0) {
 				prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
-				// AbstractStrategyRule.logCandle(this,
-				// prevCandleItem.getCandle());
+				// AbstractStrategyRule
+				// .logCandle(this, prevCandleItem.getCandle());
+			} else {
+				return;
 			}
 
 			// AbstractStrategyRule.logCandle(this,

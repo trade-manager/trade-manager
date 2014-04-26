@@ -151,22 +151,24 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 			 */
 
 			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), 5))
+					.getTradestrategy().getTradingday().getOpen(), this
+					.getTradestrategy().getBarSize() / 60))
 					&& newBar) {
 
 				/*
-				 * Example On start of the 9:35 candle check the 9:30 candle and
-				 * buy over under in the direction of the bar.
+				 * Example On start of the second (9:35) candle check the 9:30
+				 * candle and buy over under in the direction of the bar.
 				 */
 			}
 
 			/*
-			 * Close any opened positions with a market order at the end of the
-			 * day.
+			 * Close any opened positions with a market order at day end minus
+			 * one bar.
 			 */
 			if (!currentCandleItem.getLastUpdateDate().before(
 					TradingCalendar.addMinutes(this.getTradestrategy()
-							.getTradingday().getClose(), -5))) {
+							.getTradingday().getClose(), (-1
+							* this.getTradestrategy().getBarSize() / 60)))) {
 				cancelOrdersClosePosition(true);
 				_log.info("Rule 15:55:00 close all open positions: "
 						+ getSymbol() + " Time: " + startPeriod);
