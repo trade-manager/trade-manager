@@ -102,10 +102,10 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
 		try {
-
-			/* Get the current candle */
-			CandleItem currentCandle = this.getCurrentCandle();
-			Date startPeriod = currentCandle.getPeriod().getStart();
+			// Get the current candle
+			CandleItem currentCandleItem = (CandleItem) candleSeries
+					.getDataItem(getCurrentCandleCount());
+			Date startPeriod = currentCandleItem.getPeriod().getStart();
 
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
@@ -182,9 +182,9 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandle.getLastUpdateDate().before(
-					TradingCalendar.getSpecificTime(
-							currentCandle.getLastUpdateDate(), 15, 58))) {
+			if (!currentCandleItem.getLastUpdateDate().before(
+					TradingCalendar.addMinutes(this.getTradestrategy()
+							.getTradingday().getClose(), -2))) {
 				cancelOrdersClosePosition(true);
 				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

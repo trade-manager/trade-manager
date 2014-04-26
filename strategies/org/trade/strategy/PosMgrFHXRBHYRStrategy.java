@@ -119,8 +119,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * Get the current candle
 			 */
 			CandleItem currentCandleItem = this.getCurrentCandle();
-			CandleItem prevCandleItem = null;
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			CandleItem prevCandleItem = null;
 			if (newBar && getCurrentCandleCount() > 0) {
 				prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
@@ -186,8 +186,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 */
 
 			// if
-			// (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
-			// 9, 45)) && newBar) {
+			// (startPeriod.after(TradingCalendar.addMinutes(this.getTradestrategy().getTradingday().getOpen(),
+			// 15)) && newBar) {
 			// PivotDataset dataset = (PivotDataset) getTradestrategy()
 			// .getStrategyData().getIndicatorByType(
 			// IndicatorSeries.PivotSeries);
@@ -201,8 +201,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			// if (pivot
 			// .getPeriod()
 			// .getStart()
-			// .after(TradingCalendar.getSpecificTime(
-			// startPeriod, 9, 45))
+			// .after(TradingCalendar.addMinutes(this.getTradestrategy().getTradingday().getOpen(),
+			// 15))
 			// && newBar) {
 			// _log.error("startPeriod: "
 			// + startPeriod
@@ -211,8 +211,9 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			// + " value: "
 			// + pivot.getPivotPrice()
 			// + " Time 9:45"
-			// + TradingCalendar.getSpecificTime(
-			// startPeriod, 9, 45));
+			// +
+			// TradingCalendar.addMinutes(this.getTradestrategy().getTradingday().getOpen(),
+			// 15));
 			// double avgfillPrice = this.getOpenPositionOrder()
 			// .getAverageFilledPrice().doubleValue();
 			//
@@ -252,8 +253,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 */
 
 			// if
-			// (startPeriod.after(TradingCalendar.getSpecificTime(startPeriod,
-			// 9, 50)) && newBar) {
+			// (startPeriod.after(TradingCalendar.addMinutes(this.getTradestrategy().getTradingday().getOpen(),
+			// 20)) && newBar) {
 			//
 			// _log.info("Symbol: " + this.getSymbol() + " Current Time: "
 			// + currentCandleItem.getPeriod().getStart() + " vwap: "
@@ -267,7 +268,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			//
 			// List<Pair> pairs = new ArrayList<Pair>();
 			//
-			// int startBar = candleSeries.indexOf(prevCandleItem.getPeriod())
+			// int startBar =
+			// candleSeries.indexOf(prevCandleItem.getPeriod())
 			// - (barBack - 1);
 			// Long startTime = ((CandleItem) candleSeries
 			// .getDataItem(startBar)).getPeriod().getStart()
@@ -293,12 +295,14 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			// }
 			// Collections.sort(pairs, Pair.X_VALUE_ASC);
 			// Pair[] pairsArray = pairs.toArray(new Pair[] {});
-			// double[] terms = matrixFunctions.solve(pairsArray, polyOrder);
+			// double[] terms = matrixFunctions.solve(pairsArray,
+			// polyOrder);
 			// double correlationCoeff = matrixFunctions
 			// .getCorrelationCoefficient(pairsArray, terms);
 			// double standardError = matrixFunctions.getStandardError(
 			// pairsArray, terms);
-			// _log.info("Symbol: " + this.getSymbol() + " correlationCoeff: "
+			// _log.info("Symbol: " + this.getSymbol() +
+			// " correlationCoeff: "
 			// + correlationCoeff + " standardError: " + standardError);
 			// if (correlationCoeff > _minCorrelationCoeff) {
 			//
@@ -387,10 +391,10 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * that break the 5min high/low between 9:40 thru 15:30.
 			 */
 
-			if (startPeriod.before(TradingCalendar.getSpecificTime(startPeriod,
-					15, 30))
-					&& startPeriod.after(TradingCalendar.getSpecificTime(
-							startPeriod, 9, 35))) {
+			if (startPeriod.before(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getClose(), -30))
+					&& startPeriod.after(TradingCalendar.addMinutes(this
+							.getTradestrategy().getTradingday().getOpen(), 5))) {
 
 				CandleItem firstCandle = this.getCandle(TradingCalendar
 						.getSpecificTime(this.getTradestrategy()
@@ -430,8 +434,9 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * At 15:30 Move stop order to b.e. i.e. the average fill price of
 			 * the open order.
 			 */
-			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
-					15, 30)) && newBar) {
+			if (startPeriod.equals(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getClose(), -30))
+					&& newBar) {
 
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
 						+ " Time: " + startPeriod);
@@ -508,8 +513,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * day.
 			 */
 			if (!currentCandleItem.getLastUpdateDate().before(
-					TradingCalendar.getSpecificTime(
-							currentCandleItem.getLastUpdateDate(), 15, 58))) {
+					TradingCalendar.addMinutes(this.getTradestrategy()
+							.getTradingday().getClose(), -2))) {
 				cancelOrdersClosePosition(true);
 				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

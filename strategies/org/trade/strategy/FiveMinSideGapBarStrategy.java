@@ -125,164 +125,160 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
 		try {
-			if (getCurrentCandleCount() > 0) {
-				// Get the current candle
-				CandleItem currentCandleItem = this.getCurrentCandle();
-				Date startPeriod = currentCandleItem.getPeriod().getStart();
+			// Get the current candle
+			CandleItem currentCandleItem = this.getCurrentCandle();
+			Date startPeriod = currentCandleItem.getPeriod().getStart();
 
+			/*
+			 * Trade is open kill this Strategy as its job is done.
+			 */
+			if (this.isThereOpenPosition()) {
+				_log.info("Strategy complete open position filled symbol: "
+						+ getSymbol() + " startPeriod: " + startPeriod);
 				/*
-				 * Trade is open kill this Strategy as its job is done.
+				 * If the order is partial filled chaeck and if the risk goes
+				 * beyond 1 risk unit cancel the openPositionOrder this will
+				 * cause it to be marked as filled.
 				 */
-				if (this.isThereOpenPosition()) {
-					_log.info("Strategy complete open position filled symbol: "
-							+ getSymbol() + " startPeriod: " + startPeriod);
-					/*
-					 * If the order is partial filled chaeck and if the risk
-					 * goes beyond 1 risk unit cancel the openPositionOrder this
-					 * will cause it to be marked as filled.
-					 */
-					if (OrderStatus.PARTIALFILLED.equals(this
-							.getOpenPositionOrder().getStatus())) {
-						if (isRiskViolated(currentCandleItem.getClose(), this
-								.getTradestrategy().getRiskAmount(), this
-								.getOpenPositionOrder().getQuantity(), this
-								.getOpenPositionOrder().getAverageFilledPrice())) {
-							this.cancelOrder(this.getOpenPositionOrder());
-						}
-					}
-					this.cancel();
-					return;
-				}
-
-				/*
-				 * Open position order was cancelled kill this Strategy as its
-				 * job is done.
-				 */
-				if (null != openPositionOrderKey
-						&& !this.getTradeOrder(openPositionOrderKey).isActive()) {
-					_log.info("Strategy complete open position cancelled symbol: "
-							+ getSymbol() + " startPeriod: " + startPeriod);
-					updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
-					this.cancel();
-					return;
-				}
-				// AbstractStrategyRule.logCandle(this,
-				// currentCandleItem.getCandle());
-
-				CandleItem prevCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount() - 1);
-
-				/*
-				 * If the 5min low is broken cancel orders as trade no longer
-				 * valid.
-				 */
-
-				CandleItem openCandle = this.getCandle(this.getTradestrategy()
-						.getTradingday().getOpen());
-
-				if (null == getTradestrategy().getSide()) {
-					error(1, 101, "Error  tradestrategy side has not been set.");
-				}
-				if (!this.isThereOpenPosition()) {
-					if (Side.BOT.equals(getTradestrategy().getSide())) {
-						if (openCandle.getLow() > prevCandleItem.getLow()) {
-							_log.info("Rule 5min low broken. Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-							this.cancelAllOrders();
-							updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
-							this.cancel();
-							return;
-
-						}
-					} else {
-						if (openCandle.getHigh() < prevCandleItem.getHigh()) {
-							_log.info("Rule 5min high broken. Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-							this.cancelAllOrders();
-							updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
-							this.cancel();
-							return;
-						}
+				if (OrderStatus.PARTIALFILLED.equals(this
+						.getOpenPositionOrder().getStatus())) {
+					if (isRiskViolated(currentCandleItem.getClose(), this
+							.getTradestrategy().getRiskAmount(), this
+							.getOpenPositionOrder().getQuantity(), this
+							.getOpenPositionOrder().getAverageFilledPrice())) {
+						this.cancelOrder(this.getOpenPositionOrder());
 					}
 				}
+				this.cancel();
+				return;
+			}
 
-				/*
-				 * Is it the the 9:35 candle? and we have not created an open
-				 * position trade.
-				 */
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 9, 35)) && newBar) {
+			/*
+			 * Open position order was cancelled kill this Strategy as its job
+			 * is done.
+			 */
+			if (null != openPositionOrderKey
+					&& !this.getTradeOrder(openPositionOrderKey).isActive()) {
+				_log.info("Strategy complete open position cancelled symbol: "
+						+ getSymbol() + " startPeriod: " + startPeriod);
+				updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
+				this.cancel();
+				return;
+			}
+			// AbstractStrategyRule.logCandle(this,
+			// currentCandleItem.getCandle());
 
-					Money price = new Money(prevCandleItem.getHigh());
-					Money priceStop = new Money(prevCandleItem.getLow());
-					String action = Action.BUY;
-					if (Side.SLD.equals(getTradestrategy().getSide())) {
-						price = new Money(prevCandleItem.getLow());
-						priceStop = new Money(prevCandleItem.getHigh());
-						action = Action.SELL;
-					}
-					// Is the candle in the direction of the trade i.e.
-					// a long play should have a green 5min candle
-					if (prevCandleItem.isSide(getTradestrategy().getSide())) {
-						Money priceClose = new Money(prevCandleItem.getClose());
-						Entrylimit entrylimit = getEntryLimit().getValue(
-								priceClose);
+			CandleItem prevCandleItem = (CandleItem) candleSeries
+					.getDataItem(getCurrentCandleCount() - 1);
 
-						double percentChange = Math.abs(prevCandleItem
-								.getHigh() - prevCandleItem.getLow())
-								/ prevCandleItem.getClose();
-						// If the candle less than the entry limit %
-						if (percentChange < entrylimit.getPercentOfPrice()
-								.doubleValue()) {
-							// TODO add the tails as a % of the body.
-							_log.info(" We have a trade!!  Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
+			/*
+			 * If the 5min low is broken cancel orders as trade no longer valid.
+			 */
 
-							/*
-							 * Create an open position.
-							 */
-							TradeOrder tradeOrder = createRiskOpenPosition(
-									action, price, priceStop, true, null, null,
-									null, null);
-							openPositionOrderKey = tradeOrder.getOrderKey();
+			CandleItem openCandle = this.getCandle(this.getTradestrategy()
+					.getTradingday().getOpen());
 
-						} else {
-							_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
-									+ getSymbol() + " Time: " + startPeriod);
-							updateTradestrategyStatus(TradestrategyStatus.PERCENT);
-							// Kill this process we are done!
-							this.cancel();
-						}
-
-					} else {
-						_log.info("Rule 5 min Red/Green bar opposite to trade direction. Symbol: "
+			if (null == getTradestrategy().getSide()) {
+				error(1, 101, "Error  tradestrategy side has not been set.");
+			}
+			if (!this.isThereOpenPosition()) {
+				if (Side.BOT.equals(getTradestrategy().getSide())) {
+					if (openCandle.getLow() > prevCandleItem.getLow()) {
+						_log.info("Rule 5min low broken. Symbol: "
 								+ getSymbol() + " Time: " + startPeriod);
-
-						if (Side.SLD.equals(getTradestrategy().getSide())) {
-							this.updateTradestrategyStatus(TradestrategyStatus.GB);
-						} else {
-							this.updateTradestrategyStatus(TradestrategyStatus.RB);
-						}
-
-						// Kill this process we are done!
-						this.cancel();
-					}
-				} else if (!startPeriod.before(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
-
-					if (!this.isThereOpenPosition()
-							&& !TradestrategyStatus.CANCELLED
-									.equals(getTradestrategy().getStatus())) {
-						this.updateTradestrategyStatus(TradestrategyStatus.TO);
 						this.cancelAllOrders();
-						// No trade we timed out
-						_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
-								+ getSymbol() + " Time: " + startPeriod);
+						updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_LOW_BROKEN);
+						this.cancel();
+						return;
+
 					}
-					this.cancel();
+				} else {
+					if (openCandle.getHigh() < prevCandleItem.getHigh()) {
+						_log.info("Rule 5min high broken. Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+						this.cancelAllOrders();
+						updateTradestrategyStatus(TradestrategyStatus.FIVE_MIN_HIGH_BROKEN);
+						this.cancel();
+						return;
+					}
 				}
 			}
 
+			/*
+			 * Is it the the 9:35 candle? and we have not created an open
+			 * position trade.
+			 */
+			if (startPeriod.equals(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getOpen(), 5))
+					&& newBar) {
+
+				Money price = new Money(prevCandleItem.getHigh());
+				Money priceStop = new Money(prevCandleItem.getLow());
+				String action = Action.BUY;
+				if (Side.SLD.equals(getTradestrategy().getSide())) {
+					price = new Money(prevCandleItem.getLow());
+					priceStop = new Money(prevCandleItem.getHigh());
+					action = Action.SELL;
+				}
+				// Is the candle in the direction of the trade i.e.
+				// a long play should have a green 5min candle
+				if (prevCandleItem.isSide(getTradestrategy().getSide())) {
+					Money priceClose = new Money(prevCandleItem.getClose());
+					Entrylimit entrylimit = getEntryLimit()
+							.getValue(priceClose);
+
+					double percentChange = Math.abs(prevCandleItem.getHigh()
+							- prevCandleItem.getLow())
+							/ prevCandleItem.getClose();
+					// If the candle less than the entry limit %
+					if (percentChange < entrylimit.getPercentOfPrice()
+							.doubleValue()) {
+						// TODO add the tails as a % of the body.
+						_log.info(" We have a trade!!  Symbol: " + getSymbol()
+								+ " Time: " + startPeriod);
+
+						/*
+						 * Create an open position.
+						 */
+						TradeOrder tradeOrder = createRiskOpenPosition(action,
+								price, priceStop, true, null, null, null, null);
+						openPositionOrderKey = tradeOrder.getOrderKey();
+
+					} else {
+						_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
+								+ getSymbol() + " Time: " + startPeriod);
+						updateTradestrategyStatus(TradestrategyStatus.PERCENT);
+						// Kill this process we are done!
+						this.cancel();
+					}
+
+				} else {
+					_log.info("Rule 5 min Red/Green bar opposite to trade direction. Symbol: "
+							+ getSymbol() + " Time: " + startPeriod);
+
+					if (Side.SLD.equals(getTradestrategy().getSide())) {
+						this.updateTradestrategyStatus(TradestrategyStatus.GB);
+					} else {
+						this.updateTradestrategyStatus(TradestrategyStatus.RB);
+					}
+
+					// Kill this process we are done!
+					this.cancel();
+				}
+			} else if (!startPeriod.before(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getOpen(), 60))) {
+
+				if (!this.isThereOpenPosition()
+						&& !TradestrategyStatus.CANCELLED
+								.equals(getTradestrategy().getStatus())) {
+					this.updateTradestrategyStatus(TradestrategyStatus.TO);
+					this.cancelAllOrders();
+					// No trade we timed out
+					_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
+							+ getSymbol() + " Time: " + startPeriod);
+				}
+				this.cancel();
+			}
 		} catch (StrategyRuleException ex) {
 			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
 			error(1, 20, "Error  runRule exception: " + ex.getMessage());

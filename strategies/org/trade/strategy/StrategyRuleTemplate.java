@@ -115,67 +115,63 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
 		try {
-			if (getCurrentCandleCount() > 0) {
-				// Get the current candle
-				CandleItem currentCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount());
-				Date startPeriod = currentCandleItem.getPeriod().getStart();
+			// Get the current candle
+			CandleItem currentCandleItem = this.getCurrentCandle();
+			Date startPeriod = currentCandleItem.getPeriod().getStart();
 
+			/*
+			 * Position is open kill this Strategy as its job is done. In this
+			 * example we would manage the position with a strategy manager.
+			 * This strategy is just used to create the order that would open
+			 * the position.
+			 */
+			if (this.isThereOpenPosition()) {
+				_log.info("Strategy complete open position filled symbol: "
+						+ getSymbol() + " startPeriod: " + startPeriod);
 				/*
-				 * Position is open kill this Strategy as its job is done. In
-				 * this example we would manage the position with a strategy
-				 * manager. This strategy is just used to create the order that
-				 * would open the position.
+				 * If the order is partial filled check if the risk goes beyond
+				 * 1 risk unit. If it does cancel the openPositionOrder this
+				 * will cause it to be marked as filled.
 				 */
-				if (this.isThereOpenPosition()) {
-					_log.info("Strategy complete open position filled symbol: "
-							+ getSymbol() + " startPeriod: " + startPeriod);
-					/*
-					 * If the order is partial filled check if the risk goes
-					 * beyond 1 risk unit. If it does cancel the
-					 * openPositionOrder this will cause it to be marked as
-					 * filled.
-					 */
-					if (OrderStatus.PARTIALFILLED.equals(this
-							.getOpenPositionOrder().getStatus())) {
-						if (isRiskViolated(currentCandleItem.getClose(), this
-								.getTradestrategy().getRiskAmount(), this
-								.getOpenPositionOrder().getQuantity(), this
-								.getOpenPositionOrder().getAverageFilledPrice())) {
-							this.cancelOrder(this.getOpenPositionOrder());
-						}
+				if (OrderStatus.PARTIALFILLED.equals(this
+						.getOpenPositionOrder().getStatus())) {
+					if (isRiskViolated(currentCandleItem.getClose(), this
+							.getTradestrategy().getRiskAmount(), this
+							.getOpenPositionOrder().getQuantity(), this
+							.getOpenPositionOrder().getAverageFilledPrice())) {
+						this.cancelOrder(this.getOpenPositionOrder());
 					}
-					this.cancel();
-					return;
 				}
-
-				/*
-				 * Create code here to create orders based on your
-				 * conditions/rules.
-				 */
-
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 9, 35)) && newBar) {
-
-					/*
-					 * Example On start of the 9:35 candle check the 9:30 candle
-					 * and buy over under in the direction of the bar.
-					 */
-				}
-
-				/*
-				 * Close any opened positions with a market order at the end of
-				 * the day.
-				 */
-				if (!startPeriod.before(TradingCalendar.getSpecificTime(
-						startPeriod, 15, 55))) {
-					cancelOrdersClosePosition(true);
-					_log.info("Rule 15:55:00 close all open positions: "
-							+ getSymbol() + " Time: " + startPeriod);
-					this.cancel();
-				}
+				this.cancel();
+				return;
 			}
 
+			/*
+			 * Create code here to create orders based on your conditions/rules.
+			 */
+
+			if (startPeriod.equals(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getOpen(), 5))
+					&& newBar) {
+
+				/*
+				 * Example On start of the 9:35 candle check the 9:30 candle and
+				 * buy over under in the direction of the bar.
+				 */
+			}
+
+			/*
+			 * Close any opened positions with a market order at the end of the
+			 * day.
+			 */
+			if (!currentCandleItem.getLastUpdateDate().before(
+					TradingCalendar.addMinutes(this.getTradestrategy()
+							.getTradingday().getClose(), -5))) {
+				cancelOrdersClosePosition(true);
+				_log.info("Rule 15:55:00 close all open positions: "
+						+ getSymbol() + " Time: " + startPeriod);
+				this.cancel();
+			}
 		} catch (StrategyRuleException ex) {
 			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
 			error(1, 10, "Error  runRule exception: " + ex.getMessage());

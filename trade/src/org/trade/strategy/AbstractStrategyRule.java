@@ -1441,14 +1441,13 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return CandleItem
 	 */
 	public CandleItem getCurrentCandle() {
-		CandleItem currentCandleItem = null;
 		if (getCurrentCandleCount() > -1) {
 			CandleSeries candleSeries = this.getTradestrategy()
 					.getStrategyData().getBaseCandleSeries();
-			currentCandleItem = (CandleItem) candleSeries
+			return (CandleItem) candleSeries
 					.getDataItem(getCurrentCandleCount());
 		}
-		return currentCandleItem;
+		return null;
 	}
 
 	/**

@@ -84,7 +84,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 	 * Note the current candle is just forming Enter a tier 1-3 gap in first
 	 * 5min bar direction, with a 3R target and stop @ 5min high/low
 	 * 
-	 * @param candleSeries the series of candels that has been updated.
+	 * @param candleSeries the series of candles that has been updated.
 	 * 
 	 * @param newBar has a new bar just started.
 	 */
@@ -100,45 +100,44 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
 		try {
-			if (getCurrentCandleCount() > 0) {
-				// Get the current candle
-				CandleItem currentCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount());
-				Date startPeriod = currentCandleItem.getPeriod().getStart();
+			// Get the current candle
+			CandleItem currentCandleItem = (CandleItem) candleSeries
+					.getDataItem(getCurrentCandleCount());
+			Date startPeriod = currentCandleItem.getPeriod().getStart();
 
-				// _log.info(getTradestrategy().getStrategy().getClassName()
-				// + " symbol: " + getSymbol() + " startPeriod: "
-				// + startPeriod);
+			// _log.info(getTradestrategy().getStrategy().getClassName()
+			// + " symbol: " + getSymbol() + " startPeriod: "
+			// + startPeriod);
 
-				// Is it the the 9:35 candle?
-				if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 9, 35)) && newBar) {
+			// Is it the the 9:35 candle?
+			if (startPeriod.equals(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getOpen(), 5))
+					&& newBar) {
 
-				} else if (startPeriod.equals(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
+			} else if (startPeriod.equals(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getOpen(), 60))) {
 
-				} else if (startPeriod.after(TradingCalendar.getSpecificTime(
-						startPeriod, 10, 30))) {
-					_log.info("Rule after 10:30:00 bar, close the "
-							+ getTradestrategy().getStrategy().getClassName()
-							+ " Symbol: " + getSymbol());
-					// Kill this process we are done!
-					this.cancel();
-				}
-
-				/*
-				 * Close any opened positions with a market order at the end of
-				 * the day.
-				 */
-				if (!startPeriod.before(TradingCalendar.getSpecificTime(
-						startPeriod, 15, 58))) {
-					cancelOrdersClosePosition(true);
-					_log.info("Rule 15:58:00 close all open positions: "
-							+ getSymbol() + " Time: " + startPeriod);
-					this.cancel();
-				}
+			} else if (startPeriod.after(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getOpen(), 60))) {
+				_log.info("Rule after 10:30:00 bar, close the "
+						+ getTradestrategy().getStrategy().getClassName()
+						+ " Symbol: " + getSymbol());
+				// Kill this process we are done!
+				this.cancel();
 			}
 
+			/*
+			 * Close any opened positions with a market order at the end of the
+			 * day.
+			 */
+			if (!currentCandleItem.getLastUpdateDate().before(
+					TradingCalendar.addMinutes(this.getTradestrategy()
+							.getTradingday().getClose(), -2))) {
+				cancelOrdersClosePosition(true);
+				_log.info("Rule 15:58:00 close all open positions: "
+						+ getSymbol() + " Time: " + startPeriod);
+				this.cancel();
+			}
 		} catch (StrategyRuleException ex) {
 			_log.error("Error  runRule exception: " + ex.getMessage(), ex);
 			error(1, 10, "Error  runRule exception: " + ex.getMessage());
