@@ -730,7 +730,6 @@ public class TradingdayPanel extends BasePanel {
 						selectedRow);
 			} else {
 				m_tradingdayTable.setRowSelectionInterval(0, 0);
-				m_tradestrategyModel.setData(tradingday);
 				enableTradestrategyButtons(null);
 			}
 		} catch (Exception ex) {
