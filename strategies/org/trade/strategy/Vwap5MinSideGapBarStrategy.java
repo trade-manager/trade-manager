@@ -119,13 +119,6 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
-			CandleItem prevCandleItem = null;
-			if (newBar && getCurrentCandleCount() > 0) {
-				prevCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount() - 1);
-				// AbstractStrategyRule
-				// .logCandle(this, prevCandleItem.getCandle());
-			}
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -177,6 +170,13 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 				 * Is the candle in the direction of the Tradestrategy side i.e.
 				 * a long play should have a green 5min candle
 				 */
+				CandleItem prevCandleItem = null;
+				if (getCurrentCandleCount() > 0) {
+					prevCandleItem = (CandleItem) candleSeries
+							.getDataItem(getCurrentCandleCount() - 1);
+					// AbstractStrategyRule
+					// .logCandle(this, prevCandleItem.getCandle());
+				}
 				if (prevCandleItem.isSide(getTradestrategy().getSide())) {
 
 					if ((Side.BOT.equals(getTradestrategy().getSide()) && prevCandleItem

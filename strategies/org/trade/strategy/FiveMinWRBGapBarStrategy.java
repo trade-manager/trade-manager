@@ -132,13 +132,6 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
-			CandleItem prevCandleItem = null;
-			if (newBar && getCurrentCandleCount() > 0) {
-				prevCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount() - 1);
-				// AbstractStrategyRule
-				// .logCandle(this, prevCandleItem.getCandle());
-			}
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -213,6 +206,14 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 						+ " High: " + candleBar.getHigh() + " Low: "
 						+ candleBar.getLow() + " Close: "
 						+ candleBar.getClose());
+
+				CandleItem prevCandleItem = null;
+				if (getCurrentCandleCount() > 0) {
+					prevCandleItem = (CandleItem) candleSeries
+							.getDataItem(getCurrentCandleCount() - 1);
+					// AbstractStrategyRule
+					// .logCandle(this, prevCandleItem.getCandle());
+				}
 
 				Side side = Side.newInstance(Side.SLD);
 				if (prevCandleItem.isSide(Side.BOT)) {

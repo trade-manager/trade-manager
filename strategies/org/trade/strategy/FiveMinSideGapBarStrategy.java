@@ -131,7 +131,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
 			CandleItem prevCandleItem = null;
-			if (newBar && getCurrentCandleCount() > 0) {
+			if (getCurrentCandleCount() > 0) {
 				prevCandleItem = (CandleItem) candleSeries
 						.getDataItem(getCurrentCandleCount() - 1);
 				// AbstractStrategyRule

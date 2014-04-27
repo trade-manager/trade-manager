@@ -126,13 +126,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
-			CandleItem prevCandleItem = null;
-			if (newBar && getCurrentCandleCount() > 0) {
-				prevCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount() - 1);
-				// AbstractStrategyRule
-				// .logCandle(this, prevCandleItem.getCandle());
-			}
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -185,7 +178,13 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				 * Add the tails as a % of the body. 10% and vwap must be
 				 * between O/C.
 				 */
-
+				CandleItem prevCandleItem = null;
+				if (getCurrentCandleCount() > 0) {
+					prevCandleItem = (CandleItem) candleSeries
+							.getDataItem(getCurrentCandleCount() - 1);
+					// AbstractStrategyRule
+					// .logCandle(this, prevCandleItem.getCandle());
+				}
 				if (CoreUtils.isBetween(prevCandleItem.getOpen(),
 						prevCandleItem.getClose(), prevCandleItem.getVwap())) {
 					double barBodyPercent = (Math.abs(prevCandleItem.getOpen()

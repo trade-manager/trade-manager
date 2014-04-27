@@ -128,14 +128,6 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
 
-			CandleItem prevCandleItem = null;
-			if (newBar && getCurrentCandleCount() > 0) {
-				prevCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount() - 1);
-				// AbstractStrategyRule
-				// .logCandle(this, prevCandleItem.getCandle());
-			}
-
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
 			 * will be closed down.
@@ -245,6 +237,14 @@ public class PosMgrFH3RBHHeikinStrategy extends AbstractStrategyRule {
 						.getTotalBuyValue().doubleValue()
 						/ this.getOpenTradePosition().getTotalBuyQuantity()
 								.doubleValue();
+
+				CandleItem prevCandleItem = null;
+				if (getCurrentCandleCount() > 0) {
+					prevCandleItem = (CandleItem) candleSeries
+							.getDataItem(getCurrentCandleCount() - 1);
+					// AbstractStrategyRule
+					// .logCandle(this, prevCandleItem.getCandle());
+				}
 
 				if (avgPrice < prevCandleItem.getLow())
 					avgPrice = prevCandleItem.getLow();

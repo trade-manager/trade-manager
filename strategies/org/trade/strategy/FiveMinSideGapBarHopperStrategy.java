@@ -128,13 +128,6 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
-			CandleItem prevCandleItem = null;
-			if (newBar && getCurrentCandleCount() > 0) {
-				prevCandleItem = (CandleItem) candleSeries
-						.getDataItem(getCurrentCandleCount() - 1);
-				// AbstractStrategyRule
-				// .logCandle(this, prevCandleItem.getCandle());
-			}
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -223,6 +216,14 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 					return;
 				}
 
+				CandleItem prevCandleItem = null;
+				if (getCurrentCandleCount() > 0) {
+					prevCandleItem = (CandleItem) candleSeries
+							.getDataItem(getCurrentCandleCount() - 1);
+					// AbstractStrategyRule
+					// .logCandle(this, prevCandleItem.getCandle());
+				}
+
 				Money price = new Money(prevCandleItem.getHigh());
 				Money priceStop = new Money(prevCandleItem.getLow());
 				String action = Action.BUY;
@@ -250,6 +251,13 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 								.getTradestrategy().getTradingday().getOpen(),
 								5))) {
 
+					CandleItem prevCandleItem = null;
+					if (getCurrentCandleCount() > 0) {
+						prevCandleItem = (CandleItem) candleSeries
+								.getDataItem(getCurrentCandleCount() - 1);
+						// AbstractStrategyRule
+						// .logCandle(this, prevCandleItem.getCandle());
+					}
 					if (!this.isThereOpenPosition()) {
 						if (Side.BOT.equals(this.side)) {
 							if (openCandle.getLow() > prevCandleItem.getLow()) {
