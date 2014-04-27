@@ -560,23 +560,25 @@ public class VostroSeries extends IndicatorSeries {
 						vostro = 0;
 					}
 
-					if (vostro2 > 8.0
-							&& vostro2Values.get(vostro2Values.size() - 1) > 8.0
-							&& vostro2Values.get(vostro2Values.size() - 2) > 8.0) {
-						vostro = 0;
+					if (vostro2Values.size() > 1) {
+						if (vostro2 > 8.0
+								&& vostro2Values.get(vostro2Values.size() - 1) > 8.0
+								&& vostro2Values.get(vostro2Values.size() - 2) > 8.0) {
+							vostro = 0;
+						}
 					}
 
 					if (vostro1 < -8.0
 							&& vostro1Values.get(vostro1Values.size() - 1) < -8.0) {
 						vostro = 0;
 					}
-
-					if (vostro1 < -8.0
-							&& vostro1Values.get(vostro1Values.size() - 1) < -8.0
-							&& vostro1Values.get(vostro1Values.size() - 2) < -8.0) {
-						vostro = 0;
+					if (vostro1Values.size() > 1) {
+						if (vostro1 < -8.0
+								&& vostro1Values.get(vostro1Values.size() - 1) < -8.0
+								&& vostro1Values.get(vostro1Values.size() - 2) < -8.0) {
+							vostro = 0;
+						}
 					}
-
 					if (newBar) {
 						VostroItem dataItem = new VostroItem(
 								candleItem.getPeriod(), new BigDecimal(vostro));
