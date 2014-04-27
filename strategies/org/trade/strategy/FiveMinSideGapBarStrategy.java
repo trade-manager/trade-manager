@@ -136,10 +136,7 @@ public class FiveMinSideGapBarStrategy extends AbstractStrategyRule {
 						.getDataItem(getCurrentCandleCount() - 1);
 				// AbstractStrategyRule
 				// .logCandle(this, prevCandleItem.getCandle());
-			} else {
-				return;
 			}
-
 			/*
 			 * Trade is open kill this Strategy as its job is done.
 			 */

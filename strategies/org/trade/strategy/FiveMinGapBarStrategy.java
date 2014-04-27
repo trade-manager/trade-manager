@@ -132,8 +132,6 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 						.getDataItem(getCurrentCandleCount() - 1);
 				// AbstractStrategyRule
 				// .logCandle(this, prevCandleItem.getCandle());
-			} else {
-				return;
 			}
 
 			/*

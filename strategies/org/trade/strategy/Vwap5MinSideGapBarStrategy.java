@@ -112,9 +112,20 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 	public void runStrategy(CandleSeries candleSeries, boolean newBar) {
 
 		try {
-			// Get the current candle
+			/*
+			 * Get the current candle
+			 */
 			CandleItem currentCandleItem = this.getCurrentCandle();
+			// AbstractStrategyRule.logCandle(this,
+			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			CandleItem prevCandleItem = null;
+			if (newBar && getCurrentCandleCount() > 0) {
+				prevCandleItem = (CandleItem) candleSeries
+						.getDataItem(getCurrentCandleCount() - 1);
+				// AbstractStrategyRule
+				// .logCandle(this, prevCandleItem.getCandle());
+			}
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -152,17 +163,15 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 				this.cancel();
 				return;
 			}
-			// AbstractStrategyRule.logCandle(this,
-			// currentCandleItem.getCandle());
 
-			CandleItem prevCandleItem = (CandleItem) candleSeries
-					.getDataItem(getCurrentCandleCount() - 1);
 			/*
 			 * Is it the the 9:35 candle? and we have not created an open
 			 * position trade.
 			 */
-			if (startPeriod.equals(TradingCalendar.getSpecificTime(startPeriod,
-					9, 35)) && newBar) {
+			if (startPeriod.equals(TradingCalendar.addMinutes(this
+					.getTradestrategy().getTradingday().getOpen(), this
+					.getTradestrategy().getBarSize() / 60))
+					&& newBar) {
 
 				/*
 				 * Is the candle in the direction of the Tradestrategy side i.e.

@@ -119,6 +119,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * Get the current candle
 			 */
 			CandleItem currentCandleItem = this.getCurrentCandle();
+			// AbstractStrategyRule.logCandle(this,
+			// currentCandleItem.getCandle());
 			Date startPeriod = currentCandleItem.getPeriod().getStart();
 			CandleItem prevCandleItem = null;
 			if (newBar && getCurrentCandleCount() > 0) {
@@ -126,12 +128,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 						.getDataItem(getCurrentCandleCount() - 1);
 				// AbstractStrategyRule
 				// .logCandle(this, prevCandleItem.getCandle());
-			} else {
-				return;
 			}
-
-			// AbstractStrategyRule.logCandle(this,
-			// currentCandleItem.getCandle());
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
