@@ -82,7 +82,7 @@ import org.trade.ui.widget.StringRenderer;
 public class TradestrategyTable extends Table {
 
 	private static final long serialVersionUID = 1132297931453070904L;
-	private static final String MASK = "**********";
+	private static final String MASK = "********************";
 	private static final String VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789. ";
 	private static final String PLACE_HOLDER = " ";
 	private static final String DATETIMEFORMAT = "MM/yyyy";

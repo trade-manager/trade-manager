@@ -512,7 +512,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "localSymbol", length = 10)
+	@Column(name = "localSymbol", length = 20)
 	public String getLocalSymbol() {
 		return this.localSymbol;
 	}
@@ -672,7 +672,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return String
 	 */
-	@Column(name = "symbol", unique = true, nullable = false, length = 10)
+	@Column(name = "symbol", unique = true, nullable = false, length = 20)
 	public String getSymbol() {
 		return this.symbol;
 	}
