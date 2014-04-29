@@ -611,7 +611,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				break;
 			}
 			case 9: {
-				// TODO
+				// Currency
+				if (token.length() > 0)
+					contract.setCurrency(token);
 				break;
 			}
 			case 10: {
