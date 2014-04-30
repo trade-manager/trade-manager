@@ -538,13 +538,14 @@ public class VostroSeries extends IndicatorSeries {
 					double gd_128 = this.highPlusLowSum / 2.0d
 							/ this.getVostroPeriod();
 
-					double gd_136 = 0.2 * (this.highLessLowSum / this
+					double gd_136 = 0.2d * (this.highLessLowSum / this
 							.getVostroPeriod());
 
 					double vostro1 = (candleItem.getLow() - gd_128) / gd_136;
 					vostro1Values.addFirst(vostro1);
 					double vostro2 = (candleItem.getHigh() - gd_128) / gd_136;
 					vostro2Values.addFirst(vostro2);
+
 					double vostro = 0;
 					if (vostro2 > 8.0 && candleItem.getHigh() > ma) {
 						vostro = 90.0;
@@ -579,6 +580,12 @@ public class VostroSeries extends IndicatorSeries {
 							vostro = 0;
 						}
 					}
+					// _log.warn("Vostro Ind Time: " + candleItem.getPeriod()
+					// + " wma: " + ma + " vostro: " + vostro
+					// + " highPlusLowSum: " + this.highPlusLowSum
+					// + " highLessLowSum: " + this.highLessLowSum
+					// + " gd_128: " + gd_128 + " gd_136: " + gd_136
+					// + " vostro1: " + vostro1 + " vostro2: " + vostro2);
 					if (newBar) {
 						VostroItem dataItem = new VostroItem(
 								candleItem.getPeriod(), new BigDecimal(vostro));
