@@ -1812,7 +1812,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								return;
 							}
 						} catch (BrokerModelException ex) {
-							tradingdayPanel.doRefreshTable(tradingday);
+							tradingdayPanel.doRefresh(tradingday);
 							JOptionPane.showConfirmDialog(this.getFrame(),
 									ex.getMessage(), "Warning",
 									JOptionPane.OK_CANCEL_OPTION);
