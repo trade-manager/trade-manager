@@ -684,7 +684,7 @@ public class TradingdayPanel extends BasePanel {
 						.findTradingdayById(tradingday.getIdTradingDay());
 				instance.populateStrategyData(tradingday);
 				m_tradingdays.replaceTradingday(instance);
-				doRefreshTradingdayTable(instance);
+				doRefreshTradingdayTable();
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(),
@@ -1252,10 +1252,9 @@ public class TradingdayPanel extends BasePanel {
 	 * 
 	 * 
 	 */
-	private void doRefreshTradingdayTable(Tradingday tradingday) {
+	private void doRefreshTradingdayTable() {
 		try {
 			this.clearStatusBarMessage();
-			m_tradingdayModel.
 			int selectedRow = m_tradingdayTable.getSelectedRow();
 			m_tradingdayModel.setData(m_tradingdays);
 			if (selectedRow > -1) {
