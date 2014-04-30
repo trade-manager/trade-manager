@@ -684,11 +684,47 @@ public class TradingdayPanel extends BasePanel {
 						.findTradingdayById(tradingday.getIdTradingDay());
 				instance.populateStrategyData(tradingday);
 				m_tradingdays.replaceTradingday(instance);
-				doRefreshTradingdayTable();
+				doRefreshTradingdayTable(instance);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(),
 					ex);
+		}
+	}
+
+	/**
+	 * Method doRefreshTable. Refresh the tradingday from the database.
+	 * 
+	 * @param tradingday
+	 *            Tradingday the selected tradingday to be refreshed.
+	 */
+	public void doRefreshTradingdayTable(Tradingday tradingday) {
+		try {
+			this.clearStatusBarMessage();
+			int selectedRow = m_tradingdayTable.getSelectedRow();
+			m_tradingdayModel.setData(m_tradingdays);
+			for (int i = 0; i < m_tradingdayModel.getRowCount(); i++) {
+				Date open = ((org.trade.core.valuetype.Date) m_tradingdayModel
+						.getValueAt(i, 0)).getDate();
+				Date close = ((org.trade.core.valuetype.Date) m_tradingdayModel
+						.getValueAt(i, 1)).getDate();
+				if (tradingday.getOpen().equals(open)
+						&& tradingday.getClose().equals(close)) {
+					selectedRow = m_tradingdayTable.convertRowIndexToView(i);
+					break;
+				}
+			}
+
+			if (selectedRow > -1) {
+				m_tradingdayTable.setRowSelectionInterval(selectedRow,
+						selectedRow);
+			} else {
+				m_tradingdayTable.setRowSelectionInterval(0, 0);
+				enableTradestrategyButtons(null);
+			}
+		} catch (Exception ex) {
+			this.setErrorMessage("Error refreshing Tradingday.",
+					ex.getMessage(), ex);
 		}
 	}
 
@@ -1245,29 +1281,6 @@ public class TradingdayPanel extends BasePanel {
 				codesNew);
 		editorComboBox.setModel(model);
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());
-	}
-
-	/**
-	 * Method doRefreshTable. Refresh the tradingday from the database.
-	 * 
-	 * 
-	 */
-	private void doRefreshTradingdayTable() {
-		try {
-			this.clearStatusBarMessage();
-			int selectedRow = m_tradingdayTable.getSelectedRow();
-			m_tradingdayModel.setData(m_tradingdays);
-			if (selectedRow > -1) {
-				m_tradingdayTable.setRowSelectionInterval(selectedRow,
-						selectedRow);
-			} else {
-				m_tradingdayTable.setRowSelectionInterval(0, 0);
-				enableTradestrategyButtons(null);
-			}
-		} catch (Exception ex) {
-			this.setErrorMessage("Error refreshing Tradingday.",
-					ex.getMessage(), ex);
-		}
 	}
 
 	/**
