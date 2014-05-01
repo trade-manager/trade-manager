@@ -389,7 +389,55 @@ public class VostroSeries extends IndicatorSeries {
 	}
 
 	/**
-	 * Method updateSeries.
+	 * Method updateSeries. int start() {
+	 * 
+	 * int gi_144 = 5;
+	 * 
+	 * int g_period_156 = 100;
+	 * 
+	 * for (gi_152 = 0; gi_152 < Bars; gi_152++) {
+	 * 
+	 * gd_120 = 0;
+	 * 
+	 * for (gi_148 = * gi_152; gi_148 < gi_144 + gi_152; gi_148++) gd_120 +=
+	 * (High[gi_148] + Low[gi_148]) / 2.0;
+	 * 
+	 * gd_128 = gd_120 / gi_144; gd_120 = 0;
+	 * 
+	 * for (gi_148 = gi_152; gi_148 < gi_144 + gi_152; gi_148++) gd_120 +=
+	 * High[gi_148] - Low[gi_148];
+	 * 
+	 * gd_136 = (gd_120 / gi_144)/gi_144;
+	 * 
+	 * g_ibuf_116[gi_152] = (Low[gi_152] - gd_128) / gd_136;
+	 * 
+	 * g_ibuf_112[gi_152] = (High[gi_152] - gd_128) / gd_136;
+	 * 
+	 * if (g_ibuf_112[gi_152] > 8.0 && High[gi_152] > iMA(NULL, 0, g_period_156,
+	 * 0, MODE_LWMA, PRICE_MEDIAN, gi_152)) g_ibuf_108[gi_152] = 90.0;
+	 * 
+	 * else {
+	 * 
+	 * if (g_ibuf_116[gi_152] < -8.0 && Low[gi_152] < iMA(NULL, 0, g_period_156,
+	 * 0, MODE_LWMA, PRICE_MEDIAN, gi_152)) g_ibuf_108[gi_152] = -90.0; else
+	 * g_ibuf_108[gi_152] = 0.0;
+	 * 
+	 * }
+	 * 
+	 * if (g_ibuf_112[gi_152] > 8.0 && g_ibuf_112[gi_152 - 1] > 8.0)
+	 * g_ibuf_108[gi_152] = 0;
+	 * 
+	 * if (g_ibuf_112[gi_152] > 8.0 && g_ibuf_112[gi_152 - 1] > 8.0 &&
+	 * g_ibuf_112[gi_152 - 2] > 8.0) g_ibuf_108[gi_152] = 0;
+	 * 
+	 * if (g_ibuf_116[gi_152] < -8.0 && g_ibuf_116[gi_152 - 1] < -8.0)
+	 * g_ibuf_108[gi_152] = 0;
+	 * 
+	 * if (g_ibuf_116[gi_152] < -8.0 && g_ibuf_116[gi_152 - 1] < -8.0 &&
+	 * g_ibuf_116[gi_152 - 2] < -8.0) g_ibuf_108[gi_152] = 0; } return (0);
+	 * 
+	 * }
+	 * 
 	 * 
 	 * @param source
 	 *            CandleSeries
@@ -538,8 +586,8 @@ public class VostroSeries extends IndicatorSeries {
 					double gd_128 = this.highPlusLowSum / 2.0d
 							/ this.getVostroPeriod();
 
-					double gd_136 = 0.2d * (this.highLessLowSum / this
-							.getVostroPeriod());
+					double gd_136 = (this.highLessLowSum / this
+							.getVostroPeriod()) / this.getVostroPeriod();
 
 					double vostro1 = (candleItem.getLow() - gd_128) / gd_136;
 					vostro1Values.addFirst(vostro1);
