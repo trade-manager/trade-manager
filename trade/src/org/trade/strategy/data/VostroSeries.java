@@ -76,7 +76,7 @@ public class VostroSeries extends IndicatorSeries {
 	private String MAType;
 	private Integer length;
 	private Integer vostroPeriod;
-	private Double vostroRange;
+	private BigDecimal vostroRange;
 	private Integer priceSource;
 	/*
 	 * Vales used to calculate MA's. These need to be reset when the series is
@@ -322,13 +322,13 @@ public class VostroSeries extends IndicatorSeries {
 	/**
 	 * Method getVostroRange.
 	 * 
-	 * @return Double
+	 * @return BigDecimal
 	 */
 	@Transient
-	public Double getVostroRange() {
+	public BigDecimal getVostroRange() {
 		try {
 			if (null == this.vostroRange)
-				this.vostroRange = (Double) this.getValueCode(VOSTRO_RANGE);
+				this.vostroRange = (BigDecimal) this.getValueCode(VOSTRO_RANGE);
 		} catch (Exception e) {
 			this.vostroRange = null;
 		}
@@ -339,9 +339,9 @@ public class VostroSeries extends IndicatorSeries {
 	 * Method setVostroRange.
 	 * 
 	 * @param vostroRange
-	 *            Double
+	 *            BigDecimal
 	 */
-	public void setVostroRange(Double vostroRange) {
+	public void setVostroRange(BigDecimal vostroRange) {
 		this.vostroRange = vostroRange;
 	}
 
@@ -623,44 +623,44 @@ public class VostroSeries extends IndicatorSeries {
 					vostro2Values.addFirst(vostro2);
 
 					double vostro = 0;
-					if (vostro2 > this.getVostroRange()
+					if (vostro2 > this.getVostroRange().doubleValue()
 							&& candleItem.getHigh() > ma) {
 						vostro = 90.0;
 					} else {
-						if (vostro1 < (-1 * this.getVostroRange())
+						if (vostro1 < (-1 * this.getVostroRange().doubleValue())
 								&& candleItem.getLow() < ma) {
 							vostro = -90.0;
 						} else {
 							vostro = 0.0;
 						}
 					}
-					if (vostro2 > this.getVostroRange()
+					if (vostro2 > this.getVostroRange().doubleValue()
 							&& vostro2Values.get(vostro2Values.size() - 1) > this
-									.getVostroRange()) {
+									.getVostroRange().doubleValue()) {
 						vostro = 0;
 					}
 
 					if (vostro2Values.size() > 1) {
-						if (vostro2 > this.getVostroRange()
+						if (vostro2 > this.getVostroRange().doubleValue()
 								&& vostro2Values.get(vostro2Values.size() - 1) > this
-										.getVostroRange()
+										.getVostroRange().doubleValue()
 								&& vostro2Values.get(vostro2Values.size() - 2) > this
-										.getVostroRange()) {
+										.getVostroRange().doubleValue()) {
 							vostro = 0;
 						}
 					}
 
-					if (vostro1 < (-1 * this.getVostroRange())
+					if (vostro1 < (-1 * this.getVostroRange().doubleValue())
 							&& vostro1Values.get(vostro1Values.size() - 1) < (-1 * this
-									.getVostroRange())) {
+									.getVostroRange().doubleValue())) {
 						vostro = 0;
 					}
 					if (vostro1Values.size() > 1) {
-						if (vostro1 < (-1 * this.getVostroRange())
+						if (vostro1 < (-1 * this.getVostroRange().doubleValue())
 								&& vostro1Values.get(vostro1Values.size() - 1) < (-1 * this
-										.getVostroRange())
+										.getVostroRange().doubleValue())
 								&& vostro1Values.get(vostro1Values.size() - 2) < (-1 * this
-										.getVostroRange())) {
+										.getVostroRange().doubleValue())) {
 							vostro = 0;
 						}
 					}
