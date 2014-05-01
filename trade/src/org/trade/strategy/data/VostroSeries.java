@@ -85,6 +85,8 @@ public class VostroSeries extends IndicatorSeries {
 
 	private double multiplyer = 0;
 	private double sum = 0.0;
+	private double vostro1 = Double.MAX_VALUE;
+	private double vostro2 = Double.MAX_VALUE;
 	private LinkedList<Double> yyValues = new LinkedList<Double>();
 	private LinkedList<Long> volValues = new LinkedList<Long>();
 	private double highPlusLowSum = 0.0;
@@ -182,6 +184,8 @@ public class VostroSeries extends IndicatorSeries {
 		super.clear();
 		multiplyer = 0;
 		sum = 0.0;
+		vostro1 = Double.MAX_VALUE;
+		vostro2 = Double.MAX_VALUE;
 		yyValues.clear();
 		volValues.clear();
 		highPlusLowSum = 0.0;
@@ -531,6 +535,7 @@ public class VostroSeries extends IndicatorSeries {
 						this.volValues.addFirst(candleItem.getVolume());
 					}
 				}
+
 				if (this.highPlusLowValues.size() == getVostroPeriod()) {
 					/*
 					 * If the item does not exist in the series then this is a
@@ -616,11 +621,18 @@ public class VostroSeries extends IndicatorSeries {
 
 					double gd_136 = (this.highLessLowSum / this
 							.getVostroPeriod()) / this.getVostroPeriod();
+					
+					if (newBar && this.vostro1 != Double.MAX_VALUE) {
+						vostro1Values.addFirst(this.vostro1);
+						vostro2Values.addFirst(this.vostro2);
+						if (vostro1Values.size() > 2) {
+							vostro1Values.removeLast();
+							vostro2Values.removeLast();
+						}
+					}
 
-					double vostro1 = (candleItem.getLow() - gd_128) / gd_136;
-					vostro1Values.addFirst(vostro1);
-					double vostro2 = (candleItem.getHigh() - gd_128) / gd_136;
-					vostro2Values.addFirst(vostro2);
+					this.vostro1 = (candleItem.getLow() - gd_128) / gd_136;
+					this.vostro2 = (candleItem.getHigh() - gd_128) / gd_136;
 
 					double vostro = 0;
 					if (vostro2 > this.getVostroRange().doubleValue()
@@ -634,36 +646,40 @@ public class VostroSeries extends IndicatorSeries {
 							vostro = 0.0;
 						}
 					}
-					if (vostro2 > this.getVostroRange().doubleValue()
-							&& vostro2Values.get(vostro2Values.size() - 1) > this
-									.getVostroRange().doubleValue()) {
-						vostro = 0;
-					}
-
-					if (vostro2Values.size() > 1) {
+					if (vostro2Values.size() > 0) {
 						if (vostro2 > this.getVostroRange().doubleValue()
-								&& vostro2Values.get(vostro2Values.size() - 1) > this
-										.getVostroRange().doubleValue()
-								&& vostro2Values.get(vostro2Values.size() - 2) > this
+								&& vostro2Values.getFirst() > this
 										.getVostroRange().doubleValue()) {
 							vostro = 0;
 						}
 					}
 
-					if (vostro1 < (-1 * this.getVostroRange().doubleValue())
-							&& vostro1Values.get(vostro1Values.size() - 1) < (-1 * this
-									.getVostroRange().doubleValue())) {
-						vostro = 0;
+					if (vostro2Values.size() > 1) {
+						if (vostro2 > this.getVostroRange().doubleValue()
+								&& vostro2Values.getFirst() > this
+										.getVostroRange().doubleValue()
+								&& vostro2Values.getLast() > this
+										.getVostroRange().doubleValue()) {
+							vostro = 0;
+						}
 					}
-					if (vostro1Values.size() > 1) {
+					if (vostro2Values.size() > 0) {
 						if (vostro1 < (-1 * this.getVostroRange().doubleValue())
-								&& vostro1Values.get(vostro1Values.size() - 1) < (-1 * this
-										.getVostroRange().doubleValue())
-								&& vostro1Values.get(vostro1Values.size() - 2) < (-1 * this
+								&& vostro1Values.getFirst() < (-1 * this
 										.getVostroRange().doubleValue())) {
 							vostro = 0;
 						}
 					}
+					if (vostro1Values.size() > 1) {
+						if (vostro1 < (-1 * this.getVostroRange().doubleValue())
+								&& vostro1Values.getFirst() < (-1 * this
+										.getVostroRange().doubleValue())
+								&& vostro1Values.getLast() < (-1 * this
+										.getVostroRange().doubleValue())) {
+							vostro = 0;
+						}
+					}
+
 					// _log.warn("Vostro Ind Time: " + candleItem.getPeriod()
 					// + " wma: " + ma + " vostro: " + vostro
 					// + " highPlusLowSum: " + this.highPlusLowSum
