@@ -125,6 +125,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private String status;
 	private BigDecimal stopPrice;
 	private Boolean transmit = new Boolean(false);
+	private BigDecimal trailStopPrice;
+	private BigDecimal trailingPercent;
 	private Integer triggerMethod;
 	private String warningMessage;
 	private String whyHeld;
@@ -266,6 +268,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 *            BigDecimal
 	 * @param transmit
 	 *            Boolean
+	 * @param trailStopPrice
+	 *            BigDecimal
+	 * @param trailingPercent
+	 *            BigDecimal
 	 * @param triggerMethod
 	 *            Integer
 	 * @param warningMessage
@@ -287,7 +293,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			Integer orderKey, String orderReference, String orderType,
 			Integer overrideConstraints, Integer parentId, Integer permId,
 			Integer quantity, String timeInForce, String status,
-			BigDecimal stopPrice, Boolean transmit, Integer triggerMethod,
+			BigDecimal stopPrice, Boolean transmit, BigDecimal trailStopPrice,
+			BigDecimal trailingPercent, Integer triggerMethod,
 			String warningMessage, String whyHeld, Date lastUpdateDate,
 			List<TradeOrderfill> tradeOrderfills) {
 		this.tradePosition = tradePosition;
@@ -321,6 +328,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.stopPrice = stopPrice;
 		this.transmit = transmit;
 		this.triggerMethod = triggerMethod;
+		this.trailStopPrice = trailStopPrice;
+		this.trailingPercent = trailingPercent;
 		this.warningMessage = warningMessage;
 		this.whyHeld = whyHeld;
 		this.lastUpdateDate = lastUpdateDate;
@@ -1153,6 +1162,46 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 */
 	public void setTransmit(Boolean transmit) {
 		this.transmit = transmit;
+	}
+
+	/**
+	 * Method getTrailStopPrice.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "trailStopPrice", precision = 10)
+	public BigDecimal getTrailStopPrice() {
+		return this.trailStopPrice;
+	}
+
+	/**
+	 * Method setTrailStopPrice.
+	 * 
+	 * @param trailStopPrice
+	 *            BigDecimal
+	 */
+	public void setTrailStopPrice(BigDecimal trailStopPrice) {
+		this.trailStopPrice = trailStopPrice;
+	}
+
+	/**
+	 * Method getTrailingPercent.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "trailingPercent", precision = 10)
+	public BigDecimal getTrailingPercent() {
+		return this.trailingPercent;
+	}
+
+	/**
+	 * Method setTrailingPercent.
+	 * 
+	 * @param trailingPercent
+	 *            BigDecimal
+	 */
+	public void setTrailingPercent(BigDecimal trailingPercent) {
+		this.trailingPercent = trailingPercent;
 	}
 
 	/**

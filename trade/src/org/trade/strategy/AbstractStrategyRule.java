@@ -533,8 +533,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 
 				return this.createOrder(this.getTradestrategy().getContract(),
 						action, OrderType.MKT, null, null, openQuantity, null,
-						TriggerMethod.DEFAULT, OverrideConstraints.YES,
-						TimeInForce.DAY, false, transmit, this
+						null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
+						TimeInForce.DAY, false, transmit, null, null, this
 								.getOpenPositionOrder().getFAProfile(), this
 								.getOpenPositionOrder().getFAGroup(), this
 								.getOpenPositionOrder().getFAMethod(), this
@@ -573,8 +573,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 			String orderType, Money limitPrice, Money auxPrice, int quantity,
 			boolean roundPrice, boolean transmit) throws StrategyRuleException {
 		return createOrder(contract, action, orderType, limitPrice, auxPrice,
-				quantity, null, TriggerMethod.DEFAULT, OverrideConstraints.YES,
-				TimeInForce.DAY, roundPrice, transmit, null, null, null, null);
+				quantity, null, null, TriggerMethod.DEFAULT,
+				OverrideConstraints.YES, TimeInForce.DAY, roundPrice, transmit,
+				null, null, null, null, null, null);
 	}
 
 	/**
@@ -609,9 +610,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 			String ocaGroupName, boolean roundPrice, boolean transmit)
 			throws StrategyRuleException {
 		return createOrder(contract, action, orderType, limitPrice, auxPrice,
-				quantity, ocaGroupName, TriggerMethod.DEFAULT,
+				quantity, ocaGroupName, null, TriggerMethod.DEFAULT,
 				OverrideConstraints.YES, TimeInForce.DAY, roundPrice, transmit,
-				null, null, null, null);
+				null, null, null, null, null, null);
 	}
 
 	/**
@@ -653,8 +654,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 			Integer overrideConstraints, String timeInForce,
 			boolean roundPrice, boolean transmit) throws StrategyRuleException {
 		return createOrder(contract, action, orderType, limitPrice, auxPrice,
-				quantity, ocaGroupName, triggerMethod, overrideConstraints,
-				timeInForce, roundPrice, transmit, null, null, null, null);
+				quantity, ocaGroupName, null, triggerMethod,
+				overrideConstraints, timeInForce, roundPrice, transmit, null,
+				null, null, null, null, null);
 	}
 
 	/**
@@ -692,10 +694,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public TradeOrder createOrder(Contract contract, String action,
 			String orderType, Money limitPrice, Money auxPrice, int quantity,
-			String ocaGroupName, int triggerMethod, int overrideConstraints,
-			String timeInForce, boolean roundPrice, boolean transmit,
-			String FAProfile, String FAGroup, String FAMethod,
-			BigDecimal FAPercent) throws StrategyRuleException {
+			String ocaGroupName, Integer parentId, int triggerMethod,
+			int overrideConstraints, String timeInForce, boolean roundPrice,
+			boolean transmit, BigDecimal trailStopPrice,
+			BigDecimal trailingPercent, String FAProfile, String FAGroup,
+			String FAMethod, BigDecimal FAPercent) throws StrategyRuleException {
 
 		if (null == contract)
 			throw new StrategyRuleException(1, 200, "Contract cannot be null");
@@ -717,6 +720,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 				&& (null == limitPrice || null == auxPrice))
 			throw new StrategyRuleException(1, 205,
 					"Limit/Aux price cannot be null");
+
+		if (OrderType.TRAIL.equals(orderType)
+				&& (null == trailStopPrice || null == trailingPercent))
+			throw new StrategyRuleException(1, 206,
+					"TrailStopPrice/TrailingPercent price cannot be null");
 		try {
 			if (OrderType.MKT.equals(orderType)) {
 				limitPrice = new Money(0);
@@ -748,6 +756,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 					overrideConstraints, timeInForce, triggerMethod);
 			tradeOrder.setOcaGroupName(ocaGroupName);
 			tradeOrder.setTransmit(transmit);
+			if (OrderType.TRAIL.equals(orderType)) {
+				tradeOrder.setTrailStopPrice(trailStopPrice);
+				tradeOrder.setTrailingPercent(trailingPercent);
+			}
+			if (parentId != null)
+				tradeOrder.setParentId(parentId);
 			if (FAProfile != null) {
 				tradeOrder.setFAProfile(FAProfile);
 			} else {

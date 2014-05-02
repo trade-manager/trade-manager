@@ -334,6 +334,8 @@ CREATE  TABLE IF NOT EXISTS tradeorder (
   status VARCHAR(45) NULL ,
   stopPrice DECIMAL(10,2) NULL ,
   transmit TINYINT(1)  NULL ,
+  trailStopPrice DECIMAL(10,2) NULL ,
+  trailingPercent DECIMAL(10,2) NULL ,
   triggerMethod INT NOT NULL ,  
   warningMessage VARCHAR(200) NULL ,
   whyHeld VARCHAR(45) NULL ,
