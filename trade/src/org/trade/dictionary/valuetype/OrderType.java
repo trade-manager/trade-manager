@@ -51,6 +51,7 @@ public class OrderType extends Decode {
 	public static final String STPLMT = "STPLMT";
 	public static final String MKT = "MKT";
 	public static final String TRAIL = "TRAIL";
+	public static final String TRAILLIMIT = "TRAILLIMIT ";
 
 	public OrderType() {
 		super(DECODE);

@@ -2880,9 +2880,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		}
 		if (null != order.getAccountNumber()) {
 			ibOrder.m_account = order.getAccountNumber();
-
 		}
-
 		return ibOrder;
 	}
 

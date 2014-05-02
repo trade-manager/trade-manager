@@ -97,6 +97,9 @@ public class AbstractStrategyTest extends TestCase {
 	protected void setUp() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
+			// m_brokerModel = (BrokerModel)
+			// ClassFactory.getServiceForInterface(
+			// BrokerModel._brokerTest, this);
 			m_brokerModel = (BrokerModel) ClassFactory.getServiceForInterface(
 					BrokerModel._brokerTest, this);
 			tradePersistentModel = (PersistentModel) ClassFactory
@@ -396,6 +399,29 @@ public class AbstractStrategyTest extends TestCase {
 					TimeInForce.DAY, true, true, null, null, null, null, null,
 					null);
 			TestCase.assertNotNull(result);
+		} catch (Exception ex) {
+			TestCase.fail("Error testCreateOrder Msg:" + ex.getMessage());
+		}
+	}
+
+	@Test
+	public void testTrailOrder() {
+		try {
+			TradeOrder result = this.strategyProxy.createOrder(
+					tradestrategy.getContract(), Action.BUY, OrderType.STPLMT,
+					new Money(191.62), new Money(191.60), 100, null, null,
+					TriggerMethod.DEFAULT, OverrideConstraints.YES,
+					TimeInForce.DAY, false, true, null, null, null, null, null,
+					null);
+
+			TradeOrder orderTrail = this.strategyProxy.createOrder(
+					tradestrategy.getContract(), Action.SELL, OrderType.TRAIL,
+					null, new Money(0.1), 100, null, result.getOrderKey(),
+					TriggerMethod.DEFAULT, OverrideConstraints.YES,
+					TimeInForce.GTC, false, true, null, null, null, null, null,
+					null);
+			TestCase.assertNotNull(result);
+			TestCase.assertNotNull(orderTrail);
 		} catch (Exception ex) {
 			TestCase.fail("Error testCreateOrder Msg:" + ex.getMessage());
 		}

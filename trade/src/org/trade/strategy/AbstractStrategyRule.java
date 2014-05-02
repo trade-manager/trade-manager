@@ -52,6 +52,7 @@ import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.core.valuetype.Money;
+import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
 import org.trade.dictionary.valuetype.OrderType;
@@ -692,9 +693,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param transmit
 	 *            boolean
 	 * @param trailStopPrice
-	 *            BigDecimal
+	 *            Money
 	 * @param trailingPercent
-	 *            BigDecimal
+	 *            Percent
 	 * @param FAProfile
 	 *            String
 	 * @param FAGroup
@@ -710,9 +711,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 			String orderType, Money limitPrice, Money auxPrice, int quantity,
 			String ocaGroupName, Integer parentId, int triggerMethod,
 			int overrideConstraints, String timeInForce, boolean roundPrice,
-			boolean transmit, BigDecimal trailStopPrice,
-			BigDecimal trailingPercent, String FAProfile, String FAGroup,
-			String FAMethod, BigDecimal FAPercent) throws StrategyRuleException {
+			boolean transmit, Money trailStopPrice, Percent trailingPercent,
+			String FAProfile, String FAGroup, String FAMethod,
+			BigDecimal FAPercent) throws StrategyRuleException {
 
 		if (null == contract)
 			throw new StrategyRuleException(1, 200, "Contract cannot be null");
@@ -735,32 +736,34 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throw new StrategyRuleException(1, 205,
 					"Limit/Aux price cannot be null");
 
-		if (OrderType.TRAIL.equals(orderType)
+		if (OrderType.TRAILLIMIT.equals(orderType)
 				&& (null == trailStopPrice && null == trailingPercent))
 			throw new StrategyRuleException(1, 206,
 					"TrailStopPrice/TrailingPercent price cannot be null");
 		try {
-			if (OrderType.MKT.equals(orderType)
-					|| OrderType.TRAIL.equals(orderType)) {
+
+			if (OrderType.MKT.equals(orderType)) {
 				limitPrice = new Money(0);
 				auxPrice = new Money(0);
-			}
-
-			if (roundPrice) {
-				String side = (Action.BUY.equals(action) ? Side.BOT : Side.SLD);
-				if (OrderType.LMT.equals(orderType)) {
-					if (roundPrice) {
-						limitPrice = addPennyAndRoundStop(
-								limitPrice.doubleValue(), side, action, 0.01);
+			} else {
+				if (roundPrice) {
+					String side = (Action.BUY.equals(action) ? Side.BOT
+							: Side.SLD);
+					if (OrderType.LMT.equals(orderType)) {
+						if (roundPrice) {
+							limitPrice = addPennyAndRoundStop(
+									limitPrice.doubleValue(), side, action,
+									0.01);
+						}
+					} else if (OrderType.STPLMT.equals(orderType)) {
+						Money diffPrice = limitPrice.subtract(auxPrice);
+						auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
+								side, action, 0.01);
+						limitPrice = auxPrice.add(diffPrice);
+					} else {
+						auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
+								side, action, 0.01);
 					}
-				} else if (OrderType.STPLMT.equals(orderType)) {
-					Money diffPrice = limitPrice.subtract(auxPrice);
-					auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
-							side, action, 0.01);
-					limitPrice = auxPrice.add(diffPrice);
-				} else {
-					auxPrice = addPennyAndRoundStop(auxPrice.doubleValue(),
-							side, action, 0.01);
 				}
 			}
 			TradeOrder tradeOrder = new TradeOrder(this.getTradestrategy(),
@@ -771,9 +774,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 					overrideConstraints, timeInForce, triggerMethod);
 			tradeOrder.setOcaGroupName(ocaGroupName);
 			tradeOrder.setTransmit(transmit);
-			if (OrderType.TRAIL.equals(orderType)) {
-				tradeOrder.setTrailStopPrice(trailStopPrice);
-				tradeOrder.setTrailingPercent(trailingPercent);
+			if (OrderType.TRAILLIMIT.equals(orderType)) {
+				tradeOrder.setTrailStopPrice((null == trailStopPrice ? null
+						: trailStopPrice.getBigDecimalValue()));
+				tradeOrder.setTrailingPercent((null == trailingPercent ? null
+						: trailingPercent.getBigDecimalValue()));
 			}
 			if (parentId != null)
 				tradeOrder.setParentId(parentId);
