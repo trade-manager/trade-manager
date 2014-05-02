@@ -679,6 +679,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            int
 	 * @param ocaGroupName
 	 *            String
+	 * @param parentId
+	 *            Integer
 	 * @param triggerMethod
 	 *            int
 	 * @param overrideConstraints
@@ -689,6 +691,18 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            boolean
 	 * @param transmit
 	 *            boolean
+	 * @param trailStopPrice
+	 *            BigDecimal
+	 * @param trailingPercent
+	 *            BigDecimal
+	 * @param FAProfile
+	 *            String
+	 * @param FAGroup
+	 *            String
+	 * @param FAMethod
+	 *            String
+	 * @param FAPercent
+	 *            BigDecimal
 	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
