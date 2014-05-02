@@ -621,7 +621,7 @@ public class VostroSeries extends IndicatorSeries {
 
 					double gd_136 = (this.highLessLowSum / this
 							.getVostroPeriod()) / this.getVostroPeriod();
-					
+
 					if (newBar && this.vostro1 != Double.MAX_VALUE) {
 						vostro1Values.addFirst(this.vostro1);
 						vostro2Values.addFirst(this.vostro2);

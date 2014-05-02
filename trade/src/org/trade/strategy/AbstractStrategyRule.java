@@ -722,11 +722,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 					"Limit/Aux price cannot be null");
 
 		if (OrderType.TRAIL.equals(orderType)
-				&& (null == trailStopPrice || null == trailingPercent))
+				&& (null == trailStopPrice && null == trailingPercent))
 			throw new StrategyRuleException(1, 206,
 					"TrailStopPrice/TrailingPercent price cannot be null");
 		try {
-			if (OrderType.MKT.equals(orderType)) {
+			if (OrderType.MKT.equals(orderType)
+					|| OrderType.TRAIL.equals(orderType)) {
 				limitPrice = new Money(0);
 				auxPrice = new Money(0);
 			}
@@ -762,6 +763,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			}
 			if (parentId != null)
 				tradeOrder.setParentId(parentId);
+
 			if (FAProfile != null) {
 				tradeOrder.setFAProfile(FAProfile);
 			} else {
