@@ -504,7 +504,7 @@ public class BrokerModelTest extends TestCase {
 	public void testOnReqExecutions() {
 
 		try {
-			m_brokerModel.onReqExecutions(this.tradestrategy);
+			m_brokerModel.onReqExecutions(this.tradestrategy, false);
 		} catch (Exception ex) {
 			TestCase.fail("Error testOnReqExecutions Msg: " + ex.getMessage());
 		}

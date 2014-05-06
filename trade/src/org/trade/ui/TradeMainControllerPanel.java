@@ -298,7 +298,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doFetch(final Tradestrategy tradestrategy) {
 		try {
 			if (null != tradestrategy.getIdTradeStrategy()) {
-				m_brokerModel.onReqExecutions(tradestrategy);
+				m_brokerModel.onReqExecutions(tradestrategy, false);
 			}
 		} catch (BrokerModelException ex) {
 			setErrorMessage("Error getting executions.", ex.getMessage(), ex);

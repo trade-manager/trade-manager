@@ -1462,6 +1462,26 @@ public abstract class AbstractStrategyRule extends Worker implements
 	}
 
 	/**
+	 * Method requestOrderExecutions.
+	 * 
+	 * @param contract
+	 *            Contract
+	 * @throws BrokerModelException
+	 */
+	public void requestOrderExecutions(Tradestrategy tradestrategy)
+			throws StrategyRuleException {
+
+		try {
+			this.getBrokerManager().onReqExecutions(tradestrategy, true);
+		} catch (BrokerModelException ex) {
+			throw new StrategyRuleException(1, 224,
+					"Error requesting execulted orders. Meg: "
+							+ ex.getMessage());
+		}
+
+	}
+
+	/**
 	 * Method getCurrentCandleCount.
 	 * 
 	 * @return int

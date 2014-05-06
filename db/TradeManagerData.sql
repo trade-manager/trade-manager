@@ -48,6 +48,7 @@ INSERT INTO strategy (idStrategy, name, description, className, version) VALUES 
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (1, '5minBarGap', 'Enter a tier 1-3 gap in first 5min bar direction, and stop @ 5min high/low',1, 'FiveMinGapBarStrategy',53,0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (2, '5minSideBarGap', 'Enter a tier 1-3 gap via expectd Side after first 5min bar and stop @ 5min high/low',1, 'FiveMinSideGapBarStrategy',53,0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (3, '5minWRBBarGap', 'Enter a tier 1-3 gap in first 5min WRB bar direction, and stop @ 55% of high/low',1, 'FiveMinWRBGapBarStrategy',52,0);
+INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (4, 'PosMgrHeikinTrail', 'Get and trail an open position on the current time frame using Hiekin-Ashi bars',1, 'PosMgrHeikinTrailStrategy',null,0);
 
 COMMIT;
 
@@ -119,6 +120,12 @@ INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, display
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(16,'Vwap','VwapSeries','Volume Weighted Moving Average',1,0,0,3,0) ;
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(17,'Pivot','PivotSeries','5 Bar Pivots',1,0,0,3,0) ;
 INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(18,'Volume','VolumeSeries','Volume',1,1,1,3,0) ;
+INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(19,'SMA-20','MovingAverageSeries','Simple 20 period Moving Average',1,-52429,0,4,0) ;
+INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(20,'SMA-8','MovingAverageSeries','Simple 8 Period Moving Average',1,-16711681,0,4,0) ;
+INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(21,'Vwap','VwapSeries','Volume Weighted Moving Average',1,0,0,4,0) ;
+INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(22,'Pivot','PivotSeries','5 Bar Pivots',1,0,0,4,0) ;
+INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(23,'HeikinAshi','HeikinAshiSeries','HeikinAshi bars used for trail stops',0,0,0,4,0) ;
+INSERT INTO indicatorseries (idIndicatorSeries, name, type, description, displaySeries, seriesRGBColor, subChart, idStrategy, version) VALUES(24,'Volume','VolumeSeries','Volume',1,1,1,4,0) ;
 
 COMMIT;
 
@@ -153,6 +160,14 @@ INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSerie
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(29,'1',33,9,0) ;
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(30,'1',33,14,0) ;
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(31,'1',33,15,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(32,'20',1,19,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(33,'LINEAR',2,19,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(34,'1',33,19,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(35,'8',1,20,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(36,'LINEAR',2,20,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(37,'1',33,20,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(38,'false',3,22,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(39,'true',4,22,0) ;
 
 COMMIT;
 

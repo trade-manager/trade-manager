@@ -318,9 +318,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
+	 * 
+	 * @param addOrders
+	 *            boolean
+	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqExecutions(Tradestrategy)
 	 */
-	public void onReqExecutions(Tradestrategy tradestrategy) {
+	public void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders)
+			throws BrokerModelException {
 
 	}
 

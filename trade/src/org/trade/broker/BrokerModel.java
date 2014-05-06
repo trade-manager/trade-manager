@@ -245,9 +245,13 @@ public interface BrokerModel {
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
+	 * 
+	 * @param addOrders
+	 *            boolean
 	 * @throws BrokerModelException
+	 * @see org.trade.broker.BrokerModel#onReqExecutions(Tradestrategy)
 	 */
-	void onReqExecutions(Tradestrategy tradestrategy)
+	void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders)
 			throws BrokerModelException;
 
 	/**

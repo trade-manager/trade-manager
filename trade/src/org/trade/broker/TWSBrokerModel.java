@@ -62,11 +62,14 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.AccountType;
+import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
+import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.SECType;
+import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
@@ -113,7 +116,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private static final ConcurrentHashMap<String, Account> m_accountRequests = new ConcurrentHashMap<String, Account>();
 
 	private static final ConcurrentHashMap<Integer, TradeOrder> openOrders = new ConcurrentHashMap<Integer, TradeOrder>();
-	private static final ConcurrentHashMap<Integer, TradeOrder> execDetails = new ConcurrentHashMap<Integer, TradeOrder>();;
+	private static final ConcurrentHashMap<Integer, TradeOrder> tradeOrdersExecutions = new ConcurrentHashMap<Integer, TradeOrder>();
+	private static ConcurrentHashMap<String, Execution> executionDetails = null;
 
 	private EClientSocket m_client = null;
 	private PersistentModel m_tradePersistentModel = null;
@@ -407,7 +411,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 */
 
 		if (m_client.isConnected()) {
-			execDetails.clear();
+			tradeOrdersExecutions.clear();
 			Integer reqId = this.getNextRequestId();
 			m_client.reqExecutions(reqId, TWSBrokerModel.getIBExecutionFilter(
 					m_clientId, mktOpenDate, null, null));
@@ -422,20 +426,31 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
+	 * 
+	 * @param addOrders
+	 *            boolean
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqExecutions(Tradestrategy)
 	 */
-	public void onReqExecutions(Tradestrategy tradestrategy)
+	public void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders)
 			throws BrokerModelException {
 
 		/*
 		 * Request execution reports based on the supplied filter criteria
 		 */
+		Integer clientId = m_clientId;
 		if (m_client.isConnected()) {
-			execDetails.clear();
-			Integer reqId = this.getNextRequestId();
+			tradeOrdersExecutions.clear();
+			if (addOrders) {
+				executionDetails = new ConcurrentHashMap<String, Execution>();
+				clientId = 0;
+			} else {
+				executionDetails = null;
+			}
+
+			Integer reqId = tradestrategy.getIdTradeStrategy();
 			m_client.reqExecutions(reqId, TWSBrokerModel.getIBExecutionFilter(
-					m_clientId, tradestrategy.getTradingday().getOpen(),
+					clientId, tradestrategy.getTradingday().getOpen(),
 					tradestrategy.getContract().getSecType(), tradestrategy
 							.getContract().getSymbol()));
 		} else {
@@ -1074,6 +1089,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								+ " make sure Client ID: "
 								+ this.m_clientId
 								+ " is not the master in TWS. On execDetails update.");
+				if (null != executionDetails) {
+					executionDetails.put(execution.m_execId, execution);
+				}
 				return;
 			}
 
@@ -1099,7 +1117,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (transientInstance.getIsFilled() && !isFilled)
 				this.fireTradeOrderFilled(transientInstance);
 
-			execDetails.put(transientInstance.getOrderKey(), transientInstance);
+			tradeOrdersExecutions.put(transientInstance.getOrderKey(),
+					transientInstance);
 			_log.info("Exec Details for order key: "
 					+ transientInstance.getOrderKey() + " AvgPrice: "
 					+ execution.m_avgPrice + " CumQty: " + execution.m_cumQty
@@ -1121,8 +1140,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void execDetailsEnd(int reqId) {
 
 		try {
-			for (Integer key : execDetails.keySet()) {
-				TradeOrder tradeorder = execDetails.get(key);
+			for (Integer key : tradeOrdersExecutions.keySet()) {
+				TradeOrder tradeorder = tradeOrdersExecutions.get(key);
 				if (tradeorder.getIsFilled()) {
 					if (tradeorder.hasTradePosition()
 							&& !tradeorder.getTradePosition().isOpen()) {
@@ -1131,11 +1150,72 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 				}
 			}
+			if (null != executionDetails) {
+				Tradestrategy tradestrategy = m_tradePersistentModel
+						.findTradestrategyById(reqId);
+
+				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
+				for (String key : executionDetails.keySet()) {
+					Execution execution = executionDetails.get(key);
+					Integer orderKey = execution.m_orderId;
+					if (tradeOrders.containsKey(orderKey))
+						continue;
+					TradeOrder order = new TradeOrder();
+					order.setTradestrategy(tradestrategy);
+
+					order.setOrderKey(orderKey);
+					TradeOrderfill tradeOrderfill = new TradeOrderfill();
+					TWSBrokerModel.populateTradeOrderfill(execution,
+							tradeOrderfill);
+					order.addTradeOrderfill(tradeOrderfill);
+					String action = Action.SELL;
+					if (Side.BOT.equals(execution.m_side))
+						action = Action.BUY;
+					order.setAction(action);
+					order.setOrderType(OrderType.MKT);
+
+					double filledValue = execution.m_avgPrice
+							* execution.m_shares;
+					int filledQuantity = execution.m_shares;
+
+					for (String key1 : executionDetails.keySet()) {
+						Execution execution1 = executionDetails.get(key1);
+						Integer orderKey1 = execution.m_orderId;
+						if (orderKey1 == orderKey
+								&& !execution1.m_execId
+										.equals(execution.m_execId)) {
+							TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
+							TWSBrokerModel.populateTradeOrderfill(execution,
+									tradeOrderfill1);
+							order.addTradeOrderfill(tradeOrderfill1);
+							filledQuantity = filledQuantity
+									+ execution1.m_shares;
+							filledValue = filledValue
+									+ (execution1.m_avgPrice * execution1.m_shares);
+						}
+					}
+					if (filledQuantity > 0) {
+						BigDecimal avgFillPrice = new BigDecimal(filledValue
+								/ filledQuantity);
+						avgFillPrice
+								.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+						order.setAverageFilledPrice(avgFillPrice);
+						order.setQuantity(filledQuantity);
+						order.setFilledQuantity(filledQuantity);
+					}
+					tradeOrders.put(order.getOrderKey(), order);
+				}
+				for (Integer orderKey : tradeOrders.keySet()) {
+					TradeOrder tradeOrder = tradeOrders.get(orderKey);
+					tradeOrder = m_tradePersistentModel
+							.persistTradeOrder(tradeOrder);
+				}
+			}
 
 			/*
 			 * Let the controller know there are execution details.
 			 */
-			this.fireExecutionDetailsEnd(execDetails);
+			this.fireExecutionDetailsEnd(tradeOrdersExecutions);
 
 		} catch (Exception ex) {
 			error(reqId, 3330, "Errors updating open order: " + ex.getMessage());
