@@ -1162,7 +1162,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						continue;
 					TradeOrder order = new TradeOrder();
 					order.setTradestrategy(tradestrategy);
-
+					order.setClientId(execution.m_clientId);
+					order.setPermId(execution.m_permId);
 					order.setOrderKey(orderKey);
 					TradeOrderfill tradeOrderfill = new TradeOrderfill();
 					TWSBrokerModel.populateTradeOrderfill(execution,
@@ -1174,10 +1175,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					order.setAction(action);
 					order.setOrderType(OrderType.MKT);
 
-					double filledValue = execution.m_avgPrice
-							* execution.m_shares;
-					int filledQuantity = execution.m_shares;
-
 					for (String key1 : executionDetails.keySet()) {
 						Execution execution1 = executionDetails.get(key1);
 						Integer orderKey1 = execution.m_orderId;
@@ -1188,27 +1185,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							TWSBrokerModel.populateTradeOrderfill(execution,
 									tradeOrderfill1);
 							order.addTradeOrderfill(tradeOrderfill1);
-							filledQuantity = filledQuantity
-									+ execution1.m_shares;
-							filledValue = filledValue
-									+ (execution1.m_avgPrice * execution1.m_shares);
 						}
-					}
-					if (filledQuantity > 0) {
-						BigDecimal avgFillPrice = new BigDecimal(filledValue
-								/ filledQuantity);
-						avgFillPrice
-								.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
-						order.setAverageFilledPrice(avgFillPrice);
-						order.setQuantity(filledQuantity);
-						order.setFilledQuantity(filledQuantity);
 					}
 					tradeOrders.put(order.getOrderKey(), order);
 				}
 				for (Integer orderKey : tradeOrders.keySet()) {
 					TradeOrder tradeOrder = tradeOrders.get(orderKey);
 					tradeOrder = m_tradePersistentModel
-							.persistTradeOrder(tradeOrder);
+							.persistTradeOrderfill(tradeOrder);
+					// Let the controller know an order was filled
+					if (tradeOrder.getIsFilled())
+						this.fireTradeOrderFilled(tradeOrder);
 				}
 			}
 

@@ -65,7 +65,7 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 	 * price is moved up to the Low of current Heikin-Ashi bar -2 as long as the
 	 * prev bars low is higher than the prev bar -1 low.
 	 * 
-	 * 6/ Close any open positions at 15:58.
+	 * 2/ Close any open positions at 15:58.
 	 * 
 	 */
 
