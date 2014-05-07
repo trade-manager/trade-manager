@@ -92,6 +92,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	private ClientSocket m_client = null;
 
 	private static final int SCALE = 5;
+	private static final int minOrderId = 100000;
 
 	private AtomicInteger orderKey = null;
 
@@ -222,8 +223,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	public void nextValidId(int orderId) {
 		try {
 			int maxKey = m_tradePersistentModel.findTradeOrderByMaxKey();
-			if (maxKey < 100000) {
-				maxKey = 100000;
+			if (maxKey < minOrderId) {
+				maxKey = minOrderId;
 			}
 			if (maxKey < orderId) {
 				orderKey = new AtomicInteger(orderId);

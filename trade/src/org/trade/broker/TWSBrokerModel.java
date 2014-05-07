@@ -131,6 +131,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private Integer m_clientId = null;
 
 	private static final int SCALE = 5;
+	private static final int minOrderId = 100000;
 
 	private static final String AVAILABLE_FUNDS = "AvailableFunds";
 	private static final String ACCOUNTTYPE = "AccountType";
@@ -1171,9 +1172,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						.findTradestrategyById(reqId);
 
 				// Internal created order have Integer.MAX_VALUE as their values
-				// change these to 99999 which is 1 less than the minimum
-				// created by TM.
-				int nextOrderKey = 99999;
+				// change these to minOrderId -1 which is 1 less than the
+				// minOrderId by TM.
+				int nextOrderKey = minOrderId - 1;
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
 					if (execution.m_orderId == Integer.MAX_VALUE)
@@ -2120,8 +2121,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			_log.info("nextValidId: " + orderId);
 			int maxKey = m_tradePersistentModel.findTradeOrderByMaxKey();
-			if (maxKey < 100000) {
-				maxKey = 100000;
+			if (maxKey < minOrderId) {
+				maxKey = minOrderId;
 			}
 			if (maxKey < orderId) {
 				orderKey = new AtomicInteger(orderId);
