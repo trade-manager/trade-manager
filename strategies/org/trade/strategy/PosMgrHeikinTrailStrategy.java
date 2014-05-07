@@ -138,16 +138,47 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
-				 * and stop orders for the open quantity. 
+				 * and stop orders for the open quantity.
 				 * 
 				 * Make the stop -1R and manage to the Vwap MA of the opening
 				 * bar.
 				 */
-				Integer quantity = this.getOpenPositionOrder()
-						.getFilledQuantity();
+				Integer quantity = Math.abs(this.getOpenTradePosition()
+						.getOpenQuantity());
+				double avgFillPrice = (Math.abs(this.getOpenTradePosition()
+						.getTotalNetValue().doubleValue()) / quantity);
+				int stopRiskUnits = 1;
+				int targetRiskUnits = 8;
 
-				createStopAndTargetOrder(getOpenPositionOrder(), 1, 0.01, 8,
-						0.01, quantity, true);
+				double stopAddAmount = 0.01;
+				double targetAddAmount = 0.01;
+				double riskAmount = Math.abs(this.getTradestrategy()
+						.getRiskAmount().doubleValue()
+						/ quantity);
+				String action = Action.BUY;
+				int buySellMultipliter = 1;
+				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+					action = Action.SELL;
+					buySellMultipliter = -1;
+				}
+
+				// Add a penny to the stop and target
+				double stop = avgFillPrice
+						+ (riskAmount * stopRiskUnits * buySellMultipliter);
+				if (stop < 0)
+					stop = 0.02;
+				Money stopPrice = addPennyAndRoundStop(stop, this
+						.getOpenTradePosition().getSide(), action,
+						stopAddAmount);
+
+				double target = avgFillPrice
+						+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
+				if (target < 0)
+					target = 0.02;
+				Money targetPrice = addPennyAndRoundStop(target, this
+						.getOpenTradePosition().getSide(), action,
+						targetAddAmount);
+				createStopAndTargetOrder(stopPrice, targetPrice, quantity, true);
 
 				_log.info("Open position submit Stop/Tgt orders created Symbol: "
 						+ getSymbol() + " Time:" + startPeriod);

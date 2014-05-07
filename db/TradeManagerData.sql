@@ -168,6 +168,7 @@ INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSerie
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(37,'1',33,20,0) ;
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(38,'false',3,22,0) ;
 INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(39,'true',4,22,0) ;
+INSERT INTO codevalue (idcodeValue , codeValue, idcodeAttribute,idIndicatorSeries, version) VALUES(40,'5',5,22,0);
 
 COMMIT;
 

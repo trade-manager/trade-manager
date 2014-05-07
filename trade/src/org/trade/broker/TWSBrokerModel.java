@@ -40,8 +40,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -89,7 +91,6 @@ import com.ib.client.ContractDetails;
 import com.ib.client.EClientSocket;
 import com.ib.client.EWrapper;
 import com.ib.client.Execution;
-import com.ib.client.ExecutionFilter;
 import com.ib.client.OrderState;
 import com.ib.client.TickType;
 import com.ib.client.UnderComp;
@@ -464,11 +465,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								.getTradingday().getOpen(), tradestrategy
 								.getContract().getSecType(), tradestrategy
 								.getContract().getSymbol()));
-				ExecutionFilter exFilter = TWSBrokerModel.getIBExecutionFilter(
-						clientId, tradestrategy.getTradingday().getOpen(),
-						tradestrategy.getContract().getSecType(), tradestrategy
-								.getContract().getSymbol());
-				_log.error("Time: " + exFilter.m_time);
 			} else {
 				throw new BrokerModelException(
 						tradestrategy.getIdTradeStrategy(), 3020,
@@ -1102,7 +1098,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			TWSBrokerModel.logExecution(execution);
 
 			TradeOrder transientInstance = m_tradePersistentModel
-					.findTradeOrderByKey(new Integer(execution.m_orderId));
+					.findTradeOrderByKey(new Integer(Math
+							.abs(execution.m_orderId)));
 			if (null == transientInstance) {
 				if (null == executionDetails) {
 					error(execution.m_orderId,
@@ -1173,6 +1170,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Tradestrategy tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(reqId);
 
+				// Internal reated order have Integer.MAX_VALUE as their values
+				// change these to the next order id.
+				int nextOrderKey = this.orderKey.getAndIncrement();
+				for (String key : executionDetails.keySet()) {
+					Execution execution = executionDetails.get(key);
+					if (execution.m_orderId == Integer.MAX_VALUE)
+						execution.m_orderId = nextOrderKey;
+				}
 				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
@@ -1200,19 +1205,36 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						if (orderKey1.equals(orderKey)
 								&& !execution1.m_execId
 										.equals(execution.m_execId)) {
-							quantity = quantity + execution1.m_shares;
+							TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
+							TWSBrokerModel.populateTradeOrderfill(execution,
+									tradeOrderfill1);
+							quantity = quantity + tradeOrderfill1.getQuantity();
+							// Make sure the create date for the order is the
+							// earliest time.
+							if (tradeOrderfill1.getTime().before(
+									tradeOrder.getCreateDate()))
+								tradeOrder.setCreateDate(tradeOrderfill1
+										.getTime());
 						}
 					}
 					tradeOrder.setQuantity(quantity);
 					tradeOrders.put(tradeOrder.getOrderKey(), tradeOrder);
 				}
+
+				List<TradeOrder> orders = new ArrayList<TradeOrder>();
 				for (Integer orderKey : tradeOrders.keySet()) {
 					TradeOrder tradeOrder = tradeOrders.get(orderKey);
+					orders.add(tradeOrder);
+				}
+				Collections.sort(orders, TradeOrder.CREATE_ORDER);
+
+				for (TradeOrder tradeOrder : orders) {
 					tradeOrder = m_tradePersistentModel
 							.persistTradeOrder(tradeOrder);
 					for (String key : executionDetails.keySet()) {
 						Execution execution = executionDetails.get(key);
-						if (orderKey == Math.abs(execution.m_orderId)) {
+						if (tradeOrder.getOrderKey().equals(
+								Math.abs(execution.m_orderId))) {
 							TradeOrderfill tradeOrderfill = new TradeOrderfill();
 							TWSBrokerModel.populateTradeOrderfill(execution,
 									tradeOrderfill);
