@@ -1170,9 +1170,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Tradestrategy tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(reqId);
 
-				// Internal reated order have Integer.MAX_VALUE as their values
-				// change these to the next order id.
-				int nextOrderKey = this.orderKey.getAndIncrement();
+				// Internal created order have Integer.MAX_VALUE as their values
+				// change these to 99999 which is 1 less than the minimum
+				// created by TM.
+				int nextOrderKey = 99999;
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
 					if (execution.m_orderId == Integer.MAX_VALUE)
