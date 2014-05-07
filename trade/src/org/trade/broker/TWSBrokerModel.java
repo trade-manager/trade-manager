@@ -89,6 +89,7 @@ import com.ib.client.ContractDetails;
 import com.ib.client.EClientSocket;
 import com.ib.client.EWrapper;
 import com.ib.client.Execution;
+import com.ib.client.ExecutionFilter;
 import com.ib.client.OrderState;
 import com.ib.client.TickType;
 import com.ib.client.UnderComp;
@@ -404,23 +405,30 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param mktOpenDate
 	 *            Date
 	 * @throws BrokerModelException
+	 * @throws IOException
 	 * @see org.trade.broker.BrokerModel#onReqAllExecutions(Date)
 	 */
 	public void onReqAllExecutions(Date mktOpenDate)
 			throws BrokerModelException {
+		try {
+			/*
+			 * Request execution reports based on the supplied filter criteria
+			 */
 
-		/*
-		 * Request execution reports based on the supplied filter criteria
-		 */
-
-		if (m_client.isConnected()) {
-			tradeOrdersExecutions.clear();
-			Integer reqId = this.getNextRequestId();
-			m_client.reqExecutions(reqId, TWSBrokerModel.getIBExecutionFilter(
-					m_clientId, mktOpenDate, null, null));
-		} else {
+			if (m_client.isConnected()) {
+				tradeOrdersExecutions.clear();
+				Integer reqId = this.getNextRequestId();
+				m_client.reqExecutions(reqId, TWSBrokerModel
+						.getIBExecutionFilter(m_clientId, mktOpenDate, null,
+								null));
+			} else {
+				throw new BrokerModelException(0, 3020,
+						"Not conected to TWS historical data cannot be retrieved");
+			}
+		} catch (Exception ex) {
 			throw new BrokerModelException(0, 3020,
-					"Not conected to TWS historical data cannot be retrieved");
+					"Error request executions for Date: " + mktOpenDate
+							+ " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -437,29 +445,40 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders)
 			throws BrokerModelException {
-
-		/*
-		 * Request execution reports based on the supplied filter criteria
-		 */
-		Integer clientId = m_clientId;
-		if (m_client.isConnected()) {
-			tradeOrdersExecutions.clear();
-			if (addOrders) {
-				executionDetails = new ConcurrentHashMap<String, Execution>();
-				clientId = 0;
+		try {
+			/*
+			 * Request execution reports based on the supplied filter criteria
+			 */
+			Integer clientId = m_clientId;
+			if (m_client.isConnected()) {
+				tradeOrdersExecutions.clear();
+				if (addOrders) {
+					executionDetails = new ConcurrentHashMap<String, Execution>();
+					clientId = 0;
+				} else {
+					executionDetails = null;
+				}
+				Integer reqId = tradestrategy.getIdTradeStrategy();
+				m_client.reqExecutions(reqId, TWSBrokerModel
+						.getIBExecutionFilter(clientId, tradestrategy
+								.getTradingday().getOpen(), tradestrategy
+								.getContract().getSecType(), tradestrategy
+								.getContract().getSymbol()));
+				ExecutionFilter exFilter = TWSBrokerModel.getIBExecutionFilter(
+						clientId, tradestrategy.getTradingday().getOpen(),
+						tradestrategy.getContract().getSecType(), tradestrategy
+								.getContract().getSymbol());
+				_log.error("Time: " + exFilter.m_time);
 			} else {
-				executionDetails = null;
+				throw new BrokerModelException(
+						tradestrategy.getIdTradeStrategy(), 3020,
+						"Not conected to TWS historical data cannot be retrieved");
 			}
-
-			Integer reqId = tradestrategy.getIdTradeStrategy();
-			m_client.reqExecutions(reqId, TWSBrokerModel.getIBExecutionFilter(
-					clientId, tradestrategy.getTradingday().getOpen(),
-					tradestrategy.getContract().getSecType(), tradestrategy
-							.getContract().getSymbol()));
-		} else {
+		} catch (Exception ex) {
 			throw new BrokerModelException(tradestrategy.getIdTradeStrategy(),
-					3020,
-					"Not conected to TWS historical data cannot be retrieved");
+					3020, "Error request executions for symbol: "
+							+ tradestrategy.getContract().getSymbol()
+							+ " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -3424,19 +3443,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param symbol
 	 *            String
 	 * @return com.ib.client.ExecutionFilter
+	 * @throws IOException
 	 */
 	public static com.ib.client.ExecutionFilter getIBExecutionFilter(
-			Integer clientId, Date mktOpen, String secType, String symbol) {
+			Integer clientId, Date mktOpen, String secType, String symbol)
+			throws IOException {
 
 		com.ib.client.ExecutionFilter executionFilter = new com.ib.client.ExecutionFilter();
-		if (null != secType) {
+		if (null != secType)
 			executionFilter.m_secType = secType;
-		}
-		if (null != symbol) {
+
+		if (null != symbol)
 			executionFilter.m_symbol = symbol;
+		if (null != mktOpen) {
+			TimeZone twsTimeZone = TimeZone.getTimeZone(ConfigProperties
+					.getPropAsString("trade.tws.timezone"));
+			// SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			sdf.setTimeZone(twsTimeZone);
+			executionFilter.m_time = sdf.format(mktOpen);
 		}
-		executionFilter.m_time = _sdfLocal.format(mktOpen);
-		executionFilter.m_clientId = clientId;
+
+		if (null != clientId)
+			executionFilter.m_clientId = clientId;
 		return executionFilter;
 	}
 

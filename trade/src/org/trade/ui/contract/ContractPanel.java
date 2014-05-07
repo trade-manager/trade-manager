@@ -863,8 +863,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					" Industry:", false, bold);
 			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
 					CoreUtils.padRight(industry, 30), false, null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), "\n",
+					false, null);
 			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					" Strategy:", false, bold);
+					"Strategy:", false, bold);
 			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
 					CoreUtils.padRight(strategyDesc, 30), false, null);
 
@@ -913,6 +915,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			enableChartButtons(tradestrategy);
 
 			double netValue = 0;
+			String openQuantity = "";
 			double commision = 0;
 			double unRealizedPL = 0;
 			double realizedPL = 0;
@@ -989,6 +992,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					realizedPL = tradePosition.getRealizedProfit()
 							.doubleValue();
 					netValue = tradePosition.getTotalNetValue().doubleValue();
+					openQuantity = tradePosition.getOpenQuantity().toString();
 					commision = tradePosition.getTotalCommission()
 							.doubleValue();
 				}
@@ -1021,8 +1025,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
 					CoreUtils.padLeft(risk, 10), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					" Net Total:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "\n", false,
+					null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Net Total:",
+					false, bold);
 			if (netValue < 0) {
 				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
 						.padLeft(currencyFormater.format(netValue), 10), false,
@@ -1066,6 +1072,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						.padLeft(currencyFormater.format(unRealizedPL), 10),
 						false, null);
 			}
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Open Qty:",
+					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+					CoreUtils.padLeft(openQuantity, 10), false, null);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Comms:",
 					false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),

@@ -44,6 +44,7 @@ import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
+import org.trade.persistent.dao.TradestrategyLite;
 import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.Strategy;
@@ -219,6 +220,17 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	Tradestrategy findTradestrategyById(Integer idTradestrategy)
+			throws PersistentModelException;
+
+	/**
+	 * Method findTradestrategyLiteById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return TradestrategyLite
+	 * @throws PersistentModelException
+	 */
+	TradestrategyLite findTradestrategyLiteById(Integer id)
 			throws PersistentModelException;
 
 	/**

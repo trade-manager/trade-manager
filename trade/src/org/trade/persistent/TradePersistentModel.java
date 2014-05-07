@@ -58,6 +58,7 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioHome;
+import org.trade.persistent.dao.TradestrategyLite;
 import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
@@ -359,6 +360,25 @@ public class TradePersistentModel implements PersistentModel {
 		if (null == instance)
 			throw new PersistentModelException(
 					"Tradestrategy not found for id: " + id);
+		return instance;
+	}
+
+	/**
+	 * Method findTradestrategyLiteById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return TradestrategyLite
+	 * @throws PersistentModelException
+	 * @see org.trade.persistent.PersistentModel#findTradestrategyById(Integer)
+	 */
+	public TradestrategyLite findTradestrategyLiteById(Integer id)
+			throws PersistentModelException {
+		TradestrategyLite instance = m_tradestrategyHome
+				.findTradestrategyLiteById(id);
+		if (null == instance)
+			throw new PersistentModelException(
+					"TradestrategyLite not found for id: " + id);
 		return instance;
 	}
 
@@ -887,6 +907,8 @@ public class TradePersistentModel implements PersistentModel {
 			if (null == tradeOrder.getTradestrategyId()) {
 				tradestrategyId = tradeOrder.getTradestrategy()
 						.getIdTradeStrategy();
+				tradeOrder.setTradestrategyId(this
+						.findTradestrategyLiteById(tradestrategyId));
 			} else {
 				tradestrategyId = tradeOrder.getTradestrategyId()
 						.getIdTradeStrategy();

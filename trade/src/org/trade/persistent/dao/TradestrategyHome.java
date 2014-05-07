@@ -90,6 +90,31 @@ public class TradestrategyHome {
 	}
 
 	/**
+	 * Method findTradestrategyLiteById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return TradestrategyLite
+	 */
+	public synchronized TradestrategyLite findTradestrategyLiteById(Integer id) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			entityManager.getTransaction().begin();
+			TradestrategyLite instance = entityManager.find(
+					TradestrategyLite.class, id);
+			entityManager.getTransaction().commit();
+			return instance;
+		} catch (RuntimeException re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
 	 * Method findVersionById.
 	 * 
 	 * @param id
