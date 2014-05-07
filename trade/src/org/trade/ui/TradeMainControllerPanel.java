@@ -298,7 +298,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doFetch(final Tradestrategy tradestrategy) {
 		try {
 			if (null != tradestrategy.getIdTradeStrategy()) {
-				m_brokerModel.onReqExecutions(tradestrategy, false);
+				int result = JOptionPane
+						.showConfirmDialog(
+								this.getFrame(),
+								"Do you want to save orders that did not orginate from TM ?",
+								"Information", JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					m_brokerModel.onReqExecutions(tradestrategy, true);
+				} else {
+					m_brokerModel.onReqExecutions(tradestrategy, false);
+				}
+
 			}
 		} catch (BrokerModelException ex) {
 			setErrorMessage("Error getting executions.", ex.getMessage(), ex);

@@ -68,8 +68,11 @@ import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OrderType;
+import org.trade.dictionary.valuetype.OverrideConstraints;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.dictionary.valuetype.Side;
+import org.trade.dictionary.valuetype.TimeInForce;
+import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
@@ -1082,14 +1085,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(execution.m_orderId));
 			if (null == transientInstance) {
-				error(execution.m_orderId,
-						3170,
-						"Warning Order not found for Order Key: "
-								+ execution.m_orderId
-								+ " make sure Client ID: "
-								+ this.m_clientId
-								+ " is not the master in TWS. On execDetails update.");
-				if (null != executionDetails) {
+				if (null == executionDetails) {
+					error(execution.m_orderId,
+							3170,
+							"Warning Order not found for Order Key: "
+									+ execution.m_orderId
+									+ " make sure Client ID: "
+									+ this.m_clientId
+									+ " is not the master in TWS. On execDetails update.");
+
+				} else {
+					_log.error("order id: " + execution.m_orderId
+							+ " exec id: " + execution.m_execId + " side: "
+							+ execution.m_side + " quantity: "
+							+ execution.m_shares + " cumQuantity: "
+							+ execution.m_cumQty);
 					executionDetails.put(execution.m_execId, execution);
 				}
 				return;
@@ -1157,45 +1167,57 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
-					Integer orderKey = execution.m_orderId;
+					Integer orderKey = Math.abs(execution.m_orderId);
 					if (tradeOrders.containsKey(orderKey))
 						continue;
-					TradeOrder order = new TradeOrder();
-					order.setTradestrategy(tradestrategy);
-					order.setClientId(execution.m_clientId);
-					order.setPermId(execution.m_permId);
-					order.setOrderKey(orderKey);
 					TradeOrderfill tradeOrderfill = new TradeOrderfill();
 					TWSBrokerModel.populateTradeOrderfill(execution,
 							tradeOrderfill);
-					order.addTradeOrderfill(tradeOrderfill);
 					String action = Action.SELL;
 					if (Side.BOT.equals(execution.m_side))
 						action = Action.BUY;
-					order.setAction(action);
-					order.setOrderType(OrderType.MKT);
 
+					Integer quantity = execution.m_shares;
+					TradeOrder tradeOrder = new TradeOrder(tradestrategy,
+							action, tradeOrderfill.getTime(), OrderType.MKT,
+							quantity, null, null, OverrideConstraints.YES,
+							TimeInForce.DAY, TriggerMethod.DEFAULT);
+					tradeOrder.setClientId(execution.m_clientId);
+					tradeOrder.setPermId(execution.m_permId);
+					tradeOrder.setOrderKey(orderKey);
 					for (String key1 : executionDetails.keySet()) {
 						Execution execution1 = executionDetails.get(key1);
-						Integer orderKey1 = execution.m_orderId;
-						if (orderKey1 == orderKey
+						Integer orderKey1 = Math.abs(execution1.m_orderId);
+						if (orderKey1.equals(orderKey)
 								&& !execution1.m_execId
 										.equals(execution.m_execId)) {
-							TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
-							TWSBrokerModel.populateTradeOrderfill(execution,
-									tradeOrderfill1);
-							order.addTradeOrderfill(tradeOrderfill1);
+							quantity = quantity + execution1.m_shares;
 						}
 					}
-					tradeOrders.put(order.getOrderKey(), order);
+					tradeOrder.setQuantity(quantity);
+					tradeOrders.put(tradeOrder.getOrderKey(), tradeOrder);
 				}
 				for (Integer orderKey : tradeOrders.keySet()) {
 					TradeOrder tradeOrder = tradeOrders.get(orderKey);
 					tradeOrder = m_tradePersistentModel
+							.persistTradeOrder(tradeOrder);
+					for (String key : executionDetails.keySet()) {
+						Execution execution = executionDetails.get(key);
+						if (orderKey == Math.abs(execution.m_orderId)) {
+							TradeOrderfill tradeOrderfill = new TradeOrderfill();
+							TWSBrokerModel.populateTradeOrderfill(execution,
+									tradeOrderfill);
+							tradeOrderfill.setTradeOrder(tradeOrder);
+							tradeOrder.addTradeOrderfill(tradeOrderfill);
+						}
+					}
+					tradeOrder = m_tradePersistentModel
 							.persistTradeOrderfill(tradeOrder);
+					TradeOrder transientInstance = m_tradePersistentModel
+							.findTradeOrderByKey(tradeOrder.getOrderKey());
 					// Let the controller know an order was filled
 					if (tradeOrder.getIsFilled())
-						this.fireTradeOrderFilled(tradeOrder);
+						this.fireTradeOrderFilled(transientInstance);
 				}
 			}
 
