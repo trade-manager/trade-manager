@@ -1114,11 +1114,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									+ " is not the master in TWS. On execDetails update.");
 
 				} else {
-					_log.error("order id: " + execution.m_orderId
-							+ " exec id: " + execution.m_execId + " side: "
-							+ execution.m_side + " quantity: "
-							+ execution.m_shares + " cumQuantity: "
-							+ execution.m_cumQty);
 					executionDetails.put(execution.m_execId, execution);
 				}
 				return;
@@ -1148,11 +1143,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 			tradeOrdersExecutions.put(transientInstance.getOrderKey(),
 					transientInstance);
-			_log.info("Exec Details for order key: "
-					+ transientInstance.getOrderKey() + " AvgPrice: "
-					+ execution.m_avgPrice + " CumQty: " + execution.m_cumQty
-					+ " Shares: " + execution.m_shares + " Price: "
-					+ execution.m_price);
 
 		} catch (Exception ex) {
 			error(reqId, 3160, "Errors saving execution: " + ex.getMessage());
