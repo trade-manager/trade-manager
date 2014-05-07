@@ -120,9 +120,9 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 			 */
 
 			if (!this.isThereOpenPosition()) {
-				_log.info("Reuest the open position Symbol: " + getSymbol()
-						+ " Time:" + startPeriod);
-				requestOrderExecutions(this.getTradestrategy());
+				_log.info("No open position so Cancel Strategy Mgr Symbol: "
+						+ getSymbol() + " Time:" + startPeriod);
+				this.cancel();
 				return;
 			}
 
@@ -195,11 +195,10 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
 						+ " Time: " + startPeriod);
-				String action = Action.SELL;
-				double avgPrice = this.getOpenTradePosition()
-						.getTotalBuyValue().doubleValue()
-						/ this.getOpenTradePosition().getTotalBuyQuantity()
-								.doubleValue();
+
+				double avgFillPrice = (Math.abs(this.getOpenTradePosition()
+						.getTotalNetValue().doubleValue()) / Math.abs(this
+						.getOpenTradePosition().getOpenQuantity()));
 
 				CandleItem prevCandleItem = null;
 				if (getCurrentCandleCount() > 0) {
@@ -208,22 +207,17 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 					// AbstractStrategyRule
 					// .logCandle(this, prevCandleItem.getCandle());
 				}
-
-				if (avgPrice < prevCandleItem.getLow())
-					avgPrice = prevCandleItem.getLow();
+				String action = Action.SELL;
+				if (avgFillPrice < prevCandleItem.getLow())
+					avgFillPrice = prevCandleItem.getLow();
 
 				if (Side.SLD.equals(getOpenTradePosition().getSide())) {
 					action = Action.BUY;
-					avgPrice = this.getOpenTradePosition().getTotalSellValue()
-							.doubleValue()
-							/ this.getOpenTradePosition()
-									.getTotalSellQuantity().doubleValue();
-
-					if (avgPrice > prevCandleItem.getHigh())
-						avgPrice = prevCandleItem.getHigh();
+					if (avgFillPrice > prevCandleItem.getHigh())
+						avgFillPrice = prevCandleItem.getHigh();
 				}
 
-				Money stopPrice = addPennyAndRoundStop(avgPrice,
+				Money stopPrice = addPennyAndRoundStop(avgFillPrice,
 						getOpenTradePosition().getSide(), action, 0.01);
 				moveStopOCAPrice(stopPrice, true);
 			}

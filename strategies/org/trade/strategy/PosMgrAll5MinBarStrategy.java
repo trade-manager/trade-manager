@@ -109,6 +109,13 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			// + " symbol: " + getSymbol() + " startPeriod: "
 			// + startPeriod);
 
+			if (!this.isThereOpenPosition()) {
+				_log.info("No open position so Cancel Strategy Mgr Symbol: "
+						+ getSymbol() + " Time:" + startPeriod);
+				this.cancel();
+				return;
+			}
+
 			// Is it the the 9:35 candle?
 			if (startPeriod.equals(TradingCalendar.addMinutes(this
 					.getTradestrategy().getTradingday().getOpen(), 5))
