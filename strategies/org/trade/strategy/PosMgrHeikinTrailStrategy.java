@@ -73,6 +73,8 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrHeikinTrailStrategy.class);
 
+	private Money target2RPrice = null;
+
 	/**
 	 * Default Constructor Note if you use class variables remember these will
 	 * need to be initialized if the strategy is restarted i.e. if they are
@@ -172,6 +174,11 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 						.getOpenTradePosition().getSide(), action,
 						stopAddAmount);
 
+				target2RPrice = addPennyAndRoundStop(
+						(avgFillPrice + (riskAmount * 2 * buySellMultipliter * -1)),
+						this.getOpenTradePosition().getSide(), action,
+						targetAddAmount);
+
 				double target = avgFillPrice
 						+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
 
@@ -239,14 +246,21 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 			 * Trail on Heikin-Ashi above target 1 with a two bar trail.
 			 */
 			if (newBar) {
-				Money newStop = getHiekinAshiTrailStop(
-						this.getStopPriceMinUnfilled(), 2);
-				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
-					moveStopOCAPrice(newStop, true);
-					_log.warn("PositionManagerStrategy HiekinAshiTrail: "
-							+ getSymbol() + " Trail Price: " + newStop
-							+ " Time: " + startPeriod + " Side: "
-							+ this.getOpenTradePosition().getSide());
+				if ((target2RPrice.isLessThan(new Money(currentCandleItem
+						.getClose())) && Side.BOT.equals(this
+						.getOpenTradePosition().getSide()))
+						|| (target2RPrice.isGreaterThan(new Money(
+								currentCandleItem.getClose())) && Side.SLD
+								.equals(this.getOpenTradePosition().getSide()))) {
+					Money newStop = getHiekinAshiTrailStop(
+							this.getStopPriceMinUnfilled(), 2);
+					if (!newStop.equals(this.getStopPriceMinUnfilled())) {
+						moveStopOCAPrice(newStop, true);
+						_log.warn("PositionManagerStrategy HiekinAshiTrail: "
+								+ getSymbol() + " Trail Price: " + newStop
+								+ " Time: " + startPeriod + " Side: "
+								+ this.getOpenTradePosition().getSide());
+					}
 				}
 			}
 
