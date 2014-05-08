@@ -1807,10 +1807,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						if (result == JOptionPane.YES_OPTION) {
 							m_tradePersistentModel
 									.removeTradingdayTradeOrders(tradingday);
-						} else {
-							if (!m_brokerModel.isConnected()) {
-								return;
-							}
 						}
 					}
 					for (Tradestrategy tradestrategy : tradingday

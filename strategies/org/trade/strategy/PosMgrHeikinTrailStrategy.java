@@ -120,8 +120,8 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 			 */
 
 			if (!this.isThereOpenPosition()) {
-				_log.info("No open position so Cancel Strategy Mgr Symbol: "
-						+ getSymbol() + " Time:" + startPeriod);
+				_log.info("No open position so Cancel Strategy Symbol: "
+						+ getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 				return;
 			}
@@ -167,22 +167,32 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 						+ (riskAmount * stopRiskUnits * buySellMultipliter);
 				if (stop < 0)
 					stop = 0.02;
+
 				Money stopPrice = addPennyAndRoundStop(stop, this
 						.getOpenTradePosition().getSide(), action,
 						stopAddAmount);
 
 				double target = avgFillPrice
 						+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
+
 				if (target < 0)
 					target = 0.02;
+
 				Money targetPrice = addPennyAndRoundStop(target, this
 						.getOpenTradePosition().getSide(), action,
 						targetAddAmount);
+
 				createStopAndTargetOrder(stopPrice, targetPrice, quantity, true);
 
-				_log.info("Open position submit Stop/Tgt orders created Symbol: "
-						+ getSymbol() + " Time:" + startPeriod);
-
+				_log.warn("Open position submit Stop/Tgt orders created Symbol: "
+						+ getSymbol()
+						+ " Time:"
+						+ startPeriod
+						+ " quantity: "
+						+ quantity
+						+ " targetPrice: "
+						+ targetPrice
+						+ " stopPrice: " + stopPrice);
 			}
 
 			/*
@@ -220,6 +230,9 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 				Money stopPrice = addPennyAndRoundStop(avgFillPrice,
 						getOpenTradePosition().getSide(), action, 0.01);
 				moveStopOCAPrice(stopPrice, true);
+				_log.warn("Move stop 30 min before close Symbol: "
+						+ getSymbol() + " Time:" + startPeriod + " stopPrice: "
+						+ stopPrice);
 			}
 
 			/*
@@ -229,11 +242,11 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 				Money newStop = getHiekinAshiTrailStop(
 						this.getStopPriceMinUnfilled(), 2);
 				if (!newStop.equals(this.getStopPriceMinUnfilled())) {
-					_log.info("PositionManagerStrategy HiekinAshiTrail: "
+					moveStopOCAPrice(newStop, true);
+					_log.warn("PositionManagerStrategy HiekinAshiTrail: "
 							+ getSymbol() + " Trail Price: " + newStop
 							+ " Time: " + startPeriod + " Side: "
 							+ this.getOpenTradePosition().getSide());
-					moveStopOCAPrice(newStop, true);
 				}
 			}
 
@@ -245,7 +258,7 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 					TradingCalendar.addMinutes(this.getTradestrategy()
 							.getTradingday().getClose(), -2))) {
 				cancelOrdersClosePosition(true);
-				_log.info("PositionManagerStrategy 15:58:00 done: "
+				_log.warn("Close position 2min before close Symbol: "
 						+ getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 			}
