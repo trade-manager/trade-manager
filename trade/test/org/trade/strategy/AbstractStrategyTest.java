@@ -381,7 +381,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testClosePosition() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			TradeOrder order = this.strategyProxy.closePosition(true);
 			TestCase.assertNotNull(order);
 		} catch (Exception ex) {
@@ -563,7 +563,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testIsTradeConvered() {
 		try {
-			createOpenBuyPosition(new Money(100), false);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, false);
 			TestCase.assertFalse(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsTradeConvered Msg:" + ex.getMessage());
@@ -573,7 +573,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testCreateStopAndTargetOrder() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			TradeOrder targetOne = this.strategyProxy.createStopAndTargetOrder(
 					new Money(99.0), new Money(103.99), 100, true);
 			TestCase.assertNotNull(targetOne);
@@ -587,7 +587,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testCreateStopAndTargetOrderPercentQty() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			this.strategyProxy
 					.createStopAndTargetOrder(this.strategyProxy
 							.getOpenPositionOrder(), 2, -0.01, 4, 0.02,
@@ -603,7 +603,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetStopPriceForPositionRisk() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			Money price = this.strategyProxy.getStopPriceForPositionRisk(
 					this.strategyProxy.getOpenPositionOrder(), 2);
 			TestCase.assertNotNull(price);
@@ -616,7 +616,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testCancelOrdersClosePosition() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			this.strategyProxy.cancelOrdersClosePosition(true);
 			this.reFreshPositionOrders();
 			TestCase.assertTrue(this.strategyProxy.isPositionCovered());
@@ -629,7 +629,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testMoveStopOCAPrice() {
 		try {
-			this.createOpenBuyPosition(new Money(100), true);
+			this.createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			TradeOrder targetOne = this.strategyProxy.createStopAndTargetOrder(
 					new Money(99.0), new Money(103.99), this.strategyProxy
 							.getOpenPositionOrder().getQuantity() / 2, true);
@@ -655,7 +655,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testCancelAllOrders() {
 		try {
-			createOpenBuyPosition(new Money(100), false);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, false);
 			this.strategyProxy.cancelAllOrders();
 			TestCase.assertFalse(this.strategyProxy.isThereOpenPosition());
 		} catch (Exception ex) {
@@ -666,7 +666,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testIsTradeOpen() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			TestCase.assertTrue(this.strategyProxy.isThereOpenPosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsTradeOpen Msg:" + ex.getMessage());
@@ -712,7 +712,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testUpdateTradestrategyStatus() {
 		try {
-			createOpenBuyPosition(new Money(100), false);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, false);
 			this.strategyProxy
 					.updateTradestrategyStatus(TradestrategyStatus.CLOSED);
 		} catch (Exception ex) {
@@ -734,7 +734,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetTradestrategy() {
 		try {
-			createOpenBuyPosition(new Money(100), false);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, false);
 			TestCase.assertNotNull(this.strategyProxy.getTradestrategy());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetTradestrategy Msg:" + ex.getMessage());
@@ -744,7 +744,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetTradeAccount() {
 		try {
-			createOpenBuyPosition(new Money(100), false);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, false);
 			TestCase.assertNotNull(this.strategyProxy.getIndividualAccount());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetTradeAccount Msg:" + ex.getMessage());
@@ -754,7 +754,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetTradePosition() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			TestCase.assertNotNull(this.strategyProxy.getOpenTradePosition());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetTrade Msg:" + ex.getMessage());
@@ -764,7 +764,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetSymbol() {
 		try {
-			createOpenBuyPosition(new Money(100), false);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, false);
 			TestCase.assertNotNull(this.strategyProxy.getSymbol());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetSymbol Msg:" + ex.getMessage());
@@ -774,7 +774,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testGetOpenPositionOrder() {
 		try {
-			createOpenBuyPosition(new Money(100), true);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
 			TestCase.assertNotNull(this.strategyProxy.getOpenPositionOrder());
 		} catch (Exception ex) {
 			TestCase.fail("Error testGetOpenPosition Msg:" + ex.getMessage());
@@ -784,7 +784,7 @@ public class AbstractStrategyTest extends TestCase {
 	@Test
 	public void testHasActiveOrders() {
 		try {
-			createOpenBuyPosition(new Money(100), false);
+			createOpenBuyPosition(new Money(100), 1000, Action.BUY, false);
 			TestCase.assertTrue(this.strategyProxy.hasActiveOrders());
 		} catch (Exception ex) {
 			TestCase.fail("Error testIsThereOpenPosition Msg:"
@@ -803,16 +803,17 @@ public class AbstractStrategyTest extends TestCase {
 	 * @throws StrategyRuleException
 	 * @throws PersistentModelException
 	 */
-	private void createOpenBuyPosition(Money price, boolean fillOpenPosition)
+	private void createOpenBuyPosition(Money price, Integer quantity,
+			String action, boolean fillOpenPosition)
 			throws StrategyRuleException, PersistentModelException {
 		if (!strategyProxy.getTradestrategy().getTradeOrders().isEmpty()) {
 			tradePersistentModel.removeTradestrategyTradeOrders(strategyProxy
 					.getTradestrategy());
 		}
 		TradeOrder tradeOrder = this.strategyProxy
-				.createOrder(tradestrategy.getContract(), Action.BUY,
+				.createOrder(tradestrategy.getContract(), action,
 						OrderType.STPLMT, price,
-						price.subtract(new Money(0.2)), 1000, null, null,
+						price.subtract(new Money(0.2)), quantity, null, null,
 						TriggerMethod.DEFAULT, OverrideConstraints.YES,
 						TimeInForce.DAY, true, true, null, null, null, null,
 						null, null);
@@ -829,8 +830,8 @@ public class AbstractStrategyTest extends TestCase {
 					.getExchange());
 			execution.setSide(side);
 			execution.setQuantity(tradeOrder.getQuantity());
-			execution.setAveragePrice((new Money(100.02)).getBigDecimalValue());
-			execution.setPrice((new Money(100.02)).getBigDecimalValue());
+			execution.setAveragePrice(price.getBigDecimalValue());
+			execution.setPrice(price.getBigDecimalValue());
 			execution.setCumulativeQuantity(tradeOrder.getQuantity());
 			((BackTestBrokerModel) m_brokerModel).execDetails(
 					tradeOrder.getOrderKey(), this.tradestrategy.getContract(),
