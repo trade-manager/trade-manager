@@ -256,7 +256,7 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 							this.getStopPriceMinUnfilled(), 2);
 					if (!newStop.equals(this.getStopPriceMinUnfilled())) {
 						moveStopOCAPrice(newStop, true);
-						_log.warn("PositionManagerStrategy HiekinAshiTrail: "
+						_log.warn("Hiekin-AshiTrail: "
 								+ getSymbol() + " Trail Price: " + newStop
 								+ " Time: " + startPeriod + " Side: "
 								+ this.getOpenTradePosition().getSide());
