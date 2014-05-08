@@ -57,7 +57,7 @@ import org.trade.strategy.data.heikinashi.HeikinAshiItem;
 
 /**
  */
-public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
+public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 
 	/**
 	 * 
@@ -71,9 +71,11 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 
 	private static final long serialVersionUID = -6717691162128305191L;
 	private final static Logger _log = LoggerFactory
-			.getLogger(PosMgrHeikinTrailStrategy.class);
+			.getLogger(PosMgrHeikinAshiTrailStrategy.class);
 
 	private Money target2RPrice = null;
+	
+	private static final Integer _hiekinAshiTrailStartR = 2;
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -90,7 +92,7 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 	 *            Integer
 	 */
 
-	public PosMgrHeikinTrailStrategy(BrokerModel brokerManagerModel,
+	public PosMgrHeikinAshiTrailStrategy(BrokerModel brokerManagerModel,
 			StrategyData strategyData, Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
 	}
@@ -175,7 +177,7 @@ public class PosMgrHeikinTrailStrategy extends AbstractStrategyRule {
 						stopAddAmount);
 
 				target2RPrice = addPennyAndRoundStop(
-						(avgFillPrice + (riskAmount * 2 * buySellMultipliter * -1)),
+						(avgFillPrice + (riskAmount * _hiekinAshiTrailStartR * buySellMultipliter * -1)),
 						this.getOpenTradePosition().getSide(), action,
 						targetAddAmount);
 

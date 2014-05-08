@@ -48,7 +48,7 @@ INSERT INTO strategy (idStrategy, name, description, className, version) VALUES 
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (1, '5minBarGap', 'Enter a tier 1-3 gap in first 5min bar direction, and stop @ 5min high/low',1, 'FiveMinGapBarStrategy',53,0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (2, '5minSideBarGap', 'Enter a tier 1-3 gap via expectd Side after first 5min bar and stop @ 5min high/low',1, 'FiveMinSideGapBarStrategy',53,0);
 INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (3, '5minWRBBarGap', 'Enter a tier 1-3 gap in first 5min WRB bar direction, and stop @ 55% of high/low',1, 'FiveMinWRBGapBarStrategy',52,0);
-INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (4, 'PosMgrHeikinTrail', 'Get and trail an open position on the current time frame using Hiekin-Ashi bars',1, 'PosMgrHeikinTrailStrategy',null,0);
+INSERT INTO strategy (idStrategy, name, description, marketData, className, idStrategyManager, version) VALUES (4, 'PosMgrHeikinAshiTrail', 'Get and trail an open position on the current time frame using Hiekin-Ashi bars',1, 'PosMgrHeikinAshiTrailStrategy',null,0);
 
 COMMIT;
 
