@@ -441,11 +441,11 @@ public class ConfigProperties {
 				properties.load(is);
 				is.close();
 			} else {
-				_log.info("The property file " + propertyFilePath
+				_log.debug("The property file " + propertyFilePath
 						+ " does not exist -- using defaults");
 			}
 		} else {
-			_log.info("The property file does not exist -- using defaults");
+			_log.debug("The property file does not exist -- using defaults");
 		}
 	}
 
@@ -496,8 +496,6 @@ public class ConfigProperties {
 				if (null != token && token.contains(codeName)) {
 
 					if (null != delimiter) {
-						_log.info("token: " + token);
-						_log.info("delimiter: " + delimiter);
 						if (null != token
 								&& !token.endsWith(lookupServiceProvideName)) {
 							if (!delimiter.equals(oldDelimiter)) {
@@ -512,7 +510,6 @@ public class ConfigProperties {
 				}
 			}
 			newText = newText + token;
-			_log.error("newText: " + newText);
 		} catch (Exception ex) {
 			_log.error("Error paring file: " + ex.getMessage(), ex);
 		} finally {

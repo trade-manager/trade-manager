@@ -78,8 +78,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
@@ -115,9 +113,6 @@ import org.trade.ui.widget.DecodeTableEditor;
 public class TradingdayPanel extends BasePanel {
 
 	private static final long serialVersionUID = 8543984162821384818L;
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradingdayPanel.class);
 
 	private PersistentModel m_tradePersistentModel = null;
 	private TradingdayTableModel m_tradingdayModel = null;
@@ -1464,7 +1459,6 @@ public class TradingdayPanel extends BasePanel {
 						+ " in : "
 						+ ((System.currentTimeMillis() - this.startTime) / 1000)
 						+ " Seconds.";
-				_log.info(message);
 				publish(message);
 			} catch (Exception ex) {
 				setErrorMessage("Error deleting Trade Orders.",
@@ -1563,7 +1557,6 @@ public class TradingdayPanel extends BasePanel {
 						+ " in : "
 						+ ((System.currentTimeMillis() - this.startTime) / 1000)
 						+ " Seconds.";
-				_log.info(message);
 				publish(message);
 
 			} catch (Exception ex) {

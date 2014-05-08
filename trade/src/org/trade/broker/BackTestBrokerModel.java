@@ -413,7 +413,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				m_contractRequests.put(tradestrategy.getContract()
 						.getIdContract(), tradestrategy.getContract());
 
-				_log.info("onBrokerData ReqId: "
+				_log.debug("onBrokerData ReqId: "
 						+ tradestrategy.getIdTradeStrategy() + " Symbol: "
 						+ tradestrategy.getContract().getSymbol()
 						+ " end Time: " + endDateTime + " Period length: "
@@ -716,7 +716,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				tradeOrder = m_tradePersistentModel
 						.persistTradeOrder(tradeOrder);
 				// Debug logging
-				_log.info("Order Placed Key: " + tradeOrder.getOrderKey());
+				_log.debug("Order Placed Key: " + tradeOrder.getOrderKey());
 				TWSBrokerModel.logContract(TWSBrokerModel
 						.getIBContract(contract));
 				TWSBrokerModel.logTradeOrder(TWSBrokerModel
@@ -871,7 +871,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 				if (OrderStatus.FILLED.equals(transientInstance.getStatus())) {
 
-					_log.info("Order Key: " + transientInstance.getOrderKey()
+					_log.debug("Order Key: " + transientInstance.getOrderKey()
 							+ " filled.");
 					BackTestBrokerModel.logOrderState(orderState);
 					BackTestBrokerModel.logTradeOrder(order);
@@ -886,7 +886,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								.getTradePosition());
 					}
 				} else {
-					_log.info("Order key: " + transientInstance.getOrderKey()
+					_log.debug("Order key: " + transientInstance.getOrderKey()
 							+ " state changed. Status:" + orderState.m_status);
 					BackTestBrokerModel.logOrderState(orderState);
 					BackTestBrokerModel.logTradeOrder(order);
@@ -983,7 +983,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						.getDate((new Date()).getTime()));
 				transientInstance.setStatus(status.toUpperCase());
 				transientInstance.setWhyHeld(whyHeld);
-				_log.info("Order Status changed. Status: " + status);
+				_log.debug("Order Status changed. Status: " + status);
 				TWSBrokerModel.logOrderStatus(orderId, status, filled,
 						remaining, avgFillPrice, permId, parentId,
 						lastFillPrice, clientId, whyHeld);
@@ -1219,7 +1219,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 							.getBaseCandleSeries();
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
-					_log.info("HistoricalData complete Req Id: "
+					_log.debug("HistoricalData complete Req Id: "
 							+ reqId
 							+ " Symbol: "
 							+ tradestrategy.getContract().getSymbol()
@@ -1384,7 +1384,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 *            OrderState
 	 */
 	public static void logOrderState(OrderState orderState) {
-		_log.info("Status: " + orderState.m_status + " Comms Amt: "
+		_log.debug("Status: " + orderState.m_status + " Comms Amt: "
 				+ orderState.m_commission + " Comms Currency: "
 				+ orderState.m_commissionCurrency + " Warning txt: "
 				+ orderState.m_warningText + " Init Margin: "
@@ -1729,7 +1729,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			int remaining, double avgFillPrice, int permId, int parentId,
 			double lastFillPrice, int clientId, String whyHeld) {
 
-		_log.info("orderId: " + orderId + " status: " + status + " filled: "
+		_log.debug("orderId: " + orderId + " status: " + status + " filled: "
 				+ filled + " remaining: " + remaining + " avgFillPrice: "
 				+ avgFillPrice + " permId: " + permId + " parentId: "
 				+ parentId + " lastFillPrice: " + lastFillPrice + " clientId: "
@@ -1744,7 +1744,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public static void logTradeOrder(TradeOrder order) {
 
-		_log.info("OrderKey: " + +order.getOrderKey() + " ClientId: "
+		_log.debug("OrderKey: " + +order.getOrderKey() + " ClientId: "
 				+ order.getClientId() + " PermId: " + order.getPermId()
 				+ " Action: " + order.getAction() + " TotalQuantity: "
 				+ order.getQuantity() + " OrderType: " + order.getOrderType()
@@ -1770,7 +1770,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 *            com.ib.client.Contract
 	 */
 	public static void logContract(Contract contract) {
-		_log.info("Symbol: " + contract.getSymbol() + " Sec Type: "
+		_log.debug("Symbol: " + contract.getSymbol() + " Sec Type: "
 				+ contract.getSecType() + " Exchange: "
 				+ contract.getExchange() + " Con Id: "
 				+ contract.getIdContractIB() + " Currency: "
@@ -1791,7 +1791,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 *            com.ib.client.Execution
 	 */
 	public static void logExecution(TradeOrderfill execution) {
-		_log.info("execDetails OrderId: "
+		_log.debug("execDetails OrderId: "
 				+ execution.getTradeOrder().getIdTradeOrder() + " Exchange: "
 				+ execution.getExchange() + " Side: " + execution.getSide()
 				+ " ExecId: " + execution.getExecId() + " Time: "

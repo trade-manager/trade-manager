@@ -46,17 +46,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.dao.EntityManagerHelper;
 
 /**
  */
 @Stateless
 public class TradeOrderHome {
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradeOrderHome.class);
 
 	public TradeOrderHome() {
 
@@ -100,12 +95,6 @@ public class TradeOrderHome {
 		} catch (RuntimeException re) {
 			EntityManagerHelper.logError("ERROR saving TradeOrder Msg: "
 					+ re.getCause().getMessage(), re);
-			_log.error("ERROR Trade Order Details: "
-					+ transientInstance.toString());
-			for (TradeOrderfill orderfill : transientInstance
-					.getTradeOrderfills()) {
-				_log.error("ERROR TradeOrderfill:" + orderfill.toString());
-			}
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

@@ -659,7 +659,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							- TradingCalendar.daysDiff(endDate, new Date());
 				}
 
-				_log.info("onBrokerData Req Id: "
+				_log.debug("onBrokerData Req Id: "
 						+ tradestrategy.getIdTradeStrategy() + " Symbol: "
 						+ tradestrategy.getContract().getSymbol()
 						+ " end Time: " + endDateTime + " Period length: "
@@ -1033,7 +1033,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					tradeOrder = m_tradePersistentModel
 							.persistTradeOrder(tradeOrder);
 
-					_log.info("Order Placed Key: " + tradeOrder.getOrderKey());
+					_log.debug("Order Placed Key: " + tradeOrder.getOrderKey());
 					logContract(TWSBrokerModel.getIBContract(contract));
 					logTradeOrder(TWSBrokerModel.getIBOrder(tradeOrder));
 
@@ -1303,7 +1303,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					transientInstance)) {
 
 				if (OrderStatus.FILLED.equals(transientInstance.getStatus())) {
-					_log.info("Open order filled Order Key:"
+					_log.debug("Open order filled Order Key:"
 							+ transientInstance.getOrderKey());
 					TWSBrokerModel.logOrderState(orderState);
 					TWSBrokerModel.logTradeOrder(order);
@@ -1318,7 +1318,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								.getTradePosition());
 					}
 				} else {
-					_log.info("Open order state changed. Status:"
+					_log.debug("Open order state changed. Status:"
 							+ orderState.m_status);
 					TWSBrokerModel.logOrderState(orderState);
 					TWSBrokerModel.logTradeOrder(order);
@@ -1349,11 +1349,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#openOrderEnd()
 	 */
 	public void openOrderEnd() {
-		_log.info("openOrderEnd");
+		_log.debug("openOrderEnd");
 		// Let the controller know there are open orders
 		for (TradeOrder openOrder : openOrders.values()) {
-			_log.info("openOrderEnd Open Order Key: " + openOrder.getOrderKey()
-					+ " Order status: " + openOrder.getStatus());
+			_log.debug("openOrderEnd Open Order Key: "
+					+ openOrder.getOrderKey() + " Order status: "
+					+ openOrder.getStatus());
 		}
 		this.fireOpenOrderEnd(openOrders);
 	}
@@ -1433,7 +1434,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						.getDate((new Date()).getTime()));
 				transientInstance.setStatus(status.toUpperCase());
 				transientInstance.setWhyHeld(whyHeld);
-				_log.info("Order Status changed. Status: " + status);
+				_log.debug("Order Status changed. Status: " + status);
 				TWSBrokerModel.logOrderStatus(orderId, status, filled,
 						remaining, avgFillPrice, permId, parentId,
 						lastFillPrice, clientId, whyHeld);
@@ -1767,7 +1768,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							break;
 						}
 						case 2: {
-							_log.info("TickString Trade Size: "
+							_log.debug("TickString Trade Size: "
 									+ Integer.parseInt(token));
 							break;
 						}
@@ -1776,12 +1777,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							break;
 						}
 						case 4: {
-							_log.info("TickString Total Volume: "
+							_log.debug("TickString Total Volume: "
 									+ Integer.parseInt(token) * 100);
 							break;
 						}
 						case 5: {
-							_log.info("TickString Total Vwap: " + token);
+							_log.debug("TickString Total Vwap: " + token);
 							break;
 						}
 						case 6: {
@@ -1913,7 +1914,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void tickOptionComputation(int reqId, int field, double impliedVol,
 			double delta, double optPrice, double pvDividend, double gamma,
 			double vega, double theta, double undPrice) {
-		_log.info("tickOptionComputation:" + reqId);
+		_log.debug("tickOptionComputation:" + reqId);
 	}
 
 	/**
@@ -1928,7 +1929,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#tickGeneric(int, int, double)
 	 */
 	public void tickGeneric(int reqId, int tickType, double value) {
-		_log.info("tickGeneric: " + reqId + " tickType: " + tickType
+		_log.debug("tickGeneric: " + reqId + " tickType: " + tickType
 				+ " tickValue: " + value);
 	}
 
@@ -1959,7 +1960,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void tickEFP(int reqId, int tickType, double basisPoints,
 			String formattedBasisPoints, double impliedFuture, int holdDays,
 			String futureExpiry, double dividendImpact, double dividendsToExpiry) {
-		_log.info("tickEFP:" + reqId);
+		_log.debug("tickEFP:" + reqId);
 	}
 
 	/**
@@ -2067,7 +2068,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void updateAccountTime(String timeStamp) {
 
 		try {
-			_log.info("updateAccountTime:" + timeStamp);
+			_log.debug("updateAccountTime:" + timeStamp);
 			for (String accountNumber : m_accountRequests.keySet()) {
 				Account account = m_accountRequests.get(accountNumber);
 				synchronized (account) {
@@ -2097,7 +2098,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#accountDownloadEnd(String)
 	 */
 	public void accountDownloadEnd(String accountNumber) {
-		_log.info("accountDownloadEnd: " + accountNumber);
+		_log.debug("accountDownloadEnd: " + accountNumber);
 	}
 
 	/**
@@ -2119,7 +2120,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void nextValidId(int orderId) {
 		try {
-			_log.info("nextValidId: " + orderId);
+			_log.debug("nextValidId: " + orderId);
 			int maxKey = m_tradePersistentModel.findTradeOrderByMaxKey();
 			if (maxKey < minOrderId) {
 				maxKey = minOrderId;
@@ -2181,7 +2182,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#bondContractDetails(int, ContractDetails)
 	 */
 	public void bondContractDetails(int reqId, ContractDetails contractDetails) {
-		_log.info("bondContractDetails:" + reqId);
+		_log.debug("bondContractDetails:" + reqId);
 	}
 
 	/**
@@ -2274,7 +2275,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void managedAccounts(String accountNumbers) {
 		try {
-			_log.info("Managed accounts: " + accountNumbers);
+			_log.debug("Managed accounts: " + accountNumbers);
 			this.fireManagedAccountsUpdated(accountNumbers);
 
 		} catch (Exception ex) {
@@ -2303,7 +2304,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			inputSource = new ByteArrayInputStream(xml.getBytes("utf-8"));
 			switch (faDataType) {
 			case EClientSocket.ALIASES: {
-				_log.info("Aliases: /n" + xml);
+				_log.debug("Aliases: /n" + xml);
 				final TWSAccountAliasRequest request = new TWSAccountAliasRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
@@ -2323,7 +2324,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				break;
 			}
 			case EClientSocket.PROFILES: {
-				_log.info("Profiles: /n" + xml);
+				_log.debug("Profiles: /n" + xml);
 				final TWSAllocationRequest request = new TWSAllocationRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
@@ -2333,7 +2334,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				break;
 			}
 			case EClientSocket.GROUPS: {
-				_log.info("Groups: /n" + xml);
+				_log.debug("Groups: /n" + xml);
 				final TWSGroupRequest request = new TWSGroupRequest();
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
@@ -2410,7 +2411,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					CandleSeries candleSeries = tradestrategy.getStrategyData()
 							.getBaseCandleSeries();
 
-					_log.info("HistoricalData complete Req Id: "
+					_log.debug("HistoricalData complete Req Id: "
 							+ reqId
 							+ " Symbol: "
 							+ tradestrategy.getContract().getSymbol()
@@ -3526,7 +3527,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public static void logTradeOrder(com.ib.client.Order order) {
 
-		_log.info("OrderKey: " + +order.m_orderId + " ClientId: "
+		_log.debug("OrderKey: " + +order.m_orderId + " ClientId: "
 				+ order.m_clientId + " PermId: " + order.m_permId + " Action: "
 				+ order.m_action + " TotalQuantity: " + order.m_totalQuantity
 				+ " OrderType: " + order.m_orderType + " LmtPrice: "
@@ -3553,7 +3554,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.Contract
 	 */
 	public static void logContract(com.ib.client.Contract contract) {
-		_log.info("Symbol: " + contract.m_symbol + " Sec Type: "
+		_log.debug("Symbol: " + contract.m_symbol + " Sec Type: "
 				+ contract.m_secType + " Exchange: " + contract.m_exchange
 				+ " Con Id: " + contract.m_conId + " Currency: "
 				+ contract.m_currency + " SecIdType: " + contract.m_secIdType
@@ -3571,7 +3572,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public static void logContractDetails(
 			com.ib.client.ContractDetails contractDetails) {
-		_log.info("Symbol: " + contractDetails.m_summary.m_symbol
+		_log.debug("Symbol: " + contractDetails.m_summary.m_symbol
 				+ " Sec Type: " + contractDetails.m_summary.m_secType
 				+ " Exchange: " + contractDetails.m_summary.m_exchange
 				+ " Con Id: " + contractDetails.m_summary.m_conId
@@ -3599,7 +3600,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.OrderState
 	 */
 	public static void logOrderState(com.ib.client.OrderState orderState) {
-		_log.info("Status: " + orderState.m_status + " Comms Amt: "
+		_log.debug("Status: " + orderState.m_status + " Comms Amt: "
 				+ orderState.m_commission + " Comms Currency: "
 				+ orderState.m_commissionCurrency + " Warning txt: "
 				+ orderState.m_warningText + " Init Margin: "
@@ -3616,9 +3617,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.Execution
 	 */
 	public static void logExecution(com.ib.client.Execution execution) {
-		_log.info("execDetails OrderId: " + execution.m_orderId + " ClientId: "
-				+ execution.m_clientId + " PermId: " + execution.m_permId
-				+ " ExecId: " + execution.m_execId + " Time: "
-				+ execution.m_time + " CumQty: " + execution.m_cumQty);
+		_log.debug("execDetails OrderId: " + execution.m_orderId
+				+ " ClientId: " + execution.m_clientId + " PermId: "
+				+ execution.m_permId + " ExecId: " + execution.m_execId
+				+ " Time: " + execution.m_time + " CumQty: "
+				+ execution.m_cumQty);
 	}
 }

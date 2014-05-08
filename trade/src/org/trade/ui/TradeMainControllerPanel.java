@@ -596,9 +596,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void openOrderEnd(
 			ConcurrentHashMap<Integer, TradeOrder> openTradeOrders) {
 		try {
-
-			_log.info("Open orders received from TWS: "
-					+ openTradeOrders.size());
 			Tradingday todayTradingday = m_tradingdays.getTradingday(
 					TradingCalendar.getTodayBusinessDayStart(),
 					TradingCalendar.getTodayBusinessDayEnd());
@@ -725,13 +722,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						tradingdayPanel.killStrategyWorker(tradestrategy
 								.getStrategy().getClassName()
 								+ tradestrategy.getIdTradeStrategy());
-
-						_log.info("Start PositionManagerStrategy: "
-								+ tradestrategy.getContract().getSymbol());
-						_log.info("tradeOrderFilled TradePosition Id: "
-								+ tradeOrder.getTradePosition()
-										.getIdTradePosition() + " Version: "
-								+ tradeOrder.getTradePosition().getVersion());
 						createStrategy(tradestrategy.getStrategy()
 								.getStrategyManager().getClassName(),
 								tradestrategy);
@@ -782,10 +772,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									BasePanel.WARNING);
 							return;
 						}
-
-						_log.info("Trade Order cancelled for Symbol: "
-								+ tradestrategy.getContract().getSymbol()
-								+ " order key: " + tradeOrder.getOrderKey());
 						contractPanel.doRefresh(tradestrategy);
 
 					} catch (Exception ex) {
@@ -860,10 +846,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									.findTradestrategyById(tradeOrder
 											.getTradestrategyId()
 											.getIdTradeStrategy());
-							_log.info("TradePosition closed for Symbol: "
-									+ tradestrategy.getContract().getSymbol()
-									+ " Profit/Loss: "
-									+ tradePosition.getTotalNetValue());
 							m_tradingdays.getTradestrategy(
 									tradestrategy.getIdTradeStrategy())
 									.setStatus(tradestrategy.getStatus());
@@ -1983,13 +1965,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		}
 		strategy.execute();
 		tradingdayPanel.addStrategyWorker(key, strategy);
-		_log.info("Start: "
-				+ strategyClassName
-				+ " Symbol: "
-				+ tradestrategy.getContract().getSymbol()
-				+ " seriesCount: "
-				+ tradestrategy.getStrategyData().getBaseCandleSeries()
-						.getItemCount());
 	}
 
 	/**
@@ -2288,7 +2263,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						+ " in : "
 						+ ((System.currentTimeMillis() - this.startTime) / 1000)
 						+ " Seconds.";
-				_log.info(message);
+				_log.debug(message);
 				publish(message);
 
 			}
@@ -2319,7 +2294,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						+ tradestrategy.getChartDays());
 				return totalSumbitted;
 			}
-			_log.info("submitBrokerRequest: "
+			_log.debug("submitBrokerRequest: "
 					+ tradestrategy.getContract().getSymbol() + " endDate: "
 					+ endDate + " barSize: " + tradestrategy.getBarSize()
 					+ " chartDays:" + tradestrategy.getChartDays());
@@ -2375,7 +2350,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					}
 				}
 				timer.stop();
-				_log.info("Finished wait 10min wait");
+				_log.debug("Finished wait 10min wait");
 			}
 
 			/*
@@ -2473,7 +2448,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (this.submitTimes.size() == 5 && this.brokerModel.isConnected()) {
 
 				if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (TIME_BETWEEN_SUBMIT * 1000)) {
-					_log.info("hasSubmittedInSeconds 5 in: "
+					_log.debug("hasSubmittedInSeconds 5 in: "
 							+ ((this.submitTimes.getFirst() - this.submitTimes
 									.getLast()) / 1000d));
 					timerRunning = new AtomicInteger(0);
@@ -2482,7 +2457,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						while (((this.submitTimes.getFirst() - this.submitTimes
 								.getLast()) + timerRunning.get()) < (TIME_BETWEEN_SUBMIT * 1000)
 								&& !this.isCancelled()) {
-							_log.info("Please wait "
+							_log.debug("Please wait "
 									+ (TIME_BETWEEN_SUBMIT - (timerRunning
 											.get() / 1000)) + " seconds.");
 							lockCoreUtilsTest.wait();
@@ -2538,7 +2513,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					if (submitted == totalSumbitted) {
 						while (this.brokerModel.getHistoricalData().size() > 0
 								&& !this.isCancelled()) {
-							_log.info("reProcessTradingdays Wait HistoricalDataSize: "
+							_log.debug("reProcessTradingdays Wait HistoricalDataSize: "
 									+ this.brokerModel.getHistoricalData()
 											.size());
 							this.brokerModel.getHistoricalData().wait();

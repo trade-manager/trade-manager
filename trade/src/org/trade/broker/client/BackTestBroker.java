@@ -423,7 +423,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		// Free some memory!!
 		this.tradestrategy.getStrategyData().clearBaseCandleDataset();
 		this.tradestrategy.setStrategyData(null);
-		_log.info("BackTestBroker done for: "
+		_log.debug("BackTestBroker done for: "
 				+ tradestrategy.getContract().getSymbol()
 				+ " idTradestrategy: "
 				+ this.tradestrategy.getIdTradeStrategy());

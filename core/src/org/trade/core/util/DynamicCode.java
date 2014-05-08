@@ -539,14 +539,14 @@ public final class DynamicCode {
 			instance = constructor.newInstance(object);
 		} catch (Exception e) {
 
-			_log.info("Could not find constructor for default parms[" + classes
-					+ "] will test all constructors.");
+			_log.debug("Could not find constructor for default parms["
+					+ classes + "] will test all constructors.");
 			Constructor<?>[] constructors = clz.getConstructors();
 			for (Constructor<?> constructor2 : constructors) {
 				try {
 					instance = constructor2.newInstance(object);
 					if (null != instance) {
-						_log.info("Found constructor: "
+						_log.debug("Found constructor: "
 								+ constructor2.toGenericString()
 								+ " for parms[" + classes + "]");
 						break;

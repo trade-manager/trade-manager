@@ -46,8 +46,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -104,9 +102,6 @@ public class XMLDOMParserWrapper {
 	public static final int CREATE_KNOWLEDGE = 2;
 
 	public static final int CREATE_RULE = 3;
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(XMLDOMParserWrapper.class);
 
 	/**
 	 * Constructor for XMLDOMParserWrapper.
@@ -324,7 +319,6 @@ public class XMLDOMParserWrapper {
 		case Node.ELEMENT_NODE: {
 
 			nodeName = node.getNodeName();
-			_log.info("nodeName" + nodeName);
 			if (function == CREATE_STYPE_SHEET) {
 				// nodeName = formatElementName(node.getNodeName());
 				nodeName = node.getNodeName();

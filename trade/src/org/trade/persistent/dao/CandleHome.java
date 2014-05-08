@@ -49,8 +49,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.candle.CandleItem;
@@ -59,9 +57,6 @@ import org.trade.strategy.data.candle.CandleItem;
  */
 @Stateless
 public class CandleHome {
-
-	private final static Logger _log = LoggerFactory
-			.getLogger(CandleHome.class);
 
 	public CandleHome() {
 
@@ -97,7 +92,8 @@ public class CandleHome {
 					if (instance.equals(candleItem.getCandle())) {
 						continue;
 					} else {
-						_log.error("Count: " + i + " Symbol: "
+						// This should never happen.
+						throw new Exception("Count: " + i + " Symbol: "
 								+ candleSeries.getSymbol() + "candleid: "
 								+ candleItem.getCandle().getIdCandle()
 								+ " open: "

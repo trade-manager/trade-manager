@@ -135,7 +135,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 						Integer.parseInt(chartDays.getCode()), startDate,
 						endDate);
 			}
-			_log.info("YahooBroker.doInBackground finished ReqId: "
+			_log.debug("YahooBroker.doInBackground finished ReqId: "
 					+ this.reqId + " Symbol: " + this.contract.getSymbol()
 					+ " Start Date: " + startDate + " End Date: " + endDate
 					+ " BarSize: " + barSize.getCode() + " ChartDays: "
@@ -152,7 +152,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 	}
 
 	public void done() {
-		_log.info("YahooBroker done for: " + contract.getSymbol());
+		_log.debug("YahooBroker done for: " + contract.getSymbol());
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 		String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/"
 				+ symbol + "/chartdata;type=quote;range=" + days + "d/csv/";
 
-		_log.info("URL : " + strUrl);
+		_log.debug("URL : " + strUrl);
 		URL url = new URL(strUrl);
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				url.openStream()));

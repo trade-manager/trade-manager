@@ -46,8 +46,6 @@ import javax.persistence.Transient;
 
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.util.Pair;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
@@ -76,8 +74,6 @@ import org.trade.strategy.data.pivot.PivotItem;
 public class PivotSeries extends IndicatorSeries {
 
 	private static final long serialVersionUID = 20183087035446657L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(PivotSeries.class);
 	private Integer bars;
 	private Boolean side;
 	private Boolean quadratic;
@@ -233,7 +229,6 @@ public class PivotSeries extends IndicatorSeries {
 					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
 				return i - 1;
 			}
-
 		}
 		return -1;
 	}
@@ -564,7 +559,7 @@ public class PivotSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			PivotItem dataItem = (PivotItem) this.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Pivot: "
 					+ dataItem.getPivotPrice() + " Side: "
 					+ dataItem.getPivotSide());

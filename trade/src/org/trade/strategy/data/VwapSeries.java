@@ -245,7 +245,7 @@ public class VwapSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			VwapItem dataItem = (VwapItem) this.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getVwapPrice());
 		}

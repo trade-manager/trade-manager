@@ -143,9 +143,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void error(int id, int errorCode, String errorMsg) {
 
 		if (id > 0) {
-			_log.info("StrategyWorkerError symbol: " + symbol + " Error Id: "
-					+ id + " Error Code: " + errorCode + " Error Msg: "
-					+ errorMsg);
+			_log.warn("Error symbol: " + symbol + " Error Id: " + id
+					+ " Error Code: " + errorCode + " Error Msg: " + errorMsg);
 		}
 		this.fireStrategyError(new StrategyRuleException(id, errorCode,
 				"Symbol: " + symbol + " " + errorMsg));
@@ -294,7 +293,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			this.tradestrategy.setStrategyData(this.strategyData);
 			this.symbol = this.tradestrategy.getContract().getSymbol();
 
-			_log.info("Starting: " + this.getClass().getName()
+			_log.debug("Starting: " + this.getClass().getName()
 					+ " engine doInBackground Symbol: " + this.symbol
 					+ " idTradestrategy: " + this.idTradestrategy
 					+ " Tradingday Date: "
@@ -351,7 +350,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 					} else if (currentCandleCount > (candleSeries
 							.getItemCount() - 1)) {
 
-						_log.info("Cancelled due to candleSeries clear Symbol: "
+						_log.debug("Cancelled due to candleSeries clear Symbol: "
 								+ getSymbol()
 								+ " class: "
 								+ this.getClass().getName());
@@ -416,7 +415,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 								.getSimpleName(), this.tradestrategy);
 						listeningCandles = true;
 
-						_log.info("Started: " + this.getClass().getName()
+						_log.debug("Started: " + this.getClass().getName()
 								+ " engine doInBackground Symbol: "
 								+ this.symbol + " idTradestrategy: "
 								+ this.idTradestrategy);
@@ -486,7 +485,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				this.tradestrategy);
 		removeAllMessageListener();
 		this.strategyData.getBaseCandleSeries().removeChangeListener(this);
-		_log.info("Rule engine done: " + getSymbol() + " class: "
+		_log.debug("Rule engine done: " + getSymbol() + " class: "
 				+ this.getClass().getSimpleName() + " idTradestrategy: "
 				+ this.tradestrategy.getIdTradeStrategy()
 				+ " Tradingday Date: "
@@ -1348,7 +1347,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public TradeOrder cancelOrdersClosePosition(boolean transmit)
 			throws StrategyRuleException {
 
-		_log.info("Strategy  closeOpenPosition symbol: " + symbol);
+		_log.debug("Strategy  closeOpenPosition symbol: " + symbol);
 		try {
 			cancelAllOrders();
 			if (this.isThereOpenPosition()) {
@@ -1374,8 +1373,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void moveStopOCAPrice(Money stopPrice, boolean transmit)
 			throws StrategyRuleException {
 
-		_log.info("Strategy  moveStopOCAPrice symbol: " + symbol
-				+ " Stop Price: " + stopPrice);
 		try {
 			if (this.isThereOpenPosition()) {
 				// If the StP order has changed send the update and refresh the
@@ -1424,7 +1421,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public void cancelAllOrders() throws StrategyRuleException {
-		_log.info("Strategy  cancelAllOrders symbol: " + symbol);
+		_log.debug("Strategy  cancelAllOrders symbol: " + symbol);
 		for (TradeOrder order : this.getTradestrategyOrders().getTradeOrders()) {
 			cancelOrder(order);
 		}
@@ -1823,7 +1820,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Candle
 	 */
 	public static void logCandle(AbstractStrategyRule context, Candle candle) {
-		_log.info(context.getClass().getSimpleName() + " Symbol: "
+		_log.debug(context.getClass().getSimpleName() + " Symbol: "
 				+ candle.getContract().getSymbol() + " startPeriod: "
 				+ candle.getStartPeriod() + " endPeriod: "
 				+ candle.getEndPeriod() + " Open: "

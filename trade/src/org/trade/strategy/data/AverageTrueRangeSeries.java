@@ -425,7 +425,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
 					.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getAverageTrueRange());
 		}

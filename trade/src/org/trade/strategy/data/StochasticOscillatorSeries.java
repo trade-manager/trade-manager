@@ -629,7 +629,7 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			StochasticOscillatorItem dataItem = (StochasticOscillatorItem) this
 					.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getStochasticOscillator());
 		}

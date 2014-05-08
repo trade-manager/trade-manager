@@ -88,7 +88,7 @@ public class PivotCalculator {
 				String output = MatrixFunctions
 						.toPrint(_polyOrder, correlationCoeff, standardError,
 								terms, userData.length);
-				_log.info("Pivot Calc: " + output);
+				_log.debug("Pivot Calc: " + output);
 				for (Pair pair : pairs) {
 					double y = MatrixFunctions.fx(pair.x, terms);
 					pair.y = y;

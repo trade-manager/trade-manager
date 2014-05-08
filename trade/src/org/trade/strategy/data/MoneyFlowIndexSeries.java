@@ -479,7 +479,7 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			MoneyFlowIndexItem dataItem = (MoneyFlowIndexItem) this
 					.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getMoneyFlowIndex());
 		}

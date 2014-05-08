@@ -47,7 +47,6 @@ import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
-import org.trade.strategy.data.bollingerbands.BollingerBandsItem;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.macd.MACDItem;
 
@@ -652,11 +651,10 @@ public class MACDSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			BollingerBandsItem dataItem = (BollingerBandsItem) this
-					.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			MACDItem dataItem = (MACDItem) this.getDataItem(i);
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Value: "
-					+ dataItem.getBollingerBands());
+					+ dataItem.getMACD());
 		}
 	}
 }

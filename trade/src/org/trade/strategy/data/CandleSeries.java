@@ -1150,7 +1150,7 @@ public class CandleSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			CandleItem dataItem = (CandleItem) this.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Open: "
 					+ dataItem.getOpen() + " Close: " + dataItem.getClose()
 					+ " High: " + dataItem.getHigh() + " Low: "
@@ -1166,7 +1166,7 @@ public class CandleSeries extends IndicatorSeries {
 	 */
 	public void printCandleItem(CandleItem dataItem) {
 
-		_log.info("Symbol: " + this.getSymbol() + " Start Time: "
+		_log.debug("Symbol: " + this.getSymbol() + " Start Time: "
 				+ dataItem.getPeriod().getStart() + " Open: "
 				+ dataItem.getOpen() + " High: " + dataItem.getHigh()
 				+ " Low: " + dataItem.getLow() + " Close: "

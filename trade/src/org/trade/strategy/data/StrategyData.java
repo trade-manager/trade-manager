@@ -514,7 +514,7 @@ public class StrategyData extends Worker {
 					Thread.sleep(delaySecond * 1000);
 
 			} catch (InterruptedException e) {
-				_log.info(" Thread interupt: " + e.getMessage());
+				_log.error(" Thread interupt: " + e.getMessage());
 			}
 		}
 	}

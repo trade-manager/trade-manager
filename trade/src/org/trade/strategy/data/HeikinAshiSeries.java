@@ -354,7 +354,7 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			HeikinAshiItem dataItem = (HeikinAshiItem) this.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Open: "
 					+ dataItem.getOpen() + " Close: " + dataItem.getClose()
 					+ " High: " + dataItem.getHigh() + " Low: "

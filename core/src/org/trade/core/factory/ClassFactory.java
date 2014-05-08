@@ -144,8 +144,8 @@ public class ClassFactory {
 			instance = constructor.newInstance(object);
 		} catch (Exception e) {
 
-			_log.info("Could not find constructor for default parms[" + classes
-					+ "] will test all constructors.");
+			_log.debug("Could not find constructor for default parms["
+					+ classes + "] will test all constructors.");
 			Constructor<?>[] constructors = c.getConstructors();
 			for (Constructor<?> constructor2 : constructors) {
 				try {
@@ -157,7 +157,7 @@ public class ClassFactory {
 						break;
 					}
 				} catch (Exception ex) {
-					_log.info("Constructor: " + constructor2.toGenericString()
+					_log.error("Constructor: " + constructor2.toGenericString()
 							+ " failed!!");
 				}
 			}

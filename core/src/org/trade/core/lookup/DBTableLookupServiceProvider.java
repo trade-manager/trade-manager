@@ -48,8 +48,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.Reflector;
@@ -66,8 +64,6 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 	 * This will be a hashtable of hashtables of Lookup objects. The first key
 	 * is the lookup name and the second key is the LookupQualifier.
 	 */
-	private final static Logger _log = LoggerFactory
-			.getLogger(DBTableLookupServiceProvider.class);
 	private static Hashtable<String, Hashtable<String, Lookup>> _lookups = new Hashtable<String, Hashtable<String, Lookup>>();
 
 	/**
@@ -323,7 +319,6 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 			}
 
 		} catch (RuntimeException re) {
-			_log.error("Error : " + re.getMessage(), re);
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

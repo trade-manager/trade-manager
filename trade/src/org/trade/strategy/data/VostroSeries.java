@@ -708,7 +708,7 @@ public class VostroSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			VostroItem dataItem = (VostroItem) this.getDataItem(i);
-			_log.info("Type: " + this.getType() + " Time: "
+			_log.debug("Type: " + this.getType() + " Time: "
 					+ dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getVostro());
 		}
