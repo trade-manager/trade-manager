@@ -1137,16 +1137,11 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		try {
 			synchronized (m_contractRequests) {
 				if (m_contractRequests.containsKey(reqId)) {
-					Contract transientInstance = m_contractRequests.get(reqId);
-					if (null != transientInstance.getIdContract())
-						transientInstance = m_tradePersistentModel
-								.findContractById(transientInstance
-										.getIdContract());
+					Contract contract = m_contractRequests.get(reqId);
 					BackTestBrokerModel.logContract(contractDetails);
 					if (BackTestBrokerModel.populateContract(contractDetails,
-							transientInstance)) {
-						m_tradePersistentModel
-								.persistContract(transientInstance);
+							contract)) {
+						m_tradePersistentModel.persistContract(contract);
 						m_contractRequests.remove(reqId);
 					}
 				} else {
