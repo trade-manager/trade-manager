@@ -61,6 +61,7 @@ public class TradeAppMain {
 
 		if (appWidth > 1200)
 			appWidth = 1200;
+		
 		TradeAppFrame frame = new TradeAppFrame();
 		frame.setIconImage(ImageBuilder.getImage("trade.gif"));
 		frame.setSize((int) appWidth, (int) appHieght);
