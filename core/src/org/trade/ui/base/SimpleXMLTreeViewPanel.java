@@ -86,7 +86,6 @@ public class SimpleXMLTreeViewPanel extends BasePanel {
 
 		// Listen for when the selection changes, call nodeSelected(node)
 		m_tree.addTreeSelectionListener(new TreeSelectionListener() {
-			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 
 				// nodeSelected(node, m_tree);
