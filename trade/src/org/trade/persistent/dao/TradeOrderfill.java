@@ -76,7 +76,8 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	private BigDecimal averagePrice;
 	private Integer cumulativeQuantity;
 	private String execId;
-	private TradeOrder tradeOrder;
+	private String orderReference;
+	private Integer permId;
 	@NotNull
 	private BigDecimal price;
 	@Min(1)
@@ -84,6 +85,7 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	private String side;
 	private String exchange;
 	private Date time;
+	private TradeOrder tradeOrder;
 
 	public TradeOrderfill() {
 	}
@@ -159,6 +161,16 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	@JoinColumn(name = "idTradeOrder", insertable = true, updatable = true, nullable = false)
 	public TradeOrder getTradeOrder() {
 		return this.tradeOrder;
+	}
+
+	/**
+	 * Method setTradeOrder.
+	 * 
+	 * @param tradeOrder
+	 *            TradeOrder
+	 */
+	public void setTradeOrder(TradeOrder tradeOrder) {
+		this.tradeOrder = tradeOrder;
 	}
 
 	/**
@@ -242,6 +254,26 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	}
 
 	/**
+	 * Method getOrderReference.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "orderReference", nullable = true, length = 45)
+	public String getOrderReference() {
+		return this.orderReference;
+	}
+
+	/**
+	 * Method setOrderReference.
+	 * 
+	 * @param orderRefeference
+	 *            String
+	 */
+	public void setOrderReference(String orderReference) {
+		this.orderReference = orderReference;
+	}
+
+	/**
 	 * Method getExchange.
 	 * 
 	 * @return String
@@ -262,13 +294,23 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	}
 
 	/**
-	 * Method setTradeOrder.
+	 * Method getPermId.
 	 * 
-	 * @param tradeOrder
-	 *            TradeOrder
+	 * @return Integer
 	 */
-	public void setTradeOrder(TradeOrder tradeOrder) {
-		this.tradeOrder = tradeOrder;
+	@Column(name = "permId")
+	public Integer getPermId() {
+		return this.permId;
+	}
+
+	/**
+	 * Method setPermId.
+	 * 
+	 * @param permId
+	 *            Integer
+	 */
+	public void setPermId(Integer permId) {
+		this.permId = permId;
 	}
 
 	/**

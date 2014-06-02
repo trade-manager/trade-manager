@@ -1120,6 +1120,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			/*
 			 * We already have this order fill.
 			 */
+
 			if (transientInstance.existTradeOrderfill(execution.m_execId))
 				return;
 
@@ -1174,16 +1175,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				// Internal created order have Integer.MAX_VALUE as their values
 				// change these to minOrderId -1 which is 1 less than the
 				// minOrderId by TM.
-				int nextOrderKey = minOrderId - 1;
+				int nextOrderKey = m_tradePersistentModel
+						.findTradeOrderByMaxKey() + 1;
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
-					if (execution.m_orderId == Integer.MAX_VALUE)
+					if (execution.m_orderId == Integer.MAX_VALUE) {
 						execution.m_orderId = nextOrderKey;
+					} else {
+						continue;
+					}
+
+					for (String key1 : executionDetails.keySet()) {
+						Execution execution1 = executionDetails.get(key1);
+						if (execution1.m_permId == execution.m_permId) {
+							if (execution1.m_orderId == Integer.MAX_VALUE)
+								execution1.m_orderId = nextOrderKey;
+						}
+					}
+					nextOrderKey++;
 				}
 				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
-					Integer orderKey = Math.abs(execution.m_orderId);
+					Integer orderKey = execution.m_orderId;
 					if (tradeOrders.containsKey(orderKey))
 						continue;
 					TradeOrderfill tradeOrderfill = new TradeOrderfill();
@@ -1193,7 +1207,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					if (Side.BOT.equals(execution.m_side))
 						action = Action.BUY;
 
-					Integer quantity = execution.m_shares;
+					Integer quantity = tradeOrderfill.getQuantity();
 					TradeOrder tradeOrder = new TradeOrder(tradestrategy,
 							action, tradeOrderfill.getTime(), OrderType.MKT,
 							quantity, null, null, OverrideConstraints.YES,
@@ -1203,18 +1217,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					tradeOrder.setOrderKey(orderKey);
 					for (String key1 : executionDetails.keySet()) {
 						Execution execution1 = executionDetails.get(key1);
-						Integer orderKey1 = Math.abs(execution1.m_orderId);
+						Integer orderKey1 = execution1.m_orderId;
 						if (orderKey1.equals(orderKey)
 								&& !execution1.m_execId
 										.equals(execution.m_execId)) {
 							TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
-							TWSBrokerModel.populateTradeOrderfill(execution,
+							TWSBrokerModel.populateTradeOrderfill(execution1,
 									tradeOrderfill1);
 							quantity = quantity + tradeOrderfill1.getQuantity();
 							// Make sure the create date for the order is the
 							// earliest time.
-							if (tradeOrderfill1.getTime().before(
-									tradeOrder.getCreateDate()))
+							if (tradeOrder.getCreateDate().after(
+									tradeOrderfill1.getTime()))
 								tradeOrder.setCreateDate(tradeOrderfill1
 										.getTime());
 						}
@@ -1235,8 +1249,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.persistTradeOrder(tradeOrder);
 					for (String key : executionDetails.keySet()) {
 						Execution execution = executionDetails.get(key);
-						if (tradeOrder.getOrderKey().equals(
-								Math.abs(execution.m_orderId))) {
+						if (tradeOrder.getOrderKey()
+								.equals(execution.m_orderId)) {
 							TradeOrderfill tradeOrderfill = new TradeOrderfill();
 							TWSBrokerModel.populateTradeOrderfill(execution,
 									tradeOrderfill);
@@ -3439,6 +3453,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		tradeOrderfill.setAccountNumber(execution.m_acctNumber);
 		tradeOrderfill.setCumulativeQuantity(execution.m_cumQty);
 		tradeOrderfill.setExecId(execution.m_execId);
+		tradeOrderfill.setOrderReference(execution.m_orderRef);
+		tradeOrderfill.setPermId(execution.m_permId);
 	}
 
 	/**

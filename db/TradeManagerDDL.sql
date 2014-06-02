@@ -375,6 +375,8 @@ CREATE  TABLE IF NOT EXISTS tradeorderfill (
   cumulativeQuantity INT NULL ,
   exchange VARCHAR(10) NULL ,
   execId VARCHAR(45) NULL ,
+  orderReference VARCHAR(45) NULL ,
+  permId INT NULL ,
   price DECIMAL(10,2) NOT NULL ,
   quantity INT NOT NULL ,
   side VARCHAR(3) NOT NULL ,

@@ -1160,7 +1160,11 @@ public class TradePersistentModel implements PersistentModel {
 				filledValue = filledValue
 						+ (tradeOrderfill.getAveragePrice().doubleValue() * tradeOrderfill
 								.getQuantity());
-				filledDate = tradeOrderfill.getTime();
+				if (null == filledDate)
+					filledDate = tradeOrderfill.getTime();
+
+				if (filledDate.before(tradeOrderfill.getTime()))
+					filledDate = tradeOrderfill.getTime();
 			}
 
 			if (filledQuantity > 0) {
