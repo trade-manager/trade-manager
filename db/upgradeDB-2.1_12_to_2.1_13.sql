@@ -11,4 +11,4 @@ ADD COLUMN `trailingPercent` DECIMAL(10,2) NULL AFTER `trailStopPrice`;
 
 ALTER TABLE `tradeprod`.`tradeorderfill` 
 ADD COLUMN `orderReference`  VARCHAR(45) NULL AFTER `execId`,
-ADD COLUMN `permId`  INT NULL AFTER `orderReference`,
+ADD COLUMN `permId`  INT NULL AFTER `orderReference`;
