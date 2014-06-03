@@ -652,6 +652,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				return;
 			}
 			m_brokerModel.onReqOpenOrders();
+			tradingdayPanel.doRefresh(todayTradingday);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.",
