@@ -1175,8 +1175,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				// Internal created order have Integer.MAX_VALUE as their values
 				// change these to minOrderId -1 which is 1 less than the
 				// minOrderId by TM.
-				int nextOrderKey = m_tradePersistentModel
-						.findTradeOrderByMaxKey() + 1;
+				int nextOrderKey = orderKey.getAndIncrement();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
 					if (execution.m_orderId == Integer.MAX_VALUE) {
@@ -1192,7 +1191,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								execution1.m_orderId = nextOrderKey;
 						}
 					}
-					nextOrderKey++;
+					nextOrderKey = orderKey.getAndIncrement();
 				}
 				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 				for (String key : executionDetails.keySet()) {
