@@ -1150,7 +1150,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	/**
 	 * Method execDetailsEnd. Only deal with these when we dont have the
-	 * tradeOrder in the TradeManager.
+	 * tradeOrder in the TradeManager. Use the permId as orderKey i.e. TWS
+	 * internal order id to reconcile orders.
 	 * 
 	 * @param reqId
 	 *            int
@@ -1173,32 +1174,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Tradestrategy tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(reqId);
 
-				// Internal created order have Integer.MAX_VALUE as their values
-				// change these to minOrderId -1 which is 1 less than the
-				// minOrderId by TM.
-				int nextOrderKey = orderKey.getAndIncrement();
-				for (String key : executionDetails.keySet()) {
-					Execution execution = executionDetails.get(key);
-					if (execution.m_orderId != nextOrderKey) {
-						execution.m_orderId = nextOrderKey;
-					} else {
-						continue;
-					}
-
-					for (String key1 : executionDetails.keySet()) {
-						Execution execution1 = executionDetails.get(key1);
-						if (execution1.m_permId == execution.m_permId) {
-							if (execution1.m_orderId != nextOrderKey)
-								execution1.m_orderId = nextOrderKey;
-						}
-					}
-					nextOrderKey = orderKey.getAndIncrement();
-				}
 				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
-					Integer orderKey = execution.m_orderId;
-					if (tradeOrders.containsKey(orderKey))
+					if (tradeOrders.containsKey(execution.m_permId))
 						continue;
 					TradeOrderfill tradeOrderfill = new TradeOrderfill();
 					TWSBrokerModel.populateTradeOrderfill(execution,
@@ -1214,11 +1193,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							TimeInForce.DAY, TriggerMethod.DEFAULT);
 					tradeOrder.setClientId(execution.m_clientId);
 					tradeOrder.setPermId(execution.m_permId);
-					tradeOrder.setOrderKey(orderKey);
+					tradeOrder.setOrderKey(execution.m_permId);
 					for (String key1 : executionDetails.keySet()) {
 						Execution execution1 = executionDetails.get(key1);
-						Integer orderKey1 = execution1.m_orderId;
-						if (orderKey1.equals(orderKey)
+						if (execution1.m_permId == execution.m_permId
 								&& !execution1.m_execId
 										.equals(execution.m_execId)) {
 							TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
@@ -1249,8 +1227,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.persistTradeOrder(tradeOrder);
 					for (String key : executionDetails.keySet()) {
 						Execution execution = executionDetails.get(key);
-						if (tradeOrder.getOrderKey()
-								.equals(execution.m_orderId)) {
+						if (tradeOrder.getOrderKey().equals(execution.m_permId)) {
 							TradeOrderfill tradeOrderfill = new TradeOrderfill();
 							TWSBrokerModel.populateTradeOrderfill(execution,
 									tradeOrderfill);
