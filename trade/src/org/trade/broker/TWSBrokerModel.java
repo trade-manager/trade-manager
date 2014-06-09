@@ -1149,7 +1149,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
-	 * Method execDetailsEnd.
+	 * Method execDetailsEnd. Only deal with these when we dont have the
+	 * tradeOrder in the TradeManager.
 	 * 
 	 * @param reqId
 	 *            int
@@ -1178,7 +1179,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				int nextOrderKey = orderKey.getAndIncrement();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
-					if (execution.m_orderId == Integer.MAX_VALUE) {
+					if (execution.m_orderId != nextOrderKey) {
 						execution.m_orderId = nextOrderKey;
 					} else {
 						continue;
@@ -1187,7 +1188,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					for (String key1 : executionDetails.keySet()) {
 						Execution execution1 = executionDetails.get(key1);
 						if (execution1.m_permId == execution.m_permId) {
-							if (execution1.m_orderId == Integer.MAX_VALUE)
+							if (execution1.m_orderId != nextOrderKey)
 								execution1.m_orderId = nextOrderKey;
 						}
 					}

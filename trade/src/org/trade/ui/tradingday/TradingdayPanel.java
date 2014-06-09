@@ -211,7 +211,7 @@ public class TradingdayPanel extends BasePanel {
 			m_tradestrategyModel = new TradestrategyTableModel();
 			Tradingday tradingday = null;
 			for (Tradingday instance : m_tradingdays.getTradingdays()) {
-				tradingday = instance;				
+				tradingday = instance;
 				break;
 			}
 			m_tradestrategyModel.setData(tradingday);
@@ -371,8 +371,7 @@ public class TradingdayPanel extends BasePanel {
 					strategyManagerEditor);
 
 			resetStrategyComboBox(strategyFromEditorComboBox);
-			resetStrategyComboBox(strategyToEditorComboBox);	
-			
+			resetStrategyComboBox(strategyToEditorComboBox);
 
 		} catch (ValueTypeException ex) {
 			this.setErrorMessage("Error activating window.", ex.getMessage(),
