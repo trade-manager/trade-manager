@@ -651,10 +651,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (null == todayTradingday) {
 				return;
 			}
-			/*
-			 * Update any open orders as their status may have changed.
-			 */
-			m_brokerModel.onReqOpenOrders();
 			tradingdayPanel.doRefresh(todayTradingday);
 
 		} catch (Exception ex) {
