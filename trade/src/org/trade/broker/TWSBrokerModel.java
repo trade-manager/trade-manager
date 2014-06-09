@@ -1112,7 +1112,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									+ " is not the master in TWS. On execDetails update.");
 
 				} else {
-					executionDetails.put(execution.m_execId, execution);
+					if (null == m_tradePersistentModel
+							.findTradeOrderfillByExecId(execution.m_execId))
+						executionDetails.put(execution.m_execId, execution);
 				}
 				return;
 			}
@@ -1177,6 +1179,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
+
 					if (tradeOrders.containsKey(execution.m_permId))
 						continue;
 					TradeOrderfill tradeOrderfill = new TradeOrderfill();
