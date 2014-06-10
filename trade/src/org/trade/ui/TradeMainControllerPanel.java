@@ -602,6 +602,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (null == todayTradingday) {
 				return;
 			}
+
+			/*
+			 * Save any tradeOrders that have been deleted from TM but are still
+			 * active in the broker.
+			 */
+			for (TradeOrder openOrder : openTradeOrders.values()) {
+				if (null == openOrder.getIdTradeOrder()) {
+					// Note we use the orderReference to store the
+					// tradestrategyId.
+					Tradestrategy tradestrategy = m_tradePersistentModel
+							.findTradestrategyById(Integer.getInteger(openOrder
+									.getOrderReference()));
+					int result = JOptionPane.showConfirmDialog(this.getFrame(),
+							"Missing order key: " + openOrder.getOrderKey()
+									+ " for contract "
+									+ tradestrategy.getContract().getSymbol()
+									+ " do you want to save?", "Information",
+							JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						openOrder.setTradestrategy(tradestrategy);
+						openOrder = m_tradePersistentModel
+								.persistTradeOrder(openOrder);
+					}
+				}
+			}
+
 			/*
 			 * Cancel any orders that were open and not filled.
 			 */

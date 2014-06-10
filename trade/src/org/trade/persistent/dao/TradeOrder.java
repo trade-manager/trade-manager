@@ -203,6 +203,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.timeInForce = timeInForce;
 		this.triggerMethod = triggerMethod;
 		this.lastUpdateDate = createDate;
+		this.orderReference = this.tradestrategy.getIdTradeStrategy()
+				.toString();
 	}
 
 	/**

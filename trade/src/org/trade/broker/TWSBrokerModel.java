@@ -1301,13 +1301,20 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				+ orderState.m_status);
 		try {
 
+			TWSBrokerModel.logOrderState(orderState);
+			TWSBrokerModel.logTradeOrder(order);
+
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(order.m_orderId));
+
 			if (null == transientInstance) {
 				error(orderId, 3170, "Warning Order not found for Order Key: "
 						+ order.m_orderId + " make sure Client ID: "
 						+ this.m_clientId
 						+ " is not the master in TWS. On openOrder update.");
+				transientInstance = new TradeOrder();
+				openOrders.put(transientInstance.getOrderKey(),
+						transientInstance);
 				return;
 			}
 
@@ -1322,9 +1329,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				if (OrderStatus.FILLED.equals(transientInstance.getStatus())) {
 					_log.debug("Open order filled Order Key:"
 							+ transientInstance.getOrderKey());
-					TWSBrokerModel.logOrderState(orderState);
-					TWSBrokerModel.logTradeOrder(order);
-
 					transientInstance = m_tradePersistentModel
 							.persistTradeOrder(transientInstance);
 
@@ -1337,8 +1341,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				} else {
 					_log.debug("Open order state changed. Status:"
 							+ orderState.m_status);
-					TWSBrokerModel.logOrderState(orderState);
-					TWSBrokerModel.logTradeOrder(order);
 					transientInstance = m_tradePersistentModel
 							.persistTradeOrder(transientInstance);
 					if (OrderStatus.CANCELLED.equals(transientInstance
