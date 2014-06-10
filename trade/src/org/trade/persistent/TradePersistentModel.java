@@ -881,7 +881,7 @@ public class TradePersistentModel implements PersistentModel {
 			 * This is a new order set the status to UNSUBMIT
 			 */
 			if (null == tradeOrder.getIdTradeOrder()
-					&& null == tradeOrder.getFilledQuantity()) {
+					&& null == tradeOrder.getStatus()) {
 				tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 			}
 

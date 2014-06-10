@@ -1297,8 +1297,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void openOrder(int orderId, com.ib.client.Contract contractIB,
 			com.ib.client.Order order, OrderState orderState) {
-		_log.error("openOrder orderId: " + orderId + " orderState: "
-				+ orderState.m_status);
 		try {
 
 			TWSBrokerModel.logOrderState(orderState);
@@ -1313,6 +1311,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						+ this.m_clientId
 						+ " is not the master in TWS. On openOrder update.");
 				transientInstance = new TradeOrder();
+				transientInstance.setOrderKey(order.m_orderId);
+				transientInstance.setCreateDate(TradingCalendar.getDate());
+				TWSBrokerModel.updateTradeOrder(order, orderState,
+						transientInstance);
 				openOrders.put(transientInstance.getOrderKey(),
 						transientInstance);
 				return;
@@ -1410,7 +1412,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			int remaining, double avgFillPrice, int permId, int parentId,
 			double lastFillPrice, int clientId, String whyHeld) {
 		try {
-			_log.error("orderStatus orderId: " + orderId + " status: " + status);
 			TradeOrder transientInstance = m_tradePersistentModel
 					.findTradeOrderByKey(new Integer(orderId));
 			if (null == transientInstance) {
@@ -3115,6 +3116,32 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (CoreUtils.nullSafeComparator(order.getOrderReference(),
 					ibOrder.m_orderRef) != 0) {
 				order.setOrderReference(ibOrder.m_orderRef);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(order.getAccountNumber(),
+					ibOrder.m_account) != 0) {
+				order.setAccountNumber(ibOrder.m_account);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(order.getFAGroup(),
+					ibOrder.m_faGroup) != 0) {
+				order.setFAGroup(ibOrder.m_faGroup);
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(order.getFAMethod(),
+					ibOrder.m_faMethod) != 0) {
+				order.setFAMethod(ibOrder.m_faMethod);
+				changed = true;
+			}
+			Money faPercent = new Money(ibOrder.m_faPercentage);
+			if (CoreUtils.nullSafeComparator(order.getFAPercent(),
+					faPercent.getBigDecimalValue()) != 0) {
+				order.setFAPercent(faPercent.getBigDecimalValue());
+				changed = true;
+			}
+			if (CoreUtils.nullSafeComparator(order.getFAProfile(),
+					ibOrder.m_faProfile) != 0) {
+				order.setFAProfile(ibOrder.m_faProfile);
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(order.getPermId(),

@@ -73,9 +73,13 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 	private final static Logger _log = LoggerFactory
 			.getLogger(PosMgrHeikinAshiTrailStrategy.class);
 
-	private Money target2RPrice = null;
-
 	private static final Integer _hiekinAshiTrailStartR = 2;
+
+	private static final Integer stopRiskUnits = 1;
+	private static final Double stopAddAmount = 0.01;
+
+	private static final Integer targetRiskUnits = 8;
+	private static final Double targetAddAmount = 0.01;
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -147,50 +151,16 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 				 * Make the stop -1R and manage to the Vwap MA of the opening
 				 * bar.
 				 */
+
 				Integer quantity = Math.abs(this.getOpenTradePosition()
 						.getOpenQuantity());
-				double avgFillPrice = (Math.abs(this.getOpenTradePosition()
-						.getTotalNetValue().doubleValue()) / quantity);
-				int stopRiskUnits = 1;
-				int targetRiskUnits = 8;
-
-				double stopAddAmount = 0.01;
-				double targetAddAmount = 0.01;
-				double riskAmount = Math.abs(this.getTradestrategy()
-						.getRiskAmount().doubleValue()
-						/ quantity);
-				String action = Action.BUY;
-				int buySellMultipliter = 1;
-				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
-					action = Action.SELL;
-					buySellMultipliter = -1;
-				}
 
 				// Add a penny to the stop and target
-				double stop = avgFillPrice
-						+ (riskAmount * stopRiskUnits * buySellMultipliter);
-				if (stop < 0)
-					stop = 0.02;
+				Money stopPrice = getRiskMultiplerPrice(stopRiskUnits, true,
+						stopAddAmount, true);
 
-				Money stopPrice = addPennyAndRoundStop(stop, this
-						.getOpenTradePosition().getSide(), action,
-						stopAddAmount);
-
-				target2RPrice = addPennyAndRoundStop(
-						(avgFillPrice + (riskAmount * _hiekinAshiTrailStartR
-								* buySellMultipliter * -1)), this
-								.getOpenTradePosition().getSide(), action,
-						targetAddAmount);
-
-				double target = avgFillPrice
-						+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
-
-				if (target < 0)
-					target = 0.02;
-
-				Money targetPrice = addPennyAndRoundStop(target, this
-						.getOpenTradePosition().getSide(), action,
-						targetAddAmount);
+				Money targetPrice = getRiskMultiplerPrice(targetRiskUnits,
+						true, targetAddAmount, false);
 
 				createStopAndTargetOrder(stopPrice, targetPrice, quantity, true);
 
@@ -249,6 +219,8 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			 * Trail on Heikin-Ashi above target 1 with a two bar trail.
 			 */
 			if (newBar) {
+				Money target2RPrice = getRiskMultiplerPrice(
+						_hiekinAshiTrailStartR, true, targetAddAmount, false);
 				if ((target2RPrice.isLessThan(new Money(currentCandleItem
 						.getClose())) && Side.BOT.equals(this
 						.getOpenTradePosition().getSide()))
@@ -435,5 +407,36 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 		// }
 
 		return stopPrice;
+	}
+
+	private Money getRiskMultiplerPrice(Integer riskMultipler, Boolean round,
+			Double roundAmt, Boolean stop) throws StrategyRuleException {
+
+		Integer quantity = Math.abs(this.getOpenTradePosition()
+				.getOpenQuantity());
+		double avgFillPrice = (Math.abs(this.getOpenTradePosition()
+				.getTotalNetValue().doubleValue()) / quantity);
+
+		double riskAmount = Math.abs(this.getTradestrategy().getRiskAmount()
+				.doubleValue()
+				/ quantity);
+		String action = Action.BUY;
+		int buySellMultipliter = 1;
+		if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+			action = Action.SELL;
+			buySellMultipliter = -1;
+		}
+		double amount = (avgFillPrice + (riskAmount * riskMultipler
+				* buySellMultipliter * (stop ? 1 : -1)));
+
+		if (amount < 0)
+			amount = 0.02;
+
+		if (round) {
+			return addPennyAndRoundStop(amount, this.getOpenTradePosition()
+					.getSide(), action, roundAmt);
+		} else {
+			return new Money(amount);
+		}
 	}
 }

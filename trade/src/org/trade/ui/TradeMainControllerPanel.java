@@ -594,64 +594,79 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 
 	public void openOrderEnd(
-			ConcurrentHashMap<Integer, TradeOrder> openTradeOrders) {
-		try {
-			Tradingday todayTradingday = m_tradingdays.getTradingday(
-					TradingCalendar.getTodayBusinessDayStart(),
-					TradingCalendar.getTodayBusinessDayEnd());
-			if (null == todayTradingday) {
-				return;
-			}
+			final ConcurrentHashMap<Integer, TradeOrder> openTradeOrders) {
 
-			/*
-			 * Save any tradeOrders that have been deleted from TM but are still
-			 * active in the broker.
-			 */
-			for (TradeOrder openOrder : openTradeOrders.values()) {
-				if (null == openOrder.getIdTradeOrder()) {
-					// Note we use the orderReference to store the
-					// tradestrategyId.
-					Tradestrategy tradestrategy = m_tradePersistentModel
-							.findTradestrategyById(Integer.getInteger(openOrder
-									.getOrderReference()));
-					int result = JOptionPane.showConfirmDialog(this.getFrame(),
-							"Missing order key: " + openOrder.getOrderKey()
-									+ " for contract "
-									+ tradestrategy.getContract().getSymbol()
-									+ " do you want to save?", "Information",
-							JOptionPane.YES_NO_OPTION);
-					if (result == JOptionPane.YES_OPTION) {
-						openOrder.setTradestrategy(tradestrategy);
-						openOrder = m_tradePersistentModel
-								.persistTradeOrder(openOrder);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+
+					Tradingday todayTradingday = m_tradingdays.getTradingday(
+							TradingCalendar.getTodayBusinessDayStart(),
+							TradingCalendar.getTodayBusinessDayEnd());
+					if (null == todayTradingday) {
+						return;
 					}
-				}
-			}
 
-			/*
-			 * Cancel any orders that were open and not filled.
-			 */
-			for (Tradestrategy tradestrategy : todayTradingday
-					.getTradestrategies()) {
-				Tradestrategy instance = m_tradePersistentModel
-						.findTradestrategyById(tradestrategy);
-				for (TradeOrder todayTradeOrder : instance.getTradeOrders()) {
-					if (todayTradeOrder.isActive()) {
-						if (!openTradeOrders.containsKey(todayTradeOrder
-								.getOrderKey())) {
-							todayTradeOrder.setStatus(OrderStatus.CANCELLED);
-							todayTradeOrder.setLastUpdateDate(TradingCalendar
-									.getDate((new Date()).getTime()));
-							m_tradePersistentModel
-									.persistTradeOrder(todayTradeOrder);
+					/*
+					 * Save any tradeOrders that have been deleted from TM but
+					 * are still active in the broker.
+					 */
+					for (TradeOrder openOrder : openTradeOrders.values()) {
+						if (null == openOrder.getIdTradeOrder()) {
+							// Note we use the orderReference to store the
+							// tradestrategyId.
+
+							Tradestrategy tradestrategy = m_tradePersistentModel
+									.findTradestrategyById(Integer
+											.parseInt(openOrder
+													.getOrderReference()));
+							int result = JOptionPane.showConfirmDialog(
+									getFrame(), "Missing order key: "
+											+ openOrder.getOrderKey()
+											+ " for contract "
+											+ tradestrategy.getContract()
+													.getSymbol()
+											+ " do you want to save?",
+									"Information", JOptionPane.YES_NO_OPTION);
+							if (result == JOptionPane.YES_OPTION) {
+								openOrder.setTradestrategy(tradestrategy);
+								openOrder = m_tradePersistentModel
+										.persistTradeOrder(openOrder);
+							}
 						}
 					}
+
+					/*
+					 * Cancel any orders that were open and not filled.
+					 */
+					for (Tradestrategy tradestrategy : todayTradingday
+							.getTradestrategies()) {
+						Tradestrategy instance = m_tradePersistentModel
+								.findTradestrategyById(tradestrategy);
+						for (TradeOrder todayTradeOrder : instance
+								.getTradeOrders()) {
+							if (todayTradeOrder.isActive()) {
+								if (!openTradeOrders
+										.containsKey(todayTradeOrder
+												.getOrderKey())) {
+									todayTradeOrder
+											.setStatus(OrderStatus.CANCELLED);
+									todayTradeOrder
+											.setLastUpdateDate(TradingCalendar
+													.getDate((new Date())
+															.getTime()));
+									m_tradePersistentModel
+											.persistTradeOrder(todayTradeOrder);
+								}
+							}
+						}
+					}
+				} catch (Exception ex) {
+					setErrorMessage("Error reconciling open orders.",
+							ex.getMessage(), ex);
 				}
 			}
-		} catch (Exception ex) {
-			this.setErrorMessage("Error reconciling open orders.",
-					ex.getMessage(), ex);
-		}
+		});
 	}
 
 	/**
