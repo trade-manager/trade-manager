@@ -183,36 +183,35 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 					.getTradestrategy().getTradingday().getClose(), -30))
 					&& newBar) {
 
-				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
-						+ " Time: " + startPeriod);
-
 				double avgFillPrice = (Math.abs(this.getOpenTradePosition()
 						.getTotalNetValue().doubleValue()) / Math.abs(this
 						.getOpenTradePosition().getOpenQuantity()));
-
-				CandleItem prevCandleItem = null;
-				if (getCurrentCandleCount() > 0) {
-					prevCandleItem = (CandleItem) candleSeries
-							.getDataItem(getCurrentCandleCount() - 1);
-					// AbstractStrategyRule
-					// .logCandle(this, prevCandleItem.getCandle());
-				}
 				String action = Action.SELL;
-				if (avgFillPrice < prevCandleItem.getLow())
-					avgFillPrice = prevCandleItem.getLow();
-
-				if (Side.SLD.equals(getOpenTradePosition().getSide())) {
+				if (Side.SLD.equals(getOpenTradePosition().getSide()))
 					action = Action.BUY;
-					if (avgFillPrice > prevCandleItem.getHigh())
-						avgFillPrice = prevCandleItem.getHigh();
+				/*
+				 * Use the previous bars H/L as stop is we are in the money for
+				 * the trade.
+				 */
+				if (getCurrentCandleCount() > 0) {
+					CandleItem prevCandleItem = (CandleItem) candleSeries
+							.getDataItem(getCurrentCandleCount() - 1);
+					if (Action.SELL.equals(action)) {
+						if (avgFillPrice < prevCandleItem.getLow())
+							avgFillPrice = prevCandleItem.getLow();
+					} else {
+						if (avgFillPrice > prevCandleItem.getHigh())
+							avgFillPrice = prevCandleItem.getHigh();
+					}
 				}
 
 				Money stopPrice = addPennyAndRoundStop(avgFillPrice,
 						getOpenTradePosition().getSide(), action, 0.01);
 				moveStopOCAPrice(stopPrice, true);
-				_log.info("Move stop 30 min before close Symbol: "
-						+ getSymbol() + " Time:" + startPeriod + " stopPrice: "
-						+ stopPrice);
+				_log.info("Rule move stop to b.e or prev bars H/L Symbol: "
+						+ getSymbol() + " Time: " + startPeriod
+						+ " stopPrice: " + stopPrice + " Side: "
+						+ this.getOpenTradePosition().getSide());
 			}
 
 			/*
