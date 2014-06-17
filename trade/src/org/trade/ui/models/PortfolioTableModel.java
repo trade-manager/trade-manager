@@ -71,10 +71,6 @@ public class PortfolioTableModel extends AspectTableModel {
 
 	public PortfolioTableModel() {
 		super(columnHeaderToolTip);
-		/*
-		 * Get the column names and cache them. Then we can close the
-		 * connection.
-		 */
 		columnNames = new String[6];
 		columnNames[0] = NAME;
 		columnNames[1] = PORTFOLIO_ALIAS;

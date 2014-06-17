@@ -89,8 +89,7 @@ public class TradelogDetailTableModel extends TableModel {
 	 * @exception * @see
 	 */
 	public TradelogDetailTableModel() {
-		// Get the column names and cache them.
-		// Then we can close the connection.
+
 		columnNames = new String[17];
 		columnNames[0] = DATE;
 		columnNames[1] = SYMBOL;

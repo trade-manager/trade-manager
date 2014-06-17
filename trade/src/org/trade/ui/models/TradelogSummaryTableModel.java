@@ -84,8 +84,7 @@ public class TradelogSummaryTableModel extends TableModel {
 	 */
 	public TradelogSummaryTableModel() {
 		super(columnHeaderToolTip);
-		// Get the column names and cache them.
-		// Then we can close the connection.
+
 		columnNames = new String[13];
 		columnNames[0] = PERIOD;
 		columnNames[1] = BATTING_AVERAGE;

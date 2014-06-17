@@ -88,8 +88,7 @@ public class TradeOrderTableModel extends TableModel {
 
 	public TradeOrderTableModel() {
 		super(columnHeaderToolTip);
-		// Get the column names and cache them.
-		// Then we can close the connection.
+
 		columnNames = new String[15];
 		columnNames[0] = SYMBOL;
 		columnNames[1] = ORDER_KEY;

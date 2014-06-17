@@ -56,8 +56,6 @@ public class CodeTypeTableModel extends AspectTableModel {
 
 	public CodeTypeTableModel() {
 
-		// Get the column names and cache them.
-		// Then we can close the connection.
 		columnNames = new String[2];
 		columnNames[0] = NAME;
 		columnNames[1] = DESCRIPTION;

@@ -82,8 +82,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 	public IndicatorSeriesTableModel() {
 		super(columnHeaderToolTip);
-		// Get the column names and cache them.
-		// Then we can close the connection.
+
 		columnNames = new String[8];
 		columnNames[0] = STRATEGY;
 		columnNames[1] = TYPE;

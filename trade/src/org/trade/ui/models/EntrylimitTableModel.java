@@ -74,8 +74,6 @@ public class EntrylimitTableModel extends AspectTableModel {
 
 	public EntrylimitTableModel() {
 		super(columnHeaderToolTip);
-		// Get the column names and cache them.
-		// Then we can close the connection.
 		columnNames = new String[8];
 		columnNames[0] = START_PRICE;
 		columnNames[1] = END_PRICE;

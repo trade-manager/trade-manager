@@ -75,8 +75,6 @@ public class StrategyTableModel extends AspectTableModel {
 	public StrategyTableModel() {
 		super(columnHeaderToolTip);
 
-		// Get the column names and cache them.
-		// Then we can close the connection.
 		columnNames = new String[5];
 		columnNames[0] = NAME;
 		columnNames[1] = DESCRIPTION;

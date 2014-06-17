@@ -90,8 +90,7 @@ public class TradingdayTableModel extends TableModel {
 
 	public TradingdayTableModel() {
 		super(columnHeaderToolTip);
-		// Get the column names and cache them.
-		// Then we can close the connection.
+
 		columnNames = new String[5];
 		columnNames[0] = OPEN;
 		columnNames[1] = CLOSE;
