@@ -143,6 +143,7 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			 * is > 0 also check to see if we already have this position
 			 * covered.
 			 */
+			
 			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
