@@ -263,7 +263,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			this.addTab("Configuration", configurationPanel);
 			this.addTab("Strategies", strategyPanel);
 			this.setSelectPanel(tradingdayPanel);
-			simulatedMode(true);
 		} catch (IOException ex) {
 			this.setErrorMessage(
 					"Error During Initialization. Please make sure config.properties file is in the root dir.",
@@ -1123,9 +1122,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						"Information", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					doDisconnect();
+				} else {
+					return;
 				}
+			} else {
+				this.setBrokerMenu(null);
+				this.setBrokerModel(BrokerModel._brokerTest);
 			}
-			ConnectionPane connectionPane = new ConnectionPane();
+
+			final ConnectionPane connectionPane = new ConnectionPane();
 			TextDialog dialog = new TextDialog(this.getFrame(),
 					"Connect to TWS", true, connectionPane, "Connect", "Cancel");
 			dialog.setLocationRelativeTo(this);
@@ -1138,30 +1143,31 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			DBTableLookupServiceProvider.clearLookup();
 
 			if (!dialog.getCancel()) {
-				m_brokerModel = (BrokerModel) ClassFactory
-						.getServiceForInterface(BrokerModel._broker, this);
+				this.setBrokerModel(BrokerModel._broker);
 				this.getFrame().setCursor(
 						Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				this.setStatusBarMessage("Please wait while login proceeds",
 						BasePanel.INFORMATION);
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							m_brokerModel.onConnect(connectionPane.getHost(),
+									connectionPane.getPort(),
+									connectionPane.getClientId());
+						} finally {
+							getFrame().setCursor(Cursor.getDefaultCursor());
+						}
+					}
+				});
 
-				/*
-				 * Controller listens for problems from the TWS interface see
-				 * doError()
-				 */
-				m_brokerModel.addMessageListener(this);
-				m_brokerModel.onConnect(connectionPane.getHost(),
-						connectionPane.getPort(), connectionPane.getClientId());
 			} else {
+				this.setBrokerMenu(BrokerModel._brokerTest);
 				this.setStatusBarMessage("Running in test.",
 						BasePanel.INFORMATION);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Could Not Connect/Disconnect From TWS",
 					ex.getMessage(), ex);
-
-		} finally {
-			this.getFrame().setCursor(Cursor.getDefaultCursor());
 		}
 	}
 
@@ -1241,14 +1247,24 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						&& !brokerDataRequestProgressMonitor.isDone()) {
 					brokerDataRequestProgressMonitor.cancel(true);
 				}
-				m_brokerModel.onDisconnect();
-				_indicatorRequests.clear();
-				refreshTradingdays(m_tradingdays);
-			} else {
-				tradingdayPanel.setConnected(false);
-				contractPanel.setConnected(false);
-				simulatedMode(true);
+
 			}
+			this.getFrame().setCursor(
+					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			this.setStatusBarMessage("Please wait while disconnect proceeds",
+					BasePanel.INFORMATION);
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						m_brokerModel.onDisconnect();
+					} finally {
+						getFrame().setCursor(Cursor.getDefaultCursor());
+					}
+				}
+			});
+
+			_indicatorRequests.clear();
+			refreshTradingdays(m_tradingdays);
 		} catch (Exception ex) {
 			this.setErrorMessage("Could Not Disconnect From TWS",
 					ex.getMessage(), ex);
@@ -1266,9 +1282,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		try {
 
+			this.setBrokerMenu(BrokerModel._broker);
 			tradingdayPanel.setConnected(true);
 			contractPanel.setConnected(true);
-			simulatedMode(false);
+
 			Tradingday todayTradingday = m_tradingdays.getTradingday(
 					TradingCalendar.getTodayBusinessDayStart(),
 					TradingCalendar.getTodayBusinessDayEnd());
@@ -1302,17 +1319,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * If the connection was lost to TWS and it was not a doDisconnect()
 			 * i.e. it was forced. Try to reconnect.
 			 */
+			tradingdayPanel.setConnected(false);
+			contractPanel.setConnected(false);
 
 			if (forced) {
 				if (!m_brokerModel.isConnected()) {
 					doConnect();
 				}
 			} else {
-				tradingdayPanel.setConnected(false);
-				contractPanel.setConnected(false);
-				simulatedMode(true);
+				this.setBrokerModel(BrokerModel._brokerTest);
+				this.setBrokerMenu(BrokerModel._brokerTest);
 				this.setStatusBarMessage("Connected to Broker was closed.",
-						BasePanel.WARNING);
+						BasePanel.INFORMATION);
 			}
 
 		} catch (Exception ex) {
@@ -2009,33 +2027,77 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	}
 
 	/**
-	 * Method simulatedMode.
+	 * Method setBrokerModel.
 	 * 
-	 * @param simulated
-	 *            boolean
+	 * @param model
+	 *            String
 	 */
-	private void simulatedMode(boolean simulated) {
+	private void setBrokerModel(String model) {
 
 		try {
-			if (simulated) {
+
+			if (null != m_brokerModel) {
+				m_brokerModel.removeMessageListener(this);
+				m_brokerModel = null;
+			}
+			if (BrokerModel._brokerTest.equals(model)) {
+
 				m_brokerModel = (BrokerModel) ClassFactory
 						.getServiceForInterface(BrokerModel._brokerTest, this);
+				tradingdayPanel.setConnected(false);
+				contractPanel.setConnected(false);
 				/*
 				 * Controller listens for problems from the TWS interface see
 				 * doError()
 				 */
 				m_brokerModel.addMessageListener(this);
+
+			} else if (BrokerModel._broker.equals(model)) {
+				m_brokerModel = (BrokerModel) ClassFactory
+						.getServiceForInterface(BrokerModel._broker, this);
+				/*
+				 * Controller listens for problems from the TWS interface see
+				 * doError()
+				 */
+				m_brokerModel.addMessageListener(this);
+
+			}
+		} catch (Exception ex) {
+			this.setErrorMessage("Error running Simulated Mode.",
+					ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 * Method setBrokerModel.
+	 * 
+	 * @param model
+	 *            String
+	 */
+	private void setBrokerMenu(String model) {
+
+		try {
+
+			if (BrokerModel._brokerTest.equals(model)) {
+
 				getMenu().setEnabledBrokerData(true);
 				getMenu().setEnabledRunStrategy(false);
 				getMenu().setEnabledTestStrategy(true);
 				getMenu().setEnabledConnect(true);
 				this.setStatusBarMessage("Running in simulated mode",
 						BasePanel.INFORMATION);
-			} else {
+			} else if (BrokerModel._broker.equals(model)) {
+
 				getMenu().setEnabledBrokerData(true);
 				getMenu().setEnabledRunStrategy(true);
 				getMenu().setEnabledTestStrategy(false);
 				getMenu().setEnabledConnect(false);
+			} else {
+
+				getMenu().setEnabledBrokerData(false);
+				getMenu().setEnabledRunStrategy(false);
+				getMenu().setEnabledTestStrategy(false);
+				getMenu().setEnabledConnect(true);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error running Simulated Mode.",

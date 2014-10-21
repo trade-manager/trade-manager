@@ -233,7 +233,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		this.m_clientId = clientId;
 		m_client.eConnect(host, port, clientId);
 		openOrders.clear();
-
 	}
 
 	/**
@@ -259,6 +258,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.AnyWrapper#connectionClosed()
 	 */
 	public void connectionClosed() {
+		_log.error("TWS Broker Model connectionClosed ");
 		onCancelAllRealtimeData();
 		this.fireConnectionClosed(true);
 	}
@@ -1494,12 +1494,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	/**
 	 * Method error.
 	 * 
-	 * @param str
+	 * @param msg
 	 *            String
 	 * @see com.ib.client.AnyWrapper#error(String)
 	 */
-	public void error(String str) {
-		_log.error("BrokerModel error str: " + str);
+	public void error(String msg) {
+		_log.error("BrokerModel error str: " + msg);
 		// this.fireBrokerError(new BrokerManagerModelException(str));
 	}
 
@@ -1519,6 +1519,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.AnyWrapper#error(int, int, String)
 	 */
 	public void error(int id, int code, String msg) {
+
 		String symbol = "N/A";
 		BrokerModelException brokerModelException = null;
 		if (m_contractRequests.containsKey(id)) {
@@ -1608,17 +1609,19 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				}
 			}
 
-			/*
-			 * Error code 502, Couldn't connect to TWS. Confirm that API is
-			 * enabled in TWS via the Configure>API menu command.
-			 */
-			if (code == 502)
-				this.fireConnectionClosed(false);
-
 			_log.error(errorMsg);
 			brokerModelException = new BrokerModelException(1, code, errorMsg);
+
 		}
 		this.fireBrokerError(brokerModelException);
+
+		/*
+		 * If onConnect() fails error 502 will be fired. This needs to tell the
+		 * main controller that we could not connect and so return the app to
+		 * test mode.
+		 */
+		if (502 == code)
+			this.fireConnectionClosed(false);
 	}
 
 	/**

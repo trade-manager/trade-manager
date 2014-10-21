@@ -190,6 +190,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		if (isConnected()) {
 			onCancelAllRealtimeData();
 		}
+		this.fireConnectionClosed(false);
 	}
 
 	/**
@@ -1015,20 +1016,20 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @param e
 	 *            Exception
 	 */
-	public void error(Exception e) {
-		_log.error("BrokerModel error ex: " + e.getMessage());
+	public void error(Exception ex) {
+		_log.error("BrokerModel error msg: " + ex.getMessage());
 		// this.fireBrokerError(new BrokerManagerModelException(e));
 	}
 
 	/**
 	 * Method error.
 	 * 
-	 * @param str
+	 * @param msg
 	 *            String
 	 */
-	public void error(String str) {
-		_log.error("BrokerModel error str: " + str);
-		// this.fireBrokerError(new BrokerManagerModelException(str));
+	public void error(String msg) {
+		_log.error("BrokerModel error str: " + msg);
+		// this.fireBrokerError(new BrokerManagerModelException(msg));
 	}
 
 	/**
@@ -1111,12 +1112,6 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					m_realTimeBarsRequests.notifyAll();
 				}
 			}
-			/*
-			 * Error code 502, Couldn't connect to TWS. Confirm that API is
-			 * enabled in TWS via the Configure>API menu command.
-			 */
-			if (code == 502)
-				this.fireConnectionClosed(false);
 
 			_log.error(errorMsg);
 			brokerModelException = new BrokerModelException(1, code, errorMsg);
