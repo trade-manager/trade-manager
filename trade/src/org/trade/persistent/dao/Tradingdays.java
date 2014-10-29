@@ -59,6 +59,7 @@ import org.trade.dictionary.valuetype.ChartDays;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOPortfolio;
 import org.trade.dictionary.valuetype.DAOStrategy;
+import org.trade.dictionary.valuetype.Tier;
 import org.trade.persistent.PersistentModelException;
 
 /**
@@ -420,6 +421,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			if (!ChartDays.newInstance(chartDays).isValid())
 				chartDays = new Integer(2);
 
+			String tier = ConfigProperties
+					.getPropAsString("trade.tier.default");
+			if (!Tier.newInstance(tier).isValid())
+				tier = "0";
+
 			Integer barSize = ConfigProperties
 					.getPropAsInt("trade.backfill.barsize");
 			if (!BarSize.newInstance(barSize).isValid())
@@ -495,6 +501,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					tradestrategy.setRiskAmount(new BigDecimal(riskAmount));
 					tradestrategy.setBarSize(barSize);
 					tradestrategy.setChartDays(chartDays);
+					tradestrategy.setTier(tier);
 					tradestrategy.setTrade(true);
 					tradestrategy.setDirty(true);
 					tradestrategy.setStrategy(strategy);
