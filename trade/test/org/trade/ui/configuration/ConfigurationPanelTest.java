@@ -154,7 +154,7 @@ public class ConfigurationPanelTest extends TestCase {
 					CalculationType.LINEAR);
 
 			Vector<Object> parm = new Vector<Object>();
-			parm.add(codeValue.getCodeValue());
+		//	parm.add(codeValue.getCodeValue());
 
 			CalculationType value = (CalculationType) ClassFactory
 					.getCreateClass(
