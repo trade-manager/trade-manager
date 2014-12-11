@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -92,6 +93,7 @@ import com.ib.client.EClientSocket;
 import com.ib.client.EWrapper;
 import com.ib.client.Execution;
 import com.ib.client.OrderState;
+import com.ib.client.TagValue;
 import com.ib.client.TickType;
 import com.ib.client.UnderComp;
 
@@ -505,9 +507,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 * Bar interval is set to 5= 5sec this is the only thing
 				 * supported by TWS for live data.
 				 */
+				Vector<TagValue> realTimeBarOptions = new Vector<TagValue>();
 				m_client.reqRealTimeBars(contract.getIdContract(),
 						TWSBrokerModel.getIBContract(contract), 5,
-						backfillWhatToShow, (backfillUseRTH > 0));
+						backfillWhatToShow, (backfillUseRTH > 0),
+						realTimeBarOptions);
 
 				if (mktData) {
 					onReqMarketData(contract, genericTicklist, false);
@@ -546,11 +550,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									+ contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
-
+				List<TagValue> mktDataOptions = new ArrayList<TagValue>();
 				m_marketDataRequests.put(contract.getIdContract(), contract);
 				m_client.reqMktData(contract.getIdContract(),
 						TWSBrokerModel.getIBContract(contract),
-						genericTicklist, snapshot);
+						genericTicklist, snapshot, mktDataOptions);
 
 			} else {
 				throw new BrokerModelException(contract.getIdContract(), 3040,
@@ -668,6 +672,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						+ backfillWhatToShow + " Regular Trading Hrs: "
 						+ backfillUseRTH + " Date format: "
 						+ backfillDateFormat);
+				List<TagValue> chartOptions = new ArrayList<TagValue>();
 
 				m_client.reqHistoricalData(tradestrategy.getIdTradeStrategy(),
 						TWSBrokerModel.getIBContract(tradestrategy
@@ -675,7 +680,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								.newInstance(chartDays).getDisplayName(),
 						BarSize.newInstance(tradestrategy.getBarSize())
 								.getDisplayName(), backfillWhatToShow,
-						backfillUseRTH, backfillDateFormat);
+						backfillUseRTH, backfillDateFormat, chartOptions);
 
 			} else {
 				throw new BrokerModelException(
@@ -2804,6 +2809,42 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 */
 	public void positionEnd() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Method displayGroupList.
+	 * 
+	 */
+	public void displayGroupList(int arg0, String arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Method displayGroupUpdated.
+	 * 
+	 */
+	public void displayGroupUpdated(int arg0, String arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Method verifyCompleted.
+	 * 
+	 */
+	public void verifyCompleted(boolean arg0, String arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Method verifyMessageAPI.
+	 * 
+	 */
+	public void verifyMessageAPI(String arg0) {
 		// TODO Auto-generated method stub
 
 	}

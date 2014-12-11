@@ -442,7 +442,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				tradingday.addTradestrategy(tradestrategy);
 				tradingdays.add(tradingday);
 				runStrategy(tradingdays, false);
-			
+
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error running Trade Strategies.",

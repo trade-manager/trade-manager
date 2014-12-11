@@ -421,10 +421,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			if (!ChartDays.newInstance(chartDays).isValid())
 				chartDays = new Integer(2);
 
-			String tier = ConfigProperties
+			String tierDefault = ConfigProperties
 					.getPropAsString("trade.tier.default");
-			if (!Tier.newInstance(tier).isValid())
-				tier = "0";
+
+			if (!Tier.newInstance(tierDefault).isValid())
+				tierDefault = "";
 
 			Integer barSize = ConfigProperties
 					.getPropAsInt("trade.backfill.barsize");
@@ -501,7 +502,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					tradestrategy.setRiskAmount(new BigDecimal(riskAmount));
 					tradestrategy.setBarSize(barSize);
 					tradestrategy.setChartDays(chartDays);
-					tradestrategy.setTier(tier);
+					tradestrategy.setTier(tierDefault);
 					tradestrategy.setTrade(true);
 					tradestrategy.setDirty(true);
 					tradestrategy.setStrategy(strategy);

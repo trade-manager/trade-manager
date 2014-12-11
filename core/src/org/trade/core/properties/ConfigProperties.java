@@ -510,6 +510,7 @@ public class ConfigProperties {
 				}
 			}
 			newText = newText + token;
+			_log.error("" + newText);
 		} catch (Exception ex) {
 			_log.error("Error paring file: " + ex.getMessage(), ex);
 		} finally {
