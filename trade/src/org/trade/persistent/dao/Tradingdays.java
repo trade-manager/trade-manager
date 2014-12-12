@@ -423,9 +423,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 
 			String tierDefault = ConfigProperties
 					.getPropAsString("trade.tier.default");
-
 			if (!Tier.newInstance(tierDefault).isValid())
-				tierDefault = "";
+				tierDefault = null;
 
 			Integer barSize = ConfigProperties
 					.getPropAsInt("trade.backfill.barsize");
