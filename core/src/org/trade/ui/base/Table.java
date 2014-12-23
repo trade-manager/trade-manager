@@ -38,18 +38,25 @@ package org.trade.ui.base;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
+import javax.imageio.ImageIO;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -105,6 +112,7 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	private static final String DATEFORMAT = "MM/dd/yyyy";
 	private JPopupMenu popup = null;
 	private boolean popupMenu = true;
+	private String m_pngDefaultDir = null;
 
 	/**
 	 * Constructor for Table.
@@ -280,7 +288,7 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	public void createPopup(Point point) {
 
 		popup = new JPopupMenu();
-		if (this.popupMenu) {
+		if (popupMenu) {
 			JMenuItem addMenuItem = popup.add(new JMenuItem("Add"));
 			addMenuItem.addActionListener(this);
 
@@ -292,6 +300,9 @@ public class Table extends JTable implements MouseListener, ActionListener {
 		}
 		JMenuItem printMenuItem = popup.add(new JMenuItem("Print"));
 		printMenuItem.addActionListener(this);
+
+		JMenuItem saveAsMenuItem = popup.add(new JMenuItem("Save As"));
+		saveAsMenuItem.addActionListener(this);
 
 		// Try to make the popup lightweight
 		point = getSuitableLocation(point, popup.getPreferredSize(), this);
@@ -320,6 +331,12 @@ public class Table extends JTable implements MouseListener, ActionListener {
 			try {
 				print();
 			} catch (PrinterException e) {
+				// Do nothing ...
+			}
+		} else if (mi.getActionCommand().equals("Save As")) {
+			try {
+				saveAs();
+			} catch (IOException e) {
 				// Do nothing ...
 			}
 		}
@@ -437,5 +454,81 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 */
 	public void add() {
 		((TableModel) this.getModel()).addRow();
+	}
+
+	/**
+	 * saveAs - Save the image as a PNG
+	 * 
+	 * @param <B>
+	 *            Component c </B> Returns the container of the component
+	 * @return Component
+	 * @throws IOException
+	 * @exception
+	 * @see
+	 */
+	private void saveAs() throws IOException {
+		BufferedImage bi = new BufferedImage(this.getSize().width,
+				this.getSize().height, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = bi.createGraphics();
+		this.paint(g); // this == JComponent
+		g.dispose();
+		ImageIO.write(bi, "png", new File(openFileChooser()));
+
+	}
+
+	/**
+	 * Method openFileChooser.
+	 * 
+	 * @return String
+	 */
+	private String openFileChooser() {
+
+		String fileName = null;
+		ExampleFileFilter filter = new ExampleFileFilter(
+				new String[] { "png" }, "PNG Files");
+		// Start in the curr dir
+
+		if (null == m_pngDefaultDir) {
+			m_pngDefaultDir = System.getProperty("user.dir");
+		}
+
+		JFileChooser filer1 = new JFileChooser(m_pngDefaultDir);
+		ExampleFileChooser fileView = new ExampleFileChooser();
+		filer1.setFileView(fileView);
+		filer1.addChoosableFileFilter(filter);
+		filer1.setFileFilter(filter);
+		filer1.setAccessory(new FilePreviewer(filer1));
+
+		int returnVal = 0;
+
+		returnVal = filer1.showSaveDialog(this);
+
+		// Upon return, getFile() will be null if user cancelled the dialog.
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			// Non-null file property after return implies user
+			// selected a file to open.
+			// Call openFile to attempt to load the text from file into TextArea
+			if (filer1.getSelectedFile().exists()) {
+
+				int result = JOptionPane.showConfirmDialog(
+						getComponentContainer(this),
+						"File Exists. Do you want to over write ?", "Warning",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					fileName = filer1.getSelectedFile().getPath();
+
+				} else {
+					// cancel
+					return null;
+				}
+			} else {
+				fileName = filer1.getSelectedFile().getPath();
+			}
+			if (!fileName.toUpperCase().endsWith(".PNG")) {
+				return fileName + ".png";
+			}
+			return fileName;
+		}
+		return null;
 	}
 }
