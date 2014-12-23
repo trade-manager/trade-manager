@@ -38,7 +38,7 @@ package org.trade.ui.base;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -467,11 +467,17 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * @see
 	 */
 	private void saveAs() throws IOException {
-		BufferedImage bi = new BufferedImage(this.getSize().width,
-				this.getSize().height, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.createGraphics();
-		this.paint(g); // this == JComponent
-		g.dispose();
+
+		int width = Math.max(this.getWidth(), this.getTableHeader().getWidth());
+		int height = this.getHeight() + this.getTableHeader().getHeight();
+
+		BufferedImage bi = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = bi.createGraphics();
+		this.getTableHeader().paint(g2);
+		g2.translate(0, this.getTableHeader().getHeight());
+		this.paint(g2);
+		g2.dispose();
 		ImageIO.write(bi, "png", new File(openFileChooser()));
 
 	}
