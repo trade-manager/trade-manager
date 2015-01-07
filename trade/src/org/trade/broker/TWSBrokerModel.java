@@ -124,8 +124,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	private static final ConcurrentHashMap<Integer, TradeOrder> openOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 	private static final ConcurrentHashMap<Integer, TradeOrder> tradeOrdersExecutions = new ConcurrentHashMap<Integer, TradeOrder>();
-	private static ConcurrentHashMap<String, Execution> executionDetails = new ConcurrentHashMap<String, Execution>();
-	private static ConcurrentHashMap<String, CommissionReport> commissionDetails = new ConcurrentHashMap<String, CommissionReport>();
+	private static final ConcurrentHashMap<String, Execution> executionDetails = new ConcurrentHashMap<String, Execution>();
+	private static final ConcurrentHashMap<String, CommissionReport> commissionDetails = new ConcurrentHashMap<String, CommissionReport>();
 
 	private EClientSocket m_client = null;
 	private PersistentModel m_tradePersistentModel = null;
@@ -1177,17 +1177,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				}
 			}
 
-			/*
-			 * If the tradestrategy exists for this request then we must create
-			 * the traderOrders and tradeOrderfills that have been request and
-			 * that do not already exist. Note executionDetails only contains
-			 * executions for tradeOrders that do not exist.
-			 */
-			Tradestrategy tradestrategy = m_tradePersistentModel
-					.findTradestrategyById(reqId);
-
-			if (null != tradestrategy) {
-
+			if (!executionDetails.isEmpty()) {
+				/*
+				 * If the tradestrategy exists for this request then we must
+				 * create the traderOrders and tradeOrderfills that have been
+				 * request and that do not already exist. Note executionDetails
+				 * only contains executions for tradeOrders that do not exist.
+				 */
+				Tradestrategy tradestrategy = m_tradePersistentModel
+						.findTradestrategyById(reqId);
 				/*
 				 * Internal created order have Integer.MAX_VALUE or are negative
 				 * as their value, so change the m_orderId to nextOrderKey.
