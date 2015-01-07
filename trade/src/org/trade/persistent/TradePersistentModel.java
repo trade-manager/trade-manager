@@ -1152,10 +1152,13 @@ public class TradePersistentModel implements PersistentModel {
 
 			Date filledDate = null;
 			double filledValue = 0;
+			double commission = 0;
 			int filledQuantity = 0;
 			for (TradeOrderfill tradeOrderfill : tradeOrder
 					.getTradeOrderfills()) {
-
+				if (null != tradeOrderfill.getCommission())
+					commission = commission
+							+ tradeOrderfill.getCommission().doubleValue();
 				filledQuantity = filledQuantity + tradeOrderfill.getQuantity();
 				filledValue = filledValue
 						+ (tradeOrderfill.getPrice().doubleValue() * tradeOrderfill
@@ -1171,6 +1174,7 @@ public class TradePersistentModel implements PersistentModel {
 				BigDecimal avgFillPrice = new BigDecimal(filledValue
 						/ filledQuantity);
 				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+
 				/*
 				 * If filled qty is greater than current filled qty set the new
 				 * value. Note openOrder can update the filled order quantity
@@ -1181,6 +1185,7 @@ public class TradePersistentModel implements PersistentModel {
 					tradeOrder.setAverageFilledPrice(avgFillPrice);
 					tradeOrder.setFilledQuantity(filledQuantity);
 					tradeOrder.setFilledDate(filledDate);
+					tradeOrder.setCommission(new BigDecimal(commission));
 					tradeOrder.setLastUpdateDate(TradingCalendar
 							.getDate((new Date()).getTime()));
 				}

@@ -125,6 +125,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	private static final ConcurrentHashMap<Integer, TradeOrder> openOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 	private static final ConcurrentHashMap<Integer, TradeOrder> tradeOrdersExecutions = new ConcurrentHashMap<Integer, TradeOrder>();
 	private static ConcurrentHashMap<String, Execution> executionDetails = null;
+	private static ConcurrentHashMap<String, CommissionReport> commissionDetails = new ConcurrentHashMap<String, CommissionReport>();
 
 	private EClientSocket m_client = null;
 	private PersistentModel m_tradePersistentModel = null;
@@ -456,6 +457,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			Integer clientId = m_clientId;
 			if (m_client.isConnected()) {
 				tradeOrdersExecutions.clear();
+				commissionDetails.clear();
 				if (addOrders) {
 					executionDetails = new ConcurrentHashMap<String, Execution>();
 					clientId = 0;
@@ -1100,7 +1102,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void execDetails(int reqId, com.ib.client.Contract contractIB,
 			Execution execution) {
 		try {
-
 			TWSBrokerModel.logExecution(execution);
 
 			TradeOrder transientInstance = m_tradePersistentModel
@@ -1149,6 +1150,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 			tradeOrdersExecutions.put(transientInstance.getOrderKey(),
 					transientInstance);
+			_log.error("execDetails tradeOrdersExecutions reqId: " + reqId);
 
 		} catch (Exception ex) {
 			error(reqId, 3160, "Errors saving execution: " + ex.getMessage());
@@ -1212,6 +1214,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					TradeOrderfill tradeOrderfill = new TradeOrderfill();
 					TWSBrokerModel.populateTradeOrderfill(execution,
 							tradeOrderfill);
+
 					String action = Action.SELL;
 					if (Side.BOT.equals(execution.m_side))
 						action = Action.BUY;
@@ -1255,16 +1258,25 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				for (TradeOrder tradeOrder : orders) {
 					tradeOrder = m_tradePersistentModel
 							.persistTradeOrder(tradeOrder);
+					double totalComms = 0;
 					for (String key : executionDetails.keySet()) {
 						Execution execution = executionDetails.get(key);
 						if (tradeOrder.getPermId().equals(execution.m_permId)) {
 							TradeOrderfill tradeOrderfill = new TradeOrderfill();
 							TWSBrokerModel.populateTradeOrderfill(execution,
 									tradeOrderfill);
+							CommissionReport comms = commissionDetails.get(key);
+
+							if (null != comms) {
+								totalComms = totalComms + comms.m_commission;
+								tradeOrderfill.setCommission(new BigDecimal(
+										comms.m_commission));
+							}
 							tradeOrderfill.setTradeOrder(tradeOrder);
 							tradeOrder.addTradeOrderfill(tradeOrderfill);
 						}
 					}
+					tradeOrder.setCommission(new BigDecimal(totalComms));
 					tradeOrder = m_tradePersistentModel
 							.persistTradeOrderfill(tradeOrder);
 					TradeOrder transientInstance = m_tradePersistentModel
@@ -2731,8 +2743,35 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.CommissionReport
 	 */
 	public void commissionReport(CommissionReport commsReport) {
-		// TODO Auto-generated method stub
 
+		try {
+			TWSBrokerModel.logCommissionReport(commsReport);
+
+			TradeOrderfill transientInstance = m_tradePersistentModel
+					.findTradeOrderfillByExecId(commsReport.m_execId);
+			if (null != transientInstance) {
+				TradeOrder tradeOrder = m_tradePersistentModel
+						.findTradeOrderByKey(transientInstance.getTradeOrder()
+								.getOrderKey());
+				for (TradeOrderfill tradeOrderfill : tradeOrder
+						.getTradeOrderfills()) {
+					if (tradeOrderfill.getExecId().equals(commsReport.m_execId)) {
+						tradeOrderfill.setCommission(new BigDecimal(
+								commsReport.m_commission));
+						m_tradePersistentModel
+								.persistTradeOrderfill(tradeOrderfill
+										.getTradeOrder());
+						return;
+					}
+				}
+
+			} else {
+				commissionDetails.put(commsReport.m_execId, commsReport);
+			}
+
+		} catch (Exception ex) {
+			error(1, 3280, "Errors saving execution: " + ex.getMessage());
+		}
 	}
 
 	/**
@@ -3709,5 +3748,22 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				+ execution.m_permId + " ExecId: " + execution.m_execId
 				+ " Time: " + execution.m_time + " CumQty: "
 				+ execution.m_cumQty);
+	}
+
+	/**
+	 * Method logCommissionReport.
+	 * 
+	 * @param commissionReport
+	 *            com.ib.client.CommissionReport
+	 */
+	public static void logCommissionReport(
+			com.ib.client.CommissionReport commissionReport) {
+		_log.debug("execDetails ExecId: " + commissionReport.m_execId
+				+ " Commission: " + commissionReport.m_commission
+				+ " Currency: " + commissionReport.m_currency
+				+ " RealizedPNL: " + commissionReport.m_realizedPNL
+				+ " yieldRedemptionDate: "
+				+ commissionReport.m_yieldRedemptionDate + " Yield: "
+				+ commissionReport.m_yield);
 	}
 }

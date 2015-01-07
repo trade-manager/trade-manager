@@ -648,9 +648,15 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	private void createOrderExecution(Contract contract, TradeOrder order,
 			BigDecimal filledPrice, Date date) throws IOException {
 
+		double commission = order.getQuantity() * 0.005d;
+		if (commission < 1) {
+			commission = 1;
+		}
+
 		TradeOrderfill execution = new TradeOrderfill();
 		execution.setTradeOrder(order);
 		execution.setAveragePrice(filledPrice);
+		execution.setCommission(new BigDecimal(commission));
 		execution.setCumulativeQuantity(order.getQuantity());
 		execution.setExchange("BATS");
 		execution.setPrice(filledPrice);
@@ -666,10 +672,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 				contract, execution);
 		OrderState orderState = new OrderState();
 		orderState.m_status = OrderStatus.FILLED;
-		orderState.m_commission = execution.getQuantity() * 0.005d;
-		if (orderState.m_commission < 1) {
-			orderState.m_commission = 1;
-		}
+		orderState.m_commission = commission;
 		this.brokerModel.openOrder(order.getOrderKey(), contract, order,
 				orderState);
 	}

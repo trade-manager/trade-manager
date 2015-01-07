@@ -74,6 +74,7 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 
 	private String accountNumber;
 	private BigDecimal averagePrice;
+	private BigDecimal commission;
 	private Integer cumulativeQuantity;
 	private String execId;
 	private String orderReference;
@@ -211,6 +212,26 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	 */
 	public void setAveragePrice(BigDecimal averagePrice) {
 		this.averagePrice = averagePrice;
+	}
+
+	/**
+	 * Method getCommission.
+	 * 
+	 * @return BigDecimal
+	 */
+	@Column(name = "commission", precision = 10)
+	public BigDecimal getCommission() {
+		return this.commission;
+	}
+
+	/**
+	 * Method setCommission.
+	 * 
+	 * @param commission
+	 *            BigDecimal
+	 */
+	public void setCommission(BigDecimal commission) {
+		this.commission = commission;
 	}
 
 	/**

@@ -372,6 +372,7 @@ CREATE  TABLE IF NOT EXISTS tradeorderfill (
   idTradeOrderFill INT NOT NULL AUTO_INCREMENT ,
   accountNumber VARCHAR(20) NULL ,
   averagePrice DECIMAL(11,3) NULL ,
+  commission DECIMAL(10,2) NULL ,
   cumulativeQuantity INT NULL ,
   exchange VARCHAR(10) NULL ,
   execId VARCHAR(45) NULL ,
