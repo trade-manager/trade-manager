@@ -100,7 +100,8 @@ public class TradePersistentModel implements PersistentModel {
 	private AspectHome m_aspectHome = null;
 	private RuleHome m_ruleHome = null;
 
-	private static final int SCALE = 5;
+	private static final int SCALE_5 = 5;
+	private static final int SCALE_2 = 2;
 
 	public TradePersistentModel() {
 		m_contractHome = new ContractHome();
@@ -1030,13 +1031,13 @@ public class TradePersistentModel implements PersistentModel {
 				tradePosition.setOpenQuantity(openQuantity);
 				tradePosition.setTotalBuyQuantity(totalBuyQuantity);
 				tradePosition.setTotalBuyValue((new BigDecimal(totalBuyValue))
-						.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN));
+						.setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalSellQuantity(totalSellQuantity);
 				tradePosition
 						.setTotalSellValue((new BigDecimal(totalSellValue))
-								.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN));
+								.setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalNetValue((new BigDecimal(totalSellValue
-						- totalBuyValue)).setScale(SCALE,
+						- totalBuyValue)).setScale(SCALE_5,
 						BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalCommission(comms.getBigDecimalValue());
 				if (openQuantity > 0)
@@ -1171,9 +1172,11 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 			if (filledQuantity > 0) {
-				BigDecimal avgFillPrice = new BigDecimal(filledValue
-						/ filledQuantity);
-				avgFillPrice.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+				BigDecimal avgFillPrice = (new BigDecimal(filledValue
+						/ filledQuantity)).setScale(SCALE_5,
+						BigDecimal.ROUND_HALF_EVEN);
+				BigDecimal commissionAmount = (new BigDecimal(commission))
+						.setScale(SCALE_2, BigDecimal.ROUND_HALF_EVEN);
 
 				/*
 				 * If filled qty is greater than current filled qty set the new
@@ -1185,7 +1188,7 @@ public class TradePersistentModel implements PersistentModel {
 					tradeOrder.setAverageFilledPrice(avgFillPrice);
 					tradeOrder.setFilledQuantity(filledQuantity);
 					tradeOrder.setFilledDate(filledDate);
-					tradeOrder.setCommission(new BigDecimal(commission));
+					tradeOrder.setCommission(commissionAmount);
 					tradeOrder.setLastUpdateDate(TradingCalendar
 							.getDate((new Date()).getTime()));
 				}

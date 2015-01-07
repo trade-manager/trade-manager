@@ -124,7 +124,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	private static final ConcurrentHashMap<Integer, TradeOrder> openOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 	private static final ConcurrentHashMap<Integer, TradeOrder> tradeOrdersExecutions = new ConcurrentHashMap<Integer, TradeOrder>();
-	private static ConcurrentHashMap<String, Execution> executionDetails = null;
+	private static ConcurrentHashMap<String, Execution> executionDetails = new ConcurrentHashMap<String, Execution>();
 	private static ConcurrentHashMap<String, CommissionReport> commissionDetails = new ConcurrentHashMap<String, CommissionReport>();
 
 	private EClientSocket m_client = null;
@@ -458,12 +458,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (m_client.isConnected()) {
 				tradeOrdersExecutions.clear();
 				commissionDetails.clear();
-				if (addOrders) {
-					executionDetails = new ConcurrentHashMap<String, Execution>();
+				executionDetails.clear();
+				/*
+				 * This will get all orders i.e. those created by this client
+				 * and those created by other clients in TWS.
+				 */
+				if (addOrders)
 					clientId = 0;
-				} else {
-					executionDetails = null;
-				}
+
 				Integer reqId = tradestrategy.getIdTradeStrategy();
 				m_client.reqExecutions(reqId, TWSBrokerModel
 						.getIBExecutionFilter(clientId, tradestrategy
@@ -1108,19 +1110,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					.findTradeOrderByKey(new Integer(Math
 							.abs(execution.m_orderId)));
 			if (null == transientInstance) {
-				if (null == executionDetails) {
-					error(execution.m_orderId,
-							3170,
-							"Warning Order not found for Order Key: "
-									+ execution.m_orderId
-									+ " make sure Client ID: "
-									+ this.m_clientId
-									+ " is not the master in TWS. On execDetails update.");
-
-				} else {
-					if (null == m_tradePersistentModel
-							.findTradeOrderfillByExecId(execution.m_execId))
-						executionDetails.put(execution.m_execId, execution);
+				/*
+				 * If the executionDetails is null and the order does not exist
+				 * then we have made a request for order executions with a
+				 * different clientId than the one which created this order.
+				 */
+				if (null == m_tradePersistentModel
+						.findTradeOrderfillByExecId(execution.m_execId)) {
+					executionDetails.put(execution.m_execId, execution);
 				}
 				return;
 			}
@@ -1179,13 +1176,21 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 				}
 			}
-			if (null != executionDetails) {
-				Tradestrategy tradestrategy = m_tradePersistentModel
-						.findTradestrategyById(reqId);
+
+			/*
+			 * If the tradestrategy exists for this request then we must create
+			 * the traderOrders and tradeOrderfills that have been request and
+			 * that do not already exist. Note executionDetails only contains
+			 * executions for tradeOrders that do not exist.
+			 */
+			Tradestrategy tradestrategy = m_tradePersistentModel
+					.findTradestrategyById(reqId);
+
+			if (null != tradestrategy) {
+
 				/*
 				 * Internal created order have Integer.MAX_VALUE or are negative
-				 * as their values change these to minOrderId -1 which is 1 less
-				 * than the minOrderId by TM.
+				 * as their value, so change the m_orderId to nextOrderKey.
 				 */
 				int nextOrderKey = orderKey.getAndIncrement();
 				for (String key : executionDetails.keySet()) {
@@ -1196,7 +1201,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					} else {
 						continue;
 					}
-
+					// Multiple executions for the same order.
 					for (String key1 : executionDetails.keySet()) {
 						Execution execution1 = executionDetails.get(key1);
 						if (execution1.m_permId == execution.m_permId) {
@@ -1205,12 +1210,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 					nextOrderKey = orderKey.getAndIncrement();
 				}
+
+				/*
+				 * Create the tradeOrder for these executions.
+				 */
 				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
 				for (String key : executionDetails.keySet()) {
 					Execution execution = executionDetails.get(key);
 
 					if (tradeOrders.containsKey(execution.m_orderId))
 						continue;
+
 					TradeOrderfill tradeOrderfill = new TradeOrderfill();
 					TWSBrokerModel.populateTradeOrderfill(execution,
 							tradeOrderfill);
@@ -1265,6 +1275,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							TradeOrderfill tradeOrderfill = new TradeOrderfill();
 							TWSBrokerModel.populateTradeOrderfill(execution,
 									tradeOrderfill);
+							/*
+							 * Commissions are sent through via the
+							 * commissionReport call. This happens when an order
+							 * is executed or a call to OnReqExecutions.
+							 */
 							CommissionReport comms = commissionDetails.get(key);
 
 							if (null != comms) {
@@ -2737,7 +2752,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	}
 
 	/**
-	 * Method commissionReport.
+	 * Method commissionReport. This will only ever be called when an execution
+	 * occurs or when OnRequestExecutions is called for this clientID.
 	 * 
 	 * @param commsReport
 	 *            com.ib.client.CommissionReport
