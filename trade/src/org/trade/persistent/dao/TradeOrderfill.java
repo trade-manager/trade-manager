@@ -219,7 +219,7 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	 * 
 	 * @return BigDecimal
 	 */
-	@Column(name = "commission", precision = 10)
+	@Column(name = "commission", precision = 11)
 	public BigDecimal getCommission() {
 		return this.commission;
 	}
