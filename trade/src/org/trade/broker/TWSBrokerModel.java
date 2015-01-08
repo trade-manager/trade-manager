@@ -422,6 +422,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 			if (m_client.isConnected()) {
 				tradeOrdersExecutions.clear();
+				commissionDetails.clear();
+				executionDetails.clear();
 				Integer reqId = this.getNextRequestId();
 				m_client.reqExecutions(reqId, TWSBrokerModel
 						.getIBExecutionFilter(m_clientId, mktOpenDate, null,
@@ -1166,6 +1168,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	public void execDetailsEnd(int reqId) {
 
 		try {
+
 			for (Integer key : tradeOrdersExecutions.keySet()) {
 				TradeOrder tradeorder = tradeOrdersExecutions.get(key);
 				if (tradeorder.getIsFilled()) {
@@ -1176,138 +1179,149 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					}
 				}
 			}
-
 			if (!executionDetails.isEmpty()) {
+
 				/*
 				 * If the tradestrategy exists for this request then we must
 				 * create the traderOrders and tradeOrderfills that have been
 				 * request and that do not already exist. Note executionDetails
 				 * only contains executions for tradeOrders that do not exist.
 				 */
-				Tradestrategy tradestrategy = m_tradePersistentModel
-						.findTradestrategyById(reqId);
-				
-				/*
-				 * Internal created order have Integer.MAX_VALUE or are negative
-				 * as their value, so change the m_orderId to nextOrderKey.
-				 */
-				int nextOrderKey = orderKey.getAndIncrement();
-				for (String key : executionDetails.keySet()) {
-					Execution execution = executionDetails.get(key);
-					if (execution.m_orderId == Integer.MAX_VALUE
-							|| execution.m_orderId < 0) {
-						execution.m_orderId = nextOrderKey;
-					} else {
-						continue;
-					}
-					// Multiple executions for the same order.
-					for (String key1 : executionDetails.keySet()) {
-						Execution execution1 = executionDetails.get(key1);
-						if (execution1.m_permId == execution.m_permId) {
-							execution1.m_orderId = nextOrderKey;
-						}
-					}
-					nextOrderKey = orderKey.getAndIncrement();
-				}
 
-				/*
-				 * Create the tradeOrder for these executions.
-				 */
-				ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
-				for (String key : executionDetails.keySet()) {
-					Execution execution = executionDetails.get(key);
+				if (m_tradePersistentModel.existTradestrategyById(reqId)) {
 
-					if (tradeOrders.containsKey(execution.m_orderId))
-						continue;
-
-					TradeOrderfill tradeOrderfill = new TradeOrderfill();
-					TWSBrokerModel.populateTradeOrderfill(execution,
-							tradeOrderfill);
-
-					String action = Action.SELL;
-					if (Side.BOT.equals(execution.m_side))
-						action = Action.BUY;
-
-					Integer quantity = tradeOrderfill.getQuantity();
-					TradeOrder tradeOrder = new TradeOrder(tradestrategy,
-							action, tradeOrderfill.getTime(), OrderType.MKT,
-							quantity, null, null, OverrideConstraints.YES,
-							TimeInForce.DAY, TriggerMethod.DEFAULT);
-					tradeOrder.setClientId(execution.m_clientId);
-					tradeOrder.setPermId(execution.m_permId);
-					tradeOrder.setOrderKey(execution.m_orderId);
-					for (String key1 : executionDetails.keySet()) {
-						Execution execution1 = executionDetails.get(key1);
-						if (execution1.m_permId == execution.m_permId
-								&& !execution1.m_execId
-										.equals(execution.m_execId)) {
-							TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
-							TWSBrokerModel.populateTradeOrderfill(execution1,
-									tradeOrderfill1);
-							quantity = quantity + tradeOrderfill1.getQuantity();
-							// Make sure the create date for the order is the
-							// earliest time.
-							if (tradeOrder.getCreateDate().after(
-									tradeOrderfill1.getTime()))
-								tradeOrder.setCreateDate(tradeOrderfill1
-										.getTime());
-						}
-					}
-					tradeOrder.setQuantity(quantity);
-					tradeOrders.put(tradeOrder.getOrderKey(), tradeOrder);
-				}
-
-				List<TradeOrder> orders = new ArrayList<TradeOrder>();
-				for (Integer orderKey : tradeOrders.keySet()) {
-					TradeOrder tradeOrder = tradeOrders.get(orderKey);
-					orders.add(tradeOrder);
-				}
-				Collections.sort(orders, TradeOrder.CREATE_ORDER);
-
-				for (TradeOrder tradeOrder : orders) {
-					tradeOrder = m_tradePersistentModel
-							.persistTradeOrder(tradeOrder);
-					double totalComms = 0;
+					Tradestrategy tradestrategy = m_tradePersistentModel
+							.findTradestrategyById(reqId);
+					/*
+					 * Internal created order have Integer.MAX_VALUE or are
+					 * negative as their value, so change the m_orderId to
+					 * nextOrderKey.
+					 */
+					int nextOrderKey = orderKey.getAndIncrement();
 					for (String key : executionDetails.keySet()) {
 						Execution execution = executionDetails.get(key);
-						if (tradeOrder.getPermId().equals(execution.m_permId)) {
-							TradeOrderfill tradeOrderfill = new TradeOrderfill();
-							TWSBrokerModel.populateTradeOrderfill(execution,
-									tradeOrderfill);
-							/*
-							 * Commissions are sent through via the
-							 * commissionReport call. This happens when an order
-							 * is executed or a call to OnReqExecutions.
-							 */
-							CommissionReport comms = commissionDetails.get(key);
-
-							if (null != comms) {
-								totalComms = totalComms + comms.m_commission;
-								tradeOrderfill.setCommission(new BigDecimal(
-										comms.m_commission));
-							}
-							tradeOrderfill.setTradeOrder(tradeOrder);
-							tradeOrder.addTradeOrderfill(tradeOrderfill);
+						if (execution.m_orderId == Integer.MAX_VALUE
+								|| execution.m_orderId < 0) {
+							execution.m_orderId = nextOrderKey;
+						} else {
+							continue;
 						}
+						// Multiple executions for the same order.
+						for (String key1 : executionDetails.keySet()) {
+							Execution execution1 = executionDetails.get(key1);
+							if (execution1.m_permId == execution.m_permId) {
+								execution1.m_orderId = nextOrderKey;
+							}
+						}
+						nextOrderKey = orderKey.getAndIncrement();
 					}
-					tradeOrder.setCommission(new BigDecimal(totalComms));
-					tradeOrder = m_tradePersistentModel
-							.persistTradeOrderfill(tradeOrder);
-					TradeOrder transientInstance = m_tradePersistentModel
-							.findTradeOrderByKey(tradeOrder.getOrderKey());
-					// Let the controller know an order was filled
-					if (tradeOrder.getIsFilled())
-						this.fireTradeOrderFilled(transientInstance);
+
+					/*
+					 * Create the tradeOrder for these executions.
+					 */
+					ConcurrentHashMap<Integer, TradeOrder> tradeOrders = new ConcurrentHashMap<Integer, TradeOrder>();
+					for (String key : executionDetails.keySet()) {
+						Execution execution = executionDetails.get(key);
+
+						if (tradeOrders.containsKey(execution.m_orderId))
+							continue;
+
+						TradeOrderfill tradeOrderfill = new TradeOrderfill();
+						TWSBrokerModel.populateTradeOrderfill(execution,
+								tradeOrderfill);
+
+						String action = Action.SELL;
+						if (Side.BOT.equals(execution.m_side))
+							action = Action.BUY;
+
+						Integer quantity = tradeOrderfill.getQuantity();
+						TradeOrder tradeOrder = new TradeOrder(tradestrategy,
+								action, tradeOrderfill.getTime(),
+								OrderType.MKT, quantity, null, null,
+								OverrideConstraints.YES, TimeInForce.DAY,
+								TriggerMethod.DEFAULT);
+						tradeOrder.setClientId(execution.m_clientId);
+						tradeOrder.setPermId(execution.m_permId);
+						tradeOrder.setOrderKey(execution.m_orderId);
+						for (String key1 : executionDetails.keySet()) {
+							Execution execution1 = executionDetails.get(key1);
+							if (execution1.m_permId == execution.m_permId
+									&& !execution1.m_execId
+											.equals(execution.m_execId)) {
+								TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
+								TWSBrokerModel.populateTradeOrderfill(
+										execution1, tradeOrderfill1);
+								quantity = quantity
+										+ tradeOrderfill1.getQuantity();
+								// Make sure the create date for the order is
+								// the
+								// earliest time.
+								if (tradeOrder.getCreateDate().after(
+										tradeOrderfill1.getTime()))
+									tradeOrder.setCreateDate(tradeOrderfill1
+											.getTime());
+							}
+						}
+						tradeOrder.setQuantity(quantity);
+						tradeOrders.put(tradeOrder.getOrderKey(), tradeOrder);
+					}
+
+					List<TradeOrder> orders = new ArrayList<TradeOrder>();
+					for (Integer orderKey : tradeOrders.keySet()) {
+						TradeOrder tradeOrder = tradeOrders.get(orderKey);
+						orders.add(tradeOrder);
+					}
+					Collections.sort(orders, TradeOrder.CREATE_ORDER);
+
+					for (TradeOrder tradeOrder : orders) {
+						tradeOrder = m_tradePersistentModel
+								.persistTradeOrder(tradeOrder);
+						double totalComms = 0;
+						for (String key : executionDetails.keySet()) {
+							Execution execution = executionDetails.get(key);
+							if (tradeOrder.getPermId().equals(
+									execution.m_permId)) {
+								TradeOrderfill tradeOrderfill = new TradeOrderfill();
+								TWSBrokerModel.populateTradeOrderfill(
+										execution, tradeOrderfill);
+								/*
+								 * Commissions are sent through via the
+								 * commissionReport call. This happens when an
+								 * order is executed or a call to
+								 * OnReqExecutions.
+								 */
+								CommissionReport comms = commissionDetails
+										.get(key);
+
+								if (null != comms) {
+									totalComms = totalComms
+											+ comms.m_commission;
+									tradeOrderfill
+											.setCommission(new BigDecimal(
+													comms.m_commission));
+								}
+								tradeOrderfill.setTradeOrder(tradeOrder);
+								tradeOrder.addTradeOrderfill(tradeOrderfill);
+							}
+						}
+						tradeOrder.setCommission(new BigDecimal(totalComms));
+						tradeOrder = m_tradePersistentModel
+								.persistTradeOrderfill(tradeOrder);
+						TradeOrder transientInstance = m_tradePersistentModel
+								.findTradeOrderByKey(tradeOrder.getOrderKey());
+						// Let the controller know an order was filled
+						if (tradeOrder.getIsFilled())
+							this.fireTradeOrderFilled(transientInstance);
+					}
 				}
 			}
-
 			/*
 			 * Let the controller know there are execution details.
 			 */
 			this.fireExecutionDetailsEnd(tradeOrdersExecutions);
-
 		} catch (Exception ex) {
-			error(reqId, 3330, "Errors updating open order: " + ex.getMessage());
+			error(reqId, 3330,
+					"Error adding new open orders: " + ex.getMessage());
 		}
 	}
 

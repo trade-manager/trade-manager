@@ -365,6 +365,21 @@ public class TradePersistentModel implements PersistentModel {
 	}
 
 	/**
+	 * Method existTradestrategyById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return boolean
+	 * @see org.trade.persistent.PersistentModel#existTradestrategyById(Integer)
+	 */
+	public boolean existTradestrategyById(Integer id) {
+		Tradestrategy instance = m_tradestrategyHome.findById(id);
+		if (null == instance)
+			return false;
+		return true;
+	}
+
+	/**
 	 * Method findTradestrategyLiteById.
 	 * 
 	 * @param id

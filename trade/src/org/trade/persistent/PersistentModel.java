@@ -223,6 +223,16 @@ public interface PersistentModel {
 			throws PersistentModelException;
 
 	/**
+	 * Method existTradestrategyById.
+	 * 
+	 * @param id
+	 *            Integer
+	 * @return boolean
+	 * @see org.trade.persistent.PersistentModel#existTradestrategyById(Integer)
+	 */
+	boolean existTradestrategyById(Integer id);
+
+	/**
 	 * Method findTradestrategyLiteById.
 	 * 
 	 * @param id
