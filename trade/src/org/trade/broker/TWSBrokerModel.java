@@ -1186,6 +1186,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 */
 				Tradestrategy tradestrategy = m_tradePersistentModel
 						.findTradestrategyById(reqId);
+				
 				/*
 				 * Internal created order have Integer.MAX_VALUE or are negative
 				 * as their value, so change the m_orderId to nextOrderKey.
