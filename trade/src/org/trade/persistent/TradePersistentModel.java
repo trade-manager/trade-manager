@@ -1172,9 +1172,11 @@ public class TradePersistentModel implements PersistentModel {
 			int filledQuantity = 0;
 			for (TradeOrderfill tradeOrderfill : tradeOrder
 					.getTradeOrderfills()) {
+
 				if (null != tradeOrderfill.getCommission())
 					commission = commission
 							+ tradeOrderfill.getCommission().doubleValue();
+
 				filledQuantity = filledQuantity + tradeOrderfill.getQuantity();
 				filledValue = filledValue
 						+ (tradeOrderfill.getPrice().doubleValue() * tradeOrderfill
@@ -1203,7 +1205,16 @@ public class TradePersistentModel implements PersistentModel {
 					tradeOrder.setAverageFilledPrice(avgFillPrice);
 					tradeOrder.setFilledQuantity(filledQuantity);
 					tradeOrder.setFilledDate(filledDate);
-					tradeOrder.setCommission(commissionAmount);
+					/*
+					 * If the commission amount is greater than the TradeOrder
+					 * commission set this amount. Note tradeOrder commission
+					 * can be set via the commissionReport event i.e each
+					 * execution or by the openOrder event.
+					 */
+					if (CoreUtils.nullSafeComparator(commissionAmount,
+							tradeOrder.getCommission()) == 1)
+						tradeOrder.setCommission(commissionAmount);
+
 					tradeOrder.setLastUpdateDate(TradingCalendar
 							.getDate((new Date()).getTime()));
 				}
