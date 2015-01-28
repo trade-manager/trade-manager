@@ -1861,32 +1861,35 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						}
 						}
 					}
-					Contract contract = m_marketDataRequests.get(reqId);
-					// _log.warn("TickString ReqId: " + reqId + " Field: "
-					// + field + " String: " + value);
-					for (Tradestrategy tradestrategy : contract
-							.getTradestrategies()) {
 
-						Contract seriesContract = tradestrategy
-								.getStrategyData().getBaseCandleSeries()
-								.getContract();
-						int index = tradestrategy.getStrategyData()
-								.getBaseCandleSeries().indexOf(time);
-						if (index < 0)
-							return;
-						CandleItem candleItem = (CandleItem) tradestrategy
-								.getStrategyData().getBaseCandleSeries()
-								.getDataItem(index);
-						if (seriesContract.getLastAskPrice().doubleValue() > 0
-								&& seriesContract.getLastBidPrice()
-										.doubleValue() > 0
-								&& (price.doubleValue() <= seriesContract
-										.getLastAskPrice().doubleValue() && price
-										.doubleValue() >= seriesContract
-										.getLastBidPrice().doubleValue())) {
+					if (price.doubleValue() > 0) {
 
-							if (marketUpdateOnClose) {
-								if (price.doubleValue() > 0
+						Contract contract = m_marketDataRequests.get(reqId);
+						// _log.warn("TickString ReqId: " + reqId + " Field: "
+						// + field + " String: " + value);
+						for (Tradestrategy tradestrategy : contract
+								.getTradestrategies()) {
+
+							Contract seriesContract = tradestrategy
+									.getStrategyData().getBaseCandleSeries()
+									.getContract();
+							int index = tradestrategy.getStrategyData()
+									.getBaseCandleSeries().indexOf(time);
+							if (index < 0)
+								return;
+
+							CandleItem candleItem = (CandleItem) tradestrategy
+									.getStrategyData().getBaseCandleSeries()
+									.getDataItem(index);
+							if (seriesContract.getLastAskPrice().doubleValue() > 0
+									&& seriesContract.getLastBidPrice()
+											.doubleValue() > 0
+									&& (price.doubleValue() <= seriesContract
+											.getLastAskPrice().doubleValue() && price
+											.doubleValue() >= seriesContract
+											.getLastBidPrice().doubleValue())) {
+
+								if (marketUpdateOnClose
 										&& (price.doubleValue() != candleItem
 												.getClose())) {
 
@@ -1902,33 +1905,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									tradestrategy.getStrategyData()
 											.getBaseCandleSeries()
 											.fireSeriesChanged();
-									// _log.info("TickString Symbol: "
-									// + seriesContract.getSymbol()
-									// + " Trade Time: " + time
-									// + " Price: " + price + " Bid: "
-									// + seriesContract.getLastBidPrice()
-									// + " Ask: "
-									// + seriesContract.getLastAskPrice());
-								}
-							} else {
-								if (price.doubleValue() > 0
-
-										&& (price.doubleValue() > candleItem
-												.getHigh() || price
-												.doubleValue() < candleItem
-												.getLow())) {
-									candleItem.setClose(price.doubleValue());
-									candleItem.setLastUpdateDate(time);
 									/*
-									 * Note if you want you can fire the series
-									 * change here this will fire runStrategy.
-									 * Could cause problems if the method is not
-									 * synchronized in the strategy when the
-									 * stock is fast running.
+									 * This can be used to update the charts.
+									 * NOTE not recommended for performance
+									 * reasons chart events are slow to update..
 									 */
-									tradestrategy.getStrategyData()
-											.getBaseCandleSeries()
-											.fireSeriesChanged();
+									// tradestrategy.getStrategyData()
+									// .getCandleDataset().getSeries(0)
+									// .fireSeriesChanged();
 									// _log.info("TickString Symbol: "
 									// + seriesContract.getSymbol()
 									// + " Trade Time: " + time
@@ -1936,6 +1920,43 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									// + seriesContract.getLastBidPrice()
 									// + " Ask: "
 									// + seriesContract.getLastAskPrice());
+								} else {
+									if (price.doubleValue() > candleItem
+											.getHigh()
+											|| price.doubleValue() < candleItem
+													.getLow()) {
+										candleItem
+												.setClose(price.doubleValue());
+										candleItem.setLastUpdateDate(time);
+										/*
+										 * Note if you want you can fire the
+										 * series change here this will fire
+										 * runStrategy. Could cause problems if
+										 * the method is not synchronized in the
+										 * strategy when the stock is fast
+										 * running.
+										 */
+										tradestrategy.getStrategyData()
+												.getBaseCandleSeries()
+												.fireSeriesChanged();
+										/*
+										 * This can be used to update the
+										 * charts. NOTE not recommended for
+										 * performance reasons chart events are
+										 * slow to update..
+										 */
+										// tradestrategy.getStrategyData()
+										// .getCandleDataset().getSeries(0)
+										// .fireSeriesChanged();
+										//
+										// _log.info("TickString Symbol: "
+										// + seriesContract.getSymbol()
+										// + " Trade Time: " + time
+										// + " Price: " + price + " Bid: "
+										// + seriesContract.getLastBidPrice()
+										// + " Ask: "
+										// + seriesContract.getLastAskPrice());
+									}
 								}
 							}
 						}

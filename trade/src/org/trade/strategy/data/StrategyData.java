@@ -142,7 +142,7 @@ public class StrategyData extends Worker {
 				/*
 				 * Lock until a candle arrives. First time in we process the
 				 * current candle. This thread is processing candles behind the
-				 * main broker que thread. So the lastBaseCandleProcessed will
+				 * main broker queue thread. So the lastBaseCandleProcessed will
 				 * increase in value until we catch up then the thread will lock
 				 * until a new candle arrives.
 				 */
