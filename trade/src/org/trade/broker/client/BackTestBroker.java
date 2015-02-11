@@ -552,21 +552,24 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		if (order.getCreateDate().after(candle.getLastUpdateDate())) {
 			return null;
 		}
-		/*
-		 * There must be enough volume to fill the unfilled quantity. TODO add
-		 * logic to handle partial fills.
-		 */
-		if (candle.getVolume() < (order.getQuantity() - order
-				.getFilledQuantity())) {
-			return null;
-		}
 
 		/*
 		 * Use the close price for market orders as the candle has been
-		 * processed by the Strategy at this point.
+		 * processed by the Strategy at this point. Note assume mkt orders are
+		 * always filled.
 		 */
 		if (OrderType.MKT.equals(order.getOrderType()))
 			return candle.getClose();
+
+		/*
+		 * There must be enough volume to fill the unfilled quantity. For none
+		 * market orders.
+		 * 
+		 * TODO add logic to handle partial fills.
+		 */
+		if (candle.getVolume() < (order.getQuantity() - order
+				.getFilledQuantity()))
+			return null;
 
 		if (Action.SELL.equals(order.getAction())) {
 			if (OrderType.STP.equals(order.getOrderType())) {
