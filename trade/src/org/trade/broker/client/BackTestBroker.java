@@ -553,10 +553,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 			return null;
 		}
 		/*
-		 * There must be enough volume to fill the unfilled quantity.
+		 * There must be enough volume to fill the unfilled quantity. TODO add
+		 * logic to handle partial fills.
 		 */
-		if ((order.getQuantity() - order.getFilledQuantity()) > candle
-				.getVolume()) {
+		if (candle.getVolume() < (order.getQuantity() - order
+				.getFilledQuantity())) {
 			return null;
 		}
 
