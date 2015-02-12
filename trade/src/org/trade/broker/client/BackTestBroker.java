@@ -567,8 +567,7 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 		 * 
 		 * TODO add logic to handle partial fills.
 		 */
-		if (candle.getVolume() < (order.getQuantity() - order
-				.getFilledQuantity()))
+		if (candle.getVolume() < order.getQuantity())
 			return null;
 
 		if (Action.SELL.equals(order.getAction())) {
