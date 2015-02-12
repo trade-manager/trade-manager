@@ -32,3 +32,23 @@ tradingday.open desc,
 contract.symbol asc,
 candle.barSize desc,
 candle.startPeriod asc;
+
+# Query to check 1min bar and 5min bar open prices from 1/1/2015
+SELECT 
+a.idContract,
+a.startPeriod,
+a.open 5minOpen,
+b.open 1minOpen,
+b.close 1minClose,
+b.volume 1minVolume,
+(select close from candle c where c.idCandle = (b.idCandle -1)) as preclose
+FROM 
+tradeprod.candle a inner join tradeprod.candle b on a.idContract = b.idContract
+where
+a.idcontract <>1099
+and a.startPeriod = b.startPeriod
+and a.barSize = 300 
+and b.barSize = 60
+and b.volume <> 0 
+and ( a.open > (b.open + 0.01) or a.open < (b.open -0.01))
+and a.idTradingday > 950;
