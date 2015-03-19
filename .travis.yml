@@ -1,5 +1,6 @@
-language: java 
+language: java
+install: ant all
 jdk:
- - oraclejdk8
- - oraclejdk7
+  - oraclejdk8
+  - oraclejdk7
  
