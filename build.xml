@@ -9,9 +9,18 @@
 		<property name="build" value="${component.base}/bin" />
 		<property name="dist" value="${component.base}/dist" />
 		<property name="srctrade" value="${component.base}/trade/src" />
+		<property name="srccoretest" value="${component.base}/core/test" />
+		<property name="srctradetest" value="${component.base}/trade/test" />
 		<property name="srccore" value="${component.base}/core/src" />
 		<property name="config" value="${component.base}/config" />
+		<property name="lib" location="${component.base}/lib" />
+		<property name="reports" location="${component.base}/reports" />
+		<property name="db" location="${component.base}/db" />
+
+		<!-- the names of various distributable files -->
 		<property name="name" value="${dist}/${component.name.base}-${component.name.version}" />
+		<property name="name-test" value="${component.name.base}Test-${component.name.version}.jar" />
+		<property name="war_name" value="${component.name.base}Test-${component.name.version}.war" />
 		<!-- Edit the next line to link to the swt library you want, see README file in the swt folder -->
 		<path id="build.classpath">
 			<pathelement location="${build}" />
@@ -57,6 +66,8 @@
 	</target>
 	<!-- Compile the TraderManager classes -->
 	<target name="compile" depends="initialise" description="Compile and package TWS source code.">
+		<!-- Create the time stamp -->
+		<tstamp />
 		<!-- create a temp build directory -->
 		<delete dir="${build}" />
 		<mkdir dir="${build}" />
@@ -91,12 +102,127 @@
 				<include name="**/*.properties" />
 			</fileset>
 		</jar>
-		<!-- delete the temp directory -->
-		<delete dir="${build}" />
-		<!-- With just specific files <zip destfile="${name}.zip" basedir="${base}"  /> 
-	      <zip destfile="${name}.zip" basedir="${base}"  excludes="src/**, test/**, config.properties, *.log*" />	
-		-->
+		<!-- delete the temp directory 
 		<zip destfile="${name}.zip" basedir="${base}" excludes="reports/**, .git/**, .gitignore, config.properties, *.log*" />
+		-->
+	</target>
+	<target name="clean-test" depends="compile" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${reports}" />
+	</target>
+
+	<target name="initialise-test" depends="clean-test" description="initialize the build environment">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create directory structures -->
+		<mkdir dir="${build}" />
+		<mkdir dir="${reports}" />
+		<mkdir dir="${reports}/raw/" />
+		<mkdir dir="${reports}/html/" />
+	</target>
+	<target name="cleanDB" description="clean the database">
+		<input message="Do you really want to delete all data in the database (y/n)?" validargs="y,n" addproperty="do.delete" />
+		<condition property="do.abort">
+			<equals arg1="n" arg2="${do.delete}" />
+		</condition>
+		<fail if="do.abort">Build aborted by user.</fail>
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="mysql-connector-java-5.1.26-bin.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="${component.base}/db/TradeManagerData.sql" />
+		</sql>
+	</target>
+	<target name="compile-test" depends="initialise-test" description="compile test source code ">
+		<javac srcdir="${srccoretest}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+			<compilerarg value="-Xlint:none" />
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${dist}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<javac srcdir="${srctradetest}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+			<compilerarg value="-Xlint:none" />
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${dist}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	<target name="dist-test" depends="compile-test" description="generate the distributable files ">
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		<jar jarfile="${dist}/${name-test}" basedir="${build}" compress="true" >
+			
+			<fileset dir="${config}">
+				<include name="**/*.properties" />
+			</fileset>
+			<fileset dir="${srctrade}">
+				<include name="**/*.gif" />
+				<include name="**/*.ico" />
+				<include name="**/*.xml" />
+				<include name="**/*.sql" />
+				<include name="**/*.html" />
+				<include name="**/*.properties" />
+			</fileset>
+			<fileset dir="${srccore}">
+				<include name="**/*.gif" />
+				<include name="**/*.ico" />
+				<include name="**/*.properties" />
+			</fileset>
+		</jar>
+		<!-- delete the temp directory	-->
+		<delete dir="${build}" />
+	</target>
+	<target name="run-tests" depends="dist-test" description="run your test suite">
+		<junit printsummary="yes" haltonfailure="no" showoutput="yes" fork="yes">
+			<jvmarg value="-Duser.timezone=${market.timezone}" />
+			<jvmarg value="-Dlog4j.configuration=file:config/config.properties" />
+			<classpath>
+				<pathelement path="${component.base}" />
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${dist}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<batchtest fork="yes" todir="${reports}/raw/">
+				<formatter type="xml" />
+				<!--
+				<fileset dir="${srctradetest}">
+					<include name="**/*.java" />
+				</fileset>
+				-->
+				<fileset dir="${srccoretest}">
+					<include name="/org/trade/core/util/*.java" />
+				</fileset>
+				<fileset dir="${config}">
+					<include name="**/*.properties" />
+				</fileset>
+				<fileset dir="${db}">
+					<include name="**/*.csv" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	<target name="test" depends="run-tests">
+		<junitreport todir="${reports}">
+			<fileset dir="${reports}/raw/">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports}\html\" />
+		</junitreport>
 	</target>
 	<target name="createTables" depends="initialise">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
@@ -135,7 +261,7 @@
 		</sql>
 	</target>
 	<target name="deleteTransactionData" depends="initialise" description="Delete the database of all transaction data.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" >
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/DeleteTransactionData.sql" />
 		</sql>
@@ -152,7 +278,7 @@
 			<transaction src="../db/DeleteAccountRuleData.sql" />
 		</sql>
 	</target>
-	<target name="all" depends="compile" description="Compiles and package in jar files all the Trade Manager related code."></target>
-	<target name="test" depends="all" description="Compiles and package in jar files all the Trade Manager related code."></target>
+	<target name="all" depends="dist-test" description="Compiles and package in jar files all the Trade Manager related code.">
+	</target>
 </project>
 
