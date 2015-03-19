@@ -152,7 +152,7 @@
 			<transaction src="../db/DeleteAccountRuleData.sql" />
 		</sql>
 	</target>
-	<target name="test" depends="compile" description="Compiles and package in jar files all the Trade Manager related code.">
-	</target>
+	<target name="all" depends="compile" description="Compiles and package in jar files all the Trade Manager related code."></target>
+	<target name="test" depends="all" description="Compiles and package in jar files all the Trade Manager related code."></target>
 </project>
 
