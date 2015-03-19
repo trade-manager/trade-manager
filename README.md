@@ -1,7 +1,6 @@
 
 
-Source and Documentation 2.1_18 
-Build Date: 03/18/2015 12:13 PST
+Source and Documentation 2.1. Please see Wiki for Install instructions and Eclipse setup.
 
 1/ Added functionality to add commissionReport call. This require adding commission to TradeOrderfill table. Run target UpgradeDB to update current databases.
 
