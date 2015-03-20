@@ -65,9 +65,12 @@ public class ConfigProperties {
 			.getLogger(ConfigProperties.class);
 
 	public final static String MANDATORY_PROPERTY = "mandatory_property";
+	private static String _filename = null;
 
-	private final static String ENVIRONMENT_VARIABLE_CONTAINING_INSTALLATION_HOME = "trade.install.dir";
-	private final static String ENVIRONMENT_VARIABLE_PROPERTY_FILE = "config.properties";
+	// This is loaded as a system resource from the current core package
+	private final static String ENVIRONMENT_VARIABLE_SYSTEM_PROPERTY_FILE = "config.properties";;
+	private final static String DEFAULT_PROPERTY_FILE = "config.properties";
+	private final static String ENVIRONMENT_VARIABLE_PROPERTY_FILE = "log4j.configuration";
 	private Properties m_properties = null;
 	private static ConfigProperties m_theConfig = new ConfigProperties();
 
@@ -89,17 +92,21 @@ public class ConfigProperties {
 	 * @return String
 	 */
 	public static String getDeploymentPropertyFileName() {
-		String filename = null;
 
 		try {
-			File file = new File(
-					System.getProperty(ENVIRONMENT_VARIABLE_CONTAINING_INSTALLATION_HOME),
-					ENVIRONMENT_VARIABLE_PROPERTY_FILE);
-			filename = file.toString();
+			if (null == _filename) {
+				_filename = System.getProperty(
+						ENVIRONMENT_VARIABLE_PROPERTY_FILE,
+						DEFAULT_PROPERTY_FILE);
+				_filename = _filename.replaceFirst("file:", "");
+				File file = new File(_filename);
+				_filename = file.toString();
+			}
+
 		} catch (Throwable e) {
 			// do nothing as we are an applet !!!
 		}
-		return filename;
+		return _filename;
 	}
 
 	/**
@@ -137,7 +144,7 @@ public class ConfigProperties {
 	 * @return String
 	 */
 	public static String getSystemPropertyFileName() {
-		return ENVIRONMENT_VARIABLE_PROPERTY_FILE;
+		return ENVIRONMENT_VARIABLE_SYSTEM_PROPERTY_FILE;
 	}
 
 	/**

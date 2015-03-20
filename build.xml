@@ -189,7 +189,7 @@
 	<target name="run-tests" depends="dist-test" description="run your test suite">
 		<junit printsummary="yes" haltonfailure="no" showoutput="yes" fork="yes">
 			<jvmarg value="-Duser.timezone=${market.timezone}" />
-			<jvmarg value="-Dlog4j.configuration=file:config/config.properties" />
+			<jvmarg value="-Dlog4j.configuration=file:${config}/config.properties" />
 			<classpath>
 				<pathelement path="${component.base}" />
 				<fileset dir="${lib}">
