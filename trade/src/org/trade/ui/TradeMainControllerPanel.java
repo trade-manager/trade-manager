@@ -139,8 +139,8 @@ import org.trade.ui.tradingday.TradingdayPanel;
  * 
  * org.trade.strategy.data.StrategyData
  * 
- * This class contains datasets for a specific strategy. The datasets are a
- * BaseCandleSeries this is the dataset that received data from the TWS API and
+ * This class contains data sets for a specific strategy. The data sets are a
+ * BaseCandleSeries this is the data set that received data from the TWS API and
  * is listened to by any running strategies. The second Candle series is used to
  * display charts. Other series are used for indicators that have been setup for
  * the strategy.
