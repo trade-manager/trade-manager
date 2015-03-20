@@ -185,6 +185,6 @@ INSERT INTO entrylimit (idEntryLimit,startPrice,endPrice,limitAmount, percentOfP
 COMMIT;
 
 
-INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, lastUpdateDate, version) VALUES (1, 'Paper','Paper Account','Paper trading account', 1, CURRENT_TIME(), 0);
+INSERT INTO portfolio (idPortfolio, name, alias, description, isDefault, lastUpdateDate, version) VALUES (1, 'Paper','Paper Account','Paper trading account', 1, NOW(), 0);
 
 COMMIT;
