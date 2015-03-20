@@ -19,11 +19,6 @@ SET CLASSPATH=.;%JAVA_HOME%/jre/lib/rt.jar;%JAVA_HOME%/lib/tools.jar;ant/lib/*;
 echo Path=%PATH%
 echo ClassPath=%CLASSPATH%
 
-rem If the config.properties does not exit in the app dir copy it from the config dir.
-if not exist config.properties (
-copy config\config.properties .
-echo Using default config.properties from /config dir.)
-
 SET ANT_BUILD_FILE=ant/build.xml
 rem SET ANT_BUILD_FILE=ant/buildtest.xml
 

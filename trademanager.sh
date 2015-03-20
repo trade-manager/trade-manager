@@ -14,6 +14,12 @@ PATH="$JAVA_HOME/bin:$PATH"
 # tools.jar is needed for the javac compiler
 LOCALCLASSPATH="$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/tools.jar:lib/*:dist/*"
 
+if ! [ -f config.properties ];
+then
+cp config/config.properties .
+echo "Using default config.properties from /config dir."
+fi
+
 # set the timezone to be your markets zone so NYSE=America/New_York London=GMT
 TIMEZONE=America/New_York
 

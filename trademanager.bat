@@ -21,6 +21,11 @@ PATH=%JAVA_HOME%/bin;%PATH%
 rem java runtime lib
 SET CLASSPATH=%JAVA_HOME%/jre/lib/rt.jar;%JAVA_HOME%/lib/tools.jar;lib/*;dist/*;
 
+rem If the config.properties does not exit in the app dir copy it from the config dir.
+if not exist config.properties (
+copy config\config.properties .
+echo Using default config.properties from /config dir.)
+
 rem set the timezone to be your markets zone so NYSE=America/New_York London=Europe/London
 SET TIMEZONE=America/New_York
 

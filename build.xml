@@ -201,11 +201,9 @@
 			</classpath>
 			<batchtest fork="yes" todir="${reports}/raw/">
 				<formatter type="xml" />
-				<!--
 				<fileset dir="${srctradetest}">
 					<include name="**/*.java" />
 				</fileset>
-				-->
 				<fileset dir="${srccoretest}">
 					<include name="**/*.java" />
 				</fileset>
