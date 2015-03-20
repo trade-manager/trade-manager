@@ -121,12 +121,14 @@
 		<mkdir dir="${reports}/raw/" />
 		<mkdir dir="${reports}/html/" />
 	</target>
-	<target name="cleanDB" description="clean the database">
+	<target name="cleanDB" depends="createDB" description="clean the database">
+		<!--
 		<input message="Do you really want to delete all data in the database (y/n)?" validargs="y,n" addproperty="do.delete" />
 		<condition property="do.abort">
 			<equals arg1="n" arg2="${do.delete}" />
 		</condition>
 		<fail if="do.abort">Build aborted by user.</fail>
+		-->
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath>
 				<fileset dir="${lib}">
@@ -160,7 +162,7 @@
 			</classpath>
 		</javac>
 	</target>
-	<target name="dist-test" depends="compile-test" description="generate the distributable files ">
+	<target name="dist-test" depends="compile-test, cleanDB" description="generate the distributable files ">
 		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
 		<jar jarfile="${dist}/${name-test}" basedir="${build}" compress="true" >
 			
@@ -205,7 +207,7 @@
 				</fileset>
 				-->
 				<fileset dir="${srccoretest}">
-					<include name="/org/trade/core/util/*.java" />
+					<include name="**/*.java" />
 				</fileset>
 				<fileset dir="${config}">
 					<include name="**/*.properties" />
@@ -227,31 +229,31 @@
 	<target name="createTables" depends="initialise">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/TradeManagerDDL.sql" />
+			<transaction src="./db/TradeManagerDDL.sql" />
 		</sql>
 	</target>
 	<target name="createDB" depends="createUser" description="Creates the database and inserts default data">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/TradeManagerData.sql" />
+			<transaction src="./db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="upgradeDB" depends="initialise" description="Upgrade the database to the latest version.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/upgradeDB-2.1_17_to_2.1_18.sql" />
+			<transaction src="./db/upgradeDB-2.1_17_to_2.1_18.sql" />
 		</sql>
 	</target>
 	<target name="addStrategyData" depends="initialise" description="Add a new strategy and associated data.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/StrategyData.sql" />
+			<transaction src="./db/StrategyData.sql" />
 		</sql>
 	</target>
 	<target name="createUser" depends="createTables">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" delimiter="//">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/DropCreateUserProc.sql" />
+			<transaction src="./db/DropCreateUserProc.sql" />
 		</sql>
 	</target>
 	<target name="resetDefaultData" depends="initialise" description="Deletes all data in the database and sets up default data.">
