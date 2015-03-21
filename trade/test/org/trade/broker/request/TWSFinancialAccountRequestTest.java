@@ -39,8 +39,11 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
@@ -49,22 +52,31 @@ import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Portfolio;
-
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.ui.TradeAppLoadConfig;
 
 /**
  */
-public class TWSFinancialAccountRequestTest extends TestCase {
+public class TWSFinancialAccountRequestTest {
 
 	private PersistentModel m_tradePersistentModel = null;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		TradeAppLoadConfig.loadAppProperties();
 		m_tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
@@ -73,9 +85,10 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		Aspects portfolioAccounts = m_tradePersistentModel
 				.findAspectsByClassName(PortfolioAccount.class.getName());
 		for (Aspect aspect : portfolioAccounts.getAspect()) {
@@ -87,6 +100,15 @@ public class TWSFinancialAccountRequestTest extends TestCase {
 		for (Aspect aspect : accounts.getAspect()) {
 			m_tradePersistentModel.removeAspect(aspect);
 		}
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

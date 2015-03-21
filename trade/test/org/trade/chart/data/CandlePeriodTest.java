@@ -44,6 +44,10 @@ import java.util.TimeZone;
 import junit.framework.TestCase;
 
 import org.jfree.data.time.RegularTimePeriod;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +66,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  */
-public class CandlePeriodTest extends TestCase {
+public class CandlePeriodTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandlePeriodTest.class);
@@ -71,11 +75,21 @@ public class CandlePeriodTest extends TestCase {
 	private Tradestrategy tradestrategy = null;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		TradeAppLoadConfig.loadAppProperties();
 		tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
@@ -86,10 +100,20 @@ public class CandlePeriodTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		TradestrategyTest.clearDBData();
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

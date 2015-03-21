@@ -42,6 +42,10 @@ import java.util.Vector;
 
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +80,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  */
-public class AbstractStrategyTest extends TestCase {
+public class AbstractStrategyTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(AbstractStrategyTest.class);
@@ -90,11 +94,21 @@ public class AbstractStrategyTest extends TestCase {
 	private StrategyRuleTest strategyProxy = null;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
 			// m_brokerModel = (BrokerModel)
@@ -141,12 +155,22 @@ public class AbstractStrategyTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		m_brokerModel.onDisconnect();
 		strategyProxy.cancel();
 		TradestrategyTest.clearDBData();
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

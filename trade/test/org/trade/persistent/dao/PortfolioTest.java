@@ -37,12 +37,14 @@ package org.trade.persistent.dao;
 
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
-
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.dictionary.valuetype.DAOPortfolio;
@@ -50,29 +52,49 @@ import org.trade.ui.TradeAppLoadConfig;
 
 /**
  */
-public class PortfolioTest extends TestCase {
+public class PortfolioTest {
 
 	private AspectHome aspectHome = new AspectHome();
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		TradeAppLoadConfig.loadAppProperties();
 	}
 
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		Aspects accounts = aspectHome.findByClassName(Account.class.getName());
 		for (Aspect aspect : accounts.getAspect()) {
 			aspectHome.remove(aspect);
 		}
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

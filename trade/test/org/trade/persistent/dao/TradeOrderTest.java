@@ -35,12 +35,18 @@
  */
 package org.trade.persistent.dao;
 
+import static org.junit.Assert.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +69,7 @@ import com.ib.client.Execution;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class TradeOrderTest extends TestCase {
+public class TradeOrderTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradeOrderTest.class);
@@ -75,11 +81,21 @@ public class TradeOrderTest extends TestCase {
 	private Integer clientId = null;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		TradeAppLoadConfig.loadAppProperties();
 		clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
 		tradeOrderHome = new TradeOrderHome();
@@ -92,10 +108,20 @@ public class TradeOrderTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		TradestrategyTest.clearDBData();
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

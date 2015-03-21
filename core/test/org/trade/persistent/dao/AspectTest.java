@@ -35,8 +35,13 @@
  */
 package org.trade.persistent.dao;
 
+import static org.junit.Assert.*;
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +55,7 @@ import org.trade.core.dao.Aspects;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class AspectTest extends TestCase {
+public class AspectTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(AspectTest.class);
@@ -58,21 +63,40 @@ public class AspectTest extends TestCase {
 	AspectHome aspectHome = null;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		aspectHome = new AspectHome();
 	}
 
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
+	}
 
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

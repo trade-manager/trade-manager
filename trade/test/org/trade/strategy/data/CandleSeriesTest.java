@@ -2,6 +2,10 @@ package org.trade.strategy.data;
 
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +13,7 @@ import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
 import org.trade.ui.TradeAppLoadConfig;
 
-public class CandleSeriesTest extends TestCase {
+public class CandleSeriesTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandleSeriesTest.class);
@@ -18,11 +22,21 @@ public class CandleSeriesTest extends TestCase {
 	private Tradestrategy tradestrategy = null;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
@@ -35,10 +49,20 @@ public class CandleSeriesTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		TradestrategyTest.clearDBData();
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

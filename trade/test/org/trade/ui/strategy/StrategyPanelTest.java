@@ -21,6 +21,10 @@ import javax.swing.JScrollPane;
 import jsyntaxpane.DefaultSyntaxKit;
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +46,7 @@ import org.trade.ui.base.StreamEditorPane;
 
 /**
  */
-public class StrategyPanelTest extends TestCase {
+public class StrategyPanelTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(StrategyPanelTest.class);
@@ -55,11 +59,21 @@ public class StrategyPanelTest extends TestCase {
 	private String m_tmpDir = "temp";
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
 			m_templateName = ConfigProperties
@@ -98,12 +112,22 @@ public class StrategyPanelTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		File dir = new File(m_tmpDir);
 		StrategyPanel.deleteDir(dir);
 		TradestrategyTest.clearDBData();
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

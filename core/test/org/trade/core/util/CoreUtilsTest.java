@@ -35,6 +35,8 @@
  */
 package org.trade.core.util;
 
+import static org.junit.Assert.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -44,6 +46,10 @@ import javax.swing.Timer;
 
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +61,7 @@ import org.trade.core.valuetype.Money;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class CoreUtilsTest extends TestCase {
+public class CoreUtilsTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CoreUtilsTest.class);
@@ -63,19 +69,39 @@ public class CoreUtilsTest extends TestCase {
 	private static final int SCALE = 5;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 	}
 
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

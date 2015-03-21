@@ -35,8 +35,13 @@
  */
 package org.trade.core.valuetype;
 
+import static org.junit.Assert.*;
 import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,27 +52,45 @@ import org.slf4j.LoggerFactory;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class ValueTypeTest extends TestCase {
+public class ValueTypeTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(ValueTypeTest.class);
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
-
+	@Before
+	public void setUp() throws Exception {
 	}
 
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
+	}
 
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

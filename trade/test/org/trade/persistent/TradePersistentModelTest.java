@@ -35,6 +35,8 @@
  */
 package org.trade.persistent;
 
+import static org.junit.Assert.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +44,10 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +103,7 @@ import com.ib.client.Execution;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class TradePersistentModelTest extends TestCase {
+public class TradePersistentModelTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradePersistentModelTest.class);
@@ -108,11 +114,21 @@ public class TradePersistentModelTest extends TestCase {
 	private Integer clientId = null;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		TradeAppLoadConfig.loadAppProperties();
 		clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
 		this.tradePersistentModel = (PersistentModel) ClassFactory
@@ -124,10 +140,20 @@ public class TradePersistentModelTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		TradestrategyTest.clearDBData();
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test
