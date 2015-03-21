@@ -43,6 +43,10 @@ import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
 import org.jfree.data.time.RegularTimePeriod;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +72,7 @@ import org.trade.ui.TradeAppLoadConfig;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class BrokerModelTest extends TestCase {
+public class BrokerModelTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(BrokerModelTest.class);
@@ -83,11 +87,21 @@ public class BrokerModelTest extends TestCase {
 	private final static String _broker = BrokerModel._brokerTest;
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
 			m_brokerModel = (BrokerModel) ClassFactory.getServiceForInterface(
@@ -108,11 +122,21 @@ public class BrokerModelTest extends TestCase {
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		m_brokerModel.onDisconnect();
 		TradestrategyTest.clearDBData();
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test

@@ -50,6 +50,10 @@ import javax.swing.Timer;
 import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,8 +84,7 @@ import org.trade.ui.base.BasePanel;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public class TWSBrokerModelTest extends TestCase implements
-		BrokerChangeListener {
+public class TWSBrokerModelTest implements BrokerChangeListener {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TWSBrokerModelTest.class);
@@ -141,11 +144,21 @@ public class TWSBrokerModelTest extends TestCase implements
 	}
 
 	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
 	 * Method setUp.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		try {
 
 			this.brokerManagerModel.onConnect(host, port, clientId);
@@ -170,10 +183,10 @@ public class TWSBrokerModelTest extends TestCase implements
 	/**
 	 * Method tearDown.
 	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
-	protected void tearDown() throws Exception {
-
+	@After
+	public void tearDown() throws Exception {
 		deleteData();
 		if (this.brokerManagerModel.isConnected())
 			this.brokerManagerModel.onDisconnect();
@@ -198,6 +211,15 @@ public class TWSBrokerModelTest extends TestCase implements
 			}
 			timer.stop();
 		}
+	}
+
+	/**
+	 * Method tearDownAfterClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test
