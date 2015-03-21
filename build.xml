@@ -185,6 +185,9 @@
 				<fileset dir="${dist}">
 					<include name="**/*.jar" />
 				</fileset>
+				<fileset dir="${env.JAVA_HOME}/lib">
+					<include name="tools.jar" />
+				</fileset>
 			</classpath>
 			<batchtest fork="yes" todir="${reports}/raw/">
 				<formatter type="xml" />
