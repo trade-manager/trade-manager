@@ -35,7 +35,7 @@
  */
 package org.trade.persistent.dao;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -111,10 +111,10 @@ public class PortfolioTest {
 					account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);
 			portfolio = aspectHome.persist(portfolio);
-			TestCase.assertNotNull(portfolio.getIndividualAccount());
+			assertNotNull(portfolio.getIndividualAccount());
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

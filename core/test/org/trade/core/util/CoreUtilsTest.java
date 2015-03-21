@@ -44,8 +44,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.Timer;
 
-import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -108,31 +106,31 @@ public class CoreUtilsTest {
 	public void testIsBetween() {
 		try {
 
-			TestCase.assertTrue(CoreUtils.isBetween(new BigDecimal(12.20),
+			assertTrue(CoreUtils.isBetween(new BigDecimal(12.20),
 					new BigDecimal(12.24), new BigDecimal(12.23)));
 
-			TestCase.assertTrue(CoreUtils.isBetween(new Integer(12),
-					new Integer(18), new Integer(15)));
+			assertTrue(CoreUtils.isBetween(new Integer(12), new Integer(18),
+					new Integer(15)));
 
-			TestCase.assertFalse(CoreUtils.isBetween(new Integer(12),
-					new Integer(18), new Integer(6)));
+			assertFalse(CoreUtils.isBetween(new Integer(12), new Integer(18),
+					new Integer(6)));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.24d, 12.23d));
+			assertTrue(CoreUtils.isBetween(12.20d, 12.24d, 12.23d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.26d));
+			assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.26d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.20d));
+			assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.20d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.24d, 12.20d, 12.23d));
+			assertTrue(CoreUtils.isBetween(12.24d, 12.20d, 12.23d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.26d));
+			assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.26d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.20d));
+			assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.20d));
 
-			TestCase.assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
-			TestCase.assertFalse(CoreUtils.isBetween(12, 14, 11));
+			assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
+			assertFalse(CoreUtils.isBetween(12, 14, 11));
 
-			TestCase.assertFalse(CoreUtils.isBetween(12, 14, 15));
+			assertFalse(CoreUtils.isBetween(12, 14, 15));
 
 		} catch (Exception ex) {
 			_log.error("Error testIsBetween: " + ex.getMessage(), ex);
@@ -146,40 +144,40 @@ public class CoreUtilsTest {
 
 			int returnVal = CoreUtils.nullSafeComparator(null, new BigDecimal(
 					1.23));
-			TestCase.assertEquals(-1, returnVal);
+			assertEquals(-1, returnVal);
 
 			returnVal = CoreUtils
 					.nullSafeComparator(new BigDecimal(1.23), null);
-			TestCase.assertEquals(1, returnVal);
+			assertEquals(1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(-1.23),
 					new BigDecimal(-1.24));
-			TestCase.assertEquals(1, returnVal);
+			assertEquals(1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, null);
-			TestCase.assertEquals(0, returnVal);
+			assertEquals(0, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.23),
 					new BigDecimal(1.24));
-			TestCase.assertEquals(-1, returnVal);
+			assertEquals(-1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.25),
 					new BigDecimal(1.24));
-			TestCase.assertEquals(1, returnVal);
+			assertEquals(1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, 1);
-			TestCase.assertEquals(-1, returnVal);
+			assertEquals(-1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, new Integer(0));
-			TestCase.assertEquals(-1, returnVal);
+			assertEquals(-1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new Integer(0),
 					new Integer(0));
-			TestCase.assertEquals(0, returnVal);
+			assertEquals(0, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new Integer(1),
 					new Integer(0));
-			TestCase.assertEquals(1, returnVal);
+			assertEquals(1, returnVal);
 
 			Money avgFilledPrice = new Money(186.75);
 			Money lastPrice = new Money(186.78);
@@ -223,7 +221,7 @@ public class CoreUtilsTest {
 
 				}
 			}
-			TestCase.assertEquals(
+			assertEquals(
 					new Money(
 							avgFilledPrice
 									.getBigDecimalValue()
@@ -265,7 +263,7 @@ public class CoreUtilsTest {
 																	buySellMultiplier))));
 				}
 			}
-			TestCase.assertEquals(
+			assertEquals(
 					new Money(lastPrice.getBigDecimalValue().subtract(
 							stopMoveAmount.getBigDecimalValue().multiply(
 									new BigDecimal(buySellMultiplier)))),
@@ -282,19 +280,16 @@ public class CoreUtilsTest {
 
 		BigDecimal avgFillPrice = new BigDecimal("35.34567897").setScale(SCALE,
 				BigDecimal.ROUND_HALF_EVEN);
-		TestCase.assertEquals(new BigDecimal("35.34568"), avgFillPrice);
+		assertEquals(new BigDecimal("35.34568"), avgFillPrice);
 		avgFillPrice = new BigDecimal("35.34567344").setScale(SCALE,
 				BigDecimal.ROUND_HALF_EVEN);
-		TestCase.assertEquals(new BigDecimal("35.34567"), avgFillPrice);
+		assertEquals(new BigDecimal("35.34567"), avgFillPrice);
 
-		TestCase.assertEquals(0,
-				BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
+		assertEquals(0, BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
 
-		TestCase.assertEquals(-1,
-				BigDecimal.ZERO.compareTo(new BigDecimal(0.01)));
+		assertEquals(-1, BigDecimal.ZERO.compareTo(new BigDecimal(0.01)));
 
-		TestCase.assertEquals(1,
-				BigDecimal.ZERO.compareTo(new BigDecimal(-0.01)));
+		assertEquals(1, BigDecimal.ZERO.compareTo(new BigDecimal(-0.01)));
 	}
 
 	private AtomicInteger timerRunning = null;

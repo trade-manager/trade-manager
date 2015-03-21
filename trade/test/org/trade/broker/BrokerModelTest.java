@@ -35,11 +35,11 @@
  */
 package org.trade.broker;
 
+import static org.junit.Assert.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
-
-import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
 import org.jfree.data.time.RegularTimePeriod;
@@ -112,10 +112,10 @@ public class BrokerModelTest {
 			ConfigProperties.getPropAsString("trade.tws.host");
 			m_brokerModel.onConnect(host, port, clientId);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(this.tradestrategy);
+			assertNotNull(this.tradestrategy);
 
 		} catch (Exception e) {
-			TestCase.fail("Error on setup " + e.getMessage());
+			fail("Error on setup " + e.getMessage());
 		}
 	}
 
@@ -156,10 +156,10 @@ public class BrokerModelTest {
 
 			_log.info("IdTradeOrder: " + tradeOrder.getIdTradeOrder()
 					+ " OrderKey: " + tradeOrder.getOrderKey());
-			TestCase.assertNotNull(tradeOrder);
+			assertNotNull(tradeOrder);
 
 		} catch (Exception e) {
-			TestCase.fail("Error testSubmitBuyOrder Msg: " + e.getMessage());
+			fail("Error testSubmitBuyOrder Msg: " + e.getMessage());
 		}
 	}
 
@@ -182,11 +182,10 @@ public class BrokerModelTest {
 
 			_log.info("IdTradeOrder: " + tradeOrder.getIdTradeOrder()
 					+ " OrderKey: " + tradeOrder.getOrderKey());
-			TestCase.assertNotNull(tradeOrder.getIdTradeOrder());
+			assertNotNull(tradeOrder.getIdTradeOrder());
 
 		} catch (Exception e) {
-			TestCase.fail("Error testSubmitSellShortOrder Msg: "
-					+ e.getMessage());
+			fail("Error testSubmitSellShortOrder Msg: " + e.getMessage());
 		}
 	}
 
@@ -208,7 +207,7 @@ public class BrokerModelTest {
 			tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
-			TestCase.assertNotNull(tradeOrder.getIdTradeOrder());
+			assertNotNull(tradeOrder.getIdTradeOrder());
 
 			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.LMT, 50,
@@ -223,7 +222,7 @@ public class BrokerModelTest {
 
 			tradeOrder1 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder1);
-			TestCase.assertNotNull(tradeOrder1.getIdTradeOrder());
+			assertNotNull(tradeOrder1.getIdTradeOrder());
 
 			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STP, 50,
@@ -236,7 +235,7 @@ public class BrokerModelTest {
 			tradeOrder2.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder2 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder2);
-			TestCase.assertNotNull(tradeOrder2.getIdTradeOrder());
+			assertNotNull(tradeOrder2.getIdTradeOrder());
 
 			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STP, 50,
@@ -248,7 +247,7 @@ public class BrokerModelTest {
 			tradeOrder3.setStatus(OrderStatus.UNSUBMIT);
 			tradeOrder3 = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder3);
-			TestCase.assertNotNull(tradeOrder3.getIdTradeOrder());
+			assertNotNull(tradeOrder3.getIdTradeOrder());
 			_log.info("IdTradeOrder: " + tradeOrder3.getIdTradeOrder()
 					+ " OrderKey2: " + tradeOrder2.getOrderKey()
 					+ " OrderKey2 Price: " + tradeOrder2.getLimitPrice()
@@ -277,10 +276,10 @@ public class BrokerModelTest {
 
 			_log.info("IdTradeOrder: " + tradeOrder2.getIdTradeOrder()
 					+ " OrderKey: " + tradeOrder3.getOrderKey());
-			TestCase.assertNotNull(tradeOrder3);
+			assertNotNull(tradeOrder3);
 
 		} catch (Exception e) {
-			TestCase.fail("Error testSubmitComboOrder Msg: " + e.getMessage());
+			fail("Error testSubmitComboOrder Msg: " + e.getMessage());
 		}
 	}
 
@@ -297,8 +296,8 @@ public class BrokerModelTest {
 			m_brokerModel.onBrokerData(tradestrategy, tradestrategy
 					.getTradingday().getClose());
 
-			TestCase.assertFalse(this.tradestrategy.getStrategyData()
-					.getCandleDataset().getSeries(0).isEmpty());
+			assertFalse(this.tradestrategy.getStrategyData().getCandleDataset()
+					.getSeries(0).isEmpty());
 
 			IndicatorSeries candleseries = this.tradestrategy.getStrategyData()
 					.getCandleDataset().getSeries(0);
@@ -383,7 +382,7 @@ public class BrokerModelTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error testOnBrokerData Msg: " + e.getMessage());
+			fail("Error testOnBrokerData Msg: " + e.getMessage());
 		}
 	}
 
@@ -392,13 +391,13 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onConnect(host, port, clientId);
 			if (_broker.equals(BrokerModel._brokerTest)) {
-				TestCase.assertFalse(m_brokerModel.isConnected());
+				assertFalse(m_brokerModel.isConnected());
 			} else {
-				TestCase.assertTrue(m_brokerModel.isConnected());
+				assertTrue(m_brokerModel.isConnected());
 			}
 
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnConnect Msg: " + ex.getMessage());
+			fail("Error testOnConnect Msg: " + ex.getMessage());
 		}
 	}
 
@@ -408,12 +407,12 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onDisconnect();
 			if (_broker.equals(BrokerModel._brokerTest)) {
-				TestCase.assertFalse(m_brokerModel.isConnected());
+				assertFalse(m_brokerModel.isConnected());
 			} else {
-				TestCase.assertTrue(m_brokerModel.isConnected());
+				assertTrue(m_brokerModel.isConnected());
 			}
 		} catch (Exception ex) {
-			TestCase.fail("Error testDisconnect Msg: " + ex.getMessage());
+			fail("Error testDisconnect Msg: " + ex.getMessage());
 		}
 	}
 
@@ -422,9 +421,9 @@ public class BrokerModelTest {
 
 		try {
 			Integer id = m_brokerModel.getNextRequestId();
-			TestCase.assertNotNull(id);
+			assertNotNull(id);
 		} catch (Exception ex) {
-			TestCase.fail("Error testGetNextRequestId Msg: " + ex.getMessage());
+			fail("Error testGetNextRequestId Msg: " + ex.getMessage());
 		}
 	}
 
@@ -434,13 +433,11 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onSubscribeAccountUpdates(true, tradestrategy
 					.getPortfolio().getIndividualAccount().getAccountNumber());
-			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getIndividualAccount().getAccountNumber()));
+			assertFalse(m_brokerModel.isAccountUpdatesRunning(tradestrategy
+					.getPortfolio().getIndividualAccount().getAccountNumber()));
 
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnSubscribeAccountUpdates Msg: "
-					+ ex.getMessage());
+			fail("Error testOnSubscribeAccountUpdates Msg: " + ex.getMessage());
 		}
 	}
 
@@ -452,12 +449,10 @@ public class BrokerModelTest {
 					.getPortfolio().getIndividualAccount().getAccountNumber());
 			m_brokerModel.onCancelAccountUpdates(tradestrategy.getPortfolio()
 					.getIndividualAccount().getAccountNumber());
-			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getIndividualAccount().getAccountNumber()));
+			assertFalse(m_brokerModel.isAccountUpdatesRunning(tradestrategy
+					.getPortfolio().getIndividualAccount().getAccountNumber()));
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnCancelAccountUpdates Msg: "
-					+ ex.getMessage());
+			fail("Error testOnCancelAccountUpdates Msg: " + ex.getMessage());
 		}
 	}
 
@@ -466,12 +461,10 @@ public class BrokerModelTest {
 
 		try {
 			m_brokerModel.onReqManagedAccount();
-			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getIndividualAccount().getAccountNumber()));
+			assertFalse(m_brokerModel.isAccountUpdatesRunning(tradestrategy
+					.getPortfolio().getIndividualAccount().getAccountNumber()));
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnReqManagedAccount Msg: "
-					+ ex.getMessage());
+			fail("Error testOnReqManagedAccount Msg: " + ex.getMessage());
 		}
 	}
 
@@ -481,8 +474,7 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onReqAllOpenOrders();
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnReqAllOpenOrders Msg: "
-					+ ex.getMessage());
+			fail("Error testOnReqAllOpenOrders Msg: " + ex.getMessage());
 		}
 	}
 
@@ -492,7 +484,7 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onReqOpenOrders();
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnReqOpenOrders Msg: " + ex.getMessage());
+			fail("Error testOnReqOpenOrders Msg: " + ex.getMessage());
 		}
 	}
 
@@ -505,10 +497,9 @@ public class BrokerModelTest {
 					this.tradestrategy);
 			m_brokerModel.onReqRealTimeBars(this.tradestrategy.getContract(),
 					false);
-			TestCase.assertFalse(m_brokerModel
-					.isRealtimeBarsRunning(tradestrategy));
+			assertFalse(m_brokerModel.isRealtimeBarsRunning(tradestrategy));
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnReqRealTimeBars Msg: " + ex.getMessage());
+			fail("Error testOnReqRealTimeBars Msg: " + ex.getMessage());
 		}
 	}
 
@@ -519,8 +510,7 @@ public class BrokerModelTest {
 			m_brokerModel.onReqAllExecutions(this.tradestrategy.getTradingday()
 					.getOpen());
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnReqAllExecutions Msg: "
-					+ ex.getMessage());
+			fail("Error testOnReqAllExecutions Msg: " + ex.getMessage());
 		}
 	}
 
@@ -530,7 +520,7 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onReqExecutions(this.tradestrategy, false);
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnReqExecutions Msg: " + ex.getMessage());
+			fail("Error testOnReqExecutions Msg: " + ex.getMessage());
 		}
 	}
 
@@ -539,11 +529,9 @@ public class BrokerModelTest {
 
 		try {
 			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
-			TestCase.assertFalse(m_brokerModel
-					.isRealtimeBarsRunning(this.tradestrategy));
+			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
-					+ ex.getMessage());
+			fail("Error testIsRealtimeBarsRunning Msg: " + ex.getMessage());
 		}
 	}
 
@@ -553,12 +541,10 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onCancelAccountUpdates(tradestrategy.getPortfolio()
 					.getIndividualAccount().getAccountNumber());
-			TestCase.assertFalse(m_brokerModel
-					.isAccountUpdatesRunning(tradestrategy.getPortfolio()
-							.getIndividualAccount().getAccountNumber()));
+			assertFalse(m_brokerModel.isAccountUpdatesRunning(tradestrategy
+					.getPortfolio().getIndividualAccount().getAccountNumber()));
 		} catch (Exception ex) {
-			TestCase.fail("Error testIsRealtimeBarsRunning Msg: "
-					+ ex.getMessage());
+			fail("Error testIsRealtimeBarsRunning Msg: " + ex.getMessage());
 		}
 	}
 
@@ -567,11 +553,10 @@ public class BrokerModelTest {
 
 		try {
 			m_brokerModel.onCancelBrokerData(this.tradestrategy);
-			TestCase.assertFalse(m_brokerModel
+			assertFalse(m_brokerModel
 					.isHistoricalDataRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			TestCase.fail("Error testIsHistoricalDataRunning Msg: "
-					+ ex.getMessage());
+			fail("Error testIsHistoricalDataRunning Msg: " + ex.getMessage());
 		}
 	}
 
@@ -580,11 +565,10 @@ public class BrokerModelTest {
 
 		try {
 			m_brokerModel.onCancelBrokerData(this.tradestrategy.getContract());
-			TestCase.assertFalse(m_brokerModel
+			assertFalse(m_brokerModel
 					.isHistoricalDataRunning(this.tradestrategy.getContract()));
 		} catch (Exception ex) {
-			TestCase.fail("Error testIsHistoricalDataRunning Msg: "
-					+ ex.getMessage());
+			fail("Error testIsHistoricalDataRunning Msg: " + ex.getMessage());
 		}
 	}
 
@@ -593,11 +577,9 @@ public class BrokerModelTest {
 
 		try {
 			m_brokerModel.onCancelAllRealtimeData();
-			TestCase.assertFalse(m_brokerModel
-					.isRealtimeBarsRunning(this.tradestrategy));
+			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnCancelAllRealtimeData Msg: "
-					+ ex.getMessage());
+			fail("Error testOnCancelAllRealtimeData Msg: " + ex.getMessage());
 		}
 	}
 
@@ -606,11 +588,9 @@ public class BrokerModelTest {
 
 		try {
 			m_brokerModel.onCancelRealtimeBars(this.tradestrategy);
-			TestCase.assertFalse(m_brokerModel
-					.isRealtimeBarsRunning(this.tradestrategy));
+			assertFalse(m_brokerModel.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnCancelRealtimeBars Msg: "
-					+ ex.getMessage());
+			fail("Error testOnCancelRealtimeBars Msg: " + ex.getMessage());
 		}
 	}
 
@@ -619,11 +599,10 @@ public class BrokerModelTest {
 
 		try {
 			m_brokerModel.onCancelBrokerData(this.tradestrategy);
-			TestCase.assertFalse(m_brokerModel
+			assertFalse(m_brokerModel
 					.isHistoricalDataRunning(this.tradestrategy));
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnCancelBrokerData Msg: "
-					+ ex.getMessage());
+			fail("Error testOnCancelBrokerData Msg: " + ex.getMessage());
 		}
 	}
 
@@ -634,8 +613,7 @@ public class BrokerModelTest {
 			m_brokerModel.onCancelContractDetails(this.tradestrategy
 					.getContract());
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnCancelContractDetails Msg: "
-					+ ex.getMessage());
+			fail("Error testOnCancelContractDetails Msg: " + ex.getMessage());
 		}
 	}
 
@@ -645,7 +623,7 @@ public class BrokerModelTest {
 		try {
 			m_brokerModel.onContractDetails(this.tradestrategy.getContract());
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnContractDetails Msg: " + ex.getMessage());
+			fail("Error testOnContractDetails Msg: " + ex.getMessage());
 		}
 	}
 
@@ -655,9 +633,9 @@ public class BrokerModelTest {
 		try {
 			ConcurrentHashMap<Integer, Tradestrategy> historicalDataList = m_brokerModel
 					.getHistoricalData();
-			TestCase.assertNotNull(historicalDataList);
+			assertNotNull(historicalDataList);
 		} catch (Exception ex) {
-			TestCase.fail("Error testGetHistoricalData Msg: " + ex.getMessage());
+			fail("Error testGetHistoricalData Msg: " + ex.getMessage());
 		}
 	}
 
@@ -669,9 +647,9 @@ public class BrokerModelTest {
 					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
-			TestCase.assertNotNull(tradeOrder);
+			assertNotNull(tradeOrder);
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnPlaceOrder Msg: " + ex.getMessage());
+			fail("Error testOnPlaceOrder Msg: " + ex.getMessage());
 		}
 	}
 
@@ -684,10 +662,10 @@ public class BrokerModelTest {
 					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder = m_brokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
-			TestCase.assertNotNull(tradeOrder);
+			assertNotNull(tradeOrder);
 			m_brokerModel.onCancelOrder(tradeOrder);
 		} catch (Exception ex) {
-			TestCase.fail("Error testOnCancelOrder Msg: " + ex.getMessage());
+			fail("Error testOnCancelOrder Msg: " + ex.getMessage());
 		}
 	}
 
@@ -696,9 +674,9 @@ public class BrokerModelTest {
 
 		try {
 			boolean result = m_brokerModel.isBrokerDataOnly();
-			TestCase.assertFalse(result);
+			assertFalse(result);
 		} catch (Exception ex) {
-			TestCase.fail("Error testIsBrokerDataOnly Msg: " + ex.getMessage());
+			fail("Error testIsBrokerDataOnly Msg: " + ex.getMessage());
 		}
 	}
 }

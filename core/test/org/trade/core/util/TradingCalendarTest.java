@@ -43,8 +43,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -108,7 +106,7 @@ public class TradingCalendarTest {
 			_log.info("Date: " + date);
 			_log.info("Date: " + TradingCalendar.addBusinessDays(date, -4));
 			_log.info("Date: " + TradingCalendar.addBusinessDays(date, -5));
-			TestCase.assertNotNull(date);
+			assertNotNull(date);
 
 		} catch (Exception ex) {
 			_log.error("Error creating class: " + ex.getMessage(), ex);
@@ -125,9 +123,9 @@ public class TradingCalendarTest {
 		Date setDate = TradingCalendar.getSpecificTime(busdayStartDate, date);
 
 		_log.info("setDate: " + setDate);
-		TestCase.assertEquals(TradingCalendar.getHourOfDay(busdayStartDate),
+		assertEquals(TradingCalendar.getHourOfDay(busdayStartDate),
 				TradingCalendar.getHourOfDay(setDate));
-		TestCase.assertEquals(TradingCalendar.getMinute(busdayStartDate),
+		assertEquals(TradingCalendar.getMinute(busdayStartDate),
 				TradingCalendar.getMinute(setDate));
 
 	}
@@ -157,8 +155,8 @@ public class TradingCalendarTest {
 			sdf.setTimeZone(twsTimeZone);
 			Date date = sdf.parse("20130701 15:58:00");
 			_log.info("Date: " + date + " TZ: " + tz);
-			TestCase.assertEquals(15, TradingCalendar.getHourOfDay(date));
-			TestCase.assertEquals(58, TradingCalendar.getMinute(date));
+			assertEquals(15, TradingCalendar.getHourOfDay(date));
+			assertEquals(58, TradingCalendar.getMinute(date));
 
 		} catch (Exception ex) {
 			_log.error("Error parsing date: " + ex.getMessage(), ex);
@@ -192,34 +190,30 @@ public class TradingCalendarTest {
 		date = TradingCalendar.getSpecificTime(date, 9, 30);
 		_log.info("Business day openDate: " + openDate
 				+ " Business day closeDate: " + closeDate + " Date: " + date);
-		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate,
-				date));
+		assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
 		date = TradingCalendar.getSpecificTime(date, 16, 00);
 		_log.info("Business day openDate: " + openDate
 				+ " Business day closeDate: " + closeDate + " Date: " + date);
-		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate,
-				date));
+		assertFalse(TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 		date = TradingCalendar.getSpecificTime(date, 15, 00);
 		_log.info("Business day openDate: " + openDate
 				+ " Business day closeDate: " + closeDate + " Date: " + date);
-		TestCase.assertTrue(TradingCalendar.isMarketHours(openDate, closeDate,
-				date));
+		assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 		date = TradingCalendar.getSpecificTime(date, 17, 00);
 		_log.info("Business day openDate: " + openDate
 				+ " Business day closeDate: " + closeDate + " Date: " + date);
-		TestCase.assertFalse(TradingCalendar.isMarketHours(openDate, closeDate,
-				date));
+		assertFalse(TradingCalendar.isMarketHours(openDate, closeDate, date));
 	}
 
 	@Test
 	public void testIsTradingday() {
 
 		Date date = TradingCalendar.getMostRecentTradingDay(new Date());
-		TestCase.assertTrue(TradingCalendar.isTradingDay(date));
+		assertTrue(TradingCalendar.isTradingDay(date));
 		date = TradingCalendar.getSpecificTime(date, Calendar.SUNDAY);
-		TestCase.assertFalse(TradingCalendar.isTradingDay(date));
+		assertFalse(TradingCalendar.isTradingDay(date));
 	}
 
 	@Test
@@ -233,7 +227,7 @@ public class TradingCalendarTest {
 					- TradingCalendar.daysDiff(endDate, new Date());
 		}
 		_log.info("chartDays: " + chartDays);
-		TestCase.assertEquals(365, chartDays.intValue());
+		assertEquals(365, chartDays.intValue());
 	}
 
 	@Test
@@ -244,7 +238,7 @@ public class TradingCalendarTest {
 		reqId = new AtomicInteger((int) (date.getTime() / 1000d));
 		_log.info("reqId: " + reqId);
 		_log.info("reqId: " + reqId.incrementAndGet());
-		TestCase.assertNotNull(reqId);
+		assertNotNull(reqId);
 	}
 
 	@Test
@@ -263,17 +257,17 @@ public class TradingCalendarTest {
 			 * -Dlog4j.configuration=file:"config.properties"
 			 */
 
-			TestCase.assertEquals(23, TradingCalendar.getDayOfMonth(date));
-			TestCase.assertEquals(19, TradingCalendar.getHourOfDay(date));
-			TestCase.assertEquals(7, TradingCalendar.getHour(date));
-			TestCase.assertEquals(29, TradingCalendar.getMinute(date));
-			TestCase.assertEquals(59, TradingCalendar.getSecond(date));
-			TestCase.assertEquals(2013, TradingCalendar.getYear(date));
+			assertEquals(23, TradingCalendar.getDayOfMonth(date));
+			assertEquals(19, TradingCalendar.getHourOfDay(date));
+			assertEquals(7, TradingCalendar.getHour(date));
+			assertEquals(29, TradingCalendar.getMinute(date));
+			assertEquals(59, TradingCalendar.getSecond(date));
+			assertEquals(2013, TradingCalendar.getYear(date));
 
 			// System.out.println(date.toString());
 			// boolean ans =
 			// date.toString().matches(".+\\d\\d:\\d\\d::(00\\.0)");
-			// TestCase.assertTrue(ans);
+			// assertTrue(ans);
 
 		} catch (Exception ex) {
 			_log.error("Error parsing date: " + ex.getMessage(), ex);

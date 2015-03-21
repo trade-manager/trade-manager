@@ -35,13 +35,13 @@
  */
 package org.trade.chart.data;
 
+import static org.junit.Assert.*;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-
-import junit.framework.TestCase;
 
 import org.jfree.data.time.RegularTimePeriod;
 import org.junit.After;
@@ -94,7 +94,7 @@ public class CandlePeriodTest {
 		tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-		TestCase.assertNotNull(this.tradestrategy);
+		assertNotNull(this.tradestrategy);
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class CandlePeriodTest {
 				CandleDataset.populateSeries(
 						this.tradestrategy.getStrategyData(), candles);
 			}
-			TestCase.assertFalse(this.tradestrategy.getStrategyData()
+			assertFalse(this.tradestrategy.getStrategyData()
 					.getBaseCandleSeries().isEmpty());
 			Candle candle = this.tradestrategy
 					.getStrategyData()
@@ -162,7 +162,7 @@ public class CandlePeriodTest {
 					+ " Volume: " + candle.getVolume());
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -191,7 +191,7 @@ public class CandlePeriodTest {
 				CandleDataset.populateSeries(
 						this.tradestrategy.getStrategyData(), candles);
 			}
-			TestCase.assertFalse(this.tradestrategy.getStrategyData()
+			assertFalse(this.tradestrategy.getStrategyData()
 					.getBaseCandleSeries().isEmpty());
 			Candle candle = this.tradestrategy
 					.getStrategyData()
@@ -232,7 +232,7 @@ public class CandlePeriodTest {
 					+ candle.getVwap() + " Volume: " + candle.getVolume());
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -246,9 +246,9 @@ public class CandlePeriodTest {
 			_log.info("Date GMT time: " + date);
 			sdf.setTimeZone(TimeZone.getTimeZone("EST"));
 			_log.info("Date EST time: " + sdf.format(date));
-			TestCase.assertNotNull(date);
+			assertNotNull(date);
 		} catch (ParseException e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -265,7 +265,7 @@ public class CandlePeriodTest {
 			_log.info("Time is : " + period.toString() + " Start: "
 					+ period.getStart() + " End: " + period.getEnd());
 			period = period.next();
-			TestCase.assertNotNull(period);
+			assertNotNull(period);
 		}
 	}
 
@@ -282,7 +282,7 @@ public class CandlePeriodTest {
 			_log.info("Time is : " + period.toString() + " Start: "
 					+ period.getStart() + " End: " + period.getEnd());
 			period = period.previous();
-			TestCase.assertNotNull(period);
+			assertNotNull(period);
 		}
 	}
 
@@ -302,6 +302,6 @@ public class CandlePeriodTest {
 		_log.info("\n Bus Day Start : " + startBusDate.toString()
 				+ "\n Start: " + period.getStart() + "\n End: "
 				+ period.getEnd() + "\n Periods: " + periods);
-		TestCase.assertNotNull(period);
+		assertNotNull(period);
 	}
 }

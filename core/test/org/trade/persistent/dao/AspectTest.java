@@ -36,7 +36,6 @@
 package org.trade.persistent.dao;
 
 import static org.junit.Assert.*;
-import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -110,7 +109,7 @@ public class AspectTest {
 			_log.info("Find Aspects by className: " + className);
 
 			Aspects transientInstance = aspectHome.findByClassName(className);
-			TestCase.assertNotNull(transientInstance);
+			assertNotNull(transientInstance);
 			for (Aspect aspect : transientInstance.getAspect()) {
 				_log.info("Aspect added Id = " + aspect.getId());
 			}

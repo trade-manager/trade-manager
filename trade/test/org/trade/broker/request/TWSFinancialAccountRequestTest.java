@@ -37,7 +37,7 @@ package org.trade.broker.request;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -136,7 +136,7 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistAspect(account);
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -166,7 +166,7 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistAspect(account);
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -195,7 +195,7 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistAspect(account);
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -215,7 +215,7 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -235,7 +235,7 @@ public class TWSFinancialAccountRequestTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -255,7 +255,7 @@ public class TWSFinancialAccountRequestTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -277,7 +277,7 @@ public class TWSFinancialAccountRequestTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -297,7 +297,7 @@ public class TWSFinancialAccountRequestTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -318,7 +318,7 @@ public class TWSFinancialAccountRequestTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 
@@ -339,7 +339,7 @@ public class TWSFinancialAccountRequestTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error :" + e.getMessage());
+			fail("Error :" + e.getMessage());
 		}
 	}
 }

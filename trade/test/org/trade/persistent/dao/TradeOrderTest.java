@@ -40,8 +40,6 @@ import static org.junit.Assert.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import junit.framework.TestCase;
-
 import org.jfree.data.DataUtilities;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -102,7 +100,7 @@ public class TradeOrderTest {
 		this.tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-		TestCase.assertNotNull(this.tradestrategy);
+		assertNotNull(this.tradestrategy);
 	}
 
 	/**
@@ -151,7 +149,7 @@ public class TradeOrderTest {
 			tradeOrder.setTransmit(true);
 			tradeOrder.setStatus("SUBMITTED");
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
-			TestCase.assertNotNull(tradeOrder);
+			assertNotNull(tradeOrder);
 			_log.info("IdOrder: " + tradeOrder.getIdTradeOrder());
 
 			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
@@ -168,7 +166,7 @@ public class TradeOrderTest {
 			assertNotNull(tradeOrder1);
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -257,7 +255,7 @@ public class TradeOrderTest {
 			_log.info("IdOrder: " + tradeOrder1.getIdTradeOrder());
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -379,7 +377,7 @@ public class TradeOrderTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -442,7 +440,7 @@ public class TradeOrderTest {
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 
 		} catch (Exception ex) {
-			TestCase.fail("Error adding row " + ex.getMessage());
+			fail("Error adding row " + ex.getMessage());
 		}
 	}
 
@@ -454,7 +452,7 @@ public class TradeOrderTest {
 			_log.info("Max Order key: " + orderKey);
 
 		} catch (Exception ex) {
-			TestCase.fail("Error adding row " + ex.getMessage());
+			fail("Error adding row " + ex.getMessage());
 		}
 	}
 }

@@ -35,6 +35,8 @@
  */
 package org.trade.broker;
 
+import static org.junit.Assert.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -46,8 +48,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.Timer;
-
-import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
 import org.junit.After;
@@ -139,7 +139,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			});
 
 		} catch (Exception e) {
-			TestCase.fail("Error on setup " + e.getMessage());
+			fail("Error on setup " + e.getMessage());
 		}
 	}
 
@@ -246,8 +246,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
 			}
 		} catch (Exception ex) {
-			TestCase.fail("Error testOneSymbolOnBrokerData Msg: "
-					+ ex.getMessage());
+			fail("Error testOneSymbolOnBrokerData Msg: " + ex.getMessage());
 		}
 	}
 
@@ -275,8 +274,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
 			}
 		} catch (Exception ex) {
-			TestCase.fail("Error testMarch2013OnBrokerData Msg: "
-					+ ex.getMessage());
+			fail("Error testMarch2013OnBrokerData Msg: " + ex.getMessage());
 		}
 	}
 
@@ -291,8 +289,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			}
 
 		} catch (Exception ex) {
-			TestCase.fail("Error testHasSubmittedInSeconds Msg: "
-					+ ex.getMessage());
+			fail("Error testHasSubmittedInSeconds Msg: " + ex.getMessage());
 		}
 	}
 
@@ -329,7 +326,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
 			}
 		} catch (Exception ex) {
-			TestCase.fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
+			fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
 					+ ex.getMessage());
 		}
 	}
@@ -931,7 +928,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				tradePersistentModel.removeAspect(item);
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error deleteData Msg: " + e.getMessage());
+			fail("Error deleteData Msg: " + e.getMessage());
 		} finally {
 			_log.info("All data deleted");
 		}

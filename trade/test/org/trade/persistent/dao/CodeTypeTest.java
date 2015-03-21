@@ -35,7 +35,7 @@
  */
 package org.trade.persistent.dao;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  */
-public class CodeTypeTest extends TestCase {
+public class CodeTypeTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CodeTypeTest.class);
@@ -94,14 +94,14 @@ public class CodeTypeTest extends TestCase {
 		try {
 			CodeTypeHome codeTypeHome = new CodeTypeHome();
 			CodeType codeType = codeTypeHome.findByName("MovingAverage");
-			TestCase.assertNotNull(codeType);
+			assertNotNull(codeType);
 			_log.info("CodeType id: " + codeType.getIdCodeType());
 			CodeValue codeValue = codeTypeHome.findByAttributeName(
 					codeType.getName(), "Length");
-			TestCase.assertNotNull(codeValue);
+			assertNotNull(codeValue);
 			_log.info("CodeValue id: " + codeValue.getIdCodeValue());
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

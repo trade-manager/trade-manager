@@ -37,7 +37,7 @@ package org.trade.persistent.dao;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -82,7 +82,7 @@ public class TradePositionTest {
 		tradePositionHome = new TradePositionHome();
 		aspectHome = new AspectHome();
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-		TestCase.assertNotNull(this.tradestrategy);
+		assertNotNull(this.tradestrategy);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class TradePositionTest {
 
 			TradePosition tradePosition = aspectHome.persist(instance);
 
-			TestCase.assertNotNull(tradePosition.getIdTradePosition());
+			assertNotNull(tradePosition.getIdTradePosition());
 			_log.info("testAddTradePosition IdTradeStrategy: "
 					+ this.tradestrategy.getIdTradeStrategy()
 					+ "IdTradePosition: " + tradePosition.getIdTradePosition());
@@ -123,10 +123,10 @@ public class TradePositionTest {
 					+ tradestrategy.getIdTradeStrategy());
 			tradePosition = tradePositionHome.findById(tradePosition
 					.getIdTradePosition());
-			TestCase.assertNull(tradePosition);
+			assertNull(tradePosition);
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

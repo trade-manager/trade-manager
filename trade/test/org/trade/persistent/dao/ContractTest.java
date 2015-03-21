@@ -38,7 +38,7 @@ package org.trade.persistent.dao;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -116,8 +116,8 @@ public class ContractTest {
 					transientInstance.getSymbol(),
 					transientInstance.getExchange(),
 					transientInstance.getCurrency(), null);
-			TestCase.assertNotNull(
-					"Contract not found: " + contract.getSymbol(), contract);
+			assertNotNull("Contract not found: " + contract.getSymbol(),
+					contract);
 
 			if (null != contract) {
 				aspectHome.remove(contract);
@@ -126,7 +126,7 @@ public class ContractTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -154,8 +154,8 @@ public class ContractTest {
 					transientInstance.getSymbol(),
 					transientInstance.getExchange(),
 					transientInstance.getCurrency(), expiry);
-			TestCase.assertNotNull(
-					"Contract not found: " + contract.getSymbol(), contract);
+			assertNotNull("Contract not found: " + contract.getSymbol(),
+					contract);
 
 			if (null != contract) {
 				aspectHome.remove(contract);
@@ -165,7 +165,7 @@ public class ContractTest {
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

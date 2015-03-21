@@ -1,6 +1,6 @@
 package org.trade.strategy.data;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,9 +40,9 @@ public class CandleSeriesTest {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(this.tradestrategy);
+			assertNotNull(this.tradestrategy);
 		} catch (Exception e) {
-			TestCase.fail("Error on setup " + e.getMessage());
+			fail("Error on setup " + e.getMessage());
 		}
 	}
 
@@ -76,10 +76,10 @@ public class CandleSeriesTest {
 			if (candleSeries.equals(series)) {
 				_log.info("CandleSeries: " + series.toString());
 			}
-			TestCase.assertEquals(series, candleSeries);
+			assertEquals(series, candleSeries);
 
 		} catch (Exception e) {
-			TestCase.fail("Error on testCandleSeriessClone " + e.getMessage());
+			fail("Error on testCandleSeriessClone " + e.getMessage());
 		}
 	}
 

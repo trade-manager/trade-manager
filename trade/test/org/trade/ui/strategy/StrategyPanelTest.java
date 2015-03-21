@@ -19,7 +19,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
 import jsyntaxpane.DefaultSyntaxKit;
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -78,24 +78,24 @@ public class StrategyPanelTest {
 			TradeAppLoadConfig.loadAppProperties();
 			m_templateName = ConfigProperties
 					.getPropAsString("trade.strategy.template");
-			TestCase.assertNotNull(m_templateName);
+			assertNotNull(m_templateName);
 			m_strategyDir = ConfigProperties
 					.getPropAsString("trade.strategy.default.dir");
-			TestCase.assertNotNull(m_strategyDir);
+			assertNotNull(m_strategyDir);
 			this.tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(this.tradestrategy);
+			assertNotNull(this.tradestrategy);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
-			TestCase.assertNotNull(strategies);
+			assertNotNull(strategies);
 			for (Strategy strategy : strategies) {
 				String fileName = m_strategyDir + "/"
 						+ StrategyRule.PACKAGE.replace('.', '/')
 						+ strategy.getClassName() + ".java";
 				String content = readFile(fileName);
-				TestCase.assertNotNull(content);
+				assertNotNull(content);
 				if (strategy.getRules().isEmpty()) {
 					Rule nextRule = new Rule(strategy, 1, null, new Date(),
 							content.getBytes(), new Date());
@@ -104,8 +104,7 @@ public class StrategyPanelTest {
 				}
 			}
 		} catch (Exception ex) {
-			TestCase.fail("Error getting Yahoo data msg: "
-					+ ex.getCause().getMessage());
+			fail("Error getting Yahoo data msg: " + ex.getCause().getMessage());
 		}
 	}
 
@@ -151,15 +150,15 @@ public class StrategyPanelTest {
 					+ ".java";
 			String content = readFile(fileName);
 			sourceText.setText(content);
-			TestCase.assertEquals(content, sourceText.getText());
+			assertEquals(content, sourceText.getText());
 			writeFile(fileName, content);
 			String content1 = readFile(fileName);
 			sourceText.setText(null);
 			sourceText.setText(content1);
-			TestCase.assertEquals(content1, sourceText.getText());
+			assertEquals(content1, sourceText.getText());
 
 		} catch (Exception ex) {
-			TestCase.fail("Error creating instance : " + ex.getMessage());
+			fail("Error creating instance : " + ex.getMessage());
 		}
 	}
 
@@ -241,12 +240,12 @@ public class StrategyPanelTest {
 			StrategyData.doDummyData(tradestrategy.getStrategyData()
 					.getBaseCandleSeries(), Tradingday.newInstance(new Date()),
 					1, BarSize.FIVE_MIN, true, 1);
-			TestCase.assertFalse(tradestrategy.getStrategyData()
-					.getBaseCandleSeries().isEmpty());
+			assertFalse(tradestrategy.getStrategyData().getBaseCandleSeries()
+					.isEmpty());
 			strategyProxy.cancel();
 
 		} catch (Exception ex) {
-			TestCase.fail("Error creating instance : " + ex.getMessage());
+			fail("Error creating instance : " + ex.getMessage());
 		}
 	}
 
@@ -271,7 +270,7 @@ public class StrategyPanelTest {
 				if (version.equals(rule.getVersion()))
 					myRule = rule;
 			}
-			TestCase.assertNotNull(myRule);
+			assertNotNull(myRule);
 			String fileDir = m_tmpDir + "/"
 					+ StrategyRule.PACKAGE.replace('.', '/');
 			String className = strategy.getClassName() + ".java";
@@ -292,10 +291,10 @@ public class StrategyPanelTest {
 			StrategyRule strategyRule = (StrategyRule) dynacode
 					.newProxyInstance(StrategyRule.class, StrategyRule.PACKAGE
 							+ strategy.getClassName(), parm);
-			TestCase.assertNotNull(strategyRule);
+			assertNotNull(strategyRule);
 
 		} catch (Exception ex) {
-			TestCase.fail("Error compiling rule : " + ex.getMessage());
+			fail("Error compiling rule : " + ex.getMessage());
 		}
 	}
 
@@ -306,11 +305,11 @@ public class StrategyPanelTest {
 					this.tradePersistentModel);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
-			TestCase.assertNotNull("No strategies", strategies);
-			TestCase.assertEquals(false, strategies.isEmpty());
+			assertNotNull("No strategies", strategies);
+			assertEquals(false, strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
-			TestCase.assertNotNull(strategy);
+			assertNotNull(strategy);
 			Rule myrule = null;
 
 			Collections.sort(strategy.getRules(), Rule.VERSION_ORDER);
@@ -328,10 +327,10 @@ public class StrategyPanelTest {
 				myrule.setVersion(myrule.getVersion() + 1);
 				myrule.setIdRule(null);
 			}
-			TestCase.assertNotNull(myrule);
+			assertNotNull(myrule);
 			strategyPanel.doCompile(myrule);
 		} catch (Exception ex) {
-			TestCase.fail("Error saving rule : " + ex.getMessage());
+			fail("Error saving rule : " + ex.getMessage());
 		}
 	}
 
@@ -342,11 +341,11 @@ public class StrategyPanelTest {
 					this.tradePersistentModel);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
-			TestCase.assertNotNull("No strategies", strategies);
-			TestCase.assertEquals(false, strategies.isEmpty());
+			assertNotNull("No strategies", strategies);
+			assertEquals(false, strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
-			TestCase.assertNotNull(strategy);
+			assertNotNull(strategy);
 			Rule myrule = null;
 
 			Collections.sort(strategy.getRules(), Rule.VERSION_ORDER);
@@ -375,16 +374,16 @@ public class StrategyPanelTest {
 			textArea.setText(content);
 			myrule.setRule(textArea.getText().getBytes());
 			myrule = this.tradePersistentModel.persistAspect(myrule);
-			TestCase.assertNotNull(myrule.getIdRule());
+			assertNotNull(myrule.getIdRule());
 			Rule ruleSaved = this.tradePersistentModel.findRuleById(myrule
 					.getIdRule());
-			TestCase.assertNotNull(ruleSaved.getIdRule());
+			assertNotNull(ruleSaved.getIdRule());
 			String javaCode = new String(ruleSaved.getRule());
-			TestCase.assertEquals(javaCode, textArea.getText());
+			assertEquals(javaCode, textArea.getText());
 			_log.info("Java file to Saved: " + javaCode);
 
 		} catch (Exception ex) {
-			TestCase.fail("Error saving rule : " + ex.getMessage());
+			fail("Error saving rule : " + ex.getMessage());
 		}
 	}
 }

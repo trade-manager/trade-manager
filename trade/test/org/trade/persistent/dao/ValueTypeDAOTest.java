@@ -38,7 +38,7 @@ package org.trade.persistent.dao;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.jfree.data.DataUtilities;
 import org.junit.After;
@@ -111,7 +111,7 @@ public class ValueTypeDAOTest {
 			DAOStrategy strategies = new DAOStrategy();
 			Vector<Decode> decodes = strategies.getCodesDecodes();
 			Enumeration<Decode> eDecodes = decodes.elements();
-			TestCase.assertFalse(decodes.isEmpty());
+			assertFalse(decodes.isEmpty());
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
 				_log.info("TYPE:"
@@ -128,7 +128,7 @@ public class ValueTypeDAOTest {
 
 			DAOStrategyManager strategyManagers = new DAOStrategyManager();
 			decodes = strategyManagers.getCodesDecodes();
-			TestCase.assertFalse(decodes.isEmpty());
+			assertFalse(decodes.isEmpty());
 			eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
@@ -144,7 +144,7 @@ public class ValueTypeDAOTest {
 
 			}
 		} catch (Exception ex) {
-			TestCase.fail("Error finding row " + ex.getMessage());
+			fail("Error finding row " + ex.getMessage());
 		}
 	}
 
@@ -153,7 +153,7 @@ public class ValueTypeDAOTest {
 		try {
 			DAOEntryLimit entryLimits = new DAOEntryLimit();
 			Vector<Decode> decodes = entryLimits.getCodesDecodes();
-			TestCase.assertFalse(decodes.isEmpty());
+			assertFalse(decodes.isEmpty());
 			Enumeration<Decode> eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
@@ -175,7 +175,7 @@ public class ValueTypeDAOTest {
 					+ entrylimit.getLimitAmount());
 
 		} catch (Exception ex) {
-			TestCase.fail("Error finding row " + ex.getMessage());
+			fail("Error finding row " + ex.getMessage());
 		}
 	}
 
@@ -184,7 +184,7 @@ public class ValueTypeDAOTest {
 		try {
 			ChartDays DAOValues = new ChartDays();
 			Vector<Decode> decodes = DAOValues.getCodesDecodes();
-			TestCase.assertFalse(decodes.isEmpty());
+			assertFalse(decodes.isEmpty());
 			Enumeration<Decode> eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
@@ -199,7 +199,7 @@ public class ValueTypeDAOTest {
 								+ DAODecode._DISPLAY_NAME));
 			}
 		} catch (Exception ex) {
-			TestCase.fail("Error finding row " + ex.getMessage());
+			fail("Error finding row " + ex.getMessage());
 		}
 	}
 }

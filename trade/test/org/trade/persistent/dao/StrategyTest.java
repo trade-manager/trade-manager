@@ -35,7 +35,7 @@
  */
 package org.trade.persistent.dao;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.jfree.data.DataUtilities;
 import org.junit.After;
@@ -112,11 +112,11 @@ public class StrategyTest {
 			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Strategy added Id = "
 					+ transientInstance.getIdStrategy());
-			TestCase.assertNotNull(transientInstance.getIdStrategy());
+			assertNotNull(transientInstance.getIdStrategy());
 			aspectHome.remove(transientInstance);
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

@@ -36,7 +36,6 @@
 package org.trade.core.valuetype;
 
 import static org.junit.Assert.*;
-import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -98,7 +97,7 @@ public class ValueTypeTest {
 		try {
 			int scale = 2;
 			Decimal decimal = new Decimal("20.236", scale);
-			TestCase.assertEquals(new Decimal(20.24, scale), decimal);
+			assertEquals(new Decimal(20.24, scale), decimal);
 
 		} catch (Exception ex) {
 			_log.error("Error creating Decimal: " + ex.getMessage(), ex);

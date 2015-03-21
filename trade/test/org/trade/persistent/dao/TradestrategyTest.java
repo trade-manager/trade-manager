@@ -35,12 +35,12 @@
  */
 package org.trade.persistent.dao;
 
+import static org.junit.Assert.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -118,17 +118,17 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(tradestrategy);
+			assertNotNull(tradestrategy);
 
 			Integer version = tradestrategyHome.findVersionById(tradestrategy
 					.getIdTradeStrategy());
-			TestCase.assertNotNull(version);
+			assertNotNull(version);
 			_log.info("testFindVersionById IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy() + " version: "
 					+ version);
 
 		} catch (Exception e) {
-			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+			fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
 
@@ -137,14 +137,14 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(tradestrategy);
+			assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 
 			TradestrategyOrders positionOrders = tradestrategyHome
 					.findPositionOrdersByTradestrategyId(tradestrategy
 							.getIdTradeStrategy());
-			TestCase.assertNotNull(positionOrders);
+			assertNotNull(positionOrders);
 			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + "found.");
 			positionOrders.setStatus(TradestrategyStatus.CANCELLED);
@@ -156,11 +156,11 @@ public class TradestrategyTest {
 			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + "found Status: "
 					+ positionOrders.getStatus());
-			TestCase.assertEquals(TradestrategyStatus.CANCELLED,
+			assertEquals(TradestrategyStatus.CANCELLED,
 					positionOrders.getStatus());
 
 		} catch (Exception e) {
-			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+			fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
 
@@ -171,17 +171,17 @@ public class TradestrategyTest {
 
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(tradestrategy);
+			assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 			tradestrategy = tradestrategyHome.findById(tradestrategy
 					.getIdTradeStrategy());
-			TestCase.assertNotNull(tradestrategy);
+			assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy() + "found.");
 
 		} catch (Exception e) {
-			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+			fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
 
@@ -207,12 +207,12 @@ public class TradestrategyTest {
 					_log.info("testTradingdaysUpdate IdTradeStrategy:"
 							+ tradestrategy.getIdTradeStrategy() + "  Status: "
 							+ tradestrategy.getStatus());
-					TestCase.assertEquals(TradestrategyStatus.OPEN,
+					assertEquals(TradestrategyStatus.OPEN,
 							tradestrategy.getStatus());
 				}
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error update row " + e.getMessage());
+			fail("Error update row " + e.getMessage());
 		}
 	}
 
@@ -229,7 +229,7 @@ public class TradestrategyTest {
 
 			String fileName = "db/LoadFile10Stocks.csv";
 			tradingdays.populateDataFromFile(fileName, instance);
-			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());
+			assertFalse(tradingdays.getTradingdays().isEmpty());
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
@@ -243,7 +243,7 @@ public class TradestrategyTest {
 				aspectHome.remove(tradingday);
 			}
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -261,7 +261,7 @@ public class TradestrategyTest {
 			String fileName = "db/LoadFile1Stock.csv";
 
 			tradingdays.populateDataFromFile(fileName, instance);
-			TestCase.assertFalse(tradingdays.getTradingdays().isEmpty());
+			assertFalse(tradingdays.getTradingdays().isEmpty());
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
@@ -276,7 +276,7 @@ public class TradestrategyTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -433,7 +433,7 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(tradestrategy);
+			assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 			List<Tradestrategy> results = tradestrategyHome
@@ -445,10 +445,10 @@ public class TradestrategyTest {
 						+ value.getChartDays() + " Strategy: "
 						+ value.getStrategy().getName());
 			}
-			TestCase.assertNotNull(results);
+			assertNotNull(results);
 
 		} catch (Exception e) {
-			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+			fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
 
@@ -457,7 +457,7 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			TestCase.assertNotNull(tradestrategy);
+			assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 			List<Tradestrategy> results = tradestrategyHome
@@ -467,10 +467,10 @@ public class TradestrategyTest {
 			for (Tradestrategy value : results) {
 				_log.info("Contract: " + value.getContract().getSymbol());
 			}
-			TestCase.assertNotNull(results);
+			assertNotNull(results);
 
 		} catch (Exception e) {
-			TestCase.fail("Error testAddTradestrategy Msg: " + e.getMessage());
+			fail("Error testAddTradestrategy Msg: " + e.getMessage());
 		}
 	}
 }

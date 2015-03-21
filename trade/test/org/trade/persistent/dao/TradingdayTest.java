@@ -37,7 +37,7 @@ package org.trade.persistent.dao;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.jfree.data.DataUtilities;
 import org.junit.After;
@@ -121,11 +121,11 @@ public class TradingdayTest {
 			tradingdayHome.persist(transientInstance);
 			_log.info("Tradingday added Id = "
 					+ transientInstance.getIdTradingDay());
-			TestCase.assertNotNull(transientInstance.getIdTradingDay());
+			assertNotNull(transientInstance.getIdTradingDay());
 			aspectHome.remove(transientInstance);
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -152,10 +152,10 @@ public class TradingdayTest {
 			tradingdayHome.persist(transientInstance);
 			_log.info("Tradingday Update Id = "
 					+ transientInstance.getIdTradingDay());
-			TestCase.assertNotNull(transientInstance.getIdTradingDay());
+			assertNotNull(transientInstance.getIdTradingDay());
 			aspectHome.remove(transientInstance);
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

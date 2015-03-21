@@ -37,7 +37,7 @@ package org.trade.persistent.dao;
 
 import java.math.BigDecimal;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.jfree.data.DataUtilities;
 import org.junit.After;
@@ -109,7 +109,7 @@ public class TradelogReportTest {
 			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(
 					portfolio, TradingCalendar.getYearStart(),
 					TradingCalendar.getTodayBusinessDayEnd(), false, null);
-			TestCase.assertFalse(!tradelogReport.getTradelogDetail().isEmpty());
+			assertFalse(!tradelogReport.getTradelogDetail().isEmpty());
 			for (TradelogDetail tradelogDetail : tradelogReport
 					.getTradelogDetail()) {
 				_log.info("testTradelogDetails tradelogDetail: " + " getOpen:"
@@ -126,7 +126,7 @@ public class TradelogReportTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -141,7 +141,7 @@ public class TradelogReportTest {
 					portfolio, TradingCalendar.getYearStart(),
 					TradingCalendar.getTodayBusinessDayEnd(), null,
 					new BigDecimal(0));
-			TestCase.assertFalse(!tradelogReport.getTradelogSummary().isEmpty());
+			assertFalse(!tradelogReport.getTradelogSummary().isEmpty());
 			for (TradelogSummary tradelogSummary : tradelogReport
 					.getTradelogSummary()) {
 				_log.info("testTradelogSummary tradelogDetail: " + "getPeriod:"
@@ -157,7 +157,7 @@ public class TradelogReportTest {
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

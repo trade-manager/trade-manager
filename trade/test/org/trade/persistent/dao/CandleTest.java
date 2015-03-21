@@ -35,10 +35,10 @@
  */
 package org.trade.persistent.dao;
 
+import static org.junit.Assert.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
-import junit.framework.TestCase;
 
 import org.jfree.data.DataUtilities;
 import org.jfree.data.time.Minute;
@@ -127,14 +127,14 @@ public class CandleTest {
 					transientInstance.setTradeCount(10);
 
 					transientInstance = aspectHome.persist(transientInstance);
-					TestCase.assertNotNull(transientInstance.getIdCandle());
+					assertNotNull(transientInstance.getIdCandle());
 					_log.info("testAddCandle IdCandle: "
 							+ transientInstance.getIdCandle());
 				}
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 
@@ -155,21 +155,21 @@ public class CandleTest {
 						.getBaseCandleSeries(), Tradingday
 						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
 						true, 0);
-				TestCase.assertFalse(tradestrategy.getStrategyData()
+				assertFalse(tradestrategy.getStrategyData()
 						.getBaseCandleSeries().isEmpty());
 				candleHome.persistCandleSeries(tradestrategy.getStrategyData()
 						.getBaseCandleSeries());
 
 				_log.info("testAddCandle IdTradeStrategy: "
 						+ tradestrategy.getIdTradeStrategy());
-				TestCase.assertNotNull(((CandleItem) tradestrategy
-						.getStrategyData().getBaseCandleSeries().getDataItem(0))
-						.getCandle().getIdCandle());
+				assertNotNull(((CandleItem) tradestrategy.getStrategyData()
+						.getBaseCandleSeries().getDataItem(0)).getCandle()
+						.getIdCandle());
 
 			}
 
 		} catch (Exception e) {
-			TestCase.fail("Error adding row " + e.getMessage());
+			fail("Error adding row " + e.getMessage());
 		}
 	}
 }

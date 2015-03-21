@@ -44,8 +44,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -155,9 +153,8 @@ public class MatrixFunctionsTest {
 					/ ((endXY.x - startXY.x)));
 			double angle = (atan * 180) / Math.PI;
 			_log.info("angle: " + angle);
-			TestCase.assertEquals(67.38,
-					new BigDecimal(angle).setScale(2, RoundingMode.HALF_UP)
-							.doubleValue());
+			assertEquals(new BigDecimal(67.38).setScale(2, RoundingMode.HALF_UP),
+					new BigDecimal(angle).setScale(2, RoundingMode.HALF_UP));
 
 		} catch (Exception ex) {
 			_log.error("Error testAngle: " + ex.getMessage(), ex);
