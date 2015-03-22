@@ -164,7 +164,7 @@
 	</target>
 	<target name="dist-test" depends="compile-test, cleanDB" description="generate the distributable files ">
 		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-		<jar jarfile="${dist}/${name-test}" basedir="${build}" compress="true" >	
+		<jar jarfile="${dist}/${name-test}" basedir="${build}" compress="true">
 			<fileset dir="${srctradetest}">
 				<include name="**/*.xml" />
 				<include name="**/*.csv" />
@@ -174,7 +174,7 @@
 		<delete dir="${build}" />
 	</target>
 	<target name="run-tests" depends="dist-test" description="run your test suite">
-		<junit printsummary="yes" haltonfailure="no" showoutput="yes" fork="yes">
+		<junit fork="yes" showoutput="yes" haltonfailure="no" printsummary="yes" outputtoformatters="true">
 			<jvmarg value="-Duser.timezone=${market.timezone}" />
 			<jvmarg value="-Dlog4j.configuration=file:${config}/config.properties" />
 			<classpath>
@@ -189,6 +189,7 @@
 					<include name="tools.jar" />
 				</fileset>
 			</classpath>
+			<formatter type="brief" usefile="false" />
 			<batchtest fork="yes" todir="${reports}/raw/">
 				<formatter type="xml" />
 				<fileset dir="${srctradetest}">
