@@ -1403,7 +1403,7 @@ public class TradePersistentModelTest {
 			assertNull(result);
 		}
 	}
-/*
+
 	@Test
 	public void testReassignStrategy() {
 
@@ -1424,7 +1424,7 @@ public class TradePersistentModelTest {
 			fail("Error testReassignStrategy Msg: " + e.getMessage());
 		}
 	};
-
+	/*
 	@Test
 	public void testReplaceTradingday() {
 
