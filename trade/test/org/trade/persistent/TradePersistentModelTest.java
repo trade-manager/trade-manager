@@ -841,7 +841,6 @@ public class TradePersistentModelTest {
 			fail("Error testFindTradeAccountById Msg: " + e.getMessage());
 		}
 	}
-	
 
 	@Test
 	public void testFindAccountByNumber() {
@@ -1405,27 +1404,6 @@ public class TradePersistentModelTest {
 	}
 
 	@Test
-	public void testReassignStrategy() {
-
-		try {
-			Tradingday tradingday = this.tradePersistentModel
-					.findTradingdayById(this.tradestrategy.getTradingday()
-							.getIdTradingDay());
-			assertFalse(tradingday.getTradestrategies().isEmpty());
-			Strategy toStrategy = (Strategy) DAOStrategy.newInstance()
-					.getObject();
-			toStrategy = this.tradePersistentModel.findStrategyById(toStrategy
-					.getIdStrategy());
-			this.tradePersistentModel.reassignStrategy(
-					this.tradestrategy.getStrategy(), toStrategy, tradingday);
-			assertEquals(toStrategy, tradingday.getTradestrategies().get(0)
-					.getStrategy());
-		} catch (Exception e) {
-			fail("Error testReassignStrategy Msg: " + e.getMessage());
-		}
-	};
-	/*
-	@Test
 	public void testReplaceTradingday() {
 
 		try {
@@ -1474,5 +1452,20 @@ public class TradePersistentModelTest {
 			fail("Error testReplaceTradingday Msg: " + e.getMessage());
 		}
 	}
-	*/
+
+	/*
+	 * @Test public void testReassignStrategy() {
+	 * 
+	 * try { Tradingday tradingday = this.tradePersistentModel
+	 * .findTradingdayById(this.tradestrategy.getTradingday()
+	 * .getIdTradingDay());
+	 * assertFalse(tradingday.getTradestrategies().isEmpty()); Strategy
+	 * toStrategy = (Strategy) DAOStrategy.newInstance() .getObject();
+	 * toStrategy = this.tradePersistentModel.findStrategyById(toStrategy
+	 * .getIdStrategy()); this.tradePersistentModel.reassignStrategy(
+	 * this.tradestrategy.getStrategy(), toStrategy, tradingday);
+	 * assertEquals(toStrategy, tradingday.getTradestrategies().get(0)
+	 * .getStrategy()); } catch (Exception e) {
+	 * fail("Error testReassignStrategy Msg: " + e.getMessage()); } }
+	 */
 }
