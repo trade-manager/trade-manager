@@ -1460,6 +1460,9 @@ public class TradePersistentModelTest {
 			Tradingday tradingday = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
+			if (tradingday.getTradestrategies().isEmpty()) {
+				_log.error("testReassignStrategy: is empty");
+			}
 			assertFalse("testReassignStrategy: No tradestrategies", tradingday
 					.getTradestrategies().isEmpty());
 			Strategy toStrategy = (Strategy) DAOStrategy.newInstance()
@@ -1470,8 +1473,14 @@ public class TradePersistentModelTest {
 					this.tradestrategy.getStrategy(), toStrategy, tradingday);
 			if (toStrategy.equals(tradingday.getTradestrategies().get(0)
 					.getStrategy())) {
-				_log.error("toStrategy Id: " + toStrategy);
-				_log.error("toStrategy Id: "
+				_log.error("testReassignStrategy: equals toStrategy Id: "
+						+ toStrategy);
+				_log.error("testReassignStrategy: equals toStrategy Id: "
+						+ tradingday.getTradestrategies().get(0).getStrategy());
+			} else {
+				_log.error("testReassignStrategy: not equals toStrategy Id: "
+						+ toStrategy);
+				_log.error("testReassignStrategy: not equals toStrategy Id: "
 						+ tradingday.getTradestrategies().get(0).getStrategy());
 			}
 

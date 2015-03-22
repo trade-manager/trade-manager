@@ -174,7 +174,7 @@
 		<delete dir="${build}" />
 	</target>
 	<target name="run-tests" depends="dist-test" description="run your test suite">
-		<junit fork="yes" showoutput="yes" haltonfailure="no" printsummary="yes" outputtoformatters="true">
+		<junit fork="yes" showoutput="yes" haltonfailure="no" printsummary="yes" >
 			<jvmarg value="-Duser.timezone=${market.timezone}" />
 			<jvmarg value="-Dlog4j.configuration=file:${config}/config.properties" />
 			<classpath>
@@ -189,7 +189,6 @@
 					<include name="tools.jar" />
 				</fileset>
 			</classpath>
-			<formatter type="brief" usefile="false" />
 			<batchtest fork="yes" todir="${reports}/raw/">
 				<formatter type="xml" />
 				<fileset dir="${srctradetest}">
