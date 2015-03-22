@@ -1171,7 +1171,7 @@ public class TradePersistentModelTest {
 			fail("Error testFindTradingdaysByDateRange Msg: " + e.getMessage());
 		}
 	}
-	/*
+
 	@Test
 	public void testFindTradestrategyDistinctByDateRange() {
 
@@ -1331,7 +1331,7 @@ public class TradePersistentModelTest {
 			fail("Error testFindStrategies Msg: " + e.getMessage());
 		}
 	}
-
+	/*
 	@Test
 	public void testFindAspectsByClassName() {
 
