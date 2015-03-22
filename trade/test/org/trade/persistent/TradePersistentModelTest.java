@@ -1467,8 +1467,9 @@ public class TradePersistentModelTest {
 					.getIdStrategy());
 			this.tradePersistentModel.reassignStrategy(
 					this.tradestrategy.getStrategy(), toStrategy, tradingday);
-			assertEquals(toStrategy.getId(), tradingday.getTradestrategies().get(0)
-					.getStrategy().getId());
+			assertEquals("Strategy should now be equal", toStrategy.getId(),
+					tradingday.getTradestrategies().get(0).getStrategy()
+							.getId());
 		} catch (Exception e) {
 			fail("Error testReassignStrategy Msg: " + e.getMessage());
 		}

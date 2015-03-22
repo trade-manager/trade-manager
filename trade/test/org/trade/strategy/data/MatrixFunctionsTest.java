@@ -153,7 +153,8 @@ public class MatrixFunctionsTest {
 					/ ((endXY.x - startXY.x)));
 			double angle = (atan * 180) / Math.PI;
 			_log.info("angle: " + angle);
-			assertEquals(new BigDecimal(67.38).setScale(2, RoundingMode.HALF_UP),
+			assertEquals(
+					new BigDecimal(67.38).setScale(2, RoundingMode.HALF_UP),
 					new BigDecimal(angle).setScale(2, RoundingMode.HALF_UP));
 
 		} catch (Exception ex) {

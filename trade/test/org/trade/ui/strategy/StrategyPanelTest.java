@@ -78,24 +78,28 @@ public class StrategyPanelTest {
 			TradeAppLoadConfig.loadAppProperties();
 			m_templateName = ConfigProperties
 					.getPropAsString("trade.strategy.template");
-			assertNotNull(m_templateName);
+			assertNotNull("setUp: Strategy template should be not null",
+					m_templateName);
 			m_strategyDir = ConfigProperties
 					.getPropAsString("trade.strategy.default.dir");
-			assertNotNull(m_strategyDir);
+			assertNotNull("setUp: Strategy dir should be not null",
+					m_strategyDir);
 			this.tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-			assertNotNull(this.tradestrategy);
+			assertNotNull("setUp: tradestrategy should be not null",
+					this.tradestrategy);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
-			assertNotNull(strategies);
+			assertNotNull("setUp: Strategy should be not null", strategies);
 			for (Strategy strategy : strategies) {
 				String fileName = m_strategyDir + "/"
 						+ StrategyRule.PACKAGE.replace('.', '/')
 						+ strategy.getClassName() + ".java";
 				String content = readFile(fileName);
-				assertNotNull(content);
+				assertNotNull("setUp: Strategy java file should be not null",
+						content);
 				if (strategy.getRules().isEmpty()) {
 					Rule nextRule = new Rule(strategy, 1, null, new Date(),
 							content.getBytes(), new Date());
@@ -150,12 +154,16 @@ public class StrategyPanelTest {
 					+ ".java";
 			String content = readFile(fileName);
 			sourceText.setText(content);
-			assertEquals(content, sourceText.getText());
+			assertEquals(
+					"testJEditorPaneTextEquals:  Strategy java file not equal to test source",
+					content, sourceText.getText());
 			writeFile(fileName, content);
 			String content1 = readFile(fileName);
 			sourceText.setText(null);
 			sourceText.setText(content1);
-			assertEquals(content1, sourceText.getText());
+			assertEquals(
+					"testJEditorPaneTextEquals:  Strategy java file not equal to test source after write",
+					content1, sourceText.getText());
 
 		} catch (Exception ex) {
 			fail("Error creating instance : " + ex.getMessage());
@@ -240,8 +248,10 @@ public class StrategyPanelTest {
 			StrategyData.doDummyData(tradestrategy.getStrategyData()
 					.getBaseCandleSeries(), Tradingday.newInstance(new Date()),
 					1, BarSize.FIVE_MIN, true, 1);
-			assertFalse(tradestrategy.getStrategyData().getBaseCandleSeries()
-					.isEmpty());
+			assertFalse(
+					"testDoCompileAndRunStrategy: Base candle series is empty",
+					tradestrategy.getStrategyData().getBaseCandleSeries()
+							.isEmpty());
 			strategyProxy.cancel();
 
 		} catch (Exception ex) {
@@ -270,7 +280,7 @@ public class StrategyPanelTest {
 				if (version.equals(rule.getVersion()))
 					myRule = rule;
 			}
-			assertNotNull(myRule);
+			assertNotNull("testDoCompileRule: Rule should be not null", myRule);
 			String fileDir = m_tmpDir + "/"
 					+ StrategyRule.PACKAGE.replace('.', '/');
 			String className = strategy.getClassName() + ".java";
@@ -291,7 +301,8 @@ public class StrategyPanelTest {
 			StrategyRule strategyRule = (StrategyRule) dynacode
 					.newProxyInstance(StrategyRule.class, StrategyRule.PACKAGE
 							+ strategy.getClassName(), parm);
-			assertNotNull(strategyRule);
+			assertNotNull("testDoCompileRule: StrategyRule should be not null",
+					strategyRule);
 
 		} catch (Exception ex) {
 			fail("Error compiling rule : " + ex.getMessage());
@@ -309,7 +320,8 @@ public class StrategyPanelTest {
 			assertEquals(false, strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
-			assertNotNull(strategy);
+			assertNotNull("testDoCompile: Strategy should be not null",
+					strategy);
 			Rule myrule = null;
 
 			Collections.sort(strategy.getRules(), Rule.VERSION_ORDER);
@@ -327,7 +339,7 @@ public class StrategyPanelTest {
 				myrule.setVersion(myrule.getVersion() + 1);
 				myrule.setIdRule(null);
 			}
-			assertNotNull(myrule);
+			assertNotNull("testDoCompile: Rule should be not null", myrule);
 			strategyPanel.doCompile(myrule);
 		} catch (Exception ex) {
 			fail("Error saving rule : " + ex.getMessage());
@@ -341,11 +353,13 @@ public class StrategyPanelTest {
 					this.tradePersistentModel);
 			List<Strategy> strategies = this.tradePersistentModel
 					.findStrategies();
-			assertNotNull("No strategies", strategies);
-			assertEquals(false, strategies.isEmpty());
+			assertNotNull("testDoSave: Strategies should be not null",
+					strategies);
+			assertEquals("testDoSave: Strategies should be not empty", false,
+					strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
-			assertNotNull(strategy);
+			assertNotNull("testDoSave: Strategy should be not null", strategy);
 			Rule myrule = null;
 
 			Collections.sort(strategy.getRules(), Rule.VERSION_ORDER);
@@ -374,12 +388,15 @@ public class StrategyPanelTest {
 			textArea.setText(content);
 			myrule.setRule(textArea.getText().getBytes());
 			myrule = this.tradePersistentModel.persistAspect(myrule);
-			assertNotNull(myrule.getIdRule());
+			assertNotNull("testDoSave: Rule should be not null",
+					myrule.getIdRule());
 			Rule ruleSaved = this.tradePersistentModel.findRuleById(myrule
 					.getIdRule());
-			assertNotNull(ruleSaved.getIdRule());
+			assertNotNull("testDoSave: Rule saved should be not null",
+					ruleSaved.getIdRule());
 			String javaCode = new String(ruleSaved.getRule());
-			assertEquals(javaCode, textArea.getText());
+			assertEquals("testDoSave: Java rule test should be equals",
+					javaCode, textArea.getText());
 			_log.info("Java file to Saved: " + javaCode);
 
 		} catch (Exception ex) {
