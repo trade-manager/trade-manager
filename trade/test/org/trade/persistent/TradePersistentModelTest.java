@@ -1468,7 +1468,7 @@ public class TradePersistentModelTest {
 					.getIdStrategy());
 			this.tradePersistentModel.reassignStrategy(
 					this.tradestrategy.getStrategy(), toStrategy, tradingday);
-			if (!toStrategy.equals(tradingday.getTradestrategies().get(0)
+			if (toStrategy.equals(tradingday.getTradestrategies().get(0)
 					.getStrategy())) {
 				_log.error("toStrategy Id: " + toStrategy);
 				_log.error("toStrategy Id: "
