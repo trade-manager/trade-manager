@@ -1331,7 +1331,7 @@ public class TradePersistentModelTest {
 			fail("Error testFindStrategies Msg: " + e.getMessage());
 		}
 	}
-	/*
+
 	@Test
 	public void testFindAspectsByClassName() {
 
@@ -1403,7 +1403,7 @@ public class TradePersistentModelTest {
 			assertNull(result);
 		}
 	}
-
+/*
 	@Test
 	public void testReassignStrategy() {
 
