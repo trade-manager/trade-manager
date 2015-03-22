@@ -429,6 +429,7 @@ public class TradePersistentModelTest {
 			/*
 			 * Fill the stop orders.
 			 */
+
 			positionOrders = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
@@ -515,331 +516,332 @@ public class TradePersistentModelTest {
 			fail("Error testLifeCycleTradeOrder Msg: " + e.getMessage());
 		}
 	}
-
-	@Test
-	public void testPersistTradingday() {
-
-		try {
-			this.tradePersistentModel.persistTradingday(this.tradestrategy
-					.getTradingday());
-			assertNotNull(this.tradestrategy.getTradingday().getIdTradingDay());
-		} catch (Exception e) {
-			fail("Error testPersistTradingday Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistTradestrategy() {
-
-		try {
-			Tradestrategy result = this.tradePersistentModel
-					.persistAspect(this.tradestrategy);
-			assertNotNull(result.getId());
-		} catch (Exception e) {
-			fail("Error testPersistTradestrategy Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistContract() {
-
-		try {
-			Contract result = this.tradePersistentModel
-					.persistContract(this.tradestrategy.getContract());
-			assertNotNull(result.getId());
-		} catch (Exception e) {
-			fail("Error testPersistContract Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testResetDefaultPortfolio() {
-
-		try {
-			this.tradePersistentModel.resetDefaultPortfolio(this.tradestrategy
-					.getPortfolio());
-			assertTrue(this.tradestrategy.getPortfolio().getIsDefault());
-		} catch (Exception e) {
-			fail("Error testResetDefaultTradeAccount Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistTradeOrder() {
-
-		try {
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
-			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
-			TradeOrder result = this.tradePersistentModel
-					.persistTradeOrder(tradeOrder);
-			assertNotNull(result.getId());
-		} catch (Exception e) {
-			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistTradeOrderFilledLong() {
-
-		try {
-
-			BigDecimal price = new BigDecimal(100.00);
-			TradeOrder tradeOrderBuy = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.STPLMT, 1000, price,
-					price.add(new BigDecimal(2)), new Date());
-			tradeOrderBuy
-					.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-							.intValue());
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderBuy);
-			tradeOrderBuy.setStatus(OrderStatus.SUBMITTED);
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderBuy);
-
-			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy,
-					"Paper", price, tradeOrderBuy.getQuantity() / 2, "ISLAND",
-					"1a", price, tradeOrderBuy.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderBuy.addTradeOrderfill(orderfill);
-
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderBuy);
-
-			TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrderBuy,
-					"Paper", tradeOrderBuy.getLimitPrice(),
-					tradeOrderBuy.getQuantity(), "BATS", "1b",
-					tradeOrderBuy.getLimitPrice(),
-					tradeOrderBuy.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderBuy.addTradeOrderfill(orderfill1);
-			tradeOrderBuy.setCommission(new BigDecimal(5.0));
-
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderBuy);
-
-			TradeOrder tradeOrderSell = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.LMT, tradeOrderBuy.getQuantity(),
-					null, new BigDecimal(105.00), new Date());
-			tradeOrderSell.setOrderKey((new BigDecimal(
-					(Math.random() * 1000000))).intValue());
-			tradeOrderSell = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderSell);
-			tradeOrderSell.setStatus(OrderStatus.SUBMITTED);
-			tradeOrderSell = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderSell);
-
-			TradeOrderfill orderfill2 = new TradeOrderfill(tradeOrderSell,
-					"Paper", tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity() / 2, "ISLAND", "2a",
-					tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderSell.addTradeOrderfill(orderfill2);
-			tradeOrderSell = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderSell);
-
-			TradeOrderfill orderfill3 = new TradeOrderfill(tradeOrderSell,
-					"Paper", tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity(), "BATS", "2b",
-					tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderSell.addTradeOrderfill(orderfill3);
-			tradeOrderSell.setCommission(new BigDecimal(5.0));
-
-			TradeOrder result = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderSell);
-			assertFalse(result.getTradePosition().isOpen());
-
-			assertEquals((new Money(4000.00)).getBigDecimalValue(), result
-					.getTradePosition().getTotalNetValue());
-
-			double totalPriceMade = (result.getTradePosition()
-					.getTotalSellValue().doubleValue() / result
-					.getTradePosition().getTotalSellQuantity().doubleValue())
-					- (result.getTradePosition().getTotalBuyValue()
-							.doubleValue() / result.getTradePosition()
-							.getTotalBuyQuantity().doubleValue());
-			assertEquals((new Money(4.00)).getBigDecimalValue(), (new Money(
-					totalPriceMade)).getBigDecimalValue());
-			assertEquals(new Integer(1000), result.getTradePosition()
-					.getTotalBuyQuantity());
-			assertEquals(new Integer(1000), result.getTradePosition()
-					.getTotalSellQuantity());
-			assertEquals(new Integer(0), result.getTradePosition()
-					.getOpenQuantity());
-
-		} catch (Exception e) {
-			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistTradeOrderFilledShort() {
-
-		try {
-			BigDecimal price = new BigDecimal(100.00);
-			TradeOrder tradeOrderBuy = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.STPLMT, 1000, price,
-					price.subtract(new BigDecimal(2)), new Date());
-			tradeOrderBuy
-					.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-							.intValue());
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderBuy);
-			tradeOrderBuy.setStatus(OrderStatus.SUBMITTED);
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderBuy);
-
-			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy,
-					"Paper", price, tradeOrderBuy.getQuantity() / 2, "ISLAND",
-					"1a", price, tradeOrderBuy.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderBuy.addTradeOrderfill(orderfill);
-
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderBuy);
-
-			TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrderBuy,
-					"Paper", tradeOrderBuy.getLimitPrice(),
-					tradeOrderBuy.getQuantity(), "BATS", "1b",
-					tradeOrderBuy.getLimitPrice(),
-					tradeOrderBuy.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderBuy.addTradeOrderfill(orderfill1);
-			tradeOrderBuy.setCommission(new BigDecimal(5.0));
-
-			tradeOrderBuy = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderBuy);
-
-			TradeOrder tradeOrderSell = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.LMT, tradeOrderBuy.getQuantity(),
-					null, new BigDecimal(95.00), new Date());
-			tradeOrderSell.setOrderKey((new BigDecimal(
-					(Math.random() * 1000000))).intValue());
-			tradeOrderSell = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderSell);
-			tradeOrderSell.setStatus(OrderStatus.SUBMITTED);
-			tradeOrderSell = this.tradePersistentModel
-					.persistTradeOrder(tradeOrderSell);
-
-			TradeOrderfill orderfill2 = new TradeOrderfill(tradeOrderSell,
-					"Paper", tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity() / 2, "ISLAND", "2a",
-					tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderSell.addTradeOrderfill(orderfill2);
-			tradeOrderSell = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderSell);
-
-			TradeOrderfill orderfill3 = new TradeOrderfill(tradeOrderSell,
-					"Paper", tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity(), "BATS", "2b",
-					tradeOrderSell.getLimitPrice(),
-					tradeOrderSell.getQuantity() / 2,
-					this.tradestrategy.getSide(), new Date());
-			tradeOrderSell.addTradeOrderfill(orderfill3);
-			tradeOrderSell.setCommission(new BigDecimal(5.0));
-
-			TradeOrder result = this.tradePersistentModel
-					.persistTradeOrderfill(tradeOrderSell);
-			assertFalse(result.getTradePosition().isOpen());
-
-			assertEquals((new Money(4000.00)).getBigDecimalValue(), result
-					.getTradePosition().getTotalNetValue());
-
-			double totalPriceMade = (result.getTradePosition()
-					.getTotalSellValue().doubleValue() / result
-					.getTradePosition().getTotalSellQuantity().doubleValue())
-					- (result.getTradePosition().getTotalBuyValue()
-							.doubleValue() / result.getTradePosition()
-							.getTotalBuyQuantity().doubleValue());
-			assertEquals((new Money(4.00)).getBigDecimalValue(), (new Money(
-					totalPriceMade)).getBigDecimalValue());
-			assertEquals(new Integer(1000), result.getTradePosition()
-					.getTotalBuyQuantity());
-			assertEquals(new Integer(1000), result.getTradePosition()
-					.getTotalSellQuantity());
-			assertEquals(new Integer(0), result.getTradePosition()
-					.getOpenQuantity());
-
-		} catch (Exception e) {
-			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistTradePosition() {
-
-		try {
-			TradePosition tradePosition = new TradePosition(
-					this.tradestrategy.getContract(), new Date(), Side.BOT);
-			TradePosition result = this.tradePersistentModel
-					.persistAspect(tradePosition);
-			assertNotNull(result.getId());
-		} catch (Exception e) {
-			fail("Error testPersistTrade Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistCandleSeries() {
-
-		try {
-
-			CandleSeries candleSeries = new CandleSeries(this.tradestrategy
-					.getStrategyData().getBaseCandleSeries(), BarSize.FIVE_MIN,
-					this.tradestrategy.getTradingday().getOpen(),
-					this.tradestrategy.getTradingday().getClose());
-			StrategyData.doDummyData(candleSeries,
-					this.tradestrategy.getTradingday(), 5, BarSize.FIVE_MIN,
-					true, 0);
-			long timeStart = System.currentTimeMillis();
-			this.tradePersistentModel.persistCandleSeries(candleSeries);
-			_log.info("Total time: " + (System.currentTimeMillis() - timeStart)
-					/ 1000);
-			assertFalse(candleSeries.isEmpty());
-			assertNotNull(((CandleItem) candleSeries.getDataItem(0))
-					.getCandle().getIdCandle());
-		} catch (Exception e) {
-			fail("Error testPersistCandleSeries Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testPersistCandle() {
-
-		try {
-
-			Date date = TradingCalendar.getTodayBusinessDayStart();
-			CandleItem candleItem = new CandleItem(
-					this.tradestrategy.getContract(),
-					this.tradestrategy.getTradingday(), new CandlePeriod(date,
-							300), 100.23, 100.23, 100.23, 100.23, 10000000L,
-					100.23, 100, date);
-			Candle candle = this.tradePersistentModel.persistCandle(candleItem
-					.getCandle());
-			assertNotNull(candle.getIdCandle());
-		} catch (Exception e) {
-			fail("Error testPersistCandleItem Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
-	public void testFindAccountById() {
-
-		try {
-			Portfolio result = this.tradePersistentModel
-					.findPortfolioById(this.tradestrategy.getPortfolio()
-							.getIdPortfolio());
-			assertNotNull(result);
-		} catch (Exception e) {
-			fail("Error testFindTradeAccountById Msg: " + e.getMessage());
-		}
-	}
+//
+//	@Test
+//	public void testPersistTradingday() {
+//
+//		try {
+//			this.tradePersistentModel.persistTradingday(this.tradestrategy
+//					.getTradingday());
+//			assertNotNull(this.tradestrategy.getTradingday().getIdTradingDay());
+//		} catch (Exception e) {
+//			fail("Error testPersistTradingday Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistTradestrategy() {
+//
+//		try {
+//			Tradestrategy result = this.tradePersistentModel
+//					.persistAspect(this.tradestrategy);
+//			assertNotNull(result.getId());
+//		} catch (Exception e) {
+//			fail("Error testPersistTradestrategy Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistContract() {
+//
+//		try {
+//			Contract result = this.tradePersistentModel
+//					.persistContract(this.tradestrategy.getContract());
+//			assertNotNull(result.getId());
+//		} catch (Exception e) {
+//			fail("Error testPersistContract Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testResetDefaultPortfolio() {
+//
+//		try {
+//			this.tradePersistentModel.resetDefaultPortfolio(this.tradestrategy
+//					.getPortfolio());
+//			assertTrue(this.tradestrategy.getPortfolio().getIsDefault());
+//		} catch (Exception e) {
+//			fail("Error testResetDefaultTradeAccount Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistTradeOrder() {
+//
+//		try {
+//			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
+//					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
+//			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
+//					.intValue());
+//			TradeOrder result = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrder);
+//			assertNotNull(result.getId());
+//		} catch (Exception e) {
+//			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistTradeOrderFilledLong() {
+//
+//		try {
+//
+//			BigDecimal price = new BigDecimal(100.00);
+//			TradeOrder tradeOrderBuy = new TradeOrder(this.tradestrategy,
+//					Action.BUY, OrderType.STPLMT, 1000, price,
+//					price.add(new BigDecimal(2)), new Date());
+//			tradeOrderBuy
+//					.setOrderKey((new BigDecimal((Math.random() * 1000000)))
+//							.intValue());
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderBuy);
+//			tradeOrderBuy.setStatus(OrderStatus.SUBMITTED);
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderBuy);
+//
+//			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy,
+//					"Paper", price, tradeOrderBuy.getQuantity() / 2, "ISLAND",
+//					"1a", price, tradeOrderBuy.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderBuy.addTradeOrderfill(orderfill);
+//
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderBuy);
+//
+//			TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrderBuy,
+//					"Paper", tradeOrderBuy.getLimitPrice(),
+//					tradeOrderBuy.getQuantity(), "BATS", "1b",
+//					tradeOrderBuy.getLimitPrice(),
+//					tradeOrderBuy.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderBuy.addTradeOrderfill(orderfill1);
+//			tradeOrderBuy.setCommission(new BigDecimal(5.0));
+//
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderBuy);
+//
+//			TradeOrder tradeOrderSell = new TradeOrder(this.tradestrategy,
+//					Action.SELL, OrderType.LMT, tradeOrderBuy.getQuantity(),
+//					null, new BigDecimal(105.00), new Date());
+//			tradeOrderSell.setOrderKey((new BigDecimal(
+//					(Math.random() * 1000000))).intValue());
+//			tradeOrderSell = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderSell);
+//			tradeOrderSell.setStatus(OrderStatus.SUBMITTED);
+//			tradeOrderSell = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderSell);
+//
+//			TradeOrderfill orderfill2 = new TradeOrderfill(tradeOrderSell,
+//					"Paper", tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity() / 2, "ISLAND", "2a",
+//					tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderSell.addTradeOrderfill(orderfill2);
+//			tradeOrderSell = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderSell);
+//
+//			TradeOrderfill orderfill3 = new TradeOrderfill(tradeOrderSell,
+//					"Paper", tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity(), "BATS", "2b",
+//					tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderSell.addTradeOrderfill(orderfill3);
+//			tradeOrderSell.setCommission(new BigDecimal(5.0));
+//
+//			TradeOrder result = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderSell);
+//			assertFalse(result.getTradePosition().isOpen());
+//
+//			assertEquals((new Money(4000.00)).getBigDecimalValue(), result
+//					.getTradePosition().getTotalNetValue());
+//
+//			double totalPriceMade = (result.getTradePosition()
+//					.getTotalSellValue().doubleValue() / result
+//					.getTradePosition().getTotalSellQuantity().doubleValue())
+//					- (result.getTradePosition().getTotalBuyValue()
+//							.doubleValue() / result.getTradePosition()
+//							.getTotalBuyQuantity().doubleValue());
+//			assertEquals((new Money(4.00)).getBigDecimalValue(), (new Money(
+//					totalPriceMade)).getBigDecimalValue());
+//			assertEquals(new Integer(1000), result.getTradePosition()
+//					.getTotalBuyQuantity());
+//			assertEquals(new Integer(1000), result.getTradePosition()
+//					.getTotalSellQuantity());
+//			assertEquals(new Integer(0), result.getTradePosition()
+//					.getOpenQuantity());
+//
+//		} catch (Exception e) {
+//			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistTradeOrderFilledShort() {
+//
+//		try {
+//			BigDecimal price = new BigDecimal(100.00);
+//			TradeOrder tradeOrderBuy = new TradeOrder(this.tradestrategy,
+//					Action.SELL, OrderType.STPLMT, 1000, price,
+//					price.subtract(new BigDecimal(2)), new Date());
+//			tradeOrderBuy
+//					.setOrderKey((new BigDecimal((Math.random() * 1000000)))
+//							.intValue());
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderBuy);
+//			tradeOrderBuy.setStatus(OrderStatus.SUBMITTED);
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderBuy);
+//
+//			TradeOrderfill orderfill = new TradeOrderfill(tradeOrderBuy,
+//					"Paper", price, tradeOrderBuy.getQuantity() / 2, "ISLAND",
+//					"1a", price, tradeOrderBuy.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderBuy.addTradeOrderfill(orderfill);
+//
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderBuy);
+//
+//			TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrderBuy,
+//					"Paper", tradeOrderBuy.getLimitPrice(),
+//					tradeOrderBuy.getQuantity(), "BATS", "1b",
+//					tradeOrderBuy.getLimitPrice(),
+//					tradeOrderBuy.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderBuy.addTradeOrderfill(orderfill1);
+//			tradeOrderBuy.setCommission(new BigDecimal(5.0));
+//
+//			tradeOrderBuy = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderBuy);
+//
+//			TradeOrder tradeOrderSell = new TradeOrder(this.tradestrategy,
+//					Action.BUY, OrderType.LMT, tradeOrderBuy.getQuantity(),
+//					null, new BigDecimal(95.00), new Date());
+//			tradeOrderSell.setOrderKey((new BigDecimal(
+//					(Math.random() * 1000000))).intValue());
+//			tradeOrderSell = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderSell);
+//			tradeOrderSell.setStatus(OrderStatus.SUBMITTED);
+//			tradeOrderSell = this.tradePersistentModel
+//					.persistTradeOrder(tradeOrderSell);
+//
+//			TradeOrderfill orderfill2 = new TradeOrderfill(tradeOrderSell,
+//					"Paper", tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity() / 2, "ISLAND", "2a",
+//					tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderSell.addTradeOrderfill(orderfill2);
+//			tradeOrderSell = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderSell);
+//
+//			TradeOrderfill orderfill3 = new TradeOrderfill(tradeOrderSell,
+//					"Paper", tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity(), "BATS", "2b",
+//					tradeOrderSell.getLimitPrice(),
+//					tradeOrderSell.getQuantity() / 2,
+//					this.tradestrategy.getSide(), new Date());
+//			tradeOrderSell.addTradeOrderfill(orderfill3);
+//			tradeOrderSell.setCommission(new BigDecimal(5.0));
+//
+//			TradeOrder result = this.tradePersistentModel
+//					.persistTradeOrderfill(tradeOrderSell);
+//			assertFalse(result.getTradePosition().isOpen());
+//
+//			assertEquals((new Money(4000.00)).getBigDecimalValue(), result
+//					.getTradePosition().getTotalNetValue());
+//
+//			double totalPriceMade = (result.getTradePosition()
+//					.getTotalSellValue().doubleValue() / result
+//					.getTradePosition().getTotalSellQuantity().doubleValue())
+//					- (result.getTradePosition().getTotalBuyValue()
+//							.doubleValue() / result.getTradePosition()
+//							.getTotalBuyQuantity().doubleValue());
+//			assertEquals((new Money(4.00)).getBigDecimalValue(), (new Money(
+//					totalPriceMade)).getBigDecimalValue());
+//			assertEquals(new Integer(1000), result.getTradePosition()
+//					.getTotalBuyQuantity());
+//			assertEquals(new Integer(1000), result.getTradePosition()
+//					.getTotalSellQuantity());
+//			assertEquals(new Integer(0), result.getTradePosition()
+//					.getOpenQuantity());
+//
+//		} catch (Exception e) {
+//			fail("Error testPersistTradeOrder Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistTradePosition() {
+//
+//		try {
+//			TradePosition tradePosition = new TradePosition(
+//					this.tradestrategy.getContract(), new Date(), Side.BOT);
+//			TradePosition result = this.tradePersistentModel
+//					.persistAspect(tradePosition);
+//			assertNotNull(result.getId());
+//		} catch (Exception e) {
+//			fail("Error testPersistTrade Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistCandleSeries() {
+//
+//		try {
+//
+//			CandleSeries candleSeries = new CandleSeries(this.tradestrategy
+//					.getStrategyData().getBaseCandleSeries(), BarSize.FIVE_MIN,
+//					this.tradestrategy.getTradingday().getOpen(),
+//					this.tradestrategy.getTradingday().getClose());
+//			StrategyData.doDummyData(candleSeries,
+//					this.tradestrategy.getTradingday(), 5, BarSize.FIVE_MIN,
+//					true, 0);
+//			long timeStart = System.currentTimeMillis();
+//			this.tradePersistentModel.persistCandleSeries(candleSeries);
+//			_log.info("Total time: " + (System.currentTimeMillis() - timeStart)
+//					/ 1000);
+//			assertFalse(candleSeries.isEmpty());
+//			assertNotNull(((CandleItem) candleSeries.getDataItem(0))
+//					.getCandle().getIdCandle());
+//		} catch (Exception e) {
+//			fail("Error testPersistCandleSeries Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testPersistCandle() {
+//
+//		try {
+//
+//			Date date = TradingCalendar.getTodayBusinessDayStart();
+//			CandleItem candleItem = new CandleItem(
+//					this.tradestrategy.getContract(),
+//					this.tradestrategy.getTradingday(), new CandlePeriod(date,
+//							300), 100.23, 100.23, 100.23, 100.23, 10000000L,
+//					100.23, 100, date);
+//			Candle candle = this.tradePersistentModel.persistCandle(candleItem
+//					.getCandle());
+//			assertNotNull(candle.getIdCandle());
+//		} catch (Exception e) {
+//			fail("Error testPersistCandleItem Msg: " + e.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testFindAccountById() {
+//
+//		try {
+//			Portfolio result = this.tradePersistentModel
+//					.findPortfolioById(this.tradestrategy.getPortfolio()
+//							.getIdPortfolio());
+//			assertNotNull(result);
+//		} catch (Exception e) {
+//			fail("Error testFindTradeAccountById Msg: " + e.getMessage());
+//		}
+//	}
+	
 /*
 	@Test
 	public void testFindAccountByNumber() {
