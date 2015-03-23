@@ -45,7 +45,6 @@ import org.jfree.data.DataUtilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,15 +109,6 @@ public class TradePersistentModelTest {
 	private PersistentModel tradePersistentModel = null;
 	private Tradestrategy tradestrategy = null;
 	private Integer clientId = null;
-
-	/**
-	 * Method setUpBeforeClass.
-	 * 
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
 
 	/**
 	 * Method setUp.
@@ -429,7 +419,6 @@ public class TradePersistentModelTest {
 			/*
 			 * Fill the stop orders.
 			 */
-
 			positionOrders = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
@@ -1366,26 +1355,40 @@ public class TradePersistentModelTest {
 	}
 
 	@Test
-	public void testCRUDAspect() {
+	public void testFindAspectById() {
 
 		try {
 			Aspect result = this.tradePersistentModel
 					.findAspectById(this.tradestrategy);
 			assertNotNull(result);
-			result = this.tradePersistentModel
+		} catch (Exception e) {
+			fail("Error testFindAspectById Msg: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testPersistAspect() {
+
+		try {
+			Aspect result = this.tradePersistentModel
 					.persistAspect(this.tradestrategy);
 			assertNotNull(result);
+		} catch (Exception e) {
+			fail("Error testPersistAspect Msg: " + e.getMessage());
+		}
+	}
 
+	@Test
+	public void testRemoveAspect() {
+		Aspect result = null;
+		try {
 			this.tradePersistentModel.removeAspect(this.tradestrategy);
-			try {
-				result = this.tradePersistentModel
-						.findAspectById(this.tradestrategy);
-
-			} catch (PersistentModelException e) {
-				assertNotNull(e);
-			}
+			result = this.tradePersistentModel
+					.findAspectById(this.tradestrategy);
 		} catch (PersistentModelException e) {
-			fail("Error testFindAspectById Msg: " + e.getMessage());
+
+		} finally {
+			assertNull(result);
 		}
 	}
 
@@ -1396,24 +1399,19 @@ public class TradePersistentModelTest {
 			Tradingday tradingday = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
-			assertFalse("testReassignStrategy: No tradestrategies", tradingday
-					.getTradestrategies().isEmpty());
+			assertFalse(tradingday.getTradestrategies().isEmpty());
 			Strategy toStrategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
 			toStrategy = this.tradePersistentModel.findStrategyById(toStrategy
 					.getIdStrategy());
 			this.tradePersistentModel.reassignStrategy(
 					this.tradestrategy.getStrategy(), toStrategy, tradingday);
-
-			Strategy newStrategy = tradingday.getTradestrategies().get(0)
-					.getStrategy();
-			assertEquals("testReassignStrategy: Strategy should now be equal",
-					toStrategy, newStrategy);
-
+			assertEquals(toStrategy, tradingday.getTradestrategies().get(0)
+					.getStrategy());
 		} catch (Exception e) {
 			fail("Error testReassignStrategy Msg: " + e.getMessage());
 		}
-	}
+	};
 
 	@Test
 	public void testReplaceTradingday() {
@@ -1431,6 +1429,7 @@ public class TradePersistentModelTest {
 			TradingdayTable tradingdayTable = new TradingdayTable(
 					tradingdayModel);
 			tradingdayTable.setRowSelectionInterval(0, 0);
+
 			this.tradestrategy.getContract().setIndustry("Computer");
 			Contract result = this.tradePersistentModel
 					.persistContract(this.tradestrategy.getContract());
@@ -1453,10 +1452,8 @@ public class TradePersistentModelTest {
 					.getTradingday(openDate.getDate(), closeDate.getDate());
 			assertNotNull(transferObject);
 
-			Tradingday tradingday = tradingdays.getTradingday(
-					instance1.getOpen(), instance1.getClose());
-			assertNotNull(tradingday);
-
+			assertNotNull(tradingdays.getTradingday(instance1.getOpen(),
+					instance1.getClose()));
 			String industry = transferObject.getTradestrategies().get(0)
 					.getContract().getIndustry();
 			assertNotNull(industry);
@@ -1465,5 +1462,4 @@ public class TradePersistentModelTest {
 			fail("Error testReplaceTradingday Msg: " + e.getMessage());
 		}
 	}
-
 }
