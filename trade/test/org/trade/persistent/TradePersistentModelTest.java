@@ -1389,80 +1389,97 @@ public class TradePersistentModelTest {
 		}
 	}
 
+	@Test
+	public void testReassignStrategy() {
 
-//	@Test
-//	public void testReplaceTradingday() {
-//
-//		try {
-//			Tradingdays tradingdays = new Tradingdays();
-//
-//			Tradingday instance1 = tradePersistentModel
-//					.findTradingdayById(this.tradestrategy.getTradingday()
-//							.getIdTradingDay());
-//			tradingdays.add(instance1);
-//
-//			TradingdayTableModel tradingdayModel = new TradingdayTableModel();
-//			tradingdayModel.setData(tradingdays);
-//			TradingdayTable tradingdayTable = new TradingdayTable(
-//					tradingdayModel);
-//			tradingdayTable.setRowSelectionInterval(0, 0);
-//
-//			this.tradestrategy.getContract().setIndustry("Computer");
-//			Contract result = this.tradePersistentModel
-//					.persistContract(this.tradestrategy.getContract());
-//			assertNotNull(result);
-//			Tradingday instance2 = tradePersistentModel
-//					.findTradingdayById(this.tradestrategy.getTradingday()
-//							.getIdTradingDay());
-//			tradingdays.replaceTradingday(instance2);
-//			int selectedRow = tradingdayTable.getSelectedRow();
-//			tradingdayModel.setData(tradingdays);
-//			if (selectedRow > -1) {
-//				tradingdayTable.setRowSelectionInterval(selectedRow,
-//						selectedRow);
-//			}
-//			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) tradingdayModel
-//					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 0);
-//			org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) tradingdayModel
-//					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 1);
-//			Tradingday transferObject = tradingdayModel.getData()
-//					.getTradingday(openDate.getDate(), closeDate.getDate());
-//			assertNotNull(transferObject);
-//
-//			assertNotNull(tradingdays.getTradingday(instance1.getOpen(),
-//					instance1.getClose()));
-//			String industry = transferObject.getTradestrategies().get(0)
-//					.getContract().getIndustry();
-//			assertNotNull(industry);
-//
-//		} catch (Exception e) {
-//			fail("Error testReplaceTradingday Msg: " + e.getMessage());
-//		}
-//	}
+		try {
+			Tradingday tradingday = this.tradePersistentModel
+					.findTradingdayById(this.tradestrategy.getTradingday()
+							.getIdTradingDay());
+			assertFalse("testReassignStrategy: No tradestrategies", tradingday
+					.getTradestrategies().isEmpty());
+			Strategy toStrategy = (Strategy) DAOStrategy.newInstance()
+					.getObject();
+			toStrategy = this.tradePersistentModel.findStrategyById(toStrategy
+					.getIdStrategy());
+			this.tradePersistentModel.reassignStrategy(
+					this.tradestrategy.getStrategy(), toStrategy, tradingday);
 
-//	@Test
-//	public void testReassignStrategy() {
-//
-//		try {
-//			Tradingday tradingday = this.tradePersistentModel
-//					.findTradingdayById(this.tradestrategy.getTradingday()
-//							.getIdTradingDay());
-//			assertFalse("testReassignStrategy: No tradestrategies", tradingday
-//					.getTradestrategies().isEmpty());
-//			Strategy toStrategy = (Strategy) DAOStrategy.newInstance()
-//					.getObject();
-//			toStrategy = this.tradePersistentModel.findStrategyById(toStrategy
-//					.getIdStrategy());
-//			this.tradePersistentModel.reassignStrategy(
-//					this.tradestrategy.getStrategy(), toStrategy, tradingday);
-//
-//			Strategy newStrategy = tradingday.getTradestrategies().get(0)
-//					.getStrategy();
-//			assertEquals("testReassignStrategy: Strategy should now be equal",
-//					toStrategy, newStrategy);
-//
-//		} catch (Exception e) {
-//			fail("Error testReassignStrategy Msg: " + e.getMessage());
-//		}
-//	}
+			Strategy newStrategy = tradingday.getTradestrategies().get(0)
+					.getStrategy();
+			assertEquals("testReassignStrategy: Strategy should now be equal",
+					toStrategy, newStrategy);
+
+		} catch (Exception e) {
+			fail("Error testReassignStrategy Msg: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testReplaceTradingday() {
+
+		try {
+			Tradingdays tradingdays = new Tradingdays();
+
+			Tradingday instance1 = tradePersistentModel
+					.findTradingdayById(this.tradestrategy.getTradingday()
+							.getIdTradingDay());
+			tradingdays.add(instance1);
+
+			TradingdayTableModel tradingdayModel = new TradingdayTableModel();
+			tradingdayModel.setData(tradingdays);
+			_log.error("testReplaceTradingday: 1");
+			TradingdayTable tradingdayTable = new TradingdayTable(
+					tradingdayModel);
+			tradingdayTable.setRowSelectionInterval(0, 0);
+			_log.error("testReplaceTradingday: 2");
+			this.tradestrategy.getContract().setIndustry("Computer");
+			Contract result = this.tradePersistentModel
+					.persistContract(this.tradestrategy.getContract());
+
+			if (null == result)
+				_log.error("testReplaceTradingday: Contract is null");
+			assertNotNull(result);
+			_log.error("testReplaceTradingday: 3");
+			Tradingday instance2 = tradePersistentModel
+					.findTradingdayById(this.tradestrategy.getTradingday()
+							.getIdTradingDay());
+			tradingdays.replaceTradingday(instance2);
+			int selectedRow = tradingdayTable.getSelectedRow();
+			tradingdayModel.setData(tradingdays);
+			if (selectedRow > -1) {
+				tradingdayTable.setRowSelectionInterval(selectedRow,
+						selectedRow);
+			}
+			_log.error("testReplaceTradingday: 4");
+			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) tradingdayModel
+					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 0);
+			org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) tradingdayModel
+					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 1);
+			Tradingday transferObject = tradingdayModel.getData()
+					.getTradingday(openDate.getDate(), closeDate.getDate());
+			_log.error("testReplaceTradingday: 5");
+			if (null == transferObject)
+				_log.error("testReplaceTradingday: Tradingday is null");
+			assertNotNull(transferObject);
+
+			Tradingday tradingday = tradingdays.getTradingday(
+					instance1.getOpen(), instance1.getClose());
+			if (null == tradingday)
+				_log.error("testReplaceTradingday: Tradingday is null");
+
+			assertNotNull(tradingday);
+
+			String industry = transferObject.getTradestrategies().get(0)
+					.getContract().getIndustry();
+
+			if (null == industry)
+				_log.error("testReplaceTradingday: industry is null");
+			assertNotNull(industry);
+
+		} catch (Exception e) {
+			fail("Error testReplaceTradingday Msg: " + e.getMessage());
+		}
+	}
+
 }
