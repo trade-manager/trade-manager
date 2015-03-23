@@ -1428,19 +1428,13 @@ public class TradePersistentModelTest {
 
 			TradingdayTableModel tradingdayModel = new TradingdayTableModel();
 			tradingdayModel.setData(tradingdays);
-			_log.error("testReplaceTradingday: 1");
 			TradingdayTable tradingdayTable = new TradingdayTable(
 					tradingdayModel);
 			tradingdayTable.setRowSelectionInterval(0, 0);
-			_log.error("testReplaceTradingday: 2");
 			this.tradestrategy.getContract().setIndustry("Computer");
 			Contract result = this.tradePersistentModel
 					.persistContract(this.tradestrategy.getContract());
-
-			if (null == result)
-				_log.error("testReplaceTradingday: Contract is null");
 			assertNotNull(result);
-			_log.error("testReplaceTradingday: 3");
 			Tradingday instance2 = tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
@@ -1451,30 +1445,20 @@ public class TradePersistentModelTest {
 				tradingdayTable.setRowSelectionInterval(selectedRow,
 						selectedRow);
 			}
-			_log.error("testReplaceTradingday: 4");
 			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) tradingdayModel
 					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 0);
 			org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) tradingdayModel
 					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 1);
 			Tradingday transferObject = tradingdayModel.getData()
 					.getTradingday(openDate.getDate(), closeDate.getDate());
-			_log.error("testReplaceTradingday: 5");
-			if (null == transferObject)
-				_log.error("testReplaceTradingday: Tradingday is null");
 			assertNotNull(transferObject);
 
 			Tradingday tradingday = tradingdays.getTradingday(
 					instance1.getOpen(), instance1.getClose());
-			if (null == tradingday)
-				_log.error("testReplaceTradingday: Tradingday is null");
-
 			assertNotNull(tradingday);
 
 			String industry = transferObject.getTradestrategies().get(0)
 					.getContract().getIndustry();
-
-			if (null == industry)
-				_log.error("testReplaceTradingday: industry is null");
 			assertNotNull(industry);
 
 		} catch (Exception e) {
