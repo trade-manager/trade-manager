@@ -174,7 +174,7 @@
 		<delete dir="${build}" />
 	</target>
 	<target name="run-tests" depends="dist-test" description="run your test suite">
-		<junit fork="yes" showoutput="yes" haltonfailure="no" printsummary="yes" >
+		<junit fork="yes" showoutput="yes" haltonfailure="yes" printsummary="yes" >
 			<jvmarg value="-Duser.timezone=${market.timezone}" />
 			<jvmarg value="-Dlog4j.configuration=file:${config}/config.properties" />
 			<classpath>
