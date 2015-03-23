@@ -1366,41 +1366,32 @@ public class TradePersistentModelTest {
 	}
 
 	@Test
-	public void testFindAspectById() {
+	public void testCRUDAspect() {
 
 		try {
 			Aspect result = this.tradePersistentModel
 					.findAspectById(this.tradestrategy);
 			assertNotNull(result);
-		} catch (Exception e) {
+			result = this.tradePersistentModel
+					.persistAspect(this.tradestrategy);
+			assertNotNull(result);
+
+			this.tradePersistentModel.removeAspect(this.tradestrategy);
+			try {
+				result = this.tradePersistentModel
+						.findAspectById(this.tradestrategy);
+
+			} catch (PersistentModelException e) {
+				assertNotNull(e);
+			}
+		} catch (PersistentModelException e) {
 			fail("Error testFindAspectById Msg: " + e.getMessage());
 		}
 	}
 
 	@Test
-	public void testPersistAspect() {
-
-		try {
-			Aspect result = this.tradePersistentModel
-					.persistAspect(this.tradestrategy);
-			assertNotNull(result);
-		} catch (Exception e) {
-			fail("Error testPersistAspect Msg: " + e.getMessage());
-		}
-	}
-
-	@Test
 	public void testRemoveAspect() {
-		Aspect result = null;
-		try {
-			this.tradePersistentModel.removeAspect(this.tradestrategy);
-			result = this.tradePersistentModel
-					.findAspectById(this.tradestrategy);
-		} catch (PersistentModelException e) {
 
-		} finally {
-			assertNull(result);
-		}
 	}
 
 	@Test
