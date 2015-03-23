@@ -1389,60 +1389,56 @@ public class TradePersistentModelTest {
 		}
 	}
 
-	@Test
-	public void testRemoveAspect() {
 
-	}
-
-	@Test
-	public void testReplaceTradingday() {
-
-		try {
-			Tradingdays tradingdays = new Tradingdays();
-
-			Tradingday instance1 = tradePersistentModel
-					.findTradingdayById(this.tradestrategy.getTradingday()
-							.getIdTradingDay());
-			tradingdays.add(instance1);
-
-			TradingdayTableModel tradingdayModel = new TradingdayTableModel();
-			tradingdayModel.setData(tradingdays);
-			TradingdayTable tradingdayTable = new TradingdayTable(
-					tradingdayModel);
-			tradingdayTable.setRowSelectionInterval(0, 0);
-
-			this.tradestrategy.getContract().setIndustry("Computer");
-			Contract result = this.tradePersistentModel
-					.persistContract(this.tradestrategy.getContract());
-			assertNotNull(result);
-			Tradingday instance2 = tradePersistentModel
-					.findTradingdayById(this.tradestrategy.getTradingday()
-							.getIdTradingDay());
-			tradingdays.replaceTradingday(instance2);
-			int selectedRow = tradingdayTable.getSelectedRow();
-			tradingdayModel.setData(tradingdays);
-			if (selectedRow > -1) {
-				tradingdayTable.setRowSelectionInterval(selectedRow,
-						selectedRow);
-			}
-			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) tradingdayModel
-					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 0);
-			org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) tradingdayModel
-					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 1);
-			Tradingday transferObject = tradingdayModel.getData()
-					.getTradingday(openDate.getDate(), closeDate.getDate());
-			assertNotNull(transferObject);
-
-			assertNotNull(tradingdays.getTradingday(instance1.getOpen(),
-					instance1.getClose()));
-			String industry = transferObject.getTradestrategies().get(0)
-					.getContract().getIndustry();
-			assertNotNull(industry);
-
-		} catch (Exception e) {
-			fail("Error testReplaceTradingday Msg: " + e.getMessage());
-		}
-	}
+//	@Test
+//	public void testReplaceTradingday() {
+//
+//		try {
+//			Tradingdays tradingdays = new Tradingdays();
+//
+//			Tradingday instance1 = tradePersistentModel
+//					.findTradingdayById(this.tradestrategy.getTradingday()
+//							.getIdTradingDay());
+//			tradingdays.add(instance1);
+//
+//			TradingdayTableModel tradingdayModel = new TradingdayTableModel();
+//			tradingdayModel.setData(tradingdays);
+//			TradingdayTable tradingdayTable = new TradingdayTable(
+//					tradingdayModel);
+//			tradingdayTable.setRowSelectionInterval(0, 0);
+//
+//			this.tradestrategy.getContract().setIndustry("Computer");
+//			Contract result = this.tradePersistentModel
+//					.persistContract(this.tradestrategy.getContract());
+//			assertNotNull(result);
+//			Tradingday instance2 = tradePersistentModel
+//					.findTradingdayById(this.tradestrategy.getTradingday()
+//							.getIdTradingDay());
+//			tradingdays.replaceTradingday(instance2);
+//			int selectedRow = tradingdayTable.getSelectedRow();
+//			tradingdayModel.setData(tradingdays);
+//			if (selectedRow > -1) {
+//				tradingdayTable.setRowSelectionInterval(selectedRow,
+//						selectedRow);
+//			}
+//			org.trade.core.valuetype.Date openDate = (org.trade.core.valuetype.Date) tradingdayModel
+//					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 0);
+//			org.trade.core.valuetype.Date closeDate = (org.trade.core.valuetype.Date) tradingdayModel
+//					.getValueAt(tradingdayTable.convertRowIndexToModel(0), 1);
+//			Tradingday transferObject = tradingdayModel.getData()
+//					.getTradingday(openDate.getDate(), closeDate.getDate());
+//			assertNotNull(transferObject);
+//
+//			assertNotNull(tradingdays.getTradingday(instance1.getOpen(),
+//					instance1.getClose()));
+//			String industry = transferObject.getTradestrategies().get(0)
+//					.getContract().getIndustry();
+//			assertNotNull(industry);
+//
+//		} catch (Exception e) {
+//			fail("Error testReplaceTradingday Msg: " + e.getMessage());
+//		}
+//	}
 
 //	@Test
 //	public void testReassignStrategy() {
