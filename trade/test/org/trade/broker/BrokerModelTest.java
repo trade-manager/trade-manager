@@ -79,11 +79,11 @@ public class BrokerModelTest {
 
 	private String symbol = "TEST";
 	private BrokerModel m_brokerModel;
-	private Integer clientId;
+	private static Integer clientId;
 	private BigDecimal price = new BigDecimal(108.85);
 	private Tradestrategy tradestrategy = null;
-	private Integer port = null;
-	private String host = null;
+	private static Integer port = null;
+	private static String host = null;
 	private final static String _broker = BrokerModel._brokerTest;
 
 	/**
@@ -93,6 +93,10 @@ public class BrokerModelTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		TradeAppLoadConfig.loadAppProperties();
+		clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
+		port = new Integer(ConfigProperties.getPropAsString("trade.tws.port"));
+		host = ConfigProperties.getPropAsString("trade.tws.host");
 	}
 
 	/**
@@ -103,13 +107,8 @@ public class BrokerModelTest {
 	@Before
 	public void setUp() throws Exception {
 		try {
-			TradeAppLoadConfig.loadAppProperties();
 			m_brokerModel = (BrokerModel) ClassFactory.getServiceForInterface(
-					_broker, this);
-			clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
-			port = new Integer(
-					ConfigProperties.getPropAsString("trade.tws.port"));
-			ConfigProperties.getPropAsString("trade.tws.host");
+					_broker, BrokerModelTest.class);
 			m_brokerModel.onConnect(host, port, clientId);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 			assertNotNull(this.tradestrategy);
@@ -126,8 +125,8 @@ public class BrokerModelTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		m_brokerModel.onDisconnect();
 		TradestrategyTest.clearDBData();
+		m_brokerModel.onDisconnect();
 	}
 
 	/**

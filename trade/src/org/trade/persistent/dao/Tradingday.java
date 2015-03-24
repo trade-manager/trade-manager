@@ -397,6 +397,39 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
+	 * Method hashCode.
+	 * 
+	 * For every field tested in the equals-Method, calculate a hash code c by:
+	 * 
+	 * If the field f is a boolean: calculate * (f ? 0 : 1);
+	 * 
+	 * If the field f is a byte, char, short or int: calculate (int)f;
+	 * 
+	 * If the field f is a long: calculate (int)(f ^ (f >>> 32));
+	 * 
+	 * If the field f is a float: calculate Float.floatToIntBits(f);
+	 * 
+	 * If the field f is a double: calculate Double.doubleToLongBits(f) and
+	 * handle the return value like every long value;
+	 * 
+	 * If the field f is an object: Use the result of the hashCode() method or 0
+	 * if f == null;
+	 * 
+	 * If the field f is an array: See every field as separate element and
+	 * calculate the hash value in a recursive fashion and combine the values as
+	 * described next.
+	 * 
+	 * @return int
+	 */
+	public int hashCode() {
+		int hash = super.hashCode();
+		hash = hash + (this.getOpen() == null ? 0 : this.getOpen().hashCode());
+		hash = hash
+				+ (this.getClose() == null ? 0 : this.getClose().hashCode());
+		return hash;
+	}
+
+	/**
 	 * Method equals.
 	 * 
 	 * @param objectToCompare

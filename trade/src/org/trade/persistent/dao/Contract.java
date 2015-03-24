@@ -1088,6 +1088,46 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	}
 
 	/**
+	 * Method hashCode.
+	 * 
+	 * For every field tested in the equals-Method, calculate a hash code c by:
+	 * 
+	 * If the field f is a boolean: calculate * (f ? 0 : 1);
+	 * 
+	 * If the field f is a byte, char, short or int: calculate (int)f;
+	 * 
+	 * If the field f is a long: calculate (int)(f ^ (f >>> 32));
+	 * 
+	 * If the field f is a float: calculate Float.floatToIntBits(f);
+	 * 
+	 * If the field f is a double: calculate Double.doubleToLongBits(f) and
+	 * handle the return value like every long value;
+	 * 
+	 * If the field f is an object: Use the result of the hashCode() method or 0
+	 * if f == null;
+	 * 
+	 * If the field f is an array: See every field as separate element and
+	 * calculate the hash value in a recursive fashion and combine the values as
+	 * described next.
+	 * 
+	 * @return int
+	 */
+	public int hashCode() {
+		int hash = super.hashCode();
+		hash = hash
+				+ (this.getCurrency() == null ? 0 : this.getCurrency()
+						.hashCode());
+		hash = hash
+				+ (this.getExchange() == null ? 0 : this.getExchange()
+						.hashCode());
+		hash = hash
+				+ (this.getSecType() == null ? 0 : this.getSecType().hashCode());
+		hash = hash
+				+ (this.getSymbol() == null ? 0 : this.getSymbol().hashCode());
+		return hash;
+	}
+
+	/**
 	 * Method toString.
 	 * 
 	 * @return String

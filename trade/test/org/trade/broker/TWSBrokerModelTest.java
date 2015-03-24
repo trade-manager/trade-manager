@@ -39,11 +39,8 @@ import static org.junit.Assert.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
-import java.util.Collections;
+import java.beans.PropertyChangeEvent;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -66,15 +63,11 @@ import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
-import org.trade.persistent.dao.Strategy;
-import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.TradeOrder;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.Tradingdays;
-import org.trade.strategy.data.CandleDataset;
-import org.trade.strategy.data.CandleSeries;
-import org.trade.strategy.data.IndicatorSeries;
 import org.trade.ui.TradeAppLoadConfig;
 import org.trade.ui.base.BasePanel;
 
@@ -92,42 +85,32 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	private Tradingdays tradingdays = null;
 	private BrokerModel brokerManagerModel;
 	private PersistentModel tradePersistentModel = null;
-	private Integer clientId;
-	private Integer port = null;
-	private String host = null;
-	private int grandTotal = 0;
-	private int testCaseGrandTotal = 0;
-	private Integer backTestBarSize = 0;
-	private long startTime = 0;
-	private Timer timer = null;
+	private static Integer clientId;
+	private static Integer port = null;
+	private static String host = null;
+	private static int testCaseGrandTotal = 0;
+	private static Timer timer = null;
 	private boolean connectionFailed = false;
-
-	private final Integer TIME_BETWEEN_SUBMIT = new Integer(4);
-	private AtomicInteger timerRunning = null;
-	private final Object lockCoreUtilsTest = new Object();
+	private static AtomicInteger timerRunning = null;
+	private final static Object lockCoreUtilsTest = new Object();
 	private final static String _broker = BrokerModel._broker;
-	private LinkedList<Long> submitTimes = new LinkedList<Long>();
 
-	private static final ConcurrentHashMap<Integer, Tradestrategy> _indicatorTradestrategy = new ConcurrentHashMap<Integer, Tradestrategy>();
+	private BrokerDataRequestMonitor brokerDataRequestProgressMonitor = null;
 
-	public TWSBrokerModelTest() {
-		super();
+	/**
+	 * Method setUpBeforeClass.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
-			this.tradePersistentModel = (PersistentModel) ClassFactory
-					.getServiceForInterface(PersistentModel._persistentModel,
-							this);
-			this.brokerManagerModel = (BrokerModel) ClassFactory
-					.getServiceForInterface(_broker, this);
-			brokerManagerModel.addMessageListener(this);
 
 			clientId = ConfigProperties.getPropAsInt("trade.tws.clientId");
 			port = new Integer(
 					ConfigProperties.getPropAsString("trade.tws.port"));
 			host = ConfigProperties.getPropAsString("trade.tws.host");
-
-			backTestBarSize = ConfigProperties
-					.getPropAsInt("trade.backtest.barSize");
 
 			timer = new Timer(250, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -144,15 +127,6 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	}
 
 	/**
-	 * Method setUpBeforeClass.
-	 * 
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	/**
 	 * Method setUp.
 	 * 
 	 * @throws java.lang.Exception
@@ -160,13 +134,17 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	@Before
 	public void setUp() throws Exception {
 		try {
-
-			this.brokerManagerModel.onConnect(host, port, clientId);
+			tradePersistentModel = (PersistentModel) ClassFactory
+					.getServiceForInterface(PersistentModel._persistentModel,
+							this);
+			brokerManagerModel = (BrokerModel) ClassFactory
+					.getServiceForInterface(_broker, this);
+			brokerManagerModel.addMessageListener(this);
+			brokerManagerModel.onConnect(host, port, clientId);
 			timerRunning = new AtomicInteger(0);
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
-				while (!this.brokerManagerModel.isConnected()
-						&& !connectionFailed) {
+				while (!brokerManagerModel.isConnected() && !connectionFailed) {
 					lockCoreUtilsTest.wait();
 				}
 			}
@@ -188,14 +166,14 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	@After
 	public void tearDown() throws Exception {
 		deleteData();
-		if (this.brokerManagerModel.isConnected())
-			this.brokerManagerModel.onDisconnect();
+		if (brokerManagerModel.isConnected())
+			brokerManagerModel.onDisconnect();
 
 		/*
 		 * Wait 10min between each test run to avoid pacing violations.
 		 */
 		if (((Math.floor(testCaseGrandTotal / 58d) == (testCaseGrandTotal / 58d)) && (testCaseGrandTotal > 0))
-				&& this.brokerManagerModel.isConnected()) {
+				&& brokerManagerModel.isConnected()) {
 			timerRunning = new AtomicInteger(0);
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
@@ -226,7 +204,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	public void testOneSymbolTodayOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
-			if (this.brokerManagerModel.isConnected()) {
+			if (brokerManagerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/OneSymbolToday.csv";
 				Date tradingDay = new Date();
@@ -241,9 +219,42 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				for (Tradingday item : tradingdays.getTradingdays()) {
 					tradePersistentModel.persistTradingday(item);
 				}
+				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
+						brokerManagerModel, tradePersistentModel, tradingdays);
+				brokerDataRequestProgressMonitor
+						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+							public void propertyChange(PropertyChangeEvent evt) {
+								if ("progress".equals(evt.getPropertyName())) {
+									int progress = (Integer) evt.getNewValue();
+									String message = String.format(
+											"Completed %d%%.", progress);
+									_log.warn(message);
+								} else if ("information".equals(evt
+										.getPropertyName())) {
+									_log.warn("Information message: "
+											+ (String) evt.getNewValue());
+									if (brokerDataRequestProgressMonitor
+											.isDone()) {
+										String message = String.format(
+												"Completed %d%%.", 100);
+										_log.warn(message);
+									}
 
-				doInBackground();
-				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
+								} else if ("error".equals(evt.getPropertyName())) {
+									_log.error("Error getting history data."
+											+ ((Exception) evt.getNewValue())
+													.getMessage());
+								}
+							}
+						});
+				brokerDataRequestProgressMonitor.execute();
+				synchronized (lockCoreUtilsTest) {
+					while (brokerManagerModel.isConnected()
+							&& !connectionFailed
+							&& !brokerDataRequestProgressMonitor.isDone()) {
+						lockCoreUtilsTest.wait(1000);
+					}
+				}
 			}
 		} catch (Exception ex) {
 			fail("Error testOneSymbolOnBrokerData Msg: " + ex.getMessage());
@@ -251,12 +262,12 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	}
 
 	@Test
-	public void testGappersOneMonthOnBrokerData() {
+	public void testOneMonthContractsOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
-			if (this.brokerManagerModel.isConnected()) {
+			if (brokerManagerModel.isConnected()) {
 
-				String fileName = "trade/test/org/trade/broker/GappersOneMonth.csv";
+				String fileName = "trade/test/org/trade/broker/OneMonthContracts.csv";
 				Date tradingDay = new Date();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
@@ -269,9 +280,42 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				for (Tradingday item : tradingdays.getTradingdays()) {
 					tradePersistentModel.persistTradingday(item);
 				}
+				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
+						brokerManagerModel, tradePersistentModel, tradingdays);
+				brokerDataRequestProgressMonitor
+						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+							public void propertyChange(PropertyChangeEvent evt) {
+								if ("progress".equals(evt.getPropertyName())) {
+									int progress = (Integer) evt.getNewValue();
+									String message = String.format(
+											"Completed %d%%.", progress);
+									_log.warn(message);
+								} else if ("information".equals(evt
+										.getPropertyName())) {
+									_log.warn("Information message: "
+											+ (String) evt.getNewValue());
+									if (brokerDataRequestProgressMonitor
+											.isDone()) {
+										String message = String.format(
+												"Completed %d%%.", 100);
+										_log.warn(message);
+									}
 
-				doInBackground();
-				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
+								} else if ("error".equals(evt.getPropertyName())) {
+									_log.error("Error getting history data."
+											+ ((Exception) evt.getNewValue())
+													.getMessage());
+								}
+							}
+						});
+				brokerDataRequestProgressMonitor.execute();
+				synchronized (lockCoreUtilsTest) {
+					while (brokerManagerModel.isConnected()
+							&& !connectionFailed
+							&& !brokerDataRequestProgressMonitor.isDone()) {
+						lockCoreUtilsTest.wait(1000);
+					}
+				}
 			}
 		} catch (Exception ex) {
 			fail("Error testMarch2013OnBrokerData Msg: " + ex.getMessage());
@@ -279,27 +323,12 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	}
 
 	@Test
-	public void testHasSubmittedInSeconds() {
-
-		try {
-			int i = 0;
-			while (i < 20) {
-				hasSubmittedInSeconds();
-				i++;
-			}
-
-		} catch (Exception ex) {
-			fail("Error testHasSubmittedInSeconds Msg: " + ex.getMessage());
-		}
-	}
-
-	@Test
-	public void testOneSymbolTwoMths2013OnBrokerData() {
+	public void testOneSymbolTwoMthsOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
-			if (this.brokerManagerModel.isConnected()) {
+			if (brokerManagerModel.isConnected()) {
 
-				String fileName = "trade/test/org/trade/broker/OneSymbolTwoMths2013.csv";
+				String fileName = "trade/test/org/trade/broker/OneSymbolTwoMths.csv";
 				Date tradingDay = new Date();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
@@ -322,8 +351,42 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 					tradePersistentModel.persistTradingday(item);
 				}
 
-				doInBackground();
-				testCaseGrandTotal = testCaseGrandTotal + this.getGrandTotal();
+				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
+						brokerManagerModel, tradePersistentModel, tradingdays);
+				brokerDataRequestProgressMonitor
+						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+							public void propertyChange(PropertyChangeEvent evt) {
+								if ("progress".equals(evt.getPropertyName())) {
+									int progress = (Integer) evt.getNewValue();
+									String message = String.format(
+											"Completed %d%%.", progress);
+									_log.warn(message);
+								} else if ("information".equals(evt
+										.getPropertyName())) {
+									_log.warn("Information message: "
+											+ (String) evt.getNewValue());
+									if (brokerDataRequestProgressMonitor
+											.isDone()) {
+										String message = String.format(
+												"Completed %d%%.", 100);
+										_log.warn(message);
+									}
+
+								} else if ("error".equals(evt.getPropertyName())) {
+									_log.error("Error getting history data."
+											+ ((Exception) evt.getNewValue())
+													.getMessage());
+								}
+							}
+						});
+				brokerDataRequestProgressMonitor.execute();
+				synchronized (lockCoreUtilsTest) {
+					while (brokerManagerModel.isConnected()
+							&& !connectionFailed
+							&& !brokerDataRequestProgressMonitor.isDone()) {
+						lockCoreUtilsTest.wait(1000);
+					}
+				}
 			}
 		} catch (Exception ex) {
 			fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
@@ -331,573 +394,76 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 		}
 	}
 
-	/**
-	 * Method doInBackground.
-	 * 
-	 * @return Void
-	 */
-	public Void doInBackground() {
-		String message = null;
-		int totalSumbitted = 0;
-		int reSumbittedAt = 20;
-		ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
-		this.grandTotal = 0;
-		this.submitTimes.clear();
-
+	@Test
+	public void testMultiContractsMultiDaysOnBrokerData() {
+		tradingdays = new Tradingdays();
 		try {
+			if (brokerManagerModel.isConnected()) {
 
-			for (Tradingday tradingday : this.tradingdays.getTradingdays()) {
-				this.grandTotal = this.getGrandTotal()
-						+ tradingday.getTradestrategies().size();
-			}
-			this.startTime = System.currentTimeMillis();
-			// Initialize the progress bar
-			// getProgressBar().setMaximum(100);
-			// setProgress(0);
+				String fileName = "trade/test/org/trade/broker/MultiContractsMultiDays.csv";
+				Date tradingDay = new Date();
+				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
-			Collections.sort(tradingdays.getTradingdays(),
-					Tradingday.DATE_ORDER_ASC);
+				Tradingday tradingday = new Tradingday(
+						TradingCalendar.getBusinessDayStart(tradingDay),
+						TradingCalendar.getBusinessDayEnd(tradingDay));
 
-			for (Tradingday tradingday : tradingdays.getTradingdays()) {
-
-				totalSumbitted = processTradingday(
-						getTradingdayToProcess(tradingday,
-								runningContractRequests), totalSumbitted);
+				tradingdays.populateDataFromFile(fileName, tradingday);
 				/*
-				 * Every reSumbittedAt value submitted contracts try to run any
-				 * that could not be run due to a conflict. Run then in asc date
-				 * order value.
+				 * Set the chart days to one day so no over lap.
 				 */
-				if (totalSumbitted > reSumbittedAt) {
-					reSumbittedAt = totalSumbitted + reSumbittedAt;
-					totalSumbitted = reProcessTradingdays(tradingdays,
-							runningContractRequests, totalSumbitted);
+				for (Tradingday item : tradingdays.getTradingdays()) {
+					for (Tradestrategy tradestrategy : item
+							.getTradestrategies()) {
+						tradestrategy.setChartDays(1);
+					}
 				}
-			}
-			/*
-			 * If we are getting data for back testing and the backTestBarSize
-			 * is set. Then get the candles for the tradestrategy tradingday
-			 * with the new bar size setting. The backTestBroker will use these
-			 * candles to build up the candle on the Tradestrategy/BarSize.
-			 */
-			if (backTestBarSize > 0
-					&& this.brokerManagerModel.isBrokerDataOnly()) {
-				Collections.sort(tradingdays.getTradingdays(),
-						Tradingday.DATE_ORDER_ASC);
-				for (Tradingday itemTradingday : tradingdays.getTradingdays()) {
-					Date today = new Date();
-					if (!(TradingCalendar.isMarketHours(
-							itemTradingday.getOpen(),
-							itemTradingday.getClose(), today) && TradingCalendar
-							.sameDay(itemTradingday.getOpen(), today))) {
-						if (itemTradingday.getTradestrategies().isEmpty())
-							continue;
-						Tradingday tradingday = (Tradingday) itemTradingday
-								.clone();
-						for (Tradestrategy itemTradestrategy : itemTradingday
-								.getTradestrategies()) {
-							if (backTestBarSize < itemTradestrategy
-									.getBarSize()) {
-								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
-										.clone();
-								tradestrategy.setBarSize(backTestBarSize);
-								tradestrategy.setChartDays(1);
-								tradestrategy
-										.setIdTradeStrategy(this.brokerManagerModel
-												.getNextRequestId());
-								tradingday.addTradestrategy(tradestrategy);
-								this.grandTotal++;
+
+				for (Tradingday item : tradingdays.getTradingdays()) {
+					tradePersistentModel.persistTradingday(item);
+				}
+
+				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
+						brokerManagerModel, tradePersistentModel, tradingdays);
+				brokerDataRequestProgressMonitor
+						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+							public void propertyChange(PropertyChangeEvent evt) {
+								if ("progress".equals(evt.getPropertyName())) {
+									int progress = (Integer) evt.getNewValue();
+									String message = String.format(
+											"Completed %d%%.", progress);
+									_log.warn(message);
+								} else if ("information".equals(evt
+										.getPropertyName())) {
+									_log.warn("Information message: "
+											+ (String) evt.getNewValue());
+									if (brokerDataRequestProgressMonitor
+											.isDone()) {
+										String message = String.format(
+												"Completed %d%%.", 100);
+										_log.warn(message);
+									}
+
+								} else if ("error".equals(evt.getPropertyName())) {
+									_log.error("Error getting history data."
+											+ ((Exception) evt.getNewValue())
+													.getMessage());
+								}
 							}
-						}
-						totalSumbitted = processTradingday(
-								getTradingdayToProcess(tradingday,
-										runningContractRequests),
-								totalSumbitted);
-					}
-				}
-			}
-
-			/*
-			 * Every reSumbittedAt value submitted contracts try to run any that
-			 * could not be run due to a conflict. Run then in asc date order
-			 * value.
-			 */
-
-			totalSumbitted = reProcessTradingdays(tradingdays,
-					runningContractRequests, totalSumbitted);
-
-		} catch (InterruptedException ex) {
-			// Do nothing
-			_log.error("doInBackground interupted Msg: ", ex.getMessage());
-		} catch (Exception ex) {
-			_log.error("Error getting history data Msg: ", ex.getMessage());
-			// setErrorMessage("Error getting history data.", ex.getMessage(),
-			// ex);
-		} finally {
-			synchronized (this.brokerManagerModel.getHistoricalData()) {
-				while ((this.brokerManagerModel.getHistoricalData().size() > 0)) {
-					int percent = (int) (((double) (getGrandTotal() - this.brokerManagerModel
-							.getHistoricalData().size()) / getGrandTotal()) * 100d);
-					_log.info("Percent: " + percent);
-					try {
-						this.brokerManagerModel.getHistoricalData().wait();
-					} catch (InterruptedException ex) {
-						// Do nothing
-						_log.error("doInBackground finally interupted Msg: ",
-								ex.getMessage());
-					}
-				}
-			}
-			// setProgress(100);
-			message = "Completed Historical data total contracts processed: "
-					+ totalSumbitted + " in : "
-					+ ((System.currentTimeMillis() - this.startTime) / 1000)
-					+ " Seconds.";
-			_log.warn(message);
-			// publish(message);
-
-		}
-		return null;
-	}
-
-	/**
-	 * Method submitBrokerRequest.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @param totalSumbitted
-	 *            int
-	 * @return int
-	 * @throws InterruptedException
-	 * @throws BrokerModelException
-	 */
-	private int submitBrokerRequest(Tradestrategy tradestrategy, Date endDate,
-			int totalSumbitted) throws InterruptedException,
-			BrokerModelException {
-
-		if (this.brokerManagerModel.isHistoricalDataRunning(tradestrategy
-				.getContract())) {
-			_log.error("submitBrokerRequest contract already running: "
-					+ tradestrategy.getContract().getSymbol() + " endDate: "
-					+ endDate + " barSize: " + tradestrategy.getBarSize());
-			return totalSumbitted;
-		}
-		_log.info("submitBrokerRequest: "
-				+ tradestrategy.getContract().getSymbol() + " endDate: "
-				+ endDate);
-
-		this.brokerManagerModel.onBrokerData(tradestrategy, endDate);
-
-		totalSumbitted++;
-		hasSubmittedInSeconds();
-		_log.info("Total: " + getGrandTotal() + " totalSumbitted: "
-				+ totalSumbitted);
-		/*
-		 * Need to slow things down as limit is 60 including real time bars
-		 * requests. When connected to TWS. Note only TWSManager return true for
-		 * connected.
-		 */
-		if (((Math.floor(totalSumbitted / 58d) == (totalSumbitted / 58d)) && (totalSumbitted > 0))
-				&& this.brokerManagerModel.isConnected()) {
-			timerRunning = new AtomicInteger(0);
-			timer.start();
-			synchronized (lockCoreUtilsTest) {
-				while (timerRunning.get() / 1000 < 601) {
-					if ((timerRunning.get() % 60000) == 0) {
-						String message = "Please wait "
-								+ (10 - (timerRunning.get() / 1000 / 60))
-								+ " minutes as there are more than 60 data requests.";
-						_log.warn(message);
-					}
-					lockCoreUtilsTest.wait();
-				}
-			}
-			timer.stop();
-		}
-
-		/*
-		 * The SwingWorker has a maximum of 10 threads to run and this process
-		 * uses one so we have 9 left for the BrokerWorkers. So wait while the
-		 * BrokerWorkers threads complete.
-		 */
-		synchronized (this.brokerManagerModel.getHistoricalData()) {
-			while ((this.brokerManagerModel.getHistoricalData().size() > 8)) {
-				this.brokerManagerModel.getHistoricalData().wait();
-			}
-		}
-
-		int percent = (int) (((double) (totalSumbitted - this.brokerManagerModel
-				.getHistoricalData().size()) / getGrandTotal()) * 100d);
-		_log.warn("Percent complete: " + percent);
-		return totalSumbitted;
-	}
-
-	/**
-	 * Method hasSubmittedInSeconds. Make sure no more than six requests every 2
-	 * seconds.
-	 * 
-	 * 162 - Historical Market Data Service error message: Historical data
-	 * request pacing violation
-	 * 
-	 * The following conditions can cause a pacing violation:
-	 * 
-	 * Making identical historical data requests within 15 seconds;
-	 * 
-	 * Making six or more historical data requests for the same Contract,
-	 * Exchange and Tick Type within two seconds.
-	 * 
-	 * Also, observe the following limitation when requesting historical data:
-	 * 
-	 * Do not make more than 60 historical data requests in any ten-minute
-	 * period.
-	 * 
-	 * @throws InterruptedException
-	 */
-	private void hasSubmittedInSeconds() throws InterruptedException {
-
-		this.submitTimes.addFirst(new Long(System.currentTimeMillis()));
-
-		if (this.submitTimes.size() == 5
-				&& this.brokerManagerModel.isConnected()) {
-
-			if ((this.submitTimes.getFirst() - this.submitTimes.getLast()) < (TIME_BETWEEN_SUBMIT * 1000)) {
-				_log.warn("hasSubmittedInSeconds 5 in: "
-						+ ((this.submitTimes.getFirst() - this.submitTimes
-								.getLast()) / 1000d));
-				timerRunning = new AtomicInteger(0);
-				timer.start();
+						});
+				brokerDataRequestProgressMonitor.execute();
 				synchronized (lockCoreUtilsTest) {
-					while (timerRunning.get() < (TIME_BETWEEN_SUBMIT * 1000)) {
-						_log.info("Please wait "
-								+ (TIME_BETWEEN_SUBMIT - (timerRunning.get() / 1000))
-								+ " seconds.");
-						lockCoreUtilsTest.wait();
-					}
-				}
-				timer.stop();
-			}
-			this.submitTimes.removeLast();
-		}
-	}
-
-	/**
-	 * Method reProcessTradingdays. Every reSumbittedAt value submitted
-	 * contracts try to run any that could not be run due to a conflict. Run
-	 * then in asc date order value.
-	 * 
-	 * @param runningContractRequests
-	 *            ConcurrentHashMap<Integer, Tradingday>
-	 * @param totalSumbitted
-	 *            int
-	 * @return int
-	 * @throws Exception
-	 */
-
-	private int reProcessTradingdays(Tradingdays tradingdays,
-			ConcurrentHashMap<Integer, Tradingday> runningContractRequests,
-			int totalSumbitted) throws Exception {
-
-		int submitted = totalSumbitted;
-
-		while (!runningContractRequests.isEmpty()) {
-
-			for (Tradingday item : tradingdays.getTradingdays()) {
-				for (Integer idTradeingday : runningContractRequests.keySet()) {
-					Tradingday reProcessTradingday = runningContractRequests
-							.get(idTradeingday);
-					if (item.equals(reProcessTradingday)) {
-						totalSumbitted = processTradingday(
-								getTradingdayToProcess(reProcessTradingday,
-										runningContractRequests),
-								totalSumbitted);
-						break;
+					while (brokerManagerModel.isConnected()
+							&& !connectionFailed
+							&& !brokerDataRequestProgressMonitor.isDone()) {
+						lockCoreUtilsTest.wait(1000);
 					}
 				}
 			}
-			/*
-			 * If nothing submitted wait for all the processes to finish.
-			 * Usually means we are submitting identical contracts.
-			 */
-
-			synchronized (this.brokerManagerModel.getHistoricalData()) {
-				if (submitted == totalSumbitted) {
-					while (this.brokerManagerModel.getHistoricalData().size() > 0) {
-						_log.info("reProcessTradingdays Wait HistoricalDataSize: "
-								+ this.brokerManagerModel.getHistoricalData()
-										.size());
-						this.brokerManagerModel.getHistoricalData().wait();
-					}
-				}
-			}
-			if (submitted < totalSumbitted)
-				submitted = totalSumbitted;
+		} catch (Exception ex) {
+			fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
+					+ ex.getMessage());
 		}
-		return totalSumbitted;
-	}
-
-	/**
-	 * Method process.This method process the publish method from
-	 * doInBackground().
-	 * 
-	 * @param messages
-	 *            List<String>
-	 */
-	protected void process(List<String> messages) {
-		_log.info(messages.get(messages.size() - 1), BasePanel.INFORMATION);
-	}
-
-	public void done() {
-
-		String message = "Completed Historical data total contracts processed: "
-				+ this.getGrandTotal()
-				+ " in : "
-				+ ((System.currentTimeMillis() - this.startTime) / 1000)
-				+ " Seconds.";
-		_log.info(message);
-	}
-
-	/**
-	 * Method getIndicatorTradestrategy. For any child indicators that are
-	 * candle based create a Tradestrategy that will get the data. If this
-	 * tradestrategy already exist share this with any other tradestrategy that
-	 * requires this.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @param series
-	 *            CandleSeries
-	 * @return Tradestrategy
-	 * @throws BrokerModelException
-	 * @throws PersistentModelException
-	 * @throws CloneNotSupportedException
-	 */
-	private Tradestrategy getIndicatorTradestrategy(
-			Tradestrategy tradestrategy, CandleSeries series)
-			throws BrokerModelException, PersistentModelException,
-			CloneNotSupportedException {
-
-		Tradestrategy indicatorTradestrategy = null;
-		for (Tradestrategy indicator : _indicatorTradestrategy.values()) {
-			if (indicator.getContract().equals(series.getContract())
-					&& indicator.getTradingday().equals(
-							tradestrategy.getTradingday())
-					&& indicator.getBarSize()
-							.equals(tradestrategy.getBarSize())
-					&& indicator.getChartDays().equals(
-							tradestrategy.getChartDays())
-					&& indicator.getPortfolio().equals(
-							tradestrategy.getPortfolio())) {
-				indicatorTradestrategy = indicator;
-				break;
-			}
-		}
-		if (null == indicatorTradestrategy) {
-			Contract contract = series.getContract();
-			if (null == series.getContract().getIdContract()) {
-				contract = this.tradePersistentModel.findContractByUniqueKey(
-						series.getContract().getSecType(), series.getContract()
-								.getSymbol(), series.getContract()
-								.getExchange(), series.getContract()
-								.getCurrency(), series.getContract()
-								.getExpiry());
-				if (null == contract) {
-					contract = this.tradePersistentModel.persistAspect(series
-							.getContract());
-				}
-			}
-			indicatorTradestrategy = new Tradestrategy(contract,
-					tradestrategy.getTradingday(), new Strategy("Indicator"),
-					tradestrategy.getPortfolio(), new BigDecimal(0), null,
-					null, false, tradestrategy.getChartDays(),
-					tradestrategy.getBarSize());
-			indicatorTradestrategy.setIdTradeStrategy(this.brokerManagerModel
-					.getNextRequestId());
-			indicatorTradestrategy.setDirty(false);
-		}
-
-		CandleSeries childSeries = indicatorTradestrategy.getStrategyData()
-				.getBaseCandleSeries();
-		childSeries.setDisplaySeries(series.getDisplaySeries());
-		childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
-		childSeries.setSubChart(series.getSubChart());
-		childSeries.setSymbol(series.getSymbol());
-		childSeries.setSecType(series.getSecType());
-		childSeries.setCurrency(series.getCurrency());
-		childSeries.setExchange(series.getExchange());
-
-		return indicatorTradestrategy;
-	}
-
-	private int processTradingday(Tradingday tradingday, int totalSumbitted)
-			throws BrokerModelException, InterruptedException,
-			CloneNotSupportedException, PersistentModelException {
-
-		if (tradingday.getTradestrategies().isEmpty())
-			return totalSumbitted;
-		/*
-		 * Remove those that are not running as these do not need to be shared.
-		 */
-		for (Tradestrategy tradestrategy : _indicatorTradestrategy.values()) {
-			if (!this.brokerManagerModel.isRealtimeBarsRunning(tradestrategy)
-					&& !this.brokerManagerModel
-							.isHistoricalDataRunning(tradestrategy
-									.getContract())) {
-				_indicatorTradestrategy.remove(tradestrategy
-						.getIdTradeStrategy());
-			}
-		}
-		Tradestrategy prevTradestrategy = null;
-
-		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-
-			if (null == prevTradestrategy) {
-				prevTradestrategy = tradestrategy;
-				_indicatorTradestrategy.put(tradestrategy.getIdTradeStrategy(),
-						tradestrategy);
-			}
-			/*
-			 * Refresh the data set container as these may have changed.
-			 */
-			tradestrategy.setStrategyData(null);
-
-			if (!this.brokerManagerModel.isRealtimeBarsRunning(tradestrategy)) {
-
-				/*
-				 * Fire all the requests to TWS to get chart data After data has
-				 * been retrieved save the data Only allow a maximum of 60
-				 * requests in a 10min period to avoid TWS pacing errors
-				 */
-
-				if (!prevTradestrategy.getContract().equals(
-						tradestrategy.getContract())
-						|| !prevTradestrategy.getBarSize().equals(
-								tradestrategy.getBarSize())
-						|| !prevTradestrategy.getChartDays().equals(
-								tradestrategy.getChartDays())) {
-					totalSumbitted = submitBrokerRequest(prevTradestrategy,
-							tradingday.getClose(), totalSumbitted);
-					prevTradestrategy = tradestrategy;
-					_indicatorTradestrategy.put(
-							tradestrategy.getIdTradeStrategy(), tradestrategy);
-				}
-			}
-		}
-		if (null != prevTradestrategy) {
-			totalSumbitted = submitBrokerRequest(prevTradestrategy,
-					tradingday.getClose(), totalSumbitted);
-		}
-		/*
-		 * Now process the indicators that are candle based.
-		 */
-		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-			CandleDataset candleDataset = (CandleDataset) tradestrategy
-					.getStrategyData().getIndicatorByType(
-							IndicatorSeries.CandleSeries);
-
-			if (null != candleDataset) {
-				for (int seriesIndex = 0; seriesIndex < candleDataset
-						.getSeriesCount(); seriesIndex++) {
-
-					CandleSeries series = candleDataset.getSeries(seriesIndex);
-					Tradestrategy indicatorTradestrategy = getIndicatorTradestrategy(
-							tradestrategy, series);
-					candleDataset.setSeries(seriesIndex, indicatorTradestrategy
-							.getStrategyData().getBaseCandleSeries());
-					if (!_indicatorTradestrategy
-							.containsKey(indicatorTradestrategy
-									.getIdTradeStrategy())) {
-						if (this.brokerManagerModel.isConnected()
-								|| this.brokerManagerModel.isBrokerDataOnly()) {
-							_indicatorTradestrategy
-									.put(indicatorTradestrategy
-											.getIdTradeStrategy(),
-											indicatorTradestrategy);
-							this.grandTotal++;
-							totalSumbitted = submitBrokerRequest(
-									indicatorTradestrategy,
-									tradingday.getClose(), totalSumbitted);
-						}
-					}
-				}
-			}
-		}
-		return totalSumbitted;
-	}
-
-	/**
-	 * Method getGrandTotal.
-	 * 
-	 * @return int
-	 */
-	private int getGrandTotal() {
-		return this.grandTotal;
-	}
-
-	/**
-	 * Method getTradingdayToProcess. Get a tradingdays worth of strategies that
-	 * have contracts with many tradestrategies. If the contract is already
-	 * running add it to the set to be reprocessed later.
-	 * 
-	 * @param tradingday
-	 *            Tradingday
-	 * 
-	 * @param runningContractRequests
-	 *            ConcurrentHashMap<Integer, Tradingday>
-	 * 
-	 * @return Tradingday
-	 * @throws CloneNotSupportedException
-	 */
-
-	private Tradingday getTradingdayToProcess(Tradingday tradingday,
-			ConcurrentHashMap<Integer, Tradingday> runningContractRequests)
-			throws CloneNotSupportedException {
-
-		if (tradingday.getTradestrategies().isEmpty())
-			return tradingday;
-
-		Collections.sort(tradingday.getTradestrategies(),
-				Tradestrategy.TRADINGDAY_CONTRACT);
-		Tradingday reProcessTradingday = null;
-		if (runningContractRequests.containsKey(tradingday.getIdTradingDay())) {
-			reProcessTradingday = runningContractRequests.get(tradingday
-					.getIdTradingDay());
-		} else {
-			reProcessTradingday = (Tradingday) tradingday.clone();
-		}
-		Tradingday toProcessTradingday = (Tradingday) tradingday.clone();
-		Contract currContract = null;
-
-		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
-			if (this.brokerManagerModel.isHistoricalDataRunning(tradestrategy
-					.getContract())) {
-				if (!reProcessTradingday.existTradestrategy(tradestrategy))
-					reProcessTradingday.addTradestrategy(tradestrategy);
-			} else {
-
-				if (tradestrategy.getContract().equals(currContract)) {
-					if (!reProcessTradingday.existTradestrategy(tradestrategy))
-						reProcessTradingday.addTradestrategy(tradestrategy);
-				} else {
-					currContract = tradestrategy.getContract();
-					toProcessTradingday.addTradestrategy(tradestrategy);
-				}
-			}
-		}
-
-		for (Tradestrategy tradestrategy : toProcessTradingday
-				.getTradestrategies()) {
-			if (reProcessTradingday.existTradestrategy(tradestrategy))
-				reProcessTradingday.removeTradestrategy(tradestrategy);
-		}
-		if (reProcessTradingday.getTradestrategies().isEmpty()) {
-			runningContractRequests.remove(reProcessTradingday
-					.getIdTradingDay());
-		}
-		if (!reProcessTradingday.getTradestrategies().isEmpty()) {
-			runningContractRequests.put(reProcessTradingday.getIdTradingDay(),
-					reProcessTradingday);
-		}
-		return toProcessTradingday;
 	}
 
 	private void deleteData() {
