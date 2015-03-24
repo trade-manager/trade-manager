@@ -84,7 +84,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 	// Candle series this is listened to by the chart panel and main controller
 	// for updates.
+	// Use tradestrategy Id as key
+
 	private static final ConcurrentHashMap<Integer, Tradestrategy> m_historyDataRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
+	// All use contract hashCode as key will not clash with tradestrategy ids.
 	private static final ConcurrentHashMap<Integer, Contract> m_realTimeBarsRequests = new ConcurrentHashMap<Integer, Contract>();
 	private static final ConcurrentHashMap<Integer, Contract> m_contractRequests = new ConcurrentHashMap<Integer, Contract>();
 	private PersistentModel m_tradePersistentModel = null;
@@ -411,8 +414,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 								.addBusinessDays(endDate, backfillOffsetDays)));
 				String endDateTime = _sdfLocal.format(endDate);
 
-				m_contractRequests.put(tradestrategy.getContract()
-						.getIdContract(), tradestrategy.getContract());
+				m_contractRequests.put(tradestrategy.getContract().hashCode(),
+						tradestrategy.getContract());
 
 				_log.debug("onBrokerData ReqId: "
 						+ tradestrategy.getIdTradeStrategy() + " Symbol: "
@@ -490,7 +493,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#isRealtimeBarsRunning(Contract)
 	 */
 	public boolean isRealtimeBarsRunning(Contract contract) {
-		if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
+		if (m_realTimeBarsRequests.containsKey(contract.hashCode())) {
 			return true;
 		}
 		return false;
@@ -505,9 +508,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public boolean isRealtimeBarsRunning(Tradestrategy tradestrategy) {
 		if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
-				.getIdContract())) {
+				.hashCode())) {
 			Contract contract = m_realTimeBarsRequests.get(tradestrategy
-					.getContract().getIdContract());
+					.getContract().hashCode());
 			for (Tradestrategy item : contract.getTradestrategies()) {
 				if (item.equals(tradestrategy)) {
 					return true;
@@ -576,7 +579,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		 * This will use the Yahoo API to get the data.
 		 */
 		synchronized (m_contractRequests) {
-			m_contractRequests.put(contract.getIdContract(), contract);
+			m_contractRequests.put(contract.hashCode(), contract);
 		}
 	}
 
@@ -642,8 +645,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 */
 	public void onCancelRealtimeBars(Contract contract) {
 		synchronized (m_realTimeBarsRequests) {
-			if (m_realTimeBarsRequests.containsKey(contract.getIdContract())) {
-				m_realTimeBarsRequests.remove(contract.getIdContract());
+			if (m_realTimeBarsRequests.containsKey(contract.hashCode())) {
+				m_realTimeBarsRequests.remove(contract.hashCode());
 				m_realTimeBarsRequests.notifyAll();
 			}
 		}
@@ -658,9 +661,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	public void onCancelRealtimeBars(Tradestrategy tradestrategy) {
 		synchronized (m_realTimeBarsRequests) {
 			if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
-					.getIdContract())) {
+					.hashCode())) {
 				Contract contract = m_realTimeBarsRequests.get(tradestrategy
-						.getContract().getIdContract());
+						.getContract().hashCode());
 				for (Tradestrategy item : contract.getTradestrategies()) {
 					if (item.equals(tradestrategy)) {
 						contract.removeTradestrategy(tradestrategy);
