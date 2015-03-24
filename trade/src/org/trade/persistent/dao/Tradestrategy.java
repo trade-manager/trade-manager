@@ -680,6 +680,11 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		hash = hash
 				+ (this.getTradingday() == null ? 0 : this.getTradingday()
 						.hashCode());
+		hash = hash
+				+ (this.getBarSize() == null ? 0 : this.getBarSize().hashCode());
+		hash = hash
+				+ (this.getChartDays() == null ? 0 : this.getChartDays()
+						.hashCode());
 		return hash;
 	}
 

@@ -126,10 +126,10 @@ public interface BrokerModel {
 	/**
 	 * Method getBackTestBroker.
 	 * 
-	 * @param idTradestrategy
-	 *            Integer
+	 * @param tradestrategy
+	 *            Tradestrategy
 	 */
-	BackTestBroker getBackTestBroker(Integer idTradestrategy);
+	BackTestBroker getBackTestBroker(Tradestrategy tradestrategy);
 
 	/**
 	 * Method onSubscribeAccountUpdates.
