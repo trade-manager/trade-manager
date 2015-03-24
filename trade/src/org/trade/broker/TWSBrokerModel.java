@@ -503,6 +503,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void onReqRealTimeBars(Contract contract, boolean mktData)
 			throws BrokerModelException {
+
+		Integer reqId = contract.hashCode();
 		try {
 			if (m_client.isConnected()) {
 
@@ -513,14 +515,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									+ contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
-				m_realTimeBarsRequests.put(contract.hashCode(), contract);
+				m_realTimeBarsRequests.put(reqId, contract);
 
 				/*
 				 * Bar interval is set to 5= 5sec this is the only thing
 				 * supported by TWS for live data.
 				 */
 				Vector<TagValue> realTimeBarOptions = new Vector<TagValue>();
-				m_client.reqRealTimeBars(contract.getIdContract(),
+				m_client.reqRealTimeBars(reqId,
 						TWSBrokerModel.getIBContract(contract), 5,
 						backfillWhatToShow, (backfillUseRTH > 0),
 						realTimeBarOptions);
@@ -530,11 +532,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				}
 
 			} else {
-				throw new BrokerModelException(contract.getIdContract(), 3040,
+				throw new BrokerModelException(reqId, 3040,
 						"Not conected to TWS historical data cannot be retrieved");
 			}
 		} catch (Exception ex) {
-			throw new BrokerModelException(contract.getIdContract(), 3050,
+			throw new BrokerModelException(reqId, 3050,
 					"Error broker data Symbol: " + contract.getSymbol()
 							+ " Msg: " + ex.getMessage());
 		}
@@ -553,27 +555,29 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void onReqMarketData(Contract contract, String genericTicklist,
 			boolean snapshot) throws BrokerModelException {
+
+		Integer reqId = contract.hashCode();
+
 		try {
 			if (m_client.isConnected()) {
 				if (this.isMarketDataRunning(contract)) {
-					throw new BrokerModelException(contract.getIdContract(),
-							3030,
+					throw new BrokerModelException(reqId, 3030,
 							"MarketData request is already in progress for: "
 									+ contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
 				List<TagValue> mktDataOptions = new ArrayList<TagValue>();
-				m_marketDataRequests.put(contract.hashCode(), contract);
-				m_client.reqMktData(contract.getIdContract(),
+				m_marketDataRequests.put(reqId, contract);
+				m_client.reqMktData(reqId,
 						TWSBrokerModel.getIBContract(contract),
 						genericTicklist, snapshot, mktDataOptions);
 
 			} else {
-				throw new BrokerModelException(contract.getIdContract(), 3040,
+				throw new BrokerModelException(reqId, 3040,
 						"Not conected to TWS market data cannot be retrieved");
 			}
 		} catch (Exception ex) {
-			throw new BrokerModelException(contract.getIdContract(), 3050,
+			throw new BrokerModelException(reqId, 3050,
 					"Error broker data Symbol: " + contract.getSymbol()
 							+ " Msg: " + ex.getMessage());
 		}
@@ -589,10 +593,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void onContractDetails(Contract contract)
 			throws BrokerModelException {
+
+		Integer reqId = contract.hashCode();
+
 		try {
 			if (m_client.isConnected()) {
-				Integer reqId = contract.hashCode();
-
 				if (!m_contractRequests.containsKey(reqId)) {
 					/*
 					 * Null the IB Contract Id as these sometimes change. This
@@ -607,11 +612,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							TWSBrokerModel.getIBContract(contract));
 				}
 			} else {
-				throw new BrokerModelException(contract.getIdContract(), 3080,
+				throw new BrokerModelException(reqId, 3080,
 						"Not conected to TWS contract data cannot be retrieved");
 			}
 		} catch (Exception ex) {
-			throw new BrokerModelException(contract.getIdContract(), 3090,
+			throw new BrokerModelException(reqId, 3090,
 					"Error broker data Symbol: " + contract.getSymbol()
 							+ " Msg: " + ex.getMessage());
 		}
