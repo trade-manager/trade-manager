@@ -83,7 +83,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			.getLogger(TWSBrokerModelTest.class);
 
 	private Tradingdays tradingdays = null;
-	private BrokerModel brokerManagerModel;
+	private BrokerModel tWSBrokerModel;
 	private PersistentModel tradePersistentModel = null;
 	private static Integer clientId;
 	private static Integer port = null;
@@ -138,21 +138,21 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			tradePersistentModel = (PersistentModel) ClassFactory
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
-			brokerManagerModel = (BrokerModel) ClassFactory
-					.getServiceForInterface(_broker, this);
-			brokerManagerModel.addMessageListener(this);
-			brokerManagerModel.onConnect(host, port, clientId);
+			tWSBrokerModel = (BrokerModel) ClassFactory.getServiceForInterface(
+					_broker, this);
+			tWSBrokerModel.addMessageListener(this);
+			tWSBrokerModel.onConnect(host, port, clientId);
 			timerRunning = new AtomicInteger(0);
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
-				while (!brokerManagerModel.isConnected() && !connectionFailed) {
+				while (!tWSBrokerModel.isConnected() && !connectionFailed) {
 					lockCoreUtilsTest.wait();
 				}
 			}
 			timer.stop();
-			if (!brokerManagerModel.isConnected())
+			if (!tWSBrokerModel.isConnected())
 				_log.warn("Could not connect to TWS test will be ignored.",
-						brokerManagerModel.isConnected());
+						tWSBrokerModel.isConnected());
 
 		} catch (InterruptedException e) {
 			_log.info("Thread interrupt: " + e.getMessage());
@@ -167,14 +167,14 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	@After
 	public void tearDown() throws Exception {
 		deleteData();
-		if (brokerManagerModel.isConnected())
-			brokerManagerModel.onDisconnect();
+		if (tWSBrokerModel.isConnected())
+			tWSBrokerModel.onDisconnect();
 
 		/*
 		 * Wait 10min between each test run to avoid pacing violations.
 		 */
 		if (((Math.floor(testCaseGrandTotal / 58d) == (testCaseGrandTotal / 58d)) && (testCaseGrandTotal > 0))
-				&& brokerManagerModel.isConnected()) {
+				&& tWSBrokerModel.isConnected()) {
 			timerRunning = new AtomicInteger(0);
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
@@ -205,7 +205,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	public void testOneSymbolTodayOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
-			if (brokerManagerModel.isConnected()) {
+			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/OneSymbolToday.csv";
 				Date tradingDay = new Date();
@@ -221,7 +221,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 					tradePersistentModel.persistTradingday(item);
 				}
 				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
-						brokerManagerModel, tradePersistentModel, tradingdays);
+						tWSBrokerModel, tradePersistentModel, tradingdays);
 				brokerDataRequestProgressMonitor
 						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 							public void propertyChange(PropertyChangeEvent evt) {
@@ -250,8 +250,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 						});
 				brokerDataRequestProgressMonitor.execute();
 				synchronized (lockCoreUtilsTest) {
-					while (brokerManagerModel.isConnected()
-							&& !connectionFailed
+					while (tWSBrokerModel.isConnected() && !connectionFailed
 							&& !brokerDataRequestProgressMonitor.isDone()) {
 						lockCoreUtilsTest.wait(1000);
 					}
@@ -266,7 +265,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	public void testOneMonthContractsOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
-			if (brokerManagerModel.isConnected()) {
+			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/OneMonthContracts.csv";
 				Date tradingDay = new Date();
@@ -282,7 +281,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 					tradePersistentModel.persistTradingday(item);
 				}
 				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
-						brokerManagerModel, tradePersistentModel, tradingdays);
+						tWSBrokerModel, tradePersistentModel, tradingdays);
 				brokerDataRequestProgressMonitor
 						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 							public void propertyChange(PropertyChangeEvent evt) {
@@ -311,8 +310,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 						});
 				brokerDataRequestProgressMonitor.execute();
 				synchronized (lockCoreUtilsTest) {
-					while (brokerManagerModel.isConnected()
-							&& !connectionFailed
+					while (tWSBrokerModel.isConnected() && !connectionFailed
 							&& !brokerDataRequestProgressMonitor.isDone()) {
 						lockCoreUtilsTest.wait(1000);
 					}
@@ -327,7 +325,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	public void testOneSymbolTwoMthsOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
-			if (brokerManagerModel.isConnected()) {
+			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/OneSymbolTwoMths.csv";
 				Date tradingDay = new Date();
@@ -353,7 +351,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				}
 
 				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
-						brokerManagerModel, tradePersistentModel, tradingdays);
+						tWSBrokerModel, tradePersistentModel, tradingdays);
 				brokerDataRequestProgressMonitor
 						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 							public void propertyChange(PropertyChangeEvent evt) {
@@ -382,8 +380,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 						});
 				brokerDataRequestProgressMonitor.execute();
 				synchronized (lockCoreUtilsTest) {
-					while (brokerManagerModel.isConnected()
-							&& !connectionFailed
+					while (tWSBrokerModel.isConnected() && !connectionFailed
 							&& !brokerDataRequestProgressMonitor.isDone()) {
 						lockCoreUtilsTest.wait(1000);
 					}
@@ -399,7 +396,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	public void testMultiContractsMultiDaysOnBrokerData() {
 		tradingdays = new Tradingdays();
 		try {
-			if (brokerManagerModel.isConnected()) {
+			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/MultiContractsMultiDays.csv";
 				Date tradingDay = new Date();
@@ -425,7 +422,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 				}
 
 				brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
-						brokerManagerModel, tradePersistentModel, tradingdays);
+						tWSBrokerModel, tradePersistentModel, tradingdays);
 				brokerDataRequestProgressMonitor
 						.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 							public void propertyChange(PropertyChangeEvent evt) {
@@ -454,8 +451,7 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 						});
 				brokerDataRequestProgressMonitor.execute();
 				synchronized (lockCoreUtilsTest) {
-					while (brokerManagerModel.isConnected()
-							&& !connectionFailed
+					while (tWSBrokerModel.isConnected() && !connectionFailed
 							&& !brokerDataRequestProgressMonitor.isDone()) {
 						lockCoreUtilsTest.wait(1000);
 					}
