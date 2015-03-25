@@ -127,7 +127,8 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	}
 
 	/**
-	 * Method setUp.
+	 * Method setUp. Try to connect to the Broker for these tests that but
+	 * candle data from the broker and test the throtle monitor.
 	 * 
 	 * @throws java.lang.Exception
 	 */
@@ -466,6 +467,11 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 		}
 	}
 
+	/**
+	 * Method deleteData. Clean the test data added.
+	 * 
+	 * 
+	 */
 	private void deleteData() {
 
 		try {
@@ -501,12 +507,12 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 	}
 
 	public void connectionOpened() {
-		_log.error("Connection opened");
+		_log.info("Connection opened");
 	}
 
 	public void connectionClosed(boolean forced) {
 		connectionFailed = true;
-		_log.error("Connection closed");
+		_log.info("Connection closed");
 	}
 
 	/**
