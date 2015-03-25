@@ -1949,9 +1949,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			brokerDataRequestProgressMonitor
 					.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 						public void propertyChange(final PropertyChangeEvent evt) {
-							/*
-							 * Dont block the broker thread.
-							 */
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									if ("progress".equals(evt.getPropertyName())) {
@@ -1961,12 +1958,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 												brokerDataRequestProgressMonitor);
 									} else if ("information".equals(evt
 											.getPropertyName())) {
-										setStatusBarMessage(
-												(String) evt.getNewValue(),
-												BasePanel.INFORMATION);
 										if (brokerDataRequestProgressMonitor
 												.isDone())
 											refreshTradingdays(tradingdays);
+										setStatusBarMessage(
+												(String) evt.getNewValue(),
+												BasePanel.INFORMATION);
+
 									} else if ("error".equals(evt
 											.getPropertyName())) {
 										setErrorMessage(
@@ -1977,7 +1975,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 									}
 								}
 							});
-
 						}
 					});
 			brokerDataRequestProgressMonitor.execute();
@@ -2129,7 +2126,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private void refreshTradingdays(Tradingdays tradingdays) {
 
 		Collections.sort(tradingdays.getTradingdays(),
-				Tradingday.DATE_ORDER_DESC);
+				Tradingday.DATE_ORDER_ASC);
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
 			tradingdayPanel.doRefresh(tradingday);
 		}
@@ -2143,6 +2140,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			tradingdayPanel.cleanStrategyWorker();
 		}
 		getMenu().setEnabledSearchDeleteRefreshSave(true);
+
 	}
 
 	public static TradeMainPanelMenu getMenu() {
