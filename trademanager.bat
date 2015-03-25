@@ -12,7 +12,7 @@ rem Change this dir to be the location for J2SE edition
 rem ***************************************************
 
 @if defined JAVA_HOME goto javahomedefined
-SET JAVA_HOME=C:/Program Files/Java/jdk1.7.0_45
+SET JAVA_HOME=C:/Program Files/Java/jdk1.8.0_15
 :javahomedefined
 
 rem set the path to include the bin dir

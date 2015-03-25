@@ -111,9 +111,8 @@ public class YahooBroker extends SwingWorker<Void, Void> {
 					"yyyyMMdd HH:mm:ss");
 			setYahooContractDetails(contract);
 
-			this.brokerModel
-					.contractDetails(contract.getIdContract(), contract);
-			this.brokerModel.contractDetailsEnd(contract.getIdContract());
+			this.brokerModel.contractDetails(contract.hashCode(), contract);
+			this.brokerModel.contractDetailsEnd(contract.hashCode());
 			Date endDate = _sdfLocal.parse(this.endDateTime);
 			ChartDays chartDays = ChartDays.newInstance();
 			chartDays.setDisplayName(this.durationStr);

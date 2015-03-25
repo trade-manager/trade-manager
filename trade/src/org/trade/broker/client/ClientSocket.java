@@ -81,12 +81,10 @@ public class ClientSocket {
 		try {
 
 			if (null != endDateTime) {
-
 				YahooBroker yahooBroker = new YahooBroker(reqId,
 						tradestrategy.getContract(), endDateTime, durationStr,
 						barSizeSetting, m_client);
-				m_backTestBroker.put(tradestrategy.getContract()
-						.getIdContract(), yahooBroker);
+				m_backTestBroker.put(reqId, yahooBroker);
 				yahooBroker.execute();
 
 			} else {
