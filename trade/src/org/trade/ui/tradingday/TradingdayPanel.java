@@ -48,6 +48,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -1483,6 +1484,8 @@ public class TradingdayPanel extends BasePanel {
 		}
 
 		public void done() {
+			Collections.sort(tradingdays.getTradingdays(),
+					Tradingday.DATE_ORDER_ASC);
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				doRefresh(tradingday);
 			}
@@ -1580,6 +1583,8 @@ public class TradingdayPanel extends BasePanel {
 		}
 
 		public void done() {
+			Collections.sort(tradingdays.getTradingdays(),
+					Tradingday.DATE_ORDER_ASC);
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				doRefresh(tradingday);
 			}

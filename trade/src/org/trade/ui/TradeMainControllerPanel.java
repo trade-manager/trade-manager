@@ -1949,23 +1949,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			brokerDataRequestProgressMonitor
 					.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 						public void propertyChange(final PropertyChangeEvent evt) {
-							if ("progress".equals(evt.getPropertyName())) {
-								int progress = (Integer) evt.getNewValue();
-								setProgressBarProgress(progress,
-										brokerDataRequestProgressMonitor);
-							} else if ("information".equals(evt
-									.getPropertyName())) {
-								setStatusBarMessage((String) evt.getNewValue(),
-										BasePanel.INFORMATION);
-								if (brokerDataRequestProgressMonitor.isDone())
-									refreshTradingdays(tradingdays);
-							} else if ("error".equals(evt.getPropertyName())) {
-								setErrorMessage("Error getting history data.",
-										((Exception) evt.getNewValue())
-												.getMessage(), (Exception) evt
-												.getNewValue());
-							}
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									if ("progress".equals(evt.getPropertyName())) {
+										int progress = (Integer) evt
+												.getNewValue();
+										setProgressBarProgress(progress,
+												brokerDataRequestProgressMonitor);
+									} else if ("information".equals(evt
+											.getPropertyName())) {
+										if (brokerDataRequestProgressMonitor
+												.isDone())
+											refreshTradingdays(tradingdays);
+										setStatusBarMessage(
+												(String) evt.getNewValue(),
+												BasePanel.INFORMATION);
 
+									} else if ("error".equals(evt
+											.getPropertyName())) {
+										setErrorMessage(
+												"Error getting history data.",
+												((Exception) evt.getNewValue())
+														.getMessage(),
+												(Exception) evt.getNewValue());
+									}
+								}
+							});
 						}
 					});
 			brokerDataRequestProgressMonitor.execute();
@@ -2117,7 +2126,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	private void refreshTradingdays(Tradingdays tradingdays) {
 
 		Collections.sort(tradingdays.getTradingdays(),
-				Tradingday.DATE_ORDER_DESC);
+				Tradingday.DATE_ORDER_ASC);
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
 			tradingdayPanel.doRefresh(tradingday);
 		}
@@ -2131,6 +2140,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			tradingdayPanel.cleanStrategyWorker();
 		}
 		getMenu().setEnabledSearchDeleteRefreshSave(true);
+
 	}
 
 	public static TradeMainPanelMenu getMenu() {
