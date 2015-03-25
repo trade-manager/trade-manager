@@ -1949,34 +1949,22 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			brokerDataRequestProgressMonitor
 					.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 						public void propertyChange(final PropertyChangeEvent evt) {
-							/*
-							 * Dont block the broker thread.
-							 */
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									if ("progress".equals(evt.getPropertyName())) {
-										int progress = (Integer) evt
-												.getNewValue();
-										setProgressBarProgress(progress,
-												brokerDataRequestProgressMonitor);
-									} else if ("information".equals(evt
-											.getPropertyName())) {
-										setStatusBarMessage(
-												(String) evt.getNewValue(),
-												BasePanel.INFORMATION);
-										if (brokerDataRequestProgressMonitor
-												.isDone())
-											refreshTradingdays(tradingdays);
-									} else if ("error".equals(evt
-											.getPropertyName())) {
-										setErrorMessage(
-												"Error getting history data.",
-												((Exception) evt.getNewValue())
-														.getMessage(),
-												(Exception) evt.getNewValue());
-									}
-								}
-							});
+							if ("progress".equals(evt.getPropertyName())) {
+								int progress = (Integer) evt.getNewValue();
+								setProgressBarProgress(progress,
+										brokerDataRequestProgressMonitor);
+							} else if ("information".equals(evt
+									.getPropertyName())) {
+								setStatusBarMessage((String) evt.getNewValue(),
+										BasePanel.INFORMATION);
+								if (brokerDataRequestProgressMonitor.isDone())
+									refreshTradingdays(tradingdays);
+							} else if ("error".equals(evt.getPropertyName())) {
+								setErrorMessage("Error getting history data.",
+										((Exception) evt.getNewValue())
+												.getMessage(), (Exception) evt
+												.getNewValue());
+							}
 
 						}
 					});
