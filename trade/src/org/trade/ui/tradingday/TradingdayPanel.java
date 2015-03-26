@@ -681,7 +681,6 @@ public class TradingdayPanel extends BasePanel {
 						.findTradingdayById(tradingday.getIdTradingDay());
 				instance.populateStrategyData(tradingday);
 				m_tradingdays.replaceTradingday(instance);
-				doRefreshTradingdayTable(instance);
 			}
 		} catch (Exception ex) {
 			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(),
@@ -743,6 +742,7 @@ public class TradingdayPanel extends BasePanel {
 			Tradingday tradingday = m_tradingdayModel.getData().getTradingday(
 					openDate.getDate(), closeDate.getDate());
 			doRefresh(tradingday);
+			this.doRefreshTradingdayTable(tradingday);
 		}
 	}
 
@@ -1448,6 +1448,8 @@ public class TradingdayPanel extends BasePanel {
 				getProgressBar().setMaximum(100);
 				setProgress(0);
 				String message = null;
+				Collections.sort(tradingdays.getTradingdays(),
+						Tradingday.DATE_ORDER_ASC);
 				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 					this.tradeManagerModel
 							.removeTradingdayTradeOrders(tradingday);
@@ -1484,11 +1486,11 @@ public class TradingdayPanel extends BasePanel {
 		}
 
 		public void done() {
-			Collections.sort(tradingdays.getTradingdays(),
-					Tradingday.DATE_ORDER_ASC);
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				doRefresh(tradingday);
 			}
+			doRefreshTradingdayTable(tradingdays.getTradingdays().get(
+					tradingdays.getTradingdays().size() - 1));
 			String message = "Completed delete of Trade Order data total days processed: "
 					+ grandtotal
 					+ " in : "
@@ -1547,6 +1549,8 @@ public class TradingdayPanel extends BasePanel {
 				String message = null;
 				this.toStrategy = this.tradeManagerModel
 						.findStrategyById(this.toStrategy.getIdStrategy());
+				Collections.sort(tradingdays.getTradingdays(),
+						Tradingday.DATE_ORDER_ASC);
 				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 					this.tradeManagerModel.reassignStrategy(this.fromStrategy,
 							this.toStrategy, tradingday);
@@ -1583,11 +1587,11 @@ public class TradingdayPanel extends BasePanel {
 		}
 
 		public void done() {
-			Collections.sort(tradingdays.getTradingdays(),
-					Tradingday.DATE_ORDER_ASC);
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				doRefresh(tradingday);
 			}
+			doRefreshTradingdayTable(tradingdays.getTradingdays().get(
+					tradingdays.getTradingdays().size() - 1));
 			String message = "Complete re-assign of Strategies total days processed: "
 					+ grandtotal
 					+ " in : "
