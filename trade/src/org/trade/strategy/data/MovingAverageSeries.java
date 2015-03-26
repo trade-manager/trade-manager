@@ -493,6 +493,29 @@ public class MovingAverageSeries extends IndicatorSeries {
 						+ (yyValues.get(i - 1) * volValues.get(i - 1) * (getLength() + 1 - i));
 			}
 			ma = sumYY / count;
+		} else if (CalculationType.TRIANGULAR.equals(calcType)) {
+
+			double sumYY = 0;
+			int count = 0;
+			int half = getLength() / 2;
+			int y = 0;
+			for (int x = 1; x <= half; x++) {
+				sumYY = sumYY + (yyValues.get(y) * x);
+				count = count + x;
+				y++;
+			}
+			if ((getLength() % 2) != 0) {
+				int z = half + 1;
+				sumYY = sumYY + (yyValues.get(y) * z);
+				count = count + z;
+				y++;
+			}
+			for (int x = half; x >= 1; x--) {
+				sumYY = sumYY + (yyValues.get(y) * x);
+				count = count + x;
+				y++;
+			}
+			ma = sumYY / count;
 		}
 		return ma;
 	}

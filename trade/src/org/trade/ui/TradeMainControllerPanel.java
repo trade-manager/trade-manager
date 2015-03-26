@@ -2128,8 +2128,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
 			tradingdayPanel.doRefresh(tradingday);
 		}
-		tradingdayPanel.doRefreshTradingdayTable(tradingdays.getTradingdays().get(
-				tradingdays.getTradingdays().size() - 1));
+		tradingdayPanel.doRefreshTradingdayTable(tradingdays.getTradingdays()
+				.get(tradingdays.getTradingdays().size() - 1));
 		if (m_brokerModel.isConnected()) {
 			getMenu().setEnabledBrokerData(true);
 			getMenu().setEnabledRunStrategy(true);

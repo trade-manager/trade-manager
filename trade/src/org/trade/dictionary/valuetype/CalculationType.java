@@ -47,6 +47,7 @@ public class CalculationType extends Decode {
 	public static final String LINEAR = "LINEAR";
 	public static final String WEIGHTED = "WEIGHTED";
 	public static final String WEIGHTED_VOLUME = "WEIGHTED_VOLUME";
+	public static final String TRIANGULAR = "TRIANGULAR";
 
 	public CalculationType() {
 		super(DECODE);
