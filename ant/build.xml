@@ -104,8 +104,14 @@
 			<transaction src="../db/TradeManagerDDL.sql" />
 		</sql>
 	</target>
+	<target name="createUser" depends="createTables">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" delimiter="//">
+			<classpath refid="build.classpath" />
+			<transaction src="../db/DropCreateUserProc.sql" />
+		</sql>
+	</target>
 	<target name="createDB" depends="createUser" description="Creates the database and inserts default data">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+		<sql driver="${sql.driver}" url="${sql.url}"  userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
@@ -117,37 +123,32 @@
 		</sql>
 	</target>
 	<target name="addStrategyData" depends="initialise" description="Add a new strategy and associated data.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user_name}" password="${sql.user_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/StrategyData.sql" />
 		</sql>
 	</target>
-	<target name="createUser" depends="createTables">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" delimiter="//">
-			<classpath refid="build.classpath" />
-			<transaction src="../db/DropCreateUserProc.sql" />
-		</sql>
-	</target>
+
 	<target name="resetDefaultData" depends="initialise" description="Deletes all data in the database and sets up default data.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user_name}" password="${sql.user_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="deleteTransactionData" depends="initialise" description="Delete the database of all transaction data.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}" >
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user_name}" password="${sql.user_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/DeleteTransactionData.sql" />
 		</sql>
 	</target>
 	<target name="deleteTradeOrderData" depends="initialise" description="Delete the database of TradeOrders for testing.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user_name}" password="${sql.user_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/DeleteTradeOrderData.sql" />
 		</sql>
 	</target>
 	<target name="deleteAccountRuleData" depends="initialise" description="Delete the database of Accounts and Rules for testing.">
-		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
+		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user_name}" password="${sql.user_password}">
 			<classpath refid="build.classpath" />
 			<transaction src="../db/DeleteAccountRuleData.sql" />
 		</sql>
