@@ -158,7 +158,9 @@ public class TradeOrderTableModel extends TableModel {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.MKT)
 						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.STP)) {
+								.equals(OrderType.STP)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode()
+								.equals(OrderType.TRAIL)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() != 0) {
 						Money price = new Money(0);
 						this.setValueAt(price, row, column);
@@ -168,7 +170,9 @@ public class TradeOrderTableModel extends TableModel {
 				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
 						OrderType.LMT)
 						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.STPLMT)) {
+								.equals(OrderType.STPLMT)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode()
+								.equals(OrderType.TRAILLIMIT)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() == 0) {
 						Money price = new Money(this.getData()
 								.getStrategyData().getBaseCandleSeries()

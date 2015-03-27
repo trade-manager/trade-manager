@@ -427,20 +427,13 @@ public class AbstractStrategyTest {
 	@Test
 	public void testTrailOrder() {
 		try {
-			TradeOrder result = this.strategyProxy.createOrder(
-					tradestrategy.getContract(), Action.BUY, OrderType.STPLMT,
-					new Money(191.62), new Money(191.60), 100, null, null,
-					TriggerMethod.DEFAULT, OverrideConstraints.YES,
-					TimeInForce.DAY, false, true, null, null, null, null, null,
-					null);
-
 			TradeOrder orderTrail = this.strategyProxy.createOrder(
 					tradestrategy.getContract(), Action.SELL, OrderType.TRAIL,
-					null, new Money(0.1), 100, null, result.getOrderKey(),
+					null, new Money(0.1), 100, null, null,
 					TriggerMethod.DEFAULT, OverrideConstraints.YES,
 					TimeInForce.GTC, false, true, new Money(191.60), null,
 					null, null, null, null);
-			assertNotNull(result);
+
 			assertNotNull(orderTrail);
 		} catch (Exception ex) {
 			fail("Error testCreateOrder Msg:" + ex.getMessage());

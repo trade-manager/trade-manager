@@ -1861,9 +1861,6 @@ public abstract class AbstractStrategyRule extends Worker implements
 			TradeOrder tradeOrder, boolean roundPrice)
 			throws StrategyRuleException {
 
-		if (null == contract)
-			throw new StrategyRuleException(1, 200, "Contract cannot be null");
-
 		if (null == tradeOrder.getOrderType())
 			throw new StrategyRuleException(1, 201, "Order Type cannot be null");
 
@@ -1884,19 +1881,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 			throw new StrategyRuleException(1, 205,
 					"Limit/Aux price cannot be null");
 
-		if ((OrderType.TRAIL.equals(tradeOrder.getOrderType()) || OrderType.TRAILLIMIT
-				.equals(tradeOrder.getOrderType()))
-				&& (null == tradeOrder.getTrailStopPrice() && null == tradeOrder
-						.getTrailingPercent()))
+		if (((OrderType.TRAIL.equals(tradeOrder.getOrderType()))
+				&& null == tradeOrder.getAuxPrice() && null == tradeOrder
+					.getTrailingPercent()))
 			throw new StrategyRuleException(1, 206,
-					"TrailStopPrice & TrailingPercent price cannot be null");
+					"Trail orders must have either AuxPrice or Trailing Percent set");
 
-		if ((OrderType.TRAILLIMIT.equals(tradeOrder.getOrderType()) || OrderType.TRAIL
-				.equals(tradeOrder.getOrderType()))
-				&& (null != tradeOrder.getTrailStopPrice() && null != tradeOrder
-						.getTrailingPercent()))
+		if ((OrderType.TRAILLIMIT.equals(tradeOrder.getOrderType()))
+				&& null == tradeOrder.getTrailStopPrice())
 			throw new StrategyRuleException(1, 207,
-					"Only TrailStopPrice or TrailingPercent can be set");
+					"TrailStopPrice cannot be null for a TrailLimit order");
 
 		if (null == tradeOrder.getFAProfile()) {
 			if (null == tradeOrder.getFAGroup()) {
@@ -1921,23 +1915,28 @@ public abstract class AbstractStrategyRule extends Worker implements
 			tradeOrder.setFAPercent(null);
 		}
 
-		if (OrderType.MKT.equals(tradeOrder.getOrderType())
-				|| OrderType.TRAIL.equals(tradeOrder.getOrderType())
-				|| OrderType.TRAILLIMIT.equals(tradeOrder.getOrderType())) {
+		if (OrderType.MKT.equals(tradeOrder.getOrderType())) {
 			tradeOrder.setLimitPrice((new Money(0)).getBigDecimalValue());
 			tradeOrder.setAuxPrice((new Money(0)).getBigDecimalValue());
+			tradeOrder.setTrailingPercent((new Money(0)).getBigDecimalValue());
+			tradeOrder.setTrailStopPrice((new Money(0)).getBigDecimalValue());
+		} else if (OrderType.TRAIL.equals(tradeOrder.getOrderType())) {
+			tradeOrder.setTrailStopPrice((new Money(0)).getBigDecimalValue());
+			if (null != tradeOrder.getAuxPrice()) {
+				tradeOrder.setTrailingPercent((new Money(0))
+						.getBigDecimalValue());
+			}
+		} else if (OrderType.TRAILLIMIT.equals(tradeOrder.getOrderType())) {
+			tradeOrder.setTrailingPercent((new Money(0)).getBigDecimalValue());
 		} else {
 			if (roundPrice) {
 				String side = (Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT
 						: Side.SLD);
 				if (OrderType.LMT.equals(tradeOrder.getOrderType())) {
-					if (roundPrice) {
-						Money limitPrice = addPennyAndRoundStop(tradeOrder
-								.getLimitPrice().doubleValue(), side,
-								tradeOrder.getAction(), 0.01);
-						tradeOrder.setLimitPrice(limitPrice
-								.getBigDecimalValue());
-					}
+					Money limitPrice = addPennyAndRoundStop(tradeOrder
+							.getLimitPrice().doubleValue(), side,
+							tradeOrder.getAction(), 0.01);
+					tradeOrder.setLimitPrice(limitPrice.getBigDecimalValue());
 				} else if (OrderType.STPLMT.equals(tradeOrder.getOrderType())) {
 					BigDecimal diffPrice = tradeOrder.getLimitPrice().subtract(
 							tradeOrder.getAuxPrice());
