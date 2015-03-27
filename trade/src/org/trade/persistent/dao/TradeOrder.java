@@ -67,7 +67,9 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.Percent;
+import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
+import org.trade.dictionary.valuetype.OrderType;
 import org.trade.dictionary.valuetype.OverrideConstraints;
 import org.trade.dictionary.valuetype.TimeInForce;
 import org.trade.dictionary.valuetype.TriggerMethod;
@@ -1431,6 +1433,94 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Method validate. this method validates the TradeOrder fields it should be
+	 * called before saving or submitting TradeOrders.
+	 * 
+	 */
+	@Transient
+	public void validate() throws Exception {
+
+		if (null == this.getOrderType())
+			throw new Exception("Order Type cannot be null");
+
+		if (null == this.getAction())
+			throw new Exception("Action cannot be null");
+
+		if (0 == this.getQuantity())
+			throw new Exception("Quantity cannot be zero");
+
+		if (OrderType.LMT.equals(this.getOrderType())
+				&& null == this.getLimitPrice())
+			throw new Exception("Limit price cannot be null");
+
+		if (OrderType.STPLMT.equals(this.getOrderType())
+				&& (null == this.getLimitPrice() || null == this.getAuxPrice()))
+			throw new Exception("Limit/Aux price cannot be null");
+
+		if (OrderType.STPLMT.equals(this.getOrderType())
+				&& Action.BUY.equals(this.getAction())
+				&& (-1 == CoreUtils.nullSafeComparator(this.getLimitPrice(),
+						this.getAuxPrice())))
+			throw new Exception(
+					"Limit Price must be greater than Stop Price for Buy order");
+
+		if (OrderType.STPLMT.equals(this.getOrderType())
+				&& Action.SELL.equals(this.getAction())
+				&& (-1 == CoreUtils.nullSafeComparator(this.getAuxPrice(),
+						this.getLimitPrice())))
+			throw new Exception(
+					"Limit Price must be less than Stop Price for Sell order");
+
+		if (((OrderType.TRAIL.equals(this.getOrderType()))
+				&& null == this.getAuxPrice() && null == this
+					.getTrailingPercent()))
+			throw new Exception(
+					"Trail orders must have either AuxPrice or Trailing Percent set");
+
+		if ((OrderType.TRAILLIMIT.equals(this.getOrderType()))
+				&& null == this.getTrailStopPrice())
+			throw new Exception(
+					"TrailStopPrice cannot be null for a TrailLimit order");
+
+		if (null == this.getFAProfile()) {
+			if (null == this.getFAGroup()) {
+				if (null != this.getTradestrategy().getPortfolio()
+						.getIndividualAccount()) {
+					this.setAccountNumber(this.getTradestrategy()
+							.getPortfolio().getIndividualAccount()
+							.getAccountNumber());
+				}
+			} else {
+				if (null == this.getFAMethod())
+					throw new Exception(
+							"FAGroup is set FAMethod cannot be null.");
+				if (null == this.getFAMethod() || null == this.getFAPercent())
+					throw new Exception(
+							"FAGroup is set FAPercent cannot be null.");
+			}
+		} else {
+			this.setFAGroup(null);
+			this.setFAMethod(null);
+			this.setFAPercent(null);
+		}
+
+		if (OrderType.MKT.equals(this.getOrderType())) {
+			this.setLimitPrice((new Money(0)).getBigDecimalValue());
+			this.setAuxPrice((new Money(0)).getBigDecimalValue());
+			this.setTrailingPercent((new Money(0)).getBigDecimalValue());
+			this.setTrailStopPrice((new Money(0)).getBigDecimalValue());
+		} else if (OrderType.TRAIL.equals(this.getOrderType())) {
+			this.setTrailStopPrice((new Money(0)).getBigDecimalValue());
+			if (null != this.getAuxPrice()) {
+				this.setTrailingPercent((new Money(0)).getBigDecimalValue());
+			}
+		} else if (OrderType.TRAILLIMIT.equals(this.getOrderType())) {
+			this.setTrailingPercent((new Money(0)).getBigDecimalValue());
+		}
+
 	}
 
 	/**

@@ -562,6 +562,7 @@ public class TradePersistentModelTest {
 					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
 			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 					.intValue());
+			tradeOrder.validate();
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrder(tradeOrder);
 			assertNotNull(result.getId());
@@ -582,6 +583,7 @@ public class TradePersistentModelTest {
 			tradeOrderBuy
 					.setOrderKey((new BigDecimal((Math.random() * 1000000)))
 							.intValue());
+			tradeOrderBuy.validate();
 			tradeOrderBuy = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderBuy);
 			tradeOrderBuy.setStatus(OrderStatus.SUBMITTED);
@@ -617,6 +619,7 @@ public class TradePersistentModelTest {
 			tradeOrderSell = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderSell);
 			tradeOrderSell.setStatus(OrderStatus.SUBMITTED);
+			tradeOrderSell.validate();
 			tradeOrderSell = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderSell);
 
@@ -680,6 +683,7 @@ public class TradePersistentModelTest {
 			tradeOrderBuy = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderBuy);
 			tradeOrderBuy.setStatus(OrderStatus.SUBMITTED);
+			tradeOrderBuy.validate();
 			tradeOrderBuy = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderBuy);
 

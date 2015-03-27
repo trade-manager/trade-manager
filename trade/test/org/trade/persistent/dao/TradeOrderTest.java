@@ -148,6 +148,7 @@ public class TradeOrderTest {
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setTransmit(true);
 			tradeOrder.setStatus("SUBMITTED");
+			tradeOrder.validate();
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
 			assertNotNull(tradeOrder);
 			_log.info("IdOrder: " + tradeOrder.getIdTradeOrder());
@@ -162,6 +163,7 @@ public class TradeOrderTest {
 			tradeOrder1.setClientId(clientId);
 			tradeOrder1.setTransmit(true);
 			tradeOrder1.setStatus("SUBMITTED");
+			tradeOrder1.validate();
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 			assertNotNull(tradeOrder1);
 
@@ -196,6 +198,7 @@ public class TradeOrderTest {
 			tradeOrder1.setOcaGroupName("");
 			tradeOrder1.setTransmit(true);
 			tradeOrder1.setStatus("SUBMITTED");
+			tradeOrder1.validate();
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 			int buySellMultiplier = 1;
 			if (action.equals(Action.BUY)) {
@@ -219,6 +222,7 @@ public class TradeOrderTest {
 					+ "q1w2e3");
 			tradeOrder2.setTransmit(true);
 			tradeOrder2.setStatus("SUBMITTED");
+			tradeOrder2.validate();
 			tradeOrder2 = tradeOrderHome.persist(tradeOrder2);
 
 			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy, action,
@@ -234,6 +238,7 @@ public class TradeOrderTest {
 					+ "q1w2e3");
 			tradeOrder3.setTransmit(true);
 			tradeOrder3.setStatus("SUBMITTED");
+			tradeOrder3.validate();
 			tradeOrder3 = tradeOrderHome.persist(tradeOrder3);
 
 			TradeOrder tradeOrder4 = new TradeOrder(this.tradestrategy, action,
@@ -250,6 +255,7 @@ public class TradeOrderTest {
 					+ "q1w2e3");
 			tradeOrder4.setTransmit(true);
 			tradeOrder4.setStatus("SUBMITTED");
+			tradeOrder4.validate();
 			tradeOrder4 = tradeOrderHome.persist(tradeOrder4);
 
 			_log.info("IdOrder: " + tradeOrder1.getIdTradeOrder());

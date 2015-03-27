@@ -373,6 +373,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 			Tradestrategy tradestrategy = m_tradePersistentModel
 					.findTradestrategyById(instance.getTradestrategy());
+			// Check the order is valid.
+			instance.validate();
 			instance = m_brokerModel.onPlaceOrder(tradestrategy.getContract(),
 					instance);
 			setStatusBarMessage("Order sent to broker.\n",
