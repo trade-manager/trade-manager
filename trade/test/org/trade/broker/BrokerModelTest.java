@@ -176,10 +176,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 			// Ping the broker to see if its completed.
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
-				while (backTestbrokerModel.isConnected()
-						&& !connectionFailed
-						&& !backTestbrokerModel.getBackTestBroker(
-								this.tradestrategy).isDone()) {
+				while (backTestbrokerModel.isConnected() && !connectionFailed
+						&& !backTestBroker.isDone()) {
 					lockCoreUtilsTest.wait();
 				}
 			}
