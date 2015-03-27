@@ -81,7 +81,7 @@ public class TradestrategyHome {
 			}
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -106,7 +106,7 @@ public class TradestrategyHome {
 					TradestrategyLite.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -147,7 +147,7 @@ public class TradestrategyHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -181,7 +181,7 @@ public class TradestrategyHome {
 				instance.getOpenTradePosition().getTradeOrders().size();
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -211,7 +211,7 @@ public class TradestrategyHome {
 			}
 			entityManager.getTransaction().commit();
 			return tradestrategy;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -224,8 +224,8 @@ public class TradestrategyHome {
 	 * 
 	 * 
 	 * 
-	 * @return List<Tradestrategy> a list of tradestrategies * @throws
-	 *         RuntimeException if there is a problem finding data
+	 * @return List<Tradestrategy> a list of tradestrategies * @throws Exception
+	 *         if there is a problem finding data
 	 */
 	public List<Tradestrategy> findAll() {
 
@@ -249,7 +249,7 @@ public class TradestrategyHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -320,7 +320,7 @@ public class TradestrategyHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -376,7 +376,7 @@ public class TradestrategyHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -433,7 +433,7 @@ public class TradestrategyHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

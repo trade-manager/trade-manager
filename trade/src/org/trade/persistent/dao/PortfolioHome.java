@@ -79,7 +79,7 @@ public class PortfolioHome {
 			instance.getPortfolioAccounts().size();
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -111,7 +111,7 @@ public class PortfolioHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -149,7 +149,7 @@ public class PortfolioHome {
 			entityManager.getTransaction().commit();
 			return portfolio;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -187,7 +187,7 @@ public class PortfolioHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -224,7 +224,7 @@ public class PortfolioHome {
 				entityManager.persist(item);
 			}
 			entityManager.getTransaction().commit();
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -296,7 +296,7 @@ public class PortfolioHome {
 			}
 			entityManager.getTransaction().commit();
 			return (portfolio == null ? instance : portfolio);
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -328,7 +328,7 @@ public class PortfolioHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}
@@ -358,7 +358,7 @@ public class PortfolioHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}
@@ -407,7 +407,7 @@ public class PortfolioHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}

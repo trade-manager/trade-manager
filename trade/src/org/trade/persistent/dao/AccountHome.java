@@ -70,7 +70,7 @@ public class AccountHome {
 			Account instance = entityManager.find(Account.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -107,7 +107,7 @@ public class AccountHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

@@ -75,7 +75,7 @@ public class StrategyHome {
 			entityManager.getTransaction().commit();
 			return instance;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -113,7 +113,7 @@ public class StrategyHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -145,7 +145,7 @@ public class StrategyHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

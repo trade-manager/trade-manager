@@ -147,7 +147,7 @@ public class CandleHome {
 				}
 			}
 			entityManager.getTransaction().commit();
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.logError("Error persistCandleSeries failed :"
 					+ re.getMessage(), re);
 			EntityManagerHelper.rollback();
@@ -209,7 +209,7 @@ public class CandleHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -275,7 +275,7 @@ public class CandleHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -300,7 +300,7 @@ public class CandleHome {
 			entityManager.getTransaction().commit();
 			return instance;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -369,7 +369,7 @@ public class CandleHome {
 				return items.get(0);
 			}
 			return null;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		} finally {
 			EntityManagerHelper.close();
@@ -421,7 +421,7 @@ public class CandleHome {
 
 			return (Long) item;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -443,7 +443,7 @@ public class CandleHome {
 					.getEntityManager();
 			Contract instance = entityManager.find(Contract.class, id);
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}
@@ -462,7 +462,7 @@ public class CandleHome {
 					.getEntityManager();
 			Tradingday instance = entityManager.find(Tradingday.class, id);
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}
@@ -496,7 +496,7 @@ public class CandleHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}

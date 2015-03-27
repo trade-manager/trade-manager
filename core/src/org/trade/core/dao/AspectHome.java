@@ -63,8 +63,10 @@ public class AspectHome {
 	 * @param transientInstance
 	 *            Aspect
 	 * @return Aspect
+	 * @throws Exception
 	 */
-	public synchronized <T extends Aspect> T persist(T transientInstance) {
+	public synchronized <T extends Aspect> T persist(T transientInstance)
+			throws Exception {
 		return persist(transientInstance, false);
 	}
 
@@ -76,10 +78,11 @@ public class AspectHome {
 	 * @param overrideVersion
 	 *            boolean
 	 * @return Aspect
+	 * @throws Exception
 	 */
 
 	public synchronized <T extends Aspect> T persist(T transientInstance,
-			boolean overrideVersion) {
+			boolean overrideVersion) throws Exception {
 
 		try {
 
@@ -106,7 +109,7 @@ public class AspectHome {
 				return instance;
 			}
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -136,7 +139,7 @@ public class AspectHome {
 				entityManager.getTransaction().commit();
 			}
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -173,12 +176,9 @@ public class AspectHome {
 			}
 			entityManager.getTransaction().commit();
 			return aspects;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
-		} catch (ClassNotFoundException e) {
-			throw e;
-
 		} finally {
 			EntityManagerHelper.close();
 		}
@@ -219,12 +219,9 @@ public class AspectHome {
 			}
 			entityManager.getTransaction().commit();
 			return aspects;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
-		} catch (ClassNotFoundException e) {
-			throw e;
-
 		} finally {
 			EntityManagerHelper.close();
 		}
@@ -247,7 +244,7 @@ public class AspectHome {
 					transientInstance.getId());
 			entityManager.getTransaction().commit();
 			return (Aspect) aspect;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -261,9 +258,10 @@ public class AspectHome {
 	 * @param transientInstance
 	 *            Aspect
 	 * @return boolean
+	 * @throws Exception
 	 */
 
-	public boolean validate(Aspect transientInstance) {
+	public boolean validate(Aspect transientInstance) throws Exception {
 
 		Set<ConstraintViolation<Aspect>> constraintViolations = EntityManagerHelper
 				.getValidator().validate(transientInstance);
@@ -278,7 +276,7 @@ public class AspectHome {
 				}
 				errorMsg = errorMsg + " " + error.getMessage();
 			}
-			throw new RuntimeException(errorMsg);
+			throw new Exception(errorMsg);
 		}
 		return true;
 	}

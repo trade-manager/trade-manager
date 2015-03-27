@@ -318,7 +318,7 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 				return items;
 			}
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

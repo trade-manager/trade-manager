@@ -71,7 +71,7 @@ public class TradeOrderfillHome {
 					id);
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -106,7 +106,7 @@ public class TradeOrderfillHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

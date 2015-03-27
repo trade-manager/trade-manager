@@ -75,7 +75,7 @@ public class CodeTypeHome {
 			entityManager.getTransaction().commit();
 			return instance;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -109,7 +109,7 @@ public class CodeTypeHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -162,7 +162,7 @@ public class CodeTypeHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -193,7 +193,7 @@ public class CodeTypeHome {
 			entityManager.getTransaction().commit();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

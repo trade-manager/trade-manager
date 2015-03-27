@@ -182,7 +182,7 @@ public class TradingdayHome {
 			entityManager.getTransaction().commit();
 			detachedInstance.setDirty(false);
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.logError(
 					"Error saving Tradingdays: " + re.getMessage(), re);
 			EntityManagerHelper.rollback();
@@ -215,7 +215,7 @@ public class TradingdayHome {
 			}
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -274,7 +274,7 @@ public class TradingdayHome {
 			entityManager.getTransaction().commit();
 			return tradingdays;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -319,7 +319,7 @@ public class TradingdayHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -354,7 +354,7 @@ public class TradingdayHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}
@@ -390,7 +390,7 @@ public class TradingdayHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}
@@ -428,7 +428,7 @@ public class TradingdayHome {
 			List<Tradestrategy> items = typedQuery.getResultList();
 			return items;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}
@@ -502,7 +502,7 @@ public class TradingdayHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			throw re;
 		}
 	}

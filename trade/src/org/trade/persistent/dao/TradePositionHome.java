@@ -69,7 +69,7 @@ public class TradePositionHome {
 			}
 			entityManager.getTransaction().commit();
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -96,7 +96,7 @@ public class TradePositionHome {
 				instance.getTradeOrders().size();
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

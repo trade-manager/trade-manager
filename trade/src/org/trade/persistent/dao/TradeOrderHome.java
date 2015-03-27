@@ -92,7 +92,7 @@ public class TradeOrderHome {
 				transientInstance.setVersion(instance.getVersion());
 				return instance;
 			}
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.logError("ERROR saving TradeOrder Msg: "
 					+ re.getCause().getMessage(), re);
 			EntityManagerHelper.rollback();
@@ -118,7 +118,7 @@ public class TradeOrderHome {
 			TradeOrder instance = entityManager.find(TradeOrder.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -156,7 +156,7 @@ public class TradeOrderHome {
 			}
 			return null;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -190,7 +190,7 @@ public class TradeOrderHome {
 
 			return (Integer) item;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

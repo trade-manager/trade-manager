@@ -214,10 +214,9 @@ public class ComponentPrintService extends PrintPage implements Printable {
 	 * Method print.
 	 * 
 	 * @return boolean
-	 * @throws PrinterException
-	 * @throws HeadlessException
+	 * @throws Exception
 	 */
-	public boolean print() throws PrinterException, HeadlessException {
+	public boolean print() throws Exception {
 		boolean showDialogs = !GraphicsEnvironment.isHeadless();
 
 		return print(PrintMode.FIT_WIDTH, null, null, showDialogs, null,
@@ -242,13 +241,12 @@ public class ComponentPrintService extends PrintPage implements Printable {
 	 * @param service
 	 *            PrintService
 	 * @return boolean
-	 * @throws PrinterException
-	 * @throws HeadlessException
+	 * @throws Exception
 	 */
 	public boolean print(PrintMode printMode, MessageFormat headerFormat,
 			MessageFormat footerFormat, boolean showPrintDialog,
 			PrintRequestAttributeSet attr, boolean interactive,
-			PrintService service) throws PrinterException, HeadlessException {
+			PrintService service) throws Exception {
 		// complain early if an invalid parameter is specified for headless mode
 		boolean isHeadless = GraphicsEnvironment.isHeadless();
 		if (isHeadless) {
@@ -353,8 +351,8 @@ public class ComponentPrintService extends PrintPage implements Printable {
 				return false;
 			} else if (pe instanceof PrinterException) {
 				throw (PrinterException) pe;
-			} else if (pe instanceof RuntimeException) {
-				throw (RuntimeException) pe;
+			} else if (pe instanceof Exception) {
+				throw (Exception) pe;
 			} else if (pe instanceof Error) {
 				throw (Error) pe;
 			}
@@ -485,7 +483,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 				if (retThrowable != null) {
 					if (retThrowable instanceof PrinterException) {
 						throw (PrinterException) retThrowable;
-					} else if (retThrowable instanceof RuntimeException) {
+					} else if (retThrowable instanceof Exception) {
 						throw (RuntimeException) retThrowable;
 					} else if (retThrowable instanceof Error) {
 						throw (Error) retThrowable;

@@ -107,7 +107,7 @@ public class TradelogHome {
 			entityManagerLocal.getTransaction().commit();
 			return tradelogReport;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			if ((entityManagerLocal.getTransaction() != null)
 					&& entityManagerLocal.getTransaction().isActive()) {
 				entityManagerLocal.getTransaction().rollback();
@@ -153,7 +153,7 @@ public class TradelogHome {
 			entityManagerLocal.getTransaction().commit();
 			return tradelogReport;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			if ((entityManagerLocal.getTransaction() != null)
 					&& entityManagerLocal.getTransaction().isActive()) {
 				entityManagerLocal.getTransaction().rollback();
@@ -199,7 +199,7 @@ public class TradelogHome {
 			entityManagerLocal.getTransaction().commit();
 			return tradelogReport;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			if ((entityManagerLocal.getTransaction() != null)
 					&& entityManagerLocal.getTransaction().isActive()) {
 				entityManagerLocal.getTransaction().rollback();

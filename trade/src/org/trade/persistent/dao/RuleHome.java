@@ -75,7 +75,7 @@ public class RuleHome {
 			Rule instance = entityManager.find(Rule.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -120,7 +120,7 @@ public class RuleHome {
 
 			return (Integer) item;
 
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {

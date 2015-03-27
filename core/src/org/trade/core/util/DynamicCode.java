@@ -135,10 +135,9 @@ public final class DynamicCode {
 	 * 
 	 * 
 	 * @return Class<?>
-	 * @throws ClassNotFoundException
-	 *             if source file not found or compilation error
+	 * @throws Exception
 	 */
-	public Class<?> loadClass(String className) throws ClassNotFoundException {
+	public Class<?> loadClass(String className) throws Exception {
 
 		LoadedClass loadedClass = null;
 		synchronized (loadedClasses) {
@@ -250,12 +249,12 @@ public final class DynamicCode {
 	 * 
 	 * 
 	 * @return Object
-	 * @throws RuntimeException
+	 * @throws Exception
 	 *             if an instance cannot be created, because of class not found
 	 *             for example
 	 */
 	public Object newProxyInstance(Class<?> interfaceClass, String implClassName)
-			throws RuntimeException {
+			throws Exception {
 		MyInvocationHandler handler = new MyInvocationHandler(implClassName);
 		return Proxy.newProxyInstance(interfaceClass.getClassLoader(),
 				new Class[] { interfaceClass }, handler);
@@ -271,10 +270,10 @@ public final class DynamicCode {
 	 * @param parm
 	 *            Vector<Object>
 	 * @return Object
-	 * @throws RuntimeException
+	 * @throws Exception
 	 */
 	public Object newProxyInstance(Class<?> interfaceClass,
-			String implClassName, Vector<Object> parm) throws RuntimeException {
+			String implClassName, Vector<Object> parm) throws Exception {
 		MyInvocationHandler handler = new MyInvocationHandler(implClassName,
 				parm);
 		return Proxy.newProxyInstance(interfaceClass.getClassLoader(),
@@ -343,8 +342,9 @@ public final class DynamicCode {
 		 *            String
 		 * @param src
 		 *            SourceDir
+		 * @throws Exception
 		 */
-		LoadedClass(String className, SourceDir src) {
+		LoadedClass(String className, SourceDir src) throws Exception {
 			this.className = className;
 			this.srcDir = src;
 
@@ -364,7 +364,7 @@ public final class DynamicCode {
 			return srcFile.lastModified() != lastModified;
 		}
 
-		void compileAndLoadClass() {
+		void compileAndLoadClass() throws Exception {
 
 			if (clazz != null) {
 				return; // class already loaded
@@ -377,7 +377,7 @@ public final class DynamicCode {
 			}
 
 			if (error != null) {
-				throw new RuntimeException("Failed to compile "
+				throw new Exception("Failed to compile "
 						+ srcFile.getAbsolutePath() + ". Error: " + error);
 			}
 
@@ -389,7 +389,7 @@ public final class DynamicCode {
 				lastModified = srcFile.lastModified();
 
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException("Failed to load DynaCode class "
+				throw new Exception("Failed to load DynaCode class "
 						+ srcFile.getAbsolutePath());
 			}
 		}
@@ -411,8 +411,10 @@ public final class DynamicCode {
 		 *            String
 		 * @param parm
 		 *            Vector<Object>
+		 * @throws Exception
 		 */
-		MyInvocationHandler(String className, Vector<Object> parm) {
+		MyInvocationHandler(String className, Vector<Object> parm)
+				throws Exception {
 			backendClassName = className;
 			this.parm = parm;
 			try {
@@ -420,7 +422,7 @@ public final class DynamicCode {
 				backend = newDynaCodeInstance(clz);
 
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException(e);
+				throw new Exception(e);
 			}
 		}
 
@@ -429,8 +431,9 @@ public final class DynamicCode {
 		 * 
 		 * @param className
 		 *            String
+		 * @throws Exception
 		 */
-		MyInvocationHandler(String className) {
+		MyInvocationHandler(String className) throws Exception {
 			backendClassName = className;
 
 			try {
@@ -438,7 +441,7 @@ public final class DynamicCode {
 				backend = newDynaCodeInstance(clz);
 
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException(e);
+				throw new Exception(e);
 			}
 		}
 
@@ -480,15 +483,15 @@ public final class DynamicCode {
 		 * @param clz
 		 *            Class<?>
 		 * @return Object
+		 * @throws Exception
 		 */
-		private Object newDynaCodeInstance(Class<?> clz) {
+		private Object newDynaCodeInstance(Class<?> clz) throws Exception {
 			try {
 				// return clz.newInstance();
 				return getCreateClass(clz, this.parm);
 			} catch (Exception e) {
-				throw new RuntimeException(
-						"Failed to new instance of DynaCode class "
-								+ clz.getName(), e);
+				throw new Exception("Failed to new instance of DynaCode class "
+						+ clz.getName(), e);
 			}
 		}
 
