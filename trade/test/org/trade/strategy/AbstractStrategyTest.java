@@ -438,8 +438,8 @@ public class AbstractStrategyTest {
 					tradestrategy.getContract(), Action.SELL, OrderType.TRAIL,
 					null, new Money(0.1), 100, null, result.getOrderKey(),
 					TriggerMethod.DEFAULT, OverrideConstraints.YES,
-					TimeInForce.GTC, false, true, null, null, null, null, null,
-					null);
+					TimeInForce.GTC, false, true, new Money(191.60), null,
+					null, null, null, null);
 			assertNotNull(result);
 			assertNotNull(orderTrail);
 		} catch (Exception ex) {

@@ -66,6 +66,7 @@ import javax.validation.constraints.NotNull;
 import org.trade.core.dao.Aspect;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.valuetype.Money;
+import org.trade.core.valuetype.Percent;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.OverrideConstraints;
 import org.trade.dictionary.valuetype.TimeInForce;
@@ -205,6 +206,82 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.lastUpdateDate = createDate;
 		this.orderReference = this.tradestrategy.getIdTradeStrategy()
 				.toString();
+	}
+
+	/**
+	 * Constructor for TradeOrder.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @param action
+	 *            String
+	 * @param createDate
+	 *            Date
+	 * @param orderType
+	 *            String
+	 * @param limitPrice
+	 *            Money
+	 * @param auxPrice
+	 *            Money
+	 * @param quantity
+	 *            Integer
+	 * @param ocaGroupName
+	 *            String
+	 * @param parentId
+	 *            Integer
+	 * @param triggerMethod
+	 *            Integer
+	 * @param overrideConstraints
+	 *            Integer
+	 * @param timeInForce
+	 *            String
+	 * @param transmit
+	 *            Boolean
+	 * @param trailStopPrice
+	 *            BigDecimal
+	 * @param trailingPercent
+	 *            BigDecimal
+	 * @param FAProfile
+	 *            String
+	 * @param FAGroup
+	 *            String
+	 * @param FAMethod
+	 *            String
+	 * @param FAPercent
+	 *            BigDecimal
+	 */
+
+	public TradeOrder(Tradestrategy tradestrategy, String action,
+			Date createDate, String orderType, Money limitPrice,
+			Money auxPrice, Integer quantity, String ocaGroupName,
+			Integer parentId, Integer triggerMethod,
+			Integer overrideConstraints, String timeInForce, Boolean transmit,
+			Money trailStopPrice, Percent trailingPercent, String FAProfile,
+			String FAGroup, String FAMethod, BigDecimal FAPercent) {
+		this.tradestrategy = tradestrategy;
+		this.action = action;
+		this.createDate = createDate;
+		this.auxPrice = (null == auxPrice ? null : auxPrice
+				.getBigDecimalValue());
+		this.limitPrice = (null == limitPrice ? null : limitPrice
+				.getBigDecimalValue());
+		this.ocaGroupName = ocaGroupName;
+		this.orderType = orderType;
+		this.overrideConstraints = overrideConstraints;
+		this.parentId = parentId;
+		this.quantity = quantity;
+		this.timeInForce = timeInForce;
+		this.transmit = transmit;
+		this.triggerMethod = triggerMethod;
+		this.trailStopPrice = (null == trailStopPrice ? null : trailStopPrice
+				.getBigDecimalValue());
+		this.trailingPercent = (null == trailingPercent ? null
+				: trailingPercent.getBigDecimalValue());
+		this.FAProfile = FAProfile;
+		this.FAGroup = FAGroup;
+		this.FAMethod = FAMethod;
+		this.FAPercent = FAPercent;
+		this.lastUpdateDate = createDate;
 	}
 
 	/**
