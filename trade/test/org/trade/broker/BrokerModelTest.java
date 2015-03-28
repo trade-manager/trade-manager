@@ -165,18 +165,16 @@ public class BrokerModelTest implements BrokerChangeListener {
 	@After
 	public void tearDown() throws Exception {
 
-		if (backTestbrokerModel.isConnected())
-			backTestbrokerModel.onDisconnect();
-
 		// Wait for the BackTestBroker to complete. These tests use the testing
 		// client from org.trade.brokerclient that runs its own thread.
 		BackTestBroker backTestBroker = backTestbrokerModel
 				.getBackTestBroker(this.tradestrategy);
 		if (null != backTestBroker) {
-			// Ping the broker to see if its completed.
+			// Ping the broker to see if its completed. Not isConnected always
+			// returns false for BackTestBrokerModel.
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
-				while (backTestbrokerModel.isConnected() && !connectionFailed
+				while (!backTestbrokerModel.isConnected() && !connectionFailed
 						&& !backTestBroker.isDone()) {
 					lockCoreUtilsTest.wait();
 				}
@@ -184,6 +182,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 			timer.stop();
 		}
 
+		if (backTestbrokerModel.isConnected())
+			backTestbrokerModel.onDisconnect();
+		
 		TradestrategyTest.clearDBData();
 	}
 
