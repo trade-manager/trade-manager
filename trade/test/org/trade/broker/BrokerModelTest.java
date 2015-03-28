@@ -164,7 +164,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		TradestrategyTest.clearDBData();
+
 		if (backTestbrokerModel.isConnected())
 			backTestbrokerModel.onDisconnect();
 
@@ -183,6 +183,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 			}
 			timer.stop();
 		}
+
+		TradestrategyTest.clearDBData();
 	}
 
 	/**
