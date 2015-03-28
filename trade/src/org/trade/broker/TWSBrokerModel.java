@@ -1044,12 +1044,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							.persistTradeOrder(tradeOrder);
 
 					_log.debug("Order Placed Key: " + tradeOrder.getOrderKey());
-					logContract(TWSBrokerModel.getIBContract(contract));
-					logTradeOrder(TWSBrokerModel.getIBOrder(tradeOrder));
+					com.ib.client.Contract IBContract = TWSBrokerModel
+							.getIBContract(contract);
+					com.ib.client.Order IBOrder = TWSBrokerModel
+							.getIBOrder(tradeOrder);
 
-					m_client.placeOrder(tradeOrder.getOrderKey(),
-							TWSBrokerModel.getIBContract(contract),
-							TWSBrokerModel.getIBOrder(tradeOrder));
+					logContract(IBContract);
+					logTradeOrder(IBOrder);
+
+					m_client.placeOrder(tradeOrder.getOrderKey(), IBContract,
+							IBOrder);
 				}
 				return tradeOrder;
 
@@ -3087,7 +3091,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != order.getAuxPrice()) {
 			ibOrder.m_auxPrice = order.getAuxPrice().doubleValue();
 		}
-
+		if (null != order.getTrailStopPrice()) {
+			ibOrder.m_trailStopPrice = order.getTrailStopPrice().doubleValue();
+		}
+		if (null != order.getTrailingPercent()) {
+			ibOrder.m_trailingPercent = order.getTrailingPercent()
+					.doubleValue();
+		}
 		if (null != order.getTimeInForce()) {
 			ibOrder.m_tif = order.getTimeInForce();
 		}
@@ -3225,6 +3235,24 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					&& CoreUtils.nullSafeComparator(order.getAuxPrice(),
 							auxPrice.getBigDecimalValue()) != 0) {
 				order.setAuxPrice(auxPrice.getBigDecimalValue());
+				changed = true;
+			}
+
+			Money trailStopPrice = new Money(ibOrder.m_trailStopPrice);
+			if (CoreUtils.nullSafeComparator(trailStopPrice, new Money(
+					Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(order.getTrailStopPrice(),
+							trailStopPrice.getBigDecimalValue()) != 0) {
+				order.setTrailStopPrice(trailStopPrice.getBigDecimalValue());
+				changed = true;
+			}
+
+			Money trailingPercent = new Money(ibOrder.m_trailingPercent);
+			if (CoreUtils.nullSafeComparator(trailingPercent, new Money(
+					Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(order.getTrailingPercent(),
+							trailingPercent.getBigDecimalValue()) != 0) {
+				order.setTrailingPercent(trailingPercent.getBigDecimalValue());
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(order.getTimeInForce(),
@@ -3711,7 +3739,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				+ order.m_triggerMethod + " Hidden: " + order.m_hidden
 				+ " ParentId: " + order.m_parentId + " GoodAfterTime: "
 				+ order.m_goodAfterTime + " GoodTillDate: "
-				+ order.m_goodTillDate + " OverridePercentageConstraints: "
+				+ order.m_goodTillDate + " TrailStopPrice: "
+				+ order.m_trailStopPrice + " TrailingPercent: "
+				+ order.m_trailingPercent + " OverridePercentageConstraints: "
 				+ order.m_overridePercentageConstraints + " AllOrNone: "
 				+ order.m_allOrNone + " Account: " + order.m_account
 				+ " FAGroup: " + order.m_faGroup + " FAMethod: "

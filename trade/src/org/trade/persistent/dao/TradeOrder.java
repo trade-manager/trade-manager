@@ -1514,8 +1514,9 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			this.setTrailStopPrice((new Money(0)).getBigDecimalValue());
 		} else if (OrderType.TRAIL.equals(this.getOrderType())) {
 			this.setTrailStopPrice((new Money(0)).getBigDecimalValue());
-			if (null != this.getAuxPrice()) {
-				this.setTrailingPercent((new Money(0)).getBigDecimalValue());
+			if (null != this.getTrailingPercent()) {
+				this.setAuxPrice(null);
+				this.setLimitPrice(null);
 			}
 		} else if (OrderType.TRAILLIMIT.equals(this.getOrderType())) {
 			this.setTrailingPercent((new Money(0)).getBigDecimalValue());
