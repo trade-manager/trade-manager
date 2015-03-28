@@ -1049,6 +1049,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					com.ib.client.Order IBOrder = TWSBrokerModel
 							.getIBOrder(tradeOrder);
 
+					// Log to debug comment out for performance.
 					logContract(IBContract);
 					logTradeOrder(IBOrder);
 

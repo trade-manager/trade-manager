@@ -159,11 +159,11 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 				Integer tgt2Qty = quantity - tgt1Qty;
 				// Integer tgt3Qty = quantity - (tgt1Qty + tgt2Qty);
 
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 2,
-						0.01, tgt1Qty, true);
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, new Money(
+						0.01), 2, new Money(0.01), tgt1Qty, true);
 
-				createStopAndTargetOrder(getOpenPositionOrder(), 2, 0.01, 2,
-						0.01, tgt2Qty, true);
+				createStopAndTargetOrder(getOpenPositionOrder(), 2, new Money(
+						0.01), 2, new Money(0.01), tgt2Qty, true);
 				// createStopAndTargetOrder(getOpenPositionOrder(),
 				// 2,0.01,4,0.01, tgt3Qty, true);
 				_log.info("Open position submit Stop/Tgt orders created Symbol: "

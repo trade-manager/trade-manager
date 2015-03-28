@@ -252,12 +252,14 @@ public class AbstractStrategyTest {
 							+ openOrder.getTradestrategy().getContract()
 									.getSymbol());
 					strategyProxy.createStopAndTargetOrder(strategyProxy
-							.getOpenPositionOrder(), 1, -0.01, 3, 0.02,
+							.getOpenPositionOrder(), 1, new Money(0.01), 3,
+							new Money(0.02),
 							strategyProxy.getOpenTradePosition()
 									.getOpenQuantity() / 2, true);
 
 					strategyProxy.createStopAndTargetOrder(strategyProxy
-							.getOpenPositionOrder(), 1, -0.01, 3, 0.02,
+							.getOpenPositionOrder(), 1, new Money(0.01), 3,
+							new Money(0.02),
 							strategyProxy.getOpenTradePosition()
 									.getOpenQuantity() / 2, true);
 
@@ -525,16 +527,14 @@ public class AbstractStrategyTest {
 			 * 
 			 * Make the stop -2R and manage to the Vwap MA of the opening bar.
 			 */
-			this.strategyProxy
-					.createStopAndTargetOrder(this.strategyProxy
-							.getOpenPositionOrder(), 1, -0.01, 4, 0.02,
-							this.strategyProxy.getOpenPositionOrder()
-									.getQuantity() / 2, true);
-			this.strategyProxy
-					.createStopAndTargetOrder(this.strategyProxy
-							.getOpenPositionOrder(), 1, -0.01, 7, 0.02,
-							this.strategyProxy.getOpenPositionOrder()
-									.getQuantity() / 2, true);
+			this.strategyProxy.createStopAndTargetOrder(this.strategyProxy
+					.getOpenPositionOrder(), 1, new Money(0.01), 4, new Money(
+					0.02), this.strategyProxy.getOpenPositionOrder()
+					.getQuantity() / 2, true);
+			this.strategyProxy.createStopAndTargetOrder(this.strategyProxy
+					.getOpenPositionOrder(), 1, new Money(0.01), 7, new Money(
+					0.02), this.strategyProxy.getOpenPositionOrder()
+					.getQuantity() / 2, true);
 			for (TradeOrder order : this.strategyProxy.getTradestrategy()
 					.getTradeOrders()) {
 				_log.info("Key: " + order.getOrderKey() + " Qty: "
@@ -599,11 +599,10 @@ public class AbstractStrategyTest {
 	public void testCreateStopAndTargetOrderPercentQty() {
 		try {
 			createOpenBuyPosition(new Money(100), 1000, Action.BUY, true);
-			this.strategyProxy
-					.createStopAndTargetOrder(this.strategyProxy
-							.getOpenPositionOrder(), 2, -0.01, 4, 0.02,
-							this.strategyProxy.getOpenPositionOrder()
-									.getQuantity() / 2, true);
+			this.strategyProxy.createStopAndTargetOrder(this.strategyProxy
+					.getOpenPositionOrder(), 2, new Money(0.01), 4, new Money(
+					0.02), this.strategyProxy.getOpenPositionOrder()
+					.getQuantity() / 2, true);
 			assertNotNull(this.strategyProxy.isPositionCovered());
 		} catch (Exception ex) {
 			fail("Error testCreateStopAndTargetOrderPercentQty Msg:"

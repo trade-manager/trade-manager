@@ -603,8 +603,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createOrder(Contract contract, String action,
-			String orderType, Money limitPrice, Money auxPrice, int quantity,
-			boolean roundPrice, boolean transmit) throws StrategyRuleException {
+			String orderType, Money limitPrice, Money auxPrice,
+			Integer quantity, Boolean roundPrice, Boolean transmit)
+			throws StrategyRuleException {
 		return createOrder(contract, action, orderType, limitPrice, auxPrice,
 				quantity, null, null, TriggerMethod.DEFAULT,
 				OverrideConstraints.YES, TimeInForce.DAY, roundPrice, transmit,
@@ -640,7 +641,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public TradeOrder createOrder(Contract contract, String action,
 			String orderType, Money limitPrice, Money auxPrice, int quantity,
-			String ocaGroupName, boolean roundPrice, boolean transmit)
+			String ocaGroupName, Boolean roundPrice, Boolean transmit)
 			throws StrategyRuleException {
 		return createOrder(contract, action, orderType, limitPrice, auxPrice,
 				quantity, ocaGroupName, null, TriggerMethod.DEFAULT,
@@ -682,10 +683,10 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createOrder(Contract contract, String action,
-			String orderType, Money limitPrice, Money auxPrice, int quantity,
-			String ocaGroupName, Integer triggerMethod,
+			String orderType, Money limitPrice, Money auxPrice,
+			Integer quantity, String ocaGroupName, Integer triggerMethod,
 			Integer overrideConstraints, String timeInForce,
-			boolean roundPrice, boolean transmit) throws StrategyRuleException {
+			Boolean roundPrice, Boolean transmit) throws StrategyRuleException {
 		return createOrder(contract, action, orderType, limitPrice, auxPrice,
 				quantity, ocaGroupName, null, triggerMethod,
 				overrideConstraints, timeInForce, roundPrice, transmit, null,
@@ -799,8 +800,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder updateOrder(Integer orderKey, String action,
-			String orderType, Money limitPrice, Money auxPrice, int quantity,
-			boolean roundPrice, boolean transmit) throws StrategyRuleException {
+			String orderType, Money limitPrice, Money auxPrice,
+			Integer quantity, Boolean roundPrice, Boolean transmit)
+			throws StrategyRuleException {
 		try {
 
 			if (null == orderKey)
@@ -887,7 +889,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 */
 	public TradeOrder createRiskOpenPosition(String action, Money entryPrice,
 			Money stopPrice, boolean transmit, String FAProfile,
-			String FAGroup, String FAMethod, BigDecimal FAPercent)
+			String FAGroup, String FAMethod, Percent FAPercent)
 			throws StrategyRuleException {
 
 		if (this.isThereOpenPosition())
@@ -958,7 +960,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 				if (FAGroup != null) {
 					tradeOrder.setFAGroup(FAGroup);
 					tradeOrder.setFAMethod(FAMethod);
-					tradeOrder.setFAPercent(FAPercent);
+					tradeOrder.setFAPercent(FAPercent.getBigDecimalValue());
 				} else {
 					if (null != getTradestrategy().getPortfolio()
 							.getIndividualAccount()) {
@@ -1073,7 +1075,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createStopAndTargetOrder(Money stopPrice,
-			Money targetPrice, int quantity, boolean stopTransmit)
+			Money targetPrice, Integer quantity, Boolean stopTransmit)
 			throws StrategyRuleException {
 
 		if (quantity == 0)
@@ -1166,9 +1168,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @throws StrategyRuleException
 	 */
 	public TradeOrder createStopAndTargetOrder(TradeOrder openPosition,
-			int stopRiskUnits, double stopAddAmount, int targetRiskUnits,
-			double targetAddAmount, Integer quantity, boolean stopTransmit)
-			throws StrategyRuleException {
+			Integer stopRiskUnits, Money stopAddAmount,
+			Integer targetRiskUnits, Money targetAddAmount, Integer quantity,
+			Boolean stopTransmit) throws StrategyRuleException {
 
 		if (!this.isThereOpenPosition()) {
 			throw new StrategyRuleException(1, 209,
@@ -1204,14 +1206,16 @@ public abstract class AbstractStrategyRule extends Worker implements
 			if (stop < 0)
 				stop = 0.02;
 			Money stopPrice = addPennyAndRoundStop(stop, this
-					.getOpenTradePosition().getSide(), action, stopAddAmount);
+					.getOpenTradePosition().getSide(), action,
+					stopAddAmount.doubleValue());
 
 			double target = openPosition.getAverageFilledPrice().doubleValue()
 					+ (riskAmount * targetRiskUnits * buySellMultipliter * -1);
 			if (target < 0)
 				target = 0.02;
 			Money targetPrice = addPennyAndRoundStop(target, this
-					.getOpenTradePosition().getSide(), action, targetAddAmount);
+					.getOpenTradePosition().getSide(), action,
+					targetAddAmount.doubleValue());
 
 			String ocaID = new String(Integer.toString((new BigDecimal(Math
 					.random() * 1000000)).intValue()));
@@ -1332,7 +1336,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            boolean
 	 * @throws StrategyRuleException
 	 */
-	public void moveStopOCAPrice(Money stopPrice, boolean transmit)
+	public void moveStopOCAPrice(Money stopPrice, Boolean transmit)
 			throws StrategyRuleException {
 
 		try {
@@ -1759,7 +1763,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 			Integer quantity, BigDecimal averageFilledPrice) {
 
 		BigDecimal currentRiskAmount = new BigDecimal(Math.abs(currentPrice
-				- averageFilledPrice.doubleValue())
+				.doubleValue() - averageFilledPrice.doubleValue())
 				* quantity);
 		if (CoreUtils.nullSafeComparator(currentRiskAmount, riskamount) == 1)
 			return true;
