@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.broker.client.BackTestBroker;
+import org.trade.broker.client.Broker;
 import org.trade.broker.request.TWSAccountAliasRequest;
 import org.trade.broker.request.TWSAllocationRequest;
 import org.trade.broker.request.TWSGroupRequest;
@@ -276,7 +276,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            Tradestrategy
 	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
 	 */
-	public BackTestBroker getBackTestBroker(Tradestrategy tradestrategy) {
+	public Broker getBackTestBroker(Tradestrategy tradestrategy) {
 		return null;
 	}
 

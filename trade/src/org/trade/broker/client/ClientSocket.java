@@ -37,15 +37,13 @@ package org.trade.broker.client;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.swing.SwingWorker;
-
 import org.trade.broker.BrokerModelException;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Tradestrategy;
 
 public class ClientSocket {
 
-	private static final ConcurrentHashMap<Integer, SwingWorker<Void, Void>> m_backTestBroker = new ConcurrentHashMap<Integer, SwingWorker<Void, Void>>();
+	private static final ConcurrentHashMap<Integer, Broker> m_backTestBroker = new ConcurrentHashMap<Integer, Broker>();
 	private ClientWrapper m_client = null;
 
 	public ClientSocket(ClientWrapper client) {
@@ -90,7 +88,7 @@ public class ClientSocket {
 			} else {
 
 				if (tradestrategy.getTrade()) {
-					BackTestBroker backTestBroker = new BackTestBroker(
+					DBBroker backTestBroker = new DBBroker(
 							tradestrategy.getStrategyData(),
 							tradestrategy.getIdTradeStrategy(), m_client);
 					m_backTestBroker.put(reqId, backTestBroker);
@@ -116,7 +114,7 @@ public class ClientSocket {
 	public void removeBackTestBroker(Tradestrategy tradestrategy) {
 		Integer reqId = tradestrategy.hashCode();
 		synchronized (m_backTestBroker) {
-			SwingWorker<Void, Void> worker = m_backTestBroker.get(reqId);
+			Broker worker = m_backTestBroker.get(reqId);
 			if (null != worker) {
 				if (worker.isDone() || worker.isCancelled()) {
 					m_backTestBroker.remove(reqId);
@@ -134,7 +132,7 @@ public class ClientSocket {
 	 * @return BackTestBroker
 	 */
 
-	public SwingWorker<Void, Void> getBackTestBroker(Tradestrategy tradestrategy) {
+	public Broker getBackTestBroker(Tradestrategy tradestrategy) {
 		return m_backTestBroker.get(tradestrategy.hashCode());
 	}
 

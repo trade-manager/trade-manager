@@ -42,9 +42,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +62,6 @@ import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
-import org.trade.strategy.StrategyChangeListener;
-import org.trade.strategy.StrategyRuleException;
 import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorSeries;
@@ -75,11 +70,9 @@ import org.trade.strategy.data.candle.CandleItem;
 
 /**
  */
-public class BackTestBroker extends SwingWorker<Void, Void> implements
-		StrategyChangeListener {
+public class DBBroker extends Broker {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(BackTestBroker.class);
+	private final static Logger _log = LoggerFactory.getLogger(DBBroker.class);
 
 	private PersistentModel tradePersistentModel = null;
 	private StrategyData strategyData = null;
@@ -87,9 +80,6 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	private Integer idTradestrategy = null;
 	private ClientWrapper brokerModel = null;
 
-	private AtomicInteger ruleComplete = new AtomicInteger(0);
-	private AtomicInteger strategiesRunning = new AtomicInteger(0);
-	private final Object lockBackTestWorker = new Object();
 	private long execId = new Date().getTime();
 
 	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
@@ -118,70 +108,11 @@ public class BackTestBroker extends SwingWorker<Void, Void> implements
 	 * @param brokerModel
 	 *            BrokerModel
 	 */
-	public BackTestBroker(StrategyData strategyData, Integer idTradestrategy,
+	public DBBroker(StrategyData strategyData, Integer idTradestrategy,
 			ClientWrapper brokerModel) {
 		this.idTradestrategy = idTradestrategy;
 		this.brokerModel = brokerModel;
 		this.strategyData = strategyData;
-	}
-
-	/**
-	 * Method strategyComplete.
-	 * 
-	 * @param strategyClassName
-	 *            String
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
-	 */
-	public synchronized void strategyComplete(String strategyClassName,
-			Tradestrategy tradestrategy) {
-		synchronized (lockBackTestWorker) {
-			strategiesRunning.getAndDecrement();
-			lockBackTestWorker.notifyAll();
-		}
-	}
-
-	/**
-	 * Method strategyStarted.
-	 * 
-	 * @param strategyClassName
-	 *            String
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see org.trade.strategy.StrategyChangeListener#strategyStarted(Tradestrategy)
-	 */
-	public synchronized void strategyStarted(String strategyClassName,
-			Tradestrategy tradestrategy) {
-		synchronized (lockBackTestWorker) {
-			strategiesRunning.getAndIncrement();
-			lockBackTestWorker.notifyAll();
-		}
-	}
-
-	/**
-	 * Method ruleComplete.
-	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
-	 * @see org.trade.strategy.StrategyChangeListener#ruleComplete(Tradestrategy)
-	 */
-	public synchronized void ruleComplete(Tradestrategy tradestrategy) {
-		synchronized (lockBackTestWorker) {
-			ruleComplete.getAndIncrement();
-			lockBackTestWorker.notifyAll();
-		}
-	}
-
-	/**
-	 * Method strategyError.
-	 * 
-	 * @param strategyError
-	 *            StrategyRuleException
-	 * @see org.trade.strategy.StrategyChangeListener#strategyError(StrategyRuleException)
-	 */
-	public void strategyError(StrategyRuleException strategyError) {
-		this.cancel(true);
 	}
 
 	/**

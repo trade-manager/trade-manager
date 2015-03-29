@@ -55,7 +55,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.broker.client.BackTestBroker;
+import org.trade.broker.client.Broker;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.valuetype.Money;
@@ -167,7 +167,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		// Wait for the BackTestBroker to complete. These tests use the testing
 		// client from org.trade.brokerclient that runs its own thread.
-		BackTestBroker backTestBroker = backTestbrokerModel
+		Broker backTestBroker = backTestbrokerModel
 				.getBackTestBroker(this.tradestrategy);
 		if (null != backTestBroker) {
 			// Ping the broker to see if its completed. Not isConnected always
@@ -184,7 +184,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		if (backTestbrokerModel.isConnected())
 			backTestbrokerModel.onDisconnect();
-		
+
 		TradestrategyTest.clearDBData();
 	}
 
@@ -351,6 +351,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 					tradestrategy.getTradingday(),
 					tradestrategy.getChartDays(), tradestrategy.getBarSize(),
 					true, 0);
+			backTestbrokerModel.setBrokerDataOnly(true);
 			backTestbrokerModel.onBrokerData(tradestrategy, tradestrategy
 					.getTradingday().getClose());
 

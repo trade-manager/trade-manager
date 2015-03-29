@@ -48,8 +48,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.swing.SwingWorker;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
@@ -61,7 +59,7 @@ import org.trade.strategy.data.candle.CandlePeriod;
 
 /**
  */
-public class YahooBroker extends SwingWorker<Void, Void> {
+public class YahooBroker extends Broker {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(YahooBroker.class);

@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.broker.client.BackTestBroker;
+import org.trade.broker.client.Broker;
 import org.trade.broker.client.ClientSocket;
 import org.trade.broker.client.ClientWrapper;
 import org.trade.broker.client.OrderState;
@@ -199,8 +199,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 *            Integer
 	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
 	 */
-	public BackTestBroker getBackTestBroker(Tradestrategy tradestrategy) {
-		return (BackTestBroker) m_client.getBackTestBroker(tradestrategy);
+	public Broker getBackTestBroker(Tradestrategy tradestrategy) {
+		return m_client.getBackTestBroker(tradestrategy);
 	}
 
 	/**
