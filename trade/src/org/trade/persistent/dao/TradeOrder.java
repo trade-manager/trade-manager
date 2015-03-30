@@ -1474,16 +1474,16 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			throw new Exception(
 					"Limit Price must be less than Stop Price for Sell order");
 
-		if (((OrderType.TRAIL.equals(this.getOrderType()))
-				&& null == this.getAuxPrice() && null == this
+		if (((OrderType.TRAIL.equals(this.getOrderType()) || (OrderType.TRAILLIMIT
+				.equals(this.getOrderType()))) && null == this.getAuxPrice() && null == this
 					.getTrailingPercent()))
 			throw new Exception(
 					"Trail orders must have either AuxPrice or Trailing Percent set");
 
 		if ((OrderType.TRAILLIMIT.equals(this.getOrderType()))
-				&& null == this.getTrailStopPrice())
+				&& null == this.getLimitPrice())
 			throw new Exception(
-					"TrailStopPrice cannot be null for a TrailLimit order");
+					"Limit Price cannot be null for a TrailLimit order");
 
 		if (null == this.getFAProfile()) {
 			if (null == this.getFAGroup()) {
