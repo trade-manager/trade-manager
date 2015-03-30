@@ -569,11 +569,17 @@ public class DBBroker extends Broker {
 					}
 				}
 			}
-			BigDecimal avgFillPrice = order
-					.getTradePosition()
-					.getTotalNetValue()
-					.divide(new BigDecimal(order.getTradePosition()
-							.getOpenQuantity()));
+			BigDecimal avgFillPrice = null;
+			if (order.hasTradePosition()) {
+				avgFillPrice = order
+						.getTradePosition()
+						.getTotalNetValue()
+						.divide(new BigDecimal(order.getTradePosition()
+								.getOpenQuantity()));
+			} else {
+				avgFillPrice = candle.getClose();
+			}
+
 			/*
 			 * Only trigger the trailing when we are aover/under the average
 			 * fill price of the position. Otherwise the stop price will be
