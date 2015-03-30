@@ -569,24 +569,41 @@ public class DBBroker extends Broker {
 					}
 				}
 			}
-
+			BigDecimal avgFillPrice = order
+					.getTradePosition()
+					.getTotalNetValue()
+					.divide(new BigDecimal(order.getTradePosition()
+							.getOpenQuantity()));
+			/*
+			 * Only trigger the trailing when we are aover/under the average
+			 * fill price of the position. Otherwise the stop price will be
+			 * either that which was set in TrailStopPrice or the market price
+			 * when the order was first submitted. i.e candle.close - trail
+			 * amt/percent
+			 */
 			if (Action.SELL.equals(order.getAction())
-					&& 1 == candle.getClose().subtract(trailAmount)
-							.compareTo(order.getAuxPrice())) {
-				order.setAuxPrice(candle.getClose().subtract(trailAmount));
-				if (OrderType.TRAILLIMIT.equals(order.getOrderType())) {
-					order.setLimitPrice(candle.getClose().subtract(
-							trailAmount.subtract(trailLimitOffsetAmount)));
-				}
-			} else if (Action.BUY.equals(order.getAction())
-					&& -1 == candle.getClose().add(trailAmount)
-							.compareTo(order.getAuxPrice())) {
-				order.setAuxPrice(candle.getClose().add(trailAmount));
-				if (OrderType.TRAILLIMIT.equals(order.getOrderType())) {
-					order.setLimitPrice(candle.getClose().add(
-							trailAmount.add(trailLimitOffsetAmount)));
+					&& (1 == candle.getClose().compareTo(avgFillPrice))) {
+				if (1 == candle.getClose().subtract(trailAmount)
+						.compareTo(order.getAuxPrice())) {
+					order.setAuxPrice(candle.getClose().subtract(trailAmount));
+					if (OrderType.TRAILLIMIT.equals(order.getOrderType())) {
+						order.setLimitPrice(candle.getClose().subtract(
+								trailAmount.subtract(trailLimitOffsetAmount)));
+					}
 				}
 			}
+			if (Action.BUY.equals(order.getAction())
+					&& (-1 == candle.getClose().compareTo(avgFillPrice))) {
+				if (-1 == candle.getClose().add(trailAmount)
+						.compareTo(order.getAuxPrice())) {
+					order.setAuxPrice(candle.getClose().add(trailAmount));
+					if (OrderType.TRAILLIMIT.equals(order.getOrderType())) {
+						order.setLimitPrice(candle.getClose().add(
+								trailAmount.add(trailLimitOffsetAmount)));
+					}
+				}
+			}
+
 		}
 
 		if (Action.SELL.equals(order.getAction())) {
