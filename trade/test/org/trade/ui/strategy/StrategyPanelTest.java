@@ -236,13 +236,9 @@ public class StrategyPanelTest {
 							+ m_templateName, parm);
 			_log.info("Created Strategy" + strategyProxy);
 			strategyProxy.execute();
-			try {
-				do {
-					Thread.sleep(1000);
-				} while (!strategyProxy.isWaiting());
-
-			} catch (InterruptedException e) {
-				_log.info(" Thread interupt: " + e.getMessage());
+			
+			while(!strategyProxy.isWaiting()){
+				Thread.sleep(250);
 			}
 
 			StrategyData.doDummyData(tradestrategy.getStrategyData()
