@@ -79,6 +79,8 @@ public class DBBroker extends Broker {
 	private Tradestrategy tradestrategy = null;
 	private Integer idTradestrategy = null;
 	private ClientWrapper brokerModel = null;
+	private BigDecimal trailAmount = null;
+	private BigDecimal trailLimitOffsetAmount = null;
 
 	private long execId = new Date().getTime();
 
@@ -501,15 +503,126 @@ public class DBBroker extends Broker {
 		if (candle.getVolume() < order.getQuantity())
 			return null;
 
+		/*
+		 * Set the AuxPrice to the trailing amount.
+		 */
+		if (OrderType.TRAIL.equals(order.getOrderType())
+				|| OrderType.TRAILLIMIT.equals(order.getOrderType())) {
+			/*
+			 * First time in set the trailAmount which will be the trailing
+			 * amount note AuxPrice doubles as a holder for this values until
+			 * the price triggers this value to be set to the trailing price.
+			 * i.e first time in it is set to the current price -0.12c then once
+			 * the price moves up the trail is reset to current - 0.12c for a
+			 * long position.
+			 * 
+			 * Note first time in the AuxPrice is trail amount i.e 0.12c behind
+			 * close price. The Limit price is the LimitOffSet i.e 0.04c so
+			 * SPTLMT order when current price is 63.22 this sets up a STPLMT
+			 * order with stop price at 63.10 and Limit at 63.06.
+			 * 
+			 * The Trailing Stop Price holds the starting point for the Stop
+			 * price if this field is specified and if is less than the current
+			 * market price for a Long position.
+			 */
+
+			if (null != order.getAuxPrice()) {
+				if (null == trailAmount) {
+					trailAmount = order.getAuxPrice();
+					trailLimitOffsetAmount = order.getLimitPrice();
+					order.setAuxPrice((Action.SELL.equals(order.getAction()) ? candle
+							.getClose().subtract(trailAmount) : candle
+							.getClose().add(trailAmount)));
+				}
+
+			} else {
+				if (null != order.getTrailingPercent()) {
+					if (null == trailAmount) {
+						trailAmount = (candle.getClose().multiply(order
+								.getTrailingPercent())).divide(new BigDecimal(
+								100));
+						trailLimitOffsetAmount = order.getLimitPrice();
+						if (null != order.getTrailStopPrice()) {
+							if (Action.SELL.equals(order.getAction())
+									&& -1 == order.getTrailStopPrice()
+											.compareTo(candle.getClose())) {
+								order.setAuxPrice(order.getTrailStopPrice());
+							} else if (Action.BUY.equals(order.getAction())
+									&& 1 == order.getTrailStopPrice()
+											.compareTo(candle.getClose())) {
+								order.setAuxPrice(order.getTrailStopPrice());
+							}
+
+						} else {
+							order.setAuxPrice((Action.SELL.equals(order
+									.getAction()) ? candle.getClose().subtract(
+									trailAmount) : candle.getClose().add(
+									trailAmount)));
+							order.setLimitPrice((Action.SELL.equals(order
+									.getAction()) ? candle.getClose().subtract(
+									trailAmount
+											.subtract(trailLimitOffsetAmount))
+									: candle.getClose()
+											.add(trailAmount
+													.add(trailLimitOffsetAmount))));
+						}
+					}
+				}
+			}
+			BigDecimal avgFillPrice = null;
+			if (order.hasTradePosition()) {
+				avgFillPrice = order
+						.getTradePosition()
+						.getTotalNetValue()
+						.divide(new BigDecimal(order.getTradePosition()
+								.getOpenQuantity()));
+			} else {
+				avgFillPrice = candle.getClose();
+			}
+
+			/*
+			 * Only trigger the trailing when we are aover/under the average
+			 * fill price of the position. Otherwise the stop price will be
+			 * either that which was set in TrailStopPrice or the market price
+			 * when the order was first submitted. i.e candle.close - trail
+			 * amt/percent
+			 */
+			if (Action.SELL.equals(order.getAction())
+					&& (1 == candle.getClose().compareTo(avgFillPrice))) {
+				if (1 == candle.getClose().subtract(trailAmount)
+						.compareTo(order.getAuxPrice())) {
+					order.setAuxPrice(candle.getClose().subtract(trailAmount));
+					if (OrderType.TRAILLIMIT.equals(order.getOrderType())) {
+						order.setLimitPrice(candle.getClose().subtract(
+								trailAmount.subtract(trailLimitOffsetAmount)));
+					}
+				}
+			}
+			if (Action.BUY.equals(order.getAction())
+					&& (-1 == candle.getClose().compareTo(avgFillPrice))) {
+				if (-1 == candle.getClose().add(trailAmount)
+						.compareTo(order.getAuxPrice())) {
+					order.setAuxPrice(candle.getClose().add(trailAmount));
+					if (OrderType.TRAILLIMIT.equals(order.getOrderType())) {
+						order.setLimitPrice(candle.getClose().add(
+								trailAmount.add(trailLimitOffsetAmount)));
+					}
+				}
+			}
+
+		}
+
 		if (Action.SELL.equals(order.getAction())) {
-			if (OrderType.STP.equals(order.getOrderType())) {
+			if (OrderType.STP.equals(order.getOrderType())
+					|| OrderType.TRAIL.equals(order.getOrderType())) {
 				if (candle.getLow().compareTo(order.getAuxPrice()) < 1) {
 					if (candle.getOpen().compareTo(order.getAuxPrice()) < 1) {
 						return candle.getOpen();
 					}
 					return order.getAuxPrice();
 				}
-			} else if (OrderType.STPLMT.equals(order.getOrderType())) {
+			} else if (OrderType.STPLMT.equals(order.getOrderType())
+					|| OrderType.TRAILLIMIT.equals(order.getOrderType())) {
 				if (candle.getLow().compareTo(order.getAuxPrice()) < 1
 						&& candle.getHigh().compareTo(order.getLimitPrice()) > -1) {
 					if (candle.getOpen().compareTo(order.getAuxPrice()) > -1) {
@@ -536,14 +649,16 @@ public class DBBroker extends Broker {
 			}
 
 		} else {
-			if (OrderType.STP.equals(order.getOrderType())) {
+			if (OrderType.STP.equals(order.getOrderType())
+					|| OrderType.TRAIL.equals(order.getOrderType())) {
 				if (candle.getHigh().compareTo(order.getAuxPrice()) > -1) {
 					if (candle.getOpen().compareTo(order.getAuxPrice()) > -1) {
 						return candle.getOpen();
 					}
 					return order.getAuxPrice();
 				}
-			} else if (OrderType.STPLMT.equals(order.getOrderType())) {
+			} else if (OrderType.STPLMT.equals(order.getOrderType())
+					|| OrderType.TRAILLIMIT.equals(order.getOrderType())) {
 				if (candle.getHigh().compareTo(order.getAuxPrice()) > -1
 						&& candle.getLow().compareTo(order.getLimitPrice()) < 1) {
 					if (candle.getOpen().compareTo(order.getAuxPrice()) < 1) {
