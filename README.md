@@ -7,6 +7,7 @@ Source and Documentation 2.1. Please see Wiki for Install instructions and Eclip
 3. Re-factored Main controller moved BrokerDataRequestMonitor into its own class under broker. Test case updates
 4. Re-factored HashMaps to use hashCode rather than DB key for identification.
 5. Update all test cases to JUnit4 style
+6. Add functionality to handle trailing and trailing limit stops.
 
 Demo database for 2.1 (TradeProdDB.sql) with data from 01/01/2013 through 03/13/2015 available at 
 
