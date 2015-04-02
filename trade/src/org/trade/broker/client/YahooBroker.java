@@ -202,7 +202,8 @@ public class YahooBroker extends Broker {
 		 * Yahoo finance http://chartapi.finance.yahoo.com/instrument/1.0/IBM
 		 * /chartdata;type=quote;range=1d/csv/
 		 */
-		int days = TradingCalendar.daysDiff(startDate, new Date());
+		int days = TradingCalendar.daysDiff(startDate, new Date()) + 1;
+
 		String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/"
 				+ symbol + "/chartdata;type=quote;range=" + days + "d/csv/";
 

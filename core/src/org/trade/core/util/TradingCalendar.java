@@ -36,7 +36,6 @@
 package org.trade.core.util;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,6 +45,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -331,23 +331,23 @@ public class TradingCalendar {
 	/**
 	 * Returns the difference in days-
 	 * 
+	 * Get a diff between two dates
 	 * 
 	 * @param date1
-	 *            Date
+	 *            the oldest date
 	 * @param date2
-	 *            Date
-	 * @return int
-	 * @exception * @see
+	 *            the newest date
+	 * 
+	 * 
+	 * @return int the diff value rounded up/down is over/under 12 hours
 	 */
 	public static int daysDiff(Date date1, Date date2) {
-		if ((date1 != null) && (date2 != null)) {
-			Double value = new Double((new BigDecimal(
-					(date2.getTime() - date1.getTime())
-							/ (60 * 60 * 24 * 1000d))).setScale(0,
-					BigDecimal.ROUND_HALF_EVEN).doubleValue());
-			return value.intValue();
-		}
-		return 0;
+		long diffInMillies = date2.getTime() - date1.getTime();
+		if ((diffInMillies / (1000 * 60 * 60 * 24)) > (12 * 60 * 60 * 1000))
+			return (int) TimeUnit.DAYS.convert(diffInMillies,
+					TimeUnit.MILLISECONDS) + 1;
+		return (int) TimeUnit.DAYS
+				.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -356,7 +356,6 @@ public class TradingCalendar {
 	 * @param date
 	 *            Date
 	 * @return int
-	 * @exception * @see
 	 */
 	public static int getYear(Date date) {
 		if (date != null) {
@@ -984,7 +983,6 @@ public class TradingCalendar {
 				return true;
 			}
 		}
-
 		return false;
 	}
 

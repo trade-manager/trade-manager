@@ -183,7 +183,7 @@ public class TradingCalendarTest {
 	@Test
 	public void testIsMarketHours() {
 
-		// TradingCalendar.getFormattedDate("20130401 09:30", "yyyyMMdd HH:mm");
+		// TradingCalendar.getFormattedDate("20150401 09:30", "yyyyMMdd HH:mm");
 		Date openDate = TradingCalendar.getBusinessDayStart(new Date());
 		Date closeDate = TradingCalendar.getBusinessDayEnd(new Date());
 		Date date = TradingCalendar.addBusinessDays(new Date(), -1);
