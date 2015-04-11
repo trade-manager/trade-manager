@@ -41,7 +41,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.jfree.data.DataUtilities;
-import org.jfree.data.time.Minute;
 import org.jfree.data.time.RegularTimePeriod;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -55,6 +54,8 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
+import org.trade.strategy.data.candle.CandlePeriod;
+import org.trade.ui.TradeAppLoadConfig;
 
 /**
  * Some tests for the {@link DataUtilities} class.
@@ -66,6 +67,9 @@ public class CandleTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandleTest.class);
+
+	private String symbol = "TEST";
+	private Tradestrategy tradestrategy = null;
 
 	/**
 	 * Method setUpBeforeClass.
@@ -83,6 +87,10 @@ public class CandleTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+
+		TradeAppLoadConfig.loadAppProperties();
+		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
+		assertNotNull(this.tradestrategy);
 	}
 
 	/**
@@ -92,6 +100,7 @@ public class CandleTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		TradestrategyTest.clearDBData();
 	}
 
 	/**
@@ -108,30 +117,26 @@ public class CandleTest {
 
 		try {
 
-			TradestrategyHome tradestrategyHome = new TradestrategyHome();
 			AspectHome aspectHome = new AspectHome();
 
-			RegularTimePeriod period = new Minute(new Date());
-			for (Tradestrategy tradestrategy : tradestrategyHome.findAll()) {
-				if (tradestrategy.getTradingday().getCandles().isEmpty()) {
-					Candle transientInstance = new Candle(
-							tradestrategy.getContract(),
-							tradestrategy.getTradingday(), period,
-							period.getStart());
-					transientInstance.setHigh(new BigDecimal(20.33));
-					transientInstance.setLow(new BigDecimal(20.11));
-					transientInstance.setOpen(new BigDecimal(20.23));
-					transientInstance.setClose(new BigDecimal(20.28));
-					transientInstance.setVolume(1500L);
-					transientInstance.setVwap(new BigDecimal(20.1));
-					transientInstance.setTradeCount(10);
+			RegularTimePeriod period = new CandlePeriod(new Date(), 60);
 
-					transientInstance = aspectHome.persist(transientInstance);
-					assertNotNull(transientInstance.getIdCandle());
-					_log.info("testAddCandle IdCandle: "
-							+ transientInstance.getIdCandle());
-				}
-			}
+			Candle transientInstance = new Candle(
+					this.tradestrategy.getContract(),
+					this.tradestrategy.getTradingday(), period,
+					period.getStart());
+			transientInstance.setHigh(new BigDecimal(20.33));
+			transientInstance.setLow(new BigDecimal(20.11));
+			transientInstance.setOpen(new BigDecimal(20.23));
+			transientInstance.setClose(new BigDecimal(20.28));
+			transientInstance.setVolume(1500L);
+			transientInstance.setVwap(new BigDecimal(20.1));
+			transientInstance.setTradeCount(10);
+
+			transientInstance = aspectHome.persist(transientInstance);
+			assertNotNull(transientInstance.getIdCandle());
+			_log.info("testAddCandle IdCandle: "
+					+ transientInstance.getIdCandle());
 
 		} catch (Exception e) {
 			fail("Error adding row " + e.getMessage());
