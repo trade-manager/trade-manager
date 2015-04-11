@@ -440,19 +440,6 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 
 		while (!this.isCancelled() && !runningContractRequests.isEmpty()) {
 
-			for (Tradingday item : tradingdays.getTradingdays()) {
-				for (Integer idTradeingday : runningContractRequests.keySet()) {
-					Tradingday reProcessTradingday = runningContractRequests
-							.get(idTradeingday);
-					if (item.equals(reProcessTradingday)) {
-						totalSumbitted = processTradingday(
-								getTradingdayToProcess(reProcessTradingday,
-										runningContractRequests),
-								totalSumbitted);
-						break;
-					}
-				}
-			}
 			/*
 			 * If nothing submitted wait for all the processes to finish.
 			 * Usually means we are submitting identical contracts.
@@ -468,6 +455,20 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 					}
 				}
 			}
+			for (Tradingday item : tradingdays.getTradingdays()) {
+				for (Integer idTradeingday : runningContractRequests.keySet()) {
+					Tradingday reProcessTradingday = runningContractRequests
+							.get(idTradeingday);
+					if (item.equals(reProcessTradingday)) {
+						totalSumbitted = processTradingday(
+								getTradingdayToProcess(reProcessTradingday,
+										runningContractRequests),
+								totalSumbitted);
+						break;
+					}
+				}
+			}
+
 			if (submitted < totalSumbitted)
 				submitted = totalSumbitted;
 		}
