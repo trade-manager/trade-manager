@@ -1,4 +1,4 @@
-<project name="TradeManager" default="all" basedir=".">
+<project name="TradeManagerBuild" default="all" basedir=".">
 	<property file="build.properties" />
 	<property name="base" location=".." />
 	<property environment="env" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="TradeManager" default="all" basedir=".">
+<project name="TradeManagerWar" default="all" basedir=".">
 	<property name="base" location=".." />
 	<!-- Remember that if another Ant is calling you, its properties will take precedence over you -->
 	<!-- If you run ant -verbose, you'll see the comments about how certain properties weren't set because your parent ant did -->
