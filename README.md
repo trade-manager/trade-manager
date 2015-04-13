@@ -8,6 +8,8 @@ Source and Documentation 2.1. Please see Wiki for Install instructions and Eclip
 4. Re-factored HashMaps to use hashCode rather than DB key for identification.
 5. Update all test cases to JUnit4 style
 6. Add functionality to handle trailing and trailing limit stops.
+7. Update to java 1.8 use ZonedDateTime instead of java.util.Date
+8. Update JPA to 2.1 chnge build to only use nySQL 5.6 or greater
 
 Demo database for 2.1 (TradeProdDB.sql) with data from 01/01/2013 through 03/13/2015 available at 
 
