@@ -134,9 +134,9 @@ public class DBBroker extends Broker {
 					TradingCalendar.getPrevTradingDay(tradestrategy
 							.getTradingday().getClose()), tradestrategy
 							.getTradingday().getClose());
-			ZonedDateTime startDate = TradingCalendar.addTradingDays(endDate,
+			ZonedDateTime startDate = TradingCalendar.addTradingDays(tradestrategy
+					.getTradingday().getClose(),
 					(-1 * (tradestrategy.getChartDays() - 1)));
-			startDate = TradingCalendar.getPrevTradingDay(startDate);
 			startDate = TradingCalendar.getDateAtTime(startDate, tradestrategy
 					.getTradingday().getOpen());
 

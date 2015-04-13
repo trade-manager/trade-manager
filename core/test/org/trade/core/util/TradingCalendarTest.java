@@ -138,20 +138,67 @@ public class TradingCalendarTest {
 		try {
 			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone()
 					.minusDays(1);
-			_log.info("date: " + date);
+			_log.debug("date: " + date);
 
 			ZonedDateTime todayStartDate = TradingCalendar
 					.getTradingDayStart(TradingCalendar
 							.getDateTimeNowMarketTimeZone());
-			_log.info("todayStartDate: " + todayStartDate);
+			_log.debug("todayStartDate: " + todayStartDate);
 			ZonedDateTime prevStartDate = TradingCalendar.getDateAtTime(date,
 					todayStartDate);
-			_log.info("prevStartDate: " + prevStartDate);
+			_log.debug("prevStartDate: " + prevStartDate);
 
-			assertEquals("testGetDateAtTime1", todayStartDate.getHour(),
-					prevStartDate.getHour());
-			assertEquals("testGetDateAtTime2", todayStartDate.getMinute(),
+			assertEquals("1", todayStartDate.getHour(), prevStartDate.getHour());
+			assertEquals("2", todayStartDate.getMinute(),
 					prevStartDate.getMinute());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
+		}
+	}
+
+	@Test
+	public void testGetPrevTradingDay() {
+		try {
+			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone();
+			date = TradingCalendar.getPrevTradingDay(date);
+			_log.debug("date: " + date);
+			assertTrue("1", TradingCalendar.isTradingDay(date));
+
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
+		}
+	}
+
+	@Test
+	public void testGetNextTradingDay() {
+		try {
+			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone();
+			date = TradingCalendar.getNextTradingDay(date);
+			_log.debug("date: " + date);
+			assertTrue("1", TradingCalendar.isTradingDay(date));
+
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
+		}
+	}
+
+	@Test
+	public void testCetCurrentTradingDay() {
+		try {
+			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone();
+			date = TradingCalendar.getCurrentTradingDay();
+			_log.debug("date: " + date);
+			assertTrue("1", TradingCalendar.isTradingDay(date));
+
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -195,14 +242,14 @@ public class TradingCalendarTest {
 			ZonedDateTime date = TradingCalendar.addTradingDays(
 					TradingCalendar.getDateTimeNowMarketTimeZone(), -1);
 			date = TradingCalendar.getDateAtTime(date, 9, 30, 0);
-			_log.info("Business day openDate: " + openDate
+			_log.debug("Business day openDate: " + openDate
 					+ " Business day closeDate: " + closeDate + " Date: "
 					+ date);
 
 			assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 			date = TradingCalendar.getDateAtTime(date, 16, 0, 0);
-			_log.info("Business day openDate: " + openDate
+			_log.debug("Business day openDate: " + openDate
 					+ " Business day closeDate: " + closeDate + " Date: "
 					+ date);
 
@@ -210,7 +257,7 @@ public class TradingCalendarTest {
 					TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 			date = TradingCalendar.getDateAtTime(date, 15, 0, 0);
-			_log.info("Business day openDate: " + openDate
+			_log.debug("Business day openDate: " + openDate
 					+ " Business day closeDate: " + closeDate + " Date: "
 					+ date);
 
@@ -218,7 +265,7 @@ public class TradingCalendarTest {
 					TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 			date = TradingCalendar.getDateAtTime(date, 17, 0, 0);
-			_log.info("Business day openDate: " + openDate
+			_log.debug("Business day openDate: " + openDate
 					+ " Business day closeDate: " + closeDate + " Date: "
 					+ date);
 
@@ -242,7 +289,7 @@ public class TradingCalendarTest {
 
 			while (date.getDayOfWeek().compareTo(DayOfWeek.SUNDAY) != 0) {
 				date = date.plusDays(1);
-				_log.info("dayOfWeek: " + date.getDayOfWeek());
+				_log.debug("dayOfWeek: " + date.getDayOfWeek());
 			}
 			assertFalse("2", TradingCalendar.isTradingDay(date));
 		} catch (Exception | AssertionError ex) {
@@ -267,7 +314,7 @@ public class TradingCalendarTest {
 								TradingCalendar.getDateTimeNowMarketTimeZone(),
 								endDate));
 			}
-			_log.info("chartDays: " + chartDays);
+			_log.debug("chartDays: " + chartDays);
 			assertEquals("1", 365, chartDays.intValue());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -282,12 +329,12 @@ public class TradingCalendarTest {
 		try {
 			AtomicInteger reqId = null;
 			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone();
-			_log.info("date: "
+			_log.debug("date: "
 					+ TradingCalendar.geMillisFromZonedDateTime(date));
 			reqId = new AtomicInteger(
 					(int) (TradingCalendar.geMillisFromZonedDateTime(date) / 1000d));
-			_log.info("reqId: " + reqId);
-			_log.info("reqId: " + reqId.incrementAndGet());
+			_log.debug("reqId: " + reqId);
+			_log.debug("reqId: " + reqId.incrementAndGet());
 			assertNotNull("1", reqId);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "

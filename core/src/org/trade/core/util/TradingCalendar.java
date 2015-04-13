@@ -575,6 +575,21 @@ public class TradingCalendar {
 	}
 
 	/**
+	 * Method getCurrentTradingDay.
+	 * 
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getCurrentTradingDay() {
+		ZonedDateTime currTradingDay = TradingCalendar
+				.getTradingDayStart(TradingCalendar
+						.getDateTimeNowMarketTimeZone());
+		while (!TradingCalendar.isTradingDay(currTradingDay)) {
+			currTradingDay = currTradingDay.minusDays(1);
+		}
+		return currTradingDay;
+	}
+
+	/**
 	 * Method getPrevTradingDay.
 	 * 
 	 * @param input
@@ -582,12 +597,13 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getPrevTradingDay(ZonedDateTime input) {
-		ZonedDateTime dateTime = input.minusDays(1);
-		dateTime = TradingCalendar.getTradingDayStart(dateTime);
-		while (!TradingCalendar.isTradingDay(dateTime)) {
-			dateTime = dateTime.minusDays(1);
+		ZonedDateTime prevTradingDay = TradingCalendar
+				.getTradingDayStart(input);
+		prevTradingDay = prevTradingDay.minusDays(1);
+		while (!TradingCalendar.isTradingDay(prevTradingDay)) {
+			prevTradingDay = prevTradingDay.minusDays(1);
 		}
-		return dateTime;
+		return prevTradingDay;
 	}
 
 	/**
@@ -598,9 +614,10 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getNextTradingDay(ZonedDateTime input) {
+		ZonedDateTime nextTradingday = TradingCalendar
+				.getTradingDayStart(input);
+		nextTradingday = nextTradingday.plusDays(1);
 
-		ZonedDateTime nextTradingday = input.plusDays(1);
-		nextTradingday = TradingCalendar.getTradingDayStart(nextTradingday);
 		while (!TradingCalendar.isTradingDay(nextTradingday)) {
 			nextTradingday = nextTradingday.plusDays(1);
 		}

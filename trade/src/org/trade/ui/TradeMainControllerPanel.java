@@ -185,8 +185,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
 			Tradingday tradingday = Tradingday.newInstance(TradingCalendar
-					.getPrevTradingDay(TradingCalendar
-							.getDateTimeNowMarketTimeZone()));
+					.getCurrentTradingDay());
 			Tradingday todayTradingday = m_tradePersistentModel
 					.findTradingdayByOpenCloseDate(tradingday.getOpen(),
 							tradingday.getClose());
