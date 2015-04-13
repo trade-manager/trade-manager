@@ -559,14 +559,14 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            int
 	 * @return List<Date>
 	 */
-	private List<ZonedDateTime> getNonTradingPeriods(ZonedDateTime startDate,
+	private List<java.util.Date> getNonTradingPeriods(ZonedDateTime startDate,
 			ZonedDateTime endDate, ZonedDateTime openDate,
 			ZonedDateTime closeDate, SegmentedTimeline segmentedTimeline) {
 		/*
 		 * Add all 15min periods that are not trading times.
 		 */
 
-		List<ZonedDateTime> noneTradingSegments = new ArrayList<>();
+		List<java.util.Date> noneTradingSegments = new ArrayList<>();
 		do {
 			/*
 			 * 96 15min periods per day
@@ -583,7 +583,10 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 							.getSegment(TradingCalendar
 									.geMillisFromZonedDateTime(segmentStartDate));
 					if (segment.inIncludeSegments()) {
-						noneTradingSegments.add(segmentStartDate);
+						noneTradingSegments
+								.add(new java.util.Date(
+										TradingCalendar
+												.geMillisFromZonedDateTime(segmentStartDate)));
 					}
 				}
 			}

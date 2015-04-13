@@ -398,8 +398,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			if (this.isBrokerDataOnly()) {
 
 				endDate = TradingCalendar.getDateAtTime(TradingCalendar
-						.getPrevTradingDay(TradingCalendar.addTradingDays(
-								endDate, backfillOffsetDays)), endDate);
+						.addTradingDays(endDate, backfillOffsetDays), endDate);
 				String endDateTime = TradingCalendar.getFormattedDate(endDate,
 						"yyyyMMdd HH:mm:ss");
 
