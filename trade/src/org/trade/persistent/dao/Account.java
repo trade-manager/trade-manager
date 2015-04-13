@@ -41,21 +41,18 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -96,15 +93,14 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	private String name;
 	private BigDecimal realizedPnL = new BigDecimal(0);
 	private BigDecimal unrealizedPnL = new BigDecimal(0);
-	private Date lastUpdateDate;
+	private ZonedDateTime lastUpdateDate;
 	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
 			0);
 
 	public Account() {
 		this.accountType = AccountType.INDIVIDUAL;
 		this.currency = Currency.USD;
-		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())
-				.getTime());
+		this.lastUpdateDate = TradingCalendar.getDateTimeNowMarketTimeZone();
 	}
 
 	/**
@@ -127,8 +123,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 		this.accountType = accountType;
 		this.name = name;
 		this.currency = currency;
-		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())
-				.getTime());
+		this.lastUpdateDate = TradingCalendar.getDateTimeNowMarketTimeZone();
 	}
 
 	/**
@@ -172,8 +167,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 		this.grossPositionValue = grossPositionValue;
 		this.realizedPnL = realizedPnL;
 		this.unrealizedPnL = unrealizedPnL;
-		this.lastUpdateDate = TradingCalendar.getDate((new java.util.Date())
-				.getTime());
+		this.lastUpdateDate = TradingCalendar.getDateTimeNowMarketTimeZone();
 	}
 
 	/**
@@ -436,11 +430,10 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Method getLastUpdateDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "lastUpdateDate", nullable = false, length = 19)
-	public Date getLastUpdateDate() {
+	@Column(name = "lastUpdateDate", nullable = false)
+	public ZonedDateTime getLastUpdateDate() {
 		return this.lastUpdateDate;
 	}
 
@@ -448,9 +441,9 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 * Method setLastUpdateDate.
 	 * 
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 

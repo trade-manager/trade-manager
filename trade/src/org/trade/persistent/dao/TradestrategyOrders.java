@@ -38,13 +38,12 @@ package org.trade.persistent.dao;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -53,8 +52,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -74,7 +71,7 @@ public class TradestrategyOrders extends Aspect implements Serializable {
 
 	private ContractLite contract;
 	private String status;
-	private Date lastUpdateDate;
+	private ZonedDateTime lastUpdateDate;
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 
 	public TradestrategyOrders() {
@@ -146,11 +143,10 @@ public class TradestrategyOrders extends Aspect implements Serializable {
 	/**
 	 * Method getLastUpdateDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "lastUpdateDate", nullable = false, length = 19)
-	public Date getLastUpdateDate() {
+	@Column(name = "lastUpdateDate", nullable = false)
+	public ZonedDateTime getLastUpdateDate() {
 		return this.lastUpdateDate;
 	}
 
@@ -158,9 +154,9 @@ public class TradestrategyOrders extends Aspect implements Serializable {
 	 * Method setLastUpdateDate.
 	 * 
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 

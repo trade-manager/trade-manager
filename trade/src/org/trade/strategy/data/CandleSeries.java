@@ -36,8 +36,8 @@
 package org.trade.strategy.data;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 
 import javax.persistence.DiscriminatorValue;
@@ -46,7 +46,6 @@ import javax.persistence.Transient;
 
 import org.jfree.data.ComparableObjectItem;
 import org.jfree.data.general.SeriesChangeEvent;
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Percent;
@@ -55,6 +54,7 @@ import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Tradingday;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.CandlePeriod;
 
@@ -83,8 +83,8 @@ public class CandleSeries extends IndicatorSeries {
 	private String currency;
 	private String exchange;
 	private String secType;
-	private Date startTime;
-	private Date endTime;
+	private ZonedDateTime startTime;
+	private ZonedDateTime endTime;
 	private int barSize = 0;
 
 	private Candle candleBar = null;
@@ -122,8 +122,8 @@ public class CandleSeries extends IndicatorSeries {
 	 *            the length in minutes for each bar ie. 5, 15, 30, 60
 	 * 
 	 */
-	public CandleSeries(CandleSeries series, int barSize, Date startTime,
-			Date endTime) {
+	public CandleSeries(CandleSeries series, int barSize,
+			ZonedDateTime startTime, ZonedDateTime endTime) {
 		super(series.getContract().getSymbol(), IndicatorSeries.CandleSeries,
 				series.getDisplaySeries(), 0, series.getSubChart());
 		this.symbol = series.getContract().getSymbol();
@@ -149,7 +149,7 @@ public class CandleSeries extends IndicatorSeries {
 	 */
 
 	public CandleSeries(String legend, Contract contract, int barSize,
-			Date startTime, Date endTime) {
+			ZonedDateTime startTime, ZonedDateTime endTime) {
 		super(legend, IndicatorSeries.CandleSeries, true, 0, false);
 		this.contract = contract;
 		this.symbol = contract.getSymbol();
@@ -214,10 +214,10 @@ public class CandleSeries extends IndicatorSeries {
 	/**
 	 * Method getStartTime.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
 	@Transient
-	public Date getStartTime() {
+	public ZonedDateTime getStartTime() {
 		return this.startTime;
 	}
 
@@ -225,19 +225,19 @@ public class CandleSeries extends IndicatorSeries {
 	 * Method setStartTime.
 	 * 
 	 * @param startTime
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setStartTime(Date startTime) {
+	public void setStartTime(ZonedDateTime startTime) {
 		this.startTime = startTime;
 	}
 
 	/**
 	 * Method getEndTime.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
 	@Transient
-	public Date getEndTime() {
+	public ZonedDateTime getEndTime() {
 		return this.endTime;
 	}
 
@@ -245,9 +245,9 @@ public class CandleSeries extends IndicatorSeries {
 	 * Method setEndTime.
 	 * 
 	 * @param endTime
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setEndTime(Date endTime) {
+	public void setEndTime(ZonedDateTime endTime) {
 		this.endTime = endTime;
 	}
 
@@ -426,7 +426,7 @@ public class CandleSeries extends IndicatorSeries {
 	public void add(Contract contract, Tradingday tradingday,
 			RegularTimePeriod period, double open, double high, double low,
 			double close, long volume, double vwap, int tradeCount,
-			Date lastUpdateDate) {
+			ZonedDateTime lastUpdateDate) {
 		if (!this.isEmpty()) {
 			CandleItem item0 = (CandleItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
@@ -465,15 +465,17 @@ public class CandleSeries extends IndicatorSeries {
 	 *            the date for which we want a period.
 	 * @return exists
 	 */
-	public int indexOf(Date date) {
+	public int indexOf(ZonedDateTime date) {
 
 		for (int i = this.data.size(); i > 0; i--) {
 			CandleItem item = (CandleItem) this.data.get(i - 1);
-			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
+			if (date.isAfter(item.getPeriod().getEnd())) {
 				return -1;
 			}
-			if ((date.getTime() >= item.getPeriod().getFirstMillisecond())
-					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
+			if ((date.isAfter(item.getPeriod().getStart()) || date.equals(item
+					.getPeriod().getStart()))
+					&& (date.isBefore(item.getPeriod().getEnd()) || date
+							.equals(item.getPeriod().getEnd()))) {
 				return i - 1;
 			}
 		}
@@ -507,12 +509,12 @@ public class CandleSeries extends IndicatorSeries {
 	 *            Date the update time.
 	 * @return completedCandle the last completed candle or -1 if still building
 	 */
-	boolean buildCandle(Date time, double open, double high, double low,
-			double close, long volume, double vwap, int tradeCount,
-			int rollupInterval, Date lastUpdateDate) {
+	boolean buildCandle(ZonedDateTime time, double open, double high,
+			double low, double close, long volume, double vwap, int tradeCount,
+			int rollupInterval, ZonedDateTime lastUpdateDate) {
 
 		int index = this.indexOf(time);
-		// _log.info("Symbol :" + this.getSymbol() + " Bar Time: " + time
+		// _log.error("Symbol :" + this.getSymbol() + " Bar Time: " + time
 		// + " Index: " + index + " open: " + open + " high: " + high
 		// + " low: " + low + " close: " + close + " volume: " + volume
 		// + " vwap: " + vwap + " tradeCount: " + tradeCount
@@ -551,10 +553,10 @@ public class CandleSeries extends IndicatorSeries {
 			RegularTimePeriod period = this.getPeriodStart(time,
 					this.getBarSize());
 			Tradingday tradingday = new Tradingday(
-					TradingCalendar.getSpecificTime(this.getStartTime(),
-							period.getStart()),
-					TradingCalendar.getSpecificTime(this.getEndTime(),
-							period.getStart()));
+					TradingCalendar.getDateAtTime(period.getStart(),
+							this.getStartTime()),
+					TradingCalendar.getDateAtTime(period.getStart(),
+							this.getEndTime()));
 
 			if (null == lastUpdateDate)
 				lastUpdateDate = period.getEnd();
@@ -619,26 +621,28 @@ public class CandleSeries extends IndicatorSeries {
 	 * @return RegularTimePeriod
 	 */
 	@Transient
-	public RegularTimePeriod getPeriodStart(Date time, int barSize) {
+	public RegularTimePeriod getPeriodStart(ZonedDateTime time, int barSize) {
 		/*
 		 * For 60min time period start the clock at 9:00am. This matches most
 		 * charting platforms.
 		 */
-		Date startBusDate = TradingCalendar.getSpecificTime(
-				this.getStartTime(), time);
+		ZonedDateTime startBusDate = TradingCalendar.getDateAtTime(time,
+				this.getStartTime());
+
 		if (3600 == barSize) {
-			if (TradingCalendar.getMinute(startBusDate) == 30) {
-				startBusDate = TradingCalendar.addMinutes(startBusDate, -30);
-				if (TradingCalendar.getMinute(time) == 30
-						&& startBusDate.equals(time)) {
-					time = TradingCalendar.addMinutes(time, -30);
+			if (startBusDate.getMinute() == 30) {
+				startBusDate = startBusDate.minusMinutes(30);
+				if (time.getMinute() == 30 && startBusDate.equals(time)) {
+					time = time.minusMinutes(30);
 				}
 			}
 		}
-		long periods = (time.getTime() - startBusDate.getTime()) / 1000
-				/ barSize;
-		long startPeriod = startBusDate.getTime() + (periods * barSize * 1000);
-		return new CandlePeriod(new Date(startPeriod), barSize);
+
+		long periodsFromDayStart = TradingCalendar.getDurationInSeconds(
+				startBusDate, time) / barSize;
+		ZonedDateTime startDateTime = startBusDate
+				.plusSeconds((periodsFromDayStart * barSize));
+		return new CandlePeriod(startDateTime, barSize);
 	}
 
 	/**
@@ -732,7 +736,8 @@ public class CandleSeries extends IndicatorSeries {
 	 *            boolean
 	 * @return Candle
 	 */
-	public Candle getAverageBar(Date startDate, Date endDate, boolean wieghted) {
+	public Candle getAverageBar(ZonedDateTime startDate, ZonedDateTime endDate,
+			boolean wieghted) {
 
 		int itemCount = this.getItemCount() - 1;
 		long sumVolume = 0;
@@ -747,9 +752,9 @@ public class CandleSeries extends IndicatorSeries {
 		for (int i = itemCount; i > -1; i--) {
 			candle = (CandleItem) this.getDataItem(i);
 			if ((candle.getPeriod().getStart().equals(startDate) || candle
-					.getPeriod().getStart().after(startDate))
+					.getPeriod().getStart().isAfter(startDate))
 					&& (candle.getPeriod().getStart().equals(endDate) || candle
-							.getPeriod().getStart().before(endDate))) {
+							.getPeriod().getStart().isBefore(endDate))) {
 
 				if (candle.getVolume() > 0)
 					numberOfCandles++;
@@ -776,7 +781,8 @@ public class CandleSeries extends IndicatorSeries {
 
 			CandlePeriod period = new CandlePeriod(startDate, endDate);
 			Candle avgCandle = new Candle(getContract(), period, 0, 0, 0,
-					Double.MAX_VALUE, new Date());
+					Double.MAX_VALUE,
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			avgCandle.setHigh(new BigDecimal(
 					(sunHighPriceXVolume / (wieghted ? sumVolume
 							: numberOfCandles))));
@@ -807,7 +813,7 @@ public class CandleSeries extends IndicatorSeries {
 	 *            Date
 	 * @return Candle
 	 */
-	public Candle getBar(Date startDate, Date endDate) {
+	public Candle getBar(ZonedDateTime startDate, ZonedDateTime endDate) {
 
 		if (null != this.candleBar) {
 			if (this.candleBar.getStartPeriod().equals(startDate)
@@ -826,12 +832,12 @@ public class CandleSeries extends IndicatorSeries {
 		for (int i = itemCount; i > -1; i--) {
 			candle = (CandleItem) this.getDataItem(i);
 			if ((candle.getPeriod().getStart().equals(startDate) || candle
-					.getPeriod().getStart().after(startDate))
-					&& (candle.getPeriod().getStart().before(endDate))) {
+					.getPeriod().getStart().isAfter(startDate))
+					&& (candle.getPeriod().getStart().isBefore(endDate))) {
 				if (null == this.candleBar) {
 					this.candleBar = new Candle(getContract(),
 							candle.getPeriod(), 0, 0, Double.MAX_VALUE, 0,
-							new Date());
+							TradingCalendar.getDateTimeNowMarketTimeZone());
 					this.candleBar.setEndPeriod(candle.getPeriod().getEnd());
 				}
 
@@ -896,15 +902,15 @@ public class CandleSeries extends IndicatorSeries {
 	 */
 	public void updatePercentChanged(CandleItem candleItem) {
 
-		Date prevDay = TradingCalendar.getPrevTradingDay(candleItem.getPeriod()
-				.getStart());
-		Date prevDayEnd = TradingCalendar.getSpecificTime(this.getEndTime(),
-				prevDay);
-		prevDayEnd = TradingCalendar.addSeconds(prevDayEnd, -1);
-		Date prevDayStart = TradingCalendar.getSpecificTime(
-				this.getStartTime(), prevDay);
-		Date todayOpen = TradingCalendar.getSpecificTime(this.getStartTime(),
-				candleItem.getPeriod().getStart());
+		ZonedDateTime prevDay = TradingCalendar.getPrevTradingDay(candleItem
+				.getPeriod().getStart());
+		ZonedDateTime prevDayEnd = TradingCalendar.getDateAtTime(prevDay,
+				this.getEndTime());
+		prevDayEnd = prevDayEnd.minusSeconds(1);
+		ZonedDateTime prevDayStart = TradingCalendar.getDateAtTime(prevDay,
+				this.getStartTime());
+		ZonedDateTime todayOpen = TradingCalendar.getDateAtTime(candleItem
+				.getPeriod().getStart(), this.getStartTime());
 		int index = this.indexOf(todayOpen);
 		if (index > -1) {
 			CandleItem openCandleItem = (CandleItem) this.getDataItem(index);
@@ -916,7 +922,7 @@ public class CandleSeries extends IndicatorSeries {
 				_log.error("Could not set ValueType Msg: " + ex.getMessage(),
 						ex);
 			}
-			if (candleItem.getPeriod().getStart().after(prevDayEnd)) {
+			if (candleItem.getPeriod().getStart().isAfter(prevDayEnd)) {
 				if (this.indexOf(prevDayStart) > -1
 						&& this.indexOf(prevDayEnd) > -1) {
 					Candle prevDayCandle = this
@@ -1004,7 +1010,7 @@ public class CandleSeries extends IndicatorSeries {
 	 */
 	private void rollCandle(RegularTimePeriod period, int rollupInterval,
 			double open, double high, double low, double close, long volume,
-			int tradeCount, double vwap, Date lastUpdateDate) {
+			int tradeCount, double vwap, ZonedDateTime lastUpdateDate) {
 
 		if (rollupInterval != this.rollingCandle.rollupInterval
 				|| this.isEmpty()) {
@@ -1101,7 +1107,7 @@ public class CandleSeries extends IndicatorSeries {
 	private void updateRollingCandle(RegularTimePeriod period,
 			int rollupInterval, double open, double high, double low,
 			double close, long volume, int tradeCount, double vwap,
-			Date lastUpdateDate) {
+			ZonedDateTime lastUpdateDate) {
 
 		if (rollupInterval == this.rollingCandleValues.size()) {
 			this.prevRollingCandle = this.rollingCandleValues.removeLast();
@@ -1187,14 +1193,15 @@ public class CandleSeries extends IndicatorSeries {
 		private long volume = 0;
 		private int tradeCount = 0;
 		private double vwap = 0;
-		private Date lastUpdateDate = null;
+		private ZonedDateTime lastUpdateDate = null;
 
 		public RollingCandle() {
 		}
 
 		public RollingCandle(RegularTimePeriod period, int rollupInterval,
 				double open, double high, double low, double close,
-				long volume, int tradeCount, double vwap, Date lastUpdateDate) {
+				long volume, int tradeCount, double vwap,
+				ZonedDateTime lastUpdateDate) {
 			this.rollupInterval = rollupInterval;
 			this.period = period;
 			this.open = open;
@@ -1291,9 +1298,9 @@ public class CandleSeries extends IndicatorSeries {
 		/**
 		 * Method getLastUpdateDate.
 		 * 
-		 * @return Date
+		 * @return ZonedDateTime
 		 */
-		public Date getLastUpdateDate() {
+		public ZonedDateTime getLastUpdateDate() {
 			return this.lastUpdateDate;
 		}
 
@@ -1311,5 +1318,4 @@ public class CandleSeries extends IndicatorSeries {
 			return (RollingCandle) super.clone();
 		}
 	}
-
 }

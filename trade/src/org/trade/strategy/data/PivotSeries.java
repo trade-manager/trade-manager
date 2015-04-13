@@ -37,23 +37,21 @@ package org.trade.strategy.data;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.core.util.Pair;
-import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.Strategy;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.CandlePeriod;
 import org.trade.strategy.data.pivot.PivotCalculator;
@@ -207,30 +205,6 @@ public class PivotSeries extends IndicatorSeries {
 			}
 		}
 		super.add(dataItem, notify);
-	}
-
-	/**
-	 * Returns the true/false if the date falls within a period.
-	 * 
-	 * @param date
-	 *            the date for which we want a period.
-	 * 
-	 * 
-	 * @return exists
-	 */
-	public int indexOf(Date date) {
-
-		for (int i = this.data.size(); i > 0; i--) {
-			PivotItem item = (PivotItem) this.data.get(i - 1);
-			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
-				break;
-			}
-			if ((date.getTime() >= item.getPeriod().getFirstMillisecond())
-					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
-				return i - 1;
-			}
-		}
-		return -1;
 	}
 
 	/**
@@ -439,8 +413,10 @@ public class PivotSeries extends IndicatorSeries {
 						}
 					}
 
-					if (TradingCalendar.sameDay(prevCandle.getPeriod()
-							.getStart(), candle.getPeriod().getStart())) {
+					if (candle.getPeriod().getStart().getYear() == prevCandle
+							.getPeriod().getStart().getYear()
+							&& candle.getPeriod().getStart().getDayOfYear() == prevCandle
+									.getPeriod().getStart().getDayOfYear()) {
 
 						if (side.equals(Side.BOT)) {
 							if ((userDataVector.get(((CandlePeriod) candle

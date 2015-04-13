@@ -40,7 +40,7 @@ package org.trade.persistent.dao;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,8 +50,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -85,7 +83,7 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	private Integer quantity;
 	private String side;
 	private String exchange;
-	private Date time;
+	private ZonedDateTime time;
 	private TradeOrder tradeOrder;
 
 	public TradeOrderfill() {
@@ -118,7 +116,7 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	public TradeOrderfill(TradeOrder tradeOrder, String accountNumber,
 			BigDecimal averagePrice, Integer cumulativeQuantity,
 			String exchange, String execId, BigDecimal price, Integer quantity,
-			String side, Date time) {
+			String side, ZonedDateTime time) {
 		this.tradeOrder = tradeOrder;
 		this.accountNumber = accountNumber;
 		this.averagePrice = averagePrice;
@@ -397,11 +395,10 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	/**
 	 * Method getTime.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "time", nullable = false, length = 19)
-	public Date getTime() {
+	@Column(name = "time", nullable = false)
+	public ZonedDateTime getTime() {
 		return this.time;
 	}
 
@@ -409,9 +406,9 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	 * Method setTime.
 	 * 
 	 * @param time
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setTime(Date time) {
+	public void setTime(ZonedDateTime time) {
 		this.time = time;
 	}
 

@@ -35,7 +35,7 @@
  */
 package org.trade.strategy;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +118,8 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -161,9 +162,9 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 			 * Is it the the 9:35 candle? and we have not created an open
 			 * position trade.
 			 */
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), this
-					.getTradestrategy().getBarSize() / 60))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getOpen()
+					.plusMinutes(this.getTradestrategy().getBarSize() / 60))
 					&& newBar) {
 
 				/*
@@ -230,8 +231,8 @@ public class Vwap5MinSideGapBarStrategy extends AbstractStrategyRule {
 					// Cancel this process we are done!
 					this.cancel();
 				}
-			} else if (!startPeriod.before(TradingCalendar.getSpecificTime(
-					startPeriod, 10, 30))) {
+			} else if (!startPeriod.isBefore(TradingCalendar.getDateAtTime(
+					startPeriod, 10, 30, 0))) {
 
 				if (!this.isThereOpenPosition()
 						&& !TradestrategyStatus.CANCELLED

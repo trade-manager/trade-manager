@@ -17,11 +17,10 @@ import java.awt.print.PrinterJob;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -97,7 +96,9 @@ public class CandlestickChartApp extends BasePanel {
 							.getPriceDataSetYahooIntraday(symbol, numberOfDays,
 									BarSize.FIVE_MIN);
 					CandlestickChart chart = new CandlestickChart(symbol,
-							strategyData, Tradingday.newInstance(new Date()));
+							strategyData, Tradingday
+									.newInstance(TradingCalendar
+											.getDateTimeNowMarketTimeZone()));
 					CandlestickChartApp panel = new CandlestickChartApp(chart);
 
 					frame.getContentPane().add(panel);
@@ -250,8 +251,9 @@ public class CandlestickChartApp extends BasePanel {
 			Strategy strategy = home.findByName(name);
 			Contract contract = new Contract(SECType.STOCK, symbol,
 					Exchange.SMART, Currency.USD, null, null);
-			Date today = new Date();
-			Date startDate = TradingCalendar.addMonth(today, -3);
+			ZonedDateTime today = TradingCalendar
+					.getDateTimeNowMarketTimeZone();
+			ZonedDateTime startDate = today.minusMonths(3);
 
 			/*
 			 * Yahoo finance So IBM form 1/1/2012 thru 06/30/2012
@@ -261,21 +263,20 @@ public class CandlestickChartApp extends BasePanel {
 			 */
 
 			String strUrl = "http://ichart.finance.yahoo.com/table.csv?s="
-					+ symbol + "&a=" + TradingCalendar.getMonth(startDate)
-					+ "&b=" + TradingCalendar.getDayOfMonth(startDate) + "&c="
-					+ TradingCalendar.getYear(startDate) + "&d="
-					+ TradingCalendar.getMonth(today) + "&e="
-					+ TradingCalendar.getDayOfMonth(today) + "&f="
-					+ TradingCalendar.getYear(today) + "&ignore=.csv";
+					+ symbol + "&a=" + startDate.getMonth() + "&b="
+					+ startDate.getDayOfMonth() + "&c=" + startDate.getYear()
+					+ "&d=" + today.getMonth() + "&e=" + today.getDayOfMonth()
+					+ "&f=" + today.getYear() + "&ignore=.csv";
 			URL url = new URL(strUrl);
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					url.openStream()));
-			DateFormat df = new SimpleDateFormat("y-M-d");
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("y-M-d");
+
 			String inputLine;
 			in.readLine();
 			while ((inputLine = in.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(inputLine, ",");
-				Date date = df.parse(st.nextToken());
+				ZonedDateTime date = ZonedDateTime.parse(st.nextToken(), df);
 				Tradingday tradingday = Tradingday.newInstance(date);
 				double open = Double.parseDouble(st.nextToken());
 				double high = Double.parseDouble(st.nextToken());
@@ -284,13 +285,13 @@ public class CandlestickChartApp extends BasePanel {
 				long volume = Long.parseLong(st.nextToken());
 				// double adjClose = Double.parseDouble( st.nextToken() );
 				CandlePeriod period = new CandlePeriod(
-						TradingCalendar.getBusinessDayStart(date),
-						TradingCalendar.addSeconds(
-								TradingCalendar.getBusinessDayEnd(date), -1));
+						TradingCalendar.getTradingDayStart(date),
+						TradingCalendar.getTradingDayEnd(date).minusSeconds(1));
 
 				Candle candle = new Candle(contract, period, open, high, low,
 						close, volume, (open + close) / 2,
-						((int) volume / 100), new Date());
+						((int) volume / 100),
+						TradingCalendar.getDateTimeNowMarketTimeZone());
 
 				candle.setContract(contract);
 				candle.setTradingday(tradingday);
@@ -301,9 +302,9 @@ public class CandlestickChartApp extends BasePanel {
 
 			Collections.reverse(candles);
 			CandleDataset candleDataset = new CandleDataset();
-			int daySeconds = (int) ((TradingCalendar.getBusinessDayEnd(today)
-					.getTime() - TradingCalendar.getBusinessDayStart(today)
-					.getTime()) / 1000);
+			int daySeconds = (int) TradingCalendar.getDurationInSeconds(
+					TradingCalendar.getTradingDayStart(today),
+					TradingCalendar.getTradingDayEnd(today));
 			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
 					contract, daySeconds, startDate, today);
 			candleDataset.addSeries(candleSeries);
@@ -331,9 +332,10 @@ public class CandlestickChartApp extends BasePanel {
 	protected static StrategyData getPriceDataSetYahooIntraday(String symbol,
 			int days, int periodSeconds) {
 		try {
-			Date today = new Date();
-			Date startDate = TradingCalendar.addDays(today, days * -1);
-			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
+			ZonedDateTime today = TradingCalendar
+					.getDateTimeNowMarketTimeZone();
+			ZonedDateTime startDate = today.minusDays(days);
+			startDate = TradingCalendar.getPrevTradingDay(startDate);
 			Strategy daoStrategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
 			StrategyHome home = new StrategyHome();
@@ -370,8 +372,9 @@ public class CandlestickChartApp extends BasePanel {
 					StringTokenizer scanLine = new StringTokenizer(inputLine,
 							",");
 					while (scanLine.hasMoreTokens()) {
-						Date time = new Date(Long.parseLong(scanLine
-								.nextToken()) * 1000);
+						ZonedDateTime time = TradingCalendar
+								.getZonedDateTimeFromMilli(Long
+										.parseLong(scanLine.nextToken()) * 1000);
 
 						// values:Timestamp,close,high,low,open,volume
 						double close = Double.parseDouble(scanLine.nextToken());
@@ -382,7 +385,7 @@ public class CandlestickChartApp extends BasePanel {
 						_log.info("Time : " + time + " Open: " + open
 								+ " High: " + high + " Low: " + low
 								+ " Close: " + close + " Volume: " + volume);
-						if (startDate.before(time)) {
+						if (startDate.isBefore(time)) {
 							strategyData.buildCandle(time, open, high, low,
 									close, volume, (open + close) / 2,
 									((int) volume / 100), periodSeconds

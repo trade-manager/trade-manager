@@ -36,7 +36,6 @@
 package org.trade.persistent.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -50,6 +49,7 @@ import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
 import org.trade.core.util.CoreUtils;
+import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModelException;
 
@@ -249,7 +249,8 @@ public class PortfolioHome {
 			entityManager.getTransaction().begin();
 			Portfolio portfolio = findPortfolioByName(instance.getName());
 			if (null == portfolio) {
-				instance.setLastUpdateDate(new Date());
+				instance.setLastUpdateDate(TradingCalendar
+						.getDateTimeNowMarketTimeZone());
 				for (PortfolioAccount item : instance.getPortfolioAccounts()) {
 					Account account = findByAccountNumber(item.getAccount()
 							.getAccountNumber());
@@ -257,7 +258,8 @@ public class PortfolioHome {
 						item.getAccount().setCurrency(Currency.USD);
 						item.getAccount().setName(
 								item.getAccount().getAccountNumber());
-						item.getAccount().setLastUpdateDate(new Date());
+						item.getAccount().setLastUpdateDate(
+								TradingCalendar.getDateTimeNowMarketTimeZone());
 					} else {
 						item.setAccount(account);
 					}
@@ -270,7 +272,8 @@ public class PortfolioHome {
 						instance.getAllocationMethod())) {
 					portfolio.setAllocationMethod(instance
 							.getAllocationMethod());
-					portfolio.setLastUpdateDate(new Date());
+					portfolio.setLastUpdateDate(TradingCalendar
+							.getDateTimeNowMarketTimeZone());
 				}
 				for (PortfolioAccount item : instance.getPortfolioAccounts()) {
 
@@ -280,7 +283,8 @@ public class PortfolioHome {
 						item.getAccount().setCurrency(Currency.USD);
 						item.getAccount().setName(
 								item.getAccount().getAccountNumber());
-						item.getAccount().setLastUpdateDate(new Date());
+						item.getAccount().setLastUpdateDate(
+								TradingCalendar.getDateTimeNowMarketTimeZone());
 					} else {
 						item.setAccount(account);
 					}

@@ -218,7 +218,7 @@ public class TradelogDetailTableModel extends TableModel {
 			break;
 		}
 		case 13: {
-			element.setFilledDate(((Date) value).getDate());
+			element.setFilledDate(((Date) value).getZonedDateTime());
 			break;
 		}
 		case 14: {

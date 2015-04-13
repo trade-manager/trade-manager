@@ -35,7 +35,6 @@
  */
 package org.trade.persistent.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -47,6 +46,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
+import org.trade.core.util.TradingCalendar;
 
 /**
  */
@@ -70,7 +70,8 @@ public class TradeOrderHome {
 			EntityManager entityManager = EntityManagerHelper
 					.getEntityManager();
 			entityManager.getTransaction().begin();
-			transientInstance.setLastUpdateDate(new Date());
+			transientInstance.setLastUpdateDate(TradingCalendar
+					.getDateTimeNowMarketTimeZone());
 			if (null == transientInstance.getIdTradeOrder()) {
 				if (null != transientInstance.getTradePosition()) {
 					if (null != transientInstance.getTradePosition()

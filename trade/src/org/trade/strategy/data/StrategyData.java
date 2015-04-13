@@ -35,12 +35,11 @@
  */
 package org.trade.strategy.data;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import org.jfree.data.time.RegularTimePeriod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.factory.ClassFactory;
@@ -48,6 +47,7 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Tradingday;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.CandlePeriod;
 
@@ -240,7 +240,7 @@ public class StrategyData extends Worker {
 					.getCandleDataset()
 					.getSeries(0)
 					.buildCandle(
-							candelItem.getLastUpdateDate(),
+							candelItem.getPeriod().getStart(),
 							candelItem.getOpen(),
 							candelItem.getHigh(),
 							candelItem.getLow(),
@@ -283,9 +283,9 @@ public class StrategyData extends Worker {
 	 *            Date the update time.
 	 * @return boolean
 	 */
-	public boolean buildCandle(Date time, double open, double high, double low,
-			double close, long volume, double vwap, int tradeCount,
-			int rollupInterval, Date lastUpdateDate) {
+	public boolean buildCandle(ZonedDateTime time, double open, double high,
+			double low, double close, long volume, double vwap, int tradeCount,
+			int rollupInterval, ZonedDateTime lastUpdateDate) {
 
 		boolean newBar = this.getBaseCandleSeries().buildCandle(time, open,
 				high, low, close, volume, vwap, tradeCount, rollupInterval,
@@ -463,11 +463,11 @@ public class StrategyData extends Worker {
 	 *            int
 	 * @param longTrade
 	 *            boolean
-	 * @param delaySecond
+	 * @param milliSecondsDeplay
 	 *            int
 	 */
 	public static void doDummyData(CandleSeries series, Tradingday start,
-			int noDays, int barSize, boolean longTrade, int delaySecond) {
+			int noDays, int barSize, boolean longTrade, int milliSecondsDeplay) {
 
 		double high = 33.98;
 		double low = 33.84;
@@ -486,12 +486,12 @@ public class StrategyData extends Worker {
 		long volume = 100000;
 		int tradeCount = 100;
 		if (barSize == 1) {
-			barSize = ((int) start.getClose().getTime() / 1000)
-					- ((int) start.getOpen().getTime() / 1000);
+			barSize = (int) TradingCalendar.getDurationInSeconds(
+					start.getOpen(), start.getClose());
 		}
 
-		long count = (((start.getClose().getTime() / 1000) - (start.getOpen()
-				.getTime() / 1000)) / barSize) * noDays;
+		long count = (TradingCalendar.getDurationInSeconds(start.getOpen(),
+				start.getClose()) / barSize) * noDays;
 
 		RegularTimePeriod period = new CandlePeriod(start.getOpen(), barSize);
 		series.clear();
@@ -506,12 +506,12 @@ public class StrategyData extends Worker {
 			period = period.next();
 			if (period.getStart().equals(start.getClose())) {
 				period = new CandlePeriod(
-						TradingCalendar.getBusinessDayStart(TradingCalendar
+						TradingCalendar.getTradingDayStart(TradingCalendar
 								.getNextTradingDay(period.getStart())), barSize);
 			}
 			try {
-				if (delaySecond > 0)
-					Thread.sleep(delaySecond * 1000);
+				if (milliSecondsDeplay > 0)
+					Thread.sleep(milliSecondsDeplay);
 
 			} catch (InterruptedException e) {
 				_log.error(" Thread interupt: " + e.getMessage());

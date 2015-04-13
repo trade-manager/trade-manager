@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -137,11 +137,13 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 						Tradingday.DATE_ORDER_ASC);
 				for (Tradingday itemTradingday : tradingdays.getTradingdays()) {
 					if (TradingCalendar.isTradingDay(itemTradingday.getOpen())
-							&& TradingCalendar.sameDay(
-									itemTradingday.getOpen(),
-									TradingCalendar.getDate(this.startTime))
+							&& TradingCalendar
+									.sameDay(
+											itemTradingday.getOpen(),
+											TradingCalendar
+													.getZonedDateTimeFromMilli(this.startTime))
 							&& !TradingCalendar.isAfterHours(TradingCalendar
-									.getDate(this.startTime)))
+									.getZonedDateTimeFromMilli(this.startTime)))
 						continue;
 
 					Tradingday tradingday = (Tradingday) itemTradingday.clone();
@@ -201,11 +203,11 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 			synchronized (this.brokerModel.getHistoricalData()) {
 				while ((this.brokerModel.getHistoricalData().size() > 0)
 						&& !this.isCancelled()) {
-					int percent = (int) (((double) (getGrandTotal() - this.brokerModel
-							.getHistoricalData().size()) / getGrandTotal()) * 100d);
-					setProgress(percent);
 					try {
 						this.brokerModel.getHistoricalData().wait();
+						int percent = (int) (((double) (getGrandTotal() - this.brokerModel
+								.getHistoricalData().size()) / getGrandTotal()) * 100d);
+						setProgress(percent);
 					} catch (InterruptedException ex) {
 						// Do nothing
 						_log.error("doInBackground finally interupted Msg: ",
@@ -236,9 +238,9 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 	 * @throws InterruptedException
 	 * @throws BrokerModelException
 	 */
-	private int submitBrokerRequest(Tradestrategy tradestrategy, Date endDate,
-			int totalSumbitted) throws InterruptedException,
-			BrokerModelException {
+	private int submitBrokerRequest(Tradestrategy tradestrategy,
+			ZonedDateTime endDate, int totalSumbitted)
+			throws InterruptedException, BrokerModelException {
 
 		if (this.brokerModel.isHistoricalDataRunning(tradestrategy
 				.getContract()) || this.isCancelled()) {
@@ -277,7 +279,6 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 
 		int percent = (int) (((double) (totalSumbitted - this.brokerModel
 				.getHistoricalData().size()) / getGrandTotal()) * 100d);
-
 		setProgress(percent);
 
 		/*
@@ -310,10 +311,11 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 		 * uses one so we have 9 left for the BrokerWorkers. So wait while the
 		 * BrokerWorkers threads complete.
 		 */
-		synchronized (this.brokerModel.getHistoricalData()) {
-			while ((this.brokerModel.getHistoricalData().size() > 8)
-					&& !this.isCancelled()) {
-				this.brokerModel.getHistoricalData().wait();
+		if (!this.isCancelled()) {
+			synchronized (this.brokerModel.getHistoricalData()) {
+				while (this.brokerModel.getHistoricalData().size() > 8) {
+					this.brokerModel.getHistoricalData().wait();
+				}
 			}
 		}
 		return totalSumbitted;
@@ -436,25 +438,23 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 			ConcurrentHashMap<Integer, Tradingday> runningContractRequests,
 			int totalSumbitted) throws Exception {
 
-		int submitted = totalSumbitted;
-
 		while (!this.isCancelled() && !runningContractRequests.isEmpty()) {
 
 			/*
 			 * If nothing submitted wait for all the processes to finish.
 			 * Usually means we are submitting identical contracts.
 			 */
-
-			synchronized (this.brokerModel.getHistoricalData()) {
-				if (submitted == totalSumbitted) {
-					while (this.brokerModel.getHistoricalData().size() > 0
-							&& !this.isCancelled()) {
-						_log.debug("reProcessTradingdays Wait HistoricalDataSize: "
-								+ this.brokerModel.getHistoricalData().size());
+			if (!this.isCancelled()) {
+				synchronized (this.brokerModel.getHistoricalData()) {
+					while (this.brokerModel.getHistoricalData().size() > 0) {
 						this.brokerModel.getHistoricalData().wait();
+						int percent = (int) (((double) (totalSumbitted - this.brokerModel
+								.getHistoricalData().size()) / getGrandTotal()) * 100d);
+						setProgress(percent);
 					}
 				}
 			}
+
 			for (Tradingday item : tradingdays.getTradingdays()) {
 				for (Integer idTradeingday : runningContractRequests.keySet()) {
 					Tradingday reProcessTradingday = runningContractRequests
@@ -468,9 +468,6 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 					}
 				}
 			}
-
-			if (submitted < totalSumbitted)
-				submitted = totalSumbitted;
 		}
 		return totalSumbitted;
 	}
@@ -772,10 +769,13 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 				 */
 				if (backTestBarSize > 0) {
 					if (TradingCalendar.isTradingDay(tradingday.getOpen())
-							&& TradingCalendar.sameDay(tradingday.getOpen(),
-									TradingCalendar.getDate(startTime))
+							&& TradingCalendar
+									.sameDay(
+											tradingday.getOpen(),
+											TradingCalendar
+													.getZonedDateTimeFromMilli(startTime))
 							&& !TradingCalendar.isAfterHours(TradingCalendar
-									.getDate(startTime)))
+									.getZonedDateTimeFromMilli(startTime)))
 						continue;
 
 					for (Tradestrategy tradestrategy : tradingday

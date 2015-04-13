@@ -38,7 +38,7 @@ package org.trade.persistent.dao;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -46,7 +46,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.Aspect;
@@ -70,6 +72,8 @@ public class TradestrategyTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradestrategyTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	private String symbol = "TEST";
 	private TradestrategyHome tradestrategyHome = null;
@@ -126,9 +130,11 @@ public class TradestrategyTest {
 			_log.info("testFindVersionById IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy() + " version: "
 					+ version);
-
-		} catch (Exception e) {
-			fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -158,9 +164,11 @@ public class TradestrategyTest {
 					+ positionOrders.getStatus());
 			assertEquals(TradestrategyStatus.CANCELLED,
 					positionOrders.getStatus());
-
-		} catch (Exception e) {
-			fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -179,9 +187,11 @@ public class TradestrategyTest {
 			assertNotNull(tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy() + "found.");
-
-		} catch (Exception e) {
-			fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -189,8 +199,10 @@ public class TradestrategyTest {
 	public void testUpdateTradeStrategy() {
 
 		try {
-			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
+			ZonedDateTime open = TradingCalendar
+					.getTradingDayStart(TradingCalendar
+							.getPrevTradingDay(TradingCalendar
+									.getDateTimeNowMarketTimeZone()));
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Tradingdays tradingdays = tradingdayHome
 					.findTradingdaysByDateRange(open, open);
@@ -211,8 +223,11 @@ public class TradestrategyTest {
 							tradestrategy.getStatus());
 				}
 			}
-		} catch (Exception e) {
-			fail("Error update row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -224,7 +239,8 @@ public class TradestrategyTest {
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Tradingdays tradingdays = new Tradingdays();
 			Tradingday instance = Tradingday.newInstance(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
+					.getPrevTradingDay(TradingCalendar
+							.getDateTimeNowMarketTimeZone()));
 			tradingdays.add(instance);
 
 			String fileName = "db/LoadFile10Stocks.csv";
@@ -242,8 +258,11 @@ public class TradestrategyTest {
 				}
 				aspectHome.remove(tradingday);
 			}
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -255,7 +274,8 @@ public class TradestrategyTest {
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			Tradingdays tradingdays = new Tradingdays();
 			Tradingday instance = Tradingday.newInstance(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
+					.getPrevTradingDay(TradingCalendar
+							.getDateTimeNowMarketTimeZone()));
 			tradingdays.add(instance);
 
 			String fileName = "db/LoadFile1Stock.csv";
@@ -274,9 +294,11 @@ public class TradestrategyTest {
 				}
 				aspectHome.remove(tradingday);
 			}
-
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -310,8 +332,9 @@ public class TradestrategyTest {
 			portfolio.getPortfolioAccounts().add(portfolioAccount);
 			portfolio = aspectHome.persist(portfolio);
 		}
-		Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
-				.getMostRecentTradingDay(new Date()));
+		ZonedDateTime open = TradingCalendar.getTradingDayStart(TradingCalendar
+				.getPrevTradingDay(TradingCalendar
+						.getDateTimeNowMarketTimeZone()));
 
 		Contract contract = contractHome.findByUniqueKey(SECType.STOCK, symbol,
 				Exchange.SMART, Currency.USD, null);
@@ -446,9 +469,11 @@ public class TradestrategyTest {
 						+ value.getStrategy().getName());
 			}
 			assertNotNull(results);
-
-		} catch (Exception e) {
-			fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -468,9 +493,11 @@ public class TradestrategyTest {
 				_log.info("Contract: " + value.getContract().getSymbol());
 			}
 			assertNotNull(results);
-
-		} catch (Exception e) {
-			fail("Error testAddTradestrategy Msg: " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

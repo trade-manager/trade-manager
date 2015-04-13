@@ -38,7 +38,7 @@ package org.trade.strategy.data.movingaverage;
 import java.math.BigDecimal;
 
 import org.jfree.data.ComparableObjectItem;
-import org.jfree.data.time.RegularTimePeriod;
+import org.trade.strategy.data.base.RegularTimePeriod;
 
 /**
  * An item representing data in the form (period, open, high, low, close).

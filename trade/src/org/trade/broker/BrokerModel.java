@@ -35,7 +35,7 @@
  */
 package org.trade.broker;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.EventListener;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -199,12 +199,12 @@ public interface BrokerModel {
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
-	 * @param Date
-	 *            endDate
+	 * @param endDate
+	 *            ZonedDateTime
 	 * 
 	 * @throws BrokerModelException
 	 */
-	public void onBrokerData(Tradestrategy tradestrategy, Date endDate)
+	public void onBrokerData(Tradestrategy tradestrategy, ZonedDateTime endDate)
 			throws BrokerModelException;
 
 	/**
@@ -237,10 +237,11 @@ public interface BrokerModel {
 	 * Method onReqAllExecutions.
 	 * 
 	 * @param mktOpenDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @throws BrokerModelException
 	 */
-	void onReqAllExecutions(Date mktOpenDate) throws BrokerModelException;
+	void onReqAllExecutions(ZonedDateTime mktOpenDate)
+			throws BrokerModelException;
 
 	/**
 	 * Method onReqExecutions.

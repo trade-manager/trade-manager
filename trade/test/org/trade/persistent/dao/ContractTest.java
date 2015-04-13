@@ -36,7 +36,7 @@
 package org.trade.persistent.dao;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import static org.junit.Assert.*;
 
@@ -44,7 +44,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.AspectHome;
@@ -59,6 +61,8 @@ public class ContractTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(ContractTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Method setUpBeforeClass.
@@ -125,8 +129,11 @@ public class ContractTest {
 						+ transientInstance.getIdContract());
 			}
 
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -139,15 +146,18 @@ public class ContractTest {
 			// values in it by reading them from form object
 			AspectHome aspectHome = new AspectHome();
 			ContractHome contractHome = new ContractHome();
-			Date expiry = TradingCalendar.addMonth(new Date(), 1);
-			expiry = TradingCalendar.getSpecificTime(expiry, 19, 0, 0, 0);
+
+			ZonedDateTime expiry = TradingCalendar.getDateAtTime(
+					TradingCalendar.getDateTimeNowMarketTimeZone(), 19, 0, 0);
+			expiry = expiry.plusMonths(1);
+
 			_log.info("Expiry Date: " + expiry);
 			Contract transientInstance = new Contract(SECType.FUTURE, "ES",
 					Exchange.SMART, Currency.USD, expiry, new BigDecimal(50));
 			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
-			expiry = TradingCalendar.addDays(expiry, 1);
+			expiry = expiry.plusDays(1);
 			_log.info("Expiry Date: " + expiry);
 			Contract contract = contractHome.findByUniqueKey(
 					transientInstance.getSecType(),
@@ -164,8 +174,11 @@ public class ContractTest {
 			}
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

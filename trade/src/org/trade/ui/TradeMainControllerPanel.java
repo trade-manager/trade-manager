@@ -44,8 +44,8 @@ import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
@@ -185,7 +185,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					.getServiceForInterface(PersistentModel._persistentModel,
 							this);
 			Tradingday tradingday = Tradingday.newInstance(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
+					.getPrevTradingDay(TradingCalendar
+							.getDateTimeNowMarketTimeZone()));
 			Tradingday todayTradingday = m_tradePersistentModel
 					.findTradingdayByOpenCloseDate(tradingday.getOpen(),
 							tradingday.getClose());
@@ -470,8 +471,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				if (m_tradingdays.getTradingdays().isEmpty()) {
 					return;
 				}
-				Date toOpen = m_tradingdays.getTradingdays().get(0).getOpen();
-				Date fromOpen = m_tradingdays.getTradingdays()
+				ZonedDateTime toOpen = m_tradingdays.getTradingdays().get(0)
+						.getOpen();
+				ZonedDateTime fromOpen = m_tradingdays.getTradingdays()
 						.get(m_tradingdays.getTradingdays().size() - 1)
 						.getOpen();
 				List<Tradestrategy> strategyBarSizeChartHistItems = m_tradePersistentModel
@@ -547,8 +549,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * This is fired from the Tradingday Tab when the Back Test Strategy button
 	 * is pressed. This will run the Strategy for the selected tradingday.
 	 * 
-	 * 
-	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
@@ -593,8 +593,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				try {
 
 					Tradingday todayTradingday = m_tradingdays.getTradingday(
-							TradingCalendar.getTodayBusinessDayStart(),
-							TradingCalendar.getTodayBusinessDayEnd());
+							TradingCalendar.getTradingDayStart(TradingCalendar
+									.getDateTimeNowMarketTimeZone()),
+							TradingCalendar.getTradingDayEnd(TradingCalendar
+									.getDateTimeNowMarketTimeZone()));
 					if (null == todayTradingday) {
 						return;
 					}
@@ -643,10 +645,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 												.getOrderKey())) {
 									todayTradeOrder
 											.setStatus(OrderStatus.CANCELLED);
-									todayTradeOrder
-											.setLastUpdateDate(TradingCalendar
-													.getDate((new Date())
-															.getTime()));
+									todayTradeOrder.setLastUpdateDate(TradingCalendar
+											.getDateTimeNowMarketTimeZone());
 									m_tradePersistentModel
 											.persistTradeOrder(todayTradeOrder);
 								}
@@ -679,8 +679,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			ConcurrentHashMap<Integer, TradeOrder> tradeOrders) {
 		try {
 			Tradingday todayTradingday = m_tradingdays.getTradingday(
-					TradingCalendar.getTodayBusinessDayStart(),
-					TradingCalendar.getTodayBusinessDayEnd());
+					TradingCalendar.getTradingDayStart(TradingCalendar
+							.getDateTimeNowMarketTimeZone()), TradingCalendar
+							.getTradingDayEnd(TradingCalendar
+									.getDateTimeNowMarketTimeZone()));
 			if (null == todayTradingday) {
 				return;
 			}
@@ -1279,8 +1281,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			contractPanel.setConnected(true);
 
 			Tradingday todayTradingday = m_tradingdays.getTradingday(
-					TradingCalendar.getTodayBusinessDayStart(),
-					TradingCalendar.getTodayBusinessDayEnd());
+					TradingCalendar.getTradingDayStart(TradingCalendar
+							.getDateTimeNowMarketTimeZone()), TradingCalendar
+							.getTradingDayEnd(TradingCalendar
+									.getDateTimeNowMarketTimeZone()));
 
 			/*
 			 * Request all the executions for today. This will result in updates
@@ -1629,8 +1633,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							action = Action.SELL;
 						}
 						TradeOrder tradeOrder = new TradeOrder(tradestrategy,
-								action, new Date(), OrderType.MKT,
-								openQuantity, null, null,
+								action,
+								TradingCalendar.getDateTimeNowMarketTimeZone(),
+								OrderType.MKT, openQuantity, null, null,
 								OverrideConstraints.YES, TimeInForce.DAY,
 								TriggerMethod.DEFAULT);
 						tradeOrder.setTransmit(true);
@@ -1876,21 +1881,21 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						}
 
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
-							Date endDate = TradingCalendar
-									.getSpecificTime(
-											tradestrategy.getTradingday()
-													.getClose(),
+							ZonedDateTime endDate = TradingCalendar
+									.getDateAtTime(
 											TradingCalendar
-													.getMostRecentTradingDay(TradingCalendar
-															.addBusinessDays(
+													.getPrevTradingDay(TradingCalendar
+															.addTradingDays(
 																	tradestrategy
 																			.getTradingday()
 																			.getClose(),
-																	0)));
-							Date startDate = TradingCalendar.addDays(endDate,
-									(-1 * (tradestrategy.getChartDays() - 1)));
+																	0)),
+											tradestrategy.getTradingday()
+													.getClose());
+							ZonedDateTime startDate = endDate
+									.minusDays((tradestrategy.getChartDays() - 1));
 							startDate = TradingCalendar
-									.getMostRecentTradingDay(startDate);
+									.getPrevTradingDay(startDate);
 
 							List<Candle> candles = m_tradePersistentModel
 									.findCandlesByContractDateRangeBarSize(

@@ -40,24 +40,24 @@ import static org.junit.Assert.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.Timer;
 
-import org.jfree.data.DataUtilities;
-import org.jfree.data.time.RegularTimePeriod;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.client.Broker;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
@@ -68,6 +68,7 @@ import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyTest;
 import org.trade.strategy.data.IndicatorSeries;
 import org.trade.strategy.data.StrategyData;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.movingaverage.MovingAverageItem;
 import org.trade.strategy.data.vwap.VwapItem;
@@ -84,6 +85,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(BrokerModelTest.class);
+
+	@Rule
+	public TestName name = new TestName();
 
 	private String symbol = "TEST";
 	private BrokerModel backTestbrokerModel;
@@ -204,7 +208,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
 					Action.BUY, OrderType.STPLMT, 100, price,
-					price.add(new BigDecimal(0.02)), new Date());
+					price.add(new BigDecimal(0.02)),
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setTransmit(new Boolean(true));
 			tradeOrder.setStatus(OrderStatus.UNSUBMIT);
@@ -230,7 +235,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STPLMT, 100,
 					price.subtract(new BigDecimal(0.70)),
-					price.subtract(new BigDecimal(0.73)), new Date());
+					price.subtract(new BigDecimal(0.73)),
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setTransmit(new Boolean(true));
@@ -256,7 +262,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.LMT, 50, null,
-					price.add(new BigDecimal(1.0)), new Date());
+					price.add(new BigDecimal(1.0)),
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setOcaType(2);
@@ -270,7 +277,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.LMT, 50,
 					price.subtract(new BigDecimal(1.0)),
-					price.add(new BigDecimal(2.0)), new Date());
+					price.add(new BigDecimal(2.0)),
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 
 			tradeOrder1.setClientId(clientId);
 			tradeOrder1.setOcaType(2);
@@ -284,7 +292,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STP, 50,
-					price.subtract(new BigDecimal(1.0)), null, new Date());
+					price.subtract(new BigDecimal(1.0)), null,
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			ocaID = ocaID + "abc";
 			tradeOrder2.setClientId(clientId);
 			tradeOrder2.setOcaType(2);
@@ -297,7 +306,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy,
 					Action.SELL, OrderType.STP, 50,
-					price.subtract(new BigDecimal(2.0)), null, new Date());
+					price.subtract(new BigDecimal(2.0)), null,
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			tradeOrder3.setClientId(clientId);
 			tradeOrder3.setOcaType(2);
 			tradeOrder3.setOcaGroupName(ocaID);
@@ -713,7 +723,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
+					Action.BUY, OrderType.MKT, 1000, null, null,
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			tradeOrder = backTestbrokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
 			assertNotNull(tradeOrder);
@@ -728,7 +739,8 @@ public class BrokerModelTest implements BrokerChangeListener {
 		try {
 
 			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.MKT, 1000, null, null, new Date());
+					Action.BUY, OrderType.MKT, 1000, null, null,
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			tradeOrder = backTestbrokerModel.onPlaceOrder(
 					this.tradestrategy.getContract(), tradeOrder);
 			assertNotNull(tradeOrder);

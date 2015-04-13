@@ -44,7 +44,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -69,6 +69,7 @@ import javax.swing.text.MaskFormatter;
 
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.TradingCalendar;
+import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
@@ -163,12 +164,15 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JSpinner.DateEditor dateStart = new JSpinner.DateEditor(
 					spinnerStart, DATEFORMAT);
 			spinnerStart.setEditor(dateStart);
-			spinnerStart.setValue(TradingCalendar.getYearStart());
+			spinnerStart.setValue((new Date(TradingCalendar.getYearStart()))
+					.getDate());
 			spinnerEnd.setModel(new SpinnerDateModel());
 			JSpinner.DateEditor dateEnd = new JSpinner.DateEditor(spinnerEnd,
 					DATEFORMAT);
 			spinnerEnd.setEditor(dateEnd);
-			spinnerEnd.setValue(TradingCalendar.getTodayBusinessDayStart());
+			spinnerEnd.setValue((new Date(TradingCalendar
+					.getTradingDayStart(TradingCalendar
+							.getDateTimeNowMarketTimeZone()))).getDate());
 			filterButton.setSelected(false);
 
 			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -254,13 +258,20 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	public void doSearch() {
 
 		try {
-			Date startDate = TradingCalendar.getSpecificTime(
-					(Date) spinnerStart.getValue(), 0, 0, 0);
-			Date endDate = TradingCalendar.getSpecificTime(
-					(Date) spinnerEnd.getValue(), 23, 59, 59);
-			if (endDate.before(startDate)) {
-				startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
-				spinnerStart.setValue(startDate);
+
+			ZonedDateTime startDate = TradingCalendar
+					.getZonedDateTimeFromMilli(((java.util.Date) spinnerStart
+							.getValue()).getTime());
+			startDate = TradingCalendar.getDateAtTime(startDate, 0, 0, 0);
+
+			ZonedDateTime endDate = TradingCalendar
+					.getZonedDateTimeFromMilli(((java.util.Date) spinnerEnd
+							.getValue()).getTime());
+			endDate = TradingCalendar.getDateAtTime(endDate, 23, 59, 59);
+
+			if (endDate.isBefore(startDate)) {
+				startDate = TradingCalendar.getDateAtTime(endDate, 0, 0, 0);
+				spinnerStart.setValue((new Date(startDate)).getDate());
 			}
 			String symbol = symbolField.getText().toUpperCase().trim();
 			if (symbol.length() == 0)

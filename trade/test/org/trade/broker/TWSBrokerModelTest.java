@@ -40,18 +40,19 @@ import static org.junit.Assert.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.Timer;
 
-import org.jfree.data.DataUtilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.Aspect;
@@ -81,6 +82,8 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TWSBrokerModelTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	private Tradingdays tradingdays = null;
 	private BrokerModel tWSBrokerModel;
@@ -208,12 +211,13 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/OneSymbolToday.csv";
-				Date tradingDay = new Date();
+				ZonedDateTime tradingDay = TradingCalendar
+						.getDateTimeNowMarketTimeZone();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
 				Tradingday tradingday = new Tradingday(
-						TradingCalendar.getBusinessDayStart(tradingDay),
-						TradingCalendar.getBusinessDayEnd(tradingDay));
+						TradingCalendar.getTradingDayStart(tradingDay),
+						TradingCalendar.getTradingDayEnd(tradingDay));
 
 				tradingdays.populateDataFromFile(fileName, tradingday);
 
@@ -268,12 +272,13 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/OneMonthContracts.csv";
-				Date tradingDay = new Date();
+				ZonedDateTime tradingDay = TradingCalendar
+						.getDateTimeNowMarketTimeZone();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
 				Tradingday tradingday = new Tradingday(
-						TradingCalendar.getBusinessDayStart(tradingDay),
-						TradingCalendar.getBusinessDayEnd(tradingDay));
+						TradingCalendar.getTradingDayStart(tradingDay),
+						TradingCalendar.getTradingDayEnd(tradingDay));
 
 				tradingdays.populateDataFromFile(fileName, tradingday);
 
@@ -328,12 +333,13 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/OneSymbolTwoMths.csv";
-				Date tradingDay = new Date();
+				ZonedDateTime tradingDay = TradingCalendar
+						.getDateTimeNowMarketTimeZone();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
 				Tradingday tradingday = new Tradingday(
-						TradingCalendar.getBusinessDayStart(tradingDay),
-						TradingCalendar.getBusinessDayEnd(tradingDay));
+						TradingCalendar.getTradingDayStart(tradingDay),
+						TradingCalendar.getTradingDayEnd(tradingDay));
 
 				tradingdays.populateDataFromFile(fileName, tradingday);
 				/*
@@ -399,12 +405,13 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 			if (tWSBrokerModel.isConnected()) {
 
 				String fileName = "trade/test/org/trade/broker/MultiContractsMultiDays.csv";
-				Date tradingDay = new Date();
+				ZonedDateTime tradingDay = TradingCalendar
+						.getDateTimeNowMarketTimeZone();
 				tradingDay = TradingCalendar.getPrevTradingDay(tradingDay);
 
 				Tradingday tradingday = new Tradingday(
-						TradingCalendar.getBusinessDayStart(tradingDay),
-						TradingCalendar.getBusinessDayEnd(tradingDay));
+						TradingCalendar.getTradingDayStart(tradingDay),
+						TradingCalendar.getTradingDayEnd(tradingDay));
 
 				tradingdays.populateDataFromFile(fileName, tradingday);
 				/*

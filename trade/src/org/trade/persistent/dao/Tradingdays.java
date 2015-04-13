@@ -42,9 +42,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -156,12 +156,12 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * Method remove.
 	 * 
 	 * @param open
-	 *            Date
+	 *            ZonedDateTime
 	 * 
 	 * @param close
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void remove(Date open, Date close) {
+	public void remove(ZonedDateTime open, ZonedDateTime close) {
 		synchronized (this.tradingdays) {
 			for (ListIterator<Tradingday> itemIter = this.tradingdays
 					.listIterator(); itemIter.hasNext();) {
@@ -203,7 +203,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            Date
 	 * @return Tradingday
 	 */
-	public Tradingday getTradingday(Date open, Date close) {
+	public Tradingday getTradingday(ZonedDateTime open, ZonedDateTime close) {
 		synchronized (this.tradingdays) {
 			for (Tradingday tradingday : this.tradingdays) {
 				if (tradingday.getOpen().compareTo(open) == 0
@@ -590,17 +590,15 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				break;
 			}
 			case 5: {
-				Date expiryDate = null;
 				if (token.length() == 6) {
-					expiryDate = TradingCalendar.getFormattedDate(token,
-							"yyyyMM");
+					contract.setExpiry(TradingCalendar
+							.getZonedDateTimeFromDateString(token, "yyyyMM",
+									TradingCalendar.MKT_TIMEZONE));
 				} else if (token.length() == 8) {
-					expiryDate = TradingCalendar.getFormattedDate(token,
-							"yyyyMMdd");
-				} else {
-					expiryDate = null;
+					contract.setExpiry(TradingCalendar
+							.getZonedDateTimeFromDateString(token, "yyyyMMdd",
+									TradingCalendar.MKT_TIMEZONE));
 				}
-				contract.setExpiry(expiryDate);
 				break;
 			}
 			case 6: {
@@ -640,10 +638,12 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 						break;
 					}
 					case 2: {
-						Date todayOpen = TradingCalendar
-								.getBusinessDayStart(TradingCalendar
-										.getFormattedDate(custToken,
-												"MM/dd/yyyy"));
+						;
+						ZonedDateTime todayOpen = TradingCalendar
+								.getTradingDayStart(TradingCalendar
+										.getZonedDateTimeFromDateString(
+												custToken, "MM/dd/yyyy",
+												TradingCalendar.MKT_TIMEZONE));
 						tradingday = Tradingday.newInstance(todayOpen);
 						tradestrategy.setTradingday(tradingday);
 						break;
@@ -726,8 +726,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			String csvLine = "";
 			// read comma separated file line by line
 			LinkedList<String> contracts = new LinkedList<String>();
-			Date startDate = null;
-			Date endDate = null;
+			ZonedDateTime startDate = null;
+			ZonedDateTime endDate = null;
 			String des = null;
 			String secType = null;
 			String exchange = null;
@@ -748,15 +748,17 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					switch (tokenNumber) {
 					case 1: {
 						if (token.length() == 10) {
-							startDate = TradingCalendar.getFormattedDate(token,
-									"MM/dd/yyyy");
+							startDate = TradingCalendar
+									.getZonedDateTimeFromDateTimeString(token,
+											"MM/dd/yyyy");
 						}
 						break;
 					}
 					case 2: {
 						if (token.length() == 10) {
-							endDate = TradingCalendar.getFormattedDate(token,
-									"MM/dd/yyyy");
+							endDate = TradingCalendar
+									.getZonedDateTimeFromDateTimeString(token,
+											"MM/dd/yyyy");
 						}
 						break;
 					}
@@ -780,8 +782,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				scanLine.close();
 			}
 			StringBuffer outPutFile = new StringBuffer();
-			while (startDate
-					.before(TradingCalendar.addBusinessDays(endDate, 1))) {
+			while (startDate.isBefore(TradingCalendar
+					.addTradingDays(endDate, 1))) {
 
 				if (TradingCalendar.isTradingDay(startDate)) {
 					for (String symbol : contracts) {

@@ -35,15 +35,13 @@
  */
 package org.trade.strategy.data;
 
-import java.util.Date;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.volume.VolumeItem;
 
@@ -182,30 +180,6 @@ public class VolumeSeries extends IndicatorSeries {
 			}
 		}
 		super.add(dataItem, notify);
-	}
-
-	/**
-	 * Returns the true/false if the date falls within a period.
-	 * 
-	 * @param date
-	 *            the date for which we want a period.
-	 * 
-	 * 
-	 * @return exists
-	 */
-	public int indexOf(Date date) {
-
-		for (int i = this.data.size(); i > 0; i--) {
-			VolumeItem item = (VolumeItem) this.data.get(i - 1);
-			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
-				break;
-			}
-			if ((date.getTime() >= item.getPeriod().getFirstMillisecond())
-					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
-				return i - 1;
-			}
-		}
-		return -1;
 	}
 
 	/**

@@ -35,12 +35,11 @@
  */
 package org.trade.strategy;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
-import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderType;
@@ -105,7 +104,8 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			// Get the current candle
 			CandleItem currentCandleItem = (CandleItem) candleSeries
 					.getDataItem(getCurrentCandleCount());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
@@ -184,9 +184,9 @@ public class PosMgrAllOrNothingStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().before(
-					TradingCalendar.addMinutes(this.getTradestrategy()
-							.getTradingday().getClose(), -2))) {
+			if (!currentCandleItem.getLastUpdateDate().isBefore(
+					this.getTradestrategy().getTradingday().getClose()
+							.minusMinutes(2))) {
 				cancelOrdersClosePosition(true);
 				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);

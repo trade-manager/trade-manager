@@ -74,11 +74,11 @@
 		<delete dir="${dist}" />
 		<mkdir dir="${dist}" />
 		<!-- compile the source -->
-		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath refid="build.classpath" />
 		</javac>
-		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath refid="build.classpath" />
 		</javac>
@@ -138,7 +138,7 @@
 		</sql>
 	</target>
 	<target name="compile-test" depends="initialise-test" description="compile test source code ">
-		<javac srcdir="${srccoretest}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${srccoretest}" destdir="${build}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath>
 				<fileset dir="${lib}">
@@ -149,7 +149,7 @@
 				</fileset>
 			</classpath>
 		</javac>
-		<javac srcdir="${srctradetest}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${srctradetest}" destdir="${build}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath>
 				<fileset dir="${lib}">
@@ -173,7 +173,7 @@
 		<delete dir="${build}" />
 	</target>
 	<target name="run-tests" depends="dist-test" description="run your test suite">
-		<junit fork="yes" showoutput="yes" haltonfailure="yes" printsummary="yes" >
+		<junit fork="yes" showoutput="yes" errorProperty="test.failed" failureProperty="test.failed" haltonfailure="${test.halt-on-failure}" printsummary="yes">
 			<jvmarg value="-Duser.timezone=${market.timezone}" />
 			<jvmarg value="-Dlog4j.configuration=file:${config}/config.properties" />
 			<classpath>
@@ -190,10 +190,10 @@
 			</classpath>
 			<batchtest fork="yes" todir="${reports}/raw/">
 				<formatter type="xml" />
-				<fileset dir="${srctradetest}">
+				<fileset dir="${srccoretest}">
 					<include name="**/*.java" />
 				</fileset>
-				<fileset dir="${srccoretest}">
+				<fileset dir="${srctradetest}">
 					<include name="**/*.java" />
 				</fileset>
 				<fileset dir="${config}">

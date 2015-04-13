@@ -38,6 +38,7 @@ package org.trade.ui.models;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Vector;
 
 import javax.swing.Timer;
@@ -266,7 +267,7 @@ public class TradestrategyTableModel extends TableModel {
 
 		switch (column) {
 		case 0: {
-			element.getTradingday().setOpen(((Date) value).getDate());
+			element.getTradingday().setOpen(((Date) value).getZonedDateTime());
 			break;
 		}
 		case 1: {
@@ -288,7 +289,6 @@ public class TradestrategyTableModel extends TableModel {
 			} else {
 				element.setTier(null);
 			}
-
 			break;
 		}
 		case 5: {
@@ -351,16 +351,17 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 17: {
-			element.getContract().setExpiry(
-					TradingCalendar.addDays(TradingCalendar.addMonth(
-							((Date) value).getDate(), 1), -1));
+			ZonedDateTime zonedDateTime = ((Date) value).getZonedDateTime();
+			zonedDateTime = zonedDateTime.plusMonths(1);
+			zonedDateTime = zonedDateTime.minusDays(1);
+			element.getContract().setExpiry(zonedDateTime);
 			break;
 		}
 		default: {
 		}
 		}
 		element.setLastUpdateDate(TradingCalendar
-				.getDate((new java.util.Date()).getTime()));
+				.getDateTimeNowMarketTimeZone());
 		element.setDirty(true);
 	}
 
@@ -388,10 +389,10 @@ public class TradestrategyTableModel extends TableModel {
 
 		for (final Tradestrategy element : getData().getTradestrategies()) {
 			if (null != barSize && barSize == 1) {
-				int daySeconds = (int) ((element.getTradingday().getClose()
-						.getTime() - element.getTradingday().getOpen()
-						.getTime()) / 1000);
-				barSize = daySeconds * barSize;
+				long daySeconds = TradingCalendar.getDurationInSeconds(element
+						.getTradingday().getOpen(), element.getTradingday()
+						.getClose());
+				barSize = (int) daySeconds * barSize;
 			}
 			if ((CoreUtils.nullSafeComparator(
 					element.getContract().getSymbol(), symbol) == 0 && null == symbol)

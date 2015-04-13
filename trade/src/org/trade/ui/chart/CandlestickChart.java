@@ -40,8 +40,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Stroke;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -95,10 +95,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	private static final long serialVersionUID = 2842422936659217811L;
 
 	private JFreeChart chart = null;
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"HH:mm:ss");
-	private static SimpleDateFormat dateFormatShort = new SimpleDateFormat(
-			"HH:mm");
+	private static final String TIME_FORMAT = "HH:mm:ss";
+	private static final String TIME_FORMAT_SHORT = "HH:mm";
 	private final TextTitle titleLegend1 = new TextTitle(" Time: 0, Price :0.0");
 	private final TextTitle titleLegend2 = new TextTitle(
 			"Time:00:00 Open: 0.0 High: 0.0 Low: 0.0 Close: 0.0 Vwap: 0.0");
@@ -220,8 +218,11 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 						}
 
 						String text = " Time: "
-								+ dateFormatShort.format(new Date((long) (x)))
-								+ rightAxisName + new Money(y);
+								+ TradingCalendar.getFormattedDate(
+										TradingCalendar
+												.getZonedDateTimeFromMilli((long) (x)),
+										TIME_FORMAT_SHORT) + rightAxisName
+								+ new Money(y);
 						if (x == xItem && y == yItem) {
 							titleLegend1.setText(text);
 							if (null == clickCrossHairs) {
@@ -310,22 +311,21 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		 * Calculate the number of 15min segments in this trading day. i.e.
 		 * 6.5hrs/15min = 26 and there are a total of 96 = one day
 		 */
-
-		int segments15min = (int) (tradingday.getClose().getTime() - tradingday
-				.getOpen().getTime()) / (1000 * 60 * 15);
+		int segments15min = (int) (TradingCalendar.getDurationInSeconds(
+				tradingday.getOpen(), tradingday.getClose()) / (60 * 15));
 
 		SegmentedTimeline segmentedTimeline = new SegmentedTimeline(
 				SegmentedTimeline.FIFTEEN_MINUTE_SEGMENT_SIZE, segments15min,
 				(96 - segments15min));
 
-		Date startDate = tradingday.getOpen();
-		Date endDate = tradingday.getClose();
+		ZonedDateTime startDate = tradingday.getOpen();
+		ZonedDateTime endDate = tradingday.getClose();
 
 		if (!strategyData.getCandleDataset().getSeries(0).isEmpty()) {
 			startDate = ((CandleItem) strategyData.getCandleDataset()
 					.getSeries(0).getDataItem(0)).getPeriod().getStart();
-			startDate = TradingCalendar.getSpecificTime(tradingday.getOpen(),
-					startDate);
+			startDate = TradingCalendar.getDateAtTime(startDate,
+					tradingday.getOpen());
 			endDate = ((CandleItem) strategyData
 					.getCandleDataset()
 					.getSeries(0)
@@ -333,11 +333,12 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 							strategyData.getCandleDataset().getSeries(0)
 									.getItemCount() - 1)).getPeriod()
 					.getStart();
-			endDate = TradingCalendar.getSpecificTime(tradingday.getClose(),
-					endDate);
+			endDate = TradingCalendar.getDateAtTime(endDate,
+					tradingday.getClose());
 		}
 
-		segmentedTimeline.setStartTime(startDate.getTime());
+		segmentedTimeline.setStartTime(TradingCalendar
+				.geMillisFromZonedDateTime(startDate));
 		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate,
 				endDate, tradingday.getOpen(), tradingday.getClose(),
 				segmentedTimeline));
@@ -469,7 +470,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				CandleItem candleItem = (CandleItem) candleSeries
 						.getDataItem(candleSeries.getItemCount() - 1);
 				String msg = "Time: "
-						+ dateFormat.format(candleItem.getLastUpdateDate())
+						+ TradingCalendar.getFormattedDate(
+								candleItem.getLastUpdateDate(), TIME_FORMAT)
 						+ " Open: " + new Money(candleItem.getOpen())
 						+ " High: " + new Money(candleItem.getHigh())
 						+ " Low: " + new Money(candleItem.getLow())
@@ -478,11 +480,14 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 				titleLegend2.setText(msg);
 				valueMarker.setValue(candleItem.getClose());
 
-				double x = TradingCalendar.getSpecificTime(
-						candleSeries.getStartTime(),
-						candleItem.getPeriod().getStart()).getTime();
+				double x = TradingCalendar
+						.geMillisFromZonedDateTime(TradingCalendar
+								.getDateAtTime(candleItem.getPeriod()
+										.getStart(), candleSeries
+										.getStartTime()));
 				String annotationText = "("
-						+ dateFormat.format(candleItem.getLastUpdateDate())
+						+ TradingCalendar.getFormattedDate(
+								candleItem.getLastUpdateDate(), TIME_FORMAT)
 						+ ", " + new Money(candleItem.getClose()) + ")";
 				if (null == closePriceLine) {
 					closePriceLine = new XYTextAnnotation(annotationText, x,
@@ -509,17 +514,18 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * @param price
 	 *            Money
 	 * @param time
-	 *            Date
+	 *            ZonedDateTime
 	 * @param quantity
 	 *            Integer
 	 * @throws ValueTypeException
 	 */
-	public void addBuySellTradeArrow(String action, Money price, Date time,
-			Integer quantity) throws ValueTypeException {
+	public void addBuySellTradeArrow(String action, Money price,
+			ZonedDateTime time, Integer quantity) throws ValueTypeException {
 		String label = Action.newInstance(action) + " " + quantity + "@"
 				+ price;
 		XYPointerAnnotation arrow = new XYPointerAnnotation(label,
-				time.getTime(), price.doubleValue(), 90d);
+				TradingCalendar.geMillisFromZonedDateTime(time),
+				price.doubleValue(), 90d);
 		arrow.setLabelOffset(5.0);
 		arrow.setBackgroundPaint(Color.GREEN);
 		if (action.equals(Action.SELL)) {
@@ -539,40 +545,50 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * Method setNonTradingPeriods.
 	 * 
 	 * @param start
-	 *            Date
+	 *            ZonedDateTime
 	 * @param end
-	 *            Date
+	 *            ZonedDateTime
+	 * 
+	 * @param openDate
+	 *            ZonedDateTime
+	 * 
+	 * @param closeDate
+	 *            ZonedDateTime
+	 * 
 	 * @param segments15min
 	 *            int
 	 * @return List<Date>
 	 */
-	private List<Date> getNonTradingPeriods(Date startDate, Date endDate,
-			Date openDate, Date closeDate, SegmentedTimeline segmentedTimeline) {
+	private List<ZonedDateTime> getNonTradingPeriods(ZonedDateTime startDate,
+			ZonedDateTime endDate, ZonedDateTime openDate,
+			ZonedDateTime closeDate, SegmentedTimeline segmentedTimeline) {
 		/*
 		 * Add all 15min periods that are not trading times.
 		 */
 
-		List<Date> noneTradingSegments = new ArrayList<Date>();
+		List<ZonedDateTime> noneTradingSegments = new ArrayList<>();
 		do {
 			/*
 			 * 96 15min periods per day
 			 */
 			for (int j = 0; j < 96; j++) {
-				Date segmentStartDate = TradingCalendar.addMinutes(
-						TradingCalendar.getSpecificTime(openDate, startDate),
-						j * 15);
+				ZonedDateTime segmentStartDate = TradingCalendar.getDateAtTime(
+						startDate, openDate);
+				segmentStartDate = segmentStartDate.plusMinutes(j * 15);
+
 				if (!TradingCalendar.isTradingDay(segmentStartDate)
 						|| !TradingCalendar.isMarketHours(openDate, closeDate,
 								segmentStartDate)) {
 					Segment segment = segmentedTimeline
-							.getSegment(segmentStartDate);
+							.getSegment(TradingCalendar
+									.geMillisFromZonedDateTime(segmentStartDate));
 					if (segment.inIncludeSegments()) {
 						noneTradingSegments.add(segmentStartDate);
 					}
 				}
 			}
-			startDate = TradingCalendar.addDays(startDate, 1);
-		} while (endDate.after(startDate));
+			startDate = startDate.plusDays(1);
+		} while (endDate.isAfter(startDate));
 
 		return noneTradingSegments;
 	}

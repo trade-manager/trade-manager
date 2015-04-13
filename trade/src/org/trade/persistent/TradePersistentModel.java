@@ -36,7 +36,7 @@
 package org.trade.persistent;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -125,9 +125,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @param portfolio
 	 *            Portfolio
 	 * @param start
-	 *            Date
+	 *            ZonedDateTime
 	 * @param end
-	 *            Date
+	 *            ZonedDateTime
 	 * @param filter
 	 *            boolean
 	 * @param symbol
@@ -139,8 +139,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradelogReport(Account,
 	 *      Date, Date, boolean)
 	 */
-	public TradelogReport findTradelogReport(Portfolio portfolio, Date start,
-			Date end, boolean filter, String symbol, BigDecimal winLossAmount)
+	public TradelogReport findTradelogReport(Portfolio portfolio,
+			ZonedDateTime start, ZonedDateTime end, boolean filter,
+			String symbol, BigDecimal winLossAmount)
 			throws PersistentModelException {
 		return m_tradelogHome.findByTradelogReport(portfolio, start, end,
 				filter, symbol, winLossAmount);
@@ -198,14 +199,17 @@ public class TradePersistentModel implements PersistentModel {
 	/**
 	 * Method findTradingdayByOpenDate.
 	 * 
-	 * @param date
-	 *            Date
+	 * @param openDate
+	 *            ZonedDateTime
+	 * @param closeDate
+	 *            ZonedDateTime
+	 * 
 	 * @return Tradingday
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradingdayByOpenDate(Date)
 	 */
-	public Tradingday findTradingdayByOpenCloseDate(Date openDate,
-			Date closeDate) throws PersistentModelException {
+	public Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate,
+			ZonedDateTime closeDate) throws PersistentModelException {
 		return m_tradingdayHome.findByOpenCloseDate(openDate, closeDate);
 	}
 
@@ -262,7 +266,7 @@ public class TradePersistentModel implements PersistentModel {
 	 *      String, String, String)
 	 */
 	public Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, Date expiry)
+			String exchange, String currency, ZonedDateTime expiry)
 			throws PersistentModelException {
 		return m_contractHome.findByUniqueKey(SECType, symbol, exchange,
 				currency, expiry);
@@ -512,7 +516,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * Method findTradestrategyByUniqueKeys.
 	 * 
 	 * @param open
-	 *            Date
+	 *            ZonedDateTime
 	 * @param strategy
 	 *            String
 	 * @param idContract
@@ -524,7 +528,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyByUniqueKeys(Date,
 	 *      String, Integer, String)
 	 */
-	public Tradestrategy findTradestrategyByUniqueKeys(Date open,
+	public Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open,
 			String strategy, Integer idContract, String portfolioName)
 			throws PersistentModelException {
 		return m_tradestrategyHome.findTradestrategyByUniqueKeys(open,
@@ -535,13 +539,13 @@ public class TradePersistentModel implements PersistentModel {
 	 * Method findTradestrategyDistinctByDateRange.
 	 * 
 	 * @param fromOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @param toOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @return List<Tradestrategy>
 	 */
 	public List<Tradestrategy> findTradestrategyDistinctByDateRange(
-			Date fromOpen, Date toOpen) {
+			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
 		return m_tradestrategyHome.findTradestrategyDistinctByDateRange(
 				fromOpen, toOpen);
 	}
@@ -550,13 +554,13 @@ public class TradePersistentModel implements PersistentModel {
 	 * Method findTradestrategyContractDistinctByDateRange.
 	 * 
 	 * @param fromOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @param toOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @return List<Tradestrategy>
 	 */
 	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
-			Date fromOpen, Date toOpen) {
+			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
 		return m_tradestrategyHome
 				.findTradestrategyContractDistinctByDateRange(fromOpen, toOpen);
 	}
@@ -680,16 +684,16 @@ public class TradePersistentModel implements PersistentModel {
 	 * Method findTradingdaysByDateRange.
 	 * 
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Tradingdays
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradingdaysByDateRange(Date,
 	 *      Date)
 	 */
-	public Tradingdays findTradingdaysByDateRange(Date startDate, Date endDate)
-			throws PersistentModelException {
+	public Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate,
+			ZonedDateTime endDate) throws PersistentModelException {
 		return m_tradingdayHome.findTradingdaysByDateRange(startDate, endDate);
 	}
 
@@ -708,8 +712,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	public List<Candle> findCandlesByContractDateRangeBarSize(
-			Integer idContract, Date startDate, Date endDate, Integer barSize)
-			throws PersistentModelException {
+			Integer idContract, ZonedDateTime startDate, ZonedDateTime endDate,
+			Integer barSize) throws PersistentModelException {
 		return m_candleHome.findCandlesByContractDateRangeBarSize(idContract,
 				startDate, endDate, barSize);
 	}
@@ -958,10 +962,11 @@ public class TradePersistentModel implements PersistentModel {
 						 * does not contain the filled date so we must set it
 						 * here.
 						 */
-						Date positionOpenDate = tradeOrder.getFilledDate();
+						ZonedDateTime positionOpenDate = tradeOrder
+								.getFilledDate();
 						if (null == positionOpenDate)
 							positionOpenDate = TradingCalendar
-									.getDate((new Date()).getTime());
+									.getDateTimeNowMarketTimeZone();
 						tradePosition = new TradePosition(
 								tradestrategyOrders.getContract(),
 								positionOpenDate, (Action.BUY.equals(tradeOrder
@@ -969,7 +974,7 @@ public class TradePersistentModel implements PersistentModel {
 						tradeOrder.setIsOpenPosition(true);
 						tradestrategyOrders.setStatus(TradestrategyStatus.OPEN);
 						tradestrategyOrders.setLastUpdateDate(TradingCalendar
-								.getDate((new Date()).getTime()));
+								.getDateTimeNowMarketTimeZone());
 						this.persistAspect(tradestrategyOrders);
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = this.persistAspect(tradePosition);
@@ -1097,18 +1102,19 @@ public class TradePersistentModel implements PersistentModel {
 							item.getTradestrategyId().setStatus(
 									TradestrategyStatus.CLOSED);
 							item.getTradestrategyId().setLastUpdateDate(
-									TradingCalendar.getDate((new Date())
-											.getTime()));
+									TradingCalendar
+											.getDateTimeNowMarketTimeZone());
 							this.persistAspect(item.getTradestrategyId());
 						}
 					}
 					tradestrategyOrders.setStatus(TradestrategyStatus.CLOSED);
 					tradestrategyOrders.setLastUpdateDate(TradingCalendar
-							.getDate((new Date()).getTime()));
+							.getDateTimeNowMarketTimeZone());
 					this.persistAspect(tradestrategyOrders);
 				}
 
-				tradePosition.setLastUpdateDate(new Date());
+				tradePosition.setLastUpdateDate(TradingCalendar
+						.getDateTimeNowMarketTimeZone());
 				tradePosition = this.persistAspect(tradePosition);
 
 			} else {
@@ -1123,7 +1129,7 @@ public class TradePersistentModel implements PersistentModel {
 									.setStatus(TradestrategyStatus.CANCELLED);
 							tradestrategyOrders
 									.setLastUpdateDate(TradingCalendar
-											.getDate((new Date()).getTime()));
+											.getDateTimeNowMarketTimeZone());
 							this.persistAspect(tradestrategyOrders);
 						}
 					}
@@ -1137,7 +1143,8 @@ public class TradePersistentModel implements PersistentModel {
 						tradePosition.getTotalCommission()) == 1) {
 					tradePosition
 							.setTotalCommission(comms.getBigDecimalValue());
-					tradePosition.setLastUpdateDate(new Date());
+					tradePosition.setLastUpdateDate(TradingCalendar
+							.getDateTimeNowMarketTimeZone());
 					tradePosition = this.persistAspect(tradePosition);
 				}
 			}
@@ -1166,7 +1173,7 @@ public class TradePersistentModel implements PersistentModel {
 			throws PersistentModelException {
 		try {
 
-			Date filledDate = null;
+			ZonedDateTime filledDate = null;
 			double filledValue = 0;
 			double commission = 0;
 			int filledQuantity = 0;
@@ -1184,7 +1191,7 @@ public class TradePersistentModel implements PersistentModel {
 				if (null == filledDate)
 					filledDate = tradeOrderfill.getTime();
 
-				if (filledDate.before(tradeOrderfill.getTime()))
+				if (filledDate.isBefore(tradeOrderfill.getTime()))
 					filledDate = tradeOrderfill.getTime();
 			}
 
@@ -1216,7 +1223,7 @@ public class TradePersistentModel implements PersistentModel {
 						tradeOrder.setCommission(commissionAmount);
 
 					tradeOrder.setLastUpdateDate(TradingCalendar
-							.getDate((new Date()).getTime()));
+							.getDateTimeNowMarketTimeZone());
 				}
 			}
 			return persistTradeOrder(tradeOrder);

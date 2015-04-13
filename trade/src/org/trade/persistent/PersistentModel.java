@@ -36,7 +36,7 @@
 package org.trade.persistent;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.trade.core.dao.Aspect;
@@ -197,7 +197,7 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, Date expiry)
+			String exchange, String currency, ZonedDateTime expiry)
 			throws PersistentModelException;
 
 	/**
@@ -271,7 +271,7 @@ public interface PersistentModel {
 	 * Method findTradestrategyByUniqueKeys.
 	 * 
 	 * @param open
-	 *            Date
+	 *            ZonedDateTime
 	 * @param strategy
 	 *            String
 	 * @param idContract
@@ -281,21 +281,21 @@ public interface PersistentModel {
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
-	Tradestrategy findTradestrategyByUniqueKeys(Date open, String strategy,
-			Integer idContract, String portfolioName)
+	Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open,
+			String strategy, Integer idContract, String portfolioName)
 			throws PersistentModelException;
 
 	/**
 	 * Method findTradestrategyDistinctByDateRange.
 	 * 
 	 * @param fromOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @param toOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @return List<Tradestrategy>
 	 */
-	List<Tradestrategy> findTradestrategyDistinctByDateRange(Date fromOpen,
-			Date toOpen);
+	List<Tradestrategy> findTradestrategyDistinctByDateRange(
+			ZonedDateTime fromOpen, ZonedDateTime toOpen);
 
 	/**
 	 * Method findTradestrategyContractDistinctByDateRange.
@@ -307,7 +307,7 @@ public interface PersistentModel {
 	 * @return List<Tradestrategy>
 	 */
 	List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
-			Date fromOpen, Date toOpen);
+			ZonedDateTime fromOpen, ZonedDateTime toOpen);
 
 	/**
 	 * Method findAllTradestrategies.
@@ -432,26 +432,28 @@ public interface PersistentModel {
 	/**
 	 * Method findTradingdayByOpenDate.
 	 * 
-	 * @param date
-	 *            Date
+	 * @param openDate
+	 *            ZonedDateTime
+	 * @param closeDate
+	 *            ZonedDateTime
 	 * @return Tradingday
 	 * @throws PersistentModelException
 	 */
-	Tradingday findTradingdayByOpenCloseDate(Date openDate, Date closeDate)
-			throws PersistentModelException;
+	Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate,
+			ZonedDateTime closeDate) throws PersistentModelException;
 
 	/**
 	 * Method findTradingdaysByDateRange.
 	 * 
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Tradingdays
 	 * @throws PersistentModelException
 	 */
-	Tradingdays findTradingdaysByDateRange(Date startDate, Date endDate)
-			throws PersistentModelException;
+	Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate,
+			ZonedDateTime endDate) throws PersistentModelException;
 
 	/**
 	 * Method findTradelogReport.
@@ -459,9 +461,9 @@ public interface PersistentModel {
 	 * @param portfolio
 	 *            Portfolio
 	 * @param start
-	 *            Date
+	 *            ZonedDateTime
 	 * @param end
-	 *            Date
+	 *            ZonedDateTime
 	 * @param filter
 	 *            boolean
 	 * @param symbol
@@ -471,9 +473,9 @@ public interface PersistentModel {
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 */
-	TradelogReport findTradelogReport(Portfolio portfolio, Date start,
-			Date end, boolean filter, String symbol, BigDecimal winLossAmount)
-			throws PersistentModelException;
+	TradelogReport findTradelogReport(Portfolio portfolio, ZonedDateTime start,
+			ZonedDateTime end, boolean filter, String symbol,
+			BigDecimal winLossAmount) throws PersistentModelException;
 
 	/**
 	 * Method findCandlesByContractDateRangeBarSize.
@@ -481,16 +483,16 @@ public interface PersistentModel {
 	 * @param idContract
 	 *            Integer
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param barSize
 	 *            Integer
 	 * @return List<Candle>
 	 * @throws PersistentModelException
 	 */
 	List<Candle> findCandlesByContractDateRangeBarSize(Integer idContract,
-			Date startDate, Date endDate, Integer barSize)
+			ZonedDateTime startDate, ZonedDateTime endDate, Integer barSize)
 			throws PersistentModelException;
 
 	/**

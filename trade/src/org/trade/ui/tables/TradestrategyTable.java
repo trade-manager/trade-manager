@@ -40,7 +40,6 @@ import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -48,6 +47,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.text.MaskFormatter;
 
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
@@ -104,8 +104,9 @@ public class TradestrategyTable extends Table {
 		super(model);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
-				Calendar.MONTH);
+				new org.trade.core.valuetype.Date(TradingCalendar
+						.getDateTimeNowMarketTimeZone()),
+				DATETIMEFORMAT, Calendar.MONTH);
 
 		this.getColumn("Expiry").setCellEditor(eDate);
 		this.getColumn("Expiry").setCellRenderer(rDate);

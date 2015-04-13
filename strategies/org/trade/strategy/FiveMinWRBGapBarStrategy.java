@@ -35,7 +35,7 @@
  */
 package org.trade.strategy;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +131,8 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -174,34 +175,34 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 			 * Is it the the 9:35 candle? and we have not created an open
 			 * position trade.
 			 */
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), this
-					.getTradestrategy().getBarSize() / 60))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getOpen()
+					.plusMinutes(this.getTradestrategy().getBarSize() / 60))
 					&& newBar) {
 
-				Candle candleAvgBar = candleSeries
-						.getAverageBar(
-								TradingCalendar.getSpecificTime(this
+				Candle candleAvgBar = candleSeries.getAverageBar(
+						TradingCalendar.getDateAtTime(
+								TradingCalendar.getPrevTradingDay(startPeriod),
+								this.getTradestrategy().getTradingday()
+										.getOpen()), TradingCalendar
+								.getDateAtTime(TradingCalendar
+										.getPrevTradingDay(startPeriod), this
 										.getTradestrategy().getTradingday()
-										.getOpen(), TradingCalendar
-										.getPrevTradingDay(startPeriod)),
-								TradingCalendar.getSpecificTime(this
-										.getTradestrategy().getTradingday()
-										.getClose(), TradingCalendar
-										.getPrevTradingDay(startPeriod)), true);
+										.getClose()), true);
 				_log.info("Market Wieghted bar Open: " + candleAvgBar.getOpen()
 						+ " High: " + candleAvgBar.getHigh() + " Low: "
 						+ candleAvgBar.getLow() + " Close: "
 						+ candleAvgBar.getClose());
 
-				Candle candleBar = candleSeries
-						.getBar(TradingCalendar.getSpecificTime(this
-								.getTradestrategy().getTradingday().getOpen(),
-								TradingCalendar.getPrevTradingDay(startPeriod)),
-								TradingCalendar.getSpecificTime(this
-										.getTradestrategy().getTradingday()
-										.getClose(), TradingCalendar
-										.getPrevTradingDay(startPeriod)));
+				Candle candleBar = candleSeries.getBar(TradingCalendar
+						.getDateAtTime(
+								TradingCalendar.getPrevTradingDay(startPeriod),
+								this.getTradestrategy().getTradingday()
+										.getOpen()), TradingCalendar
+						.getDateAtTime(
+								TradingCalendar.getPrevTradingDay(startPeriod),
+								this.getTradestrategy().getTradingday()
+										.getClose()));
 				_log.info("Market Wieghted bar Open: " + candleBar.getOpen()
 						+ " High: " + candleBar.getHigh() + " Low: "
 						+ candleBar.getLow() + " Close: "
@@ -259,8 +260,8 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 					this.cancel();
 				}
 
-			} else if (!startPeriod.before(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), 60))) {
+			} else if (!startPeriod.isBefore(this.getTradestrategy()
+					.getTradingday().getOpen().plusMinutes(60))) {
 
 				if (!this.isThereOpenPosition()
 						&& !TradestrategyStatus.CANCELLED

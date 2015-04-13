@@ -36,13 +36,13 @@
 package org.trade.strategy.data.heikinashi;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.jfree.data.ComparableObjectItem;
-import org.jfree.data.time.RegularTimePeriod;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.strategy.data.base.RegularTimePeriod;
 
 /**
  * An item representing data in the form (period, open, high, low, close).
@@ -78,11 +78,11 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	 * @param contract
 	 *            Contract
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
 	public HeikinAshiItem(Contract contract, RegularTimePeriod period,
 			double open, double high, double low, double close,
-			Date lastUpdateDate) {
+			ZonedDateTime lastUpdateDate) {
 		super(period, new Candle(contract, period, open, high, low, close,
 				lastUpdateDate));
 	}
@@ -270,9 +270,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	 * 
 	 * 
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
 		Candle dataItem = (Candle) getObject();
 		if (dataItem != null) {
 			dataItem.setLastUpdateDate(lastUpdateDate);
@@ -286,7 +286,7 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	 * 
 	 * @return The lastUpdateDate value.
 	 */
-	public Date getLastUpdateDate() {
+	public ZonedDateTime getLastUpdateDate() {
 		Candle dataItem = (Candle) getObject();
 		if (dataItem != null) {
 			return dataItem.getLastUpdateDate();

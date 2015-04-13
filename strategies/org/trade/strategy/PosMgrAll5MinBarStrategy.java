@@ -35,12 +35,11 @@
  */
 package org.trade.strategy;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
-import org.trade.core.util.TradingCalendar;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 import org.trade.strategy.data.candle.CandleItem;
@@ -103,7 +102,8 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			// Get the current candle
 			CandleItem currentCandleItem = (CandleItem) candleSeries
 					.getDataItem(getCurrentCandleCount());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			// _log.info(getTradestrategy().getStrategy().getClassName()
 			// + " symbol: " + getSymbol() + " startPeriod: "
@@ -117,15 +117,15 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			}
 
 			// Is it the the 9:35 candle?
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), 5))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getOpen().plusMinutes(5))
 					&& newBar) {
 
-			} else if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), 60))) {
+			} else if (startPeriod.equals(this.getTradestrategy()
+					.getTradingday().getOpen().plusMinutes(60))) {
 
-			} else if (startPeriod.after(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), 60))) {
+			} else if (startPeriod.isAfter(this.getTradestrategy()
+					.getTradingday().getOpen().plusMinutes(60))) {
 				_log.info("Rule after 10:30:00 bar, close the "
 						+ getTradestrategy().getStrategy().getClassName()
 						+ " Symbol: " + getSymbol());
@@ -137,9 +137,9 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().before(
-					TradingCalendar.addMinutes(this.getTradestrategy()
-							.getTradingday().getClose(), -2))) {
+			if (!currentCandleItem.getLastUpdateDate().isBefore(
+					this.getTradestrategy().getTradingday().getClose()
+							.minusMinutes(2))) {
 				cancelOrdersClosePosition(true);
 				_log.info("Rule 15:58:00 close all open positions: "
 						+ getSymbol() + " Time: " + startPeriod);

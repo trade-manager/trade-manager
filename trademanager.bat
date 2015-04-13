@@ -12,7 +12,7 @@ rem Change this dir to be the location for J2SE edition
 rem ***************************************************
 
 @if defined JAVA_HOME goto javahomedefined
-SET JAVA_HOME=C:/Program Files/Java/jdk1.8.0_15
+SET JAVA_HOME=C:/Program Files/Java/jdk1.8.0_40
 :javahomedefined
 
 rem set the path to include the bin dir
@@ -33,6 +33,6 @@ echo Path=%PATH%
 echo ClassPath=%CLASSPATH%
 echo Market Timezone=%TIMEZONE%
 
-java -Xmn128M -Xms768M -Xmx768M -classpath "%CLASSPATH%" -Duser.timezone=%TIMEZONE% -Dlog4j.configuration=file:"config.properties" org.trade.ui.TradeAppMain
+java -classpath "%CLASSPATH%" -Duser.timezone=%TIMEZONE% -Dlog4j.configuration=file:"config.properties" org.trade.ui.TradeAppMain
 
 

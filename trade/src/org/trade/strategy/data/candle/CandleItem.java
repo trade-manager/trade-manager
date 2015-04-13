@@ -36,14 +36,14 @@
 package org.trade.strategy.data.candle;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.jfree.data.ComparableObjectItem;
-import org.jfree.data.time.RegularTimePeriod;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Tradingday;
+import org.trade.strategy.data.base.RegularTimePeriod;
 
 /**
  * An item representing data in the form (period, open, high, low, close).
@@ -88,7 +88,7 @@ public class CandleItem extends ComparableObjectItem {
 	public CandleItem(Contract contract, Tradingday tradingday,
 			RegularTimePeriod period, double open, double high, double low,
 			double close, long volume, double vwap, int count,
-			Date lastUpdateDate) {
+			ZonedDateTime lastUpdateDate) {
 		super(period, new Candle(contract, tradingday, period, open, high, low,
 				close, volume, vwap, count, lastUpdateDate));
 	}
@@ -321,9 +321,9 @@ public class CandleItem extends ComparableObjectItem {
 	 * 
 	 * 
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
 		if (null != getCandle())
 			getCandle().setLastUpdateDate(lastUpdateDate);
 	}
@@ -334,7 +334,7 @@ public class CandleItem extends ComparableObjectItem {
 	 * 
 	 * @return The lastUpdateDate value.
 	 */
-	public Date getLastUpdateDate() {
+	public ZonedDateTime getLastUpdateDate() {
 		if (null != getCandle())
 			return getCandle().getLastUpdateDate();
 		return null;

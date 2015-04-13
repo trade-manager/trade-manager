@@ -40,8 +40,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -57,6 +57,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
 import org.trade.core.util.TradingCalendar;
+import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.ChartDays;
@@ -80,7 +81,7 @@ public class FilterBackTestPane extends JPanel {
 
 	private static final String DATEFORMAT = "MM/dd/yyyy";
 
-	public FilterBackTestPane(Date startDate, Date endDate,
+	public FilterBackTestPane(ZonedDateTime startDate, ZonedDateTime endDate,
 			List<Tradestrategy> strategyBarSizeChartHistItems,
 			List<Tradestrategy> contractItems) throws ValueTypeException {
 
@@ -122,13 +123,13 @@ public class FilterBackTestPane extends JPanel {
 		JSpinner.DateEditor de = new JSpinner.DateEditor(spinnerStart,
 				DATEFORMAT);
 		spinnerStart.setEditor(de);
-		spinnerStart.setValue(startDate);
+		spinnerStart.setValue((new Date(startDate)).getDate());
 
 		spinnerEnd.setModel(new SpinnerDateModel());
 		JSpinner.DateEditor de1 = new JSpinner.DateEditor(spinnerEnd,
 				DATEFORMAT);
 		spinnerEnd.setEditor(de1);
-		spinnerEnd.setValue(endDate);
+		spinnerEnd.setValue((new Date(endDate)).getDate());
 
 		strategyBarSizeChartHistComboBox = new JComboBox<ComboItem>(items);
 		strategyBarSizeChartHistComboBox
@@ -217,16 +218,23 @@ public class FilterBackTestPane extends JPanel {
 	/**
 	 * Method getSelectedStartDate
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	public Date getSelectedStartDate() {
-		Date startDate = TradingCalendar.getSpecificTime(
-				(Date) spinnerStart.getValue(), 0, 0, 0);
-		Date endDate = TradingCalendar.getSpecificTime(
-				(Date) spinnerEnd.getValue(), 23, 59, 59);
-		if (endDate.before(startDate)) {
-			startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
-			spinnerStart.setValue(startDate);
+	public ZonedDateTime getSelectedStartDate() {
+
+		ZonedDateTime startDate = TradingCalendar
+				.getZonedDateTimeFromMilli(((java.util.Date) spinnerStart
+						.getValue()).getTime());
+		startDate = TradingCalendar.getDateAtTime(startDate, 0, 0, 0);
+
+		ZonedDateTime endDate = TradingCalendar
+				.getZonedDateTimeFromMilli(((java.util.Date) spinnerEnd
+						.getValue()).getTime());
+		endDate = TradingCalendar.getDateAtTime(endDate, 23, 59, 59);
+
+		if (endDate.isBefore(startDate)) {
+			startDate = TradingCalendar.getDateAtTime(endDate, 0, 0, 0);
+			spinnerStart.setValue((new Date(startDate)).getDate());
 		}
 
 		return startDate;
@@ -235,16 +243,21 @@ public class FilterBackTestPane extends JPanel {
 	/**
 	 * Method getSelectedEndDate
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	public Date getSelectedEndDate() {
-		Date startDate = TradingCalendar.getSpecificTime(
-				(Date) spinnerStart.getValue(), 0, 0, 0);
-		Date endDate = TradingCalendar.getSpecificTime(
-				(Date) spinnerEnd.getValue(), 23, 59, 59);
-		if (endDate.before(startDate)) {
-			startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
-			spinnerStart.setValue(startDate);
+	public ZonedDateTime getSelectedEndDate() {
+		ZonedDateTime startDate = TradingCalendar
+				.getZonedDateTimeFromMilli(((java.util.Date) spinnerStart
+						.getValue()).getTime());
+		startDate = TradingCalendar.getDateAtTime(startDate, 0, 0, 0);
+
+		ZonedDateTime endDate = TradingCalendar
+				.getZonedDateTimeFromMilli(((java.util.Date) spinnerEnd
+						.getValue()).getTime());
+		endDate = TradingCalendar.getDateAtTime(endDate, 23, 59, 59);
+		if (endDate.isBefore(startDate)) {
+			startDate = TradingCalendar.getDateAtTime(endDate, 0, 0, 0);
+			spinnerStart.setValue((new Date(startDate)).getDate());
 		}
 
 		return endDate;

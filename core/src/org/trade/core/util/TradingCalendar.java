@@ -37,15 +37,18 @@ package org.trade.core.util;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,63 +68,82 @@ public class TradingCalendar {
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradingCalendar.class);
 
-	private static final TimeZone TIMEZONE = TimeZone.getDefault();
-	public static final Date NULLDATE = (new GregorianCalendar(0, 0, 0, 0, 0, 0))
-			.getTime();
+	public static ZoneId LOCAL_TIMEZONE = null;
+	public static ZoneId MKT_TIMEZONE = null;
+
 	private static final HashMap<Integer, int[]> HOLIDAYS = new HashMap<Integer, int[]>();
 	private static int[] NONTRADINGDAYS = new int[] {};
-	private static GregorianCalendar CALENDAR_NY;
-	private static SimpleDateFormat dateFormat;
+
 	private static Integer openHour = new Integer(9);
 	private static Integer openMinute = new Integer(30);
 	private static Integer closeHour = new Integer(16);
 	private static Integer closeMinute = new Integer(0);
 	private static Integer closeDayOffset = new Integer(0);
 
+	private static Integer currentYear = null;
+	private static Integer currentMonth = null;
+	private static Integer currentDay = null;
+
 	/*
 	 * Initialize the calendar form the properties file. If values are not found
 	 * defaults will be used.
 	 */
 	static {
-		CALENDAR_NY = new GregorianCalendar(TIMEZONE, Locale.getDefault());
-		CALENDAR_NY.setLenient(false);
-		dateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-		dateFormat.setLenient(false);
-		dateFormat.setTimeZone(TIMEZONE);
 		try {
-			String open = ConfigProperties.getPropAsString("trade.market.open");
-			openHour = new Integer(open.substring(0, open.indexOf(":")));
-			openMinute = new Integer(open.substring(open.indexOf(":") + 1,
-					open.length()));
-		} catch (IOException ex) {
-			_log.warn("Property trade.market.open not set in config.properties will use default 9:30am EST");
+			if (null == LOCAL_TIMEZONE) {
+				String localTimeZone = ConfigProperties
+						.getPropAsString("trade.tws.timezone");
+				LOCAL_TIMEZONE = ZoneId.of(localTimeZone);
+				MKT_TIMEZONE = TimeZone.getDefault().toZoneId();
+				ZonedDateTime currentDateTime = ZonedDateTime
+						.now(LOCAL_TIMEZONE);
+				currentYear = new Integer(currentDateTime.getYear());
+				currentMonth = new Integer(currentDateTime.getMonthValue());
+				currentDay = new Integer(currentDateTime.getDayOfMonth());
+
+			}
+
+		} catch (Exception ex) {
+			_log.warn("Property trade.tws.market.timezone not set in config.properties will use default");
 		}
+
 		try {
-			String close = ConfigProperties
-					.getPropAsString("trade.market.close");
-			closeHour = new Integer(close.substring(0, close.indexOf(":")));
-			closeMinute = new Integer(close.substring(close.indexOf(":") + 1,
-					close.length()));
-			/*
-			 * If the close time if before or equal to the open time assume its
-			 * the next day.
-			 */
-			if (closeHour < openHour
-					|| (closeHour == openHour && closeMinute <= openMinute)) {
-				closeDayOffset++;
+			if (null == openHour) {
+				String open = ConfigProperties
+						.getPropAsString("trade.market.open");
+				String close = ConfigProperties
+						.getPropAsString("trade.market.close");
+				openHour = new Integer(open.substring(0, open.indexOf(":")));
+				openMinute = new Integer(open.substring(open.indexOf(":") + 1,
+						open.length()));
+				closeHour = new Integer(close.substring(0, close.indexOf(":")));
+				closeMinute = new Integer(close.substring(
+						close.indexOf(":") + 1, close.length()));
+				/*
+				 * If the close time if before or equal to the open time assume
+				 * its the next day.
+				 */
+				if (closeHour < openHour
+						|| (closeHour == openHour && closeMinute <= openMinute)) {
+					closeDayOffset++;
+				}
 			}
 		} catch (IOException ex) {
-			_log.warn("Property trade.market.close not set in config.properties will use default 4:00pm EST");
+			_log.warn("Property trade.market.open/trade.market.close not set in config.properties will use default 9:30am EST");
 		}
-		int year = 0;
+
 		try {
-			CALENDAR_NY.setTime(new Date());
-			year = CALENDAR_NY.get(Calendar.YEAR);
-			String holidaysString = ConfigProperties
-					.getPropAsString("trade.holidays." + year);
-			parseHolidayIntegerCSVString(HOLIDAYS, year, holidaysString);
+			if (HOLIDAYS.isEmpty()) {
+				int year = TradingCalendar.getDateTimeNowMarketTimeZone()
+						.getYear();
+				String holidaysString = ConfigProperties
+						.getPropAsString("trade.holidays." + year);
+				parseHolidayIntegerCSVString(HOLIDAYS, year, holidaysString);
+			}
+
 		} catch (IOException ex) {
-			_log.warn("Property trade.holidays." + year
+			_log.warn("Property trade.holidays."
+					+ TradingCalendar.getDateTimeNowMarketTimeZone().getYear()
 					+ " not set in org/trade/core/util/config.properties");
 		}
 		try {
@@ -142,434 +164,514 @@ public class TradingCalendar {
 	}
 
 	/**
-	 * Add Years to a date-
-	 * 
+	 * Method addTradingDays.
 	 * 
 	 * @param date
-	 *            Date
+	 *            ZonedDateTime
+	 * @param noDays
+	 *            int
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime addTradingDays(ZonedDateTime date, int noDays) {
+		if ((date != null) && (noDays != 0)) {
+			if (noDays > 0) {
+				for (int i = 0; i < noDays; i++) {
+					date = date.plusDays(1);
+					if (!TradingCalendar.isTradingDay(date) || isHoliday(date)) {
+						noDays++;
+					}
+				}
+				return date;
+			} else {
+				for (int i = 0; i > noDays; i--) {
+					date = date.minusDays(1);
+					if (!TradingCalendar.isTradingDay(date) || isHoliday(date)) {
+						noDays--;
+					}
+				}
+				return date;
+
+			}
+		} else {
+			return date;
+		}
+	}
+
+	/**
+	 * Method isTradingDay.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
 	 * @return boolean
-	 * @exception * @see
 	 */
-	public static boolean inDaylightTime(Date date) {
-		synchronized (CALENDAR_NY) {
-			return CALENDAR_NY.getTimeZone().inDaylightTime(date);
+	public static boolean isTradingDay(ZonedDateTime date) {
+		if (isHoliday(date)) {
+			return false;
 		}
-	}
-
-	/**
-	 * Add Years to a date-
-	 * 
-	 * @param date
-	 *            Date
-	 * @param noYears
-	 *            int
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date addYear(Date date, int noYears) {
-		if ((date != null) && (noYears != 0)) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				CALENDAR_NY.add(Calendar.YEAR, noYears);
-				return CALENDAR_NY.getTime();
-			}
-		} else {
-			return date;
-		}
-	}
-
-	/**
-	 * Add months to a date-
-	 * 
-	 * @param date
-	 *            Date
-	 * @param noMonths
-	 *            int
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date addMonth(Date date, int noMonths) {
-		if ((date != null) && (noMonths != 0)) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				CALENDAR_NY.add(Calendar.MONTH, noMonths);
-				return CALENDAR_NY.getTime();
-			}
-		} else {
-			return date;
-		}
-	}
-
-	/**
-	 * Add days to a date-
-	 * 
-	 * @param date
-	 *            Date
-	 * @param noDays
-	 *            int
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date addDays(Date date, int noDays) {
-		if ((date != null) && (noDays != 0)) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				CALENDAR_NY.add(Calendar.DAY_OF_YEAR, noDays);
-				return CALENDAR_NY.getTime();
-			}
-		} else {
-			return date;
-		}
-	}
-
-	/**
-	 * Method addBusinessDays.
-	 * 
-	 * @param date
-	 *            Date
-	 * @param noDays
-	 *            int
-	 * @return Date
-	 */
-	public static Date addBusinessDays(Date date, int noDays) {
-		if ((date != null) && (noDays != 0)) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				if (noDays > 0) {
-					for (int i = 0; i < noDays; i++) {
-						CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), 1));
-						if (!TradingCalendar
-								.isTradingDay(CALENDAR_NY.getTime())
-								|| isHoliday(CALENDAR_NY.getTime())) {
-							noDays++;
-						}
-					}
-					return CALENDAR_NY.getTime();
-				} else {
-					for (int i = 0; i > noDays; i--) {
-						CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), -1));
-						if (!TradingCalendar
-								.isTradingDay(CALENDAR_NY.getTime())
-								|| isHoliday(CALENDAR_NY.getTime())) {
-							noDays--;
-						}
-					}
-					return CALENDAR_NY.getTime();
+		if (null != NONTRADINGDAYS) {
+			for (int hol : NONTRADINGDAYS) {
+				if (hol == date.getDayOfWeek().getValue()) {
+					return false;
 				}
 			}
-		} else {
-			return date;
 		}
+		return true;
 	}
 
 	/**
-	 * Add days to a date-
+	 * Return the current date time in the market time zone.
+	 * 
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getDateTimeNowMarketTimeZone() {
+		ZonedDateTime defaultZonedDateTime = ZonedDateTime.now(TimeZone
+				.getDefault().toZoneId());
+		return defaultZonedDateTime.withZoneSameInstant(TimeZone.getDefault()
+				.toZoneId());
+	}
+
+	/**
+	 * Method adjustDateTimeToMarketTimeZone
 	 * 
 	 * @param date
-	 *            Date
-	 * @param noHours
-	 *            int
-	 * @return Date
-	 * @exception * @see
+	 *            ZonedDateTime Return the date time in the market time zone.
+	 * 
+	 * @return ZonedDateTime
 	 */
-	public static Date addHours(Date date, int noHours) {
-		if ((date != null) && (noHours != 0)) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				CALENDAR_NY.add(Calendar.HOUR_OF_DAY, noHours);
-				return CALENDAR_NY.getTime();
-			}
-		} else {
-			return date;
-		}
+	public static ZonedDateTime adjustDateTimeToMarketTimeZone(
+			ZonedDateTime dateTime) {
+		return dateTime.withZoneSameInstant(TimeZone.getDefault().toZoneId());
 	}
 
 	/**
-	 * Add days to a date-
+	 * Get the date formated to the standard format string
 	 * 
 	 * @param date
-	 *            Date
-	 * @param noMinutes
-	 *            int
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date addMinutes(Date date, int noMinutes) {
-		if ((date != null) && (noMinutes != 0)) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				CALENDAR_NY.add(Calendar.MINUTE, noMinutes);
-				return CALENDAR_NY.getTime();
-			}
-		} else {
-			return date;
-		}
-	}
-
-	/**
-	 * Add days to a date-
-	 * 
-	 * @param date
-	 *            Date
-	 * @param noSeconds
-	 *            int
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date addSeconds(Date date, int noSeconds) {
-		if ((date != null) && (noSeconds != 0)) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				CALENDAR_NY.add(Calendar.SECOND, noSeconds);
-				return CALENDAR_NY.getTime();
-			}
-		} else {
-			return date;
-		}
-	}
-
-	/**
-	 * Returns the difference in days-
-	 * 
-	 * Get a diff between two dates
-	 * 
-	 * @param date1
-	 *            the oldest date
-	 * @param date2
-	 *            the newest date
-	 * 
-	 * 
-	 * @return int the diff value rounded up/down is over/under 12 hours
-	 */
-	public static int daysDiff(Date date1, Date date2) {
-		long diffInMillies = date2.getTime() - date1.getTime();
-		if ((diffInMillies / (1000 * 60 * 60 * 24)) > (12 * 60 * 60 * 1000))
-			return (int) TimeUnit.DAYS.convert(diffInMillies,
-					TimeUnit.MILLISECONDS) + 1;
-		return (int) TimeUnit.DAYS
-				.convert(diffInMillies, TimeUnit.MILLISECONDS);
-	}
-
-	/**
-	 * Return the Year for this date
-	 * 
-	 * @param date
-	 *            Date
-	 * @return int
-	 */
-	public static int getYear(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.YEAR);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Return the Second for this date
-	 * 
-	 * @param date
-	 *            Date
-	 * @return int
-	 * @exception * @see
-	 */
-	public static int getSecond(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.SECOND);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Return the Minute for this date
-	 * 
-	 * @param date
-	 *            Date
-	 * @return int
-	 * @exception * @see
-	 */
-	public static int getMinute(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.MINUTE);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Return the Hour of day (24 hour clock )for this date
-	 * 
-	 * @param date
-	 *            Date
-	 * @return int
-	 * @exception * @see
-	 */
-	public static int getHourOfDay(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.HOUR_OF_DAY);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Return the AM or PM for this date
-	 * 
-	 * @param date
-	 *            Date
+	 *            LocalDate
+	 * @param format
+	 *            String
 	 * @return String
 	 * @exception * @see
 	 */
-	public static String getAMPM(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				if (CALENDAR_NY.get(Calendar.AM_PM) == 0) {
-					return "AM";
-				} else {
-					return "PM";
+	public static String getFormattedDate(LocalDate date, String format) {
+		return date.format(DateTimeFormatter.ofPattern(format));
+	}
+
+	/**
+	 * Get the date formated to the standard format string
+	 * 
+	 * @param date
+	 *            LocalDateTime
+	 * @param format
+	 *            String
+	 * @return String
+	 * @exception * @see
+	 */
+	public static String getFormattedDate(LocalDateTime date, String format) {
+		return date.format(DateTimeFormatter.ofPattern(format));
+	}
+
+	/**
+	 * Get the date formated to the standard format string
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @param format
+	 *            String
+	 * @return String
+	 * @exception * @see
+	 */
+	public static String getFormattedDate(ZonedDateTime date, String format) {
+		return date.format(DateTimeFormatter.ofPattern(format));
+	}
+
+	/**
+	 * Method getZonedDateTimeFromDateString
+	 * 
+	 * @param date
+	 *            String
+	 * @param format
+	 *            String
+	 * @param zoneId
+	 *            ZoneId
+	 * @return ZonedDateTime
+	 * @throws ParseException
+	 */
+	public static ZonedDateTime getZonedDateTimeFromDateString(String date,
+			String format, ZoneId zoneId) {
+		LocalDate localDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern(format));
+		return ZonedDateTime.of(localDate, LocalTime.of(0, 0), zoneId);
+	}
+
+	/**
+	 * Method getZonedDateTimeFromDateString
+	 * 
+	 * @param dateTime
+	 *            String
+	 * @param format
+	 *            String
+	 * @param zoneId
+	 *            ZoneId
+	 * @return ZonedDateTime
+	 * @throws ParseException
+	 */
+	public static ZonedDateTime getZonedDateTimeFromDateTimeString(
+			String dateTime, String format, ZoneId zoneId) {
+		LocalDateTime localDateTime = LocalDateTime.parse(dateTime,
+				DateTimeFormatter.ofPattern(format));
+		return ZonedDateTime.of(localDateTime, zoneId);
+	}
+
+	/**
+	 * Method getZonedDateTimeFromDateString
+	 * 
+	 * @param dateTime
+	 *            String
+	 * @param format
+	 *            String
+	 * @return ZonedDateTime
+	 * @throws ParseException
+	 */
+	public static ZonedDateTime getZonedDateTimeFromDateTimeString(
+			String dateTime, String format) {
+		LocalDateTime localDateTime = LocalDateTime.parse(dateTime,
+				DateTimeFormatter.ofPattern(format));
+		return ZonedDateTime
+				.of(localDateTime, TimeZone.getDefault().toZoneId());
+	}
+
+	/**
+	 * Method getLocalDateFromDateString
+	 * 
+	 * @param date
+	 *            String
+	 * @param format
+	 *            String
+	 * @return LocalDate
+	 * @throws ParseException
+	 */
+	public static LocalDate getLocalDateFromDateString(String date,
+			String format) {
+		return LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
+	}
+
+	/**
+	 * Method getLocalDateTimeFromDateTimeString
+	 * 
+	 * @param dateTime
+	 *            String
+	 * @param format
+	 *            String
+	 * @return ZonedDateTime
+	 * @throws ParseException
+	 */
+	public static LocalDateTime getLocalDateTimeFromDateTimeString(
+			String dateTime, String format) {
+		return LocalDateTime.parse(dateTime,
+				DateTimeFormatter.ofPattern(format));
+	}
+
+	/**
+	 * Method getTradingDayStart.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getTradingDayStart(ZonedDateTime date) {
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date
+				.getDayOfMonth(), openHour, openMinute, 0, 0, TimeZone
+				.getDefault().toZoneId());
+	}
+
+	/**
+	 * Method getTradingDayEnd.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getTradingDayEnd(ZonedDateTime date) {
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date
+				.getDayOfMonth(), closeHour, closeMinute, 0, 0, TimeZone
+				.getDefault().toZoneId());
+	}
+
+	/**
+	 * Method getDateAtTime.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @param atTime
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getDateAtTime(ZonedDateTime date,
+			ZonedDateTime atTime) {
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(),
+				date.getDayOfMonth(), atTime.getHour(), atTime.getMinute(),
+				atTime.getSecond(), 0, TimeZone.getDefault().toZoneId());
+	}
+
+	/**
+	 * Method getDateAtTime.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @param atHour
+	 *            int
+	 * @param atMinute
+	 *            int
+	 * @param atSecond
+	 *            int
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getDateAtTime(ZonedDateTime date, int atHour,
+			int atMinute, int atSecond) {
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date
+				.getDayOfMonth(), atHour, atMinute, atSecond, 0, TimeZone
+				.getDefault().toZoneId());
+	}
+
+	/**
+	 * Method getDurationInSeconds.
+	 * 
+	 * @param startOfPeriod
+	 *            ZonedDateTime
+	 * @param endOfPeriod
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static long getDurationInSeconds(ZonedDateTime startOfPeriod,
+			ZonedDateTime endOfPeriod) {
+		Duration duration = Duration.between(startOfPeriod, endOfPeriod);
+		return duration.getSeconds();
+	}
+
+	/**
+	 * Method getDurationInDays.
+	 * 
+	 * @param startOfPeriod
+	 *            ZonedDateTime
+	 * @param endOfPeriod
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static long getDurationInDays(ZonedDateTime startOfPeriod,
+			ZonedDateTime endOfPeriod) {
+		Duration duration = Duration.between(startOfPeriod, endOfPeriod);
+		return (duration.getSeconds() / (24 * 60 * 60));
+	}
+
+	/**
+	 * Method getCurrentDayAtTime.
+	 * 
+	 * @param time
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getCurrentDayAtTime(ZonedDateTime time) {
+		return ZonedDateTime.of(currentYear, currentMonth, currentDay, time
+				.getHour(), time.getMinute(), time.getSecond(), 0, TimeZone
+				.getDefault().toZoneId());
+	}
+
+	/**
+	 * Method getYearStart.
+	 * 
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getYearStart() {
+		return ZonedDateTime.of(TradingCalendar.getDateTimeNowMarketTimeZone()
+				.toLocalDate().with(TemporalAdjusters.firstDayOfYear())
+				.atStartOfDay(), TimeZone.getDefault().toZoneId());
+	}
+
+	/**
+	 * Method isMarketHours.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @return boolean
+	 */
+	public static boolean isMarketHours(ZonedDateTime date) {
+		if (!isAfterHours(date) && !isPreMarket(date)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Method isMarketHours.
+	 * 
+	 * @param openDate
+	 *            ZonedDateTime
+	 * @param closeDate
+	 *            ZonedDateTime
+	 * @param date
+	 *            ZonedDateTime
+	 * @return boolean
+	 */
+	public static boolean isMarketHours(ZonedDateTime openDate,
+			ZonedDateTime closeDate, ZonedDateTime date) {
+
+		if (isTradingDay(date)) {
+			int diffDays = (int) (TradingCalendar.getDurationInDays(openDate,
+					closeDate));
+			if (TradingCalendar.between(date, TradingCalendar.getDateAtTime(
+					date, openDate), TradingCalendar.addTradingDays(
+					TradingCalendar.getDateAtTime(date, closeDate), diffDays))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Method isPreMarket.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @return boolean
+	 */
+	public static boolean isPreMarket(ZonedDateTime date) {
+		if (getTradingDayStart(date).isAfter(date)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Method isAfterHours.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @return boolean
+	 */
+	public static boolean isAfterHours(ZonedDateTime date) {
+		if (getTradingDayEnd(date).isBefore(date)
+				|| (getTradingDayEnd(date).compareTo(date) == 0)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Method sameDay.
+	 * 
+	 * @param date1
+	 *            ZonedDateTime
+	 * @param date2
+	 *            ZonedDateTime
+	 * @return boolean
+	 */
+	public static boolean sameDay(ZonedDateTime date1, ZonedDateTime date2) {
+		if (date1.getYear() == date2.getYear()
+				&& date1.getMonthValue() == date2.getMonthValue()
+				&& date1.getDayOfMonth() == date2.getDayOfMonth())
+			return true;
+		return false;
+	}
+
+	/**
+	 * Method getPrevTradingDay.
+	 * 
+	 * @param input
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getPrevTradingDay(ZonedDateTime input) {
+		ZonedDateTime dateTime = input.minusDays(1);
+		dateTime = TradingCalendar.getTradingDayStart(dateTime);
+		while (!TradingCalendar.isTradingDay(dateTime)) {
+			dateTime = dateTime.minusDays(1);
+		}
+		return dateTime;
+	}
+
+	/**
+	 * Method getNextTradingDay.
+	 * 
+	 * @param input
+	 *            ZonedDateTime
+	 * @return ZonedDateTime
+	 */
+	public static ZonedDateTime getNextTradingDay(ZonedDateTime input) {
+
+		ZonedDateTime nextTradingday = input.plusDays(1);
+		nextTradingday = TradingCalendar.getTradingDayStart(nextTradingday);
+		while (!TradingCalendar.isTradingDay(nextTradingday)) {
+			nextTradingday = nextTradingday.plusDays(1);
+		}
+		return nextTradingday;
+	}
+
+	/**
+	 * Method isHoliday.
+	 * 
+	 * @param date
+	 *            ZonedDateTime
+	 * @return boolean
+	 */
+	public static boolean isHoliday(ZonedDateTime date) {
+
+		int year = date.getYear();
+		int[] hols = HOLIDAYS.get(year);
+		if (null != hols) {
+			for (int hol : hols) {
+				if (hol == date.getDayOfYear()) {
+					return true;
 				}
 			}
 		}
-		return null;
+		return false;
 	}
 
 	/**
-	 * Return the Hour for this date
+	 * Method between.
 	 * 
 	 * @param date
-	 *            Date
-	 * @return int
-	 * @exception * @see
-	 */
-	public static int getHour(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.HOUR);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Return the Month for this date
+	 *            ZonedDateTime
+	 * @param openDate
+	 *            ZonedDateTime
+	 * @param closeDate
+	 *            ZonedDateTime
 	 * 
-	 * @param date
-	 *            Date
-	 * @return int
-	 * @exception * @see
+	 * @return boolean
 	 */
-	public static int getMonth(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.MONTH);
-			}
-		}
-		return 0;
+	public static boolean between(ZonedDateTime date, ZonedDateTime openDate,
+			ZonedDateTime closeDate) {
+		if ((date.isAfter(openDate) || date.equals(openDate))
+				&& (date.isBefore(closeDate)))
+			return true;
+		return false;
 	}
 
 	/**
-	 * Return the Day for this date
+	 * Method getZonedDateTimeFromMilli.
 	 * 
 	 * @param millis
 	 *            long
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date getDate(long millis) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTimeInMillis(millis);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Return the Day for this date
 	 * 
-	 * @return Date
-	 * @exception * @see
+	 * @return ZonedDateTime
 	 */
-	public static Date getDate() {
-		return getDate(new Date());
+	public static ZonedDateTime getZonedDateTimeFromMilli(long millis) {
+		Instant instant = Instant.ofEpochMilli(millis);
+		return ZonedDateTime.ofInstant(instant, TimeZone.getDefault()
+				.toZoneId());
 	}
 
 	/**
-	 * Return the Day for this date
-	 * 
-	 * @param millis
-	 *            long
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date getDate(Date date) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTimeInMillis(date.getTime());
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Return the Day for this date
+	 * Method geMillisFromZonedDateTime.
 	 * 
 	 * @param date
-	 *            Date
-	 * @return int
-	 * @exception * @see
-	 */
-	public static int getDayOfYear(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.DAY_OF_YEAR);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Return the Day for this date
+	 *            ZonedDateTime
 	 * 
-	 * @param date
-	 *            Date
-	 * @return int
-	 * @exception * @see
+	 * @return long
 	 */
-	public static int getDayOfMonth(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.DAY_OF_MONTH);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Return the Day for this date
-	 * 
-	 * @param date
-	 *            Date
-	 * @return int
-	 */
-	public static int getDayOfWeek(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				return CALENDAR_NY.get(Calendar.DAY_OF_WEEK);
-			}
-		}
-		return 0;
+	public static long geMillisFromZonedDateTime(ZonedDateTime date) {
+		return date.toInstant().toEpochMilli();
 	}
 
 	/**
@@ -579,118 +681,43 @@ public class TradingCalendar {
 	 *            Date
 	 * @return int
 	 */
-	public static int getDaysInYear(Date date) {
-		if (date != null) {
-			synchronized (CALENDAR_NY) {
-				CALENDAR_NY.setTime(date);
-				if (CALENDAR_NY.isLeapYear(CALENDAR_NY.get(Calendar.YEAR))) {
-					return 366;
-				} else {
-					return 365;
-				}
-			}
+	public static int getDaysInYear(ZonedDateTime date) {
+		if (date.toLocalDate().isLeapYear())
+			return 366;
+		return 365;
+	}
+
+	/**
+	 * convertTimeZone Move the timeZone from System to Market this is only
+	 * needed because JPA 2.1 does not support ZonedDateTime i.e. EST 9:30 gets
+	 * converted to PC dateTime when stored.
+	 * 
+	 * @param date
+	 *            java.util.Date
+	 * @param fromTZ
+	 *            TimeZone
+	 * @param toTZ
+	 *            TimeZone
+	 * 
+	 * @return java.util.Date
+	 */
+
+	public static java.util.Date convertTimeZone(java.util.Date date,
+			TimeZone fromTZ, TimeZone toTZ) {
+		long fromTZDst = 0;
+		if (fromTZ.inDaylightTime(date)) {
+			fromTZDst = fromTZ.getDSTSavings();
 		}
-		return 0;
-	}
 
-	/**
-	 * Get the date formated to the standard format string
-	 * 
-	 * @param date
-	 *            Date
-	 * @return String
-	 * @exception * @see
-	 */
-	public static String getFormattedDate(Date date) {
-		return dateFormat.format(date);
-	}
+		long fromTZOffset = fromTZ.getRawOffset() + fromTZDst;
 
-	/**
-	 * Get the date formated to the standard format string
-	 * 
-	 * @param date
-	 *            Date
-	 * @param format
-	 *            String
-	 * @return String
-	 * @exception * @see
-	 */
-	public static String getFormattedDate(Date date, String format) {
-		if (format != null) {
-			SimpleDateFormat newDateFormat = new SimpleDateFormat(format);
-			return newDateFormat.format(date);
-		} else {
-			return getFormattedDate(date);
+		long toTZDst = 0;
+		if (toTZ.inDaylightTime(date)) {
+			toTZDst = toTZ.getDSTSavings();
 		}
-	}
+		long toTZOffset = toTZ.getRawOffset() + toTZDst;
 
-	/**
-	 * Set the date in the standard CALENDAR_NY to the string date
-	 * 
-	 * @param date
-	 *            String
-	 * @param format
-	 *            String
-	 * @return Date
-	 * @throws ParseException
-	 */
-	public static Date getFormattedDate(String date, String format)
-			throws ParseException {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-		return dateFormat.parse(date);
-	}
-
-	/**
-	 * Set the date in the standard calendar to the dtring date
-	 * 
-	 * 
-	 * @param date
-	 *            String
-	 * @return Date
-	 * @throws ParseException
-	 * @exception * @see
-	 */
-	public static Date getFormattedDate(String date) throws ParseException {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(dateFormat.parse(date));
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Get the date equal to zero
-	 * 
-	 * @return Date
-	 * @exception * @see
-	 */
-	public static Date getNullJavaDate() {
-		return NULLDATE;
-	}
-
-	/**
-	 * Is the date equal to zero
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 * @exception * @see
-	 */
-	public static boolean isNullDate(Date date) {
-		return date.equals(NULLDATE);
-	}
-
-	/**
-	 * Is the date equal to zero
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 * @exception * @see
-	 */
-	public static boolean isDayLightSavings(Date date) {
-		synchronized (CALENDAR_NY) {
-			return CALENDAR_NY.getTimeZone().inDaylightTime(date);
-		}
+		return new java.util.Date(date.getTime() + (toTZOffset - fromTZOffset));
 	}
 
 	/**
@@ -713,484 +740,5 @@ public class TradingCalendar {
 			}
 			HOLIDAYS.put(year, dates);
 		}
-	}
-
-	/**
-	 * Method getTodayBusinessDayStart.
-	 * 
-	 * @return Date
-	 */
-	public static Date getTodayBusinessDayStart() {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(new Date());
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, openHour);
-			CALENDAR_NY.set(Calendar.MINUTE, openMinute);
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getTodayBusinessDayEnd.
-	 * 
-	 * @return Date
-	 */
-	public static Date getTodayBusinessDayEnd() {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(new Date());
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, closeHour);
-			CALENDAR_NY.set(Calendar.MINUTE, closeMinute);
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getBusinessDayStart.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return Date
-	 */
-	public static Date getBusinessDayStart(Date date) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, openHour);
-			CALENDAR_NY.set(Calendar.MINUTE, openMinute);
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getBusinessDayEnd.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return Date
-	 */
-	public static Date getBusinessDayEnd(Date date) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(TradingCalendar.addBusinessDays(date,
-					closeDayOffset));
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, closeHour);
-			CALENDAR_NY.set(Calendar.MINUTE, closeMinute);
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getSpecificTime.
-	 * 
-	 * @param date
-	 *            Date
-	 * @param dayOfWeek
-	 *            int
-	 * 
-	 * @return Date
-	 */
-	public static Date getSpecificTime(final Date date, int dayOfWeek) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
-			CALENDAR_NY.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, 0);
-			CALENDAR_NY.set(Calendar.MINUTE, 0);
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getSpecificTime.
-	 * 
-	 * @param date
-	 *            Date
-	 * @param hrs
-	 *            int
-	 * @param minutes
-	 *            int
-	 * @return Date
-	 */
-	public static Date getSpecificTime(Date date, int hrs, int minutes) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, hrs);
-			CALENDAR_NY.set(Calendar.MINUTE, minutes);
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getSpecificTime.
-	 * 
-	 * @param date
-	 *            Date
-	 * @param hrs
-	 *            int
-	 * @param minutes
-	 *            int
-	 * @param seconds
-	 *            int
-	 * @return Date
-	 */
-	public static Date getSpecificTime(final Date date, int hrs, int minutes,
-			int seconds) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, hrs);
-			CALENDAR_NY.set(Calendar.MINUTE, minutes);
-			CALENDAR_NY.set(Calendar.SECOND, seconds);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getSpecificTime.
-	 * 
-	 * @param date
-	 *            Date
-	 * @param dayOfMonth
-	 *            int
-	 * @param hrs
-	 *            int
-	 * @param minutes
-	 *            int
-	 * @param seconds
-	 *            int
-	 * @return Date
-	 */
-	public static Date getSpecificTime(final Date date, int dayOfMonth,
-			int hrs, int minutes, int seconds) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(date);
-			CALENDAR_NY.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, hrs);
-			CALENDAR_NY.set(Calendar.MINUTE, minutes);
-			CALENDAR_NY.set(Calendar.SECOND, seconds);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method setTimeForDateTo. Returns the date set to the time of another
-	 * date.
-	 * 
-	 * @param openClose
-	 *            The time you want to use to set the date to.
-	 * @param date
-	 *            Date you want the time set for.
-	 * 
-	 * @return Date the tradingday open date for this date.
-	 */
-	public static Date getSpecificTime(Date openClose, Date date) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(openClose);
-			int hour = CALENDAR_NY.get(Calendar.HOUR_OF_DAY);
-			int minute = CALENDAR_NY.get(Calendar.MINUTE);
-			int second = CALENDAR_NY.get(Calendar.SECOND);
-			CALENDAR_NY.setTime(date);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, hour);
-			CALENDAR_NY.set(Calendar.MINUTE, minute);
-			CALENDAR_NY.set(Calendar.SECOND, second);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getYearStart.
-	 * 
-	 * @return Date
-	 */
-	public static Date getYearStart() {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(new Date());
-			CALENDAR_NY.set(Calendar.YEAR, CALENDAR_NY.get(Calendar.YEAR));
-			CALENDAR_NY.set(Calendar.MONTH, 0);
-			CALENDAR_NY.set(Calendar.DAY_OF_MONTH, 1);
-			CALENDAR_NY.set(Calendar.HOUR_OF_DAY, openHour);
-			CALENDAR_NY.set(Calendar.MINUTE, openMinute);
-			CALENDAR_NY.set(Calendar.SECOND, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method isTradingDay.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 */
-	public static boolean isTradingDay(Date date) {
-		synchronized (CALENDAR_NY) {
-			if (isHoliday(date)) {
-				return false;
-			}
-			CALENDAR_NY.setTime(date);
-			if (null != NONTRADINGDAYS) {
-				for (int hol : NONTRADINGDAYS) {
-					if (hol == CALENDAR_NY.get(Calendar.DAY_OF_WEEK)) {
-						return false;
-					}
-				}
-			}
-			return true;
-		}
-	}
-
-	/**
-	 * Method isMarketHours.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 */
-	public static boolean isMarketHours(Date date) {
-		if (!isAfterHours(date) && !isPreMarket(date)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Method isMarketHours.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 */
-	public static boolean isMarketHours(Date openDate, Date closeDate, Date date) {
-
-		if (isTradingDay(date)) {
-			int diffDays = TradingCalendar.daysDiff(openDate, closeDate);
-			if (TradingCalendar
-					.between(date, TradingCalendar.getSpecificTime(openDate,
-							date), TradingCalendar.addBusinessDays(
-							TradingCalendar.getSpecificTime(closeDate, date),
-							diffDays))) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Method isPreMarket.
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isPreMarket() {
-		return getTodayBusinessDayStart().after(new Date());
-	}
-
-	/**
-	 * Method isPreMarket.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 */
-	public static boolean isPreMarket(Date date) {
-		if (getBusinessDayStart(date).after(date)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Method isAfterHours.
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isAfterHours() {
-		if (getTodayBusinessDayEnd().before(new Date())
-				|| (getTodayBusinessDayEnd().compareTo(new Date()) == 0)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Method isAfterHours.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 */
-	public static boolean isAfterHours(Date date) {
-		if (getBusinessDayEnd(date).before(date)
-				|| (getBusinessDayEnd(date).compareTo(date) == 0)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Method sameDay.
-	 * 
-	 * @param date1
-	 *            Date
-	 * @param date2
-	 *            Date
-	 * @return boolean
-	 */
-	public static boolean sameDay(Date date1, Date date2) {
-		GregorianCalendar cal1 = new GregorianCalendar();
-		cal1.setTime(date2);
-		GregorianCalendar cal2 = new GregorianCalendar();
-		cal2.setTime(date1);
-		return sameDay(cal1, cal2);
-	}
-
-	/**
-	 * Method sameDay.
-	 * 
-	 * @param date1
-	 *            Calendar
-	 * @param date2
-	 *            Calendar
-	 * @return boolean
-	 */
-	public static boolean sameDay(Calendar date1, Calendar date2) {
-		return (date1.get(Calendar.MONTH) == date2.get(Calendar.MONTH))
-				&& (date1.get(Calendar.DAY_OF_MONTH) == date2
-						.get(Calendar.DAY_OF_MONTH))
-				&& (date1.get(Calendar.YEAR) == date2.get(Calendar.YEAR));
-	}
-
-	/**
-	 * Method getMostRecentTradingDay.
-	 * 
-	 * @param input
-	 *            Date
-	 * @return Date
-	 */
-	public static Date getMostRecentTradingDay(Date input) {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.setTime(TradingCalendar.getBusinessDayStart(input));
-			while (!TradingCalendar.isTradingDay(CALENDAR_NY.getTime())
-					|| isHoliday(CALENDAR_NY.getTime())) {
-				CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), -1));
-			}
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method getPrevTradingDay.
-	 * 
-	 * @param input
-	 *            Date
-	 * @return Date
-	 */
-	public static Date getPrevTradingDay(Date input) {
-		synchronized (CALENDAR_NY) {
-			Date preTradingday = addDays(input, -1);
-			return getMostRecentTradingDay(preTradingday);
-		}
-	}
-
-	/**
-	 * Method getNextTradingDay.
-	 * 
-	 * @param input
-	 *            Date
-	 * @return Date
-	 */
-	public static Date getNextTradingDay(Date input) {
-		synchronized (CALENDAR_NY) {
-			Date nextTradingday = addDays(input, 1);
-			CALENDAR_NY.setTime(TradingCalendar
-					.getBusinessDayStart(nextTradingday));
-			while (!TradingCalendar.isTradingDay(CALENDAR_NY.getTime())
-					|| TradingCalendar.isHoliday(CALENDAR_NY.getTime())) {
-				CALENDAR_NY.setTime(addDays(CALENDAR_NY.getTime(), 1));
-			}
-			return CALENDAR_NY.getTime();
-		}
-	}
-
-	/**
-	 * Method isHoliday.
-	 * 
-	 * @param date
-	 *            Date
-	 * @return boolean
-	 */
-	public static boolean isHoliday(Date date) {
-		synchronized (CALENDAR_NY) {
-			int year = 0;
-			try {
-				CALENDAR_NY.setTime(date);
-				year = CALENDAR_NY.get(Calendar.YEAR);
-				int[] hols = HOLIDAYS.get(year);
-				if (null == hols || hols.length == 0) {
-					String holidaysString = ConfigProperties
-							.getPropAsString("trade.holidays." + year);
-					parseHolidayIntegerCSVString(HOLIDAYS, year, holidaysString);
-				}
-				if (null != hols) {
-					for (int hol : hols) {
-						if (hol == CALENDAR_NY.get(Calendar.DAY_OF_YEAR)) {
-							return true;
-						}
-					}
-				}
-			} catch (IOException ex) {
-				_log.warn("Property trade.holidays." + year
-						+ " not set in org/trade/core/util/config.properties");
-			}
-			return false;
-		}
-	}
-
-	/**
-	 * Method firstMondayAfter2010.
-	 * 
-	 * 
-	 * @return long
-	 */
-	public static long firstMondayAfter2010() {
-		synchronized (CALENDAR_NY) {
-			CALENDAR_NY.set(2010, 0, 1, 0, 0, 0);
-			CALENDAR_NY.set(Calendar.MILLISECOND, 0);
-			while (CALENDAR_NY.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-				CALENDAR_NY.add(Calendar.DATE, 1);
-			}
-			// return cal.getTimeInMillis();
-			// preceding code won't work with JDK 1.3
-			return CALENDAR_NY.getTime().getTime();
-		}
-	}
-
-	/**
-	 * Method between. *
-	 * 
-	 * @param date
-	 *            Date
-	 * @param openDate
-	 *            Date
-	 * @param closeDate
-	 *            Date
-	 * 
-	 * @return boolean
-	 */
-	public static boolean between(Date date, Date openDate, Date closeDate) {
-		if ((date.after(openDate) || date.equals(openDate))
-				&& (date.before(closeDate)))
-			return true;
-		return false;
 	}
 }

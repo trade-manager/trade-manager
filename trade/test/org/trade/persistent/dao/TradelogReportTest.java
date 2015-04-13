@@ -44,7 +44,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.util.TradingCalendar;
@@ -61,6 +63,8 @@ public class TradelogReportTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradelogReportTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Method setUpBeforeClass.
@@ -107,8 +111,10 @@ public class TradelogReportTest {
 			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 					.getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(
-					portfolio, TradingCalendar.getYearStart(),
-					TradingCalendar.getTodayBusinessDayEnd(), false, null);
+					portfolio, TradingCalendar.getYearStart(), TradingCalendar
+							.getTradingDayEnd(TradingCalendar
+									.getDateTimeNowMarketTimeZone()), false,
+					null);
 			assertFalse(!tradelogReport.getTradelogDetail().isEmpty());
 			for (TradelogDetail tradelogDetail : tradelogReport
 					.getTradelogDetail()) {
@@ -125,8 +131,11 @@ public class TradelogReportTest {
 						+ " getFilledDate:" + tradelogDetail.getFilledDate());
 			}
 
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -138,8 +147,9 @@ public class TradelogReportTest {
 			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
 					.getObject();
 			TradelogReport tradelogReport = tradelogHome.findByTradelogSummary(
-					portfolio, TradingCalendar.getYearStart(),
-					TradingCalendar.getTodayBusinessDayEnd(), null,
+					portfolio, TradingCalendar.getYearStart(), TradingCalendar
+							.getTradingDayEnd(TradingCalendar
+									.getDateTimeNowMarketTimeZone()), null,
 					new BigDecimal(0));
 			assertFalse(!tradelogReport.getTradelogSummary().isEmpty());
 			for (TradelogSummary tradelogSummary : tradelogReport
@@ -156,8 +166,11 @@ public class TradelogReportTest {
 						+ tradelogSummary.getNetProfitLoss());
 			}
 
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

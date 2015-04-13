@@ -39,7 +39,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -49,6 +48,7 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.TableRowSorter;
 
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.MarketBar;
@@ -82,8 +82,9 @@ public class TradingdayTable extends Table {
 		this.setDefaultEditor(MarketBar.class, marketBarEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
-				Calendar.MINUTE);
+				new org.trade.core.valuetype.Date(TradingCalendar
+						.getDateTimeNowMarketTimeZone()),
+				DATETIMEFORMAT, Calendar.MINUTE);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setFont(new Font("Monospaced", Font.PLAIN, 12));

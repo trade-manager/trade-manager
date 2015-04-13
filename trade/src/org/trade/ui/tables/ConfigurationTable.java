@@ -37,7 +37,6 @@ package org.trade.ui.tables;
 
 import java.awt.Component;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.DefaultListCellRenderer;
@@ -45,6 +44,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.AccountType;
@@ -86,8 +86,9 @@ public class ConfigurationTable extends Table {
 						(Vector<Decode>) (new AccountType()).getCodesDecodes()));
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
-				Calendar.MINUTE);
+				new org.trade.core.valuetype.Date(TradingCalendar
+						.getDateTimeNowMarketTimeZone()),
+				DATETIMEFORMAT, Calendar.MINUTE);
 		DecodeTableEditor dataTypeEditor = new DecodeTableEditor(
 				new JComboBox<Decode>(
 						(Vector<Decode>) (new DataType()).getCodesDecodes()));

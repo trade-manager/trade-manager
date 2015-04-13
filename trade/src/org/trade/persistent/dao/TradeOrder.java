@@ -40,9 +40,9 @@ package org.trade.persistent.dao;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -56,8 +56,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
@@ -98,16 +96,16 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private BigDecimal auxPrice;
 	private Integer clientId;
 	private BigDecimal commission;
-	private Date createDate;
+	private ZonedDateTime createDate;
 	private Integer displayQuantity;
 	private String FAGroup;
 	private String FAProfile;
 	private String FAMethod;
 	private BigDecimal FAPercent;
 	private Integer filledQuantity;
-	private Date filledDate;
-	private Date goodAfterTime;
-	private Date goodTillTime;
+	private ZonedDateTime filledDate;
+	private ZonedDateTime goodAfterTime;
+	private ZonedDateTime goodTillTime;
 	private Boolean hidden = new Boolean(false);
 	private Boolean isOpenPosition = new Boolean(false);
 	private Boolean isFilled = new Boolean(false);
@@ -133,7 +131,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private Integer triggerMethod;
 	private String warningMessage;
 	private String whyHeld;
-	private Date lastUpdateDate;
+	private ZonedDateTime lastUpdateDate;
 	private List<TradeOrderfill> tradeOrderfills = new ArrayList<TradeOrderfill>(
 			0);
 
@@ -156,11 +154,11 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param limitPrice
 	 *            BigDecimal
 	 * @param createDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
 	public TradeOrder(Tradestrategy tradestrategy, String action,
 			String orderType, Integer quantity, BigDecimal auxPrice,
-			BigDecimal limitPrice, Date createDate) {
+			BigDecimal limitPrice, ZonedDateTime createDate) {
 		this(tradestrategy, action, createDate, orderType, quantity, auxPrice,
 				limitPrice, OverrideConstraints.YES, TimeInForce.DAY,
 				TriggerMethod.DEFAULT);
@@ -174,7 +172,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param action
 	 *            String
 	 * @param createDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param orderType
 	 *            String
 	 * @param quantity
@@ -191,7 +189,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 *            Integer
 	 */
 	public TradeOrder(Tradestrategy tradestrategy, String action,
-			Date createDate, String orderType, Integer quantity,
+			ZonedDateTime createDate, String orderType, Integer quantity,
 			BigDecimal auxPrice, BigDecimal limitPrice,
 			Integer overrideConstraints, String timeInForce,
 			Integer triggerMethod) {
@@ -218,7 +216,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param action
 	 *            String
 	 * @param createDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param orderType
 	 *            String
 	 * @param limitPrice
@@ -254,7 +252,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 */
 
 	public TradeOrder(Tradestrategy tradestrategy, String action,
-			Date createDate, String orderType, Money limitPrice,
+			ZonedDateTime createDate, String orderType, Money limitPrice,
 			Money auxPrice, Integer quantity, String ocaGroupName,
 			Integer parentId, Integer triggerMethod,
 			Integer overrideConstraints, String timeInForce, Boolean transmit,
@@ -308,13 +306,13 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param displayQuantity
 	 *            Integer
 	 * @param filledDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param filledQuantity
 	 *            Integer
 	 * @param goodAfterTime
-	 *            Date
+	 *            ZonedDateTime
 	 * @param goodTillTime
-	 *            Date
+	 *            ZonedDateTime
 	 * @param hidden
 	 *            Boolean
 	 * @param isOpenPosition
@@ -360,15 +358,16 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param whyHeld
 	 *            String
 	 * @param updateDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param tradeOrderfills
 	 *            List<TradeOrderfill>
 	 */
 	public TradeOrder(TradePosition tradePosition, String action,
 			BigDecimal averageFilledPrice, Boolean allOrNothing,
 			BigDecimal auxPrice, Integer clientId, BigDecimal commission,
-			Date createDate, Integer displayQuantity, Date filledDate,
-			Integer filledQuantity, Date goodAfterTime, Date goodTillTime,
+			ZonedDateTime createDate, Integer displayQuantity,
+			ZonedDateTime filledDate, Integer filledQuantity,
+			ZonedDateTime goodAfterTime, ZonedDateTime goodTillTime,
 			Boolean hidden, Boolean isOpenPosition, Boolean isFilled,
 			BigDecimal limitPrice, String ocaGroupName, Integer ocaType,
 			Integer orderKey, String orderReference, String orderType,
@@ -376,8 +375,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			Integer quantity, String timeInForce, String status,
 			BigDecimal stopPrice, Boolean transmit, BigDecimal trailStopPrice,
 			BigDecimal trailingPercent, Integer triggerMethod,
-			String warningMessage, String whyHeld, Date lastUpdateDate,
-			List<TradeOrderfill> tradeOrderfills) {
+			String warningMessage, String whyHeld,
+			ZonedDateTime lastUpdateDate, List<TradeOrderfill> tradeOrderfills) {
 		this.tradePosition = tradePosition;
 		this.action = action;
 		this.allOrNothing = allOrNothing;
@@ -656,11 +655,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	/**
 	 * Method getCreateDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createDate", nullable = false, length = 19)
-	public Date getCreateDate() {
+	@Column(name = "createDate", nullable = false)
+	public ZonedDateTime getCreateDate() {
 		return this.createDate;
 	}
 
@@ -668,9 +666,9 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * Method setCreateDate.
 	 * 
 	 * @param createDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(ZonedDateTime createDate) {
 		this.createDate = createDate;
 	}
 
@@ -777,11 +775,11 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	/**
 	 * Method getFilledDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "filledDate", length = 19)
-	public Date getFilledDate() {
+
+	@Column(name = "filledDate")
+	public ZonedDateTime getFilledDate() {
 		return this.filledDate;
 	}
 
@@ -789,9 +787,9 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * Method setFilledDate.
 	 * 
 	 * @param filledDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setFilledDate(Date filledDate) {
+	public void setFilledDate(ZonedDateTime filledDate) {
 		this.filledDate = filledDate;
 	}
 
@@ -818,11 +816,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	/**
 	 * Method getGoodAfterTime.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "goodAfterTime", length = 19)
-	public Date getGoodAfterTime() {
+	@Column(name = "goodAfterTime")
+	public ZonedDateTime getGoodAfterTime() {
 		return this.goodAfterTime;
 	}
 
@@ -830,20 +827,19 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * Method setGoodAfterTime.
 	 * 
 	 * @param goodAfterTime
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setGoodAfterTime(Date goodAfterTime) {
+	public void setGoodAfterTime(ZonedDateTime goodAfterTime) {
 		this.goodAfterTime = goodAfterTime;
 	}
 
 	/**
 	 * Method getGoodTillTime.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "goodTillTime", length = 19)
-	public Date getGoodTillTime() {
+	@Column(name = "goodTillTime")
+	public ZonedDateTime getGoodTillTime() {
 		return this.goodTillTime;
 	}
 
@@ -851,9 +847,9 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * Method setGoodTillTime.
 	 * 
 	 * @param goodTillTime
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setGoodTillTime(Date goodTillTime) {
+	public void setGoodTillTime(ZonedDateTime goodTillTime) {
 		this.goodTillTime = goodTillTime;
 	}
 
@@ -1308,11 +1304,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	/**
 	 * Method getLastUpdateDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "lastUpdateDate", nullable = false, length = 19)
-	public Date getLastUpdateDate() {
+	@Column(name = "lastUpdateDate", nullable = false)
+	public ZonedDateTime getLastUpdateDate() {
 		return this.lastUpdateDate;
 	}
 
@@ -1320,9 +1315,9 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * Method setLastUpdateDate.
 	 * 
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 

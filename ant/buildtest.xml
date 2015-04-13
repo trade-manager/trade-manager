@@ -33,7 +33,7 @@
 	</target>
 
 	<target name="compile" depends="initialise" description="compile the source code ">
-		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${srccore}" destdir="${build}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath>
 				<fileset dir="${lib}">
@@ -44,7 +44,7 @@
 				</fileset>
 			</classpath>
 		</javac>
-		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${srctrade}" destdir="${build}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath>
 				<fileset dir="${lib}">
@@ -103,7 +103,7 @@
 		</sql>
 	</target>
 	<target name="run-tests" depends="dist, cleanDB" description="run your test suite">
-		<junit printsummary="yes" haltonfailure="no" showoutput="yes" fork="yes">
+		<junit printsummary="yes" haltonfailure="${test.halt-on-failure}" showoutput="yes" fork="yes">
 			<jvmarg value="-Duser.timezone=${market.timezone}" />
 			<jvmarg value="-Dlog4j.configuration=file:config/config.properties" />
 			<classpath>
@@ -117,10 +117,10 @@
 			</classpath>
 			<batchtest fork="yes" todir="${reports}/raw/">
 				<formatter type="xml" />
-				<fileset dir="${srctrade}">
+				<fileset dir="${srccore}">
 					<include name="**/*.java" />
 				</fileset>
-				<fileset dir="${srccore}">
+				<fileset dir="${srctrade}">
 					<include name="**/*.java" />
 				</fileset>
 				<fileset dir="${config}">

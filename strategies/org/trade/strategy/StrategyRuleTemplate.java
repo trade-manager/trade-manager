@@ -35,12 +35,11 @@
  */
 package org.trade.strategy;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
-import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
@@ -117,7 +116,8 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 		try {
 			// Get the current candle
 			CandleItem currentCandleItem = this.getCurrentCandle();
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			/*
 			 * Position is open kill this Strategy as its job is done. In this
@@ -150,9 +150,9 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 			 * Create code here to create orders based on your conditions/rules.
 			 */
 
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), this
-					.getTradestrategy().getBarSize() / 60))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getOpen()
+					.plusMinutes(this.getTradestrategy().getBarSize() / 60))
 					&& newBar) {
 
 				/*
@@ -165,10 +165,12 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at day end minus
 			 * one bar.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().before(
-					TradingCalendar.addMinutes(this.getTradestrategy()
-							.getTradingday().getClose(), (-1
-							* this.getTradestrategy().getBarSize() / 60)))) {
+			if (!currentCandleItem.getLastUpdateDate().isBefore(
+					this.getTradestrategy()
+							.getTradingday()
+							.getClose()
+							.minusMinutes(
+									this.getTradestrategy().getBarSize() / 60))) {
 				cancelOrdersClosePosition(true);
 				_log.info("Rule 15:55:00 close all open positions: "
 						+ getSymbol() + " Time: " + startPeriod);

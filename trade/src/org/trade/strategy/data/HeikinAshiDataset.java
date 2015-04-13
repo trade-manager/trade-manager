@@ -42,11 +42,11 @@ import java.util.List;
 
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.time.RegularTimePeriod;
-import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.ObjectUtilities;
+import org.trade.strategy.data.base.RegularTimePeriod;
+import org.trade.strategy.data.base.TimePeriodAnchor;
 import org.trade.strategy.data.heikinashi.HeikinAshiItem;
 import org.trade.strategy.data.heikinashi.IHeikinAshiDataset;
 import org.trade.ui.chart.renderer.HeikinAshiRenderer;

@@ -35,8 +35,8 @@
  */
 package org.trade.persistent.dao;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -270,7 +270,7 @@ public class TradestrategyHome {
 	 *            String
 	 * @return Tradestrategy
 	 */
-	public Tradestrategy findTradestrategyByUniqueKeys(Date open,
+	public Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open,
 			String strategyName, Integer idContract, String portfolioName) {
 
 		try {
@@ -332,13 +332,13 @@ public class TradestrategyHome {
 	 * Method findTradestrategyDistinctByDateRange.
 	 * 
 	 * @param fromOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @param toOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Vector<ComboItem>
 	 */
 	public List<Tradestrategy> findTradestrategyDistinctByDateRange(
-			Date fromOpen, Date toOpen) {
+			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -355,14 +355,14 @@ public class TradestrategyHome {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
 				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
-						.get("open").as(Date.class), fromOpen);
+						.get("open").as(ZonedDateTime.class), fromOpen);
 				predicates.add(predicate);
 			}
 			if (null != toOpen) {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
 				Predicate predicate = builder.lessThanOrEqualTo(
-						tradingday.get("open").as(Date.class), toOpen);
+						tradingday.get("open").as(ZonedDateTime.class), toOpen);
 				predicates.add(predicate);
 			}
 
@@ -388,13 +388,13 @@ public class TradestrategyHome {
 	 * Method findTradestrategyContractDistinctByDateRange.
 	 * 
 	 * @param fromOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @param toOpen
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Vector<ComboItem>
 	 */
 	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
-			Date fromOpen, Date toOpen) {
+			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -413,14 +413,14 @@ public class TradestrategyHome {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
 				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
-						.get("open").as(Date.class), fromOpen);
+						.get("open").as(ZonedDateTime.class), fromOpen);
 				predicates.add(predicate);
 			}
 			if (null != toOpen) {
 				Join<Tradestrategy, Tradingday> tradingday = from
 						.join("tradingday");
 				Predicate predicate = builder.lessThanOrEqualTo(
-						tradingday.get("open").as(Date.class), toOpen);
+						tradingday.get("open").as(ZonedDateTime.class), toOpen);
 				predicates.add(predicate);
 			}
 

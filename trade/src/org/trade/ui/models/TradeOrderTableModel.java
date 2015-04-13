@@ -330,7 +330,7 @@ public class TradeOrderTableModel extends TableModel {
 			break;
 		}
 		case 11: {
-			element.setFilledDate(((Date) value).getDate());
+			element.setFilledDate(((Date) value).getZonedDateTime());
 			break;
 		}
 		case 12: {
@@ -441,7 +441,8 @@ public class TradeOrderTableModel extends TableModel {
 
 		final TradeOrder tradeOrder = new TradeOrder(tradestrategy, action,
 				orderType, quantity, price.getBigDecimalValue(),
-				limitPrice.getBigDecimalValue(), TradingCalendar.getDate());
+				limitPrice.getBigDecimalValue(),
+				TradingCalendar.getDateTimeNowMarketTimeZone());
 		tradeOrder.setOcaGroupName("");
 		tradeOrder.setTransmit(true);
 		tradeOrder.setStatus(OrderStatus.UNSUBMIT);

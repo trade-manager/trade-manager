@@ -36,21 +36,20 @@
 package org.trade.persistent.dao;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.trade.core.dao.EntityManagerHelper;
+import org.trade.core.util.TradingCalendar;
 
 /**
  */
 @Stateless
 public class TradelogHome {
-	private static final SimpleDateFormat m_sdf = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+	private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	public TradelogHome() {
 
@@ -62,17 +61,18 @@ public class TradelogHome {
 	 * @param portfolio
 	 *            Portfolio
 	 * @param start
-	 *            Date
+	 *            ZonedDateTime
 	 * @param end
-	 *            Date
+	 *            ZonedDateTime
 	 * @param filter
 	 *            boolean
 	 * @param symbol
 	 *            String
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogReport(Portfolio portfolio, Date start,
-			Date end, boolean filter, String symbol, BigDecimal winLossAmount) {
+	public TradelogReport findByTradelogReport(Portfolio portfolio,
+			ZonedDateTime start, ZonedDateTime end, boolean filter,
+			String symbol, BigDecimal winLossAmount) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -81,8 +81,10 @@ public class TradelogHome {
 					TradelogDetail.getSQLString(), TradelogDetail.class);
 
 			queryDetail.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			queryDetail.setParameter("start", m_sdf.format(start));
-			queryDetail.setParameter("end", m_sdf.format(end));
+			queryDetail.setParameter("start",
+					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			queryDetail.setParameter("end",
+					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			queryDetail.setParameter("filter", filter);
 			queryDetail.setParameter("symbol", symbol);
 
@@ -96,8 +98,10 @@ public class TradelogHome {
 
 			querySummary
 					.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			querySummary.setParameter("start", m_sdf.format(start));
-			querySummary.setParameter("end", m_sdf.format(end));
+			querySummary.setParameter("start",
+					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			querySummary.setParameter("end",
+					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			querySummary.setParameter("symbol", symbol);
 			querySummary.setParameter("winLossAmount", winLossAmount);
 
@@ -124,15 +128,16 @@ public class TradelogHome {
 	 * @param portfolio
 	 *            Portfolio
 	 * @param start
-	 *            Date
+	 *            ZonedDateTime
 	 * @param end
-	 *            Date
+	 *            ZonedDateTime
 	 * @param filter
 	 *            boolean
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogDetail(Portfolio portfolio, Date start,
-			Date end, boolean filter, String symbol) {
+	public TradelogReport findByTradelogDetail(Portfolio portfolio,
+			ZonedDateTime start, ZonedDateTime end, boolean filter,
+			String symbol) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -141,8 +146,10 @@ public class TradelogHome {
 					TradelogDetail.getSQLString(), "TradelogDetailMapping");
 
 			queryDetail.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			queryDetail.setParameter("start", m_sdf.format(start));
-			queryDetail.setParameter("end", m_sdf.format(end));
+			queryDetail.setParameter("start",
+					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			queryDetail.setParameter("end",
+					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			queryDetail.setParameter("filter", filter);
 			queryDetail.setParameter("symbol", symbol);
 
@@ -170,13 +177,14 @@ public class TradelogHome {
 	 * @param portfolio
 	 *            Portfolio
 	 * @param start
-	 *            Date
+	 *            ZonedDateTime
 	 * @param end
-	 *            Date
+	 *            ZonedDateTime
 	 * @return TradelogReport
 	 */
 	public TradelogReport findByTradelogSummary(Portfolio portfolio,
-			Date start, Date end, String symbol, BigDecimal winLossAmount) {
+			ZonedDateTime start, ZonedDateTime end, String symbol,
+			BigDecimal winLossAmount) {
 		EntityManager entityManagerLocal = EntityManagerHelper
 				.getLocalEntityManager();
 		try {
@@ -186,8 +194,10 @@ public class TradelogHome {
 
 			querySummary
 					.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			querySummary.setParameter("start", m_sdf.format(start));
-			querySummary.setParameter("end", m_sdf.format(end));
+			querySummary.setParameter("start",
+					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			querySummary.setParameter("end",
+					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			querySummary.setParameter("symbol", symbol);
 			querySummary.setParameter("winLossAmount", winLossAmount);
 

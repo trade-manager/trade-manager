@@ -64,6 +64,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Decimal;
 import org.trade.core.valuetype.Decode;
@@ -137,7 +138,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 		DateRenderer rDate = new DateRenderer(DATEFORMAT);
 		rDate.setHorizontalAlignment(SwingConstants.CENTER);
 		DateEditor eDate = new DateEditor(new DateField(DATEFORMAT), new Date(
-				new java.util.Date()), DATEFORMAT, Calendar.DAY_OF_MONTH);
+				TradingCalendar.getDateTimeNowMarketTimeZone()), DATEFORMAT,
+				Calendar.DAY_OF_MONTH);
 		MoneyRenderer rMoney = new MoneyRenderer();
 		MoneyEditor eMoney = new MoneyEditor(new MoneyField());
 		DecimalRenderer rDecimal = new DecimalRenderer();

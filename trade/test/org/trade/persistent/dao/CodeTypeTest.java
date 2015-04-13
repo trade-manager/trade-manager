@@ -41,7 +41,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +53,8 @@ public class CodeTypeTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CodeTypeTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Method setUpBeforeClass.
@@ -100,8 +104,11 @@ public class CodeTypeTest {
 					codeType.getName(), "Length");
 			assertNotNull(codeValue);
 			_log.info("CodeValue id: " + codeValue.getIdCodeValue());
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

@@ -38,21 +38,22 @@ package org.trade.persistent.dao;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
-import org.jfree.data.DataUtilities;
-import org.jfree.data.time.RegularTimePeriod;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.strategy.data.StrategyData;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.CandlePeriod;
 import org.trade.ui.TradeAppLoadConfig;
@@ -67,6 +68,8 @@ public class CandleTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandleTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	private String symbol = "TEST";
 	private Tradestrategy tradestrategy = null;
@@ -119,7 +122,9 @@ public class CandleTest {
 
 			AspectHome aspectHome = new AspectHome();
 
-			RegularTimePeriod period = new CandlePeriod(new Date(), 60);
+			RegularTimePeriod period = new CandlePeriod(
+					TradingCalendar.getTradingDayStart(TradingCalendar
+							.getDateTimeNowMarketTimeZone()), 300);
 
 			Candle transientInstance = new Candle(
 					this.tradestrategy.getContract(),
@@ -138,8 +143,11 @@ public class CandleTest {
 			_log.info("testAddCandle IdCandle: "
 					+ transientInstance.getIdCandle());
 
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -153,9 +161,9 @@ public class CandleTest {
 			for (Tradestrategy tradestrategy : tradestrategyHome.findAll()) {
 				tradestrategy = tradestrategyHome.findById(tradestrategy
 						.getIdTradeStrategy());
-				Date prevTradingday = TradingCalendar.addDays(tradestrategy
-						.getTradingday().getOpen(), (-1 * (tradestrategy
-						.getChartDays() - 1)));
+				ZonedDateTime prevTradingday = TradingCalendar.addTradingDays(
+						tradestrategy.getTradingday().getOpen(),
+						(-1 * (tradestrategy.getChartDays() - 1)));
 				StrategyData.doDummyData(tradestrategy.getStrategyData()
 						.getBaseCandleSeries(), Tradingday
 						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
@@ -173,8 +181,11 @@ public class CandleTest {
 
 			}
 
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

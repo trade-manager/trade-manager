@@ -35,16 +35,18 @@
  */
 package org.trade.persistent.dao;
 
-import java.util.Date;
-
 import static org.junit.Assert.*;
+
+import java.time.ZonedDateTime;
 
 import org.jfree.data.DataUtilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.dao.AspectHome;
@@ -62,6 +64,8 @@ public class TradingdayTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(TradingdayTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Method setUpBeforeClass.
@@ -111,10 +115,12 @@ public class TradingdayTest {
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			AspectHome aspectHome = new AspectHome();
-			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
+			ZonedDateTime open = TradingCalendar
+					.getTradingDayStart(TradingCalendar
+							.getPrevTradingDay(TradingCalendar
+									.getDateTimeNowMarketTimeZone()));
 			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
-					open, TradingCalendar.getBusinessDayEnd(open));
+					open, TradingCalendar.getTradingDayEnd(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}
@@ -123,9 +129,11 @@ public class TradingdayTest {
 					+ transientInstance.getIdTradingDay());
 			assertNotNull(transientInstance.getIdTradingDay());
 			aspectHome.remove(transientInstance);
-
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -140,10 +148,12 @@ public class TradingdayTest {
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			AspectHome aspectHome = new AspectHome();
-			Date open = TradingCalendar.getBusinessDayStart(TradingCalendar
-					.getMostRecentTradingDay(new Date()));
+			ZonedDateTime open = TradingCalendar
+					.getTradingDayStart(TradingCalendar
+							.getPrevTradingDay(TradingCalendar
+									.getDateTimeNowMarketTimeZone()));
 			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
-					open, TradingCalendar.getBusinessDayEnd(open));
+					open, TradingCalendar.getTradingDayEnd(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}
@@ -154,8 +164,11 @@ public class TradingdayTest {
 					+ transientInstance.getIdTradingDay());
 			assertNotNull(transientInstance.getIdTradingDay());
 			aspectHome.remove(transientInstance);
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

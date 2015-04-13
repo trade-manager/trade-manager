@@ -37,11 +37,9 @@ package org.trade.broker.client;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,16 +80,14 @@ public class DBBroker extends Broker {
 	private BigDecimal trailAmount = null;
 	private BigDecimal trailLimitOffsetAmount = null;
 
-	private long execId = new Date().getTime();
+	private long execId = TradingCalendar
+			.geMillisFromZonedDateTime(TradingCalendar
+					.getDateTimeNowMarketTimeZone());
 
-	private static final SimpleDateFormat _sdfLocal = new SimpleDateFormat(
-			"yyyyMMdd HH:mm:ss");
 	private static Integer _backTestBarSize = 0;
 
 	static {
 		try {
-			_sdfLocal.setTimeZone(TimeZone.getTimeZone((ConfigProperties
-					.getPropAsString("trade.tws.timezone"))));
 			_backTestBarSize = ConfigProperties
 					.getPropAsInt("trade.backtest.barSize");
 		} catch (IOException ex) {
@@ -134,18 +130,18 @@ public class DBBroker extends Broker {
 			this.strategyData.clearBaseCandleDataset();
 			this.tradestrategy.setStrategyData(this.strategyData);
 			List<Candle> candles = null;
-			Date endDate = TradingCalendar.getSpecificTime(tradestrategy
-					.getTradingday().getClose(), TradingCalendar
-					.getMostRecentTradingDay(tradestrategy.getTradingday()
-							.getClose()));
-			Date startDate = TradingCalendar.addDays(endDate,
+			ZonedDateTime endDate = TradingCalendar.getDateAtTime(
+					TradingCalendar.getPrevTradingDay(tradestrategy
+							.getTradingday().getClose()), tradestrategy
+							.getTradingday().getClose());
+			ZonedDateTime startDate = TradingCalendar.addTradingDays(endDate,
 					(-1 * (tradestrategy.getChartDays() - 1)));
-			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
-			startDate = TradingCalendar.getSpecificTime(tradestrategy
-					.getTradingday().getOpen(), startDate);
+			startDate = TradingCalendar.getPrevTradingDay(startDate);
+			startDate = TradingCalendar.getDateAtTime(startDate, tradestrategy
+					.getTradingday().getOpen());
 
 			List<Candle> candlesTradingday = new ArrayList<Candle>();
-			endDate = TradingCalendar.addBusinessDays(endDate, -1);
+			endDate = TradingCalendar.addTradingDays(endDate, -1);
 			candles = this.getCandles(this.tradestrategy, startDate, endDate,
 					this.tradestrategy.getBarSize());
 
@@ -255,7 +251,7 @@ public class DBBroker extends Broker {
 						lockBackTestWorker.wait();
 					}
 				}
-				if (candle.getStartPeriod().before(
+				if (candle.getStartPeriod().isBefore(
 						this.tradestrategy.getTradingday().getOpen()))
 					continue;
 
@@ -482,7 +478,7 @@ public class DBBroker extends Broker {
 	 */
 	private BigDecimal getFilledPrice(TradeOrder order, Candle candle) {
 
-		if (order.getCreateDate().after(candle.getLastUpdateDate())) {
+		if (order.getCreateDate().isAfter(candle.getLastUpdateDate())) {
 			return null;
 		}
 
@@ -609,7 +605,6 @@ public class DBBroker extends Broker {
 					}
 				}
 			}
-
 		}
 
 		if (Action.SELL.equals(order.getAction())) {
@@ -702,7 +697,7 @@ public class DBBroker extends Broker {
 	 * @throws IOException
 	 */
 	private void createOrderExecution(Contract contract, TradeOrder order,
-			BigDecimal filledPrice, Date date) throws IOException {
+			BigDecimal filledPrice, ZonedDateTime date) throws IOException {
 
 		double commission = order.getQuantity() * 0.005d;
 		if (commission < 1) {
@@ -760,13 +755,14 @@ public class DBBroker extends Broker {
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @throws PersistentModelException
 	 */
 	private void populateIndicatorCandleSeries(Tradestrategy tradestrategy,
-			Date startDate, Date endDate) throws PersistentModelException {
+			ZonedDateTime startDate, ZonedDateTime endDate)
+			throws PersistentModelException {
 
 		CandleDataset candleDataset = (CandleDataset) tradestrategy
 				.getStrategyData().getIndicatorByType(
@@ -829,9 +825,9 @@ public class DBBroker extends Broker {
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param barSize
 	 *            int
 	 * 
@@ -840,21 +836,21 @@ public class DBBroker extends Broker {
 	 */
 
 	private List<Candle> getCandles(Tradestrategy tradestrategy,
-			Date startDate, Date endDate, int barSize)
+			ZonedDateTime startDate, ZonedDateTime endDate, int barSize)
 			throws PersistentModelException {
 		List<Candle> candles = new ArrayList<Candle>(0);
 		int[] barSizes = { 3600, 1800, 900, 300, 120, 60, 30 };
-		for (int element : barSizes) {
-			if (element <= barSize) {
+		for (int size : barSizes) {
+			if (size <= barSize) {
 				/*
 				 * Only go for barSize that are whole integer divisible.
 				 */
-				if ((Math.floor(tradestrategy.getBarSize() / (double) element) == (tradestrategy
-						.getBarSize() / (double) element))) {
+				if ((Math.floor(tradestrategy.getBarSize() / (double) size) == (tradestrategy
+						.getBarSize() / (double) size))) {
 					candles = tradePersistentModel
 							.findCandlesByContractDateRangeBarSize(
 									tradestrategy.getContract().getIdContract(),
-									startDate, endDate, element);
+									startDate, endDate, size);
 					if (!candles.isEmpty()) {
 						break;
 					}

@@ -27,4 +27,4 @@ echo "PATH=$PATH"
 echo "CLASSPATH=$LOCALCLASSPATH"
 echo "TIMEZONE=$TIMEZONE"
 
-java  -Xmn128M -Xms768M -Xmx768M -classpath "$LOCALCLASSPATH" -Duser.timezone=$TIMEZONE -Dlog4j.configuration=file:"config.properties" org.trade.ui.TradeAppMain
+java  -classpath "$LOCALCLASSPATH" -Duser.timezone=$TIMEZONE -Dlog4j.configuration=file:"config.properties" org.trade.ui.TradeAppMain

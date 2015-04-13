@@ -45,7 +45,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.valuetype.DAODecode;
@@ -67,6 +69,8 @@ public class ValueTypeDAOTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(ValueTypeDAOTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Method setUpBeforeClass.
@@ -143,8 +147,11 @@ public class ValueTypeDAOTest {
 								+ DAODecode._DISPLAY_NAME));
 
 			}
-		} catch (Exception ex) {
-			fail("Error finding row " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -173,9 +180,11 @@ public class ValueTypeDAOTest {
 			_log.info("Price:" + price + " Percent:"
 					+ entrylimit.getPercentOfPrice() + " LimitAmount:"
 					+ entrylimit.getLimitAmount());
-
-		} catch (Exception ex) {
-			fail("Error finding row " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -198,8 +207,11 @@ public class ValueTypeDAOTest {
 						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
 								+ DAODecode._DISPLAY_NAME));
 			}
-		} catch (Exception ex) {
-			fail("Error finding row " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

@@ -6,7 +6,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.persistent.dao.Tradestrategy;
@@ -17,6 +19,8 @@ public class CandleSeriesTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CandleSeriesTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	private String symbol = "TEST";
 	private Tradestrategy tradestrategy = null;
@@ -41,8 +45,11 @@ public class CandleSeriesTest {
 			TradeAppLoadConfig.loadAppProperties();
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 			assertNotNull(this.tradestrategy);
-		} catch (Exception e) {
-			fail("Error on setup " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -77,9 +84,11 @@ public class CandleSeriesTest {
 				_log.info("CandleSeries: " + series.toString());
 			}
 			assertEquals(series, candleSeries);
-
-		} catch (Exception e) {
-			fail("Error on testCandleSeriessClone " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 

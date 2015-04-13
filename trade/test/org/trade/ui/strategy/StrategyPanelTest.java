@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,12 +25,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
+import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.dao.Rule;
@@ -50,6 +51,8 @@ public class StrategyPanelTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(StrategyPanelTest.class);
+	@org.junit.Rule
+	public TestName name = new TestName();
 
 	private String symbol = "TEST";
 	private PersistentModel tradePersistentModel = null;
@@ -101,14 +104,19 @@ public class StrategyPanelTest {
 				assertNotNull("setUp: Strategy java file should be not null",
 						content);
 				if (strategy.getRules().isEmpty()) {
-					Rule nextRule = new Rule(strategy, 1, null, new Date(),
-							content.getBytes(), new Date());
+					Rule nextRule = new Rule(strategy, 1, null,
+							TradingCalendar.getDateTimeNowMarketTimeZone(),
+							content.getBytes(),
+							TradingCalendar.getDateTimeNowMarketTimeZone());
 					strategy.add(nextRule);
 					this.tradePersistentModel.persistAspect(nextRule);
 				}
 			}
-		} catch (Exception ex) {
-			fail("Error getting Yahoo data msg: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -164,9 +172,11 @@ public class StrategyPanelTest {
 			assertEquals(
 					"testJEditorPaneTextEquals:  Strategy java file not equal to test source after write",
 					content1, sourceText.getText());
-
-		} catch (Exception ex) {
-			fail("Error creating instance : " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -179,7 +189,6 @@ public class StrategyPanelTest {
 	 * @throws IOException
 	 */
 	private String readFile(String fileName) throws IOException {
-
 		FileReader inputStreamReader = null;
 		BufferedReader bufferedReader = null;
 		inputStreamReader = new FileReader(fileName);
@@ -236,22 +245,27 @@ public class StrategyPanelTest {
 							+ m_templateName, parm);
 			_log.info("Created Strategy" + strategyProxy);
 			strategyProxy.execute();
-			
-			while(!strategyProxy.isWaiting()){
+
+			while (!strategyProxy.isWaiting()) {
 				Thread.sleep(250);
 			}
 
 			StrategyData.doDummyData(tradestrategy.getStrategyData()
-					.getBaseCandleSeries(), Tradingday.newInstance(new Date()),
-					1, BarSize.FIVE_MIN, true, 1);
+					.getBaseCandleSeries(),
+					Tradingday.newInstance(TradingCalendar
+							.getDateTimeNowMarketTimeZone()), 1,
+					BarSize.FIVE_MIN, true, 250);
 			assertFalse(
 					"testDoCompileAndRunStrategy: Base candle series is empty",
 					tradestrategy.getStrategyData().getBaseCandleSeries()
 							.isEmpty());
 			strategyProxy.cancel();
 
-		} catch (Exception ex) {
-			fail("Error creating instance : " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -299,9 +313,11 @@ public class StrategyPanelTest {
 							+ strategy.getClassName(), parm);
 			assertNotNull("testDoCompileRule: StrategyRule should be not null",
 					strategyRule);
-
-		} catch (Exception ex) {
-			fail("Error compiling rule : " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -337,8 +353,11 @@ public class StrategyPanelTest {
 			}
 			assertNotNull("testDoCompile: Rule should be not null", myrule);
 			strategyPanel.doCompile(myrule);
-		} catch (Exception ex) {
-			fail("Error saving rule : " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -373,7 +392,7 @@ public class StrategyPanelTest {
 				myrule.setIdRule(null);
 			}
 			myrule.setComment("Test Ver: " + myrule.getVersion());
-			myrule.setCreateDate(new Date());
+			myrule.setCreateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 			StreamEditorPane textArea = new StreamEditorPane("text/rtf");
 			new JScrollPane(textArea);
 			String fileDir = m_strategyDir + "/"
@@ -394,9 +413,11 @@ public class StrategyPanelTest {
 			assertEquals("testDoSave: Java rule test should be equals",
 					javaCode, textArea.getText());
 			_log.info("Java file to Saved: " + javaCode);
-
-		} catch (Exception ex) {
-			fail("Error saving rule : " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

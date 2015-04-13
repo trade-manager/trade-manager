@@ -35,15 +35,15 @@
  */
 package org.trade.strategy.data;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.heikinashi.HeikinAshiItem;
 
@@ -170,10 +170,10 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 * @param close
 	 *            double
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
 	public void add(Contract contract, RegularTimePeriod period, double open,
-			double high, double low, double close, Date lastUpdateDate) {
+			double high, double low, double close, ZonedDateTime lastUpdateDate) {
 		if (!this.isEmpty()) {
 			HeikinAshiItem item0 = (HeikinAshiItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
@@ -204,31 +204,6 @@ public class HeikinAshiSeries extends IndicatorSeries {
 			}
 		}
 		super.add(dataItem, notify);
-	}
-
-	/**
-	 * Returns the true/false if the date falls within a period.
-	 * 
-	 * @param date
-	 *            the date for which we want a period.
-	 * 
-	 * 
-	 * @return exists
-	 */
-	public int indexOf(Date date) {
-
-		for (int i = this.data.size(); i > 0; i--) {
-			HeikinAshiItem item = (HeikinAshiItem) this.data.get(i - 1);
-			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
-				break;
-			}
-			if ((date.getTime() >= item.getPeriod().getFirstMillisecond())
-					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
-				return i - 1;
-			}
-
-		}
-		return -1;
 	}
 
 	/**

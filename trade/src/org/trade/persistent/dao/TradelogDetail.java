@@ -37,7 +37,7 @@ package org.trade.persistent.dao;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,8 +45,6 @@ import javax.persistence.EntityResult;
 import javax.persistence.Id;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.SqlResultSetMappings;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.trade.core.dao.Aspect;
 import org.trade.core.properties.ConfigProperties;
@@ -76,7 +74,7 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 	private String action;
 	private BigDecimal stopPrice;
 	private String orderStatus;
-	private Date filledDate;
+	private ZonedDateTime filledDate;
 	private Integer quantity;
 	private BigDecimal averageFilledPrice;
 	private BigDecimal commission;
@@ -129,8 +127,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 			String marketBias, String marketBar, String name, String symbol,
 			String longShort, String tier, String status, String side,
 			String action, BigDecimal stopPrice, String orderStatus,
-			Date filledDate, Integer quantity, BigDecimal averageFilledPrice,
-			BigDecimal commission, BigDecimal profitLoss) {
+			ZonedDateTime filledDate, Integer quantity,
+			BigDecimal averageFilledPrice, BigDecimal commission,
+			BigDecimal profitLoss) {
 		this.idTradestrategy = idTradestrategy;
 		this.open = open;
 		this.marketBias = marketBias;
@@ -436,11 +435,10 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 	/**
 	 * Method getFilledDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "filledDate", length = 19)
-	public Date getFilledDate() {
+	@Column(name = "filledDate")
+	public ZonedDateTime getFilledDate() {
 		return this.filledDate;
 	}
 
@@ -448,9 +446,9 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 	 * Method setFilledDate.
 	 * 
 	 * @param filledDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setFilledDate(Date filledDate) {
+	public void setFilledDate(ZonedDateTime filledDate) {
 		this.filledDate = filledDate;
 	}
 

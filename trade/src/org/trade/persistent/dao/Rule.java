@@ -39,8 +39,8 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.time.ZonedDateTime;
 import java.util.Comparator;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,8 +51,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -77,14 +75,13 @@ public class Rule extends Aspect implements java.io.Serializable {
 	private Strategy strategy;
 	private String comment;
 	@NotNull
-	private Date createDate;
-	private Date lastUpdateDate;
+	private ZonedDateTime createDate;
+	private ZonedDateTime lastUpdateDate;
 	private byte[] rule;
 	private boolean dirty = false;
 
 	public Rule() {
-		this.createDate = TradingCalendar.getDate((new java.util.Date())
-				.getTime());
+		this.createDate = TradingCalendar.getDateTimeNowMarketTimeZone();
 		this.lastUpdateDate = this.createDate;
 	}
 
@@ -103,7 +100,7 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 *            Date
 	 */
 	public Rule(Strategy strategy, Integer version, String comment,
-			Date createDate, Date lastUpdateDate) {
+			ZonedDateTime createDate, ZonedDateTime lastUpdateDate) {
 		this.strategy = strategy;
 		this.version = version;
 		this.comment = comment;
@@ -128,7 +125,7 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 *            Date
 	 */
 	public Rule(Strategy strategy, Integer version, String comment,
-			Date createDate, byte[] rule, Date lastUpdateDate) {
+			ZonedDateTime createDate, byte[] rule, ZonedDateTime lastUpdateDate) {
 		this.strategy = strategy;
 		this.version = version;
 		this.comment = comment;
@@ -203,11 +200,10 @@ public class Rule extends Aspect implements java.io.Serializable {
 	/**
 	 * Method getCreateDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createDate", nullable = false, length = 19)
-	public Date getCreateDate() {
+	@Column(name = "createDate", nullable = false)
+	public ZonedDateTime getCreateDate() {
 		return this.createDate;
 	}
 
@@ -215,20 +211,20 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 * Method setCreateDate.
 	 * 
 	 * @param createDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(ZonedDateTime createDate) {
 		this.createDate = createDate;
 	}
 
 	/**
 	 * Method getLastUpdateDate.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "lastUpdateDate", nullable = false, length = 19)
-	public Date getLastUpdateDate() {
+
+	@Column(name = "lastUpdateDate", nullable = false)
+	public ZonedDateTime getLastUpdateDate() {
 		return this.lastUpdateDate;
 	}
 
@@ -236,9 +232,9 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 * Method setLastUpdateDate.
 	 * 
 	 * @param lastUpdateDate
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 

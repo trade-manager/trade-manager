@@ -35,7 +35,7 @@
  */
 package org.trade.strategy;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +127,8 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -177,18 +178,19 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 			 * Is it the the 9:35 candle? and we have not created an open
 			 * position trade.
 			 */
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), this
-					.getTradestrategy().getBarSize() / 60))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getOpen()
+					.plusMinutes(this.getTradestrategy().getBarSize() / 60))
 					&& newBar) {
 
-				Date preTradingDate = TradingCalendar.getPrevTradingDay(this
-						.getTradestrategy().getTradingday().getOpen());
+				ZonedDateTime preTradingDate = TradingCalendar
+						.getPrevTradingDay(this.getTradestrategy()
+								.getTradingday().getOpen());
 
-				Date prevDayStart = TradingCalendar
-						.getBusinessDayStart(preTradingDate);
-				Date prevDayEnd = TradingCalendar
-						.getBusinessDayEnd(preTradingDate);
+				ZonedDateTime prevDayStart = TradingCalendar
+						.getTradingDayStart(preTradingDate);
+				ZonedDateTime prevDayEnd = TradingCalendar
+						.getTradingDayEnd(preTradingDate);
 				// _log.error("prevDayStart: " + prevDayStart
 				// + " prevDayEnd: " + prevDayEnd);
 
@@ -245,11 +247,10 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 
 			} else {
 
-				if (startPeriod.before(TradingCalendar.addMinutes(this
-						.getTradestrategy().getTradingday().getClose(), -30))
-						&& startPeriod.after(TradingCalendar.addMinutes(this
-								.getTradestrategy().getTradingday().getOpen(),
-								5))) {
+				if (startPeriod.isBefore(this.getTradestrategy()
+						.getTradingday().getClose().minusMinutes(30))
+						&& startPeriod.isAfter(this.getTradestrategy()
+								.getTradingday().getOpen().plusMinutes(5))) {
 
 					CandleItem prevCandleItem = null;
 					if (getCurrentCandleCount() > 0) {
@@ -284,8 +285,8 @@ public class FiveMinSideGapBarHopperStrategy extends AbstractStrategyRule {
 				}
 			}
 
-			if (!startPeriod.before(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getClose(), -30))) {
+			if (!startPeriod.isBefore(this.getTradestrategy().getTradingday()
+					.getClose().minusMinutes(30))) {
 				_log.info("Rule 15:30:00 bar, time out unfilled open position Symbol: "
 						+ getSymbol() + " Time: " + startPeriod);
 				if (!this.isThereOpenPosition()

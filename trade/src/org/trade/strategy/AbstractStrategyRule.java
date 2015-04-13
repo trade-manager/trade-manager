@@ -37,7 +37,7 @@ package org.trade.strategy;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import javax.swing.event.EventListenerList;
 
@@ -105,7 +105,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	private final Object lockStrategyWorker = new Object();
 	private boolean listeningCandles = false;
 	private int currentCandleCount = -1;
-	private Date strategyLastFired = new Date();
+	private ZonedDateTime strategyLastFired = TradingCalendar
+			.getDateTimeNowMarketTimeZone();
 
 	/**
 	 * Constructor for AbstractStrategyRule. An abstract class that implements
@@ -377,8 +378,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 						if (!getCurrentCandle()
 								.getPeriod()
 								.getStart()
-								.before(this.tradestrategy.getTradingday()
-										.getOpen())) {
+								.isBefore(
+										this.tradestrategy.getTradingday()
+												.getOpen())) {
 							/*
 							 * Refresh the orders in the positionOrders as these
 							 * may have been filled via another thread. This
@@ -394,7 +396,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 							this.tradestrategy.getContract().setLastPrice(
 									candleSeries.getContract().getLastPrice());
 							runStrategy(candleSeries, newCandle);
-							strategyLastFired = new Date();
+							strategyLastFired = TradingCalendar
+									.getDateTimeNowMarketTimeZone();
 						}
 					}
 					/*
@@ -454,7 +457,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		 */
 		synchronized (lockStrategyWorker) {
 			seriesChanged = true;
-			lockStrategyWorker.notifyAll();
+			lockStrategyWorker.notify();
 		}
 	}
 
@@ -504,7 +507,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	public void seriesChanged(SeriesChangeEvent event) {
 		synchronized (lockStrategyWorker) {
 			seriesChanged = true;
-			lockStrategyWorker.notifyAll();
+			lockStrategyWorker.notify();
 		}
 	}
 
@@ -841,8 +844,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 							side, action, 0.01);
 				}
 			}
-			tradeOrder.setLastUpdateDate(TradingCalendar.getDate((new Date())
-					.getTime()));
+			tradeOrder.setLastUpdateDate(TradingCalendar
+					.getDateTimeNowMarketTimeZone());
 			tradeOrder.setLimitPrice((null == limitPrice ? null : limitPrice
 					.getBigDecimalValue()));
 			tradeOrder.setAuxPrice((null == auxPrice ? null : auxPrice
@@ -1354,7 +1357,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 									|| !tradeOrder.getTransmit().equals(
 											transmit)) {
 								tradeOrder.setLastUpdateDate(TradingCalendar
-										.getDate((new Date()).getTime()));
+										.getDateTimeNowMarketTimeZone());
 								tradeOrder.setAuxPrice(stopPrice
 										.getBigDecimalValue());
 								tradeOrder.setTransmit(transmit);
@@ -1476,7 +1479,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return CandleItem
 	 * @throws StrategyRuleException
 	 */
-	public CandleItem getCandle(Date startPeriod) throws StrategyRuleException {
+	public CandleItem getCandle(ZonedDateTime startPeriod)
+			throws StrategyRuleException {
 		CandleItem candle = null;
 		CandleSeries baseCandleSeries = getTradestrategy().getStrategyData()
 				.getBaseCandleSeries();
@@ -1508,7 +1512,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		try {
 			this.getTradestrategyOrders().setStatus(status);
 			this.getTradestrategyOrders().setLastUpdateDate(
-					TradingCalendar.getDate((new Date()).getTime()));
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			this.tradestrategyOrders = this.tradePersistentModel
 					.persistAspect(this.getTradestrategyOrders());
 		} catch (Exception ex) {
@@ -1556,9 +1560,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	/**
 	 * Method getStrategyLastFired.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	public Date getStrategyLastFired() {
+	public ZonedDateTime getStrategyLastFired() {
 		return strategyLastFired;
 	}
 
@@ -1735,7 +1739,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Date
 	 * @return boolean
 	 */
-	public boolean isDuringTradingday(Date dateTime) {
+	public boolean isDuringTradingday(ZonedDateTime dateTime) {
 		if (TradingCalendar.isMarketHours(getTradestrategy().getTradingday()
 				.getOpen(), getTradestrategy().getTradingday().getClose(),
 				dateTime)
@@ -1850,11 +1854,12 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * Method getOrderCreateDate. If realtimebars running use current time
 	 * otherwise we are testing use candle lastUpdateDate.
 	 * 
-	 * @return Date
+	 * @return LocalDatetime
 	 * @throws StrategyRuleException
 	 */
-	private Date getOrderCreateDate() {
-		Date createDate = TradingCalendar.getDate();
+	private ZonedDateTime getOrderCreateDate() {
+		ZonedDateTime createDate = TradingCalendar
+				.getDateTimeNowMarketTimeZone();
 		if (!brokerModel.isRealtimeBarsRunning(this.tradestrategy)) {
 			if (null != this.getCurrentCandle())
 				createDate = this.getCurrentCandle().getPeriod().getStart();

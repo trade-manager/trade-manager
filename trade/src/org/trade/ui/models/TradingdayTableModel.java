@@ -35,6 +35,7 @@
  */
 package org.trade.ui.models;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -121,8 +122,8 @@ public class TradingdayTableModel extends TableModel {
 	public boolean isCellEditable(int row, int column) {
 		Date openDate = (Date) this.getValueAt(row, 0);
 		Date closeDate = (Date) this.getValueAt(row, 1);
-		Tradingday tradingday = getData().getTradingday(openDate.getDate(),
-				closeDate.getDate());
+		Tradingday tradingday = getData().getTradingday(
+				openDate.getZonedDateTime(), closeDate.getZonedDateTime());
 		if (null != tradingday && Tradingdays.hasTradeOrders(tradingday)) {
 			if ((columnNames[column] == OPEN) || (columnNames[column] == CLOSE)) {
 				return false;
@@ -168,19 +169,20 @@ public class TradingdayTableModel extends TableModel {
 			Date openDate = ((Date) super.getValueAt(row, 0));
 			if (null != closeDate && null != openDate) {
 				if (closeDate.getDate().before(openDate.getDate())) {
-					Date date = new Date(TradingCalendar.addBusinessDays(
-							closeDate.getDate(), 1));
-					if (TradingCalendar.daysDiff(openDate.getDate(),
-							date.getDate()) > 1)
-						date = openDate;
-					this.setValueAt(date, row, column);
-					return date;
+					ZonedDateTime date = TradingCalendar.addTradingDays(
+							closeDate.getZonedDateTime(), 1);
+					if (TradingCalendar.getDurationInDays(
+							openDate.getZonedDateTime(), date) > 1)
+						this.setValueAt(openDate, row, column);
+					return openDate;
 				}
 
-				if (((closeDate.getDate().getTime() - openDate.getDate()
-						.getTime()) / 1000) > (60 * 60 * 24)) {
-					Date date = new Date(TradingCalendar.getSpecificTime(
-							closeDate.getDate(), openDate.getDate()));
+				if (TradingCalendar.getDurationInDays(
+						openDate.getZonedDateTime(),
+						closeDate.getZonedDateTime()) > 1) {
+					Date date = new Date(TradingCalendar.getDateAtTime(
+							openDate.getZonedDateTime(),
+							closeDate.getZonedDateTime()));
 					this.setValueAt(date, row, column);
 					return date;
 				}
@@ -223,16 +225,16 @@ public class TradingdayTableModel extends TableModel {
 
 		Date openDate = (Date) super.getValueAt(row, 0);
 		Date closeDate = (Date) super.getValueAt(row, 1);
-		Tradingday element = getData().getTradingday(openDate.getDate(),
-				closeDate.getDate());
+		Tradingday element = getData().getTradingday(
+				openDate.getZonedDateTime(), closeDate.getZonedDateTime());
 
 		switch (column) {
 		case 0: {
-			element.setOpen(((Date) value).getDate());
+			element.setOpen(((Date) value).getZonedDateTime());
 			break;
 		}
 		case 1: {
-			element.setClose(((Date) value).getDate());
+			element.setClose(((Date) value).getZonedDateTime());
 			break;
 		}
 		case 2: {
@@ -263,8 +265,8 @@ public class TradingdayTableModel extends TableModel {
 
 		Date open = (Date) this.getValueAt(selectedRow, 0);
 		Date close = (Date) this.getValueAt(selectedRow, 1);
-		Tradingday element = getData().getTradingday(open.getDate(),
-				close.getDate());
+		Tradingday element = getData().getTradingday(open.getZonedDateTime(),
+				close.getZonedDateTime());
 		if (!element.getTradestrategies().isEmpty())
 			element.getTradestrategies().clear();
 		getData().remove(element);
@@ -276,18 +278,18 @@ public class TradingdayTableModel extends TableModel {
 
 	public void addRow() {
 
-		java.util.Date date = new java.util.Date();
+		ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone();
 		if (!TradingCalendar.isTradingDay(date)) {
 			date = TradingCalendar.getNextTradingDay(date);
 		}
 		Tradingday tradingday = new Tradingday(
-				TradingCalendar.getBusinessDayStart(date),
-				TradingCalendar.getBusinessDayEnd(date));
+				TradingCalendar.getTradingDayStart(date),
+				TradingCalendar.getTradingDayEnd(date));
 		while (getData().containsTradingday(tradingday)) {
 			date = TradingCalendar.getNextTradingDay(date);
 			tradingday = new Tradingday(
-					TradingCalendar.getBusinessDayStart(date),
-					TradingCalendar.getBusinessDayEnd(date));
+					TradingCalendar.getTradingDayStart(date),
+					TradingCalendar.getTradingDayEnd(date));
 		}
 		getData().add(tradingday);
 		Vector<Object> newRow = new Vector<Object>();

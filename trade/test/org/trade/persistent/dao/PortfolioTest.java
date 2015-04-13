@@ -41,7 +41,11 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.AspectHome;
 import org.trade.core.dao.Aspects;
@@ -53,6 +57,11 @@ import org.trade.ui.TradeAppLoadConfig;
 /**
  */
 public class PortfolioTest {
+
+	private final static Logger _log = LoggerFactory
+			.getLogger(PortfolioTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	private AspectHome aspectHome = new AspectHome();
 
@@ -113,8 +122,11 @@ public class PortfolioTest {
 			portfolio = aspectHome.persist(portfolio);
 			assertNotNull(portfolio.getIndividualAccount());
 
-		} catch (Exception e) {
-			fail("Error adding row " + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

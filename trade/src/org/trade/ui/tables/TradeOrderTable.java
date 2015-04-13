@@ -37,13 +37,13 @@ package org.trade.ui.tables;
 
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.text.MaskFormatter;
 
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.Action;
@@ -123,8 +123,9 @@ public class TradeOrderTable extends Table {
 		this.setDefaultEditor(OrderStatus.class, orderStatusEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(new Date()), DATETIMEFORMAT,
-				Calendar.DAY_OF_MONTH);
+				new org.trade.core.valuetype.Date(TradingCalendar
+						.getDateTimeNowMarketTimeZone()),
+				DATETIMEFORMAT, Calendar.DAY_OF_MONTH);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

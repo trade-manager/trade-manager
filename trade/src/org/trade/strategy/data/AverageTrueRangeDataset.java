@@ -43,13 +43,13 @@ import java.util.List;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.time.RegularTimePeriod;
-import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.ObjectUtilities;
 import org.trade.strategy.data.atr.AverageTrueRangeItem;
 import org.trade.strategy.data.atr.IAverageTrueRangeDataset;
+import org.trade.strategy.data.base.RegularTimePeriod;
+import org.trade.strategy.data.base.TimePeriodAnchor;
 
 /**
  */

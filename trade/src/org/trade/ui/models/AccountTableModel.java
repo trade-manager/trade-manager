@@ -190,7 +190,8 @@ public class AccountTableModel extends TableModel {
 			break;
 		}
 		case 11: {
-			element.getAccount().setLastUpdateDate(((Date) value).getDate());
+			element.getAccount().setLastUpdateDate(
+					((Date) value).getZonedDateTime());
 			break;
 		}
 		default: {

@@ -37,19 +37,19 @@ package org.trade.strategy.data;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.time.RegularTimePeriod;
-import org.jfree.data.time.TimePeriodAnchor;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.ObjectUtilities;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.Contract;
+import org.trade.strategy.data.base.RegularTimePeriod;
+import org.trade.strategy.data.base.TimePeriodAnchor;
 import org.trade.strategy.data.candle.CandleItem;
 import org.trade.strategy.data.candle.OHLCVwapDataset;
 import org.trade.ui.chart.renderer.CandleRenderer;
@@ -585,8 +585,8 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @return CandleSeries
 	 */
 	public static CandleSeries createSeries(CandleDataset source,
-			int seriesIndex, Contract contract, int bars, Date startTime,
-			Date endTime) {
+			int seriesIndex, Contract contract, int bars,
+			ZonedDateTime startTime, ZonedDateTime endTime) {
 
 		if (source.getSeries(seriesIndex) == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");

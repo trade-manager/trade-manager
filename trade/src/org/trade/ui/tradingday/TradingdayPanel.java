@@ -47,11 +47,9 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -82,6 +80,7 @@ import javax.swing.text.StyleConstants;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
+import org.trade.core.valuetype.Date;
 import org.trade.core.valuetype.Decode;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.DAOPortfolio;
@@ -141,8 +140,7 @@ public class TradingdayPanel extends BasePanel {
 	private JEditorPane portfolioLabel = null;
 	private static final NumberFormat currencyFormater = NumberFormat
 			.getCurrencyInstance();
-	private final SimpleDateFormat dateFormater = new SimpleDateFormat(
-			"MM/dd/yy HH:mm:ss", Locale.getDefault());
+	private final String DATE_FORMAT = "MM/dd/yy HH:mm:ss";
 
 	private static final SimpleAttributeSet bold = new SimpleAttributeSet();
 	private static final SimpleAttributeSet colorRedAttr = new SimpleAttributeSet();
@@ -181,7 +179,6 @@ public class TradingdayPanel extends BasePanel {
 			m_defaultDir = ConfigProperties
 					.getPropAsString("trade.csv.default.dir");
 			currencyFormater.setMinimumFractionDigits(2);
-			dateFormater.setLenient(false);
 
 			// This allows the controller to listen to these events
 			transferButton = new BaseButton(controller,
@@ -267,13 +264,13 @@ public class TradingdayPanel extends BasePanel {
 			JSpinner.DateEditor de = new JSpinner.DateEditor(spinnerStart,
 					DATEFORMAT);
 			spinnerStart.setEditor(de);
-			spinnerStart.setValue(tradingday.getOpen());
+			spinnerStart.setValue((new Date(tradingday.getOpen())).getDate());
 
 			spinnerEnd.setModel(new SpinnerDateModel());
 			JSpinner.DateEditor de1 = new JSpinner.DateEditor(spinnerEnd,
 					DATEFORMAT);
 			spinnerEnd.setEditor(de1);
-			spinnerEnd.setValue(tradingday.getOpen());
+			spinnerEnd.setValue((new Date(tradingday.getOpen())).getDate());
 			portfolioLabel = new JEditorPane("text/rtf", "");
 			portfolioLabel.setAutoscrolls(false);
 			portfolioLabel.setEditable(false);
@@ -480,7 +477,7 @@ public class TradingdayPanel extends BasePanel {
 						boolean dirty = false;
 						for (Tradingday tradingday : m_tradingdays
 								.getTradingdays()) {
-							if (tradingday.getClose().before(
+							if (tradingday.getClose().isBefore(
 									tradingday.getOpen())
 									|| tradingday.getClose().equals(
 											tradingday.getOpen())) {
@@ -526,13 +523,20 @@ public class TradingdayPanel extends BasePanel {
 	public void doSearch() {
 		try {
 			this.clearStatusBarMessage();
-			Date startDate = TradingCalendar.getSpecificTime(
-					(Date) spinnerStart.getValue(), 0, 0, 0);
-			Date endDate = TradingCalendar.getSpecificTime(
-					(Date) spinnerEnd.getValue(), 23, 59, 59);
-			if (endDate.before(startDate)) {
-				startDate = TradingCalendar.getSpecificTime(endDate, 0, 0, 0);
-				spinnerStart.setValue(startDate);
+
+			ZonedDateTime startDate = TradingCalendar
+					.getZonedDateTimeFromMilli(((java.util.Date) spinnerStart
+							.getValue()).getTime());
+			startDate = TradingCalendar.getDateAtTime(startDate, 0, 0, 0);
+
+			ZonedDateTime endDate = TradingCalendar
+					.getZonedDateTimeFromMilli(((java.util.Date) spinnerEnd
+							.getValue()).getTime());
+			endDate = TradingCalendar.getDateAtTime(endDate, 23, 59, 59);
+
+			if (endDate.isBefore(startDate)) {
+				startDate = TradingCalendar.getDateAtTime(endDate, 0, 0, 0);
+				spinnerStart.setValue((new Date(startDate)).getDate());
 			}
 			/*
 			 * Check to see if in the new search criteria do we have todays
@@ -543,12 +547,16 @@ public class TradingdayPanel extends BasePanel {
 			Tradingdays tradingdays = m_tradePersistentModel
 					.findTradingdaysByDateRange(startDate, endDate);
 			Tradingday todayTradingday = tradingdays.getTradingday(
-					TradingCalendar.getTodayBusinessDayStart(),
-					TradingCalendar.getTodayBusinessDayEnd());
+					TradingCalendar.getTradingDayStart(TradingCalendar
+							.getDateTimeNowMarketTimeZone()), TradingCalendar
+							.getTradingDayEnd(TradingCalendar
+									.getDateTimeNowMarketTimeZone()));
 			if (null != todayTradingday) {
 				Tradingday currTodayTradingday = m_tradingdays.getTradingday(
-						TradingCalendar.getTodayBusinessDayStart(),
-						TradingCalendar.getTodayBusinessDayEnd());
+						TradingCalendar.getTradingDayStart(TradingCalendar
+								.getDateTimeNowMarketTimeZone()),
+						TradingCalendar.getTradingDayEnd(TradingCalendar
+								.getDateTimeNowMarketTimeZone()));
 				if (null != currTodayTradingday
 						&& !currTodayTradingday.getTradestrategies().isEmpty()
 						&& this.isConnected()) {
@@ -561,11 +569,12 @@ public class TradingdayPanel extends BasePanel {
 				m_tradestrategyModel.setData(new Tradingday());
 				this.setStatusBarMessage(
 						"Did not find data for period From Date: "
-								+ TradingCalendar.getFormattedDate(startDate,
-										DATEFORMAT)
+								+ TradingCalendar.getFormattedDate(
+										startDate.toLocalDate(), DATEFORMAT)
 								+ " To Date: "
-								+ TradingCalendar.getFormattedDate(endDate,
-										DATEFORMAT), BasePanel.INFORMATION);
+								+ TradingCalendar.getFormattedDate(
+										endDate.toLocalDate(), DATEFORMAT),
+						BasePanel.INFORMATION);
 
 			} else {
 				for (Tradingday tradingday : tradingdays.getTradingdays()) {
@@ -700,10 +709,10 @@ public class TradingdayPanel extends BasePanel {
 			int selectedRow = m_tradingdayTable.getSelectedRow();
 			m_tradingdayModel.setData(m_tradingdays);
 			for (int i = 0; i < m_tradingdayModel.getRowCount(); i++) {
-				Date open = ((org.trade.core.valuetype.Date) m_tradingdayModel
-						.getValueAt(i, 0)).getDate();
-				Date close = ((org.trade.core.valuetype.Date) m_tradingdayModel
-						.getValueAt(i, 1)).getDate();
+				ZonedDateTime open = ((org.trade.core.valuetype.Date) m_tradingdayModel
+						.getValueAt(i, 0)).getZonedDateTime();
+				ZonedDateTime close = ((org.trade.core.valuetype.Date) m_tradingdayModel
+						.getValueAt(i, 1)).getZonedDateTime();
 				if (tradingday.getOpen().equals(open)
 						&& tradingday.getClose().equals(close)) {
 					selectedRow = m_tradingdayTable.convertRowIndexToView(i);
@@ -740,7 +749,7 @@ public class TradingdayPanel extends BasePanel {
 					.getValueAt(m_tradingdayTable.convertRowIndexToModel(row),
 							1);
 			Tradingday tradingday = m_tradingdayModel.getData().getTradingday(
-					openDate.getDate(), closeDate.getDate());
+					openDate.getZonedDateTime(), closeDate.getZonedDateTime());
 			doRefresh(tradingday);
 			this.doRefreshTradingdayTable(tradingday);
 		}
@@ -810,7 +819,8 @@ public class TradingdayPanel extends BasePanel {
 							.getValueAt(m_tradingdayTable
 									.convertRowIndexToModel(selectedRow), 1);
 					tradingday = m_tradingdayModel.getData().getTradingday(
-							openDate.getDate(), closeDate.getDate());
+							openDate.getZonedDateTime(),
+							closeDate.getZonedDateTime());
 				}
 
 				m_tradingdays.populateDataFromFile(fileName, tradingday);
@@ -818,18 +828,14 @@ public class TradingdayPanel extends BasePanel {
 				if (m_tradingdays.getTradingdays().size() > 0) {
 					m_tradingdayTable.setRowSelectionInterval(selectedRow,
 							selectedRow);
-					spinnerEnd
-							.setValue(((org.trade.core.valuetype.Date) m_tradingdayModel
-									.getValueAt(m_tradingdayTable
-											.convertRowIndexToModel(0), 0))
-									.getDate());
+					spinnerEnd.setValue(((Date) m_tradingdayModel.getValueAt(
+							m_tradingdayTable.convertRowIndexToModel(0), 0))
+							.getDate());
 
-					spinnerStart
-							.setValue(((org.trade.core.valuetype.Date) m_tradingdayModel.getValueAt(
-									m_tradingdayTable
-											.convertRowIndexToModel(m_tradingdayModel
-													.getRowCount() - 1), 1))
-									.getDate());
+					spinnerStart.setValue(((Date) m_tradingdayModel.getValueAt(
+							m_tradingdayTable
+									.convertRowIndexToModel(m_tradingdayModel
+											.getRowCount() - 1), 1)).getDate());
 				}
 			}
 			this.clearStatusBarMessage();
@@ -874,7 +880,8 @@ public class TradingdayPanel extends BasePanel {
 			BigDecimal grossPositionValue = new BigDecimal(0);
 			BigDecimal realizedPnL = new BigDecimal(0);
 			BigDecimal unrealizedPnL = new BigDecimal(0);
-			Date updateDate = new Date();
+			ZonedDateTime updateDate = TradingCalendar
+					.getDateTimeNowMarketTimeZone();
 			for (PortfolioAccount portfolioAccount : portfolio
 					.getPortfolioAccounts()) {
 				availableFunds = availableFunds
@@ -966,9 +973,11 @@ public class TradingdayPanel extends BasePanel {
 			CoreUtils.setDocumentText(portfolioLabel.getDocument(), " Date:",
 					false, bold);
 			CoreUtils.setDocumentText(portfolioLabel.getDocument(), CoreUtils
-					.padRight(dateFormater
-							.format((updateDate == null ? new Date()
-									: updateDate)), 17), false, null);
+					.padRight(TradingCalendar.getFormattedDate(
+							(updateDate == null ? TradingCalendar
+									.getDateTimeNowMarketTimeZone()
+									: updateDate), DATE_FORMAT), 17), false,
+					null);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error setting Trade Account Label.",
@@ -1337,8 +1346,8 @@ public class TradingdayPanel extends BasePanel {
 										.convertRowIndexToModel(model
 												.getLeadSelectionIndex()), 1);
 						Tradingday transferObject = m_tradingdayModel.getData()
-								.getTradingday(openDate.getDate(),
-										closeDate.getDate());
+								.getTradingday(openDate.getZonedDateTime(),
+										closeDate.getZonedDateTime());
 
 						m_tradestrategyModel.setData(transferObject);
 						m_tradestrategyTable.enablePopupMenu(true);

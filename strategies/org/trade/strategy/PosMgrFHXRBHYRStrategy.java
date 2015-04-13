@@ -35,8 +35,8 @@
  */
 package org.trade.strategy;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +121,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
@@ -383,14 +384,14 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * that break the 5min high/low between 9:40 thru 15:30.
 			 */
 
-			if (startPeriod.before(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getClose(), -30))
-					&& startPeriod.after(TradingCalendar.addMinutes(this
-							.getTradestrategy().getTradingday().getOpen(), 5))) {
+			if (startPeriod.isBefore(this.getTradestrategy().getTradingday()
+					.getClose().minusMinutes(30))
+					&& startPeriod.isAfter(this.getTradestrategy()
+							.getTradingday().getOpen().plusMinutes(5))) {
 
 				CandleItem firstCandle = this.getCandle(TradingCalendar
-						.getSpecificTime(this.getTradestrategy()
-								.getTradingday().getOpen(), startPeriod));
+						.getDateAtTime(startPeriod, this.getTradestrategy()
+								.getTradingday().getOpen()));
 
 				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
 					if (currentCandleItem.getVwap() < firstCandle.getVwap()) {
@@ -426,8 +427,8 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * At 15:30 Move stop order to b.e. i.e. the average fill price of
 			 * the open order.
 			 */
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getClose(), -30))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getClose().minusMinutes(30))
 					&& newBar) {
 
 				_log.info("Rule move stop to b.e.. Symbol: " + getSymbol()
@@ -512,9 +513,9 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().before(
-					TradingCalendar.addMinutes(this.getTradestrategy()
-							.getTradingday().getClose(), -2))) {
+			if (!currentCandleItem.getLastUpdateDate().isBefore(
+					this.getTradestrategy().getTradingday().getClose()
+							.minusMinutes(2))) {
 				cancelOrdersClosePosition(true);
 				_log.info("PositionManagerStrategy 15:58:00 done: "
 						+ getSymbol() + " Time: " + startPeriod);
@@ -573,8 +574,7 @@ public class PosMgrFHXRBHYRStrategy extends AbstractStrategyRule {
 			Money stopPrice, CandleItem currentCandle)
 			throws StrategyRuleException {
 
-		if (!(59 == TradingCalendar
-				.getSecond(currentCandle.getLastUpdateDate())))
+		if (!(59 == currentCandle.getLastUpdateDate().getSecond()))
 			return stopPrice;
 
 		if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {

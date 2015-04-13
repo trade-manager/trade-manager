@@ -48,7 +48,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.valuetype.Money;
@@ -63,6 +65,9 @@ public class CoreUtilsTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(CoreUtilsTest.class);
+
+	@Rule
+	public TestName name = new TestName();
 
 	private static final int SCALE = 5;
 
@@ -106,35 +111,38 @@ public class CoreUtilsTest {
 	public void testIsBetween() {
 		try {
 
-			assertTrue(CoreUtils.isBetween(new BigDecimal(12.20),
+			assertTrue("1", CoreUtils.isBetween(new BigDecimal(12.20),
 					new BigDecimal(12.24), new BigDecimal(12.23)));
 
-			assertTrue(CoreUtils.isBetween(new Integer(12), new Integer(18),
-					new Integer(15)));
+			assertTrue("2", CoreUtils.isBetween(new Integer(12),
+					new Integer(18), new Integer(15)));
 
-			assertFalse(CoreUtils.isBetween(new Integer(12), new Integer(18),
-					new Integer(6)));
+			assertFalse("3", CoreUtils.isBetween(new Integer(12), new Integer(
+					18), new Integer(6)));
 
-			assertTrue(CoreUtils.isBetween(12.20d, 12.24d, 12.23d));
+			assertTrue("4", CoreUtils.isBetween(12.20d, 12.24d, 12.23d));
 
-			assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.26d));
+			assertTrue("5", CoreUtils.isBetween(12.20d, 12.26d, 12.26d));
 
-			assertTrue(CoreUtils.isBetween(12.20d, 12.26d, 12.20d));
+			assertTrue("6", CoreUtils.isBetween(12.20d, 12.26d, 12.20d));
 
-			assertTrue(CoreUtils.isBetween(12.24d, 12.20d, 12.23d));
+			assertTrue("7", CoreUtils.isBetween(12.24d, 12.20d, 12.23d));
 
-			assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.26d));
+			assertTrue("8", CoreUtils.isBetween(12.26d, 12.20d, 12.26d));
 
-			assertTrue(CoreUtils.isBetween(12.26d, 12.20d, 12.20d));
+			assertTrue("9", CoreUtils.isBetween(12.26d, 12.20d, 12.20d));
 
-			assertTrue(CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
-			assertFalse(CoreUtils.isBetween(12, 14, 11));
+			assertTrue("10", CoreUtils.isBetween(12.20d, 12.20d, 12.20d));
 
-			assertFalse(CoreUtils.isBetween(12, 14, 15));
+			assertFalse("11", CoreUtils.isBetween(12, 14, 11));
 
-		} catch (Exception ex) {
-			_log.error("Error testIsBetween: " + ex.getMessage(), ex);
-			fail("Error testIsBetween: " + ex.getCause().getMessage());
+			assertFalse("12", CoreUtils.isBetween(12, 14, 15));
+
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -144,40 +152,40 @@ public class CoreUtilsTest {
 
 			int returnVal = CoreUtils.nullSafeComparator(null, new BigDecimal(
 					1.23));
-			assertEquals(-1, returnVal);
+			assertEquals("1", -1, returnVal);
 
 			returnVal = CoreUtils
 					.nullSafeComparator(new BigDecimal(1.23), null);
-			assertEquals(1, returnVal);
+			assertEquals("2", 1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(-1.23),
 					new BigDecimal(-1.24));
-			assertEquals(1, returnVal);
+			assertEquals("3", 1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, null);
-			assertEquals(0, returnVal);
+			assertEquals("4", 0, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.23),
 					new BigDecimal(1.24));
-			assertEquals(-1, returnVal);
+			assertEquals("5", -1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.25),
 					new BigDecimal(1.24));
-			assertEquals(1, returnVal);
+			assertEquals("6", 1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, 1);
-			assertEquals(-1, returnVal);
+			assertEquals("7", -1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, new Integer(0));
-			assertEquals(-1, returnVal);
+			assertEquals("8", -1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new Integer(0),
 					new Integer(0));
-			assertEquals(0, returnVal);
+			assertEquals("9", 0, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(new Integer(1),
 					new Integer(0));
-			assertEquals(1, returnVal);
+			assertEquals("10", 1, returnVal);
 
 			Money avgFilledPrice = new Money(186.75);
 			Money lastPrice = new Money(186.78);
@@ -264,14 +272,17 @@ public class CoreUtilsTest {
 				}
 			}
 			assertEquals(
+					"11",
 					new Money(lastPrice.getBigDecimalValue().subtract(
 							stopMoveAmount.getBigDecimalValue().multiply(
 									new BigDecimal(buySellMultiplier)))),
 					auxPrice);
 
-		} catch (Exception ex) {
-			_log.error("Error testNullSafe: " + ex.getMessage(), ex);
-			fail("Error testNullSafe: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -280,16 +291,17 @@ public class CoreUtilsTest {
 
 		BigDecimal avgFillPrice = new BigDecimal("35.34567897").setScale(SCALE,
 				BigDecimal.ROUND_HALF_EVEN);
-		assertEquals(new BigDecimal("35.34568"), avgFillPrice);
+		assertEquals("1", new BigDecimal("35.34568"), avgFillPrice);
+
 		avgFillPrice = new BigDecimal("35.34567344").setScale(SCALE,
 				BigDecimal.ROUND_HALF_EVEN);
-		assertEquals(new BigDecimal("35.34567"), avgFillPrice);
+		assertEquals("2", new BigDecimal("35.34567"), avgFillPrice);
 
-		assertEquals(0, BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
+		assertEquals("3", 0, BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
 
-		assertEquals(-1, BigDecimal.ZERO.compareTo(new BigDecimal(0.01)));
+		assertEquals("4", -1, BigDecimal.ZERO.compareTo(new BigDecimal(0.01)));
 
-		assertEquals(1, BigDecimal.ZERO.compareTo(new BigDecimal(-0.01)));
+		assertEquals("5", 1, BigDecimal.ZERO.compareTo(new BigDecimal(-0.01)));
 	}
 
 	private AtomicInteger timerRunning = null;
@@ -322,9 +334,11 @@ public class CoreUtilsTest {
 				}
 			}
 			timer.stop();
-		} catch (Exception ex) {
-			_log.error("Error test10MinTimer: " + ex.getMessage(), ex);
-			fail("Error test10MinTimer: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -341,9 +355,11 @@ public class CoreUtilsTest {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			_log.error("Error testIntRounding: " + ex.getMessage(), ex);
-			fail("Error testIntRounding: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

@@ -35,8 +35,8 @@
  */
 package org.trade.persistent.dao;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -50,7 +50,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
-import org.trade.core.util.TradingCalendar;
 
 /**
  */
@@ -227,12 +226,13 @@ public class TradingdayHome {
 	 * Method findTradingdaysByDateRange.
 	 * 
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Tradingdays
 	 */
-	public Tradingdays findTradingdaysByDateRange(Date startDate, Date endDate) {
+	public Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate,
+			ZonedDateTime endDate) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -249,12 +249,12 @@ public class TradingdayHome {
 
 			if (null != startDate) {
 				Predicate predicate = builder.greaterThanOrEqualTo(
-						from.get("open").as(Date.class), startDate);
+						from.get("open").as(ZonedDateTime.class), startDate);
 				predicates.add(predicate);
 			}
 			if (null != endDate) {
 				Predicate predicate = builder.lessThanOrEqualTo(from
-						.get("open").as(Date.class), endDate);
+						.get("open").as(ZonedDateTime.class), endDate);
 				predicates.add(predicate);
 			}
 
@@ -285,11 +285,14 @@ public class TradingdayHome {
 	/**
 	 * Method findByOpen.
 	 * 
-	 * @param open
-	 *            Date
+	 * @param openDate
+	 *            ZonedDateTime
+	 * @param closeDate
+	 *            ZonedDateTime
 	 * @return Tradingday
 	 */
-	public Tradingday findByOpenCloseDate(Date openDate, Date closeDate) {
+	public Tradingday findByOpenCloseDate(ZonedDateTime openDate,
+			ZonedDateTime closeDate) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -362,12 +365,15 @@ public class TradingdayHome {
 	/**
 	 * Method findTradingdayByOpenDate.
 	 * 
-	 * @param open
-	 *            Date
-	 * @return Tradingday
+	 * @param openDate
+	 *            ZonedDateTime
+	 * @param closeDate
+	 *            ZonedDateTime
+	 * 
+	 @return Tradingday
 	 */
-	private Tradingday findTradingdayByOpenCloseDate(Date openDate,
-			Date closeDate) {
+	private Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate,
+			ZonedDateTime closeDate) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -449,7 +455,7 @@ public class TradingdayHome {
 	 * @return Contract
 	 */
 	private Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, Date expiryDate) {
+			String exchange, String currency, ZonedDateTime expiryDate) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -481,13 +487,13 @@ public class TradingdayHome {
 			}
 			if (null != expiryDate) {
 
-				Integer yearExpiry = TradingCalendar.getYear(expiryDate);
+				Integer yearExpiry = expiryDate.getYear();
 				Expression<Integer> year = builder.function("year",
 						Integer.class, from.get("expiry"));
 				Predicate predicateYear = builder.equal(year, yearExpiry);
 				predicates.add(predicateYear);
 
-				Integer monthExpiry = TradingCalendar.getMonth(expiryDate);
+				Integer monthExpiry = expiryDate.getMonthValue();
 				Expression<Integer> month = builder.function("month",
 						Integer.class, from.get("expiry"));
 				Predicate predicateMonth = builder.equal(month, new Integer(

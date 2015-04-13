@@ -35,18 +35,21 @@
  */
 package org.trade.broker.request;
 
-import java.util.Date;
-
 import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
+import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.AccountType;
 import org.trade.dictionary.valuetype.Currency;
 import org.trade.persistent.PersistentModel;
@@ -58,6 +61,11 @@ import org.trade.ui.TradeAppLoadConfig;
 /**
  */
 public class TWSFinancialAccountRequestTest {
+
+	private final static Logger _log = LoggerFactory
+			.getLogger(TWSFinancialAccountRequestTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	private PersistentModel m_tradePersistentModel = null;
 
@@ -135,8 +143,11 @@ public class TWSFinancialAccountRequestTest {
 				account.setAlias(item.getAlias());
 				m_tradePersistentModel.persistAspect(account);
 			}
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -162,11 +173,15 @@ public class TWSFinancialAccountRequestTest {
 							AccountType.INDIVIDUAL);
 				}
 				account.setAlias(item.getAlias());
-				account.setLastUpdateDate(new Date());
+				account.setLastUpdateDate(TradingCalendar
+						.getDateTimeNowMarketTimeZone());
 				m_tradePersistentModel.persistAspect(account);
 			}
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -191,11 +206,15 @@ public class TWSFinancialAccountRequestTest {
 							AccountType.INDIVIDUAL);
 				}
 				account.setAlias(item.getAlias());
-				account.setLastUpdateDate(new Date());
+				account.setLastUpdateDate(TradingCalendar
+						.getDateTimeNowMarketTimeZone());
 				m_tradePersistentModel.persistAspect(account);
 			}
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -214,8 +233,11 @@ public class TWSFinancialAccountRequestTest {
 			for (Aspect aspect : aspects.getAspect()) {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -234,8 +256,11 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
 
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -254,8 +279,11 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
 
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -276,8 +304,11 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
 
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -296,8 +327,11 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
 
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -317,8 +351,11 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
 
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -338,8 +375,11 @@ public class TWSFinancialAccountRequestTest {
 				m_tradePersistentModel.persistPortfolio((Portfolio) aspect);
 			}
 
-		} catch (Exception e) {
-			fail("Error :" + e.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

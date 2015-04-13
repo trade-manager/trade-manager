@@ -35,8 +35,8 @@
  */
 package org.trade.persistent.dao;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -49,7 +49,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.trade.core.dao.EntityManagerHelper;
-import org.trade.core.util.TradingCalendar;
 
 /**
  */
@@ -72,11 +71,11 @@ public class ContractHome {
 	 * @param currency
 	 *            String
 	 * @param expiryDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Contract
 	 */
 	public Contract findByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, Date expiryDate) {
+			String exchange, String currency, ZonedDateTime expiryDate) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -109,17 +108,16 @@ public class ContractHome {
 			}
 			if (null != expiryDate) {
 
-				Integer yearExpiry = TradingCalendar.getYear(expiryDate);
+				Integer yearExpiry = expiryDate.getYear();
 				Expression<Integer> year = builder.function("year",
 						Integer.class, from.get("expiry"));
 				Predicate predicateYear = builder.equal(year, yearExpiry);
 				predicates.add(predicateYear);
 
-				Integer monthExpiry = TradingCalendar.getMonth(expiryDate);
+				Integer monthExpiry = expiryDate.getMonthValue();
 				Expression<Integer> month = builder.function("month",
 						Integer.class, from.get("expiry"));
-				Predicate predicateMonth = builder.equal(month, new Integer(
-						1 + monthExpiry.intValue()));
+				Predicate predicateMonth = builder.equal(month, monthExpiry);
 				predicates.add(predicateMonth);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));

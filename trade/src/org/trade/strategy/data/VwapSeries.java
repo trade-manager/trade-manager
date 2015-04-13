@@ -36,14 +36,13 @@
 package org.trade.strategy.data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.persistent.dao.Strategy;
+import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.vwap.VwapItem;
 
 /**
@@ -155,31 +154,6 @@ public class VwapSeries extends IndicatorSeries {
 			}
 		}
 		super.add(dataItem, notify);
-	}
-
-	/**
-	 * Returns the true/false if the date falls within a period.
-	 * 
-	 * @param date
-	 *            the date for which we want a period.
-	 * 
-	 * 
-	 * @return exists
-	 */
-	public int indexOf(Date date) {
-
-		for (int i = this.data.size(); i > 0; i--) {
-			VwapItem item = (VwapItem) this.data.get(i - 1);
-			if (date.getTime() > item.getPeriod().getLastMillisecond()) {
-				break;
-			}
-			if ((date.getTime() >= item.getPeriod().getFirstMillisecond())
-					&& (date.getTime() <= item.getPeriod().getLastMillisecond())) {
-				return i - 1;
-			}
-
-		}
-		return -1;
 	}
 
 	/**

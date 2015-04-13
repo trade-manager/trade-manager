@@ -39,12 +39,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -105,23 +103,24 @@ public class YahooBroker extends Broker {
 
 		try {
 
-			SimpleDateFormat _sdfLocal = new SimpleDateFormat(
-					"yyyyMMdd HH:mm:ss");
 			setYahooContractDetails(contract);
 
-			this.brokerModel.contractDetails(contract.hashCode(), contract);
-			this.brokerModel.contractDetailsEnd(contract.hashCode());
-			Date endDate = _sdfLocal.parse(this.endDateTime);
+			this.brokerModel.contractDetails(contract.getId(), contract);
+			this.brokerModel.contractDetailsEnd(contract.getId());
+
+			ZonedDateTime endDate = TradingCalendar
+					.getZonedDateTimeFromDateTimeString(this.endDateTime,
+							"yyyyMMdd HH:mm:ss");
 			ChartDays chartDays = ChartDays.newInstance();
 			chartDays.setDisplayName(this.durationStr);
 
 			BarSize barSize = BarSize.newInstance();
 			barSize.setDisplayName(this.barSizeSetting);
 
-			Date startDate = TradingCalendar.addDays(endDate,
-					(Integer.parseInt(chartDays.getCode()) - 1) * -1);
-			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
-			startDate = TradingCalendar.getSpecificTime(startDate, 0, 0);
+			ZonedDateTime startDate = endDate.minusDays((Integer
+					.parseInt(chartDays.getCode()) - 1));
+			startDate = TradingCalendar.getPrevTradingDay(startDate);
+			startDate = TradingCalendar.getDateAtTime(startDate, 0, 0, 0);
 
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
 				this.setYahooPriceDataDay(this.reqId,
@@ -192,17 +191,21 @@ public class YahooBroker extends Broker {
 	 * @param chartDays
 	 *            int
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
+	 * @param endDate
+	 *            ZonedDateTime
 	 * @throws IOException
 	 */
 	private void setYahooPriceDataIntraday(int reqId, String symbol,
-			int chartDays, Date startDate, Date endDate) throws IOException {
+			int chartDays, ZonedDateTime startDate, ZonedDateTime endDate)
+			throws IOException {
 
 		/*
 		 * Yahoo finance http://chartapi.finance.yahoo.com/instrument/1.0/IBM
 		 * /chartdata;type=quote;range=1d/csv/
 		 */
-		int days = TradingCalendar.daysDiff(startDate, new Date()) + 1;
+		long days = (TradingCalendar.getDurationInDays(startDate,
+				TradingCalendar.getDateTimeNowMarketTimeZone().plusDays(1)));
 
 		String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/"
 				+ symbol + "/chartdata;type=quote;range=" + days + "d/csv/";
@@ -219,7 +222,9 @@ public class YahooBroker extends Broker {
 				StringTokenizer scanLine = new StringTokenizer(inputLine, ",");
 				while (scanLine.hasMoreTokens()) {
 					String dateString = scanLine.nextToken();
-					Date time = new Date(Long.parseLong(dateString) * 1000);
+					ZonedDateTime time = TradingCalendar
+							.getZonedDateTimeFromMilli((Long
+									.parseLong(dateString) * 1000));
 					// values:Timestamp,close,high,low,open,volume
 					double close = Double.parseDouble(scanLine.nextToken());
 					double high = Double.parseDouble(scanLine.nextToken());
@@ -230,8 +235,8 @@ public class YahooBroker extends Broker {
 					// + high + " Low: " + low + " Close: " + close
 					// + " Volume: " + volume);
 
-					if ((time.after(startDate) || time.equals(startDate))
-							&& time.before(endDate)) {
+					if ((time.isAfter(startDate) || time.equals(startDate))
+							&& time.isBefore(endDate)) {
 						this.brokerModel
 								.historicalData(reqId, dateString, open, high,
 										low, close, ((int) volume / 100),
@@ -252,30 +257,28 @@ public class YahooBroker extends Broker {
 	 * @param symbol
 	 *            String
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	private void setYahooPriceDataDay(int reqId, String symbol, Date startDate,
-			Date endDate) throws IOException, ParseException {
+	private void setYahooPriceDataDay(int reqId, String symbol,
+			ZonedDateTime startDate, ZonedDateTime endDate) throws IOException,
+			ParseException {
 
 		/*
 		 * Yahoo finance So IBM form 1/1/2012 thru 06/30/2012
 		 * http://ichart.finance .yahoo.com/table.csv?s=IBM&a=0&b=1&c=2012&d=5
 		 * &e=30&f=2012&ignore=.csv"
 		 */
-		DateFormat df = new SimpleDateFormat("y-M-d");
 		List<Candle> candles = new ArrayList<Candle>();
 
 		String strUrl = "http://ichart.finance.yahoo.com/table.csv?s=" + symbol
-				+ "&a=" + TradingCalendar.getMonth(startDate) + "&b="
-				+ TradingCalendar.getDayOfMonth(startDate) + "&c="
-				+ TradingCalendar.getYear(startDate) + "&d="
-				+ TradingCalendar.getMonth(endDate) + "&e="
-				+ TradingCalendar.getDayOfMonth(endDate) + "&f="
-				+ TradingCalendar.getYear(endDate) + "&ignore=.csv";
+				+ "&a=" + startDate.getMonthValue() + "&b="
+				+ startDate.getDayOfMonth() + "&c=" + startDate.getYear()
+				+ "&d=" + endDate.getMonth() + "&e=" + endDate.getDayOfMonth()
+				+ "&f=" + endDate.getYear() + "&ignore=.csv";
 
 		// _log.info(strUrl);
 		URL url = new URL(strUrl);
@@ -285,8 +288,13 @@ public class YahooBroker extends Broker {
 		in.readLine();
 		while ((inputLine = in.readLine()) != null) {
 			StringTokenizer st = new StringTokenizer(inputLine, ",");
-			Date time = TradingCalendar.getSpecificTime(startDate,
-					df.parse(st.nextToken()));
+
+			ZonedDateTime candleDate = TradingCalendar
+					.getZonedDateTimeFromDateString(st.nextToken(), "y-M-d",
+							TradingCalendar.MKT_TIMEZONE);
+			ZonedDateTime time = TradingCalendar.getDateAtTime(candleDate,
+					startDate);
+
 			double open = Double.parseDouble(st.nextToken());
 			double high = Double.parseDouble(st.nextToken());
 			double low = Double.parseDouble(st.nextToken());
@@ -297,25 +305,28 @@ public class YahooBroker extends Broker {
 			// + high + " Low: " + low + " Close: " + close
 			// + " Volume: " + volume);
 
-			CandlePeriod period = new CandlePeriod(time,
-					TradingCalendar.addSeconds(
-							TradingCalendar.getSpecificTime(endDate, time), -1));
+			CandlePeriod period = new CandlePeriod(time, TradingCalendar
+					.getDateAtTime(time, endDate).minusSeconds(1));
 
 			Candle candle = new Candle(null, period, open, high, low, close,
 					(volume / 100), (open + close) / 2, ((int) volume / 100),
-					new Date());
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 
-			candle.setLastUpdateDate(candle.getStartPeriod());
+			candle.setLastUpdateDate(time);
 			candles.add(candle);
 
 		}
 		in.close();
 		Collections.reverse(candles);
 		for (Candle candle : candles) {
-			this.brokerModel.historicalData(reqId, String.valueOf(candle
-					.getStartPeriod().getTime() / 1000), candle.getOpen()
-					.doubleValue(), candle.getHigh().doubleValue(), candle
-					.getLow().doubleValue(), candle.getClose().doubleValue(),
+
+			long millis = TradingCalendar.geMillisFromZonedDateTime(candle
+					.getStartPeriod());
+
+			this.brokerModel.historicalData(reqId, String
+					.valueOf(millis / 1000), candle.getOpen().doubleValue(),
+					candle.getHigh().doubleValue(), candle.getLow()
+							.doubleValue(), candle.getClose().doubleValue(),
 					candle.getVolume().intValue(), candle.getTradeCount(),
 					candle.getVwap().doubleValue(), false);
 		}

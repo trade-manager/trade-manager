@@ -35,8 +35,8 @@
  */
 package org.trade.persistent.dao;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -169,7 +169,7 @@ public class CandleHome {
 	 * @return List<Candle>
 	 */
 	public List<Candle> findByContractAndDateRange(Integer idContract,
-			Date startPeriod, Date endPeriod, Integer barSize) {
+			ZonedDateTime startPeriod, ZonedDateTime endPeriod, Integer barSize) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -188,13 +188,13 @@ public class CandleHome {
 				predicates.add(predicate);
 			}
 			if (null != startPeriod) {
-				Expression<Date> start = from.get("startPeriod");
+				Expression<ZonedDateTime> start = from.get("startPeriod");
 				Predicate predicate = builder.greaterThanOrEqualTo(start,
 						startPeriod);
 				predicates.add(predicate);
 			}
 			if (null != endPeriod) {
-				Expression<Date> end = from.get("endPeriod");
+				Expression<ZonedDateTime> end = from.get("endPeriod");
 				Predicate predicate = builder.lessThanOrEqualTo(end, endPeriod);
 				predicates.add(predicate);
 			}
@@ -223,16 +223,16 @@ public class CandleHome {
 	 * @param idContract
 	 *            Integer
 	 * @param startDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endDate
-	 *            Date
+	 *            ZonedDateTime
 	 * @param barSize
 	 *            Integer
 	 * @return List<Candle>
 	 */
 	public List<Candle> findCandlesByContractDateRangeBarSize(
-			Integer idContract, Date startOpenDate, Date endOpenDate,
-			Integer barSize) {
+			Integer idContract, ZonedDateTime startOpenDate,
+			ZonedDateTime endOpenDate, Integer barSize) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -254,11 +254,11 @@ public class CandleHome {
 				Join<Candle, Tradingday> tradingdayOpenDate = from
 						.join("tradingday");
 				Predicate predicateStartDate = builder.greaterThanOrEqualTo(
-						tradingdayOpenDate.get("open").as(Date.class),
+						tradingdayOpenDate.get("open").as(ZonedDateTime.class),
 						startOpenDate);
 				predicates.add(predicateStartDate);
 				Predicate predicateEndDate = builder.lessThanOrEqualTo(
-						tradingdayOpenDate.get("open").as(Date.class),
+						tradingdayOpenDate.get("open").as(ZonedDateTime.class),
 						endOpenDate);
 				predicates.add(predicateEndDate);
 			}
@@ -316,13 +316,13 @@ public class CandleHome {
 	 * @param idContract
 	 *            Integer
 	 * @param startPeriod
-	 *            Date
+	 *            ZonedDateTime
 	 * @param endPeriod
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Candle
 	 */
 	public Candle findByUniqueKey(Integer idTradingday, Integer idContract,
-			Date startPeriod, Date endPeriod, Integer barSize) {
+			ZonedDateTime startPeriod, ZonedDateTime endPeriod, Integer barSize) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -471,10 +471,13 @@ public class CandleHome {
 	 * Method findTradingdayByDate.
 	 * 
 	 * @param open
-	 *            Date
+	 *            ZonedDateTime
+	 * @param close
+	 *            ZonedDateTime
 	 * @return Tradingday
 	 */
-	private Tradingday findTradingdayByDate(Date open, Date close) {
+	private Tradingday findTradingdayByDate(ZonedDateTime open,
+			ZonedDateTime close) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper

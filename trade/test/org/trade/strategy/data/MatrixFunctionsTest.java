@@ -41,14 +41,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.util.MatrixFunctions;
@@ -66,6 +67,8 @@ public class MatrixFunctionsTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(MatrixFunctionsTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Method setUpBeforeClass.
@@ -113,8 +116,10 @@ public class MatrixFunctionsTest {
 			int longShort = 1;
 
 			CandlePeriod period = new CandlePeriod(
-					TradingCalendar.getBusinessDayStart(new Date()), 300);
-			Long startPeriod = period.getStart().getTime();
+					TradingCalendar.getTradingDayStart(TradingCalendar
+							.getDateTimeNowMarketTimeZone()), 300);
+			Long startPeriod = TradingCalendar.geMillisFromZonedDateTime(period
+					.getStart());
 			Long endPeriod = null;
 			pairs.add(new Pair(0, vwap));
 
@@ -122,7 +127,8 @@ public class MatrixFunctionsTest {
 				vwap = vwap + (0.1 * longShort)
 						+ (((double) i * longShort / 10));
 				period = (CandlePeriod) period.next();
-				endPeriod = period.getStart().getTime();
+				endPeriod = TradingCalendar.geMillisFromZonedDateTime(period
+						.getStart());
 				pairs.add(new Pair(
 						((double) (endPeriod - startPeriod) / (1000 * 60 * 60)),
 						vwap));
@@ -156,10 +162,11 @@ public class MatrixFunctionsTest {
 			assertEquals(
 					new BigDecimal(67.38).setScale(2, RoundingMode.HALF_UP),
 					new BigDecimal(angle).setScale(2, RoundingMode.HALF_UP));
-
-		} catch (Exception ex) {
-			_log.error("Error testAngle: " + ex.getMessage(), ex);
-			fail("Error testAngle: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

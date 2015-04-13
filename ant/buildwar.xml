@@ -113,11 +113,11 @@
 		<delete dir="${base}/defaultroot" />
 	</target>
 	<target name="compile.all" depends="prepare">
-		<javac srcdir="${pathname.source.core}" destdir="${pathname.output.main}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${pathname.source.core}" destdir="${pathname.output.main}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath refid="path.class.compile" />
 		</javac>
-		<javac srcdir="${pathname.source.main}" destdir="${pathname.output.main}" debug="on" deprecation="on" source="1.7" target="1.7" includeantruntime="false">
+		<javac srcdir="${pathname.source.main}" destdir="${pathname.output.main}" debug="on" deprecation="on" source="1.8" target="1.8" includeantruntime="false">
 			<compilerarg value="-Xlint:none" />
 			<classpath refid="path.class.compile" />
 		</javac>

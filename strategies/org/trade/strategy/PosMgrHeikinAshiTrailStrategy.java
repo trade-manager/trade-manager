@@ -35,13 +35,12 @@
  */
 package org.trade.strategy;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
-import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderType;
@@ -120,7 +119,8 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
@@ -143,7 +143,7 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			 * is > 0 also check to see if we already have this position
 			 * covered.
 			 */
-			
+
 			if (this.isThereOpenPosition() && !this.isPositionCovered()) {
 				/*
 				 * Position has been opened and not covered submit the target
@@ -180,8 +180,8 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			 * At 15:30 Move stop order to b.e. i.e. the average fill price of
 			 * the open order.
 			 */
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getClose(), -30))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getClose().minusMinutes(30))
 					&& newBar) {
 
 				double avgFillPrice = (Math.abs(this.getOpenTradePosition()
@@ -243,9 +243,9 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().before(
-					TradingCalendar.addMinutes(this.getTradestrategy()
-							.getTradingday().getClose(), -2))) {
+			if (!currentCandleItem.getLastUpdateDate().isBefore(
+					this.getTradestrategy().getTradingday().getClose()
+							.minusMinutes(2))) {
 				cancelOrdersClosePosition(true);
 				_log.info("Close position 2min before close Symbol: "
 						+ getSymbol() + " Time: " + startPeriod);
@@ -360,8 +360,7 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			Money stopPrice, CandleItem currentCandle)
 			throws StrategyRuleException {
 
-		if (!(59 == TradingCalendar
-				.getSecond(currentCandle.getLastUpdateDate())))
+		if (!(59 == currentCandle.getLastUpdateDate().getSecond()))
 			return stopPrice;
 
 		if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {

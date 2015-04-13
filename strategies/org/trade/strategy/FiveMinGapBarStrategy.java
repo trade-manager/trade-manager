@@ -35,7 +35,7 @@
  */
 package org.trade.strategy;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,7 +125,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			Date startPeriod = currentCandleItem.getPeriod().getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
+					.getStart();
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
@@ -169,9 +170,9 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 			 * Is it the the 9:35 candle? and we have not created an open
 			 * position trade.
 			 */
-			if (startPeriod.equals(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), this
-					.getTradestrategy().getBarSize() / 60))
+			if (startPeriod.equals(this.getTradestrategy().getTradingday()
+					.getOpen()
+					.plusMinutes(this.getTradestrategy().getBarSize() / 60))
 					&& newBar) {
 
 				/*
@@ -257,14 +258,13 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				}
 
 			} else {
-				if (startPeriod.before(TradingCalendar.addMinutes(this
-						.getTradestrategy().getTradingday().getOpen(), 120))
-						&& startPeriod.after(TradingCalendar.addMinutes(this
-								.getTradestrategy().getTradingday().getOpen(),
-								5))) {
+				if (startPeriod.isBefore(this.getTradestrategy()
+						.getTradingday().getOpen().plusMinutes(120))
+						&& startPeriod.isAfter(this.getTradestrategy()
+								.getTradingday().getOpen().plusMinutes(5))) {
 					CandleItem firstCandle = this.getCandle(TradingCalendar
-							.getSpecificTime(this.getTradestrategy()
-									.getTradingday().getOpen(), startPeriod));
+							.getDateAtTime(startPeriod, this.getTradestrategy()
+									.getTradingday().getOpen()));
 					/*
 					 * Check for 5 min H/L being broken in the opposite
 					 * direction to the trade before position is opened.
@@ -293,8 +293,8 @@ public class FiveMinGapBarStrategy extends AbstractStrategyRule {
 				}
 			}
 
-			if (!startPeriod.before(TradingCalendar.addMinutes(this
-					.getTradestrategy().getTradingday().getOpen(), 120))) {
+			if (!startPeriod.isBefore(this.getTradestrategy().getTradingday()
+					.getOpen().plusMinutes(120))) {
 				_log.info("Rule 11:30:00 bar, time out unfilled open position Symbol: "
 						+ getSymbol() + " Time: " + startPeriod);
 				if (!this.isThereOpenPosition()

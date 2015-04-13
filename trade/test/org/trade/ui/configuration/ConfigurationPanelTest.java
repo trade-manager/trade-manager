@@ -44,7 +44,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.factory.ClassFactory;
@@ -67,6 +69,8 @@ public class ConfigurationPanelTest {
 
 	private final static Logger _log = LoggerFactory
 			.getLogger(ConfigurationPanelTest.class);
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Method setUpBeforeClass.
@@ -120,9 +124,11 @@ public class ConfigurationPanelTest {
 					.getCodeAttribute().getClassName(), parm, this);
 			_log.info("Value is: " + value);
 			assertEquals(20, value, 0);
-
-		} catch (Exception ex) {
-			fail("Error creating class: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -141,9 +147,11 @@ public class ConfigurationPanelTest {
 					.getCodeAttribute().getClassName(), parm, this);
 			_log.info("Value is: " + value);
 			assertEquals(new Boolean(true), value);
-
-		} catch (Exception ex) {
-			fail("Error creating class: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -162,8 +170,11 @@ public class ConfigurationPanelTest {
 					.getCodeAttribute().getClassName(), parm, this);
 			assertEquals("Simple", value);
 			_log.info("Value is: " + value);
-		} catch (Exception ex) {
-			fail("Error creating class: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -187,8 +198,11 @@ public class ConfigurationPanelTest {
 			value.setValue(CalculationType.LINEAR);
 			assertEquals(CalculationType.LINEAR, value.getCode());
 			_log.info("Value is: " + value);
-		} catch (Exception ex) {
-			fail("Error creating class: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -215,8 +229,11 @@ public class ConfigurationPanelTest {
 
 			assertEquals(value.getClass().getName(), className);
 			_log.info("Value is: " + value);
-		} catch (Exception ex) {
-			fail("Error creating class: " + ex.getCause().getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 }

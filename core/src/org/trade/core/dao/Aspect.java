@@ -187,7 +187,6 @@ public abstract class Aspect extends Object implements Serializable {
 		int hash = 1;
 		hash = hash * 31 + (this.getId() == null ? 0 : this.getId().hashCode());
 		hash = hash
-				* 31
 				+ (this.getVersion() == null ? 0 : this.getVersion().hashCode());
 		return hash;
 	}

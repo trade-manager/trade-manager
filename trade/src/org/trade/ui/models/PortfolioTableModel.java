@@ -171,7 +171,7 @@ public class PortfolioTableModel extends AspectTableModel {
 		}
 		}
 		element.setLastUpdateDate(TradingCalendar
-				.getDate((new java.util.Date()).getTime()));
+				.getDateTimeNowMarketTimeZone());
 		element.setDirty(true);
 	}
 

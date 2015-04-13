@@ -7,7 +7,7 @@ rem Change this dir to be the location for J2SE edition
 rem ***************************************************
 
 @if defined JAVA_HOME goto javahomedefined
-SET JAVA_HOME=C:/Program Files/Java/jdk1.8.0_15
+SET JAVA_HOME=C:/Program Files/Java/jdk1.8.0_40
 :javahomedefined
 
 rem set the path to include the bin dir
@@ -19,7 +19,7 @@ SET CLASSPATH=.;%JAVA_HOME%/jre/lib/rt.jar;%JAVA_HOME%/lib/tools.jar;ant/lib/*;
 echo Path=%PATH%
 echo ClassPath=%CLASSPATH%
 
-SET ANT_BUILD_FILE=ant/build.xml
+SET ANT_BUILD_FILE=build.xml
 rem SET ANT_BUILD_FILE=ant/buildtest.xml
 
 rem *******************************************************
@@ -36,7 +36,7 @@ rem 7/ TARGET=deleteTradeOrderData Deletes all the orders from the database.
 rem 8/ TARGET=deleteAccountRuleData Delete the accounts and rules from the database. These will reload on login.
 rem 9/ TARGET=all ANT_BUILD_FILE=ant/buildtest.xml Build and compile all test cases. This depends on 1/  
 
-SET TARGET=all
+SET TARGET=test
 
 java -classpath "%CLASSPATH%"  org.apache.tools.ant.Main -buildfile "%ANT_BUILD_FILE%" "%TARGET%"
 

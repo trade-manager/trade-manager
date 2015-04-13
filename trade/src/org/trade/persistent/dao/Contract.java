@@ -41,9 +41,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -57,8 +57,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -88,7 +86,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	private String comboLegDescription;
 	@NotNull
 	private String exchange;
-	private Date expiry;
+	private ZonedDateTime expiry;
 	private Integer idContractIB;
 	private Boolean includeExpired;
 	private String localSymbol;
@@ -155,7 +153,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 *            Date
 	 */
 	public Contract(String secType, String symbol, String exchange,
-			String currency, Date expiry, BigDecimal priceMultiplier) {
+			String currency, ZonedDateTime expiry, BigDecimal priceMultiplier) {
 		this.currency = currency;
 		this.exchange = exchange;
 		this.symbol = symbol;
@@ -349,11 +347,10 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Method getExpiry.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "expiry", unique = true, nullable = false, length = 19)
-	public Date getExpiry() {
+	@Column(name = "expiry", unique = true, nullable = false)
+	public ZonedDateTime getExpiry() {
 		return this.expiry;
 	}
 
@@ -361,9 +358,9 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 * Method setExpiry.
 	 * 
 	 * @param expiry
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setExpiry(Date expiry) {
+	public void setExpiry(ZonedDateTime expiry) {
 		this.expiry = expiry;
 	}
 

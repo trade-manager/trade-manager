@@ -50,7 +50,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -81,6 +80,7 @@ import org.trade.broker.BrokerModel;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.properties.ConfigProperties;
 import org.trade.core.util.DynamicCode;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.BarSize;
 import org.trade.dictionary.valuetype.Currency;
@@ -350,7 +350,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			CandleDataset candleDataset = new CandleDataset();
 			CandleSeries candleSeries = new CandleSeries("Test", new Contract(
 					SECType.STOCK, "Test", Exchange.SMART, Currency.USD, null,
-					null), BarSize.FIVE_MIN, new Date(), new Date());
+					null), BarSize.FIVE_MIN,
+					TradingCalendar.getDateTimeNowMarketTimeZone(),
+					TradingCalendar.getDateTimeNowMarketTimeZone());
 			candleDataset.addSeries(candleSeries);
 			StrategyData strategyData = new StrategyData(rule.getStrategy(),
 					candleDataset);
@@ -462,8 +464,10 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 				Integer version = this.tradePersistentModel
 						.findRuleByMaxVersion(this.currentRule.getStrategy());
 				Rule nextRule = new Rule(this.currentRule.getStrategy(),
-						(version + 1), commentText.getText(), new Date(),
-						getContent().getBytes(), new Date());
+						(version + 1), commentText.getText(),
+						TradingCalendar.getDateTimeNowMarketTimeZone(),
+						getContent().getBytes(),
+						TradingCalendar.getDateTimeNowMarketTimeZone());
 				this.currentRule.getStrategy().add(nextRule);
 				this.tradePersistentModel.persistAspect(nextRule);
 				doSaveFile(fileNameSource, getContent());
@@ -484,7 +488,8 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 			} else {
 				if (getComments().length() > 0)
 					this.currentRule.setComment(getComments());
-				this.currentRule.setLastUpdateDate(new Date());
+				this.currentRule.setLastUpdateDate(TradingCalendar
+						.getDateTimeNowMarketTimeZone());
 				this.currentRule.setRule(getContent().getBytes());
 				this.tradePersistentModel.persistAspect(this.currentRule);
 				doSaveFile(fileNameSource, getContent());
@@ -658,7 +663,9 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 					String comments = readFile(fileNameComments);
 					if (strategy.getRules().isEmpty()) {
 						Rule nextRule = new Rule(strategy, 1, comments,
-								new Date(), content.getBytes(), new Date());
+								TradingCalendar.getDateTimeNowMarketTimeZone(),
+								content.getBytes(),
+								TradingCalendar.getDateTimeNowMarketTimeZone());
 						strategy.add(nextRule);
 						this.tradePersistentModel.persistAspect(nextRule);
 					} else {
@@ -976,8 +983,10 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 		Integer version = this.tradePersistentModel
 				.findRuleByMaxVersion(strategy);
 		Rule nextRule = new Rule(strategy, (version + 1),
-				commentText.getText(), new Date(), getContent().getBytes(),
-				new Date());
+				commentText.getText(),
+				TradingCalendar.getDateTimeNowMarketTimeZone(), getContent()
+						.getBytes(),
+				TradingCalendar.getDateTimeNowMarketTimeZone());
 		strategy.add(nextRule);
 		refreshTree();
 		TreePath path = m_tree.findTreePathByObject(nextRule);

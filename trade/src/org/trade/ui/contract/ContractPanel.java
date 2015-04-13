@@ -50,7 +50,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -684,20 +684,19 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private ChartPanel createChartPanel(Tradestrategy tradestrategy)
 			throws PersistentModelException {
 
-		Date startDate = null;
-		Date endDate = null;
+		ZonedDateTime startDate = null;
+		ZonedDateTime endDate = null;
 
 		if (tradestrategy.getStrategyData().getBaseCandleSeries().isEmpty()) {
-			endDate = TradingCalendar.getSpecificTime(tradestrategy
-					.getTradingday().getClose(), TradingCalendar
-					.getMostRecentTradingDay(TradingCalendar.addBusinessDays(
+			endDate = TradingCalendar.getDateAtTime(TradingCalendar
+					.getPrevTradingDay(TradingCalendar.addTradingDays(
 							tradestrategy.getTradingday().getClose(),
-							backfillOffsetDays)));
-			startDate = TradingCalendar.addDays(endDate,
-					(-1 * (tradestrategy.getChartDays() - 1)));
-			startDate = TradingCalendar.getMostRecentTradingDay(startDate);
-			startDate = TradingCalendar.getSpecificTime(tradestrategy
-					.getTradingday().getOpen(), startDate);
+							backfillOffsetDays)), tradestrategy.getTradingday()
+					.getClose());
+			startDate = endDate.minusDays((tradestrategy.getChartDays() - 1));
+			startDate = TradingCalendar.getPrevTradingDay(startDate);
+			startDate = TradingCalendar.getDateAtTime(startDate, tradestrategy
+					.getTradingday().getOpen());
 			List<Candle> candles = m_tradePersistentModel
 					.findCandlesByContractDateRangeBarSize(tradestrategy
 							.getContract().getIdContract(), startDate, endDate,
@@ -734,7 +733,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @throws PersistentModelException
 	 */
 	private void populateIndicatorCandleSeries(Tradestrategy tradestrategy,
-			Date startDate, Date endDate) throws PersistentModelException {
+			ZonedDateTime startDate, ZonedDateTime endDate)
+			throws PersistentModelException {
 
 		CandleDataset candleDataset = (CandleDataset) tradestrategy
 				.getStrategyData().getIndicatorByType(

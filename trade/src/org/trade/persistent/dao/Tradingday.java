@@ -40,9 +40,9 @@ package org.trade.persistent.dao;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -55,8 +55,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -81,9 +79,9 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	private static final long serialVersionUID = 3388042483785305102L;
 
 	@NotNull
-	private Date open;
+	private ZonedDateTime open;
 	@NotNull
-	private Date close;
+	private ZonedDateTime close;
 	private String marketBias;
 	private String marketGap;
 	private String marketBar;
@@ -98,11 +96,11 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * Constructor for Tradingday.
 	 * 
 	 * @param open
-	 *            Date
+	 *            ZonedDateTime
 	 * @param close
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public Tradingday(Date open, Date close) {
+	public Tradingday(ZonedDateTime open, ZonedDateTime close) {
 		this.open = open;
 		this.close = close;
 	}
@@ -111,9 +109,9 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * Constructor for Tradingday.
 	 * 
 	 * @param open
-	 *            Date
+	 *            ZonedDateTime
 	 * @param close
-	 *            Date
+	 *            ZonedDateTime
 	 * @param marketBias
 	 *            String
 	 * @param marketGap
@@ -125,8 +123,8 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * @param candles
 	 *            List<Candle>
 	 */
-	public Tradingday(Date open, Date close, String marketBias,
-			String marketGap, String marketBar,
+	public Tradingday(ZonedDateTime open, ZonedDateTime close,
+			String marketBias, String marketGap, String marketBar,
 			List<Tradestrategy> tradestrategies, List<Candle> candles) {
 		this.open = open;
 		this.close = close;
@@ -162,11 +160,10 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Method getOpen.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "open", unique = true, nullable = false, length = 19)
-	public Date getOpen() {
+	@Column(name = "open", unique = true, nullable = false)
+	public ZonedDateTime getOpen() {
 		return this.open;
 	}
 
@@ -174,20 +171,19 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * Method setOpen.
 	 * 
 	 * @param open
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setOpen(Date open) {
+	public void setOpen(ZonedDateTime open) {
 		this.open = open;
 	}
 
 	/**
 	 * Method getClose.
 	 * 
-	 * @return Date
+	 * @return ZonedDateTime
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "close", unique = true, nullable = false, length = 19)
-	public Date getClose() {
+	@Column(name = "close", unique = true, nullable = false)
+	public ZonedDateTime getClose() {
 		return this.close;
 	}
 
@@ -195,9 +191,9 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * Method setClose.
 	 * 
 	 * @param close
-	 *            Date
+	 *            ZonedDateTime
 	 */
-	public void setClose(Date close) {
+	public void setClose(ZonedDateTime close) {
 		this.close = close;
 	}
 
@@ -393,7 +389,8 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * @return String
 	 */
 	public String toString() {
-		return TradingCalendar.getFormattedDate(getOpen(), "MM/dd/yyyy");
+		return TradingCalendar.getFormattedDate(getOpen().toLocalDate(),
+				"MM/dd/yyyy");
 	}
 
 	/**
@@ -456,13 +453,13 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * Method newInstance.
 	 * 
 	 * @param date
-	 *            Date
+	 *            ZonedDateTime
 	 * @return Tradingday
 	 */
-	public static Tradingday newInstance(Date date) {
+	public static Tradingday newInstance(ZonedDateTime date) {
 		Tradingday tradingday = new Tradingday(
-				TradingCalendar.getBusinessDayStart(date),
-				TradingCalendar.getBusinessDayEnd(date));
+				TradingCalendar.getTradingDayStart(date),
+				TradingCalendar.getTradingDayEnd(date));
 		return tradingday;
 
 	}
