@@ -2130,12 +2130,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradingdays
 	 */
 	private void refreshTradingdays(Tradingdays tradingdays) {
+		/*
+		 * Refresh to check to see if changes need to be saved.
+		 */
+		if (!tradingdays.getTradingdays().isEmpty()) {
+			for (Tradingday tradingday : tradingdays.getTradingdays()) {
+				tradingdayPanel.doRefresh(tradingday);
+			}
 
-		for (Tradingday tradingday : tradingdays.getTradingdays()) {
-			tradingdayPanel.doRefresh(tradingday);
+			tradingdayPanel.doRefreshTradingdayTable(tradingdays
+					.getTradingdays().get(
+							tradingdays.getTradingdays().size() - 1));
 		}
-		tradingdayPanel.doRefreshTradingdayTable(tradingdays.getTradingdays()
-				.get(tradingdays.getTradingdays().size() - 1));
+
 		if (m_brokerModel.isConnected()) {
 			getMenu().setEnabledBrokerData(true);
 			getMenu().setEnabledRunStrategy(true);
