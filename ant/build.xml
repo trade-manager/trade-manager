@@ -119,7 +119,7 @@
 	<target name="upgradeDB" depends="initialise" description="Upgrade the database to the latest version.">
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.dba_user}" password="${sql.dba_password}">
 			<classpath refid="build.classpath" />
-			<transaction src="../db/upgradeDB-2.1_17_to_2.1_18.sql" />
+			<transaction src="../db/upgradeDB-2.1_19_to_2.1_20.sql" />
 		</sql>
 	</target>
 	<target name="addStrategyData" depends="initialise" description="Add a new strategy and associated data.">

@@ -52,17 +52,17 @@ INSERT INTO strategy (idStrategy, name, description, marketData, className, idSt
 
 COMMIT;
 
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(1,'MovingAverage','Moving Average',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(2,'Pivot','Pivot points',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(3,'Candle','Contract to be followed',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(4,'AverageTrueRange','Average True Range',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(5,'RelativeStrengthIndex','Relative Strength Index',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(6,'CommodityChannelIndex','Commodity Channel Index',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(7,'BollingerBands','Bollinger Bands',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(8,'StochasticOscillator','Stochastic Oscillator',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(9,'MoneyFlowIndex','Money Flow Index',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(10,'MACD','MACD',0);
-INSERT INTO codetype (idCodeType, name, description, version) VALUES(11,'Vostro','Vostro Indicator',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(1,'MovingAverage','IndicatorParameters','Moving Average',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(2,'Pivot','IndicatorParameters','Pivot points',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(3,'Candle','IndicatorParameters','Contract to be followed',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(4,'AverageTrueRange','IndicatorParameters','Average True Range',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(5,'RelativeStrengthIndex','IndicatorParameters','Relative Strength Index',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(6,'CommodityChannelIndex','IndicatorParameters','Commodity Channel Index',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(7,'BollingerBands','IndicatorParameters','Bollinger Bands',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(8,'StochasticOscillator','IndicatorParameters','Stochastic Oscillator',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(9,'MoneyFlowIndex','IndicatorParameters','Money Flow Index',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(10,'MACD','IndicatorParameters','MACD',0);
+INSERT INTO codetype (idCodeType, name, type, description, version) VALUES(11,'Vostro','IndicatorParameters','Vostro Indicator',0);
 
 COMMIT;
 

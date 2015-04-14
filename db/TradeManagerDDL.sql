@@ -475,7 +475,7 @@ CREATE  TABLE IF NOT EXISTS indicatorseries (
   idIndicatorSeries INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL ,
   description VARCHAR(100) NULL ,
-  type VARCHAR(51) NOT NULL ,
+  type VARCHAR(45) NOT NULL ,
   displaySeries SMALLINT(1) NULL ,
   seriesRGBColor INT NULL ,
   subChart SMALLINT(1) NULL ,
@@ -503,10 +503,11 @@ SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS codetype (
   idCodeType INT NOT NULL AUTO_INCREMENT ,
   name VARCHAR(45) NOT NULL ,
+  type VARCHAR(45) NOT NULL ,
   description VARCHAR(100) NULL ,
   version INT NULL,
   PRIMARY KEY (idCodeType) ,
-  UNIQUE INDEX codetype_name_uq (name ASC) )
+  UNIQUE INDEX codetype_name_type_uq (name ASC, type ASC) )
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -549,9 +550,11 @@ CREATE  TABLE IF NOT EXISTS codevalue (
   version INT NULL,
   idCodeAttribute INT NOT NULL ,
   idIndicatorSeries INT NULL ,
+  idTradeStrategy INT NULL ,
   PRIMARY KEY (idCodeValue) ,
   INDEX codeValue_CodeAttribute_idx (idCodeAttribute ASC) ,
   INDEX codeValue_IndicatorSeries_idx (idIndicatorSeries ASC) ,
+  INDEX codeValue_TradeStrategy_idx (idTradeStrategy ASC) ,
   CONSTRAINT codeValue_CodeAttribute_fk
     FOREIGN KEY (idCodeAttribute )
     REFERENCES codeattribute (idCodeAttribute )
@@ -560,6 +563,11 @@ CREATE  TABLE IF NOT EXISTS codevalue (
   CONSTRAINT codeValue_IndicatorSeries_fk
     FOREIGN KEY (idIndicatorSeries )
     REFERENCES indicatorseries (idIndicatorSeries )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+   CONSTRAINT codeValue_TradeStrategy_fk
+    FOREIGN KEY (idTradeStrategy )
+    REFERENCES tradestrategy (idTradeStrategy )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
