@@ -93,7 +93,7 @@ public class CandleTest {
 
 		TradeAppLoadConfig.loadAppProperties();
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-		assertNotNull(this.tradestrategy);
+		assertNotNull("1", this.tradestrategy);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class CandleTest {
 			transientInstance.setTradeCount(10);
 
 			transientInstance = aspectHome.persist(transientInstance);
-			assertNotNull(transientInstance.getIdCandle());
+			assertNotNull("1", transientInstance.getIdCandle());
 			_log.info("testAddCandle IdCandle: "
 					+ transientInstance.getIdCandle());
 
@@ -168,16 +168,17 @@ public class CandleTest {
 						.getBaseCandleSeries(), Tradingday
 						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
 						true, 0);
-				assertFalse(tradestrategy.getStrategyData()
+				assertFalse("1", tradestrategy.getStrategyData()
 						.getBaseCandleSeries().isEmpty());
 				candleHome.persistCandleSeries(tradestrategy.getStrategyData()
 						.getBaseCandleSeries());
 
 				_log.info("testAddCandle IdTradeStrategy: "
 						+ tradestrategy.getIdTradeStrategy());
-				assertNotNull(((CandleItem) tradestrategy.getStrategyData()
-						.getBaseCandleSeries().getDataItem(0)).getCandle()
-						.getIdCandle());
+				assertNotNull("2",
+						((CandleItem) tradestrategy.getStrategyData()
+								.getBaseCandleSeries().getDataItem(0))
+								.getCandle().getIdCandle());
 
 			}
 

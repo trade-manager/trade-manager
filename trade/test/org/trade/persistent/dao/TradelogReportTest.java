@@ -115,7 +115,7 @@ public class TradelogReportTest {
 							.getTradingDayEnd(TradingCalendar
 									.getDateTimeNowMarketTimeZone()), false,
 					null);
-			assertFalse(!tradelogReport.getTradelogDetail().isEmpty());
+			assertFalse("1", !tradelogReport.getTradelogDetail().isEmpty());
 			for (TradelogDetail tradelogDetail : tradelogReport
 					.getTradelogDetail()) {
 				_log.info("testTradelogDetails tradelogDetail: " + " getOpen:"
@@ -151,7 +151,7 @@ public class TradelogReportTest {
 							.getTradingDayEnd(TradingCalendar
 									.getDateTimeNowMarketTimeZone()), null,
 					new BigDecimal(0));
-			assertFalse(!tradelogReport.getTradelogSummary().isEmpty());
+			assertFalse("1", !tradelogReport.getTradelogSummary().isEmpty());
 			for (TradelogSummary tradelogSummary : tradelogReport
 					.getTradelogSummary()) {
 				_log.info("testTradelogSummary tradelogDetail: " + "getPeriod:"

@@ -99,7 +99,7 @@ public class CandlePeriodTest {
 		tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-		assertNotNull(this.tradestrategy);
+		assertNotNull("1", this.tradestrategy);
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class CandlePeriodTest {
 				CandleDataset.populateSeries(
 						this.tradestrategy.getStrategyData(), candles);
 			}
-			assertFalse(this.tradestrategy.getStrategyData()
+			assertFalse("1", this.tradestrategy.getStrategyData()
 					.getBaseCandleSeries().isEmpty());
 			Candle candle = this.tradestrategy
 					.getStrategyData()
@@ -267,7 +267,7 @@ public class CandlePeriodTest {
 			ZonedDateTime newInstant = date.withZoneSameLocal(defaultZone);
 			_log.info("Date PST time: " + newInstant);
 
-			assertNotNull(date);
+			assertNotNull("1", date);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -290,7 +290,7 @@ public class CandlePeriodTest {
 			_log.info("Time is : " + period.toString() + " Start: "
 					+ period.getStart() + " End: " + period.getEnd());
 			period = period.next();
-			assertNotNull(period);
+			assertNotNull("1", period);
 		}
 	}
 
@@ -308,7 +308,7 @@ public class CandlePeriodTest {
 			_log.info("Time is : " + period.toString() + " Start: "
 					+ period.getStart() + " End: " + period.getEnd());
 			period = period.previous();
-			assertNotNull(period);
+			assertNotNull("1", period);
 		}
 	}
 
@@ -326,6 +326,6 @@ public class CandlePeriodTest {
 		_log.info("\n Bus Day Start : " + startBusDate.toString()
 				+ "\n Start: " + period.getStart() + "\n End: "
 				+ period.getEnd() + "\n Periods: " + periods);
-		assertNotNull(period);
+		assertNotNull("1", period);
 	}
 }

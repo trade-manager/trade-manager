@@ -98,11 +98,11 @@ public class CodeTypeTest {
 		try {
 			CodeTypeHome codeTypeHome = new CodeTypeHome();
 			CodeType codeType = codeTypeHome.findByName("MovingAverage");
-			assertNotNull(codeType);
+			assertNotNull("1", codeType);
 			_log.info("CodeType id: " + codeType.getIdCodeType());
 			CodeValue codeValue = codeTypeHome.findByAttributeName(
 					codeType.getName(), "Length");
-			assertNotNull(codeValue);
+			assertNotNull("2", codeValue);
 			_log.info("CodeValue id: " + codeValue.getIdCodeValue());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "

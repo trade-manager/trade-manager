@@ -116,7 +116,7 @@ public class StrategyTest {
 			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Strategy added Id = "
 					+ transientInstance.getIdStrategy());
-			assertNotNull(transientInstance.getIdStrategy());
+			assertNotNull("1", transientInstance.getIdStrategy());
 			aspectHome.remove(transientInstance);
 
 		} catch (Exception | AssertionError ex) {

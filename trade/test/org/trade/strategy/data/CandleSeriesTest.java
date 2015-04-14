@@ -44,7 +44,7 @@ public class CandleSeriesTest {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-			assertNotNull(this.tradestrategy);
+			assertNotNull("1", this.tradestrategy);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -83,7 +83,7 @@ public class CandleSeriesTest {
 			if (candleSeries.equals(series)) {
 				_log.info("CandleSeries: " + series.toString());
 			}
-			assertEquals(series, candleSeries);
+			assertEquals("1", series, candleSeries);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();

@@ -125,7 +125,7 @@ public class TradePersistentModelTest {
 		this.tradePersistentModel = (PersistentModel) ClassFactory
 				.getServiceForInterface(PersistentModel._persistentModel, this);
 		this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-		assertNotNull(this.tradestrategy);
+		assertNotNull("1", this.tradestrategy);
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class TradePersistentModelTest {
 			this.tradePersistentModel.persistTradingday(tradingday);
 			_log.info("testTradingdaysRemoce IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
-			assertNotNull(tradingday.getIdTradingDay());
+			assertNotNull("1", tradingday.getIdTradingDay());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -224,7 +224,7 @@ public class TradePersistentModelTest {
 						.findPositionOrdersByTradestrategyId(this.tradestrategy
 								.getIdTradeStrategy());
 
-				assertNotNull(positionOrders.getOpenTradePosition());
+				assertNotNull("1", positionOrders.getOpenTradePosition());
 			}
 
 		} catch (Exception | AssertionError ex) {
@@ -266,7 +266,7 @@ public class TradePersistentModelTest {
 			 */
 			tradeOrder = this.tradePersistentModel
 					.persistTradeOrder(tradeOrder);
-			assertNotNull(tradeOrder.getIdTradeOrder());
+			assertNotNull("1", tradeOrder.getIdTradeOrder());
 			/*
 			 * Update the order to Submitted via openOrder(), orderStatus
 			 */
@@ -276,7 +276,7 @@ public class TradePersistentModelTest {
 
 			tradeOrderOpenPosition = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderOpenPosition);
-			assertNotNull(tradeOrderOpenPosition.getIdTradeOrder());
+			assertNotNull("2", tradeOrderOpenPosition.getIdTradeOrder());
 			/*
 			 * Fill the order via execDetails()
 			 */
@@ -305,7 +305,7 @@ public class TradePersistentModelTest {
 			tradeOrderFilled.setFilledDate(tradeOrderfill.getTime());
 			tradeOrderFilled = this.tradePersistentModel
 					.persistTradeOrder(tradeOrderFilled);
-			assertNotNull(tradeOrderFilled.getTradeOrderfills().get(0)
+			assertNotNull("3", tradeOrderFilled.getTradeOrderfills().get(0)
 					.getIdTradeOrderFill());
 
 			/*
@@ -334,7 +334,7 @@ public class TradePersistentModelTest {
 			Tradestrategy tradestrategyStpTgt = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			assertTrue(tradestrategyStpTgt.isThereOpenTradePosition());
+			assertTrue("4", tradestrategyStpTgt.isThereOpenTradePosition());
 
 			int buySellMultiplier = 1;
 			if (action.equals(Action.BUY)) {
@@ -479,7 +479,7 @@ public class TradePersistentModelTest {
 
 						for (TradeOrderfill item : tradeOrderOcaSubmit
 								.getTradeOrderfills()) {
-							assertNotNull(item.getIdTradeOrderFill());
+							assertNotNull("6", item.getIdTradeOrderFill());
 						}
 					}
 				}
@@ -531,7 +531,8 @@ public class TradePersistentModelTest {
 		try {
 			this.tradePersistentModel.persistTradingday(this.tradestrategy
 					.getTradingday());
-			assertNotNull(this.tradestrategy.getTradingday().getIdTradingDay());
+			assertNotNull("1", this.tradestrategy.getTradingday()
+					.getIdTradingDay());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -546,7 +547,7 @@ public class TradePersistentModelTest {
 		try {
 			Tradestrategy result = this.tradePersistentModel
 					.persistAspect(this.tradestrategy);
-			assertNotNull(result.getId());
+			assertNotNull("1", result.getId());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -561,7 +562,7 @@ public class TradePersistentModelTest {
 		try {
 			Contract result = this.tradePersistentModel
 					.persistContract(this.tradestrategy.getContract());
-			assertNotNull(result.getId());
+			assertNotNull("1", result.getId());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -576,7 +577,7 @@ public class TradePersistentModelTest {
 		try {
 			this.tradePersistentModel.resetDefaultPortfolio(this.tradestrategy
 					.getPortfolio());
-			assertTrue(this.tradestrategy.getPortfolio().getIsDefault());
+			assertTrue("1", this.tradestrategy.getPortfolio().getIsDefault());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -597,7 +598,7 @@ public class TradePersistentModelTest {
 			tradeOrder.validate();
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrder(tradeOrder);
-			assertNotNull(result.getId());
+			assertNotNull("1", result.getId());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -685,9 +686,9 @@ public class TradePersistentModelTest {
 
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrderfill(tradeOrderSell);
-			assertFalse(result.getTradePosition().isOpen());
+			assertFalse("1", result.getTradePosition().isOpen());
 
-			assertEquals((new Money(4000.00)).getBigDecimalValue(), result
+			assertEquals("2", (new Money(4000.00)).getBigDecimalValue(), result
 					.getTradePosition().getTotalNetValue());
 
 			double totalPriceMade = (result.getTradePosition()
@@ -696,13 +697,13 @@ public class TradePersistentModelTest {
 					- (result.getTradePosition().getTotalBuyValue()
 							.doubleValue() / result.getTradePosition()
 							.getTotalBuyQuantity().doubleValue());
-			assertEquals((new Money(4.00)).getBigDecimalValue(), (new Money(
-					totalPriceMade)).getBigDecimalValue());
-			assertEquals(new Integer(1000), result.getTradePosition()
+			assertEquals("3", (new Money(4.00)).getBigDecimalValue(),
+					(new Money(totalPriceMade)).getBigDecimalValue());
+			assertEquals("4", new Integer(1000), result.getTradePosition()
 					.getTotalBuyQuantity());
-			assertEquals(new Integer(1000), result.getTradePosition()
+			assertEquals("5", new Integer(1000), result.getTradePosition()
 					.getTotalSellQuantity());
-			assertEquals(new Integer(0), result.getTradePosition()
+			assertEquals("6", new Integer(0), result.getTradePosition()
 					.getOpenQuantity());
 
 		} catch (Exception | AssertionError ex) {
@@ -790,9 +791,9 @@ public class TradePersistentModelTest {
 
 			TradeOrder result = this.tradePersistentModel
 					.persistTradeOrderfill(tradeOrderSell);
-			assertFalse(result.getTradePosition().isOpen());
+			assertFalse("1", result.getTradePosition().isOpen());
 
-			assertEquals((new Money(4000.00)).getBigDecimalValue(), result
+			assertEquals("2", (new Money(4000.00)).getBigDecimalValue(), result
 					.getTradePosition().getTotalNetValue());
 
 			double totalPriceMade = (result.getTradePosition()
@@ -801,13 +802,13 @@ public class TradePersistentModelTest {
 					- (result.getTradePosition().getTotalBuyValue()
 							.doubleValue() / result.getTradePosition()
 							.getTotalBuyQuantity().doubleValue());
-			assertEquals((new Money(4.00)).getBigDecimalValue(), (new Money(
-					totalPriceMade)).getBigDecimalValue());
-			assertEquals(new Integer(1000), result.getTradePosition()
+			assertEquals("3", (new Money(4.00)).getBigDecimalValue(),
+					(new Money(totalPriceMade)).getBigDecimalValue());
+			assertEquals("4", new Integer(1000), result.getTradePosition()
 					.getTotalBuyQuantity());
-			assertEquals(new Integer(1000), result.getTradePosition()
+			assertEquals("5", new Integer(1000), result.getTradePosition()
 					.getTotalSellQuantity());
-			assertEquals(new Integer(0), result.getTradePosition()
+			assertEquals("6", new Integer(0), result.getTradePosition()
 					.getOpenQuantity());
 
 		} catch (Exception | AssertionError ex) {
@@ -827,7 +828,7 @@ public class TradePersistentModelTest {
 					TradingCalendar.getDateTimeNowMarketTimeZone(), Side.BOT);
 			TradePosition result = this.tradePersistentModel
 					.persistAspect(tradePosition);
-			assertNotNull(result.getId());
+			assertNotNull("1", result.getId());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -852,8 +853,8 @@ public class TradePersistentModelTest {
 			this.tradePersistentModel.persistCandleSeries(candleSeries);
 			_log.info("Total time: " + (System.currentTimeMillis() - timeStart)
 					/ 1000);
-			assertFalse(candleSeries.isEmpty());
-			assertNotNull(((CandleItem) candleSeries.getDataItem(0))
+			assertFalse("1", candleSeries.isEmpty());
+			assertNotNull("2", ((CandleItem) candleSeries.getDataItem(0))
 					.getCandle().getIdCandle());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -878,7 +879,7 @@ public class TradePersistentModelTest {
 					100.23, 100, date);
 			Candle candle = this.tradePersistentModel.persistCandle(candleItem
 					.getCandle());
-			assertNotNull(candle.getIdCandle());
+			assertNotNull("1", candle.getIdCandle());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -894,7 +895,7 @@ public class TradePersistentModelTest {
 			Portfolio result = this.tradePersistentModel
 					.findPortfolioById(this.tradestrategy.getPortfolio()
 							.getIdPortfolio());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -910,7 +911,7 @@ public class TradePersistentModelTest {
 			Account result = this.tradePersistentModel
 					.findAccountByNumber(this.tradestrategy.getPortfolio()
 							.getIndividualAccount().getAccountNumber());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -926,7 +927,7 @@ public class TradePersistentModelTest {
 			Contract result = this.tradePersistentModel
 					.findContractById(this.tradestrategy.getContract()
 							.getIdContract());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -945,7 +946,7 @@ public class TradePersistentModelTest {
 							.getSymbol(), this.tradestrategy.getContract()
 							.getExchange(), this.tradestrategy.getContract()
 							.getCurrency(), null);
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -960,7 +961,7 @@ public class TradePersistentModelTest {
 		try {
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy);
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -976,7 +977,7 @@ public class TradePersistentModelTest {
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -995,7 +996,7 @@ public class TradePersistentModelTest {
 							.getStrategy().getName(), this.tradestrategy
 							.getContract().getIdContract(), this.tradestrategy
 							.getPortfolio().getName());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1010,7 +1011,7 @@ public class TradePersistentModelTest {
 		try {
 			List<Tradestrategy> result = this.tradePersistentModel
 					.findAllTradestrategies();
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1030,7 +1031,7 @@ public class TradePersistentModelTest {
 					.persistAspect(tradePosition);
 			TradePosition result = this.tradePersistentModel
 					.findTradePositionById(resultTrade.getIdTradePosition());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1052,11 +1053,11 @@ public class TradePersistentModelTest {
 			resultTrade.getContract().setTradePosition(resultTrade);
 			this.tradePersistentModel.persistAspect(resultTrade.getContract());
 
-			assertNotNull(resultTrade);
+			assertNotNull("1", resultTrade);
 			TradestrategyOrders result = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(result);
+			assertNotNull("2", result);
 			resultTrade.getContract().setTradePosition(null);
 			this.tradePersistentModel.persistAspect(resultTrade.getContract());
 		} catch (Exception | AssertionError ex) {
@@ -1077,7 +1078,7 @@ public class TradePersistentModelTest {
 			this.tradestrategy.getContract().setTradePosition(tradePosition);
 			TradePosition resultTrade = this.tradePersistentModel
 					.persistAspect(tradePosition);
-			assertNotNull(resultTrade);
+			assertNotNull("1", resultTrade);
 			TradestrategyOrders positionOrders = this.tradePersistentModel
 					.findPositionOrdersByTradestrategyId(this.tradestrategy
 							.getIdTradeStrategy());
@@ -1101,7 +1102,7 @@ public class TradePersistentModelTest {
 					+ positionOrders.getVersion() + " current version: "
 					+ result.getVersion());
 
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1121,7 +1122,7 @@ public class TradePersistentModelTest {
 			Tradingday result = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
-			assertNotNull(result);
+			assertNotNull("1", result);
 			this.tradePersistentModel.removeTradingdayTradeOrders(result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -1142,7 +1143,7 @@ public class TradePersistentModelTest {
 			Tradestrategy result = this.tradePersistentModel
 					.findTradestrategyById(this.tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(result);
+			assertNotNull("1", result);
 			this.tradePersistentModel.removeTradestrategyTradeOrders(result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -1167,7 +1168,7 @@ public class TradePersistentModelTest {
 					.persistTradeOrder(tradeOrder);
 			TradeOrder result = this.tradePersistentModel
 					.findTradeOrderById(resultTradeOrder.getIdTradeOrder());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1191,7 +1192,7 @@ public class TradePersistentModelTest {
 					.persistTradeOrder(tradeOrder);
 			TradeOrder result = this.tradePersistentModel
 					.findTradeOrderByKey(resultTradeOrder.getOrderKey());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1222,7 +1223,7 @@ public class TradePersistentModelTest {
 			TradeOrderfill result = this.tradePersistentModel
 					.findTradeOrderfillByExecId(resultTradeOrder
 							.getTradeOrderfills().get(0).getExecId());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1236,7 +1237,7 @@ public class TradePersistentModelTest {
 
 		try {
 			Integer result = this.tradePersistentModel.findTradeOrderByMaxKey();
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1252,7 +1253,7 @@ public class TradePersistentModelTest {
 			Tradingday result = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1269,7 +1270,7 @@ public class TradePersistentModelTest {
 					.findTradingdayByOpenCloseDate(this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getClose());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1286,7 +1287,7 @@ public class TradePersistentModelTest {
 					.findTradingdaysByDateRange(this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getOpen());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1303,7 +1304,7 @@ public class TradePersistentModelTest {
 					.findTradestrategyDistinctByDateRange(this.tradestrategy
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getOpen());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1321,7 +1322,7 @@ public class TradePersistentModelTest {
 							TradingCalendar.getYearStart(), this.tradestrategy
 									.getTradingday().getClose(), true, null,
 							new BigDecimal(0));
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1340,7 +1341,7 @@ public class TradePersistentModelTest {
 							.getTradingday().getOpen(), this.tradestrategy
 							.getTradingday().getClose(), this.tradestrategy
 							.getBarSize());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1356,7 +1357,7 @@ public class TradePersistentModelTest {
 			Long result = this.tradePersistentModel.findCandleCount(
 					this.tradestrategy.getTradingday().getIdTradingDay(),
 					this.tradestrategy.getContract().getIdContract());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1375,7 +1376,7 @@ public class TradePersistentModelTest {
 					"Test", TradingCalendar.getDateTimeNowMarketTimeZone(),
 					TradingCalendar.getDateTimeNowMarketTimeZone());
 			Aspect result = this.tradePersistentModel.persistAspect(rule);
-			assertNotNull(result);
+			assertNotNull("1", result);
 			this.tradePersistentModel.removeAspect(rule);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -1395,10 +1396,10 @@ public class TradePersistentModelTest {
 					"Test", TradingCalendar.getDateTimeNowMarketTimeZone(),
 					TradingCalendar.getDateTimeNowMarketTimeZone());
 			Aspect resultAspect = this.tradePersistentModel.persistAspect(rule);
-			assertNotNull(resultAspect);
+			assertNotNull("1", resultAspect);
 			Rule result = this.tradePersistentModel.findRuleById(resultAspect
 					.getId());
-			assertNotNull(result);
+			assertNotNull("2", result);
 			this.tradePersistentModel.removeAspect(rule);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -1414,7 +1415,7 @@ public class TradePersistentModelTest {
 		try {
 			Integer result = this.tradePersistentModel
 					.findRuleByMaxVersion(this.tradestrategy.getStrategy());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1430,7 +1431,7 @@ public class TradePersistentModelTest {
 			Strategy result = this.tradePersistentModel
 					.findStrategyById(this.tradestrategy.getStrategy()
 							.getIdStrategy());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1446,7 +1447,7 @@ public class TradePersistentModelTest {
 			Strategy result = this.tradePersistentModel
 					.findStrategyByName(this.tradestrategy.getStrategy()
 							.getName());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1463,7 +1464,7 @@ public class TradePersistentModelTest {
 							.indexOf("Series"));
 			CodeType result = this.tradePersistentModel.findCodeTypeByNameType(
 					indicatorName, CodeType.IndicatorParameters);
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1482,7 +1483,7 @@ public class TradePersistentModelTest {
 					"Test", TradingCalendar.getDateTimeNowMarketTimeZone(),
 					TradingCalendar.getDateTimeNowMarketTimeZone());
 			Rule resultAspect = this.tradePersistentModel.persistAspect(rule);
-			assertNotNull(resultAspect);
+			assertNotNull("1", resultAspect);
 			this.tradePersistentModel.removeAspect(resultAspect);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -1497,7 +1498,7 @@ public class TradePersistentModelTest {
 
 		try {
 			List<Strategy> result = this.tradePersistentModel.findStrategies();
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1513,7 +1514,7 @@ public class TradePersistentModelTest {
 			Aspects result = this.tradePersistentModel
 					.findAspectsByClassName(this.tradestrategy.getClass()
 							.getName());
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1534,7 +1535,7 @@ public class TradePersistentModelTest {
 				Aspects result = this.tradePersistentModel
 						.findAspectsByClassNameFieldName(
 								CodeType.class.getName(), "name", indicatorName);
-				assertNotNull(result);
+				assertNotNull("1", result);
 			}
 
 		} catch (Exception | AssertionError ex) {
@@ -1551,7 +1552,7 @@ public class TradePersistentModelTest {
 		try {
 			Aspect result = this.tradePersistentModel
 					.findAspectById(this.tradestrategy);
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1566,7 +1567,7 @@ public class TradePersistentModelTest {
 		try {
 			Aspect result = this.tradePersistentModel
 					.persistAspect(this.tradestrategy);
-			assertNotNull(result);
+			assertNotNull("1", result);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1588,7 +1589,7 @@ public class TradePersistentModelTest {
 				// Note Exception will be throw as it will not be found.
 				result = null;
 			} finally {
-				assertNull(result);
+				assertNull("1", result);
 			}
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -1605,15 +1606,15 @@ public class TradePersistentModelTest {
 			Tradingday tradingday = this.tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
-			assertFalse(tradingday.getTradestrategies().isEmpty());
+			assertFalse("1", tradingday.getTradestrategies().isEmpty());
 			Strategy toStrategy = (Strategy) DAOStrategy.newInstance()
 					.getObject();
 			toStrategy = this.tradePersistentModel.findStrategyById(toStrategy
 					.getIdStrategy());
 			this.tradePersistentModel.reassignStrategy(
 					this.tradestrategy.getStrategy(), toStrategy, tradingday);
-			assertEquals(toStrategy, tradingday.getTradestrategies().get(0)
-					.getStrategy());
+			assertEquals("2", toStrategy, tradingday.getTradestrategies()
+					.get(0).getStrategy());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -1642,7 +1643,7 @@ public class TradePersistentModelTest {
 			this.tradestrategy.getContract().setIndustry("Computer");
 			Contract result = this.tradePersistentModel
 					.persistContract(this.tradestrategy.getContract());
-			assertNotNull(result);
+			assertNotNull("1", result);
 			Tradingday instance2 = tradePersistentModel
 					.findTradingdayById(this.tradestrategy.getTradingday()
 							.getIdTradingDay());
@@ -1660,13 +1661,15 @@ public class TradePersistentModelTest {
 			Tradingday transferObject = tradingdayModel.getData()
 					.getTradingday(openDate.getZonedDateTime(),
 							closeDate.getZonedDateTime());
-			assertNotNull(transferObject);
+			assertNotNull("2", transferObject);
 
-			assertNotNull(tradingdays.getTradingday(instance1.getOpen(),
-					instance1.getClose()));
+			assertNotNull(
+					"3",
+					tradingdays.getTradingday(instance1.getOpen(),
+							instance1.getClose()));
 			String industry = transferObject.getTradestrategies().get(0)
 					.getContract().getIndustry();
-			assertNotNull(industry);
+			assertNotNull("4", industry);
 
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "

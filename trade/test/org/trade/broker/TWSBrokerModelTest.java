@@ -260,8 +260,11 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			fail("Error testOneSymbolOnBrokerData Msg: " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -321,8 +324,11 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			fail("Error testMarch2013OnBrokerData Msg: " + ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -392,9 +398,11 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
-					+ ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 
@@ -464,9 +472,11 @@ public class TWSBrokerModelTest implements BrokerChangeListener {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			fail("Error testOneSymbolMarch2013OnBrokerData Msg: "
-					+ ex.getMessage());
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
 		}
 	}
 

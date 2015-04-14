@@ -120,7 +120,7 @@ public class PortfolioTest {
 					account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);
 			portfolio = aspectHome.persist(portfolio);
-			assertNotNull(portfolio.getIndividualAccount());
+			assertNotNull("1", portfolio.getIndividualAccount());
 
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "

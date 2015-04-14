@@ -122,11 +122,11 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			assertNotNull(tradestrategy);
+			assertNotNull("1", tradestrategy);
 
 			Integer version = tradestrategyHome.findVersionById(tradestrategy
 					.getIdTradeStrategy());
-			assertNotNull(version);
+			assertNotNull("2", version);
 			_log.info("testFindVersionById IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy() + " version: "
 					+ version);
@@ -143,14 +143,14 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			assertNotNull(tradestrategy);
+			assertNotNull("1", tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 
 			TradestrategyOrders positionOrders = tradestrategyHome
 					.findPositionOrdersByTradestrategyId(tradestrategy
 							.getIdTradeStrategy());
-			assertNotNull(positionOrders);
+			assertNotNull("2", positionOrders);
 			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + "found.");
 			positionOrders.setStatus(TradestrategyStatus.CANCELLED);
@@ -162,7 +162,7 @@ public class TradestrategyTest {
 			_log.info("testTradingdaysSave PositionOrders IdTradeStrategy:"
 					+ positionOrders.getIdTradeStrategy() + "found Status: "
 					+ positionOrders.getStatus());
-			assertEquals(TradestrategyStatus.CANCELLED,
+			assertEquals("3", TradestrategyStatus.CANCELLED,
 					positionOrders.getStatus());
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -179,12 +179,12 @@ public class TradestrategyTest {
 
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			assertNotNull(tradestrategy);
+			assertNotNull("1", tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 			tradestrategy = tradestrategyHome.findById(tradestrategy
 					.getIdTradeStrategy());
-			assertNotNull(tradestrategy);
+			assertNotNull("2", tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy() + "found.");
 		} catch (Exception | AssertionError ex) {
@@ -219,7 +219,7 @@ public class TradestrategyTest {
 					_log.info("testTradingdaysUpdate IdTradeStrategy:"
 							+ tradestrategy.getIdTradeStrategy() + "  Status: "
 							+ tradestrategy.getStatus());
-					assertEquals(TradestrategyStatus.OPEN,
+					assertEquals("1", TradestrategyStatus.OPEN,
 							tradestrategy.getStatus());
 				}
 			}
@@ -245,7 +245,7 @@ public class TradestrategyTest {
 
 			String fileName = "db/LoadFile10Stocks.csv";
 			tradingdays.populateDataFromFile(fileName, instance);
-			assertFalse(tradingdays.getTradingdays().isEmpty());
+			assertFalse("1", tradingdays.getTradingdays().isEmpty());
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
@@ -281,7 +281,7 @@ public class TradestrategyTest {
 			String fileName = "db/LoadFile1Stock.csv";
 
 			tradingdays.populateDataFromFile(fileName, instance);
-			assertFalse(tradingdays.getTradingdays().isEmpty());
+			assertFalse("1", tradingdays.getTradingdays().isEmpty());
 			for (Tradingday tradingday : tradingdays.getTradingdays()) {
 				tradingdayHome.persist(tradingday);
 				for (Tradestrategy tradestrategy : tradingday
@@ -456,7 +456,7 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			assertNotNull(tradestrategy);
+			assertNotNull("1", tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 			List<Tradestrategy> results = tradestrategyHome
@@ -468,7 +468,7 @@ public class TradestrategyTest {
 						+ value.getChartDays() + " Strategy: "
 						+ value.getStrategy().getName());
 			}
-			assertNotNull(results);
+			assertNotNull("2", results);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -482,7 +482,7 @@ public class TradestrategyTest {
 		try {
 			Tradestrategy tradestrategy = TradestrategyTest
 					.getTestTradestrategy(symbol);
-			assertNotNull(tradestrategy);
+			assertNotNull("1", tradestrategy);
 			_log.info("testTradingdaysSave IdTradeStrategy:"
 					+ tradestrategy.getIdTradeStrategy());
 			List<Tradestrategy> results = tradestrategyHome
@@ -492,7 +492,7 @@ public class TradestrategyTest {
 			for (Tradestrategy value : results) {
 				_log.info("Contract: " + value.getContract().getSymbol());
 			}
-			assertNotNull(results);
+			assertNotNull("2", results);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();

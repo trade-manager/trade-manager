@@ -155,7 +155,7 @@ public class TradeOrderTest {
 			tradeOrder.setStatus("SUBMITTED");
 			tradeOrder.validate();
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
-			assertNotNull(tradeOrder);
+			assertNotNull("1", tradeOrder);
 			_log.info("IdOrder: " + tradeOrder.getIdTradeOrder());
 
 			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
@@ -170,7 +170,7 @@ public class TradeOrderTest {
 			tradeOrder1.setStatus("SUBMITTED");
 			tradeOrder1.validate();
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
-			assertNotNull(tradeOrder1);
+			assertNotNull("2", tradeOrder1);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();

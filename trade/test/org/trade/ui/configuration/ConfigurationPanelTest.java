@@ -124,7 +124,7 @@ public class ConfigurationPanelTest {
 			Integer value = (Integer) ClassFactory.getCreateClass(codeValue
 					.getCodeAttribute().getClassName(), parm, this);
 			_log.info("Value is: " + value);
-			assertEquals(20, value, 0);
+			assertEquals("1", 20, value, 0);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -148,7 +148,7 @@ public class ConfigurationPanelTest {
 			Boolean value = (Boolean) ClassFactory.getCreateClass(codeValue
 					.getCodeAttribute().getClassName(), parm, this);
 			_log.info("Value is: " + value);
-			assertEquals(new Boolean(true), value);
+			assertEquals("1", new Boolean(true), value);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
 					+ ex.getMessage();
@@ -171,7 +171,7 @@ public class ConfigurationPanelTest {
 
 			String value = (String) ClassFactory.getCreateClass(codeValue
 					.getCodeAttribute().getClassName(), parm, this);
-			assertEquals("Simple", value);
+			assertEquals("1", "Simple", value);
 			_log.info("Value is: " + value);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -200,7 +200,7 @@ public class ConfigurationPanelTest {
 							codeValue.getCodeAttribute().getClassName(), parm,
 							this);
 			value.setValue(CalculationType.LINEAR);
-			assertEquals(CalculationType.LINEAR, value.getCode());
+			assertEquals("1", CalculationType.LINEAR, value.getCode());
 			_log.info("Value is: " + value);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
@@ -231,7 +231,7 @@ public class ConfigurationPanelTest {
 			IndicatorSeries value = (IndicatorSeries) ClassFactory
 					.getCreateClass(className, parm, this);
 
-			assertEquals(value.getClass().getName(), className);
+			assertEquals("1", value.getClass().getName(), className);
 			_log.info("Value is: " + value);
 		} catch (Exception | AssertionError ex) {
 			String msg = "Error running " + name.getMethodName() + " msg: "
