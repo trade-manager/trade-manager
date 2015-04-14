@@ -36,25 +36,16 @@
 package org.trade.ui.configuration;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.text.ParseException;
-import java.util.Hashtable;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import javax.swing.InputVerifier;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -62,7 +53,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -71,11 +61,9 @@ import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.lookup.DBTableLookupServiceProvider;
-import org.trade.core.valuetype.Decode;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
 import org.trade.dictionary.valuetype.ReferenceTable;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.dao.CodeAttribute;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Portfolio;
@@ -320,17 +308,16 @@ public class ConfigurationPanel extends BasePanel {
 			this.clearStatusBarMessage();
 			String indicatorName = series.getType().substring(0,
 					series.getType().indexOf("Series"));
-			Aspects aspects = m_tradePersistentModel
-					.findAspectsByClassNameFieldName(CodeType.class.getName(),
-							"name", indicatorName);
-			if (aspects.getAspect().isEmpty()) {
+			CodeType codeType = m_tradePersistentModel.findCodeTypeByNameType(
+					indicatorName, CodeType.IndicatorParameters);
+			if (null == codeType) {
 				this.setStatusBarMessage(
 						"There are no properties for this Indicator ...",
 						BasePanel.INFORMATION);
 			} else {
 
-				CodeAttributesPanel codeAttributePanel = new CodeAttributesPanel(
-						aspects, series);
+				CodeAttributePanel codeAttributePanel = new CodeAttributePanel(
+						codeType, series.getCodeValues());
 				if (null != codeAttributePanel) {
 					TextDialog dialog = new TextDialog(this.getFrame(),
 							"Indicator Properties", true, codeAttributePanel);
@@ -338,54 +325,11 @@ public class ConfigurationPanel extends BasePanel {
 					dialog.setVisible(true);
 					if (!dialog.getCancel()) {
 						/*
-						 * If there are no code values set them up
-						 */
-
-						if (series.getCodeValues().isEmpty()) {
-							for (Aspect aspect : aspects.getAspect()) {
-								CodeType codeType = (CodeType) aspect;
-								for (CodeAttribute codeAttribute : codeType
-										.getCodeAttribute()) {
-									CodeValue codeValue = new CodeValue(
-											codeAttribute, null);
-									codeValue.setIndicatorSeries(series);
-									series.addCodeValue(codeValue);
-								}
-							}
-						}
-						/*
 						 * Populate the code values from the fields.
 						 */
-						for (CodeValue codeValue : series.getCodeValues()) {
-							series.setDirty(true);
-							if (((FormattedTextFieldVerifier) codeAttributePanel
-									.getFields()
-									.get(codeValue.getCodeAttribute().getName())
-									.getInputVerifier()).isValid()) {
-
-								JComponent field = codeAttributePanel
-										.getFields().get(
-												codeValue.getCodeAttribute()
-														.getName());
-								if (field instanceof JFormattedTextField) {
-									codeValue
-											.setCodeValue(((JFormattedTextField) codeAttributePanel
-													.getFields()
-													.get(codeValue
-															.getCodeAttribute()
-															.getName()))
-													.getText());
-								} else if (field instanceof DecodeComboBoxEditor) {
-									codeValue
-											.setCodeValue(((Decode) ((DecodeComboBoxEditor) codeAttributePanel
-													.getFields()
-													.get(codeValue
-															.getCodeAttribute()
-															.getName()))
-													.getSelectedItem())
-													.getCode());
-								}
-							}
+						for (CodeValue value : codeAttributePanel
+								.getCodeValues()) {
+							series.addCodeValue(value);
 						}
 					}
 				}
@@ -544,172 +488,4 @@ public class ConfigurationPanel extends BasePanel {
 		}
 	}
 
-	/**
-	 */
-	class CodeAttributesPanel extends JPanel {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 5972331201407363985L;
-		private Hashtable<String, JComponent> fields = new Hashtable<String, JComponent>();
-
-		/**
-		 * Constructor for CodeAttributesPanel.
-		 * 
-		 * @param aspects
-		 *            Aspects
-		 * @param series
-		 *            IndicatorSeries
-		 * @throws Exception
-		 */
-		public CodeAttributesPanel(Aspects aspects, IndicatorSeries series)
-				throws Exception {
-
-			GridBagLayout gridBagLayout1 = new GridBagLayout();
-			JPanel jPanel1 = new JPanel(gridBagLayout1);
-			this.setLayout(new BorderLayout());
-
-			for (Aspect aspect : aspects.getAspect()) {
-				CodeType codeType = (CodeType) aspect;
-
-				int i = 0;
-				for (CodeAttribute codeAttribute : codeType.getCodeAttribute()) {
-					JLabel jLabel = new JLabel(codeAttribute.getName() + ": ");
-					jLabel.setToolTipText(codeAttribute.getDescription());
-					jLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-					jLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-					JComponent field = null;
-					if (null == codeAttribute.getEditorClassName()) {
-						field = new JFormattedTextField();
-						field.setInputVerifier(new FormattedTextFieldVerifier());
-						for (CodeValue value : series.getCodeValues()) {
-							if (value.getCodeAttribute().getName()
-									.equals(codeAttribute.getName())) {
-								((JFormattedTextField) field).setValue(series
-										.getValueCode(codeAttribute.getName()));
-								break;
-							}
-						}
-
-						if (null == ((JFormattedTextField) field).getValue()) {
-							Vector<Object> parm = new Vector<Object>();
-							parm.add(codeAttribute.getDefaultValue());
-							Object codeValue = ClassFactory.getCreateClass(
-									codeAttribute.getClassName(), parm, this);
-							((JFormattedTextField) field).setValue(codeValue);
-						}
-					} else {
-						Vector<Object> parm = new Vector<Object>();
-						Object decode = ClassFactory.getCreateClass(
-								codeAttribute.getEditorClassName(), parm, this);
-						boolean valueSet = false;
-						if (decode instanceof Decode) {
-							field = new DecodeComboBoxEditor(
-									((Decode) decode).getCodesDecodes());
-							field.setInputVerifier(new FormattedTextFieldVerifier());
-							DecodeComboBoxRenderer codeRenderer = new DecodeComboBoxRenderer();
-							((DecodeComboBoxEditor) field)
-									.setRenderer(codeRenderer);
-							for (CodeValue value : series.getCodeValues()) {
-								if (value.getCodeAttribute().getName()
-										.equals(codeAttribute.getName())) {
-
-									((Decode) decode).setValue(series
-											.getValueCode(codeAttribute
-													.getName()));
-									((DecodeComboBoxEditor) field)
-											.setItem((Decode) decode);
-									valueSet = true;
-									break;
-								}
-							}
-							if (!valueSet) {
-								((Decode) decode).setValue(codeAttribute
-										.getDefaultValue());
-								((DecodeComboBoxEditor) field)
-										.setItem((Decode) decode);
-							}
-						} else {
-							continue;
-						}
-					}
-
-					fields.put(codeAttribute.getName(), field);
-					jPanel1.add(jLabel, new GridBagConstraints(0, i, 1, 1, 0.0,
-							0.0, GridBagConstraints.EAST,
-							GridBagConstraints.NONE, new Insets(2, 2, 2, 2),
-							20, 5));
-					jPanel1.add(field, new GridBagConstraints(1, i, 1, 1, 1.0,
-							0.0, GridBagConstraints.WEST,
-							GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2,
-									20), 20, 5));
-					i++;
-				}
-			}
-			this.add(jPanel1);
-		}
-
-		/**
-		 * Method getFields.
-		 * 
-		 * @return Hashtable<String,JComponent>
-		 */
-		public Hashtable<String, JComponent> getFields() {
-			return this.fields;
-		}
-	}
-
-	/**
-	 */
-	public class FormattedTextFieldVerifier extends InputVerifier {
-
-		private boolean valid = true;
-
-		/**
-		 * Method verify.
-		 * 
-		 * @param input
-		 *            JComponent
-		 * @return boolean
-		 */
-		public boolean verify(JComponent input) {
-			if (input instanceof JFormattedTextField) {
-				JFormattedTextField ftf = (JFormattedTextField) input;
-				AbstractFormatter formatter = ftf.getFormatter();
-				if (formatter != null) {
-					String text = ftf.getText();
-					try {
-						formatter.stringToValue(text);
-						ftf.setBackground(null);
-						valid = true;
-					} catch (ParseException pe) {
-						ftf.setBackground(Color.red);
-						valid = false;
-					}
-				}
-			}
-			return valid;
-		}
-
-		/**
-		 * Method shouldYieldFocus.
-		 * 
-		 * @param input
-		 *            JComponent
-		 * @return boolean
-		 */
-		public boolean shouldYieldFocus(JComponent input) {
-			return verify(input);
-		}
-
-		/**
-		 * Method isValid.
-		 * 
-		 * @return boolean
-		 */
-		public boolean isValid() {
-			return valid;
-		}
-	}
 }

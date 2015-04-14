@@ -54,6 +54,8 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CandleHome;
+import org.trade.persistent.dao.CodeType;
+import org.trade.persistent.dao.CodeTypeHome;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
@@ -86,6 +88,7 @@ import org.trade.strategy.data.candle.CandleItem;
  */
 public class TradePersistentModel implements PersistentModel {
 
+	private CodeTypeHome m_codeTypeHome = null;
 	private ContractHome m_contractHome = null;
 	private StrategyHome m_strategyHome = null;
 	private TradingdayHome m_tradingdayHome = null;
@@ -104,6 +107,7 @@ public class TradePersistentModel implements PersistentModel {
 	private static final int SCALE_2 = 2;
 
 	public TradePersistentModel() {
+		m_codeTypeHome = new CodeTypeHome();
 		m_contractHome = new ContractHome();
 		m_strategyHome = new StrategyHome();
 		m_tradingdayHome = new TradingdayHome();
@@ -1504,6 +1508,26 @@ public class TradePersistentModel implements PersistentModel {
 
 		} catch (Exception ex) {
 			throw new PersistentModelException("Error reassign Strategy: "
+					+ ex.getMessage());
+		}
+	}
+
+	/**
+	 * Method findCodeTypeByNameType.
+	 * 
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @return CodeType
+	 * @throws PersistentModelException
+	 */
+	public CodeType findCodeTypeByNameType(String name, String type)
+			throws PersistentModelException {
+		try {
+			return m_codeTypeHome.findByNameAndType(name, type);
+		} catch (Exception ex) {
+			throw new PersistentModelException("Error finding CodeType: "
 					+ ex.getMessage());
 		}
 	}

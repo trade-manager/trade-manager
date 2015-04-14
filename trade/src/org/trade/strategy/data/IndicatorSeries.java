@@ -256,7 +256,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * 
 	 * @return String
 	 */
-	@Column(name = "type", length = 10, insertable = false, updatable = false, unique = true, nullable = false)
+	@Column(name = "type", length = 45, insertable = false, updatable = false, unique = true, nullable = false)
 	public String getType() {
 		return this.type;
 	}
@@ -454,7 +454,21 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 *            CodeValue
 	 */
 	public void addCodeValue(CodeValue codeValue) {
-		this.codeValues.add(codeValue);
+		this.setDirty(false);
+		if (!this.codeValues.isEmpty()) {
+			for (CodeValue value : this.codeValues) {
+				if (value.getCodeAttribute().getName()
+						.equals(codeValue.getCodeAttribute().getName())) {
+					value.setCodeValue(codeValue.getCodeValue());
+					this.setDirty(true);
+				}
+			}
+		}
+		if (!this.isDirty()) {
+			codeValue.setIndicatorSeries(this);
+			this.codeValues.add(codeValue);
+			this.setDirty(true);
+		}
 	}
 
 	/**

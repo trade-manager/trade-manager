@@ -42,13 +42,19 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
@@ -57,16 +63,39 @@ import org.trade.core.dao.Aspect;
  */
 @Entity
 @Table(name = "codetype")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("CodeType")
 public class CodeType extends Aspect implements java.io.Serializable {
 
 	private static final long serialVersionUID = 2273276207080568947L;
 
 	@NotNull
 	private String name;
+	@NotNull
+	private String type;
 	private String description;
 	private List<CodeAttribute> codeAttributes = new ArrayList<CodeAttribute>(0);
 
+	public static final String IndicatorParameters = "IndicatorParameters";
+	public static final String StrategyParameters = "StrategyParameters";
+
+	/**
+	 * Default constructor for CodeType.
+	 * 
+	 */
+
 	public CodeType() {
+	}
+
+	/**
+	 * Constructor for CodeType.
+	 * 
+	 * @param type
+	 *            String
+	 */
+	public CodeType(String type) {
+		this.type = type;
 	}
 
 	/**
@@ -77,9 +106,9 @@ public class CodeType extends Aspect implements java.io.Serializable {
 	 * @param description
 	 *            String
 	 */
-	public CodeType(String name, String description) {
-
+	public CodeType(String name, String type, String description) {
 		this.name = name;
+		this.type = type;
 		this.description = description;
 	}
 
@@ -126,6 +155,26 @@ public class CodeType extends Aspect implements java.io.Serializable {
 	}
 
 	/**
+	 * Method getType.
+	 * 
+	 * @return String
+	 */
+	@Column(name = "type", length = 45, insertable = false, updatable = false, unique = true, nullable = false)
+	public String getType() {
+		return this.type;
+	}
+
+	/**
+	 * Method setType.
+	 * 
+	 * @param type
+	 *            String
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
 	 * Method getDescription.
 	 * 
 	 * @return String
@@ -143,6 +192,27 @@ public class CodeType extends Aspect implements java.io.Serializable {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * Method getVersion.
+	 * 
+	 * @return Integer
+	 */
+	@Version
+	@Column(name = "version")
+	public Integer getVersion() {
+		return this.version;
+	}
+
+	/**
+	 * Method setVersion.
+	 * 
+	 * @param version
+	 *            Integer
+	 */
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	/**

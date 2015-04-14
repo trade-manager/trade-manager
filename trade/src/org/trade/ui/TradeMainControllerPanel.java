@@ -80,6 +80,8 @@ import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
 import org.trade.persistent.dao.Candle;
+import org.trade.persistent.dao.CodeType;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
@@ -97,6 +99,7 @@ import org.trade.ui.base.BasePanel;
 import org.trade.ui.base.ComponentPrintService;
 import org.trade.ui.base.TabbedAppPanel;
 import org.trade.ui.base.TextDialog;
+import org.trade.ui.configuration.CodeAttributePanel;
 import org.trade.ui.configuration.ConfigurationPanel;
 import org.trade.ui.contract.ContractPanel;
 import org.trade.ui.portfolio.PortfolioPanel;
@@ -1489,6 +1492,51 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	}
 
 	/**
+	 * Method doStrategyParameters.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void doStrategyParameters(Tradestrategy tradestrategy) {
+		try {
+			this.clearStatusBarMessage();
+			String strategyName = tradestrategy.getStrategy().getName();
+			CodeType codeType = m_tradePersistentModel.findCodeTypeByNameType(
+					strategyName, CodeType.StrategyParameters);
+			if (null == codeType) {
+				this.setStatusBarMessage(
+						"There are no properties for this Strategy ...",
+						BasePanel.INFORMATION);
+			} else {
+
+				CodeAttributePanel codeAttributePanel = new CodeAttributePanel(
+						codeType, tradestrategy.getCodeValues());
+				if (null != codeAttributePanel) {
+					TextDialog dialog = new TextDialog(this.getFrame(),
+							"Indicator Properties", true, codeAttributePanel);
+					dialog.setLocationRelativeTo(this);
+					dialog.setVisible(true);
+					if (!dialog.getCancel()) {
+						/*
+						 * Populate the code values from the fields.
+						 */
+						for (CodeValue value : codeAttributePanel
+								.getCodeValues()) {
+							tradestrategy.addCodeValue(value);
+							m_tradePersistentModel.persistAspect(value);
+						}
+					}
+				}
+			}
+		} catch (Exception ex) {
+			setErrorMessage("Error getting Indicator properties.",
+					ex.getMessage(), ex);
+		} finally {
+			this.getFrame().setCursor(Cursor.getDefaultCursor());
+		}
+	}
+
+	/**
 	 * This method is fired from the Contract Tab when the Cancel Order button
 	 * is pressed. This should be used to cancel orders in the broker platform.
 	 * 
@@ -1921,7 +1969,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								}
 							}
 						}
+						/*
+						 * See if this strategy has any parameters
+						 */
+						doStrategyParameters(tradestrategy);
 					}
+
 				}
 			}
 

@@ -112,7 +112,8 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateIntegerClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average", "Moving Average");
+			CodeType codeType = new CodeType("Moving Average",
+					CodeType.IndicatorParameters, "Moving Average");
 			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length",
 					"The length of the MA", "10", "java.lang.Integer", null);
 			CodeValue codeValue = new CodeValue(codeAttribute, "20");
@@ -135,7 +136,8 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateBooleanClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average", "Moving Average");
+			CodeType codeType = new CodeType("Moving Average",
+					CodeType.IndicatorParameters, "Moving Average");
 			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length",
 					"The length of the MA", "true", "java.lang.Boolean", null);
 			CodeValue codeValue = new CodeValue(codeAttribute, "true");
@@ -158,7 +160,8 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateStringClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average", "Moving Average");
+			CodeType codeType = new CodeType("Moving Average",
+					CodeType.IndicatorParameters, "Moving Average");
 			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length",
 					"The length of the MA", "Test", "java.lang.String", null);
 			CodeValue codeValue = new CodeValue(codeAttribute, "Simple");
@@ -181,7 +184,8 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateDecodeClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average", "Moving Average");
+			CodeType codeType = new CodeType("Moving Average",
+					CodeType.IndicatorParameters, "Moving Average");
 			CodeAttribute codeAttribute = new CodeAttribute(codeType,
 					"SMAType", "The length of the MA", "LINEAR",
 					"org.trade.dictionary.valuetype.CalculationType", null);

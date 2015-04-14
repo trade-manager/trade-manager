@@ -42,6 +42,7 @@ import java.util.List;
 import org.trade.core.dao.Aspect;
 import org.trade.core.dao.Aspects;
 import org.trade.persistent.dao.Candle;
+import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.TradestrategyLite;
@@ -641,4 +642,17 @@ public interface PersistentModel {
 	 */
 	void reassignStrategy(Strategy fromStrategy, Strategy toStrategy,
 			Tradingday tradingday) throws PersistentModelException;
+
+	/**
+	 * Method findCodeTypeByNameType.
+	 * 
+	 * @param name
+	 *            String
+	 * @param type
+	 *            String
+	 * @return CodeType
+	 * @throws PersistentModelException
+	 */
+	public CodeType findCodeTypeByNameType(String name, String type)
+			throws PersistentModelException;
 }

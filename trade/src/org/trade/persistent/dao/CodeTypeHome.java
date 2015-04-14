@@ -118,6 +118,52 @@ public class CodeTypeHome {
 	}
 
 	/**
+	 * Method findByNameAndType.
+	 * 
+	 * @param codeName
+	 *            String
+	 * @param codeType
+	 *            String
+	 * @return CodeType
+	 */
+	public CodeType findByNameAndType(String codeName, String codeType) {
+
+		try {
+			EntityManager entityManager = EntityManagerHelper
+					.getEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<CodeType> query = builder.createQuery(CodeType.class);
+			Root<CodeType> from = query.from(CodeType.class);
+			query.select(from);
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (null != codeName) {
+				Predicate predicate = builder.equal(from.get("name"), codeName);
+				predicates.add(predicate);
+			}
+			if (null != codeType) {
+				Predicate predicate = builder.equal(from.get("type"), codeType);
+				predicates.add(predicate);
+			}
+			query.where(predicates.toArray(new Predicate[] {}));
+			TypedQuery<CodeType> typedQuery = entityManager.createQuery(query);
+			List<CodeType> items = typedQuery.getResultList();
+			entityManager.getTransaction().commit();
+			if (items.size() > 0) {
+				return items.get(0);
+			}
+			return null;
+
+		} catch (Exception re) {
+			EntityManagerHelper.rollback();
+			throw re;
+		} finally {
+			EntityManagerHelper.close();
+		}
+	}
+
+	/**
 	 * Method findByAttributeName.
 	 * 
 	 * @param codeTypeName

@@ -63,6 +63,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	@NotNull
 	private CodeAttribute codeAttribute;
 	private IndicatorSeries indicatorSeries;
+	private Tradestrategy tradestrategy;
 
 	public CodeValue() {
 	}
@@ -95,6 +96,23 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 		this.codeValue = codeValue;
 		this.codeAttribute = codeAttribute;
 		this.indicatorSeries = indicatorSeries;
+	}
+
+	/**
+	 * Constructor for CodeValue.
+	 * 
+	 * @param codeAttribute
+	 *            CodeAttribute
+	 * @param codeValue
+	 *            String
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public CodeValue(CodeAttribute codeAttribute, String codeValue,
+			Tradestrategy tradestrategy) {
+		this.codeValue = codeValue;
+		this.codeAttribute = codeAttribute;
+		this.tradestrategy = tradestrategy;
 	}
 
 	/**
@@ -179,6 +197,27 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 */
 	public void setIndicatorSeries(IndicatorSeries indicatorSeries) {
 		this.indicatorSeries = indicatorSeries;
+	}
+
+	/**
+	 * Method getTradestrategy.
+	 * 
+	 * @return Tradestrategy
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "idTradeStrategy", nullable = true)
+	public Tradestrategy getTradestrategy() {
+		return this.tradestrategy;
+	}
+
+	/**
+	 * Method setTradestrategy.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 */
+	public void setTradestrategy(Tradestrategy tradestrategy) {
+		this.tradestrategy = tradestrategy;
 	}
 
 	/**

@@ -1456,6 +1456,23 @@ public class TradePersistentModelTest {
 	}
 
 	@Test
+	public void testFindCodeTypeByNameType() {
+		try {
+			String indicatorName = IndicatorSeries.MovingAverageSeries
+					.substring(0, IndicatorSeries.MovingAverageSeries
+							.indexOf("Series"));
+			CodeType result = this.tradePersistentModel.findCodeTypeByNameType(
+					indicatorName, CodeType.IndicatorParameters);
+			assertNotNull(result);
+		} catch (Exception | AssertionError ex) {
+			String msg = "Error running " + name.getMethodName() + " msg: "
+					+ ex.getMessage();
+			_log.error(msg);
+			fail(msg);
+		}
+	}
+
+	@Test
 	public void testRemoveRule() {
 
 		try {

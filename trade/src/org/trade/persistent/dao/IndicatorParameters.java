@@ -33,45 +33,38 @@
  * -------
  *
  */
-package org.trade.dictionary.valuetype;
+package org.trade.persistent.dao;
 
-import org.trade.core.valuetype.DAODecode;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 /**
  */
-public class DAOIndicatorSeries extends DAODecode {
+@Entity
+@DiscriminatorValue("IndicatorParameters")
+public class IndicatorParameters extends CodeType {
 
-	private static final long serialVersionUID = -5381026427696898592L;
-	public static final String DECODE = "INDICATOR_DATA";
-	public static final String _TABLE = "_TABLE";
-	public static final String _TABLE_ID = "_TABLE_ID";
-	public static final String _COLUMN = "_COLUMN";
+	private static final long serialVersionUID = 2273276207080568947L;
 
-	public DAOIndicatorSeries() {
-		super(DECODE);
+	public IndicatorParameters(String name, String description) {
+		super(name, CodeType.IndicatorParameters, description);
+	}
+
+	public IndicatorParameters() {
+		super(CodeType.IndicatorParameters);
 	}
 
 	/**
-	 * Method newInstance.
+	 * Constructor for CodeType.
 	 * 
-	 * @param value
+	 * @param name
 	 *            String
-	 * @return DAOIndicatorSeries
+	 * @param type
+	 *            String
+	 * @param description
+	 *            String
 	 */
-	public static DAOIndicatorSeries newInstance(String displayName) {
-		final DAOIndicatorSeries returnInstance = new DAOIndicatorSeries();
-		returnInstance.setDisplayName(displayName);
-		return returnInstance;
-	}
-
-	/**
-	 * Method newInstance.
-	 * 
-	 * @return DAOIndicatorSeries
-	 */
-	public static DAOIndicatorSeries newInstance() {
-		final DAOIndicatorSeries returnInstance = new DAOIndicatorSeries();
-		returnInstance.setDefaultCode();
-		return returnInstance;
+	public IndicatorParameters(String name, String type, String description) {
+		super(name, type, description);
 	}
 }

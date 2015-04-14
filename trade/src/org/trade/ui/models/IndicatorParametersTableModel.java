@@ -37,43 +37,38 @@ package org.trade.ui.models;
 
 import java.util.Vector;
 
+import org.trade.core.dao.Aspect;
+import org.trade.core.dao.Aspects;
 import org.trade.core.util.CoreUtils;
-import org.trade.dictionary.valuetype.DataType;
-import org.trade.persistent.dao.CodeAttribute;
 import org.trade.persistent.dao.CodeType;
-import org.trade.ui.base.TableModel;
+import org.trade.persistent.dao.IndicatorParameters;
 
 /**
  */
-public class CodeAttributeTableModel extends TableModel {
+public class IndicatorParametersTableModel extends AspectTableModel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3087514589731145479L;
-	private static final String NAME = "Parm Name*";
+	private static final String NAME = "Indicator Name*";
 	private static final String DESCRIPTION = "Description";
-	private static final String DEFAULT_VALUE = "Default Value*";
-	private static final String CLASS_NAME = "Data Type*";
-	private static final String CLASS_EDITOR_NAME = "Data Type Editor";
 
-	CodeType m_data = null;
+	Aspects m_data = null;
 
-	public CodeAttributeTableModel() {
+	public IndicatorParametersTableModel() {
 
-		columnNames = new String[5];
+		columnNames = new String[2];
 		columnNames[0] = NAME;
 		columnNames[1] = DESCRIPTION;
-		columnNames[2] = DEFAULT_VALUE;
-		columnNames[3] = CLASS_NAME;
-		columnNames[4] = CLASS_EDITOR_NAME;
+
 	}
 
 	/**
 	 * Method getData.
 	 * 
-	 * @return CodeType
+	 * @return Aspects
 	 */
-	public CodeType getData() {
+	public Aspects getData() {
 		return m_data;
 	}
 
@@ -81,17 +76,16 @@ public class CodeAttributeTableModel extends TableModel {
 	 * Method setData.
 	 * 
 	 * @param data
-	 *            CodeType
+	 *            Aspects
 	 */
-	public void setData(CodeType data) {
+	public void setData(Aspects data) {
 
 		this.m_data = data;
 		this.clearAll();
-		if (!getData().getCodeAttribute().isEmpty()) {
-
-			for (final CodeAttribute element : getData().getCodeAttribute()) {
+		if (!getData().getAspect().isEmpty()) {
+			for (final Aspect element : getData().getAspect()) {
 				final Vector<Object> newRow = new Vector<Object>();
-				getNewRow(newRow, element);
+				getNewRow(newRow, (CodeType) element);
 				rows.add(newRow);
 			}
 			fireTableDataChanged();
@@ -110,7 +104,7 @@ public class CodeAttributeTableModel extends TableModel {
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
-		final CodeAttribute element = getData().getCodeAttribute().get(row);
+		final CodeType element = (CodeType) getData().getAspect().get(row);
 
 		switch (column) {
 		case 0: {
@@ -119,18 +113,6 @@ public class CodeAttributeTableModel extends TableModel {
 		}
 		case 1: {
 			element.setDescription((String) value);
-			break;
-		}
-		case 2: {
-			element.setDefaultValue((String) value);
-			break;
-		}
-		case 3: {
-			element.setClassName(((DataType) value).getCode());
-			break;
-		}
-		case 4: {
-			element.setEditorClassName((String) value);
 			break;
 		}
 		default: {
@@ -148,9 +130,10 @@ public class CodeAttributeTableModel extends TableModel {
 	public void deleteRow(int selectedRow) {
 
 		String name = (String) this.getValueAt(selectedRow, 0);
-		for (final CodeAttribute element : getData().getCodeAttribute()) {
-			if (CoreUtils.nullSafeComparator(element.getName(), name) == 0) {
-				getData().getCodeAttribute().remove(element);
+		for (final Aspect element : getData().getAspect()) {
+			if (CoreUtils.nullSafeComparator(((CodeType) element).getName(),
+					name) == 0) {
+				getData().remove(element);
 				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
@@ -162,17 +145,15 @@ public class CodeAttributeTableModel extends TableModel {
 
 	public void addRow() {
 
-		final CodeAttribute element = new CodeAttribute(this.m_data, "", "",
-				null, "", null);
-		getData().getCodeAttribute().add(element);
+		final IndicatorParameters element = new IndicatorParameters("",
+				CodeType.IndicatorParameters, "");
+		getData().add(element);
 		getData().setDirty(true);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
 		rows.add(newRow);
-
 		// Tell the listeners a new table has arrived.
 		this.fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
-
 	}
 
 	/**
@@ -181,13 +162,11 @@ public class CodeAttributeTableModel extends TableModel {
 	 * @param newRow
 	 *            Vector<Object>
 	 * @param element
-	 *            CodeAttribute
+	 *            CodeType
 	 */
-	public void getNewRow(Vector<Object> newRow, CodeAttribute element) {
+	public void getNewRow(Vector<Object> newRow, CodeType element) {
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getDescription());
-		newRow.addElement(element.getDefaultValue());
-		newRow.addElement(DataType.newInstance(element.getClassName()));
-		newRow.addElement(element.getEditorClassName());
+
 	}
 }

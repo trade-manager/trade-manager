@@ -44,6 +44,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Vector;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,6 +61,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.Min;
 
 import org.trade.core.dao.Aspect;
+import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
@@ -95,6 +97,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
 	private StrategyData strategyData = null;
 	private TradestrategyStatus tradestrategyStatus = new TradestrategyStatus();
+	private List<CodeValue> codeValues = new ArrayList<CodeValue>(0);
 
 	public Tradestrategy() {
 		this.lastUpdateDate = TradingCalendar.getDateTimeNowMarketTimeZone();
@@ -498,6 +501,80 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 */
 	public void setTradeOrders(List<TradeOrder> tradeOrders) {
 		this.tradeOrders = tradeOrders;
+	}
+
+	/**
+	 * Method getCodeValues.
+	 * 
+	 * @return List<CodeValue>
+	 */
+	@OneToMany(mappedBy = "indicatorSeries", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
+	public List<CodeValue> getCodeValues() {
+		return this.codeValues;
+	}
+
+	/**
+	 * Method setCodeValues.
+	 * 
+	 * @param codeValues
+	 *            List<CodeValue>
+	 */
+	public void setCodeValues(List<CodeValue> codeValues) {
+		this.codeValues = codeValues;
+	}
+
+	/**
+	 * Method addCodeValue.
+	 * 
+	 * @param codeValue
+	 *            CodeValue
+	 */
+	public void addCodeValue(CodeValue codeValue) {
+		this.setDirty(false);
+		if (!this.codeValues.isEmpty()) {
+			for (CodeValue value : this.codeValues) {
+				if (value.getCodeAttribute().getName()
+						.equals(codeValue.getCodeAttribute().getName())) {
+					value.setCodeValue(codeValue.getCodeValue());
+					this.setDirty(true);
+				}
+			}
+		}
+		if (!this.isDirty()) {
+			codeValue.setTradestrategy(this);
+			this.codeValues.add(codeValue);
+			this.setDirty(true);
+		}
+	}
+
+	/**
+	 * Returns the value associated with for the this name attribute name. For
+	 * String data types you should define an classEditorName in the
+	 * CodeAttribute table, this should be a
+	 * org.trade.dictionary.valuetype.Decode These are presented as a combo box
+	 * in the UI for editing. all other data types use JFormattedField.
+	 * 
+	 * @param name
+	 *            the name of the attribute.
+	 * 
+	 * 
+	 * @return The value of the attribute.
+	 * @throws Exception
+	 */
+
+	@Transient
+	public Object getValueCode(String name) throws Exception {
+		Object codeValue = null;
+		for (CodeValue value : this.getCodeValues()) {
+			if (name.equals(value.getCodeAttribute().getName())) {
+				Vector<Object> parm = new Vector<Object>();
+				parm.add(value.getCodeValue());
+				codeValue = ClassFactory.getCreateClass(value
+						.getCodeAttribute().getClassName(), parm, this);
+				return codeValue;
+			}
+		}
+		return codeValue;
 	}
 
 	/**
