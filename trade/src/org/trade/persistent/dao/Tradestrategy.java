@@ -508,7 +508,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return List<CodeValue>
 	 */
-	@OneToMany(mappedBy = "indicatorSeries", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
+	@OneToMany(mappedBy = "tradestrategy", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	public List<CodeValue> getCodeValues() {
 		return this.codeValues;
 	}

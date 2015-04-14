@@ -78,6 +78,7 @@ public class TradestrategyHome {
 				instance.getStrategy().getIndicatorSeries().size();
 				instance.getTradeOrders().size();
 				instance.getPortfolio().getPortfolioAccounts().size();
+				instance.getCodeValues().size();
 			}
 			entityManager.getTransaction().commit();
 			return instance;
