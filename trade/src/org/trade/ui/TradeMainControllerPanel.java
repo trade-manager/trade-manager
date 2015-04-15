@@ -1500,17 +1500,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doStrategyParameters(Tradestrategy tradestrategy) {
 		try {
 			this.clearStatusBarMessage();
-			Tradestrategy instance = m_tradePersistentModel
-					.findTradestrategyById(tradestrategy);
-			String strategyName = instance.getStrategy().getName();
+			String strategyName = tradestrategy.getStrategy().getName();
 			CodeType codeType = m_tradePersistentModel.findCodeTypeByNameType(
 					strategyName, CodeType.StrategyParameters);
 			if (null == codeType) {
-				this.setStatusBarMessage(
-						"There are no properties for this Strategy ...",
-						BasePanel.INFORMATION);
+				return;
 			} else {
-
+				Tradestrategy instance = m_tradePersistentModel
+						.findTradestrategyById(tradestrategy);
 				CodeAttributePanel codeAttributePanel = new CodeAttributePanel(
 						codeType, instance.getCodeValues());
 				if (null != codeAttributePanel) {
@@ -1975,7 +1972,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						/*
 						 * See if this strategy has any parameters
 						 */
-						doStrategyParameters(tradestrategy);
+						// doStrategyParameters(tradestrategy);
 					}
 
 				}
