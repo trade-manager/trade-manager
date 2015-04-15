@@ -33,5 +33,5 @@ ADD CONSTRAINT `codeValue_TradeStrategy_fk`
 
 
 ALTER TABLE `tradeprod`.`codevalue` 
-ADD  UNIQUE INDEX codeValue_uq (idCodeAttribute ASC, idIndicatorSeries ASC, idTradeStrategy ASC );
+ADD UNIQUE INDEX `codeValue_uq` (`idCodeAttribute` ASC, `idIndicatorSeries` ASC, `idTradeStrategy` ASC);
 
