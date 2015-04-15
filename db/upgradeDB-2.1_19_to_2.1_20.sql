@@ -8,12 +8,18 @@ CHANGE COLUMN `type` `type` VARCHAR(45) NOT NULL AFTER `description`;
 ALTER TABLE `tradeprod`.`codetype` 
 ADD COLUMN `type` VARCHAR(45) NOT NULL AFTER `version`;
 
+UPDATE `tradeprod`.`codetype` SET type = 'IndicatorParameters' WHERE idCodeType > 0;
+
+commit;
+
 ALTER TABLE `tradeprod`.`codetype` 
 DROP INDEX `codetype_Name_uq` ,
 ADD UNIQUE INDEX `codetype_Name_Type_uq` (`name` ASC, `type` ASC);
 
+
 ALTER TABLE `tradeprod`.`codevalue` 
 ADD COLUMN `idTradeStrategy` INT(11) NULL DEFAULT NULL AFTER `idIndicatorSeries`;
+
 
 
 ALTER TABLE `tradeprod`.`codevalue` 
@@ -26,6 +32,6 @@ ADD CONSTRAINT `codeValue_TradeStrategy_fk`
   ON UPDATE NO ACTION;
 
 
-update codeType set type = 'IndicatorParameters' where idCodeType > 0;
+ALTER TABLE `tradeprod`.`codevalue` 
+ADD  UNIQUE INDEX codeValue_uq (idCodeAttribute ASC, idIndicatorSeries ASC, idTradeStrategy ASC );
 
-commit;

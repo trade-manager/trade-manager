@@ -1522,8 +1522,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						 */
 						for (CodeValue value : codeAttributePanel
 								.getCodeValues()) {
-							tradestrategy.addCodeValue(value);
-							m_tradePersistentModel.persistAspect(value);
+							value.setTradestrategy(tradestrategy);
+							CodeValue codeValue = m_tradePersistentModel
+									.persistAspect(value);
+							tradestrategy.addCodeValue(codeValue);
 						}
 					}
 				}
