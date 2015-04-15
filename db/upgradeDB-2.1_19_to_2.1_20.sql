@@ -12,15 +12,12 @@ UPDATE `tradeprod`.`codetype` SET type = 'IndicatorParameters' WHERE idCodeType 
 
 commit;
 
-ALTER TABLE `tradeprod`.`codetype` 
-DROP INDEX `codetype_Name_uq` ,
-ADD UNIQUE INDEX `codetype_Name_Type_uq` (`name` ASC, `type` ASC);
-
-
 ALTER TABLE `tradeprod`.`codevalue` 
 ADD COLUMN `idTradeStrategy` INT(11) NULL DEFAULT NULL AFTER `idIndicatorSeries`;
 
-
+ALTER TABLE `tradeprod`.`codevalue` 
+ADD UNIQUE INDEX `codeValue_Tradestrategy_CodeAttribute_uq` (`idCodeAttribute` ASC, `idTradeStrategy` ASC),
+ADD UNIQUE INDEX `codeValue_IndicatorSeries_CodeAttribute_uq` (`idIndicatorSeries` ASC, `idCodeAttribute` ASC);
 
 ALTER TABLE `tradeprod`.`codevalue` 
 ADD INDEX `codeValue_TradeStrategy_fk_idx` (`idTradeStrategy` ASC);

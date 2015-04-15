@@ -1500,7 +1500,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doStrategyParameters(Tradestrategy tradestrategy) {
 		try {
 			this.clearStatusBarMessage();
-			String strategyName = tradestrategy.getStrategy().getName();
+			Tradestrategy instance = m_tradePersistentModel
+					.findTradestrategyById(tradestrategy);
+			String strategyName = instance.getStrategy().getName();
 			CodeType codeType = m_tradePersistentModel.findCodeTypeByNameType(
 					strategyName, CodeType.StrategyParameters);
 			if (null == codeType) {
@@ -1510,7 +1512,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			} else {
 
 				CodeAttributePanel codeAttributePanel = new CodeAttributePanel(
-						codeType, tradestrategy.getCodeValues());
+						codeType, instance.getCodeValues());
 				if (null != codeAttributePanel) {
 					TextDialog dialog = new TextDialog(this.getFrame(),
 							"Strategy Parms", true, codeAttributePanel);
@@ -1522,10 +1524,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						 */
 						for (CodeValue value : codeAttributePanel
 								.getCodeValues()) {
-							value.setTradestrategy(tradestrategy);
-							CodeValue codeValue = m_tradePersistentModel
-									.persistAspect(value);
-							tradestrategy.addCodeValue(codeValue);
+							if (null == value.getTradestrategy())
+								value.setTradestrategy(instance);
+							m_tradePersistentModel.persistAspect(value);
 						}
 					}
 				}

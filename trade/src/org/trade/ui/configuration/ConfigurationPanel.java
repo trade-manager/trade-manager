@@ -329,7 +329,9 @@ public class ConfigurationPanel extends BasePanel {
 						 */
 						for (CodeValue value : codeAttributePanel
 								.getCodeValues()) {
-							series.addCodeValue(value);
+							series.setDirty(true);
+							if (null == value.getIndicatorSeries())
+								value.setIndicatorSeries(series);
 						}
 					}
 				}

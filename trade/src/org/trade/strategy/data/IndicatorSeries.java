@@ -40,7 +40,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.persistence.CascadeType;
@@ -117,7 +118,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	private Strategy strategy;
 	protected Integer version;
 	private boolean dirty = false;
-	private List<CodeValue> codeValues = new ArrayList<CodeValue>(0);
+	private Set<CodeValue> codeValues = new HashSet<>(0);
 
 	/**
 	 * Constructor for IndicatorSeries.
@@ -430,10 +431,10 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	/**
 	 * Method getCodeValues.
 	 * 
-	 * @return List<CodeValue>
+	 * @return Set<CodeValue>
 	 */
 	@OneToMany(mappedBy = "indicatorSeries", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
-	public List<CodeValue> getCodeValues() {
+	public Set<CodeValue> getCodeValues() {
 		return this.codeValues;
 	}
 
@@ -441,34 +442,10 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * Method setCodeValues.
 	 * 
 	 * @param codeValues
-	 *            List<CodeValue>
+	 *            Set<CodeValue>
 	 */
-	public void setCodeValues(List<CodeValue> codeValues) {
+	public void setCodeValues(Set<CodeValue> codeValues) {
 		this.codeValues = codeValues;
-	}
-
-	/**
-	 * Method addCodeValue.
-	 * 
-	 * @param codeValue
-	 *            CodeValue
-	 */
-	public void addCodeValue(CodeValue codeValue) {
-		this.setDirty(false);
-		if (!this.codeValues.isEmpty()) {
-			for (CodeValue value : this.codeValues) {
-				if (value.getCodeAttribute().getName()
-						.equals(codeValue.getCodeAttribute().getName())) {
-					value.setCodeValue(codeValue.getCodeValue());
-					this.setDirty(true);
-				}
-			}
-		}
-		if (!this.isDirty()) {
-			codeValue.setIndicatorSeries(this);
-			this.codeValues.add(codeValue);
-			this.setDirty(true);
-		}
 	}
 
 	/**

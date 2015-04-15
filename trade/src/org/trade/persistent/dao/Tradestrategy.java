@@ -43,7 +43,9 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.persistence.CascadeType;
@@ -94,10 +96,11 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private BigDecimal riskAmount;
 	private Boolean trade = new Boolean(false);
 	private ZonedDateTime lastUpdateDate;
-	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
+
 	private StrategyData strategyData = null;
 	private TradestrategyStatus tradestrategyStatus = new TradestrategyStatus();
-	private List<CodeValue> codeValues = new ArrayList<CodeValue>(0);
+	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
+	private Set<CodeValue> codeValues = new HashSet<>(0);
 
 	public Tradestrategy() {
 		this.lastUpdateDate = TradingCalendar.getDateTimeNowMarketTimeZone();
@@ -506,10 +509,10 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Method getCodeValues.
 	 * 
-	 * @return List<CodeValue>
+	 * @return Set<CodeValue>
 	 */
-	@OneToMany(mappedBy = "tradestrategy", fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-	public List<CodeValue> getCodeValues() {
+	@OneToMany(mappedBy = "tradestrategy", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	public Set<CodeValue> getCodeValues() {
 		return this.codeValues;
 	}
 
@@ -517,34 +520,10 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 * Method setCodeValues.
 	 * 
 	 * @param codeValues
-	 *            List<CodeValue>
+	 *            Set<CodeValue>
 	 */
-	public void setCodeValues(List<CodeValue> codeValues) {
+	public void setCodeValues(Set<CodeValue> codeValues) {
 		this.codeValues = codeValues;
-	}
-
-	/**
-	 * Method addCodeValue.
-	 * 
-	 * @param codeValue
-	 *            CodeValue
-	 */
-	public void addCodeValue(CodeValue codeValue) {
-		this.setDirty(false);
-		if (!this.codeValues.isEmpty()) {
-			for (CodeValue value : this.codeValues) {
-				if (value.getCodeAttribute().getName()
-						.equals(codeValue.getCodeAttribute().getName())) {
-					value.setCodeValue(codeValue.getCodeValue());
-					this.setDirty(true);
-				}
-			}
-		}
-		if (!this.isDirty()) {
-			codeValue.setTradestrategy(this);
-			this.codeValues.add(codeValue);
-			this.setDirty(true);
-		}
 	}
 
 	/**

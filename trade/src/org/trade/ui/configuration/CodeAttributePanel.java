@@ -6,9 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.InputVerifier;
@@ -35,6 +34,7 @@ public class CodeAttributePanel extends JPanel {
 	private static final long serialVersionUID = 5972331201407363985L;
 	private Hashtable<String, JComponent> fields = new Hashtable<String, JComponent>();
 	private CodeType codeType = null;
+	private Set<CodeValue> currentCodeValues = null;
 
 	/**
 	 * Constructor for CodeAttributesPanel.
@@ -46,9 +46,10 @@ public class CodeAttributePanel extends JPanel {
 	 * @throws Exception
 	 */
 	public CodeAttributePanel(CodeType codeType,
-			List<CodeValue> currentCodeValues) throws Exception {
+			Set<CodeValue> currentCodeValues) throws Exception {
 
 		this.codeType = codeType;
+		this.currentCodeValues = currentCodeValues;
 		GridBagLayout gridBagLayout1 = new GridBagLayout();
 		JPanel jPanel1 = new JPanel(gridBagLayout1);
 		this.setLayout(new BorderLayout());
@@ -63,11 +64,12 @@ public class CodeAttributePanel extends JPanel {
 			if (null == codeAttribute.getEditorClassName()) {
 				field = new JFormattedTextField();
 				field.setInputVerifier(new FormattedTextFieldVerifier());
-				for (CodeValue value : currentCodeValues) {
+				for (CodeValue value : this.currentCodeValues) {
 					if (value.getCodeAttribute().getName()
 							.equals(codeAttribute.getName())) {
-						((JFormattedTextField) field).setValue(getValueCode(
-								codeAttribute.getName(), currentCodeValues));
+						((JFormattedTextField) field)
+								.setValue(getValueCode(codeAttribute.getName(),
+										this.currentCodeValues));
 						break;
 					}
 				}
@@ -90,14 +92,13 @@ public class CodeAttributePanel extends JPanel {
 					field.setInputVerifier(new FormattedTextFieldVerifier());
 					DecodeComboBoxRenderer codeRenderer = new DecodeComboBoxRenderer();
 					((DecodeComboBoxEditor) field).setRenderer(codeRenderer);
-					for (CodeValue value : currentCodeValues) {
+					for (CodeValue value : this.currentCodeValues) {
 						if (value.getCodeAttribute().getName()
 								.equals(codeAttribute.getName())) {
 
-							((Decode) decode)
-									.setValue(getValueCode(
-											codeAttribute.getName(),
-											currentCodeValues));
+							((Decode) decode).setValue(getValueCode(
+									codeAttribute.getName(),
+									this.currentCodeValues));
 							((DecodeComboBoxEditor) field)
 									.setItem((Decode) decode);
 							valueSet = true;
@@ -126,28 +127,41 @@ public class CodeAttributePanel extends JPanel {
 		this.add(jPanel1);
 	}
 
-	public List<CodeValue> getCodeValues() {
+	public Set<CodeValue> getCodeValues() {
 
-		List<CodeValue> codeValues = new ArrayList<>();
 		for (CodeAttribute codeAttribute : this.codeType.getCodeAttribute()) {
-
 			if (((FormattedTextFieldVerifier) this.fields.get(
 					codeAttribute.getName()).getInputVerifier()).isValid()) {
 
 				JComponent field = this.fields.get(codeAttribute.getName());
+				String newValue = null;
 				if (field instanceof JFormattedTextField) {
-					codeValues.add(new CodeValue(codeAttribute,
-							(((JFormattedTextField) this.fields
-									.get(codeAttribute.getName())).getText())));
+					newValue = (((JFormattedTextField) this.fields
+							.get(codeAttribute.getName())).getText());
 				} else if (field instanceof DecodeComboBoxEditor) {
-					codeValues.add(new CodeValue(codeAttribute,
-							((Decode) ((DecodeComboBoxEditor) this.fields
-									.get(codeAttribute.getName()))
-									.getSelectedItem()).getCode()));
+					newValue = ((Decode) ((DecodeComboBoxEditor) this.fields
+							.get(codeAttribute.getName())).getSelectedItem())
+							.getCode();
+				}
+				/*
+				 * Add code values or updated the current ones. Note there
+				 * should always be an equal number for attributes and values.
+				 */
+				if (this.currentCodeValues.size() < this.codeType
+						.getCodeAttribute().size()) {
+					this.currentCodeValues.add(new CodeValue(codeAttribute,
+							newValue));
+				} else {
+					for (CodeValue codeValue : this.currentCodeValues) {
+						if (codeValue.getCodeAttribute().getName()
+								.equals(codeAttribute.getName())) {
+							codeValue.setCodeValue(newValue);
+						}
+					}
 				}
 			}
 		}
-		return codeValues;
+		return this.currentCodeValues;
 	}
 
 	/**
@@ -165,7 +179,7 @@ public class CodeAttributePanel extends JPanel {
 	 * @throws Exception
 	 */
 
-	public Object getValueCode(String name, List<CodeValue> codeValues)
+	public Object getValueCode(String name, Set<CodeValue> codeValues)
 			throws Exception {
 		Object codeValue = null;
 		for (CodeValue value : codeValues) {

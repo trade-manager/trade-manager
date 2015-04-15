@@ -555,7 +555,8 @@ CREATE  TABLE IF NOT EXISTS codevalue (
   INDEX codeValue_CodeAttribute_idx (idCodeAttribute ASC) ,
   INDEX codeValue_IndicatorSeries_idx (idIndicatorSeries ASC) ,
   INDEX codeValue_TradeStrategy_idx (idTradeStrategy ASC) ,
-  UNIQUE INDEX codeValue_uq (idCodeAttribute ASC, idIndicatorSeries ASC, idTradeStrategy ASC ),
+  UNIQUE INDEX codeValue_TradeStrategy_CodeAttribute_uq (idCodeAttribute ASC, idTradeStrategy ASC),
+  UNIQUE INDEX codeValue_IndicatorSeries_CodeAttribute_uq (idIndicatorSeries ASC, idCodeAttribute ASC),
   CONSTRAINT codeValue_CodeAttribute_fk
     FOREIGN KEY (idCodeAttribute )
     REFERENCES codeattribute (idCodeAttribute )
