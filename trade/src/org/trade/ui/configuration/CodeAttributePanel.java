@@ -7,7 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.ParseException;
 import java.util.Hashtable;
-import java.util.Set;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.InputVerifier;
@@ -34,7 +34,7 @@ public class CodeAttributePanel extends JPanel {
 	private static final long serialVersionUID = 5972331201407363985L;
 	private Hashtable<String, JComponent> fields = new Hashtable<String, JComponent>();
 	private CodeType codeType = null;
-	private Set<CodeValue> currentCodeValues = null;
+	private List<CodeValue> currentCodeValues = null;
 
 	/**
 	 * Constructor for CodeAttributesPanel.
@@ -46,7 +46,7 @@ public class CodeAttributePanel extends JPanel {
 	 * @throws Exception
 	 */
 	public CodeAttributePanel(CodeType codeType,
-			Set<CodeValue> currentCodeValues) throws Exception {
+			List<CodeValue> currentCodeValues) throws Exception {
 
 		this.codeType = codeType;
 		this.currentCodeValues = currentCodeValues;
@@ -127,7 +127,7 @@ public class CodeAttributePanel extends JPanel {
 		this.add(jPanel1);
 	}
 
-	public Set<CodeValue> getCodeValues() {
+	public List<CodeValue> getCodeValues() {
 
 		for (CodeAttribute codeAttribute : this.codeType.getCodeAttribute()) {
 			if (((FormattedTextFieldVerifier) this.fields.get(

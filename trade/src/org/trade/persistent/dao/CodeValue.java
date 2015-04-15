@@ -37,7 +37,7 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.util.Set;
+import java.util.List;
 import java.util.Vector;
 
 import javax.persistence.Column;
@@ -257,13 +257,13 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 * @param name
 	 *            the name of the attribute.
 	 * @param codeValues
-	 *            Set<CodeValue>.
+	 *            List<CodeValue>.
 	 * @return The value of the attribute.
 	 * @throws Exception
 	 */
 	@Transient
 	public static Object getValueCode(final String name,
-			final Set<CodeValue> codeValues) throws Exception {
+			final List<CodeValue> codeValues) throws Exception {
 		Object codeValue = null;
 		for (CodeValue value : codeValues) {
 			if (name.equals(value.getCodeAttribute().getName())) {
@@ -276,71 +276,5 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 			}
 		}
 		return codeValue;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((codeAttribute == null) ? 0 : codeAttribute.hashCode());
-		result = prime * result
-				+ ((indicatorSeries == null) ? 0 : indicatorSeries.hashCode());
-		result = prime * result
-				+ ((tradestrategy == null) ? 0 : tradestrategy.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (!(obj instanceof CodeValue)) {
-			return false;
-		}
-		CodeValue other = (CodeValue) obj;
-		if (codeAttribute == null) {
-			if (other.codeAttribute != null) {
-				return false;
-			}
-		} else if (!codeAttribute.equals(other.codeAttribute)) {
-			return false;
-		}
-		if (codeValue == null) {
-			if (other.codeValue != null) {
-				return false;
-			}
-		} else if (!codeValue.equals(other.codeValue)) {
-			return false;
-		}
-		if (indicatorSeries == null) {
-			if (other.indicatorSeries != null) {
-				return false;
-			}
-		} else if (!indicatorSeries.equals(other.indicatorSeries)) {
-			return false;
-		}
-		if (tradestrategy == null) {
-			if (other.tradestrategy != null) {
-				return false;
-			}
-		} else if (!tradestrategy.equals(other.tradestrategy)) {
-			return false;
-		}
-		return true;
 	}
 }

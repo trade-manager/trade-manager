@@ -36,8 +36,8 @@
 package org.trade.ui.models;
 
 import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
@@ -197,7 +197,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 			break;
 		}
 		case 7: {
-			Set<CodeValue> code = new HashSet<>();
+			List<CodeValue> code = new ArrayList<>();
 			for (Aspect aspect : ((Aspects) value).getAspect()) {
 				code.add((CodeValue) aspect);
 			}

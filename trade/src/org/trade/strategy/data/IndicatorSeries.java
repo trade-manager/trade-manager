@@ -40,8 +40,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -116,7 +115,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	private Strategy strategy;
 	protected Integer version;
 	private boolean dirty = false;
-	private Set<CodeValue> codeValues = new HashSet<>(0);
+	private List<CodeValue> codeValues = new ArrayList<>(0);
 
 	/**
 	 * Constructor for IndicatorSeries.
@@ -429,10 +428,10 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	/**
 	 * Method getCodeValues.
 	 * 
-	 * @return Set<CodeValue>
+	 * @return List<CodeValue>
 	 */
 	@OneToMany(mappedBy = "indicatorSeries", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
-	public Set<CodeValue> getCodeValues() {
+	public List<CodeValue> getCodeValues() {
 		return this.codeValues;
 	}
 
@@ -440,9 +439,9 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * Method setCodeValues.
 	 * 
 	 * @param codeValues
-	 *            Set<CodeValue>
+	 *            List<CodeValue>
 	 */
-	public void setCodeValues(Set<CodeValue> codeValues) {
+	public void setCodeValues(List<CodeValue> codeValues) {
 		this.codeValues = codeValues;
 	}
 

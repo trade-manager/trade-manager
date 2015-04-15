@@ -43,9 +43,7 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.persistence.CascadeType;
@@ -100,7 +98,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	private StrategyData strategyData = null;
 	private TradestrategyStatus tradestrategyStatus = new TradestrategyStatus();
 	private List<TradeOrder> tradeOrders = new ArrayList<TradeOrder>(0);
-	private Set<CodeValue> codeValues = new HashSet<>(0);
+	private List<CodeValue> codeValues = new ArrayList<>(0);
 
 	public Tradestrategy() {
 		this.lastUpdateDate = TradingCalendar.getDateTimeNowMarketTimeZone();
@@ -509,10 +507,10 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	/**
 	 * Method getCodeValues.
 	 * 
-	 * @return Set<CodeValue>
+	 * @return List<CodeValue>
 	 */
 	@OneToMany(mappedBy = "tradestrategy", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	public Set<CodeValue> getCodeValues() {
+	public List<CodeValue> getCodeValues() {
 		return this.codeValues;
 	}
 
@@ -520,9 +518,9 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 * Method setCodeValues.
 	 * 
 	 * @param codeValues
-	 *            Set<CodeValue>
+	 *            List<CodeValue>
 	 */
-	public void setCodeValues(Set<CodeValue> codeValues) {
+	public void setCodeValues(List<CodeValue> codeValues) {
 		this.codeValues = codeValues;
 	}
 

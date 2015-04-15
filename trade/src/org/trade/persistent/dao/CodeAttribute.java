@@ -37,8 +37,8 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,7 +70,7 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 	private String classEditorName;
 	@NotNull
 	private CodeType codeType;
-	private Set<CodeValue> codeValues = new HashSet<>(0);
+	private List<CodeValue> codeValues = new ArrayList<>(0);
 
 	public CodeAttribute() {
 	}
@@ -247,10 +247,10 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 	/**
 	 * Method getCodeValue.
 	 * 
-	 * @return Set<CodeValue>
+	 * @return List<CodeValue>
 	 */
 	@OneToMany(mappedBy = "codeAttribute", fetch = FetchType.LAZY)
-	public Set<CodeValue> getCodeValue() {
+	public List<CodeValue> getCodeValue() {
 		return this.codeValues;
 	}
 
@@ -258,9 +258,9 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 	 * Method setCodeValue.
 	 * 
 	 * @param codeValues
-	 *            Set<CodeValue>
+	 *            List<CodeValue>
 	 */
-	public void setCodeValue(Set<CodeValue> codeValues) {
+	public void setCodeValue(List<CodeValue> codeValues) {
 		this.codeValues = codeValues;
 	}
 
