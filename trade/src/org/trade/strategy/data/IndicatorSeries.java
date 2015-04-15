@@ -42,7 +42,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -66,7 +65,6 @@ import org.jfree.data.ComparableObjectItem;
 import org.jfree.data.ComparableObjectSeries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.trade.core.factory.ClassFactory;
 import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Strategy;
 
@@ -446,36 +444,6 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 */
 	public void setCodeValues(Set<CodeValue> codeValues) {
 		this.codeValues = codeValues;
-	}
-
-	/**
-	 * Returns the value associated with for the this name attribute name. For
-	 * String data types you should define an classEditorName in the
-	 * CodeAttribute table, this should be a
-	 * org.trade.dictionary.valuetype.Decode These are presented as a combo box
-	 * in the UI for editing. all other data types use JFormattedField.
-	 * 
-	 * @param name
-	 *            the name of the attribute.
-	 * 
-	 * 
-	 * @return The value of the attribute.
-	 * @throws Exception
-	 */
-
-	@Transient
-	public Object getValueCode(String name) throws Exception {
-		Object codeValue = null;
-		for (CodeValue value : this.getCodeValues()) {
-			if (name.equals(value.getCodeAttribute().getName())) {
-				Vector<Object> parm = new Vector<Object>();
-				parm.add(value.getCodeValue());
-				codeValue = ClassFactory.getCreateClass(value
-						.getCodeAttribute().getClassName(), parm, this);
-				return codeValue;
-			}
-		}
-		return codeValue;
 	}
 
 	/**

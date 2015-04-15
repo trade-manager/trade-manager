@@ -67,8 +67,8 @@ public class CodeAttributePanel extends JPanel {
 				for (CodeValue value : this.currentCodeValues) {
 					if (value.getCodeAttribute().getName()
 							.equals(codeAttribute.getName())) {
-						((JFormattedTextField) field)
-								.setValue(getValueCode(codeAttribute.getName(),
+						((JFormattedTextField) field).setValue(CodeValue
+								.getValueCode(codeAttribute.getName(),
 										this.currentCodeValues));
 						break;
 					}
@@ -96,7 +96,7 @@ public class CodeAttributePanel extends JPanel {
 						if (value.getCodeAttribute().getName()
 								.equals(codeAttribute.getName())) {
 
-							((Decode) decode).setValue(getValueCode(
+							((Decode) decode).setValue(CodeValue.getValueCode(
 									codeAttribute.getName(),
 									this.currentCodeValues));
 							((DecodeComboBoxEditor) field)
@@ -162,36 +162,6 @@ public class CodeAttributePanel extends JPanel {
 			}
 		}
 		return this.currentCodeValues;
-	}
-
-	/**
-	 * Returns the value associated with for the this name attribute name. For
-	 * String data types you should define an classEditorName in the
-	 * CodeAttribute table, this should be a
-	 * org.trade.dictionary.valuetype.Decode These are presented as a combo box
-	 * in the UI for editing. all other data types use JFormattedField.
-	 * 
-	 * @param name
-	 *            the name of the attribute.
-	 * 
-	 * 
-	 * @return The value of the attribute.
-	 * @throws Exception
-	 */
-
-	public Object getValueCode(String name, Set<CodeValue> codeValues)
-			throws Exception {
-		Object codeValue = null;
-		for (CodeValue value : codeValues) {
-			if (name.equals(value.getCodeAttribute().getName())) {
-				Vector<Object> parm = new Vector<Object>();
-				parm.add(value.getCodeValue());
-				codeValue = ClassFactory.getCreateClass(value
-						.getCodeAttribute().getClassName(), parm, this);
-				return codeValue;
-			}
-		}
-		return codeValue;
 	}
 
 	class FormattedTextFieldVerifier extends InputVerifier {

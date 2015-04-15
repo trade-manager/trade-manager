@@ -45,6 +45,7 @@ import javax.persistence.Transient;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.trade.dictionary.valuetype.CalculationType;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
@@ -231,7 +232,8 @@ public class MovingAverageSeries extends IndicatorSeries {
 	public Integer getPriceSource() {
 		try {
 			if (null == this.priceSource)
-				this.priceSource = (Integer) this.getValueCode(PRICE_SOURCE);
+				this.priceSource = (Integer) CodeValue.getValueCode(
+						PRICE_SOURCE, this.getCodeValues());
 		} catch (Exception e) {
 			this.priceSource = null;
 		}
@@ -257,7 +259,8 @@ public class MovingAverageSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) this.getValueCode(LENGTH);
+				this.length = (Integer) CodeValue.getValueCode(LENGTH,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -283,7 +286,8 @@ public class MovingAverageSeries extends IndicatorSeries {
 	public String getMAType() {
 		try {
 			if (null == this.MAType)
-				this.MAType = (String) this.getValueCode(MA_TYPE);
+				this.MAType = (String) CodeValue.getValueCode(MA_TYPE,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.MAType = null;
 		}

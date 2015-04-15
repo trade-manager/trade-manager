@@ -37,6 +37,9 @@ package org.trade.persistent.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Set;
+import java.util.Vector;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,11 +48,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.trade.core.dao.Aspect;
+import org.trade.core.factory.ClassFactory;
 import org.trade.strategy.data.IndicatorSeries;
+import org.trade.ui.configuration.CodeAttributePanel;
 
 /**
  */
@@ -239,6 +245,37 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 */
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	/**
+	 * Returns the value associated with for the this name attribute name. For
+	 * String data types you should define an classEditorName in the
+	 * CodeAttribute table, this should be a
+	 * org.trade.dictionary.valuetype.Decode These are presented as a combo box
+	 * in the UI for editing. all other data types use JFormattedField.
+	 * 
+	 * @param name
+	 *            the name of the attribute.
+	 * @param codeValues
+	 *            Set<CodeValue>.
+	 * @return The value of the attribute.
+	 * @throws Exception
+	 */
+	@Transient
+	public static Object getValueCode(final String name,
+			final Set<CodeValue> codeValues) throws Exception {
+		Object codeValue = null;
+		for (CodeValue value : codeValues) {
+			if (name.equals(value.getCodeAttribute().getName())) {
+				Vector<Object> parm = new Vector<Object>();
+				parm.add(value.getCodeValue());
+				codeValue = ClassFactory.getCreateClass(value
+						.getCodeAttribute().getClassName(), parm,
+						CodeAttributePanel.class);
+				return codeValue;
+			}
+		}
+		return codeValue;
 	}
 
 	/*

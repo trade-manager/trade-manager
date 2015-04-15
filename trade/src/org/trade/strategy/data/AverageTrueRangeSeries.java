@@ -43,6 +43,7 @@ import javax.persistence.Transient;
 
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.atr.AverageTrueRangeItem;
 import org.trade.strategy.data.base.RegularTimePeriod;
@@ -240,7 +241,8 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) this.getValueCode(LENGTH);
+				this.length = (Integer) CodeValue.getValueCode(LENGTH,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -266,8 +268,8 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	public Boolean getRollingCandle() {
 		try {
 			if (null == this.rollingCandle)
-				this.rollingCandle = (Boolean) this
-						.getValueCode(ROLLING_CANDLE);
+				this.rollingCandle = (Boolean) CodeValue.getValueCode(
+						ROLLING_CANDLE, this.getCodeValues());
 		} catch (Exception e) {
 			this.rollingCandle = null;
 		}

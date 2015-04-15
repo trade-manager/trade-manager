@@ -44,6 +44,7 @@ import javax.persistence.Transient;
 
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.bollingerbands.BollingerBandsItem;
@@ -241,7 +242,8 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) this.getValueCode(LENGTH);
+				this.length = (Integer) CodeValue.getValueCode(LENGTH,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -267,8 +269,8 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	public BigDecimal getNumberOfSTD() {
 		try {
 			if (null == this.numberOfSTD)
-				this.numberOfSTD = (BigDecimal) this
-						.getValueCode(NUMBER_OF_STD);
+				this.numberOfSTD = (BigDecimal) CodeValue.getValueCode(
+						NUMBER_OF_STD, this.getCodeValues());
 		} catch (Exception e) {
 			this.numberOfSTD = null;
 		}

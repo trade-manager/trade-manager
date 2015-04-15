@@ -45,6 +45,7 @@ import javax.persistence.Transient;
 
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
@@ -306,7 +307,8 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) this.getValueCode(LENGTH);
+				this.length = (Integer) CodeValue.getValueCode(LENGTH,
+						this.getCodeValues());
 			if (this.length < 1)
 				this.length = 1;
 		} catch (Exception e) {
@@ -334,7 +336,8 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	public Integer getPercentD() {
 		try {
 			if (null == this.percentD)
-				this.percentD = (Integer) this.getValueCode(PERCENT_D);
+				this.percentD = (Integer) CodeValue.getValueCode(PERCENT_D,
+						this.getCodeValues());
 			if (this.percentD < 1)
 				this.percentD = 1;
 		} catch (Exception e) {
@@ -362,7 +365,8 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	public Integer getKSmoothing() {
 		try {
 			if (null == this.kSmoothing)
-				this.kSmoothing = (Integer) this.getValueCode(KSMOOTHING);
+				this.kSmoothing = (Integer) CodeValue.getValueCode(KSMOOTHING,
+						this.getCodeValues());
 			if (this.kSmoothing < 1)
 				this.kSmoothing = 1;
 		} catch (Exception e) {
@@ -390,7 +394,8 @@ public class StochasticOscillatorSeries extends IndicatorSeries {
 	public Boolean getInverse() {
 		try {
 			if (null == this.inverse)
-				this.inverse = (Boolean) this.getValueCode(INVERSE);
+				this.inverse = (Boolean) CodeValue.getValueCode(INVERSE,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.inverse = null;
 		}

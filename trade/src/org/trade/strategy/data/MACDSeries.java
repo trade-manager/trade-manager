@@ -44,6 +44,7 @@ import javax.persistence.Transient;
 
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
@@ -268,7 +269,8 @@ public class MACDSeries extends IndicatorSeries {
 	public Integer getFastLength() {
 		try {
 			if (null == this.fastLength)
-				this.fastLength = (Integer) this.getValueCode(FAST_LENGTH);
+				this.fastLength = (Integer) CodeValue.getValueCode(FAST_LENGTH,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.fastLength = null;
 		}
@@ -294,7 +296,8 @@ public class MACDSeries extends IndicatorSeries {
 	public Integer getSlowLength() {
 		try {
 			if (null == this.slowLength)
-				this.slowLength = (Integer) this.getValueCode(SLOW_LENGTH);
+				this.slowLength = (Integer) CodeValue.getValueCode(SLOW_LENGTH,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.slowLength = null;
 		}
@@ -320,8 +323,8 @@ public class MACDSeries extends IndicatorSeries {
 	public Integer getSignalSmoothing() {
 		try {
 			if (null == this.signalSmoothing)
-				this.signalSmoothing = (Integer) this
-						.getValueCode(SIGNAL_SMOOTHING);
+				this.signalSmoothing = (Integer) CodeValue.getValueCode(
+						SIGNAL_SMOOTHING, this.getCodeValues());
 		} catch (Exception e) {
 			this.signalSmoothing = null;
 		}
@@ -347,7 +350,8 @@ public class MACDSeries extends IndicatorSeries {
 	public Boolean getSimpleMAType() {
 		try {
 			if (null == this.simpleMAType)
-				this.simpleMAType = (Boolean) this.getValueCode(SMA_TYPE);
+				this.simpleMAType = (Boolean) CodeValue.getValueCode(SMA_TYPE,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.simpleMAType = null;
 		}

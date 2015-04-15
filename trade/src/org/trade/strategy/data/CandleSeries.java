@@ -51,6 +51,7 @@ import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Percent;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.persistent.dao.Candle;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.Tradingday;
@@ -260,7 +261,8 @@ public class CandleSeries extends IndicatorSeries {
 	public String getSymbol() {
 		try {
 			if (null == this.symbol)
-				this.symbol = (String) this.getValueCode(SYMBOL);
+				this.symbol = (String) CodeValue.getValueCode(SYMBOL,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.symbol = null;
 		}
@@ -286,7 +288,8 @@ public class CandleSeries extends IndicatorSeries {
 	public String getCurrency() {
 		try {
 			if (null == this.currency)
-				this.currency = (String) this.getValueCode(CURRENCY);
+				this.currency = (String) CodeValue.getValueCode(CURRENCY,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.currency = null;
 		}
@@ -312,7 +315,8 @@ public class CandleSeries extends IndicatorSeries {
 	public String getExchange() {
 		try {
 			if (null == this.exchange)
-				this.exchange = (String) this.getValueCode(EXCHANGE);
+				this.exchange = (String) CodeValue.getValueCode(EXCHANGE,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.exchange = null;
 		}
@@ -338,7 +342,8 @@ public class CandleSeries extends IndicatorSeries {
 	public String getSecType() {
 		try {
 			if (null == this.secType)
-				this.secType = (String) this.getValueCode(SEC_TYPE);
+				this.secType = (String) CodeValue.getValueCode(SEC_TYPE,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.secType = null;
 		}

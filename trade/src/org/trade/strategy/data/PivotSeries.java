@@ -49,6 +49,7 @@ import org.trade.core.valuetype.Money;
 import org.trade.core.valuetype.ValueTypeException;
 import org.trade.dictionary.valuetype.DAOEntryLimit;
 import org.trade.dictionary.valuetype.Side;
+import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Entrylimit;
 import org.trade.persistent.dao.Strategy;
 import org.trade.strategy.data.base.RegularTimePeriod;
@@ -216,7 +217,8 @@ public class PivotSeries extends IndicatorSeries {
 	public Integer getBars() {
 		try {
 			if (null == this.bars)
-				this.bars = (Integer) this.getValueCode(BARS);
+				this.bars = (Integer) CodeValue.getValueCode(BARS,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.bars = null;
 		}
@@ -242,7 +244,8 @@ public class PivotSeries extends IndicatorSeries {
 	public Boolean getSide() {
 		try {
 			if (null == this.side)
-				this.side = (Boolean) this.getValueCode(SIDE);
+				this.side = (Boolean) CodeValue.getValueCode(SIDE,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.side = null;
 		}
@@ -268,7 +271,8 @@ public class PivotSeries extends IndicatorSeries {
 	public Boolean getQuadratic() {
 		try {
 			if (null == this.quadratic)
-				this.quadratic = (Boolean) this.getValueCode(QUADRATIC);
+				this.quadratic = (Boolean) CodeValue.getValueCode(QUADRATIC,
+						this.getCodeValues());
 		} catch (Exception e) {
 			this.quadratic = null;
 		}
