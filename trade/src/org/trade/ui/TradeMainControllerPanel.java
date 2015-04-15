@@ -1513,7 +1513,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						codeType, tradestrategy.getCodeValues());
 				if (null != codeAttributePanel) {
 					TextDialog dialog = new TextDialog(this.getFrame(),
-							"Indicator Properties", true, codeAttributePanel);
+							"Strategy Parms", true, codeAttributePanel);
 					dialog.setLocationRelativeTo(this);
 					dialog.setVisible(true);
 					if (!dialog.getCancel()) {

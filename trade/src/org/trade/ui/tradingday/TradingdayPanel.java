@@ -132,6 +132,7 @@ public class TradingdayPanel extends BasePanel {
 	private BaseButton closeAllPositionsButton = null;
 	private BaseButton reAssignButton = null;
 	private BaseButton transferButton = null;
+	private BaseButton strategyParmButton = null;
 	private DAODecodeComboBoxEditor strategyFromEditorComboBox = null;
 	private DAODecodeComboBoxEditor strategyToEditorComboBox = null;
 	private JSpinner spinnerStart = new JSpinner();
@@ -204,6 +205,8 @@ public class TradingdayPanel extends BasePanel {
 					BaseUIPropertyCodes.CLOSE_ALL);
 			closeAllPositionsButton
 					.setToolTipText("Cancel Orders & Close Position");
+			strategyParmButton = new BaseButton(controller,
+					UIPropertyCodes.newInstance(UIPropertyCodes.STRATEGY_PARMS));
 			reAssignButton = new BaseButton(this,
 					UIPropertyCodes.newInstance(UIPropertyCodes.REASSIGN));
 			m_tradestrategyModel = new TradestrategyTableModel();
@@ -285,6 +288,7 @@ public class TradingdayPanel extends BasePanel {
 			jPanel5.add(testStrategyButton, null);
 			jPanel5.add(runStrategyButton, null);
 			jPanel5.add(cancelStrategiesButton, null);
+			jPanel5.add(strategyParmButton, null);
 			jPanel5.add(deleteTradeOrderButton, null);
 			jPanel5.add(closeAllPositionsButton, null);
 			jPanel5.add(ordersButton, null);
@@ -429,7 +433,7 @@ public class TradingdayPanel extends BasePanel {
 	 * tradestrategy.
 	 * 
 	 * @param tradestrategy
-	 *            the Tradestrategy that you would like to delete tradeorders
+	 *            the Tradestrategy that you would like to delete trade orders
 	 *            for.
 	 * 
 	 */
@@ -1242,6 +1246,7 @@ public class TradingdayPanel extends BasePanel {
 
 		deleteTradeOrderButton.setTransferObject(transferObject);
 		cancelStrategiesButton.setTransferObject(transferObject);
+		strategyParmButton.setTransferObject(transferObject);
 		closeAllPositionsButton.setTransferObject(transferObject);
 		testStrategyButton.setTransferObject(transferObject);
 		ordersButton.setTransferObject(transferObject);
@@ -1250,13 +1255,18 @@ public class TradingdayPanel extends BasePanel {
 
 		deleteTradeOrderButton.setEnabled(enable);
 		cancelStrategiesButton.setEnabled(enable);
+		strategyParmButton.setEnabled(enable);
 		closeAllPositionsButton.setEnabled(enable);
 		testStrategyButton.setEnabled(enable);
 		brokerDataButton.setEnabled(enable);
 		ordersButton.setEnabled(false);
 		runStrategyButton.setEnabled(false);
+
 		if (this.isConnected() && null != transferObject) {
 			runStrategyButton.setEnabled(true);
+			strategyParmButton.setEnabled(true);
+			if (transferObject.getCodeValues().isEmpty())
+				strategyParmButton.setEnabled(false);
 			testStrategyButton.setEnabled(false);
 			ordersButton.setEnabled(true);
 		}

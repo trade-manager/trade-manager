@@ -60,6 +60,7 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 
 	public final static String COMPILE = "COMPILE";
 	public final static String REASSIGN = "REASSIGN";
+	public final static String STRATEGY_PARMS = "STRATEGY_PARMS";
 
 	/**
 	 * Default Constructor
