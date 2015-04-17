@@ -193,8 +193,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 *            Integer
 	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
 	 */
-	public Broker getBackTestBroker(Tradestrategy tradestrategy) {
-		return m_client.getBackTestBroker(tradestrategy);
+	public Broker getBackTestBroker(Integer idTradestrategy) {
+		return m_client.getBackTestBroker(idTradestrategy);
 	}
 
 	/**
@@ -592,7 +592,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				m_historyDataRequests.notify();
 			}
 		}
-		m_client.removeBackTestBroker(tradestrategy);
+		m_client.removeBackTestBroker(tradestrategy.getId());
 	}
 
 	/**
@@ -606,7 +606,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 		for (Tradestrategy tradestrategy : m_historyDataRequests.values()) {
 			if (contract.equals(tradestrategy.getContract())) {
 				contract.removeTradestrategy(tradestrategy);
-				m_client.removeBackTestBroker(tradestrategy);
+				m_client.removeBackTestBroker(tradestrategy.getId());
 				synchronized (m_historyDataRequests) {
 					m_historyDataRequests.remove(tradestrategy.getId());
 					m_historyDataRequests.notify();

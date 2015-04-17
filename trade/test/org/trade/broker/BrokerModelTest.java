@@ -175,7 +175,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 		// Wait for the BackTestBroker to complete. These tests use the testing
 		// client from org.trade.brokerclient that runs its own thread.
 		Broker backTestBroker = backTestbrokerModel
-				.getBackTestBroker(this.tradestrategy);
+				.getBackTestBroker(this.tradestrategy.getId());
 		if (null != backTestBroker) {
 			// Ping the broker to see if its completed. Not isConnected always
 			// returns false for BackTestBrokerModel.

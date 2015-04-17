@@ -111,12 +111,12 @@ public class ClientSocket {
 	 *            Integer
 	 */
 
-	public void removeBackTestBroker(Tradestrategy tradestrategy) {
+	public void removeBackTestBroker(Integer idTradestrategy) {
 		synchronized (m_backTestBroker) {
-			Broker worker = m_backTestBroker.get(tradestrategy.getId());
+			Broker worker = m_backTestBroker.get(idTradestrategy);
 			if (null != worker) {
 				if (worker.isDone() || worker.isCancelled()) {
-					m_backTestBroker.remove(tradestrategy.getId());
+					m_backTestBroker.remove(idTradestrategy);
 				}
 			}
 		}
@@ -131,8 +131,8 @@ public class ClientSocket {
 	 * @return BackTestBroker
 	 */
 
-	public Broker getBackTestBroker(Tradestrategy tradestrategy) {
-		return m_backTestBroker.get(tradestrategy.getId());
+	public Broker getBackTestBroker(Integer idTradestrategy) {
+		return m_backTestBroker.get(idTradestrategy);
 	}
 
 	/**

@@ -265,11 +265,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	/**
 	 * Method getBackTestBroker.
 	 * 
-	 * @param tradestrategy
-	 *            Tradestrategy
+	 * @param idTradestrategy
+	 *            Integer
 	 * @see org.trade.broker.BrokerModel#getBackTestBroker(Integer)
 	 */
-	public Broker getBackTestBroker(Tradestrategy tradestrategy) {
+	public Broker getBackTestBroker(Integer idTradestrategy) {
 		return null;
 	}
 
