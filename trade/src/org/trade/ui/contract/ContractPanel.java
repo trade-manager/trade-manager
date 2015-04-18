@@ -344,7 +344,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            IndicatorSeries
 	 */
 
-	public void doProperties(TradeOrder instance) {
+	public void doProperties(final TradeOrder instance) {
 		try {
 
 			if (null == instance.getTradestrategy().getPortfolio()
@@ -386,7 +386,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		}
 	}
 
-	public void doCancel(Aspects aspects) {
+	public void doCancel(final Aspects aspects) {
 		this.setStatusBarMessage("Please select an order to cancel ...\n",
 				BasePanel.INFORMATION);
 	}
@@ -410,7 +410,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
-	public void doClose(Tradestrategy tradestrategy) {
+	public void doClose(final Tradestrategy tradestrategy) {
 		for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
 			ChartPanel chart = (ChartPanel) m_jTabbedPaneContract
 					.getComponentAt(index);
@@ -595,7 +595,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
-	public void doTransfer(Tradestrategy tradestrategy) {
+	public void doTransfer(final Tradestrategy tradestrategy) {
 		brokerDataButton.setTransferObject(tradestrategy);
 	}
 
@@ -839,7 +839,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            CandlestickChart
 	 * @throws BadLocationException
 	 */
-	private void setStrategyLabel(Tradestrategy tradestrategy) {
+	private void setStrategyLabel(final Tradestrategy tradestrategy) {
 		try {
 			m_strategyLabel.setText(null);
 			String primaryExchange = "";
@@ -1094,7 +1094,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            Tradestrategy
 	 * @throws Exception
 	 */
-	private void enableChartButtons(Tradestrategy tradestrategy)
+	private void enableChartButtons(final Tradestrategy tradestrategy)
 			throws Exception {
 		propertiesButton.setEnabled(false);
 		executeButton.setEnabled(false);

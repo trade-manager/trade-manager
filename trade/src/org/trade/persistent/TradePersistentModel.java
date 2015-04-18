@@ -143,7 +143,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradelogReport(Account,
 	 *      Date, Date, boolean)
 	 */
-	public TradelogReport findTradelogReport(Portfolio portfolio,
+	public TradelogReport findTradelogReport(final Portfolio portfolio,
 			ZonedDateTime start, ZonedDateTime end, boolean filter,
 			String symbol, BigDecimal winLossAmount)
 			throws PersistentModelException {
@@ -160,7 +160,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAccountById(Integer)
 	 */
-	public Account findAccountById(Integer id) throws PersistentModelException {
+	public Account findAccountById(final Integer id)
+			throws PersistentModelException {
 		Account instance = m_accountHome.findById(id);
 		if (null == instance)
 			throw new PersistentModelException("Account not found for id: "
@@ -191,7 +192,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradingdayById(Integer)
 	 */
-	public Tradingday findTradingdayById(Integer id)
+	public Tradingday findTradingdayById(final Integer id)
 			throws PersistentModelException {
 		Tradingday instance = m_tradingdayHome.findTradingdayById(id);
 		if (null == instance)
@@ -212,8 +213,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradingdayByOpenDate(Date)
 	 */
-	public Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate,
-			ZonedDateTime closeDate) throws PersistentModelException {
+	public Tradingday findTradingdayByOpenCloseDate(
+			final ZonedDateTime openDate, final ZonedDateTime closeDate)
+			throws PersistentModelException {
 		return m_tradingdayHome.findByOpenCloseDate(openDate, closeDate);
 	}
 
@@ -226,7 +228,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findContractById(Integer)
 	 */
-	public Contract findContractById(Integer id)
+	public Contract findContractById(final Integer id)
 			throws PersistentModelException {
 		Contract instance = m_contractHome.findById(id);
 		if (null == instance)
@@ -244,7 +246,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findContractById(Integer)
 	 */
-	public TradeOrder findTradeOrderById(Integer id)
+	public TradeOrder findTradeOrderById(final Integer id)
 			throws PersistentModelException {
 		TradeOrder instance = m_tradeOrderHome.findById(id);
 		if (null == instance)
@@ -285,7 +287,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyById(Tradestrategy)
 	 */
-	public Tradestrategy findTradestrategyById(Tradestrategy tradestrategy)
+	public Tradestrategy findTradestrategyById(final Tradestrategy tradestrategy)
 			throws PersistentModelException {
 		if (null == tradestrategy.getIdTradeStrategy())
 			throw new PersistentModelException(
@@ -314,7 +316,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
 	public TradestrategyOrders refreshPositionOrdersByTradestrategyId(
-			TradestrategyOrders positionOrders) throws PersistentModelException {
+			final TradestrategyOrders positionOrders)
+			throws PersistentModelException {
 
 		Integer version = m_tradestrategyHome.findVersionById(positionOrders
 				.getIdTradeStrategy());
@@ -344,7 +347,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
 	public TradestrategyOrders findPositionOrdersByTradestrategyId(
-			Integer idTradestrategy) throws PersistentModelException {
+			final Integer idTradestrategy) throws PersistentModelException {
 
 		TradestrategyOrders instance = m_tradestrategyHome
 				.findPositionOrdersByTradestrategyId(idTradestrategy);
@@ -363,7 +366,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyById(Integer)
 	 */
-	public Tradestrategy findTradestrategyById(Integer id)
+	public Tradestrategy findTradestrategyById(final Integer id)
 			throws PersistentModelException {
 		Tradestrategy instance = m_tradestrategyHome.findById(id);
 		if (null == instance)
@@ -380,7 +383,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return boolean
 	 * @see org.trade.persistent.PersistentModel#existTradestrategyById(Integer)
 	 */
-	public boolean existTradestrategyById(Integer id) {
+	public boolean existTradestrategyById(final Integer id) {
 		Tradestrategy instance = m_tradestrategyHome.findById(id);
 		if (null == instance)
 			return false;
@@ -396,7 +399,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyById(Integer)
 	 */
-	public TradestrategyLite findTradestrategyLiteById(Integer id)
+	public TradestrategyLite findTradestrategyLiteById(final Integer id)
 			throws PersistentModelException {
 		TradestrategyLite instance = m_tradestrategyHome
 				.findTradestrategyLiteById(id);
@@ -415,7 +418,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradeById(Integer)
 	 */
-	public TradePosition findTradePositionById(Integer id)
+	public TradePosition findTradePositionById(final Integer id)
 			throws PersistentModelException {
 		TradePosition instance = m_tradePositionHome.findById(id);
 		if (null == instance)
@@ -432,7 +435,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return Portfolio
 	 * @throws PersistentModelException
 	 */
-	public Portfolio findPortfolioById(Integer id)
+	public Portfolio findPortfolioById(final Integer id)
 			throws PersistentModelException {
 		Portfolio instance = m_portfolioHome.findById(id);
 		if (null == instance)
@@ -471,7 +474,7 @@ public class TradePersistentModel implements PersistentModel {
 	 *            Portfolio
 	 * @throws PersistentModelException
 	 */
-	public void resetDefaultPortfolio(Portfolio transientInstance)
+	public void resetDefaultPortfolio(final Portfolio transientInstance)
 			throws PersistentModelException {
 		try {
 			m_portfolioHome.resetDefaultPortfolio(transientInstance);
@@ -493,7 +496,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 */
 
-	public Portfolio persistPortfolio(Portfolio instance)
+	public Portfolio persistPortfolio(final Portfolio instance)
 			throws PersistentModelException {
 		try {
 			return m_portfolioHome.persistPortfolio(instance);
@@ -532,8 +535,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyByUniqueKeys(Date,
 	 *      String, Integer, String)
 	 */
-	public Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open,
-			String strategy, Integer idContract, String portfolioName)
+	public Tradestrategy findTradestrategyByUniqueKeys(
+			final ZonedDateTime open, final String strategy,
+			final Integer idContract, final String portfolioName)
 			throws PersistentModelException {
 		return m_tradestrategyHome.findTradestrategyByUniqueKeys(open,
 				strategy, idContract, portfolioName);
@@ -549,7 +553,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return List<Tradestrategy>
 	 */
 	public List<Tradestrategy> findTradestrategyDistinctByDateRange(
-			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
+			final ZonedDateTime fromOpen, final ZonedDateTime toOpen) {
 		return m_tradestrategyHome.findTradestrategyDistinctByDateRange(
 				fromOpen, toOpen);
 	}
@@ -564,7 +568,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return List<Tradestrategy>
 	 */
 	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
-			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
+			final ZonedDateTime fromOpen, final ZonedDateTime toOpen) {
 		return m_tradestrategyHome
 				.findTradestrategyContractDistinctByDateRange(fromOpen, toOpen);
 	}
@@ -577,7 +581,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#removeTradingdayTrades(Tradingday)
 	 */
-	public void removeTradingdayTradeOrders(Tradingday transientInstance)
+	public void removeTradingdayTradeOrders(final Tradingday transientInstance)
 			throws PersistentModelException {
 		for (Tradestrategy tradestrategy : transientInstance
 				.getTradestrategies()) {
@@ -593,7 +597,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#removeTradestrategyTrades(Tradestrategy)
 	 */
-	public void removeTradestrategyTradeOrders(Tradestrategy transientInstance)
+	public void removeTradestrategyTradeOrders(final Tradestrategy tradestrategy)
 			throws PersistentModelException {
 
 		try {
@@ -601,8 +605,8 @@ public class TradePersistentModel implements PersistentModel {
 			 * Refresh the trade strategy as orders across tradePosition could
 			 * have been deleted if this is a bulk delete of tradestrategies.
 			 */
-			transientInstance = m_tradestrategyHome.findById(transientInstance
-					.getIdTradeStrategy());
+			Tradestrategy transientInstance = m_tradestrategyHome
+					.findById(tradestrategy.getIdTradeStrategy());
 			transientInstance.setStatus(null);
 			m_aspectHome.persist(transientInstance);
 
@@ -640,7 +644,7 @@ public class TradePersistentModel implements PersistentModel {
 		} catch (Exception ex) {
 			throw new PersistentModelException(
 					"Error removing Tradestrategy TradePositions: "
-							+ transientInstance.getContract().getSymbol()
+							+ tradestrategy.getContract().getSymbol()
 							+ "\n Msg: " + ex.getMessage());
 		}
 	}
@@ -654,7 +658,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradeOrderByKey(Integer)
 	 */
-	public TradeOrder findTradeOrderByKey(Integer orderKey)
+	public TradeOrder findTradeOrderByKey(final Integer orderKey)
 			throws PersistentModelException {
 		return m_tradeOrderHome.findTradeOrderByKey(orderKey);
 	}
@@ -696,8 +700,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradingdaysByDateRange(Date,
 	 *      Date)
 	 */
-	public Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate,
-			ZonedDateTime endDate) throws PersistentModelException {
+	public Tradingdays findTradingdaysByDateRange(
+			final ZonedDateTime startDate, final ZonedDateTime endDate)
+			throws PersistentModelException {
 		return m_tradingdayHome.findTradingdaysByDateRange(startDate, endDate);
 	}
 
@@ -716,8 +721,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 */
 	public List<Candle> findCandlesByContractDateRangeBarSize(
-			Integer idContract, ZonedDateTime startDate, ZonedDateTime endDate,
-			Integer barSize) throws PersistentModelException {
+			final Integer idContract, final ZonedDateTime startDate,
+			final ZonedDateTime endDate, final Integer barSize)
+			throws PersistentModelException {
 		return m_candleHome.findCandlesByContractDateRangeBarSize(idContract,
 				startDate, endDate, barSize);
 	}
@@ -734,8 +740,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findCandleCount(Integer,
 	 *      Integer)
 	 */
-	public Long findCandleCount(Integer idTradingday, Integer idContract)
-			throws PersistentModelException {
+	public Long findCandleCount(final Integer idTradingday,
+			final Integer idContract) throws PersistentModelException {
 		return m_candleHome.findCandleCount(idTradingday, idContract);
 	}
 
@@ -748,7 +754,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistContract(Contract)
 	 */
-	public Contract persistContract(Contract transientInstance)
+	public Contract persistContract(final Contract transientInstance)
 			throws PersistentModelException {
 
 		try {
@@ -784,7 +790,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistCandleSeries(CandleSeries)
 	 */
-	public void persistCandleSeries(CandleSeries candleSeries)
+	public void persistCandleSeries(final CandleSeries candleSeries)
 			throws PersistentModelException {
 		try {
 			/*
@@ -818,7 +824,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistCandleItem(CandleItem)
 	 */
-	public Candle persistCandle(Candle candle) throws PersistentModelException {
+	public Candle persistCandle(final Candle candle)
+			throws PersistentModelException {
 		try {
 			synchronized (candle) {
 				if (null == candle.getTradingday().getIdTradingDay()) {
@@ -869,7 +876,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistTradingday(Tradingday)
 	 */
-	public void persistTradingday(Tradingday transientInstance)
+	public void persistTradingday(final Tradingday transientInstance)
 			throws PersistentModelException {
 
 		try {
@@ -893,7 +900,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#persistTradeOrder(TradeOrder)
 	 */
 
-	public synchronized TradeOrder persistTradeOrder(TradeOrder tradeOrder)
+	public synchronized TradeOrder persistTradeOrder(final TradeOrder tradeOrder)
 			throws PersistentModelException {
 		try {
 
@@ -1173,8 +1180,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistTradeOrderfill(TradeOrder)
 	 */
-	public synchronized TradeOrder persistTradeOrderfill(TradeOrder tradeOrder)
-			throws PersistentModelException {
+	public synchronized TradeOrder persistTradeOrderfill(
+			final TradeOrder tradeOrder) throws PersistentModelException {
 		try {
 
 			ZonedDateTime filledDate = null;
@@ -1250,7 +1257,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findRuleById(Integer)
 	 */
-	public Rule findRuleById(Integer id) throws PersistentModelException {
+	public Rule findRuleById(final Integer id) throws PersistentModelException {
 		Rule instance = m_ruleHome.findById(id);
 		if (null == instance)
 			throw new PersistentModelException("Rule not found for Id: " + id);
@@ -1266,7 +1273,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findRuleByMaxVersion(Strategy)
 	 */
-	public Integer findRuleByMaxVersion(Strategy strategy)
+	public Integer findRuleByMaxVersion(final Strategy strategy)
 			throws PersistentModelException {
 		return m_ruleHome.findByMaxVersion(strategy);
 	}
@@ -1280,7 +1287,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findStrategyById(Integer)
 	 */
-	public Strategy findStrategyById(Integer id)
+	public Strategy findStrategyById(final Integer id)
 			throws PersistentModelException {
 		Strategy instance = m_strategyHome.findById(id);
 		if (null == instance)
@@ -1396,12 +1403,12 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAspectById(Aspect)
 	 */
-	public Aspect findAspectById(Aspect transientInstance)
+	public Aspect findAspectById(final Aspect aspect)
 			throws PersistentModelException {
-		Aspect instance = m_aspectHome.findById(transientInstance);
+		Aspect instance = m_aspectHome.findById(aspect);
 		if (null == instance)
 			throw new PersistentModelException("Aspect not found for Id: "
-					+ transientInstance.getId());
+					+ aspect.getId());
 		return instance;
 	}
 
@@ -1414,7 +1421,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistAspect(Aspect)
 	 */
-	public <T extends Aspect> T persistAspect(T transientInstance)
+	public <T extends Aspect> T persistAspect(final T transientInstance)
 			throws PersistentModelException {
 		try {
 			return m_aspectHome.persist(transientInstance);
@@ -1441,7 +1448,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * 
 	 * @see org.trade.persistent.PersistentModel#persistAspect(Aspect)
 	 */
-	public <T extends Aspect> T persistAspect(T transientInstance,
+	public <T extends Aspect> T persistAspect(final T transientInstance,
 			boolean overrideVersion) throws PersistentModelException {
 		try {
 			return m_aspectHome.persist(transientInstance, overrideVersion);
@@ -1464,7 +1471,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#removeAspect(Aspect)
 	 */
-	public void removeAspect(Aspect transientInstance)
+	public void removeAspect(final Aspect transientInstance)
 			throws PersistentModelException {
 		try {
 			m_aspectHome.remove(transientInstance);
@@ -1492,8 +1499,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#reassignStrategy(Strategy,
 	 *      Strategy, Tradingday)
 	 */
-	public void reassignStrategy(Strategy fromStrategy, Strategy toStrategy,
-			Tradingday tradingday) throws PersistentModelException {
+	public void reassignStrategy(final Strategy fromStrategy,
+			final Strategy toStrategy, final Tradingday tradingday)
+			throws PersistentModelException {
 
 		try {
 			for (Tradestrategy item : tradingday.getTradestrategies()) {

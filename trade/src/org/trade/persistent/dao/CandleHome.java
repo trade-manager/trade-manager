@@ -69,7 +69,7 @@ public class CandleHome {
 	 *            CandleSeries
 	 * @throws Exception
 	 */
-	public synchronized void persistCandleSeries(CandleSeries candleSeries)
+	public synchronized void persistCandleSeries(final CandleSeries candleSeries)
 			throws Exception {
 		Candle transientInstance = null;
 		try {

@@ -360,33 +360,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            TradeOrder
 	 */
 
-	public void doExecute(TradeOrder instance) {
-
+	public void doExecute(final TradeOrder tradeOrder) {
+		TradeOrder submittedTradeOrder = null;
 		try {
 			this.getFrame().setCursor(
 					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			TradeOrder tradeOrder = m_tradePersistentModel
-					.findTradeOrderByKey(instance.getOrderKey());
-			if (null != tradeOrder) {
-				if (!tradeOrder.getVersion().equals(instance.getVersion())) {
+			TradeOrder instance = m_tradePersistentModel
+					.findTradeOrderByKey(tradeOrder.getOrderKey());
+			if (null != instance) {
+				if (!instance.getVersion().equals(tradeOrder.getVersion())) {
 					this.setStatusBarMessage(
 							"Please refresh order before sumbitting change ...\n",
 							BasePanel.WARNING);
 				}
 			}
 			Tradestrategy tradestrategy = m_tradePersistentModel
-					.findTradestrategyById(instance.getTradestrategy());
+					.findTradestrategyById(tradeOrder.getTradestrategy());
 			// Check the order is valid.
 			instance.validate();
-			instance = m_brokerModel.onPlaceOrder(tradestrategy.getContract(),
-					instance);
+			submittedTradeOrder = m_brokerModel.onPlaceOrder(
+					tradestrategy.getContract(), instance);
 			setStatusBarMessage("Order sent to broker.\n",
 					BasePanel.INFORMATION);
 
 		} catch (Exception ex) {
-			this.setErrorMessage(
-					"Error submitting Order " + instance.getOrderKey(),
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error submitting Order "
+					+ submittedTradeOrder.getOrderKey(), ex.getMessage(), ex);
 		} finally {
 			this.getFrame().setCursor(Cursor.getDefaultCursor());
 		}
@@ -555,7 +554,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy
 	 */
 
-	public void doTest(Tradestrategy tradestrategy) {
+	public void doTest(final Tradestrategy tradestrategy) {
 
 		if (tradestrategy.isDirty()) {
 			this.setStatusBarMessage(
@@ -678,7 +677,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *      ConcurrentHashMap<Integer,TradeOrder>)
 	 */
 	public void executionDetailsEnd(
-			ConcurrentHashMap<Integer, TradeOrder> tradeOrders) {
+			final ConcurrentHashMap<Integer, TradeOrder> tradeOrders) {
 		try {
 			Tradingday todayTradingday = m_tradingdays.getTradingday(
 					TradingCalendar.getTradingDayStart(TradingCalendar
@@ -937,7 +936,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.strategy.StrategyChangeListener#strategyStarted(Tradestrategy)
 	 */
 	public void strategyStarted(String strategyClassName,
-			Tradestrategy tradestrategy) {
+			final Tradestrategy tradestrategy) {
 
 	}
 
@@ -948,7 +947,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#ruleComplete(Tradestrategy)
 	 */
-	public void ruleComplete(Tradestrategy tradestrategy) {
+	public void ruleComplete(final Tradestrategy tradestrategy) {
 
 	}
 
@@ -1050,7 +1049,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.broker.BrokerChangeListener#historicalDataComplete(Tradestrategy)
 	 */
 
-	public void historicalDataComplete(Tradestrategy tradestrategy) {
+	public void historicalDataComplete(final Tradestrategy tradestrategy) {
 		try {
 			/*
 			 * Now we have the history data complete and the request for real
@@ -1497,7 +1496,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
-	public void doStrategyParameters(Tradestrategy tradestrategy) {
+	public void doStrategyParameters(final Tradestrategy tradestrategy) {
 		try {
 			this.clearStatusBarMessage();
 			String strategyName = tradestrategy.getStrategy().getName();
@@ -1545,7 +1544,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * 
 	 */
 
-	public void doCancel(TradeOrder order) {
+	public void doCancel(final TradeOrder order) {
 
 		if (!order.getIsFilled()) {
 			try {
@@ -1594,7 +1593,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * 
 	 */
 
-	public void doCancel(Tradestrategy tradestrategy) {
+	public void doCancel(final Tradestrategy tradestrategy) {
 		try {
 			if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 				m_brokerModel.onCancelRealtimeBars(tradestrategy);
@@ -1640,7 +1639,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * This method is fired from the Contract Tab this will close all open
 	 * positions
 	 */
-	public void doCloseAll(Tradestrategy tradestrategy) {
+	public void doCloseAll(final Tradestrategy tradestrategy) {
 		try {
 			if (null == tradestrategy.getIdTradeStrategy()) {
 				return;
@@ -1648,7 +1647,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			TradestrategyOrders positionOrders = m_tradePersistentModel
 					.findPositionOrdersByTradestrategyId(tradestrategy
 							.getIdTradeStrategy());
-			tradestrategy = m_tradePersistentModel
+			Tradestrategy instance = m_tradePersistentModel
 					.findTradestrategyById(tradestrategy.getIdTradeStrategy());
 			for (TradeOrder order : positionOrders.getTradeOrders()) {
 				if (order.isActive()) {
@@ -1679,7 +1678,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								.getOpenTradePosition().getSide())) {
 							action = Action.SELL;
 						}
-						TradeOrder tradeOrder = new TradeOrder(tradestrategy,
+						TradeOrder tradeOrder = new TradeOrder(instance,
 								action,
 								TradingCalendar.getDateTimeNowMarketTimeZone(),
 								OrderType.MKT, openQuantity, null, null,
@@ -1698,10 +1697,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 								tradeOrder.setFAPercent(openTradeOrder
 										.getFAPercent());
 							} else {
-								if (null != tradestrategy.getPortfolio()
+								if (null != instance.getPortfolio()
 										.getIndividualAccount()) {
 
-									tradeOrder.setAccountNumber(tradestrategy
+									tradeOrder.setAccountNumber(instance
 											.getPortfolio()
 											.getIndividualAccount()
 											.getAccountNumber());
@@ -1709,7 +1708,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							}
 						}
 						tradeOrder = m_brokerModel.onPlaceOrder(
-								tradestrategy.getContract(), tradeOrder);
+								instance.getContract(), tradeOrder);
 					}
 				}
 			}
@@ -2182,7 +2181,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @param tradingdays
 	 *            Tradingdays
 	 */
-	private void refreshTradingdays(Tradingdays tradingdays) {
+	private void refreshTradingdays(final Tradingdays tradingdays) {
 		/*
 		 * Refresh to check to see if changes need to be saved.
 		 */

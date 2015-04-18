@@ -55,7 +55,7 @@ public class TradePositionHome {
 	 * @param transientInstance
 	 *            TradePosition
 	 */
-	public void remove(TradePosition transientInstance) {
+	public void remove(final TradePosition transientInstance) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper

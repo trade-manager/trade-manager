@@ -69,7 +69,7 @@ public class TradingdayHome {
 	 *            tradestrategies.
 	 * @throws Exception
 	 */
-	public void persist(Tradingday detachedInstance) throws Exception {
+	public void persist(final Tradingday detachedInstance) throws Exception {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper

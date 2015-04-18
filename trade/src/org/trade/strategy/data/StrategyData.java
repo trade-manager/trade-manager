@@ -60,7 +60,7 @@ public class StrategyData extends Worker {
 
 	private CandleDataset baseCandleDataset = null;
 	private CandleDataset candleDataset = null;
-	private List<IndicatorDataset> indicators = new ArrayList<IndicatorDataset>();
+	private final List<IndicatorDataset> indicators = new ArrayList<IndicatorDataset>();
 
 	private boolean seriesChanged = true;
 	private final Object lockStrategyWorker = new Object();

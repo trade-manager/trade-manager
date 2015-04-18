@@ -220,7 +220,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @see #addChangeListener(StrategyChangeListener)
 	 */
 	protected void fireStrategyComplete(String strategyClassName,
-			Tradestrategy tradestrategy) {
+			final Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == StrategyChangeListener.class) {
@@ -239,7 +239,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @see #addChangeListener(StrategyChangeListener)
 	 */
 	protected void fireStrategyStarted(String strategyClassName,
-			Tradestrategy tradestrategy) {
+			final Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == StrategyChangeListener.class) {
@@ -258,7 +258,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Tradestrategy
 	 * @see #addChangeListener(StrategyChangeListener)
 	 */
-	protected void fireRuleComplete(Tradestrategy tradestrategy) {
+	protected void fireRuleComplete(final Tradestrategy tradestrategy) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == StrategyChangeListener.class) {
@@ -561,15 +561,15 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder submitOrder(Contract contract, TradeOrder tradeOrder)
-			throws StrategyRuleException {
+	public TradeOrder submitOrder(final Contract contract,
+			final TradeOrder tradeOrder) throws StrategyRuleException {
 
 		try {
 			tradeOrder.validate();
-			tradeOrder = getBrokerManager().onPlaceOrder(contract, tradeOrder);
-			this.getTradestrategyOrders().addTradeOrder(tradeOrder);
-
-			return tradeOrder;
+			TradeOrder instance = getBrokerManager().onPlaceOrder(contract,
+					tradeOrder);
+			this.getTradestrategyOrders().addTradeOrder(instance);
+			return instance;
 		} catch (BrokerModelException ex) {
 			throw new StrategyRuleException(1, 500,
 					"Error submitting new tradeOrder to broker : "
@@ -996,7 +996,8 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public void cancelOrder(TradeOrder order) throws StrategyRuleException {
+	public void cancelOrder(final TradeOrder order)
+			throws StrategyRuleException {
 		try {
 			if (null != order) {
 				if (order.isActive()) {
@@ -1077,9 +1078,9 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder createStopAndTargetOrder(Money stopPrice,
-			Money targetPrice, Integer quantity, Boolean stopTransmit)
-			throws StrategyRuleException {
+	public TradeOrder createStopAndTargetOrder(final Money stopPrice,
+			final Money targetPrice, final Integer quantity,
+			final Boolean stopTransmit) throws StrategyRuleException {
 
 		if (quantity == 0)
 			throw new StrategyRuleException(1, 207, "Quantity cannot be zero");
@@ -1170,10 +1171,11 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return TradeOrder
 	 * @throws StrategyRuleException
 	 */
-	public TradeOrder createStopAndTargetOrder(TradeOrder openPosition,
-			Integer stopRiskUnits, Money stopAddAmount,
-			Integer targetRiskUnits, Money targetAddAmount, Integer quantity,
-			Boolean stopTransmit) throws StrategyRuleException {
+	public TradeOrder createStopAndTargetOrder(final TradeOrder openPosition,
+			final Integer stopRiskUnits, final Money stopAddAmount,
+			final Integer targetRiskUnits, final Money targetAddAmount,
+			final Integer quantity, final Boolean stopTransmit)
+			throws StrategyRuleException {
 
 		if (!this.isThereOpenPosition()) {
 			throw new StrategyRuleException(1, 209,
@@ -1280,7 +1282,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @return Money
 	 * @throws StrategyRuleException
 	 */
-	public Money getStopPriceForPositionRisk(TradeOrder openPosition,
+	public Money getStopPriceForPositionRisk(final TradeOrder openPosition,
 			int numberRiskUnits) throws StrategyRuleException {
 		try {
 			double riskAmount = (this.getTradestrategy().getRiskAmount()
@@ -1434,7 +1436,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 *            Contract
 	 * @throws BrokerModelException
 	 */
-	public void requestOrderExecutions(Tradestrategy tradestrategy)
+	public void requestOrderExecutions(final Tradestrategy tradestrategy)
 			throws StrategyRuleException {
 
 		try {
@@ -1780,7 +1782,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 	 * @param tradeOrder
 	 *            TradeOrder
 	 */
-	public void tradeOrderFilled(TradeOrder tradeOrder) {
+	public void tradeOrderFilled(final TradeOrder tradeOrder) {
 	}
 
 	/**
@@ -1867,7 +1869,7 @@ public abstract class AbstractStrategyRule extends Worker implements
 		return createDate;
 	}
 
-	private TradeOrder roundTradeOrderPrice(TradeOrder tradeOrder)
+	private TradeOrder roundTradeOrderPrice(final TradeOrder tradeOrder)
 			throws StrategyRuleException {
 
 		String side = (Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT

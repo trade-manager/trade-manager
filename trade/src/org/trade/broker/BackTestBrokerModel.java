@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -62,6 +63,8 @@ import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.strategy.data.CandleSeries;
+
+import com.ib.client.ContractDetails;
 
 /**
  */
@@ -382,8 +385,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
 	 *      )
 	 */
-	public void onBrokerData(Tradestrategy tradestrategy, ZonedDateTime endDate)
-			throws BrokerModelException {
+	public void onBrokerData(final Tradestrategy tradestrategy,
+			final ZonedDateTime endDate) throws BrokerModelException {
 
 		try {
 			if (this.isHistoricalDataRunning(tradestrategy)) {
@@ -397,9 +400,10 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 
 			if (this.isBrokerDataOnly()) {
 
-				endDate = TradingCalendar.getDateAtTime(TradingCalendar
-						.addTradingDays(endDate, backfillOffsetDays), endDate);
-				String endDateTime = TradingCalendar.getFormattedDate(endDate,
+				ZonedDateTime endDay = TradingCalendar.getDateAtTime(
+						TradingCalendar.addTradingDays(endDate,
+								backfillOffsetDays), endDate);
+				String endDateTime = TradingCalendar.getFormattedDate(endDay,
 						"yyyyMMdd HH:mm:ss");
 
 				m_contractRequests.put(tradestrategy.getContract().getId(),
@@ -559,7 +563,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onContractDetails(Contract)
 	 */
-	public void onContractDetails(Contract contract)
+	public void onContractDetails(final Contract contract)
 			throws BrokerModelException {
 		/*
 		 * This will use the Yahoo API to get the data.
@@ -683,8 +687,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onPlaceOrder(Contract, TradeOrder)
 	 */
-	public TradeOrder onPlaceOrder(Contract contract, TradeOrder tradeOrder)
-			throws BrokerModelException {
+	public TradeOrder onPlaceOrder(final Contract contract,
+			final TradeOrder tradeOrder) throws BrokerModelException {
 
 		try {
 			synchronized (tradeOrder) {
@@ -694,15 +698,14 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				if (null == tradeOrder.getClientId()) {
 					tradeOrder.setClientId(999);
 				}
-				tradeOrder = m_tradePersistentModel
+				TradeOrder item = m_tradePersistentModel
 						.persistTradeOrder(tradeOrder);
 				// Debug logging
-				_log.debug("Order Placed Key: " + tradeOrder.getOrderKey());
+				_log.debug("Order Placed Key: " + item.getOrderKey());
 				TWSBrokerModel.logContract(TWSBrokerModel
 						.getIBContract(contract));
-				TWSBrokerModel.logTradeOrder(TWSBrokerModel
-						.getIBOrder(tradeOrder));
-				return tradeOrder;
+				TWSBrokerModel.logTradeOrder(TWSBrokerModel.getIBOrder(item));
+				return item;
 			}
 
 		} catch (Exception ex) {
@@ -825,8 +828,8 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 *            OrderState
 	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
-	public void openOrder(int orderId, Contract contract, TradeOrder order,
-			OrderState orderState) {
+	public void openOrder(int orderId, final Contract contract,
+			final TradeOrder order, final OrderState orderState) {
 
 		try {
 

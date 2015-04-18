@@ -64,7 +64,7 @@ public class TradeOrderHome {
 	 *            TradeOrder
 	 * @return TradeOrder
 	 */
-	public synchronized TradeOrder persist(TradeOrder transientInstance) {
+	public synchronized TradeOrder persist(final TradeOrder transientInstance) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper

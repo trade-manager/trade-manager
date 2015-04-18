@@ -201,7 +201,7 @@ public class PortfolioHome {
 	 * @param defaultPortfolio
 	 *            Portfolio
 	 */
-	public void resetDefaultPortfolio(Portfolio defaultPortfolio) {
+	public void resetDefaultPortfolio(final Portfolio defaultPortfolio) {
 
 		try {
 			EntityManager entityManager = EntityManagerHelper
@@ -241,7 +241,7 @@ public class PortfolioHome {
 	 * @throws PersistentModelException
 	 */
 
-	public synchronized Portfolio persistPortfolio(Portfolio instance)
+	public synchronized Portfolio persistPortfolio(final Portfolio instance)
 			throws PersistentModelException {
 		try {
 			EntityManager entityManager = EntityManagerHelper

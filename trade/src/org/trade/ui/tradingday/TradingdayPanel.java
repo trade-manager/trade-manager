@@ -684,15 +684,16 @@ public class TradingdayPanel extends BasePanel {
 	 *            Tradingday the selected tradingday to be refreshed.
 	 * 
 	 */
-	public void doRefresh(Tradingday tradingday) {
+	public void doRefresh(final Tradingday tradingday) {
 		try {
 			this.clearStatusBarMessage();
-			tradingday = m_tradingdays.getTradingday(tradingday.getOpen(),
-					tradingday.getClose());
-			if (null != tradingday && null != tradingday.getIdTradingDay()) {
+			Tradingday currentTradingday = m_tradingdays.getTradingday(
+					tradingday.getOpen(), tradingday.getClose());
+			if (null != currentTradingday
+					&& null != currentTradingday.getIdTradingDay()) {
 				Tradingday instance = m_tradePersistentModel
-						.findTradingdayById(tradingday.getIdTradingDay());
-				instance.populateStrategyData(tradingday);
+						.findTradingdayById(currentTradingday.getIdTradingDay());
+				instance.populateStrategyData(currentTradingday);
 				m_tradingdays.replaceTradingday(instance);
 			}
 		} catch (Exception ex) {
@@ -707,7 +708,7 @@ public class TradingdayPanel extends BasePanel {
 	 * @param tradingday
 	 *            Tradingday the selected tradingday to be refreshed.
 	 */
-	public void doRefreshTradingdayTable(Tradingday tradingday) {
+	public void doRefreshTradingdayTable(final Tradingday tradingday) {
 		try {
 			this.clearStatusBarMessage();
 			int selectedRow = m_tradingdayTable.getSelectedRow();
@@ -877,7 +878,7 @@ public class TradingdayPanel extends BasePanel {
 	 * @param portfolio
 	 *            Portfolio
 	 */
-	public void setPortfolioLabel(Portfolio portfolio) {
+	public void setPortfolioLabel(final Portfolio portfolio) {
 		try {
 			BigDecimal availableFunds = new BigDecimal(0);
 			BigDecimal buyingPower = new BigDecimal(0);
@@ -996,7 +997,7 @@ public class TradingdayPanel extends BasePanel {
 	 *            Tradingday
 	 * @return boolean
 	 */
-	public boolean isStrategyWorkerRunning(Tradingday tradingday) {
+	public boolean isStrategyWorkerRunning(final Tradingday tradingday) {
 		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 			if (isStrategyWorkerRunning(tradestrategy)) {
 				return true;
@@ -1012,7 +1013,7 @@ public class TradingdayPanel extends BasePanel {
 	 *            Tradestrategy
 	 * @return boolean
 	 */
-	public boolean isStrategyWorkerRunning(Tradestrategy tradestrategy) {
+	public boolean isStrategyWorkerRunning(final Tradestrategy tradestrategy) {
 
 		String key = tradestrategy.getStrategy().getClassName()
 				+ tradestrategy.getIdTradeStrategy();
@@ -1056,7 +1057,7 @@ public class TradingdayPanel extends BasePanel {
 	 * @param strategy
 	 *            StrategyRule
 	 */
-	public void addStrategyWorker(String key, StrategyRule strategy) {
+	public void addStrategyWorker(String key, final StrategyRule strategy) {
 		m_strategyWorkers.put(key, strategy);
 	}
 
@@ -1096,7 +1097,7 @@ public class TradingdayPanel extends BasePanel {
 	 *            Tradestrategy
 	 */
 	public void killAllStrategyWorkersForTradestrategy(
-			Tradestrategy tradestrategy) {
+			final Tradestrategy tradestrategy) {
 		String key = tradestrategy.getStrategy().getClassName()
 				+ tradestrategy.getIdTradeStrategy();
 		if (isStrategyWorkerRunning(key)) {
@@ -1155,7 +1156,7 @@ public class TradingdayPanel extends BasePanel {
 	 * @param tradingdays
 	 *            Tradingdays
 	 */
-	private void deleteTradeOrders(Tradingdays tradingdays) {
+	private void deleteTradeOrders(final Tradingdays tradingdays) {
 
 		/*
 		 * Check to see if any of the selected trading days has open positions.
@@ -1234,7 +1235,7 @@ public class TradingdayPanel extends BasePanel {
 	 * @param transferObject
 	 *            Tradestrategy
 	 */
-	private void enableTradestrategyButtons(Tradestrategy transferObject) {
+	private void enableTradestrategyButtons(final Tradestrategy transferObject) {
 		boolean enable = false;
 		if (null != transferObject) {
 			enable = true;

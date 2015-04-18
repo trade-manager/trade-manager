@@ -336,7 +336,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 * @param rule
 	 *            Rule
 	 */
-	public void doCompile(Rule rule) {
+	public void doCompile(final Rule rule) {
 		try {
 			setMessageText(null, false, false, null);
 			String fileName = "temp" + "/"
@@ -510,7 +510,7 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 * @param strategy
 	 *            Strategy
 	 */
-	public void doNew(Strategy strategy) {
+	public void doNew(final Strategy strategy) {
 		try {
 
 			String templateName = ConfigProperties
@@ -977,8 +977,8 @@ public class StrategyPanel extends BasePanel implements TreeSelectionListener {
 	 * @throws PersistentModelException
 	 * @throws ValueTypeException
 	 */
-	private void createRule(Strategy strategy) throws PersistentModelException,
-			ValueTypeException {
+	private void createRule(final Strategy strategy)
+			throws PersistentModelException, ValueTypeException {
 
 		Integer version = this.tradePersistentModel
 				.findRuleByMaxVersion(strategy);

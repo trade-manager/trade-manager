@@ -303,7 +303,7 @@ public class ConfigurationPanel extends BasePanel {
 	 * @param series
 	 *            IndicatorSeries
 	 */
-	public void doProperties(IndicatorSeries series) {
+	public void doProperties(final IndicatorSeries series) {
 		try {
 			this.clearStatusBarMessage();
 			String indicatorName = series.getType().substring(0,
@@ -449,7 +449,7 @@ public class ConfigurationPanel extends BasePanel {
 	 * @param aspect
 	 *            Aspect
 	 */
-	private void setChildPanel(Aspect aspect) {
+	private void setChildPanel(final Aspect aspect) {
 		try {
 			if (aspect instanceof Strategy) {
 				m_tableModelChild = new IndicatorSeriesTableModel();

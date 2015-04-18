@@ -386,7 +386,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 * @throws ValueTypeException
 	 */
 
-	private void resetPortfolioComboBox(DAODecodeComboBoxEditor editorComboBox)
+	private void resetPortfolioComboBox(
+			final DAODecodeComboBoxEditor editorComboBox)
 			throws ValueTypeException {
 
 		Vector<Decode> codesNew = ((new DAOPortfolio()).getCodesDecodes());
@@ -558,7 +559,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 * @return StringBuffer
 	 */
 	private StringBuffer formatTradelogSummaryLine(
-			TradelogSummary tradelogSummary) {
+			final TradelogSummary tradelogSummary) {
 		StringBuffer tradelogLine = new StringBuffer();
 		tradelogLine.append((tradelogSummary.getPeriod() == null ? ""
 				: tradelogSummary.getPeriod())
@@ -609,7 +610,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 *            TradelogDetail
 	 * @return StringBuffer
 	 */
-	private StringBuffer formatTradelogDetailLine(TradelogDetail tradelogDetail) {
+	private StringBuffer formatTradelogDetailLine(
+			final TradelogDetail tradelogDetail) {
 		StringBuffer tradelogLine = new StringBuffer();
 		tradelogLine.append(tradelogDetail.getOpen()
 				+ ","
