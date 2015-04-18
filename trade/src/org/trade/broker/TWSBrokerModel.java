@@ -1036,8 +1036,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 					m_client.placeOrder(tradeOrder.getOrderKey(), IBContract,
 							IBOrder);
+					return tradeOrder;
 				}
-				return tradeOrder;
 
 			} else {
 				throw new BrokerModelException(tradeOrder.getOrderKey(), 3120,

@@ -702,12 +702,9 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						.getIBContract(contract));
 				TWSBrokerModel.logTradeOrder(TWSBrokerModel
 						.getIBOrder(tradeOrder));
-
-				/*
-				 * Call to broker interface should be next
-				 */
+				return tradeOrder;
 			}
-			return tradeOrder;
+
 		} catch (Exception ex) {
 			throw new BrokerModelException(tradeOrder.getOrderKey(), 3030,
 					"Could not save or place TradeOrder: "
