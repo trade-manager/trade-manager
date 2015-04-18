@@ -530,7 +530,7 @@ public class TradestrategyTableModel extends TableModel {
 		 * the DatasetContainer cannot be created. This is due to an issue with
 		 * hibernate and Eager fetch.
 		 */
-		if (null != element.getIdTradeStrategy()) {
+		if (null != element.getStrategyData()) {
 			newRow.addElement(element.getStrategyData().getBaseCandleSeries()
 					.getPercentChangeFromClose());
 			newRow.addElement(element.getStrategyData().getBaseCandleSeries()

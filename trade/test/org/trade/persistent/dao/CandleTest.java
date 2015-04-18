@@ -161,6 +161,8 @@ public class CandleTest {
 			for (Tradestrategy tradestrategy : tradestrategyHome.findAll()) {
 				tradestrategy = tradestrategyHome.findById(tradestrategy
 						.getIdTradeStrategy());
+				tradestrategy.setStrategyData(StrategyData
+						.create(tradestrategy));
 				ZonedDateTime prevTradingday = TradingCalendar.addTradingDays(
 						tradestrategy.getTradingday().getOpen(),
 						(-1 * (tradestrategy.getChartDays() - 1)));

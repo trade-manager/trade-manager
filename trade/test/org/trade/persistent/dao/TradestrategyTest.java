@@ -64,6 +64,7 @@ import org.trade.dictionary.valuetype.DAOStrategy;
 import org.trade.dictionary.valuetype.Exchange;
 import org.trade.dictionary.valuetype.SECType;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
+import org.trade.strategy.data.StrategyData;
 import org.trade.ui.TradeAppLoadConfig;
 
 /**
@@ -312,7 +313,6 @@ public class TradestrategyTest {
 			throws Exception {
 		ContractHome contractHome = new ContractHome();
 		PortfolioHome portfolioHome = new PortfolioHome();
-
 		TradestrategyHome tradestrategyHome = new TradestrategyHome();
 		AspectHome aspectHome = new AspectHome();
 
@@ -386,18 +386,21 @@ public class TradestrategyTest {
 		}
 		TradingdayHome tradingdayHome = new TradingdayHome();
 		Tradingday tradingday = Tradingday.newInstance(open);
-		Tradingday instance = tradingdayHome.findByOpenCloseDate(
+		Tradingday instanceTradingDay = tradingdayHome.findByOpenCloseDate(
 				tradingday.getOpen(), tradingday.getClose());
-		if (null != instance) {
+		if (null != instanceTradingDay) {
 			tradingday.getTradestrategies().clear();
-			tradingday = instance;
+			tradingday = instanceTradingDay;
 		}
 		tradestrategy = new Tradestrategy(contract, tradingday, strategy,
 				portfolio, new BigDecimal(100), "BUY", "0", true,
 				ChartDays.TWO_DAYS, BarSize.FIVE_MIN);
 		tradingday.addTradestrategy(tradestrategy);
 		tradingdayHome.persist(tradingday);
-		return tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
+		Tradestrategy instance = tradestrategyHome.findById(tradestrategy
+				.getIdTradeStrategy());
+		instance.setStrategyData(StrategyData.create(instance));
+		return instance;
 	}
 
 	/**

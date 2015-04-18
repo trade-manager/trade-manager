@@ -136,7 +136,6 @@ public class CandlePeriodTest {
 							.getContract().getIdContract(), prevTradingday,
 							this.tradestrategy.getTradingday().getOpen(),
 							this.tradestrategy.getBarSize());
-
 			if (candles.isEmpty()) {
 				StrategyData.doDummyData(this.tradestrategy.getStrategyData()
 						.getBaseCandleSeries(), Tradingday

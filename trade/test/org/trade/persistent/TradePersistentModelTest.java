@@ -841,7 +841,6 @@ public class TradePersistentModelTest {
 	public void testPersistCandleSeries() {
 
 		try {
-
 			CandleSeries candleSeries = new CandleSeries(this.tradestrategy
 					.getStrategyData().getBaseCandleSeries(), BarSize.FIVE_MIN,
 					this.tradestrategy.getTradingday().getOpen(),

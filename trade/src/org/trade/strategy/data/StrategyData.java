@@ -40,12 +40,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.persistence.Transient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.TradingCalendar;
 import org.trade.core.util.Worker;
 import org.trade.persistent.dao.Strategy;
+import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.strategy.data.base.RegularTimePeriod;
 import org.trade.strategy.data.candle.CandleItem;
@@ -448,6 +451,26 @@ public class StrategyData extends Worker {
 	 */
 	public CandleDataset getCandleDataset() {
 		return candleDataset;
+	}
+
+	/**
+	 * Method createStrategyData.
+	 * 
+	 * @param tradestrategy
+	 *            Tradestrategy
+	 * @return StrategyData
+	 */
+	@Transient
+	public static StrategyData create(final Tradestrategy tradestrategy) {
+
+		CandleDataset candleDataset = new CandleDataset();
+		CandleSeries candleSeries = new CandleSeries(tradestrategy
+				.getContract().getSymbol(), tradestrategy.getContract(),
+				tradestrategy.getBarSize(), tradestrategy.getTradingday()
+						.getOpen(), tradestrategy.getTradingday().getClose());
+		candleDataset.addSeries(candleSeries);
+		return new StrategyData(tradestrategy.getStrategy(), candleDataset);
+
 	}
 
 	/**

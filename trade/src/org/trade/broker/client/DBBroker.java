@@ -799,13 +799,15 @@ public class DBBroker extends Broker {
 							+ endDate + " and barSize: "
 							+ childTradestrategy.getBarSize());
 				} else {
-					CandleDataset.populateSeries(
-							childTradestrategy.getStrategyData(),
-							indicatorCandles);
+
+					StrategyData strategyData = StrategyData
+							.create(childTradestrategy);
+					CandleDataset
+							.populateSeries(strategyData, indicatorCandles);
 					indicatorCandles.clear();
 
-					CandleSeries childSeries = childTradestrategy
-							.getStrategyData().getBaseCandleSeries();
+					CandleSeries childSeries = strategyData
+							.getBaseCandleSeries();
 					childSeries.setDisplaySeries(series.getDisplaySeries());
 					childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
 					childSeries.setSymbol(series.getSymbol());

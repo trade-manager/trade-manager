@@ -367,7 +367,6 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnBrokerData() {
 
 		try {
-
 			StrategyData.doDummyData(this.tradestrategy.getStrategyData()
 					.getCandleDataset().getSeries(0),
 					tradestrategy.getTradingday(),

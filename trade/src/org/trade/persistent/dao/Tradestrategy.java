@@ -65,8 +65,6 @@ import org.trade.core.factory.ClassFactory;
 import org.trade.core.util.CoreUtils;
 import org.trade.core.util.TradingCalendar;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
-import org.trade.strategy.data.CandleDataset;
-import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.StrategyData;
 
 /**
@@ -582,19 +580,6 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 */
 	@Transient
 	public StrategyData getStrategyData() {
-		/*
-		 * Add the dataset container if non exists. If tradestrategy is dirty we
-		 * do not want to create a StrategyData object as Strategy/Contract have
-		 * not yet been fully populated.
-		 */
-		if (null == this.strategyData) {
-			CandleDataset candleDataset = new CandleDataset();
-			CandleSeries candleSeries = new CandleSeries(getContract()
-					.getSymbol(), getContract(), getBarSize(), this
-					.getTradingday().getOpen(), this.getTradingday().getClose());
-			candleDataset.addSeries(candleSeries);
-			this.strategyData = new StrategyData(getStrategy(), candleDataset);
-		}
 		return this.strategyData;
 	}
 

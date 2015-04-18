@@ -107,6 +107,7 @@ import org.trade.persistent.dao.Tradingdays;
 import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorSeries;
+import org.trade.strategy.data.StrategyData;
 import org.trade.ui.base.BaseButton;
 import org.trade.ui.base.BasePanel;
 import org.trade.ui.base.BaseUIPropertyCodes;
@@ -687,11 +688,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		ZonedDateTime startDate = null;
 		ZonedDateTime endDate = null;
 
+		if (null == tradestrategy.getStrategyData()) {
+			tradestrategy.setStrategyData(StrategyData.create(tradestrategy));
+		}
+
 		if (tradestrategy.getStrategyData().getBaseCandleSeries().isEmpty()) {
 			endDate = TradingCalendar.getDateAtTime(TradingCalendar
-					.getPrevTradingDay(TradingCalendar.addTradingDays(
-							tradestrategy.getTradingday().getClose(),
-							backfillOffsetDays)), tradestrategy.getTradingday()
+					.addTradingDays(tradestrategy.getTradingday().getClose(),
+							backfillOffsetDays), tradestrategy.getTradingday()
 					.getClose());
 			startDate = endDate.minusDays((tradestrategy.getChartDays() - 1));
 			startDate = TradingCalendar.getPrevTradingDay(startDate);
@@ -768,13 +772,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 								+ childTradestrategy.getContract().getSymbol(),
 								BasePanel.INFORMATION);
 					} else {
-						CandleDataset.populateSeries(
-								childTradestrategy.getStrategyData(),
+						StrategyData strategyData = StrategyData
+								.create(childTradestrategy);
+						CandleDataset.populateSeries(strategyData,
 								indicatorCandles);
 						indicatorCandles.clear();
 
-						CandleSeries childSeries = childTradestrategy
-								.getStrategyData().getBaseCandleSeries();
+						CandleSeries childSeries = strategyData
+								.getBaseCandleSeries();
 						childSeries.setDisplaySeries(series.getDisplaySeries());
 						childSeries.setSeriesRGBColor(series
 								.getSeriesRGBColor());

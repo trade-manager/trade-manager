@@ -28,6 +28,7 @@ import org.trade.persistent.dao.Tradingdays;
 import org.trade.strategy.data.CandleDataset;
 import org.trade.strategy.data.CandleSeries;
 import org.trade.strategy.data.IndicatorSeries;
+import org.trade.strategy.data.StrategyData;
 
 public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 
@@ -107,6 +108,9 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 					 * Refresh the data set container as these may have changed.
 					 */
 					tradestrategy.setStrategyData(null);
+					tradestrategy.setStrategyData(StrategyData
+							.create(tradestrategy));
+
 					toProcessTradingday.addTradestrategy(tradestrategy);
 					addIndicatorTradestrategyToTradingday(toProcessTradingday,
 							tradestrategy);
@@ -552,6 +556,10 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 			indicatorTradestrategy.setIdTradeStrategy(this.brokerModel
 					.getNextRequestId());
 			indicatorTradestrategy.setDirty(false);
+		}
+		if (null == indicatorTradestrategy.getStrategyData()) {
+			indicatorTradestrategy.setStrategyData(StrategyData
+					.create(indicatorTradestrategy));
 		}
 
 		CandleSeries childSeries = indicatorTradestrategy.getStrategyData()
