@@ -370,6 +370,7 @@ public class CandleHome {
 			}
 			return null;
 		} catch (Exception re) {
+			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
 			EntityManagerHelper.close();

@@ -40,8 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.persistence.Transient;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.core.factory.ClassFactory;
@@ -454,13 +452,12 @@ public class StrategyData extends Worker {
 	}
 
 	/**
-	 * Method createStrategyData.
+	 * Method create.
 	 * 
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 * @return StrategyData
 	 */
-	@Transient
 	public static StrategyData create(final Tradestrategy tradestrategy) {
 
 		CandleDataset candleDataset = new CandleDataset();
@@ -470,7 +467,6 @@ public class StrategyData extends Worker {
 						.getOpen(), tradestrategy.getTradingday().getClose());
 		candleDataset.addSeries(candleSeries);
 		return new StrategyData(tradestrategy.getStrategy(), candleDataset);
-
 	}
 
 	/**

@@ -89,8 +89,8 @@ public class AspectHome {
 			validate(transientInstance);
 			EntityManager entityManager = EntityManagerHelper
 					.getEntityManager();
-
 			entityManager.getTransaction().begin();
+			
 			if (null == transientInstance.getId()) {
 				entityManager.persist(transientInstance);
 				entityManager.getTransaction().commit();
