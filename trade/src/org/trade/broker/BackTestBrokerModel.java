@@ -698,14 +698,16 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 				if (null == tradeOrder.getClientId()) {
 					tradeOrder.setClientId(999);
 				}
-				TradeOrder item = m_tradePersistentModel
+				TradeOrder transientInstance = m_tradePersistentModel
 						.persistTradeOrder(tradeOrder);
 				// Debug logging
-				_log.debug("Order Placed Key: " + item.getOrderKey());
+				_log.debug("Order Placed Key: "
+						+ transientInstance.getOrderKey());
 				TWSBrokerModel.logContract(TWSBrokerModel
 						.getIBContract(contract));
-				TWSBrokerModel.logTradeOrder(TWSBrokerModel.getIBOrder(item));
-				return item;
+				TWSBrokerModel.logTradeOrder(TWSBrokerModel
+						.getIBOrder(transientInstance));
+				return transientInstance;
 			}
 
 		} catch (Exception ex) {
@@ -791,12 +793,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					.getCumulativeQuantity());
 			transientInstance.setFilledDate(tradeOrderfill.getTime());
 			boolean isFilled = transientInstance.getIsFilled();
-			transientInstance = m_tradePersistentModel
+			TradeOrder updatedOrder = m_tradePersistentModel
 					.persistTradeOrderfill(transientInstance);
 
 			// Let the controller know an order was filled
-			if (transientInstance.getIsFilled() && !isFilled)
-				this.fireTradeOrderFilled(transientInstance);
+			if (updatedOrder.getIsFilled() && !isFilled)
+				this.fireTradeOrderFilled(updatedOrder);
 
 		} catch (Exception ex) {
 			error(reqId, 3160, "Errors saving execution: " + ex.getMessage());
@@ -829,12 +831,12 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
 	public void openOrder(int orderId, final Contract contract,
-			final TradeOrder order, final OrderState orderState) {
+			final TradeOrder tradeOrder, final OrderState orderState) {
 
 		try {
 
 			TradeOrder transientInstance = m_tradePersistentModel
-					.findTradeOrderByKey(order.getOrderKey());
+					.findTradeOrderByKey(tradeOrder.getOrderKey());
 			if (null == transientInstance) {
 				error(orderId, 3170, "Warning Order not found for Order Key: "
 						+ orderId + " make sure Client ID: " + 0
@@ -847,7 +849,7 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 			 * twice on order fills.
 			 */
 
-			if (BackTestBrokerModel.updateTradeOrder(order, orderState,
+			if (BackTestBrokerModel.updateTradeOrder(tradeOrder, orderState,
 					transientInstance)) {
 
 				if (OrderStatus.FILLED.equals(transientInstance.getStatus())) {
@@ -855,28 +857,26 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 					_log.debug("Order Key: " + transientInstance.getOrderKey()
 							+ " filled.");
 					BackTestBrokerModel.logOrderState(orderState);
-					BackTestBrokerModel.logTradeOrder(order);
+					BackTestBrokerModel.logTradeOrder(tradeOrder);
 
-					transientInstance = m_tradePersistentModel
+					TradeOrder updatedOrder = m_tradePersistentModel
 							.persistTradeOrder(transientInstance);
 
-					if (transientInstance.hasTradePosition()
-							&& !transientInstance.getTradePosition().isOpen()) {
+					if (updatedOrder.hasTradePosition()
+							&& !updatedOrder.getTradePosition().isOpen()) {
 						// Let the controller know a position was closed
-						this.firePositionClosed(transientInstance
-								.getTradePosition());
+						this.firePositionClosed(updatedOrder.getTradePosition());
 					}
 				} else {
 					_log.debug("Order key: " + transientInstance.getOrderKey()
 							+ " state changed. Status:" + orderState.m_status);
 					BackTestBrokerModel.logOrderState(orderState);
-					BackTestBrokerModel.logTradeOrder(order);
-					transientInstance = m_tradePersistentModel
+					BackTestBrokerModel.logTradeOrder(tradeOrder);
+					TradeOrder updatedOrder = m_tradePersistentModel
 							.persistTradeOrder(transientInstance);
-					if (OrderStatus.CANCELLED.equals(transientInstance
-							.getStatus())) {
+					if (OrderStatus.CANCELLED.equals(updatedOrder.getStatus())) {
 						// Let the controller know a position was closed
-						this.fireTradeOrderCancelled(transientInstance);
+						this.fireTradeOrderCancelled(updatedOrder);
 					}
 				}
 			}
@@ -970,17 +970,17 @@ public class BackTestBrokerModel extends AbstractBrokerModel implements
 						lastFillPrice, clientId, whyHeld);
 
 				boolean isFilled = transientInstance.getIsFilled();
-				transientInstance = m_tradePersistentModel
+				TradeOrder updatedOrder = m_tradePersistentModel
 						.persistTradeOrder(transientInstance);
 
-				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
+				if (OrderStatus.CANCELLED.equals(updatedOrder.getStatus())) {
 					// Let the controller know a position was closed
-					this.fireTradeOrderCancelled(transientInstance);
+					this.fireTradeOrderCancelled(updatedOrder);
 				} else {
-					this.fireTradeOrderStatusChanged(transientInstance);
+					this.fireTradeOrderStatusChanged(updatedOrder);
 					// Let the controller know an order was filled
-					if (transientInstance.getIsFilled() && !isFilled)
-						this.fireTradeOrderFilled(transientInstance);
+					if (updatedOrder.getIsFilled() && !isFilled)
+						this.fireTradeOrderFilled(updatedOrder);
 				}
 			}
 
