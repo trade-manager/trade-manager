@@ -104,13 +104,6 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 						.clone();
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
-					/*
-					 * Refresh the data set container as these may have changed.
-					 */
-					tradestrategy.setStrategyData(null);
-					tradestrategy.setStrategyData(StrategyData
-							.create(tradestrategy));
-
 					toProcessTradingday.addTradestrategy(tradestrategy);
 					addIndicatorTradestrategyToTradingday(toProcessTradingday,
 							tradestrategy);
@@ -169,7 +162,6 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 									 * Refresh the data set container as these
 									 * may have changed.
 									 */
-									tradestrategy.setStrategyData(null);
 									tradingday.addTradestrategy(tradestrategy);
 									addIndicatorTradestrategyToTradingday(
 											tradingday, tradestrategy);
@@ -346,6 +338,7 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 			CloneNotSupportedException {
 
 		boolean addedIndicator = false;
+
 		CandleDataset candleDataset = (CandleDataset) tradestrategy
 				.getStrategyData().getIndicatorByType(
 						IndicatorSeries.CandleSeries);
@@ -729,6 +722,12 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 				 */
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
+					/*
+					 * Refresh the data set container as these may have changed.
+					 */
+					tradestrategy.setStrategyData(null);
+					tradestrategy.setStrategyData(StrategyData
+							.create(tradestrategy));
 					CandleDataset candleDataset = (CandleDataset) tradestrategy
 							.getStrategyData().getIndicatorByType(
 									IndicatorSeries.CandleSeries);
@@ -791,6 +790,10 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 						if (backTestBarSize < tradestrategy.getBarSize())
 							total++;
 
+						if (null == tradestrategy.getStrategyData()) {
+							tradestrategy.setStrategyData(StrategyData
+									.create(tradestrategy));
+						}
 						CandleDataset candleDataset = (CandleDataset) tradestrategy
 								.getStrategyData().getIndicatorByType(
 										IndicatorSeries.CandleSeries);
@@ -819,7 +822,6 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 					contracts.clear();
 				}
 			}
-
 		}
 		return total;
 	}
