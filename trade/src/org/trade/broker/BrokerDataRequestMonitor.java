@@ -155,6 +155,10 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 								tradestrategy
 										.setIdTradeStrategy(this.brokerModel
 												.getNextRequestId());
+								tradestrategy.setStrategyData(null);
+								tradestrategy.setStrategyData(StrategyData
+										.create(tradestrategy));
+								
 								if (this.brokerModel
 										.validateBrokerData(tradestrategy)) {
 
