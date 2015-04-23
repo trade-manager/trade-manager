@@ -104,6 +104,10 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 						.clone();
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
+					if (null == tradestrategy.getStrategyData()) {
+						tradestrategy.setStrategyData(StrategyData
+								.create(tradestrategy));
+					}
 					toProcessTradingday.addTradestrategy(tradestrategy);
 					addIndicatorTradestrategyToTradingday(toProcessTradingday,
 							tradestrategy);
@@ -158,7 +162,7 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 								tradestrategy.setStrategyData(null);
 								tradestrategy.setStrategyData(StrategyData
 										.create(tradestrategy));
-								
+
 								if (this.brokerModel
 										.validateBrokerData(tradestrategy)) {
 

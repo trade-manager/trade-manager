@@ -1499,9 +1499,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doStrategyParameters(final Tradestrategy tradestrategy) {
 		try {
 			this.clearStatusBarMessage();
-			String strategyName = tradestrategy.getStrategy().getName();
 			CodeType codeType = m_tradePersistentModel.findCodeTypeByNameType(
-					strategyName, CodeType.StrategyParameters);
+					tradestrategy.getStrategy().getName(),
+					CodeType.StrategyParameters);
 			if (null == codeType) {
 				return;
 			} else {

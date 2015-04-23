@@ -89,6 +89,7 @@ import org.trade.dictionary.valuetype.DAOStrategyManager;
 import org.trade.dictionary.valuetype.UIPropertyCodes;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
+import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
 import org.trade.persistent.dao.Strategy;
@@ -1234,40 +1235,49 @@ public class TradingdayPanel extends BasePanel {
 	 * 
 	 * @param transferObject
 	 *            Tradestrategy
+	 * @throws PersistentModelException
 	 */
-	private void enableTradestrategyButtons(final Tradestrategy transferObject) {
+	private void enableTradestrategyButtons(final Tradestrategy tradestrategy) {
 		boolean enable = false;
-		if (null != transferObject) {
+		if (null != tradestrategy) {
 			enable = true;
-			transferButton.setTransferObject(transferObject
-					.getIdTradeStrategy());
+			transferButton
+					.setTransferObject(tradestrategy.getIdTradeStrategy());
+			try {
+				CodeType codeType = m_tradePersistentModel
+						.findCodeTypeByNameType(tradestrategy.getStrategy()
+								.getName(), CodeType.StrategyParameters);
+				if (null != codeType) {
+					strategyParmButton.setEnabled(true);
+				}
+			} catch (Exception ex) {
+				this.setErrorMessage("Error finding CodeTypeByName.",
+						ex.getMessage(), ex);
+			}
 		} else {
 			transferButton.setTransferObject(null);
+			strategyParmButton.setEnabled(false);
 		}
 
-		deleteTradeOrderButton.setTransferObject(transferObject);
-		cancelStrategiesButton.setTransferObject(transferObject);
-		strategyParmButton.setTransferObject(transferObject);
-		closeAllPositionsButton.setTransferObject(transferObject);
-		testStrategyButton.setTransferObject(transferObject);
-		ordersButton.setTransferObject(transferObject);
-		brokerDataButton.setTransferObject(transferObject);
-		runStrategyButton.setTransferObject(transferObject);
+		deleteTradeOrderButton.setTransferObject(tradestrategy);
+		cancelStrategiesButton.setTransferObject(tradestrategy);
+		strategyParmButton.setTransferObject(tradestrategy);
+		closeAllPositionsButton.setTransferObject(tradestrategy);
+		testStrategyButton.setTransferObject(tradestrategy);
+		ordersButton.setTransferObject(tradestrategy);
+		brokerDataButton.setTransferObject(tradestrategy);
+		runStrategyButton.setTransferObject(tradestrategy);
 
 		deleteTradeOrderButton.setEnabled(enable);
 		cancelStrategiesButton.setEnabled(enable);
-		strategyParmButton.setEnabled(enable);
 		closeAllPositionsButton.setEnabled(enable);
 		testStrategyButton.setEnabled(enable);
 		brokerDataButton.setEnabled(enable);
 		ordersButton.setEnabled(false);
 		runStrategyButton.setEnabled(false);
 
-		if (this.isConnected() && null != transferObject) {
+		if (this.isConnected() && null != tradestrategy) {
 			runStrategyButton.setEnabled(true);
-			strategyParmButton.setEnabled(true);
-			if (transferObject.getCodeValues().isEmpty())
-				strategyParmButton.setEnabled(false);
 			testStrategyButton.setEnabled(false);
 			ordersButton.setEnabled(true);
 		}
