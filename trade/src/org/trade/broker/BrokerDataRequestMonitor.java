@@ -86,9 +86,10 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 		String message = null;
 		int totalSumbitted = 0;
 		int reSumbittedAt = 20;
-		ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
 		this.startTime = System.currentTimeMillis();
 		this.submitTimes.clear();
+		ConcurrentHashMap<Integer, Tradingday> runningContractRequests = new ConcurrentHashMap<Integer, Tradingday>();
+
 		// Initialize the progress bar
 		setProgress(0);
 
@@ -104,10 +105,8 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 						.clone();
 				for (Tradestrategy tradestrategy : tradingday
 						.getTradestrategies()) {
-					if (null == tradestrategy.getStrategyData()) {
-						tradestrategy.setStrategyData(StrategyData
-								.create(tradestrategy));
-					}
+					tradestrategy.setStrategyData(StrategyData
+							.create(tradestrategy));
 					toProcessTradingday.addTradestrategy(tradestrategy);
 					addIndicatorTradestrategyToTradingday(toProcessTradingday,
 							tradestrategy);
@@ -733,7 +732,6 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 					/*
 					 * Refresh the data set container as these may have changed.
 					 */
-					tradestrategy.setStrategyData(null);
 					tradestrategy.setStrategyData(StrategyData
 							.create(tradestrategy));
 					CandleDataset candleDataset = (CandleDataset) tradestrategy

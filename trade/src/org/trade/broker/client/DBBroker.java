@@ -350,7 +350,6 @@ public class DBBroker extends Broker {
 		brokerModel.onCancelRealtimeBars(this.tradestrategy);
 		brokerModel.onCancelBrokerData(this.tradestrategy);
 		// Free some memory!!
-		this.tradestrategy.getStrategyData().clearBaseCandleDataset();
 		this.tradestrategy.setStrategyData(null);
 		_log.debug("BackTestBroker done for: "
 				+ tradestrategy.getContract().getSymbol()

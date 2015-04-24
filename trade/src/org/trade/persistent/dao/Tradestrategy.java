@@ -590,6 +590,9 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 *            StrategyData
 	 */
 	public void setStrategyData(StrategyData strategyData) {
+		if (null != this.strategyData) {
+			this.strategyData.clearBaseCandleDataset();
+		}
 		this.strategyData = strategyData;
 	}
 
