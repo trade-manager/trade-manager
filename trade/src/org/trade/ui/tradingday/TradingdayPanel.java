@@ -1063,7 +1063,7 @@ public class TradingdayPanel extends BasePanel {
 	}
 
 	/**
-	 * Method addStrategyWorker.
+	 * Method removeStrategyWorker.
 	 * 
 	 * @param key
 	 *            String
