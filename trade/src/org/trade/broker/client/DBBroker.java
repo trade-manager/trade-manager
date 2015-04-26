@@ -129,7 +129,7 @@ public class DBBroker extends Broker {
 					.findTradestrategyById(this.idTradestrategy);
 			this.strategyData.clearBaseCandleDataset();
 			this.tradestrategy.setStrategyData(this.strategyData);
-			List<Candle> candles = null;
+
 			ZonedDateTime endDate = TradingCalendar.getDateAtTime(
 					TradingCalendar.getPrevTradingDay(tradestrategy
 							.getTradingday().getClose()), tradestrategy
@@ -139,9 +139,10 @@ public class DBBroker extends Broker {
 					(-1 * (tradestrategy.getChartDays() - 1)));
 			startDate = TradingCalendar.getDateAtTime(startDate, tradestrategy
 					.getTradingday().getOpen());
-
-			List<Candle> candlesTradingday = new ArrayList<Candle>();
 			endDate = TradingCalendar.addTradingDays(endDate, -1);
+
+			List<Candle> candles = new ArrayList<>();
+			List<Candle> candlesTradingday = new ArrayList<>();
 			candles = this.getCandles(this.tradestrategy, startDate, endDate,
 					this.tradestrategy.getBarSize());
 
@@ -200,6 +201,7 @@ public class DBBroker extends Broker {
 				for (Candle candle : candlesTradingday) {
 					candles.add(candle);
 				}
+				candlesTradingday.clear();
 				/*
 				 * Populate any child datasets.
 				 */

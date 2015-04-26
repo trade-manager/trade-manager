@@ -82,6 +82,9 @@ public abstract class TableModel extends AbstractTableModel {
 	public void clearAll() {
 		int rowSize = rows.size() - 1;
 		if (rowSize > -1) {
+			rows.stream().forEach((item) -> {
+				item.clear();
+			});
 			rows.clear();
 			this.fireTableRowsDeleted(0, rowSize);
 		}
