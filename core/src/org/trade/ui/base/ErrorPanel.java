@@ -340,9 +340,8 @@ public class ErrorPanel extends BasePanel {
 
 		getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		try {
-			InputStream is = new BufferedInputStream(new FileInputStream(
-					currFileName));
+		try (InputStream is = new BufferedInputStream(new FileInputStream(
+				currFileName));) {
 
 			// Load the data from the stream
 			jTextArea1.setInputStream(is);
