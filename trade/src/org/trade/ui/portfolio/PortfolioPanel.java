@@ -487,14 +487,13 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 *            String
 	 */
 	private void doReadWrite(String fileName) {
-		FileWriter fileWriter = null;
-		PrintWriter writer = null;
+
 		if (null != fileName) {
 			this.setStatusBarMessage("Saving file " + fileName,
 					BasePanel.INFORMATION);
-			try {
-				fileWriter = new FileWriter(fileName);
-				writer = new PrintWriter(fileWriter);
+			try (FileWriter fileWriter = new FileWriter(fileName);
+					PrintWriter writer = new PrintWriter(fileWriter);) {
+
 				// Write out the header
 				writer.println(TradelogSummaryTableModel.PERIOD + ","
 						+ TradelogSummaryTableModel.BATTING_AVERAGE + ","
