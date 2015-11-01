@@ -96,7 +96,7 @@
 		<sql driver="${sql.driver}" url="${sql.url}" userid="${sql.user_name}" password="${sql.user_password}">
 			<classpath>
 				<fileset dir="${lib}">
-					<include name="mysql-connector-java-5.1.26-bin.jar" />
+					<include name="mysql-connector-java-5.1.37-bin.jar" />
 				</fileset>
 			</classpath>
 			<transaction src="${component.base}/db/TradeManagerData.sql" />

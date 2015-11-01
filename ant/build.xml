@@ -39,7 +39,7 @@
 				<include name="javax.el-api-2.2.4.jar" />
 				<include name="ejb-api-3.0.jar" />
 				<include name="antlr-2.7.7.jar" />
-				<include name="mysql-connector-java-5.1.26-bin.jar" />
+				<include name="mysql-connector-java-5.1.37-bin.jar" />
 				<include name="jboss-logging-3.3.0.Final.jar" />
 				<include name="jboss-logging-annotations-1.2.0.Beta1.jar" />
 				<include name="jboss-transaction-api_1.2_spec-1.0.0.Final.jar" />
