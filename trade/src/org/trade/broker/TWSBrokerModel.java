@@ -75,8 +75,8 @@ import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TimeInForce;
 import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
-import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderfill;
@@ -3621,8 +3621,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			throws ParseException, IOException {
 
 		ZonedDateTime date = TradingCalendar
-				.getZonedDateTimeFromDateTimeString(execution.m_time,
-						"yyyyMMdd HH:mm:ss");
+				.getZonedDateTimeFromDateTimeString(
+						execution.m_time.replaceAll("\\s", ""),
+						"yyyyMMddHH:mm:ss", TradingCalendar.LOCAL_TIMEZONE);
 		tradeOrderfill.setTime(date);
 		tradeOrderfill.setExchange(execution.m_exchange);
 		tradeOrderfill.setSide(execution.m_side);
