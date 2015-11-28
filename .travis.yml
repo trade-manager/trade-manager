@@ -23,4 +23,4 @@ jdk:
   - "sudo /etc/init.d/mysql.server start"
   - mysql --version
   - mysql -e "SELECT VERSION();"
- 
+  
