@@ -4,7 +4,7 @@ jdk:
   - oraclejdk8
 
 
-sudo: required
+ sudo: required
 
  before_install:
   - "export DISPLAY=:99.0"
