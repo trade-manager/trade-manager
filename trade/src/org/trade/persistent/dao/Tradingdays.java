@@ -73,8 +73,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	// private ConcurrentHashMap<Date, Tradingday> tradingdays = new
 	// ConcurrentHashMap<Date, Tradingday>(
 	// 0);
-	private List<Tradingday> tradingdays = Collections
-			.synchronizedList(new ArrayList<Tradingday>(0));
+	private List<Tradingday> tradingdays = Collections.synchronizedList(new ArrayList<Tradingday>(0));
 
 	public Tradingdays() {
 	}
@@ -141,8 +140,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 */
 	public void remove(Tradingday tradingday) {
 		synchronized (this.tradingdays) {
-			for (ListIterator<Tradingday> itemIter = this.tradingdays
-					.listIterator(); itemIter.hasNext();) {
+			for (ListIterator<Tradingday> itemIter = this.tradingdays.listIterator(); itemIter.hasNext();) {
 				Tradingday item = itemIter.next();
 				if (item.equals(tradingday)) {
 					itemIter.remove();
@@ -163,11 +161,9 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 */
 	public void remove(ZonedDateTime open, ZonedDateTime close) {
 		synchronized (this.tradingdays) {
-			for (ListIterator<Tradingday> itemIter = this.tradingdays
-					.listIterator(); itemIter.hasNext();) {
+			for (ListIterator<Tradingday> itemIter = this.tradingdays.listIterator(); itemIter.hasNext();) {
 				Tradingday item = itemIter.next();
-				if (item.getOpen().compareTo(open) == 0
-						&& item.getClose().compareTo(close) == 0) {
+				if (item.getOpen().compareTo(open) == 0 && item.getClose().compareTo(close) == 0) {
 					itemIter.remove();
 					break;
 				}
@@ -206,8 +202,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	public Tradingday getTradingday(ZonedDateTime open, ZonedDateTime close) {
 		synchronized (this.tradingdays) {
 			for (Tradingday tradingday : this.tradingdays) {
-				if (tradingday.getOpen().compareTo(open) == 0
-						&& tradingday.getClose().compareTo(close) == 0)
+				if (tradingday.getOpen().compareTo(open) == 0 && tradingday.getClose().compareTo(close) == 0)
 					return tradingday;
 			}
 		}
@@ -259,8 +254,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		Contract contract = null;
 		synchronized (this.tradingdays) {
 			for (Tradingday tradingday : this.tradingdays) {
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
+				for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 					if (tradestrategy.getContract().getSymbol().equals(symbol)) {
 						contract = tradestrategy.getContract();
 						break;
@@ -281,10 +275,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	public Tradestrategy getTradestrategy(Integer idTradestrategy) {
 		synchronized (this.tradingdays) {
 			for (Tradingday tradingday : this.tradingdays) {
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
-					if (tradestrategy.getIdTradeStrategy().equals(
-							idTradestrategy)) {
+				for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
+					if (tradestrategy.getIdTradeStrategy().equals(idTradestrategy)) {
 						return tradestrategy;
 					}
 				}
@@ -301,8 +293,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 */
 	public void replaceTradingday(Tradingday newTradingday) {
 		synchronized (this.tradingdays) {
-			for (ListIterator<Tradingday> itemIter = this.tradingdays
-					.listIterator(); itemIter.hasNext();) {
+			for (ListIterator<Tradingday> itemIter = this.tradingdays.listIterator(); itemIter.hasNext();) {
 				Tradingday item = itemIter.next();
 				if (item.equals(newTradingday)) {
 					itemIter.set(newTradingday);
@@ -321,8 +312,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	public void replaceTradestrategy(Tradestrategy newTradestrategy) {
 		synchronized (this.tradingdays) {
 			for (Tradingday tradingday : this.tradingdays) {
-				for (ListIterator<Tradestrategy> itemIter = tradingday
-						.getTradestrategies().listIterator(); itemIter
+				for (ListIterator<Tradestrategy> itemIter = tradingday.getTradestrategies().listIterator(); itemIter
 						.hasNext();) {
 					Tradestrategy tradestrategy = itemIter.next();
 					if (tradestrategy.equals(newTradestrategy)) {
@@ -392,8 +382,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 *            String
 	 * @throws Exception
 	 */
-	public synchronized void populateDataFromFile(String fileName,
-			Tradingday tradingday) throws Exception {
+	public synchronized void populateDataFromFile(String fileName, Tradingday tradingday) throws Exception {
 
 		/*
 		 * CSV file format CSV file format is: DES, Underlying, Sec Type,
@@ -402,91 +391,74 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 		 * (opt),Multiplier(opt),|BOT/SLD(opt)|DATE(MM/dd/yyyy) (opt)|
 		 * Tier(Opt)| Mkt Gap(opt)| Mkt Bias(opt)| Mkt Bar(opt)");
 		 */
-		FileReader fileReader = null;
-		BufferedReader bufferedReader = null;
+		// FileReader fileReader = null;
+		// BufferedReader bufferedReader = null;
 		/*
 		 * Refresh the decode tables.
 		 */
 		DBTableLookupServiceProvider.clearLookup();
-		try {
+		try (FileReader fileReader = new FileReader(fileName);
+				BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
 			if ((fileName == null) || fileName.equals("")) {
 				return;
 			}
-			fileReader = new FileReader(fileName);
-			bufferedReader = new BufferedReader(fileReader);
 
-			Integer chartDays = ConfigProperties
-					.getPropAsInt("trade.backfill.duration");
+			Integer chartDays = ConfigProperties.getPropAsInt("trade.backfill.duration");
 			if (!ChartDays.newInstance(chartDays).isValid())
 				chartDays = new Integer(2);
 
-			String tierDefault = ConfigProperties
-					.getPropAsString("trade.tier.default");
+			String tierDefault = ConfigProperties.getPropAsString("trade.tier.default");
 			if (!Tier.newInstance(tierDefault).isValid())
 				tierDefault = null;
 
-			Integer barSize = ConfigProperties
-					.getPropAsInt("trade.backfill.barsize");
+			Integer barSize = ConfigProperties.getPropAsInt("trade.backfill.barsize");
 			if (!BarSize.newInstance(barSize).isValid())
 				barSize = new Integer(300);
 
 			Integer riskAmount = ConfigProperties.getPropAsInt("trade.risk");
-			String strategyName = ConfigProperties
-					.getPropAsString("trade.strategy.default");
+			String strategyName = ConfigProperties.getPropAsString("trade.strategy.default");
 			if (!DAOStrategy.newInstance(strategyName).isValid())
 				strategyName = DAOStrategy.newInstance().getCode();
 
-			Strategy strategy = (Strategy) DAOStrategy
-					.newInstance(strategyName).getObject();
+			Strategy strategy = (Strategy) DAOStrategy.newInstance(strategyName).getObject();
 
-			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
-					.getObject();
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance().getObject();
 			String strLine = "";
 
 			// read comma separated file line by line
 
 			while ((strLine = bufferedReader.readLine()) != null) {
-				Tradestrategy tradestrategy = Tradingdays
-						.parseContractLine(strLine);
+				Tradestrategy tradestrategy = Tradingdays.parseContractLine(strLine);
 
 				if (null != tradestrategy) {
 
-					Contract contract = this.getContract(tradestrategy
-							.getContract().getSymbol());
+					Contract contract = this.getContract(tradestrategy.getContract().getSymbol());
 					if (null != contract) {
 						tradestrategy.setContract(contract);
 					}
 
 					if (null == tradestrategy.getTradingday()) {
 						if (null == tradingday) {
-							throw new PersistentModelException(
-									"Please select a Tradingday");
+							throw new PersistentModelException("Please select a Tradingday");
 						}
 						tradestrategy.setTradingday(tradingday);
 					} else {
-						Tradingday currTradingday = this.getTradingday(
-								tradestrategy.getTradingday().getOpen(),
+						Tradingday currTradingday = this.getTradingday(tradestrategy.getTradingday().getOpen(),
 								tradestrategy.getTradingday().getClose());
 
 						if (null != currTradingday) {
-							if (null != tradestrategy.getTradingday()
-									.getMarketGap()
+							if (null != tradestrategy.getTradingday().getMarketGap()
 									&& null == currTradingday.getMarketGap()) {
-								currTradingday.setMarketGap(tradestrategy
-										.getTradingday().getMarketGap());
+								currTradingday.setMarketGap(tradestrategy.getTradingday().getMarketGap());
 							}
-							if (null != tradestrategy.getTradingday()
-									.getMarketBias()
+							if (null != tradestrategy.getTradingday().getMarketBias()
 									&& null == currTradingday.getMarketBias()) {
-								currTradingday.setMarketBias(tradestrategy
-										.getTradingday().getMarketBias());
+								currTradingday.setMarketBias(tradestrategy.getTradingday().getMarketBias());
 							}
-							if (null != tradestrategy.getTradingday()
-									.getMarketBar()
+							if (null != tradestrategy.getTradingday().getMarketBar()
 									&& null == currTradingday.getMarketBar()) {
-								currTradingday.setMarketBar(tradestrategy
-										.getTradingday().getMarketBar());
+								currTradingday.setMarketBar(tradestrategy.getTradingday().getMarketBar());
 							}
 							tradestrategy.setTradingday(currTradingday);
 						}
@@ -494,8 +466,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					/*
 					 * Do not load tradestrategies for trading holidays.
 					 */
-					if (TradingCalendar.isHoliday(tradestrategy.getTradingday()
-							.getOpen())) {
+					if (TradingCalendar.isHoliday(tradestrategy.getTradingday().getOpen())) {
 						continue;
 					}
 					tradestrategy.setRiskAmount(new BigDecimal(riskAmount));
@@ -506,28 +477,18 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					tradestrategy.setDirty(true);
 					tradestrategy.setStrategy(strategy);
 					tradestrategy.setPortfolio(portfolio);
-					if (!tradestrategy.getTradingday().existTradestrategy(
-							tradestrategy))
-						tradestrategy.getTradingday().addTradestrategy(
-								tradestrategy);
+					if (!tradestrategy.getTradingday().existTradestrategy(tradestrategy))
+						tradestrategy.getTradingday().addTradestrategy(tradestrategy);
 
 					if (!this.containsTradingday(tradestrategy.getTradingday())) {
 						this.add(tradestrategy.getTradingday());
 					}
-					Collections
-							.sort(tradestrategy.getTradingday()
-									.getTradestrategies(),
-									Tradestrategy.DATE_ORDER_ASC);
+					Collections.sort(tradestrategy.getTradingday().getTradestrategies(), Tradestrategy.DATE_ORDER_ASC);
 				}
 			}
 
 		} catch (Exception ex) {
 			throw new PersistentModelException(1, 200, ex.getMessage());
-		} finally {
-			if (null != fileReader)
-				fileReader.close();
-			if (null != bufferedReader)
-				bufferedReader.close();
 		}
 	}
 
@@ -540,8 +501,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @throws PersistentModelException
 	 * @throws ParseException
 	 */
-	public static Tradestrategy parseContractLine(String csvLine)
-			throws PersistentModelException, ParseException {
+	public static Tradestrategy parseContractLine(String csvLine) throws PersistentModelException, ParseException {
 		Tradestrategy tradestrategy = null;
 		Contract contract = null;
 		Tradingday tradingday = null;
@@ -566,9 +526,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					contract.setCurrency(Currency.USD);
 					tradestrategy.setContract(contract);
 				} else {
-					throw new PersistentModelException(
-							1,
-							200,
+					throw new PersistentModelException(1, 200,
 							"Incorrect file format! CSV file format is: DES, Underlying, Sec Type, Exchange, Expiration (yyyyMM, or yyyyMMdd opt),Strike Price(opt),PUT/CALL(opt),Multiplier(opt),BOT/SLD(opt)|DATE(MM/dd/yyyy) (opt)| Tier(Opt)| Mkt Bias(opt)| Mkt Bar(opt)| Mkt Gap(opt)");
 				}
 				break;
@@ -591,13 +549,11 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 			}
 			case 5: {
 				if (token.length() == 6) {
-					contract.setExpiry(TradingCalendar
-							.getZonedDateTimeFromDateString(token, "yyyyMM",
-									TradingCalendar.MKT_TIMEZONE));
+					contract.setExpiry(TradingCalendar.getZonedDateTimeFromDateString(token, "yyyyMM",
+							TradingCalendar.MKT_TIMEZONE));
 				} else if (token.length() == 8) {
-					contract.setExpiry(TradingCalendar
-							.getZonedDateTimeFromDateString(token, "yyyyMMdd",
-									TradingCalendar.MKT_TIMEZONE));
+					contract.setExpiry(TradingCalendar.getZonedDateTimeFromDateString(token, "yyyyMMdd",
+							TradingCalendar.MKT_TIMEZONE));
 				}
 				break;
 			}
@@ -639,11 +595,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					}
 					case 2: {
 						;
-						ZonedDateTime todayOpen = TradingCalendar
-								.getTradingDayStart(TradingCalendar
-										.getZonedDateTimeFromDateString(
-												custToken, "MM/dd/yyyy",
-												TradingCalendar.MKT_TIMEZONE));
+						ZonedDateTime todayOpen = TradingCalendar.getTradingDayStart(TradingCalendar
+								.getZonedDateTimeFromDateString(custToken, "MM/dd/yyyy", TradingCalendar.MKT_TIMEZONE));
 						tradingday = Tradingday.newInstance(todayOpen);
 						tradestrategy.setTradingday(tradingday);
 						break;
@@ -705,8 +658,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 * @param outPutFileName
 	 *            String
 	 */
-	private static void createLoadFile(String inputFileDef,
-			String outPutFileName) {
+	private static void createLoadFile(String inputFileDef, String outPutFileName) {
 		/*
 		 * CSV file format CSV file format is: 01/01/2013 (From date),01/01/2014
 		 * (To Date),DES, Underlying, Sec Type, Exchange, AAPL, AMZN e.t.c comma
@@ -748,17 +700,13 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					switch (tokenNumber) {
 					case 1: {
 						if (token.length() == 10) {
-							startDate = TradingCalendar
-									.getZonedDateTimeFromDateTimeString(token,
-											"MM/dd/yyyy");
+							startDate = TradingCalendar.getZonedDateTimeFromDateTimeString(token, "MM/dd/yyyy");
 						}
 						break;
 					}
 					case 2: {
 						if (token.length() == 10) {
-							endDate = TradingCalendar
-									.getZonedDateTimeFromDateTimeString(token,
-											"MM/dd/yyyy");
+							endDate = TradingCalendar.getZonedDateTimeFromDateTimeString(token, "MM/dd/yyyy");
 						}
 						break;
 					}
@@ -782,21 +730,12 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 				scanLine.close();
 			}
 			StringBuffer outPutFile = new StringBuffer();
-			while (startDate.isBefore(TradingCalendar
-					.addTradingDays(endDate, 1))) {
+			while (startDate.isBefore(TradingCalendar.addTradingDays(endDate, 1))) {
 
 				if (TradingCalendar.isTradingDay(startDate)) {
 					for (String symbol : contracts) {
-						outPutFile.append(des
-								+ ","
-								+ symbol
-								+ ","
-								+ secType
-								+ ","
-								+ exchange
-								+ ",,,,,,||"
-								+ TradingCalendar.getFormattedDate(startDate,
-										"MM/dd/yyyy") + "|\n");
+						outPutFile.append(des + "," + symbol + "," + secType + "," + exchange + ",,,,,,||"
+								+ TradingCalendar.getFormattedDate(startDate, "MM/dd/yyyy") + "|\n");
 					}
 				}
 
