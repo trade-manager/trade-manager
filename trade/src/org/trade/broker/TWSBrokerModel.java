@@ -104,8 +104,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	private static final long serialVersionUID = 595280836716405557L;
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TWSBrokerModel.class);
+	private final static Logger _log = LoggerFactory.getLogger(TWSBrokerModel.class);
 
 	// Use getId as key
 	private static final ConcurrentHashMap<Integer, Tradestrategy> m_historyDataRequests = new ConcurrentHashMap<Integer, Tradestrategy>();
@@ -164,20 +163,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 	static {
 		try {
-			backfillUseRTH = ConfigProperties
-					.getPropAsInt("trade.backfill.useRTH");
-			backfillWhatToShow = ConfigProperties
-					.getPropAsString("trade.backfill.whatToShow");
-			backfillOffsetDays = ConfigProperties
-					.getPropAsInt("trade.backfill.offsetDays");
-			genericTicklist = ConfigProperties
-					.getPropAsString("trade.marketdata.genericTicklist");
-			marketUpdateOnClose = ConfigProperties
-					.getPropAsBoolean("trade.marketdata.realtime.updateClose");
+			backfillUseRTH = ConfigProperties.getPropAsInt("trade.backfill.useRTH");
+			backfillWhatToShow = ConfigProperties.getPropAsString("trade.backfill.whatToShow");
+			backfillOffsetDays = ConfigProperties.getPropAsInt("trade.backfill.offsetDays");
+			genericTicklist = ConfigProperties.getPropAsString("trade.marketdata.genericTicklist");
+			marketUpdateOnClose = ConfigProperties.getPropAsBoolean("trade.marketdata.realtime.updateClose");
 
 		} catch (Exception ex) {
-			throw new IllegalArgumentException(
-					"Error initializing BrokerModel Msg: " + ex.getMessage());
+			throw new IllegalArgumentException("Error initializing BrokerModel Msg: " + ex.getMessage());
 		}
 	}
 
@@ -185,14 +178,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			m_client = new EClientSocket(this);
 			m_tradePersistentModel = (PersistentModel) ClassFactory
-					.getServiceForInterface(PersistentModel._persistentModel,
-							this);
-			reqId = new AtomicInteger(
-					(int) (System.currentTimeMillis() / 1000d));
+					.getServiceForInterface(PersistentModel._persistentModel, this);
+			reqId = new AtomicInteger((int) (System.currentTimeMillis() / 1000d));
 
 		} catch (Exception ex) {
-			throw new IllegalArgumentException(
-					"Error initializing BrokerModel Msg: " + ex.getMessage());
+			throw new IllegalArgumentException("Error initializing BrokerModel Msg: " + ex.getMessage());
 		}
 	}
 
@@ -283,14 +273,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			if (m_client.isConnected()) {
 				m_client.requestFA(EClientSocket.ALIASES);
 			} else {
-				throw new BrokerModelException(0, 3010,
-						"Not conected Financial Account data cannot be retrieved");
+				throw new BrokerModelException(0, 3010, "Not conected Financial Account data cannot be retrieved");
 			}
 		} catch (Exception ex) {
-			error(0,
-					3295,
-					"Error requesting Financial Account Msg: "
-							+ ex.getMessage());
+			error(0, 3295, "Error requesting Financial Account Msg: " + ex.getMessage());
 		}
 	}
 
@@ -304,18 +290,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 * @see org.trade.broker.onReqReplaceFinancialAccount()
 	 */
-	public void onReqReplaceFinancialAccount(int faDataType, String xml)
-			throws BrokerModelException {
+	public void onReqReplaceFinancialAccount(int faDataType, String xml) throws BrokerModelException {
 		try {
 			if (m_client.isConnected()) {
 				m_client.replaceFA(faDataType, xml);
 			} else {
-				throw new BrokerModelException(0, 3010,
-						"Not conected Financial Account data cannot be replaced");
+				throw new BrokerModelException(0, 3010, "Not conected Financial Account data cannot be replaced");
 			}
 		} catch (Exception ex) {
-			error(0, 3295,
-					"Error replacing Financial Account Msg: " + ex.getMessage());
+			error(0, 3295, "Error replacing Financial Account Msg: " + ex.getMessage());
 		}
 	}
 
@@ -330,8 +313,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (m_client.isConnected()) {
 			m_client.reqManagedAccts();
 		} else {
-			throw new BrokerModelException(0, 3010,
-					"Not conected to TWS historical data cannot be retrieved");
+			throw new BrokerModelException(0, 3010, "Not conected to TWS historical data cannot be retrieved");
 		}
 	}
 
@@ -346,11 +328,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see org.trade.broker.BrokerModel#onSubscribeAccountUpdates(boolean,
 	 *      Account)
 	 */
-	public void onSubscribeAccountUpdates(boolean subscribe,
-			String accountNumber) throws BrokerModelException {
+	public void onSubscribeAccountUpdates(boolean subscribe, String accountNumber) throws BrokerModelException {
 		try {
-			Account account = m_tradePersistentModel
-					.findAccountByNumber(accountNumber);
+			Account account = m_tradePersistentModel.findAccountByNumber(accountNumber);
 			m_accountRequests.put(accountNumber, account);
 			if (m_client.isConnected()) {
 				m_client.reqAccountUpdates(subscribe, accountNumber);
@@ -360,8 +340,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 
 		} catch (Exception ex) {
-			error(0, 3290, "Error requesting Account: " + accountNumber
-					+ " Msg: " + ex.getMessage());
+			error(0, 3290, "Error requesting Account: " + accountNumber + " Msg: " + ex.getMessage());
 		}
 
 	}
@@ -378,8 +357,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			openOrders.clear();
 			m_client.reqAllOpenOrders();
 		} else {
-			throw new BrokerModelException(0, 3010,
-					"Not conected to TWS historical data cannot be retrieved");
+			throw new BrokerModelException(0, 3010, "Not conected to TWS historical data cannot be retrieved");
 		}
 	}
 
@@ -395,8 +373,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			openOrders.clear();
 			m_client.reqOpenOrders();
 		} else {
-			throw new BrokerModelException(0, 3010,
-					"Not conected to TWS historical data cannot be retrieved");
+			throw new BrokerModelException(0, 3010, "Not conected to TWS historical data cannot be retrieved");
 		}
 	}
 
@@ -409,8 +386,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws IOException
 	 * @see org.trade.broker.BrokerModel#onReqAllExecutions(Date)
 	 */
-	public void onReqAllExecutions(ZonedDateTime mktOpenDate)
-			throws BrokerModelException {
+	public void onReqAllExecutions(ZonedDateTime mktOpenDate) throws BrokerModelException {
 		try {
 			/*
 			 * Request execution reports based on the supplied filter criteria
@@ -421,17 +397,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				commissionDetails.clear();
 				executionDetails.clear();
 				Integer reqId = this.getNextRequestId();
-				m_client.reqExecutions(reqId, TWSBrokerModel
-						.getIBExecutionFilter(m_clientId, mktOpenDate, null,
-								null));
+				m_client.reqExecutions(reqId, TWSBrokerModel.getIBExecutionFilter(m_clientId, mktOpenDate, null, null));
 			} else {
-				throw new BrokerModelException(0, 3020,
-						"Not conected to TWS historical data cannot be retrieved");
+				throw new BrokerModelException(0, 3020, "Not conected to TWS historical data cannot be retrieved");
 			}
 		} catch (Exception ex) {
 			throw new BrokerModelException(0, 3020,
-					"Error request executions for Date: " + mktOpenDate
-							+ " Msg: " + ex.getMessage());
+					"Error request executions for Date: " + mktOpenDate + " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -446,8 +418,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqExecutions(Tradestrategy)
 	 */
-	public void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders)
-			throws BrokerModelException {
+	public void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders) throws BrokerModelException {
 		try {
 			/*
 			 * Request execution reports based on the supplied filter criteria
@@ -465,21 +436,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					clientId = 0;
 
 				Integer reqId = tradestrategy.getIdTradeStrategy();
-				m_client.reqExecutions(reqId, TWSBrokerModel
-						.getIBExecutionFilter(clientId, tradestrategy
-								.getTradingday().getOpen(), tradestrategy
-								.getContract().getSecType(), tradestrategy
-								.getContract().getSymbol()));
+				m_client.reqExecutions(reqId,
+						TWSBrokerModel.getIBExecutionFilter(clientId, tradestrategy.getTradingday().getOpen(),
+								tradestrategy.getContract().getSecType(), tradestrategy.getContract().getSymbol()));
 			} else {
-				throw new BrokerModelException(
-						tradestrategy.getIdTradeStrategy(), 3020,
+				throw new BrokerModelException(tradestrategy.getIdTradeStrategy(), 3020,
 						"Not conected to TWS historical data cannot be retrieved");
 			}
 		} catch (Exception ex) {
-			throw new BrokerModelException(tradestrategy.getIdTradeStrategy(),
-					3020, "Error request executions for symbol: "
-							+ tradestrategy.getContract().getSymbol()
-							+ " Msg: " + ex.getMessage());
+			throw new BrokerModelException(tradestrategy.getIdTradeStrategy(), 3020,
+					"Error request executions for symbol: " + tradestrategy.getContract().getSymbol() + " Msg: "
+							+ ex.getMessage());
 		}
 	}
 
@@ -491,16 +458,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqRealTimeBars(Contract)
 	 */
-	public void onReqRealTimeBars(Contract contract, boolean mktData)
-			throws BrokerModelException {
+	public void onReqRealTimeBars(Contract contract, boolean mktData) throws BrokerModelException {
 
 		try {
 			if (m_client.isConnected()) {
 
 				if (this.isRealtimeBarsRunning(contract)) {
 					throw new BrokerModelException(contract.getId(), 3030,
-							"RealtimeBars request is already in progress for: "
-									+ contract.getSymbol()
+							"RealtimeBars request is already in progress for: " + contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
 				m_realTimeBarsRequests.put(contract.getId(), contract);
@@ -510,10 +475,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 * supported by TWS for live data.
 				 */
 				Vector<TagValue> realTimeBarOptions = new Vector<>();
-				m_client.reqRealTimeBars(contract.getId(),
-						TWSBrokerModel.getIBContract(contract), 5,
-						backfillWhatToShow, (backfillUseRTH > 0),
-						realTimeBarOptions);
+				m_client.reqRealTimeBars(contract.getId(), TWSBrokerModel.getIBContract(contract), 5,
+						backfillWhatToShow, (backfillUseRTH > 0), realTimeBarOptions);
 
 				if (mktData) {
 					onReqMarketData(contract, genericTicklist, false);
@@ -525,8 +488,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		} catch (Exception ex) {
 			throw new BrokerModelException(contract.getId(), 3050,
-					"Error broker data Symbol: " + contract.getSymbol()
-							+ " Msg: " + ex.getMessage());
+					"Error broker data Symbol: " + contract.getSymbol() + " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -541,22 +503,20 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            boolean
 	 * @throws BrokerModelException
 	 */
-	public void onReqMarketData(Contract contract, String genericTicklist,
-			boolean snapshot) throws BrokerModelException {
+	public void onReqMarketData(Contract contract, String genericTicklist, boolean snapshot)
+			throws BrokerModelException {
 
 		try {
 			if (m_client.isConnected()) {
 				if (this.isMarketDataRunning(contract)) {
 					throw new BrokerModelException(contract.getId(), 3030,
-							"MarketData request is already in progress for: "
-									+ contract.getSymbol()
+							"MarketData request is already in progress for: " + contract.getSymbol()
 									+ " Please wait or cancel.");
 				}
 				List<TagValue> mktDataOptions = new ArrayList<TagValue>();
 				m_marketDataRequests.put(contract.getId(), contract);
-				m_client.reqMktData(contract.getId(),
-						TWSBrokerModel.getIBContract(contract),
-						genericTicklist, snapshot, mktDataOptions);
+				m_client.reqMktData(contract.getId(), TWSBrokerModel.getIBContract(contract), genericTicklist, snapshot,
+						mktDataOptions);
 
 			} else {
 				throw new BrokerModelException(contract.getId(), 3040,
@@ -564,8 +524,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		} catch (Exception ex) {
 			throw new BrokerModelException(contract.getId(), 3050,
-					"Error broker data Symbol: " + contract.getSymbol()
-							+ " Msg: " + ex.getMessage());
+					"Error broker data Symbol: " + contract.getSymbol() + " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -577,8 +536,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onContractDetails(Contract)
 	 */
-	public void onContractDetails(Contract contract)
-			throws BrokerModelException {
+	public void onContractDetails(Contract contract) throws BrokerModelException {
 
 		try {
 			if (m_client.isConnected()) {
@@ -590,10 +548,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 */
 					contract.setIdContractIB(null);
 					m_contractRequests.put(contract.getId(), contract);
-					TWSBrokerModel.logContract(TWSBrokerModel
-							.getIBContract(contract));
-					m_client.reqContractDetails(contract.getId(),
-							TWSBrokerModel.getIBContract(contract));
+					TWSBrokerModel.logContract(TWSBrokerModel.getIBContract(contract));
+					m_client.reqContractDetails(contract.getId(), TWSBrokerModel.getIBContract(contract));
 				}
 			} else {
 				throw new BrokerModelException(contract.getId(), 3080,
@@ -601,8 +557,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		} catch (Exception ex) {
 			throw new BrokerModelException(contract.getId(), 3090,
-					"Error broker data Symbol: " + contract.getSymbol()
-							+ " Msg: " + ex.getMessage());
+					"Error broker data Symbol: " + contract.getSymbol() + " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -617,18 +572,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see org.trade.broker.BrokerModel#onBrokerData(Contract , String , String
 	 *      )
 	 */
-	public void onBrokerData(Tradestrategy tradestrategy, ZonedDateTime endDate)
-			throws BrokerModelException {
+	public void onBrokerData(Tradestrategy tradestrategy, ZonedDateTime endDate) throws BrokerModelException {
 
 		try {
 
 			if (m_client.isConnected()) {
 				if (this.isHistoricalDataRunning(tradestrategy)) {
-					throw new BrokerModelException(
-							tradestrategy.getIdTradeStrategy(), 3010,
+					throw new BrokerModelException(tradestrategy.getIdTradeStrategy(), 3010,
 							"HistoricalData request is already in progress for: "
-									+ tradestrategy.getContract().getSymbol()
-									+ " Please wait or cancel.");
+									+ tradestrategy.getContract().getSymbol() + " Please wait or cancel.");
 				}
 
 				/*
@@ -642,43 +594,34 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				m_historyDataRequests.put(tradestrategy.getId(), tradestrategy);
 
-				endDate = TradingCalendar.getDateAtTime(TradingCalendar
-						.addTradingDays(endDate, backfillOffsetDays), endDate);
+				endDate = TradingCalendar.getDateAtTime(TradingCalendar.addTradingDays(endDate, backfillOffsetDays),
+						endDate);
 
-				String endDateTime = TradingCalendar.getFormattedDate(endDate,
-						"yyyyMMdd HH:mm:ss");
+				String endDateTime = TradingCalendar.getFormattedDate(endDate, "yyyyMMdd HH:mm:ss");
 
 				/*
 				 * TWS API data has a limit of one calendar year of data. So
 				 * apply this limit to the chartDays.
 				 */
 				Integer chartDays = tradestrategy.getChartDays();
-				if (TradingCalendar.getDurationInDays(TradingCalendar
-						.addTradingDays(endDate,
-								(-1 * tradestrategy.getChartDays())),
-						TradingCalendar.getDateTimeNowMarketTimeZone()) > endDate
-						.getDayOfYear()) {
-					chartDays = (int) (endDate.getDayOfYear() - (TradingCalendar
-							.getDurationInDays(endDate, TradingCalendar
-									.getDateTimeNowMarketTimeZone())));
+				if (TradingCalendar.getDurationInDays(
+						TradingCalendar.addTradingDays(endDate, (-1 * tradestrategy.getChartDays())),
+						TradingCalendar.getDateTimeNowMarketTimeZone()) > endDate.getDayOfYear()) {
+					chartDays = (int) (endDate.getDayOfYear() - (TradingCalendar.getDurationInDays(endDate,
+							TradingCalendar.getDateTimeNowMarketTimeZone())));
 				}
 
-				_log.debug("onBrokerData Req Id: " + tradestrategy.getId()
-						+ " Symbol: " + tradestrategy.getContract().getSymbol()
-						+ " end Time: " + endDateTime + " Period length: "
-						+ tradestrategy.getChartDays() + " Bar size: "
-						+ tradestrategy.getBarSize() + " WhatToShow: "
-						+ backfillWhatToShow + " Regular Trading Hrs: "
-						+ backfillUseRTH + " Date format: "
+				_log.debug("onBrokerData Req Id: " + tradestrategy.getId() + " Symbol: "
+						+ tradestrategy.getContract().getSymbol() + " end Time: " + endDateTime + " Period length: "
+						+ tradestrategy.getChartDays() + " Bar size: " + tradestrategy.getBarSize() + " WhatToShow: "
+						+ backfillWhatToShow + " Regular Trading Hrs: " + backfillUseRTH + " Date format: "
 						+ backfillDateFormat);
 				List<TagValue> chartOptions = new ArrayList<TagValue>();
 
 				m_client.reqHistoricalData(tradestrategy.getId(),
-						TWSBrokerModel.getIBContract(tradestrategy
-								.getContract()), endDateTime, ChartDays
-								.newInstance(chartDays).getDisplayName(),
-						BarSize.newInstance(tradestrategy.getBarSize())
-								.getDisplayName(), backfillWhatToShow,
+						TWSBrokerModel.getIBContract(tradestrategy.getContract()), endDateTime,
+						ChartDays.newInstance(chartDays).getDisplayName(),
+						BarSize.newInstance(tradestrategy.getBarSize()).getDisplayName(), backfillWhatToShow,
 						backfillUseRTH, backfillDateFormat, chartOptions);
 
 			} else {
@@ -686,10 +629,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						"Not conected to TWS historical data cannot be retrieved");
 			}
 		} catch (Exception ex) {
-			throw new BrokerModelException(tradestrategy.getId(), 3110,
-					"Error broker data Symbol: "
-							+ tradestrategy.getContract().getSymbol()
-							+ " Msg: " + ex.getMessage());
+			throw new BrokerModelException(tradestrategy.getId(), 3110, "Error broker data Symbol: "
+					+ tradestrategy.getContract().getSymbol() + " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -764,10 +705,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @return boolean
 	 */
 	public boolean isRealtimeBarsRunning(Tradestrategy tradestrategy) {
-		if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
-				.getId())) {
-			Contract contract = m_realTimeBarsRequests.get(tradestrategy
-					.getContract().getId());
+		if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract().getId())) {
+			Contract contract = m_realTimeBarsRequests.get(tradestrategy.getContract().getId());
 			for (Tradestrategy item : contract.getTradestrategies()) {
 				if (item.equals(tradestrategy)) {
 					return true;
@@ -802,10 +741,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @return boolean
 	 */
 	public boolean isMarketDataRunning(Tradestrategy tradestrategy) {
-		if (m_marketDataRequests.containsKey(tradestrategy.getContract()
-				.getId())) {
-			Contract contract = m_marketDataRequests.get(tradestrategy
-					.getContract().getId());
+		if (m_marketDataRequests.containsKey(tradestrategy.getContract().getId())) {
+			Contract contract = m_marketDataRequests.get(tradestrategy.getContract().getId());
 			for (Tradestrategy item : contract.getTradestrategies()) {
 				if (item.equals(tradestrategy)) {
 					return true;
@@ -923,10 +860,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            Tradestrategy
 	 */
 	public void onCancelRealtimeBars(Tradestrategy tradestrategy) {
-		if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract()
-				.getId())) {
-			Contract contract = m_realTimeBarsRequests.get(tradestrategy
-					.getContract().getId());
+		if (m_realTimeBarsRequests.containsKey(tradestrategy.getContract().getId())) {
+			Contract contract = m_realTimeBarsRequests.get(tradestrategy.getContract().getId());
 			for (Tradestrategy item : contract.getTradestrategies()) {
 				if (item.equals(tradestrategy)) {
 					contract.removeTradestrategy(tradestrategy);
@@ -965,10 +900,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            Tradestrategy
 	 */
 	public void onCancelMarketData(Tradestrategy tradestrategy) {
-		if (m_marketDataRequests.containsKey(tradestrategy.getContract()
-				.getId())) {
-			Contract contract = m_marketDataRequests.get(tradestrategy
-					.getContract().getId());
+		if (m_marketDataRequests.containsKey(tradestrategy.getContract().getId())) {
+			Contract contract = m_marketDataRequests.get(tradestrategy.getContract().getId());
 			for (Tradestrategy item : contract.getTradestrategies()) {
 				if (item.equals(tradestrategy)) {
 					contract.removeTradestrategy(tradestrategy);
@@ -1010,8 +943,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onPlaceOrder(Contract, TradeOrder)
 	 */
-	public TradeOrder onPlaceOrder(Contract contract, TradeOrder tradeOrder)
-			throws BrokerModelException {
+	public TradeOrder onPlaceOrder(Contract contract, TradeOrder tradeOrder) throws BrokerModelException {
 		try {
 			if (m_client.isConnected()) {
 				synchronized (tradeOrder) {
@@ -1021,21 +953,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					if (null == tradeOrder.getClientId()) {
 						tradeOrder.setClientId(this.m_clientId);
 					}
-					tradeOrder = m_tradePersistentModel
-							.persistTradeOrder(tradeOrder);
+					tradeOrder = m_tradePersistentModel.persistTradeOrder(tradeOrder);
 
 					_log.debug("Order Placed Key: " + tradeOrder.getOrderKey());
-					com.ib.client.Contract IBContract = TWSBrokerModel
-							.getIBContract(contract);
-					com.ib.client.Order IBOrder = TWSBrokerModel
-							.getIBOrder(tradeOrder);
+					com.ib.client.Contract IBContract = TWSBrokerModel.getIBContract(contract);
+					com.ib.client.Order IBOrder = TWSBrokerModel.getIBOrder(tradeOrder);
 
 					// Log to debug comment out for performance.
 					logContract(IBContract);
 					logTradeOrder(IBOrder);
 
-					m_client.placeOrder(tradeOrder.getOrderKey(), IBContract,
-							IBOrder);
+					m_client.placeOrder(tradeOrder.getOrderKey(), IBContract, IBOrder);
 					return tradeOrder;
 				}
 
@@ -1045,9 +973,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 		} catch (Exception ex) {
 			throw new BrokerModelException(tradeOrder.getOrderKey(), 3130,
-					"Could not save or place TradeOrder: "
-							+ tradeOrder.getOrderKey() + " Msg: "
-							+ ex.getMessage());
+					"Could not save or place TradeOrder: " + tradeOrder.getOrderKey() + " Msg: " + ex.getMessage());
 		}
 	}
 
@@ -1059,8 +985,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onCancelOrder(TradeOrder)
 	 */
-	public void onCancelOrder(TradeOrder tradeOrder)
-			throws BrokerModelException {
+	public void onCancelOrder(TradeOrder tradeOrder) throws BrokerModelException {
 		if (m_client.isConnected()) {
 			if (null != tradeOrder.getOrderKey()) {
 				m_client.cancelOrder(tradeOrder.getOrderKey());
@@ -1088,22 +1013,19 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#execDetails(int, com.ib.client.Contract,
 	 *      Execution)
 	 */
-	public void execDetails(int reqId, com.ib.client.Contract contractIB,
-			Execution execution) {
+	public void execDetails(int reqId, com.ib.client.Contract contractIB, Execution execution) {
 		try {
 			TWSBrokerModel.logExecution(execution);
 
 			TradeOrder transientInstance = m_tradePersistentModel
-					.findTradeOrderByKey(new Integer(Math
-							.abs(execution.m_orderId)));
+					.findTradeOrderByKey(new Integer(Math.abs(execution.m_orderId)));
 			if (null == transientInstance) {
 				/*
 				 * If the executionDetails is null and the order does not exist
 				 * then we have made a request for order executions with a
 				 * different clientId than the one which created this order.
 				 */
-				if (null == m_tradePersistentModel
-						.findTradeOrderfillByExecId(execution.m_execId)) {
+				if (null == m_tradePersistentModel.findTradeOrderfillByExecId(execution.m_execId)) {
 					executionDetails.put(execution.m_execId, execution);
 				}
 				return;
@@ -1120,20 +1042,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			TWSBrokerModel.populateTradeOrderfill(execution, tradeOrderfill);
 			tradeOrderfill.setTradeOrder(transientInstance);
 			transientInstance.addTradeOrderfill(tradeOrderfill);
-			transientInstance.setAverageFilledPrice(tradeOrderfill
-					.getAveragePrice());
-			transientInstance.setFilledQuantity(tradeOrderfill
-					.getCumulativeQuantity());
+			transientInstance.setAverageFilledPrice(tradeOrderfill.getAveragePrice());
+			transientInstance.setFilledQuantity(tradeOrderfill.getCumulativeQuantity());
 			transientInstance.setFilledDate(tradeOrderfill.getTime());
 			boolean isFilled = transientInstance.getIsFilled();
-			transientInstance = m_tradePersistentModel
-					.persistTradeOrderfill(transientInstance);
+			transientInstance = m_tradePersistentModel.persistTradeOrderfill(transientInstance);
 			// Let the controller know an order was filled
 			if (transientInstance.getIsFilled() && !isFilled)
 				this.fireTradeOrderFilled(transientInstance);
 
-			tradeOrdersExecutions.put(transientInstance.getOrderKey(),
-					transientInstance);
+			tradeOrdersExecutions.put(transientInstance.getOrderKey(), transientInstance);
 			_log.error("execDetails tradeOrdersExecutions reqId: " + reqId);
 
 		} catch (Exception ex) {
@@ -1157,8 +1075,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			for (Integer key : tradeOrdersExecutions.keySet()) {
 				TradeOrder tradeorder = tradeOrdersExecutions.get(key);
 				if (tradeorder.getIsFilled()) {
-					if (tradeorder.hasTradePosition()
-							&& !tradeorder.getTradePosition().isOpen()) {
+					if (tradeorder.hasTradePosition() && !tradeorder.getTradePosition().isOpen()) {
 						// Let the controller know a position was closed
 						this.firePositionClosed(tradeorder.getTradePosition());
 					}
@@ -1175,8 +1092,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				if (m_tradePersistentModel.existTradestrategyById(reqId)) {
 
-					Tradestrategy tradestrategy = m_tradePersistentModel
-							.findTradestrategyById(reqId);
+					Tradestrategy tradestrategy = m_tradePersistentModel.findTradestrategyById(reqId);
 					/*
 					 * Internal created order have Integer.MAX_VALUE or are
 					 * negative as their value, so change the m_orderId to
@@ -1185,8 +1101,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					int nextOrderKey = orderKey.getAndIncrement();
 					for (String key : executionDetails.keySet()) {
 						Execution execution = executionDetails.get(key);
-						if (execution.m_orderId == Integer.MAX_VALUE
-								|| execution.m_orderId < 0) {
+						if (execution.m_orderId == Integer.MAX_VALUE || execution.m_orderId < 0) {
 							execution.m_orderId = nextOrderKey;
 						} else {
 							continue;
@@ -1212,18 +1127,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 							continue;
 
 						TradeOrderfill tradeOrderfill = new TradeOrderfill();
-						TWSBrokerModel.populateTradeOrderfill(execution,
-								tradeOrderfill);
+						TWSBrokerModel.populateTradeOrderfill(execution, tradeOrderfill);
 
 						String action = Action.SELL;
 						if (Side.BOT.equals(execution.m_side))
 							action = Action.BUY;
 
 						Integer quantity = tradeOrderfill.getQuantity();
-						TradeOrder tradeOrder = new TradeOrder(tradestrategy,
-								action, tradeOrderfill.getTime(),
-								OrderType.MKT, quantity, null, null,
-								OverrideConstraints.YES, TimeInForce.DAY,
+						TradeOrder tradeOrder = new TradeOrder(tradestrategy, action, tradeOrderfill.getTime(),
+								OrderType.MKT, quantity, null, null, OverrideConstraints.YES, TimeInForce.DAY,
 								TriggerMethod.DEFAULT);
 						tradeOrder.setClientId(execution.m_clientId);
 						tradeOrder.setPermId(execution.m_permId);
@@ -1231,20 +1143,15 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						for (String key1 : executionDetails.keySet()) {
 							Execution execution1 = executionDetails.get(key1);
 							if (execution1.m_permId == execution.m_permId
-									&& !execution1.m_execId
-											.equals(execution.m_execId)) {
+									&& !execution1.m_execId.equals(execution.m_execId)) {
 								TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
-								TWSBrokerModel.populateTradeOrderfill(
-										execution1, tradeOrderfill1);
-								quantity = quantity
-										+ tradeOrderfill1.getQuantity();
+								TWSBrokerModel.populateTradeOrderfill(execution1, tradeOrderfill1);
+								quantity = quantity + tradeOrderfill1.getQuantity();
 								// Make sure the create date for the order is
 								// the
 								// earliest time.
-								if (tradeOrder.getCreateDate().isAfter(
-										tradeOrderfill1.getTime()))
-									tradeOrder.setCreateDate(tradeOrderfill1
-											.getTime());
+								if (tradeOrder.getCreateDate().isAfter(tradeOrderfill1.getTime()))
+									tradeOrder.setCreateDate(tradeOrderfill1.getTime());
 							}
 						}
 						tradeOrder.setQuantity(quantity);
@@ -1259,39 +1166,31 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					Collections.sort(orders, TradeOrder.CREATE_ORDER);
 
 					for (TradeOrder tradeOrder : orders) {
-						tradeOrder = m_tradePersistentModel
-								.persistTradeOrder(tradeOrder);
+						tradeOrder = m_tradePersistentModel.persistTradeOrder(tradeOrder);
 						double totalComms = 0;
 						for (String key : executionDetails.keySet()) {
 							Execution execution = executionDetails.get(key);
-							if (tradeOrder.getPermId().equals(
-									execution.m_permId)) {
+							if (tradeOrder.getPermId().equals(execution.m_permId)) {
 								TradeOrderfill tradeOrderfill = new TradeOrderfill();
-								TWSBrokerModel.populateTradeOrderfill(
-										execution, tradeOrderfill);
+								TWSBrokerModel.populateTradeOrderfill(execution, tradeOrderfill);
 								/*
 								 * Commissions are sent through via the
 								 * commissionReport call. This happens when an
 								 * order is executed or a call to
 								 * OnReqExecutions.
 								 */
-								CommissionReport comms = commissionDetails
-										.get(key);
+								CommissionReport comms = commissionDetails.get(key);
 
 								if (null != comms) {
-									totalComms = totalComms
-											+ comms.m_commission;
-									tradeOrderfill
-											.setCommission(new BigDecimal(
-													comms.m_commission));
+									totalComms = totalComms + comms.m_commission;
+									tradeOrderfill.setCommission(new BigDecimal(comms.m_commission));
 								}
 								tradeOrderfill.setTradeOrder(tradeOrder);
 								tradeOrder.addTradeOrderfill(tradeOrderfill);
 							}
 						}
 						tradeOrder.setCommission(new BigDecimal(totalComms));
-						tradeOrder = m_tradePersistentModel
-								.persistTradeOrderfill(tradeOrder);
+						tradeOrder = m_tradePersistentModel.persistTradeOrderfill(tradeOrder);
 						TradeOrder transientInstance = m_tradePersistentModel
 								.findTradeOrderByKey(tradeOrder.getOrderKey());
 						// Let the controller know an order was filled
@@ -1305,8 +1204,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 */
 			this.fireExecutionDetailsEnd(tradeOrdersExecutions);
 		} catch (Exception ex) {
-			error(reqId, 3330,
-					"Error adding new open orders: " + ex.getMessage());
+			error(reqId, 3330, "Error adding new open orders: " + ex.getMessage());
 		}
 	}
 
@@ -1325,29 +1223,24 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            OrderState
 	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
-	public void openOrder(int orderId, com.ib.client.Contract contractIB,
-			com.ib.client.Order order, OrderState orderState) {
+	public void openOrder(int orderId, com.ib.client.Contract contractIB, com.ib.client.Order order,
+			OrderState orderState) {
 		try {
 
 			TWSBrokerModel.logOrderState(orderState);
 			TWSBrokerModel.logTradeOrder(order);
 
-			TradeOrder transientInstance = m_tradePersistentModel
-					.findTradeOrderByKey(new Integer(order.m_orderId));
+			TradeOrder transientInstance = m_tradePersistentModel.findTradeOrderByKey(new Integer(order.m_orderId));
 
 			if (null == transientInstance) {
-				error(orderId, 3170, "Warning Order not found for Order Key: "
-						+ order.m_orderId + " make sure Client ID: "
-						+ this.m_clientId
-						+ " is not the master in TWS. On openOrder update.");
+				error(orderId, 3170,
+						"Warning Order not found for Order Key: " + order.m_orderId + " make sure Client ID: "
+								+ this.m_clientId + " is not the master in TWS. On openOrder update.");
 				transientInstance = new TradeOrder();
 				transientInstance.setOrderKey(order.m_orderId);
-				transientInstance.setCreateDate(TradingCalendar
-						.getDateTimeNowMarketTimeZone());
-				TWSBrokerModel.updateTradeOrder(order, orderState,
-						transientInstance);
-				openOrders.put(transientInstance.getOrderKey(),
-						transientInstance);
+				transientInstance.setCreateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
+				TWSBrokerModel.updateTradeOrder(order, orderState, transientInstance);
+				openOrders.put(transientInstance.getOrderKey(), transientInstance);
 				return;
 			}
 
@@ -1356,28 +1249,20 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 * twice on order fills.
 			 */
 
-			if (TWSBrokerModel.updateTradeOrder(order, orderState,
-					transientInstance)) {
+			if (TWSBrokerModel.updateTradeOrder(order, orderState, transientInstance)) {
 
 				if (OrderStatus.FILLED.equals(transientInstance.getStatus())) {
-					_log.debug("Open order filled Order Key:"
-							+ transientInstance.getOrderKey());
-					transientInstance = m_tradePersistentModel
-							.persistTradeOrder(transientInstance);
+					_log.debug("Open order filled Order Key:" + transientInstance.getOrderKey());
+					transientInstance = m_tradePersistentModel.persistTradeOrder(transientInstance);
 
-					if (transientInstance.hasTradePosition()
-							&& !transientInstance.getTradePosition().isOpen()) {
+					if (transientInstance.hasTradePosition() && !transientInstance.getTradePosition().isOpen()) {
 						// Let the controller know a position was closed
-						this.firePositionClosed(transientInstance
-								.getTradePosition());
+						this.firePositionClosed(transientInstance.getTradePosition());
 					}
 				} else {
-					_log.debug("Open order state changed. Status:"
-							+ orderState.m_status);
-					transientInstance = m_tradePersistentModel
-							.persistTradeOrder(transientInstance);
-					if (OrderStatus.CANCELLED.equals(transientInstance
-							.getStatus())) {
+					_log.debug("Open order state changed. Status:" + orderState.m_status);
+					transientInstance = m_tradePersistentModel.persistTradeOrder(transientInstance);
+					if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
 						// Let the controller know a position was closed
 						this.fireTradeOrderCancelled(transientInstance);
 					} else {
@@ -1387,8 +1272,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			}
 			openOrders.put(transientInstance.getOrderKey(), transientInstance);
 		} catch (Exception ex) {
-			error(orderId, 3180,
-					"Errors updating open order: " + ex.getMessage());
+			error(orderId, 3180, "Errors updating open order: " + ex.getMessage());
 		}
 	}
 
@@ -1404,8 +1288,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		_log.debug("openOrderEnd");
 		// Let the controller know there are open orders
 		for (TradeOrder openOrder : openOrders.values()) {
-			_log.debug("openOrderEnd Open Order Key: "
-					+ openOrder.getOrderKey() + " Order status: "
+			_log.debug("openOrderEnd Open Order Key: " + openOrder.getOrderKey() + " Order status: "
 					+ openOrder.getStatus());
 		}
 		this.fireOpenOrderEnd(openOrders);
@@ -1439,16 +1322,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            String
 	 * @see http://www.interactivebrokers.com/php/apiUsersGuide/apiguide.htm
 	 */
-	public void orderStatus(int orderId, String status, int filled,
-			int remaining, double avgFillPrice, int permId, int parentId,
-			double lastFillPrice, int clientId, String whyHeld) {
+	public void orderStatus(int orderId, String status, int filled, int remaining, double avgFillPrice, int permId,
+			int parentId, double lastFillPrice, int clientId, String whyHeld) {
 		try {
-			TradeOrder transientInstance = m_tradePersistentModel
-					.findTradeOrderByKey(new Integer(orderId));
+			TradeOrder transientInstance = m_tradePersistentModel.findTradeOrderByKey(new Integer(orderId));
 			if (null == transientInstance) {
-				error(orderId, 3170, "Warning Order not found for Order Key: "
-						+ orderId + " make sure Client ID: " + this.m_clientId
-						+ " is not the master in TWS. On orderStatus update.");
+				error(orderId, 3170, "Warning Order not found for Order Key: " + orderId + " make sure Client ID: "
+						+ this.m_clientId + " is not the master in TWS. On orderStatus update.");
 				return;
 			}
 			/*
@@ -1456,13 +1336,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 * twice on order fills.
 			 */
 			boolean changed = false;
-			if (CoreUtils.nullSafeComparator(transientInstance.getStatus(),
-					status.toUpperCase()) != 0) {
+			if (CoreUtils.nullSafeComparator(transientInstance.getStatus(), status.toUpperCase()) != 0) {
 				transientInstance.setStatus(status.toUpperCase());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientInstance.getWhyHeld(),
-					whyHeld) != 0) {
+			if (CoreUtils.nullSafeComparator(transientInstance.getWhyHeld(), whyHeld) != 0) {
 				transientInstance.setWhyHeld(whyHeld);
 				changed = true;
 			}
@@ -1470,29 +1348,24 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			 * If filled qty is greater than current filled qty set the new
 			 * value.
 			 */
-			if (CoreUtils.nullSafeComparator(new Integer(filled),
-					transientInstance.getFilledQuantity()) == 1) {
+			if (CoreUtils.nullSafeComparator(new Integer(filled), transientInstance.getFilledQuantity()) == 1) {
 				if (filled > 0) {
-					transientInstance.setAverageFilledPrice(new BigDecimal(
-							avgFillPrice));
+					transientInstance.setAverageFilledPrice(new BigDecimal(avgFillPrice));
 					transientInstance.setFilledQuantity(filled);
 					changed = true;
 				}
 			}
 
 			if (changed) {
-				transientInstance.setLastUpdateDate(TradingCalendar
-						.getDateTimeNowMarketTimeZone());
+				transientInstance.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 				transientInstance.setStatus(status.toUpperCase());
 				transientInstance.setWhyHeld(whyHeld);
 				_log.debug("Order Status changed. Status: " + status);
-				TWSBrokerModel.logOrderStatus(orderId, status, filled,
-						remaining, avgFillPrice, permId, parentId,
+				TWSBrokerModel.logOrderStatus(orderId, status, filled, remaining, avgFillPrice, permId, parentId,
 						lastFillPrice, clientId, whyHeld);
 
 				boolean isFilled = transientInstance.getIsFilled();
-				transientInstance = m_tradePersistentModel
-						.persistTradeOrder(transientInstance);
+				transientInstance = m_tradePersistentModel.persistTradeOrder(transientInstance);
 
 				if (OrderStatus.CANCELLED.equals(transientInstance.getStatus())) {
 					// Let the controller know a position was closed
@@ -1505,8 +1378,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				}
 			}
 		} catch (Exception ex) {
-			error(orderId, 3200,
-					"Errors updating open order status: " + ex.getMessage());
+			error(orderId, 3200, "Errors updating open order status: " + ex.getMessage());
 		}
 	}
 
@@ -1563,14 +1435,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			Tradestrategy tradestrategy = m_historyDataRequests.get(id);
 			symbol = tradestrategy.getContract().getSymbol();
 			if (code == 162) {
-				symbol = tradestrategy.getContract().getSymbol()
-						+ " pacing violation Tradingday: "
-						+ tradestrategy.getTradingday().getOpen()
-						+ " BarSize: "
-						+ tradestrategy.getBarSize()
-						+ " ChartDays: "
-						+ tradestrategy.getChartDays()
-						+ "  \n"
+				symbol = tradestrategy.getContract().getSymbol() + " pacing violation Tradingday: "
+						+ tradestrategy.getTradingday().getOpen() + " BarSize: " + tradestrategy.getBarSize()
+						+ " ChartDays: " + tradestrategy.getChartDays() + "  \n"
 						+ "The following conditions can cause a pacing violation: \n"
 						+ "1/ Making identical historical data requests within 15 seconds. \n"
 						+ "2/ Making six or more historical data requests for the same Contract, Exchange and Tick Type within two seconds. \n"
@@ -1601,28 +1468,23 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 * Error code 502, Couldn't connect to TWS. Confirm that API is enabled
 		 * in TWS via the Configure>API menu command.
 		 */
-		String errorMsg = "Req/Order Id: " + id + " Code: " + code
-				+ " Symbol: " + symbol + " Msg: " + msg;
+		String errorMsg = "Req/Order Id: " + id + " Code: " + code + " Symbol: " + symbol + " Msg: " + msg;
 
-		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299))
-				|| (code == 366) || (code == 162) || (code == 321)
-				|| (code == 3170)) {
+		if (((code > 1999) && (code < 3000)) || ((code >= 200) && (code < 299)) || (code == 366) || (code == 162)
+				|| (code == 321) || (code == 3170)) {
 
 			if (((code > 1999) && (code < 3000))) {
 				_log.info(errorMsg);
-				brokerModelException = new BrokerModelException(3, code,
-						errorMsg);
+				brokerModelException = new BrokerModelException(3, code, errorMsg);
 			} else if (code == 202 || code == 201 || code == 3170) {
 				_log.warn(errorMsg);
-				brokerModelException = new BrokerModelException(2, code,
-						errorMsg);
+				brokerModelException = new BrokerModelException(2, code, errorMsg);
 			} else if (code == 321) {
 				_log.info(errorMsg);
 				return;
 			} else {
 				_log.warn(errorMsg);
-				brokerModelException = new BrokerModelException(2, code,
-						errorMsg);
+				brokerModelException = new BrokerModelException(2, code, errorMsg);
 			}
 
 		} else {
@@ -1669,8 +1531,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 		try {
 
-			BigDecimal price = (new BigDecimal(value)).setScale(SCALE,
-					BigDecimal.ROUND_HALF_EVEN);
+			BigDecimal price = (new BigDecimal(value)).setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 			synchronized (price) {
 				// _log.warn("tickPrice Field: " + field + " value :" + value
 				// + " time: " + System.currentTimeMillis());
@@ -1684,10 +1545,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				 * outside the current Bid/Ask.
 				 */
 
-				for (Tradestrategy tradestrategy : contract
-						.getTradestrategies()) {
-					Contract seriesContract = tradestrategy.getStrategyData()
-							.getBaseCandleSeries().getContract();
+				for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
+					Contract seriesContract = tradestrategy.getStrategyData().getBaseCandleSeries().getContract();
 
 					switch (field) {
 					case TickType.ASK: {
@@ -1748,7 +1607,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				// candle.setLastUpdateDate(new Date());
 				// datasetContainer.getBaseCandleSeries()
 				// .fireSeriesChanged();
-				// _log.info("TickSize  Symbol: "
+				// _log.info("TickSize Symbol: "
 				// + tradestrategy.getContract()
 				// .getSymbol() + " "
 				// + TickType.getField(field) + " : "
@@ -1814,24 +1673,20 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						String token = st.nextToken();
 						switch (tokenNumber) {
 						case 1: {
-							price = (new BigDecimal(Double.parseDouble(token)))
-									.setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+							price = (new BigDecimal(Double.parseDouble(token))).setScale(SCALE,
+									BigDecimal.ROUND_HALF_EVEN);
 							break;
 						}
 						case 2: {
-							_log.debug("TickString Trade Size: "
-									+ Integer.parseInt(token));
+							_log.debug("TickString Trade Size: " + Integer.parseInt(token));
 							break;
 						}
 						case 3: {
-							time = TradingCalendar
-									.getZonedDateTimeFromMilli(Long
-											.parseLong(token));
+							time = TradingCalendar.getZonedDateTimeFromMilli(Long.parseLong(token));
 							break;
 						}
 						case 4: {
-							_log.debug("TickString Total Volume: "
-									+ Integer.parseInt(token) * 100);
+							_log.debug("TickString Total Volume: " + Integer.parseInt(token) * 100);
 							break;
 						}
 						case 5: {
@@ -1852,31 +1707,22 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						Contract contract = m_marketDataRequests.get(reqId);
 						// _log.warn("TickString ReqId: " + reqId + " Field: "
 						// + field + " String: " + value);
-						for (Tradestrategy tradestrategy : contract
-								.getTradestrategies()) {
+						for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
 
-							Contract seriesContract = tradestrategy
-									.getStrategyData().getBaseCandleSeries()
+							Contract seriesContract = tradestrategy.getStrategyData().getBaseCandleSeries()
 									.getContract();
-							int index = tradestrategy.getStrategyData()
-									.getBaseCandleSeries().indexOf(time);
+							int index = tradestrategy.getStrategyData().getBaseCandleSeries().indexOf(time);
 							if (index < 0)
 								return;
 
-							CandleItem candleItem = (CandleItem) tradestrategy
-									.getStrategyData().getBaseCandleSeries()
+							CandleItem candleItem = (CandleItem) tradestrategy.getStrategyData().getBaseCandleSeries()
 									.getDataItem(index);
 							if (seriesContract.getLastAskPrice().doubleValue() > 0
-									&& seriesContract.getLastBidPrice()
-											.doubleValue() > 0
-									&& (price.doubleValue() <= seriesContract
-											.getLastAskPrice().doubleValue() && price
-											.doubleValue() >= seriesContract
-											.getLastBidPrice().doubleValue())) {
+									&& seriesContract.getLastBidPrice().doubleValue() > 0
+									&& (price.doubleValue() <= seriesContract.getLastAskPrice().doubleValue()
+											&& price.doubleValue() >= seriesContract.getLastBidPrice().doubleValue())) {
 
-								if (marketUpdateOnClose
-										&& (price.doubleValue() != candleItem
-												.getClose())) {
+								if (marketUpdateOnClose && (price.doubleValue() != candleItem.getClose())) {
 
 									candleItem.setClose(price.doubleValue());
 									candleItem.setLastUpdateDate(time);
@@ -1887,9 +1733,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									 * synchronized in the strategy when the
 									 * stock is fast running.
 									 */
-									tradestrategy.getStrategyData()
-											.getBaseCandleSeries()
-											.fireSeriesChanged();
+									tradestrategy.getStrategyData().getBaseCandleSeries().fireSeriesChanged();
 									/*
 									 * This can be used to update the charts.
 									 * NOTE not recommended for performance
@@ -1906,12 +1750,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 									// + " Ask: "
 									// + seriesContract.getLastAskPrice());
 								} else {
-									if (price.doubleValue() > candleItem
-											.getHigh()
-											|| price.doubleValue() < candleItem
-													.getLow()) {
-										candleItem
-												.setClose(price.doubleValue());
+									if (price.doubleValue() > candleItem.getHigh()
+											|| price.doubleValue() < candleItem.getLow()) {
+										candleItem.setClose(price.doubleValue());
 										candleItem.setLastUpdateDate(time);
 										/*
 										 * Note if you want you can fire the
@@ -1921,9 +1762,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 										 * strategy when the stock is fast
 										 * running.
 										 */
-										tradestrategy.getStrategyData()
-												.getBaseCandleSeries()
-												.fireSeriesChanged();
+										tradestrategy.getStrategyData().getBaseCandleSeries().fireSeriesChanged();
 										/*
 										 * This can be used to update the
 										 * charts. NOTE not recommended for
@@ -1985,9 +1824,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#tickOptionComputation(int, int, double,
 	 *      double, double, double, double, double, double, double)
 	 */
-	public void tickOptionComputation(int reqId, int field, double impliedVol,
-			double delta, double optPrice, double pvDividend, double gamma,
-			double vega, double theta, double undPrice) {
+	public void tickOptionComputation(int reqId, int field, double impliedVol, double delta, double optPrice,
+			double pvDividend, double gamma, double vega, double theta, double undPrice) {
 		_log.debug("tickOptionComputation:" + reqId);
 	}
 
@@ -2003,8 +1841,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#tickGeneric(int, int, double)
 	 */
 	public void tickGeneric(int reqId, int tickType, double value) {
-		_log.debug("tickGeneric: " + reqId + " tickType: " + tickType
-				+ " tickValue: " + value);
+		_log.debug("tickGeneric: " + reqId + " tickType: " + tickType + " tickValue: " + value);
 	}
 
 	/**
@@ -2031,9 +1868,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#tickEFP(int, int, double, String, double,
 	 *      int, String, double, double)
 	 */
-	public void tickEFP(int reqId, int tickType, double basisPoints,
-			String formattedBasisPoints, double impliedFuture, int holdDays,
-			String futureExpiry, double dividendImpact, double dividendsToExpiry) {
+	public void tickEFP(int reqId, int tickType, double basisPoints, String formattedBasisPoints, double impliedFuture,
+			int holdDays, String futureExpiry, double dividendImpact, double dividendsToExpiry) {
 		_log.debug("tickEFP:" + reqId);
 	}
 
@@ -2059,14 +1895,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#updatePortfolio(com.ib.client.Contract, int,
 	 *      double, double, double, double, double, String)
 	 */
-	public void updatePortfolio(com.ib.client.Contract contract, int position,
-			double marketPrice, double marketValue, double averageCost,
-			double unrealizedPNL, double realizedPNL, String accountNumber) {
-		_log.debug("updatePortfolio Account#: " + accountNumber + " contract:"
-				+ contract.m_symbol + " position:" + position + " marketPrice:"
-				+ marketPrice + " marketValue:" + marketValue + " averageCost:"
-				+ averageCost + " unrealizedPNL:" + unrealizedPNL
-				+ " realizedPNL:" + realizedPNL);
+	public void updatePortfolio(com.ib.client.Contract contract, int position, double marketPrice, double marketValue,
+			double averageCost, double unrealizedPNL, double realizedPNL, String accountNumber) {
+		_log.debug("updatePortfolio Account#: " + accountNumber + " contract:" + contract.m_symbol + " position:"
+				+ position + " marketPrice:" + marketPrice + " marketValue:" + marketValue + " averageCost:"
+				+ averageCost + " unrealizedPNL:" + unrealizedPNL + " realizedPNL:" + realizedPNL);
 	}
 
 	/**
@@ -2083,14 +1916,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#updateAccountValue(String, String, String,
 	 *      String)
 	 */
-	public void updateAccountValue(String key, String value, String currency,
-			String accountNumber) {
+	public void updateAccountValue(String key, String value, String currency, String accountNumber) {
 
 		synchronized (key) {
 
-			_log.debug("updateAccountValue Account#: " + accountNumber
-					+ " Key:" + key + " Value:" + value + " Currency:"
-					+ currency);
+			_log.debug("updateAccountValue Account#: " + accountNumber + " Key:" + key + " Value:" + value
+					+ " Currency:" + currency);
 			if (m_accountRequests.containsKey(accountNumber)) {
 				Account account = m_accountRequests.get(accountNumber);
 				if (key.equals(TWSBrokerModel.ACCOUNTTYPE)) {
@@ -2114,8 +1945,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						account.setCurrency(value);
 						account.setDirty(true);
 					}
-					if (key.equals(TWSBrokerModel.GROSS_POSITION_VALUE)
-							|| key.equals(TWSBrokerModel.STOCK_MKT_VALUE)) {
+					if (key.equals(TWSBrokerModel.GROSS_POSITION_VALUE) || key.equals(TWSBrokerModel.STOCK_MKT_VALUE)) {
 						account.setGrossPositionValue(new BigDecimal(value));
 						account.setDirty(true);
 					}
@@ -2151,10 +1981,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * seconds just HH:mm format.
 					 */
 					if (account.isDirty()) {
-						account.setLastUpdateDate(TradingCalendar
-								.getDateTimeNowMarketTimeZone());
-						account = m_tradePersistentModel.persistAspect(account,
-								true);
+						account.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
+						account = m_tradePersistentModel.persistAspect(account, true);
 						m_accountRequests.replace(accountNumber, account);
 						this.fireUpdateAccountTime(accountNumber);
 					}
@@ -2230,8 +2058,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					m_tradePersistentModel.persistContract(contract);
 				}
 			} else {
-				error(reqId, 3220, "Contract details not found for reqId: "
-						+ reqId + " Symbol: "
+				error(reqId, 3220, "Contract details not found for reqId: " + reqId + " Symbol: "
 						+ contractDetails.m_summary.m_symbol);
 			}
 		} catch (Exception ex) {
@@ -2285,8 +2112,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#updateMktDepth(int, int, int, int, double,
 	 *      int)
 	 */
-	public void updateMktDepth(int tickerId, int position, int operation,
-			int side, double price, int size) {
+	public void updateMktDepth(int tickerId, int position, int operation, int side, double price, int size) {
 
 	}
 
@@ -2310,8 +2136,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#updateMktDepthL2(int, int, String, int, int,
 	 *      double, int)
 	 */
-	public void updateMktDepthL2(int tickerId, int position,
-			String marketMaker, int operation, int side, double price, int size) {
+	public void updateMktDepthL2(int tickerId, int position, String marketMaker, int operation, int side, double price,
+			int size) {
 
 	}
 
@@ -2328,8 +2154,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            String
 	 * @see com.ib.client.EWrapper#updateNewsBulletin(int, int, String, String)
 	 */
-	public void updateNewsBulletin(int msgId, int msgType, String message,
-			String origExchange) {
+	public void updateNewsBulletin(int msgId, int msgType, String message, String origExchange) {
 
 	}
 
@@ -2346,8 +2171,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			this.fireManagedAccountsUpdated(accountNumbers);
 
 		} catch (Exception ex) {
-			error(0, 3315,
-					"Error updating Managed Accounts: " + ex.getMessage());
+			error(0, 3315, "Error updating Managed Accounts: " + ex.getMessage());
 		} finally {
 			/*
 			 * Call FA Accounts to see if we are Financial Advisor.
@@ -2376,16 +2200,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				final Aspects aspects = (Aspects) request.fromXML(inputSource);
 				for (Aspect aspect : aspects.getAspect()) {
 					Account item = (Account) aspect;
-					Account account = m_tradePersistentModel
-							.findAccountByNumber(item.getAccountNumber());
+					Account account = m_tradePersistentModel.findAccountByNumber(item.getAccountNumber());
 					if (null == account) {
-						account = new Account(item.getAccountNumber(),
-								item.getAccountNumber(), Currency.USD,
+						account = new Account(item.getAccountNumber(), item.getAccountNumber(), Currency.USD,
 								AccountType.INDIVIDUAL);
 					}
 					account.setAlias(item.getAlias());
-					account.setLastUpdateDate(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
+					account.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 					m_tradePersistentModel.persistAspect(account);
 				}
 				m_client.requestFA(EClientSocket.GROUPS);
@@ -2466,9 +2287,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#historicalData(int, String, double, double,
 	 *      double, double, int, int, double, boolean)
 	 */
-	public void historicalData(int reqId, String dateString, double open,
-			double high, double low, double close, int volume, int tradeCount,
-			double vwap, boolean hasGaps) {
+	public void historicalData(int reqId, String dateString, double open, double high, double low, double close,
+			int volume, int tradeCount, double vwap, boolean hasGaps) {
 		try {
 			volume = volume * 100;
 			if (m_historyDataRequests.containsKey(reqId)) {
@@ -2476,20 +2296,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				if (dateString.contains("finished-")) {
 
-					CandleSeries candleSeries = tradestrategy.getStrategyData()
-							.getBaseCandleSeries();
+					CandleSeries candleSeries = tradestrategy.getStrategyData().getBaseCandleSeries();
 
-					_log.debug("HistoricalData complete Req Id: "
-							+ reqId
-							+ " Symbol: "
-							+ tradestrategy.getContract().getSymbol()
-							+ " Tradingday: "
-							+ tradestrategy.getTradingday().getOpen()
-							+ " candles to saved: "
-							+ candleSeries.getItemCount()
-							+ " Contract Tradestrategies size:: "
-							+ tradestrategy.getContract().getTradestrategies()
-									.size());
+					_log.debug("HistoricalData complete Req Id: " + reqId + " Symbol: "
+							+ tradestrategy.getContract().getSymbol() + " Tradingday: "
+							+ tradestrategy.getTradingday().getOpen() + " candles to saved: "
+							+ candleSeries.getItemCount() + " Contract Tradestrategies size:: "
+							+ tradestrategy.getContract().getTradestrategies().size());
 
 					m_tradePersistentModel.persistCandleSeries(candleSeries);
 
@@ -2507,27 +2320,17 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * Check to see if the trading day is today and this
 					 * strategy is selected to trade and that the market is open
 					 */
-					synchronized (tradestrategy.getContract()
-							.getTradestrategies()) {
+					synchronized (tradestrategy.getContract().getTradestrategies()) {
 
 						this.fireHistoricalDataComplete(tradestrategy);
-						if (tradestrategy
-								.getTradingday()
-								.getClose()
-								.isAfter(
-										TradingCalendar
-												.getDateTimeNowMarketTimeZone())) {
-							if (!this.isRealtimeBarsRunning(tradestrategy
-									.getContract())) {
-								tradestrategy.getContract().addTradestrategy(
-										tradestrategy);
-								this.onReqRealTimeBars(tradestrategy
-										.getContract(), tradestrategy
-										.getStrategy().getMarketData());
+						if (tradestrategy.getTradingday().getClose()
+								.isAfter(TradingCalendar.getDateTimeNowMarketTimeZone())) {
+							if (!this.isRealtimeBarsRunning(tradestrategy.getContract())) {
+								tradestrategy.getContract().addTradestrategy(tradestrategy);
+								this.onReqRealTimeBars(tradestrategy.getContract(),
+										tradestrategy.getStrategy().getMarketData());
 							} else {
-								Contract contract = m_realTimeBarsRequests
-										.get(tradestrategy.getContract()
-												.getId());
+								Contract contract = m_realTimeBarsRequests.get(tradestrategy.getContract().getId());
 								contract.addTradestrategy(tradestrategy);
 							}
 						}
@@ -2542,40 +2345,30 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					 * the period the dates come through as yyyyMMdd.
 					 */
 					if (dateString.length() == 8) {
-						date = TradingCalendar.getZonedDateTimeFromDateString(
-								dateString, "yyyyMMdd",
+						date = TradingCalendar.getZonedDateTimeFromDateString(dateString, "yyyyMMdd",
 								TradingCalendar.MKT_TIMEZONE);
 					} else {
-						date = TradingCalendar.getZonedDateTimeFromMilli((Long
-								.parseLong(dateString) * 1000));
+						date = TradingCalendar.getZonedDateTimeFromMilli((Long.parseLong(dateString) * 1000));
 					}
 
 					/*
 					 * For daily bars set the time to the open time.
 					 */
 					if (tradestrategy.getBarSize() > 3600) {
-						date = TradingCalendar.getDateAtTime(date,
-								tradestrategy.getTradingday().getOpen());
+						date = TradingCalendar.getDateAtTime(date, tradestrategy.getTradingday().getOpen());
 					}
 					if (tradestrategy.getTradingday().getClose().isAfter(date)) {
 
 						if (backfillUseRTH == 1
-								&& !TradingCalendar.isMarketHours(tradestrategy
-										.getTradingday().getOpen(),
-										tradestrategy.getTradingday()
-												.getClose(), date))
+								&& !TradingCalendar.isMarketHours(tradestrategy.getTradingday().getOpen(),
+										tradestrategy.getTradingday().getClose(), date))
 							return;
-						BigDecimal price = (new BigDecimal(close)).setScale(
-								SCALE, BigDecimal.ROUND_HALF_EVEN);
-						tradestrategy.getStrategyData().getBaseCandleSeries()
-								.getContract().setLastAskPrice(price);
-						tradestrategy.getStrategyData().getBaseCandleSeries()
-								.getContract().setLastBidPrice(price);
-						tradestrategy.getStrategyData().getBaseCandleSeries()
-								.getContract().setLastPrice(price);
-						tradestrategy.getStrategyData().buildCandle(date, open,
-								high, low, close, volume, vwap, tradeCount, 1,
-								null);
+						BigDecimal price = (new BigDecimal(close)).setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+						tradestrategy.getStrategyData().getBaseCandleSeries().getContract().setLastAskPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries().getContract().setLastBidPrice(price);
+						tradestrategy.getStrategyData().getBaseCandleSeries().getContract().setLastPrice(price);
+						tradestrategy.getStrategyData().buildCandle(date, open, high, low, close, volume, vwap,
+								tradeCount, 1, null);
 					}
 				}
 			}
@@ -2614,8 +2407,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#scannerData(int, int, ContractDetails,
 	 *      String, String, String, String)
 	 */
-	public void scannerData(int reqId, int rank,
-			ContractDetails contractDetails, String distance, String benchmark,
+	public void scannerData(int reqId, int rank, ContractDetails contractDetails, String distance, String benchmark,
 			String projection, String legsStr) {
 
 	}
@@ -2656,60 +2448,43 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *      double, double, long, double, int)
 	 */
 
-	public void realtimeBar(int reqId, long time, double open, double high,
-			double low, double close, long volume, double vwap, int tradeCount) {
+	public void realtimeBar(int reqId, long time, double open, double high, double low, double close, long volume,
+			double vwap, int tradeCount) {
 		// Called when a candle finishes
 		try {
 
 			volume = volume * 100;
-			ZonedDateTime date = TradingCalendar
-					.getZonedDateTimeFromMilli(time * 1000);
+			ZonedDateTime date = TradingCalendar.getZonedDateTimeFromMilli(time * 1000);
 
 			// Only store data that is during mkt hours
 			if (m_realTimeBarsRequests.containsKey(reqId)) {
 				Contract contract = m_realTimeBarsRequests.get(reqId);
 
 				synchronized (contract) {
-					Collections.sort(contract.getTradestrategies(),
-							Tradestrategy.TRADINGDAY_CONTRACT);
+					Collections.sort(contract.getTradestrategies(), Tradestrategy.TRADINGDAY_CONTRACT);
 					boolean updateCandleDB = true;
-					for (Tradestrategy tradestrategy : contract
-							.getTradestrategies()) {
-						StrategyData strategyData = tradestrategy
-								.getStrategyData();
+					for (Tradestrategy tradestrategy : contract.getTradestrategies()) {
+						StrategyData strategyData = tradestrategy.getStrategyData();
 
-						if (TradingCalendar.isMarketHours(tradestrategy
-								.getTradingday().getOpen(), tradestrategy
-								.getTradingday().getClose(), date)) {
+						if (TradingCalendar.isMarketHours(tradestrategy.getTradingday().getOpen(),
+								tradestrategy.getTradingday().getClose(), date)) {
 
 							if (!this.isMarketDataRunning(contract)) {
-								BigDecimal price = (new BigDecimal(close))
-										.setScale(SCALE,
-												BigDecimal.ROUND_HALF_EVEN);
-								strategyData.getBaseCandleSeries()
-										.getContract().setLastAskPrice(price);
-								strategyData.getBaseCandleSeries()
-										.getContract().setLastBidPrice(price);
-								strategyData.getBaseCandleSeries()
-										.getContract().setLastPrice(price);
+								BigDecimal price = (new BigDecimal(close)).setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
+								strategyData.getBaseCandleSeries().getContract().setLastAskPrice(price);
+								strategyData.getBaseCandleSeries().getContract().setLastBidPrice(price);
+								strategyData.getBaseCandleSeries().getContract().setLastPrice(price);
 							}
 							ZonedDateTime lastUpdateDate = date.plusNanos(4999);
 
-							strategyData.buildCandle(date, open, high, low,
-									close, volume, vwap, tradeCount,
-									(tradestrategy.getBarSize() / 5),
-									lastUpdateDate);
+							strategyData.buildCandle(date, open, high, low, close, volume, vwap, tradeCount,
+									(tradestrategy.getBarSize() / 5), lastUpdateDate);
 
 							if (!strategyData.getBaseCandleSeries().isEmpty()) {
-								CandleItem candleItem = (CandleItem) strategyData
-										.getBaseCandleSeries().getDataItem(
-												strategyData
-														.getBaseCandleSeries()
-														.getItemCount() - 1);
+								CandleItem candleItem = (CandleItem) strategyData.getBaseCandleSeries()
+										.getDataItem(strategyData.getBaseCandleSeries().getItemCount() - 1);
 								if (updateCandleDB) {
-									m_tradePersistentModel
-											.persistCandle(candleItem
-													.getCandle());
+									m_tradePersistentModel.persistCandle(candleItem.getCandle());
 									updateCandleDB = false;
 								}
 							}
@@ -2782,20 +2557,14 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		try {
 			TWSBrokerModel.logCommissionReport(commsReport);
 
-			TradeOrderfill transientInstance = m_tradePersistentModel
-					.findTradeOrderfillByExecId(commsReport.m_execId);
+			TradeOrderfill transientInstance = m_tradePersistentModel.findTradeOrderfillByExecId(commsReport.m_execId);
 			if (null != transientInstance) {
 				TradeOrder tradeOrder = m_tradePersistentModel
-						.findTradeOrderByKey(transientInstance.getTradeOrder()
-								.getOrderKey());
-				for (TradeOrderfill tradeOrderfill : tradeOrder
-						.getTradeOrderfills()) {
+						.findTradeOrderByKey(transientInstance.getTradeOrder().getOrderKey());
+				for (TradeOrderfill tradeOrderfill : tradeOrder.getTradeOrderfills()) {
 					if (tradeOrderfill.getExecId().equals(commsReport.m_execId)) {
-						tradeOrderfill.setCommission(new BigDecimal(
-								commsReport.m_commission));
-						m_tradePersistentModel
-								.persistTradeOrderfill(tradeOrderfill
-										.getTradeOrder());
+						tradeOrderfill.setCommission(new BigDecimal(commsReport.m_commission));
+						m_tradePersistentModel.persistTradeOrderfill(tradeOrderfill.getTradeOrder());
 						return;
 					}
 				}
@@ -2844,8 +2613,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param String
 	 *            The currency of the tag.
 	 */
-	public void accountSummary(int arg0, String arg1, String arg2, String arg3,
-			String arg4) {
+	public void accountSummary(int arg0, String arg1, String arg2, String arg3, String arg4) {
 		// TODO Auto-generated method stub
 
 	}
@@ -2872,8 +2640,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param pos
 	 *            double The position.
 	 */
-	public void position(String arg0, com.ib.client.Contract arg1, int arg2,
-			double arg3) {
+	public void position(String arg0, com.ib.client.Contract arg1, int arg2, double arg3) {
 		// TODO Auto-generated method stub
 
 	}
@@ -2947,40 +2714,30 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws BrokerModelException
 	 */
 
-	public boolean validateBrokerData(Tradestrategy tradestrategy)
-			throws BrokerModelException {
+	public boolean validateBrokerData(Tradestrategy tradestrategy) throws BrokerModelException {
 
 		boolean valid = true;
-		String errorMsg = "Symbol: "
-				+ tradestrategy.getContract().getSymbol()
+		String errorMsg = "Symbol: " + tradestrategy.getContract().getSymbol()
 				+ " Bar Size/Chart Days combination was not valid for TWS API, these values have been updated.\n Please validate and save.\n "
 				+ "Note Chart Days/BarSize combinations for IB TWS:\n "
 				+ "Chart Hist/Bar Size 1 Y/1 day, 6 M/1 day, 3 M/1 day 1 M/(1 day, 1 hour)\n "
 				+ "Chart Hist 1 W/ Bar Size(1 day, 1 hour, 30 mins, 15 mins 2 D 1 hour, 30 mins, 15 mins, 3 mins, 2 mins, 1 min)\n "
 				+ "Chart Hist 1 D/ Bar Size(1 hour, 30 mins, 15 mins, 5 mins 3 mins, 2 mins, 1 min, 30 secs)\n ";
-		if (tradestrategy.getChartDays() > 1
-				&& (tradestrategy.getBarSize() < 60)) {
+		if (tradestrategy.getChartDays() > 1 && (tradestrategy.getBarSize() < 60)) {
 			tradestrategy.setBarSize(60);
 			valid = false;
-		} else if (tradestrategy.getChartDays() > 7
-				&& tradestrategy.getBarSize() < 3600) {
+		} else if (tradestrategy.getChartDays() > 7 && tradestrategy.getBarSize() < 3600) {
 			tradestrategy.setBarSize(3600);
-			valid = false;
-		} else if (tradestrategy.getChartDays() > 30) {
-			tradestrategy.setBarSize(1);
 			valid = false;
 		}
 
-		if (tradestrategy.getBarSize() == 30
-				&& tradestrategy.getChartDays() > 1) {
+		if (tradestrategy.getBarSize() == 30 && tradestrategy.getChartDays() > 1) {
 			tradestrategy.setChartDays(1);
 			valid = false;
-		} else if (tradestrategy.getBarSize() <= 1800
-				&& tradestrategy.getChartDays() > 7) {
+		} else if (tradestrategy.getBarSize() <= 1800 && tradestrategy.getChartDays() > 7) {
 			tradestrategy.setChartDays(7);
 			valid = false;
-		} else if (tradestrategy.getBarSize() == 3600
-				&& tradestrategy.getChartDays() > 30) {
+		} else if (tradestrategy.getBarSize() == 3600 && tradestrategy.getChartDays() > 30) {
 			tradestrategy.setChartDays(30);
 			valid = false;
 		}
@@ -3000,8 +2757,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @return com.ib.client.Contract
 	 * @throws IOException
 	 */
-	public static com.ib.client.Contract getIBContract(Contract contract)
-			throws IOException {
+	public static com.ib.client.Contract getIBContract(Contract contract) throws IOException {
 		com.ib.client.Contract ibContract = new com.ib.client.Contract();
 		if (null != contract.getIdContractIB()) {
 			// ibContract.m_conId = contract.getIdContractIB();
@@ -3020,8 +2776,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		}
 		if (null != contract.getExpiry()) {
 			if (SECType.FUTURE.equals(contract.getSecType())) {
-				ibContract.m_expiry = TradingCalendar.getFormattedDate(
-						contract.getExpiry(), "yyyyMMdd").substring(0, 6);
+				ibContract.m_expiry = TradingCalendar.getFormattedDate(contract.getExpiry(), "yyyyMMdd").substring(0,
+						6);
 			}
 		}
 		if (null != contract.getCurrency()) {
@@ -3079,8 +2835,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			ibOrder.m_trailStopPrice = order.getTrailStopPrice().doubleValue();
 		}
 		if (null != order.getTrailingPercent()) {
-			ibOrder.m_trailingPercent = order.getTrailingPercent()
-					.doubleValue();
+			ibOrder.m_trailingPercent = order.getTrailingPercent().doubleValue();
 		}
 		if (null != order.getTimeInForce()) {
 			ibOrder.m_tif = order.getTimeInForce();
@@ -3113,16 +2868,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 			ibOrder.m_hidden = order.getHidden();
 		}
 		if (null != order.getGoodAfterTime()) {
-			ibOrder.m_goodAfterTime = TradingCalendar.getFormattedDate(
-					order.getGoodAfterTime(), "yyyyMMdd HH:mm:ss");
+			ibOrder.m_goodAfterTime = TradingCalendar.getFormattedDate(order.getGoodAfterTime(), "yyyyMMdd HH:mm:ss");
 		}
 		if (null != order.getGoodTillTime()) {
-			ibOrder.m_goodTillDate = TradingCalendar.getFormattedDate(
-					order.getGoodTillTime(), "yyyyMMdd HH:mm:ss");
+			ibOrder.m_goodTillDate = TradingCalendar.getFormattedDate(order.getGoodTillTime(), "yyyyMMdd HH:mm:ss");
 		}
 		if (null != order.getOverrideConstraints()) {
-			ibOrder.m_overridePercentageConstraints = (order
-					.getOverrideConstraints() == 0) ? false : true;
+			ibOrder.m_overridePercentageConstraints = (order.getOverrideConstraints() == 0) ? false : true;
 		}
 		if (null != order.getAllOrNothing()) {
 			ibOrder.m_allOrNone = order.getAllOrNothing();
@@ -3158,200 +2910,159 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @return boolean
 	 * @throws ParseException
 	 */
-	public static boolean updateTradeOrder(com.ib.client.Order ibOrder,
-			com.ib.client.OrderState ibOrderState, TradeOrder order)
-			throws ParseException {
+	public static boolean updateTradeOrder(com.ib.client.Order ibOrder, com.ib.client.OrderState ibOrderState,
+			TradeOrder order) throws ParseException {
 
 		boolean changed = false;
 
-		if (CoreUtils
-				.nullSafeComparator(order.getOrderKey(), ibOrder.m_orderId) == 0) {
-			if (CoreUtils.nullSafeComparator(order.getStatus(),
-					ibOrderState.m_status.toUpperCase()) != 0) {
+		if (CoreUtils.nullSafeComparator(order.getOrderKey(), ibOrder.m_orderId) == 0) {
+			if (CoreUtils.nullSafeComparator(order.getStatus(), ibOrderState.m_status.toUpperCase()) != 0) {
 				order.setStatus(ibOrderState.m_status.toUpperCase());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getWarningMessage(),
-					ibOrderState.m_warningText) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getWarningMessage(), ibOrderState.m_warningText) != 0) {
 				order.setWarningMessage(ibOrderState.m_warningText);
 				changed = true;
 			}
 			Money comms = new Money(ibOrderState.m_commission);
-			if (CoreUtils
-					.nullSafeComparator(comms, new Money(Double.MAX_VALUE)) != 0) {
-				if (CoreUtils.nullSafeComparator(order.getCommission(),
-						comms.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(comms, new Money(Double.MAX_VALUE)) != 0) {
+				if (CoreUtils.nullSafeComparator(order.getCommission(), comms.getBigDecimalValue()) != 0) {
 					order.setCommission(comms.getBigDecimalValue());
 					changed = true;
 				}
 			}
-			if (CoreUtils.nullSafeComparator(order.getClientId(),
-					ibOrder.m_clientId) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getClientId(), ibOrder.m_clientId) != 0) {
 				order.setClientId(ibOrder.m_clientId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getAction(),
-					ibOrder.m_action) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getAction(), ibOrder.m_action) != 0) {
 				order.setAction(ibOrder.m_action);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getQuantity(),
-					ibOrder.m_totalQuantity) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getQuantity(), ibOrder.m_totalQuantity) != 0) {
 				order.setQuantity(ibOrder.m_totalQuantity);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getOrderType(),
-					ibOrder.m_orderType.replaceAll("\\s+", "")) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getOrderType(), ibOrder.m_orderType.replaceAll("\\s+", "")) != 0) {
 				order.setOrderType(ibOrder.m_orderType.replaceAll("\\s+", ""));
 				changed = true;
 			}
 
 			Money lmtPrice = new Money(ibOrder.m_lmtPrice);
-			if (CoreUtils.nullSafeComparator(lmtPrice, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(order.getLimitPrice(),
-							lmtPrice.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(lmtPrice, new Money(Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(order.getLimitPrice(), lmtPrice.getBigDecimalValue()) != 0) {
 				order.setLimitPrice(lmtPrice.getBigDecimalValue());
 				changed = true;
 			}
 			Money auxPrice = new Money(ibOrder.m_auxPrice);
-			if (CoreUtils.nullSafeComparator(auxPrice, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(order.getAuxPrice(),
-							auxPrice.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(auxPrice, new Money(Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(order.getAuxPrice(), auxPrice.getBigDecimalValue()) != 0) {
 				order.setAuxPrice(auxPrice.getBigDecimalValue());
 				changed = true;
 			}
 
 			Money trailStopPrice = new Money(ibOrder.m_trailStopPrice);
-			if (CoreUtils.nullSafeComparator(trailStopPrice, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(order.getTrailStopPrice(),
-							trailStopPrice.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(trailStopPrice, new Money(Double.MAX_VALUE)) != 0 && CoreUtils
+					.nullSafeComparator(order.getTrailStopPrice(), trailStopPrice.getBigDecimalValue()) != 0) {
 				order.setTrailStopPrice(trailStopPrice.getBigDecimalValue());
 				changed = true;
 			}
 
 			Money trailingPercent = new Money(ibOrder.m_trailingPercent);
-			if (CoreUtils.nullSafeComparator(trailingPercent, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(order.getTrailingPercent(),
-							trailingPercent.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(trailingPercent, new Money(Double.MAX_VALUE)) != 0 && CoreUtils
+					.nullSafeComparator(order.getTrailingPercent(), trailingPercent.getBigDecimalValue()) != 0) {
 				order.setTrailingPercent(trailingPercent.getBigDecimalValue());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getTimeInForce(),
-					ibOrder.m_tif) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getTimeInForce(), ibOrder.m_tif) != 0) {
 				order.setTimeInForce(ibOrder.m_tif);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getOcaGroupName(),
-					ibOrder.m_ocaGroup) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getOcaGroupName(), ibOrder.m_ocaGroup) != 0) {
 				order.setOcaGroupName(ibOrder.m_ocaGroup);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getOcaType(),
-					ibOrder.m_ocaType) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getOcaType(), ibOrder.m_ocaType) != 0) {
 				order.setOcaType(ibOrder.m_ocaType);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getOrderReference(),
-					ibOrder.m_orderRef) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getOrderReference(), ibOrder.m_orderRef) != 0) {
 				order.setOrderReference(ibOrder.m_orderRef);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getAccountNumber(),
-					ibOrder.m_account) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getAccountNumber(), ibOrder.m_account) != 0) {
 				order.setAccountNumber(ibOrder.m_account);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getFAGroup(),
-					ibOrder.m_faGroup) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getFAGroup(), ibOrder.m_faGroup) != 0) {
 				order.setFAGroup(ibOrder.m_faGroup);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getFAMethod(),
-					ibOrder.m_faMethod) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getFAMethod(), ibOrder.m_faMethod) != 0) {
 				order.setFAMethod(ibOrder.m_faMethod);
 				changed = true;
 			}
 			Money faPercent = new Money(ibOrder.m_faPercentage);
-			if (CoreUtils.nullSafeComparator(order.getFAPercent(),
-					faPercent.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getFAPercent(), faPercent.getBigDecimalValue()) != 0) {
 				order.setFAPercent(faPercent.getBigDecimalValue());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getFAProfile(),
-					ibOrder.m_faProfile) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getFAProfile(), ibOrder.m_faProfile) != 0) {
 				order.setFAProfile(ibOrder.m_faProfile);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getPermId(),
-					ibOrder.m_permId) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getPermId(), ibOrder.m_permId) != 0) {
 				order.setPermId(ibOrder.m_permId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getParentId(),
-					ibOrder.m_parentId) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getParentId(), ibOrder.m_parentId) != 0) {
 				order.setParentId(ibOrder.m_parentId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getTransmit(),
-					ibOrder.m_transmit) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getTransmit(), ibOrder.m_transmit) != 0) {
 				order.setTransmit(ibOrder.m_transmit);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getDisplayQuantity(),
-					ibOrder.m_displaySize) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getDisplayQuantity(), ibOrder.m_displaySize) != 0) {
 				order.setDisplayQuantity(ibOrder.m_displaySize);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getTriggerMethod(),
-					ibOrder.m_triggerMethod) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getTriggerMethod(), ibOrder.m_triggerMethod) != 0) {
 				order.setTriggerMethod(ibOrder.m_triggerMethod);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getHidden(),
-					ibOrder.m_hidden) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getHidden(), ibOrder.m_hidden) != 0) {
 				order.setHidden(ibOrder.m_hidden);
 				changed = true;
 			}
 			if (null != ibOrder.m_goodAfterTime) {
 				ZonedDateTime goodAfterTime = TradingCalendar
-						.getZonedDateTimeFromDateTimeString(
-								ibOrder.m_goodAfterTime, "yyyyMMdd HH:mm:ss");
-				if (CoreUtils.nullSafeComparator(order.getGoodAfterTime(),
-						goodAfterTime) != 0) {
+						.getZonedDateTimeFromDateTimeString(ibOrder.m_goodAfterTime, "yyyyMMdd HH:mm:ss");
+				if (CoreUtils.nullSafeComparator(order.getGoodAfterTime(), goodAfterTime) != 0) {
 					order.setGoodAfterTime(goodAfterTime);
 					changed = true;
 				}
 			}
 
 			if (null != ibOrder.m_goodTillDate) {
-				ZonedDateTime goodTillDate = TradingCalendar
-						.getZonedDateTimeFromDateTimeString(
-								ibOrder.m_goodTillDate, "yyyyMMdd HH:mm:ss");
-				if (CoreUtils.nullSafeComparator(order.getGoodTillTime(),
-						goodTillDate) != 0) {
+				ZonedDateTime goodTillDate = TradingCalendar.getZonedDateTimeFromDateTimeString(ibOrder.m_goodTillDate,
+						"yyyyMMdd HH:mm:ss");
+				if (CoreUtils.nullSafeComparator(order.getGoodTillTime(), goodTillDate) != 0) {
 					order.setGoodTillTime(goodTillDate);
 					changed = true;
 				}
 			}
-			Integer overridePercentageConstraints = new Integer(
-					(ibOrder.m_overridePercentageConstraints ? 1 : 0));
-			if (CoreUtils.nullSafeComparator(order.getOverrideConstraints(),
-					overridePercentageConstraints) != 0) {
+			Integer overridePercentageConstraints = new Integer((ibOrder.m_overridePercentageConstraints ? 1 : 0));
+			if (CoreUtils.nullSafeComparator(order.getOverrideConstraints(), overridePercentageConstraints) != 0) {
 				order.setOverrideConstraints(overridePercentageConstraints);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(order.getAllOrNothing(),
-					ibOrder.m_allOrNone) != 0) {
+			if (CoreUtils.nullSafeComparator(order.getAllOrNothing(), ibOrder.m_allOrNone) != 0) {
 				order.setAllOrNothing(ibOrder.m_allOrNone);
 				changed = true;
 			}
 			if (changed)
-				order.setLastUpdateDate(TradingCalendar
-						.getDateTimeNowMarketTimeZone());
+				order.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 		}
 		return changed;
 	}
@@ -3365,9 +3076,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            Contract
 	 * @throws ParseException
 	 */
-	public static boolean populateContract(
-			com.ib.client.ContractDetails contractDetails,
-			Contract transientContract) throws ParseException {
+	public static boolean populateContract(com.ib.client.ContractDetails contractDetails, Contract transientContract)
+			throws ParseException {
 
 		boolean changed = false;
 		/*
@@ -3375,171 +3085,125 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 * Symbol ES Local will be ES06. TODO Need to find out how to handle
 		 * same symbol different local symbols when using exchange SMART.
 		 */
-		if (CoreUtils.nullSafeComparator(transientContract.getSymbol(),
-				contractDetails.m_summary.m_localSymbol) != 0
+		if (CoreUtils.nullSafeComparator(transientContract.getSymbol(), contractDetails.m_summary.m_localSymbol) != 0
 				&& SECType.STOCK.equals(transientContract.getSecType())) {
 			return changed;
 
 		}
-		if (CoreUtils.nullSafeComparator(transientContract.getSymbol(),
-				contractDetails.m_summary.m_symbol) == 0) {
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getLocalSymbol(),
+		if (CoreUtils.nullSafeComparator(transientContract.getSymbol(), contractDetails.m_summary.m_symbol) == 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getLocalSymbol(),
 					contractDetails.m_summary.m_localSymbol) != 0) {
-				transientContract
-						.setLocalSymbol(contractDetails.m_summary.m_localSymbol);
+				transientContract.setLocalSymbol(contractDetails.m_summary.m_localSymbol);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getIdContractIB(),
+			if (CoreUtils.nullSafeComparator(transientContract.getIdContractIB(),
 					contractDetails.m_summary.m_conId) != 0) {
-				transientContract
-						.setIdContractIB(contractDetails.m_summary.m_conId);
+				transientContract.setIdContractIB(contractDetails.m_summary.m_conId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getPrimaryExchange(),
+			if (CoreUtils.nullSafeComparator(transientContract.getPrimaryExchange(),
 					contractDetails.m_summary.m_primaryExch) != 0) {
-				transientContract
-						.setPrimaryExchange(contractDetails.m_summary.m_primaryExch);
+				transientContract.setPrimaryExchange(contractDetails.m_summary.m_primaryExch);
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(transientContract.getExchange(),
 					contractDetails.m_summary.m_exchange) != 0) {
-				transientContract
-						.setExchange(contractDetails.m_summary.m_exchange);
+				transientContract.setExchange(contractDetails.m_summary.m_exchange);
 				changed = true;
 			}
 			if (null != contractDetails.m_summary.m_expiry) {
-				ZonedDateTime expiryDateTime = TradingCalendar
-						.getZonedDateTimeFromDateString(
-								contractDetails.m_summary.m_expiry, "yyyyMMdd",
-								TradingCalendar.MKT_TIMEZONE);
-				if (CoreUtils.nullSafeComparator(transientContract.getExpiry(),
-						expiryDateTime) != 0) {
+				ZonedDateTime expiryDateTime = TradingCalendar.getZonedDateTimeFromDateString(
+						contractDetails.m_summary.m_expiry, "yyyyMMdd", TradingCalendar.MKT_TIMEZONE);
+				if (CoreUtils.nullSafeComparator(transientContract.getExpiry(), expiryDateTime) != 0) {
 					transientContract.setExpiry(expiryDateTime);
 					changed = true;
 				}
 			}
 			if (CoreUtils.nullSafeComparator(transientContract.getSecIdType(),
 					contractDetails.m_summary.m_secIdType) != 0) {
-				transientContract
-						.setSecIdType(contractDetails.m_summary.m_secIdType);
+				transientContract.setSecIdType(contractDetails.m_summary.m_secIdType);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getLongName(),
-					contractDetails.m_longName) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getLongName(), contractDetails.m_longName) != 0) {
 				transientContract.setLongName(contractDetails.m_longName);
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(transientContract.getCurrency(),
 					contractDetails.m_summary.m_currency) != 0) {
-				transientContract
-						.setCurrency(contractDetails.m_summary.m_currency);
+				transientContract.setCurrency(contractDetails.m_summary.m_currency);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getCategory(),
-					contractDetails.m_category) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getCategory(), contractDetails.m_category) != 0) {
 				transientContract.setCategory(contractDetails.m_category);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getIndustry(),
-					contractDetails.m_industry) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getIndustry(), contractDetails.m_industry) != 0) {
 				transientContract.setIndustry(contractDetails.m_industry);
 				changed = true;
 			}
 			Money minTick = new Money(contractDetails.m_minTick);
-			if (CoreUtils.nullSafeComparator(minTick, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(
-							transientContract.getMinTick(),
-							minTick.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(minTick, new Money(Double.MAX_VALUE)) != 0 && CoreUtils
+					.nullSafeComparator(transientContract.getMinTick(), minTick.getBigDecimalValue()) != 0) {
 				transientContract.setMinTick(minTick.getBigDecimalValue());
 				changed = true;
 			}
 			Money priceMagnifier = new Money(contractDetails.m_priceMagnifier);
-			if (CoreUtils.nullSafeComparator(priceMagnifier, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(
-							transientContract.getPriceMagnifier(),
+			if (CoreUtils.nullSafeComparator(priceMagnifier, new Money(Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(transientContract.getPriceMagnifier(),
 							priceMagnifier.getBigDecimalValue()) != 0) {
-				transientContract.setPriceMagnifier(priceMagnifier
-						.getBigDecimalValue());
+				transientContract.setPriceMagnifier(priceMagnifier.getBigDecimalValue());
 				changed = true;
 			}
 
 			Money multiplier = new Money(contractDetails.m_summary.m_multiplier);
-			if (CoreUtils.nullSafeComparator(multiplier, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(
-							transientContract.getPriceMultiplier(),
-							multiplier.getBigDecimalValue()) != 0) {
-				transientContract.setPriceMultiplier(multiplier
-						.getBigDecimalValue());
+			if (CoreUtils.nullSafeComparator(multiplier, new Money(Double.MAX_VALUE)) != 0 && CoreUtils
+					.nullSafeComparator(transientContract.getPriceMultiplier(), multiplier.getBigDecimalValue()) != 0) {
+				transientContract.setPriceMultiplier(multiplier.getBigDecimalValue());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getSubCategory(),
-					contractDetails.m_subcategory) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getSubCategory(), contractDetails.m_subcategory) != 0) {
 				transientContract.setSubCategory(contractDetails.m_subcategory);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getTradingClass(),
+			if (CoreUtils.nullSafeComparator(transientContract.getTradingClass(),
 					contractDetails.m_summary.m_tradingClass) != 0) {
-				transientContract
-						.setTradingClass(contractDetails.m_summary.m_tradingClass);
+				transientContract.setTradingClass(contractDetails.m_summary.m_tradingClass);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getComboLegDescription(),
+			if (CoreUtils.nullSafeComparator(transientContract.getComboLegDescription(),
 					contractDetails.m_summary.m_comboLegsDescrip) != 0) {
-				transientContract
-						.setComboLegDescription(contractDetails.m_summary.m_comboLegsDescrip);
+				transientContract.setComboLegDescription(contractDetails.m_summary.m_comboLegsDescrip);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getContractMonth(),
+			if (CoreUtils.nullSafeComparator(transientContract.getContractMonth(),
 					contractDetails.m_contractMonth) != 0) {
-				transientContract
-						.setContractMonth(contractDetails.m_contractMonth);
+				transientContract.setContractMonth(contractDetails.m_contractMonth);
 				changed = true;
 			}
 			Money evMultiplier = new Money(contractDetails.m_evMultiplier);
-			if (CoreUtils.nullSafeComparator(evMultiplier, new Money(
-					Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(
-							transientContract.getEvMultiplier(),
-							evMultiplier.getBigDecimalValue()) != 0) {
-				transientContract.setEvMultiplier(evMultiplier
-						.getBigDecimalValue());
+			if (CoreUtils.nullSafeComparator(evMultiplier, new Money(Double.MAX_VALUE)) != 0 && CoreUtils
+					.nullSafeComparator(transientContract.getEvMultiplier(), evMultiplier.getBigDecimalValue()) != 0) {
+				transientContract.setEvMultiplier(evMultiplier.getBigDecimalValue());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getEvRule(),
-					contractDetails.m_evRule) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getEvRule(), contractDetails.m_evRule) != 0) {
 				transientContract.setEvRule(contractDetails.m_evRule);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract
-					.getIncludeExpired(), new Boolean(
-					contractDetails.m_summary.m_includeExpired)) != 0) {
-				transientContract.setIncludeExpired(new Boolean(
-						contractDetails.m_summary.m_includeExpired));
+			if (CoreUtils.nullSafeComparator(transientContract.getIncludeExpired(),
+					new Boolean(contractDetails.m_summary.m_includeExpired)) != 0) {
+				transientContract.setIncludeExpired(new Boolean(contractDetails.m_summary.m_includeExpired));
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getLiquidHours(),
-					contractDetails.m_liquidHours) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getLiquidHours(), contractDetails.m_liquidHours) != 0) {
 				transientContract.setLiquidHours(contractDetails.m_liquidHours);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getMarketName(),
-					contractDetails.m_marketName) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getMarketName(), contractDetails.m_marketName) != 0) {
 				transientContract.setMarketName(contractDetails.m_marketName);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getOrderTypes(),
-					contractDetails.m_orderTypes) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getOrderTypes(), contractDetails.m_orderTypes) != 0) {
 				String orderTypes = "MKT";
 				if (contractDetails.m_orderTypes.contains("STP")) {
 					orderTypes = orderTypes + ",STP";
@@ -3556,49 +3220,38 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				transientContract.setOrderTypes(orderTypes);
 
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getSecId(),
-					contractDetails.m_summary.m_secId) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getSecId(), contractDetails.m_summary.m_secId) != 0) {
 				transientContract.setSecId(contractDetails.m_summary.m_secId);
 				changed = true;
 			}
 			Money strike = new Money(contractDetails.m_summary.m_strike);
-			if (CoreUtils.nullSafeComparator(strike,
-					new Money(Double.MAX_VALUE)) != 0
-					&& CoreUtils.nullSafeComparator(
-							transientContract.getStrike(),
-							strike.getBigDecimalValue()) != 0) {
+			if (CoreUtils.nullSafeComparator(strike, new Money(Double.MAX_VALUE)) != 0
+					&& CoreUtils.nullSafeComparator(transientContract.getStrike(), strike.getBigDecimalValue()) != 0) {
 				transientContract.setStrike(strike.getBigDecimalValue());
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(transientContract.getTimeZoneId(),
-					contractDetails.m_timeZoneId) != 0) {
+			if (CoreUtils.nullSafeComparator(transientContract.getTimeZoneId(), contractDetails.m_timeZoneId) != 0) {
 				transientContract.setTimeZoneId(contractDetails.m_timeZoneId);
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getTradingHours(),
+			if (CoreUtils.nullSafeComparator(transientContract.getTradingHours(),
 					contractDetails.m_tradingHours) != 0) {
-				transientContract
-						.setTradingHours(contractDetails.m_tradingHours);
+				transientContract.setTradingHours(contractDetails.m_tradingHours);
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(transientContract.getUnderConId(),
 					new Integer(contractDetails.m_underConId)) != 0) {
-				transientContract.setUnderConId(new Integer(
-						contractDetails.m_underConId));
+				transientContract.setUnderConId(new Integer(contractDetails.m_underConId));
 				changed = true;
 			}
-			if (CoreUtils.nullSafeComparator(
-					transientContract.getValidExchanges(),
+			if (CoreUtils.nullSafeComparator(transientContract.getValidExchanges(),
 					contractDetails.m_validExchanges) != 0) {
-				transientContract
-						.setValidExchanges(contractDetails.m_validExchanges);
+				transientContract.setValidExchanges(contractDetails.m_validExchanges);
 				changed = true;
 			}
 			if (CoreUtils.nullSafeComparator(transientContract.getOptionType(),
 					contractDetails.m_summary.m_right) != 0) {
-				transientContract
-						.setOptionType(contractDetails.m_summary.m_right);
+				transientContract.setOptionType(contractDetails.m_summary.m_right);
 				changed = true;
 			}
 		}
@@ -3616,14 +3269,11 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static void populateTradeOrderfill(
-			com.ib.client.Execution execution, TradeOrderfill tradeOrderfill)
+	public static void populateTradeOrderfill(com.ib.client.Execution execution, TradeOrderfill tradeOrderfill)
 			throws ParseException, IOException {
 
-		ZonedDateTime date = TradingCalendar
-				.getZonedDateTimeFromDateTimeString(
-						execution.m_time.replaceAll("\\s", ""),
-						"yyyyMMddHH:mm:ss", TradingCalendar.LOCAL_TIMEZONE);
+		ZonedDateTime date = TradingCalendar.getZonedDateTimeFromDateTimeString(execution.m_time.replaceAll("\\s", ""),
+				"yyyyMMddHH:mm:ss", TradingCalendar.LOCAL_TIMEZONE);
 		tradeOrderfill.setTime(date);
 		tradeOrderfill.setExchange(execution.m_exchange);
 		tradeOrderfill.setSide(execution.m_side);
@@ -3651,9 +3301,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @return com.ib.client.ExecutionFilter
 	 * @throws IOException
 	 */
-	public static com.ib.client.ExecutionFilter getIBExecutionFilter(
-			Integer clientId, ZonedDateTime mktOpen, String secType,
-			String symbol) throws IOException {
+	public static com.ib.client.ExecutionFilter getIBExecutionFilter(Integer clientId, ZonedDateTime mktOpen,
+			String secType, String symbol) throws IOException {
 
 		com.ib.client.ExecutionFilter executionFilter = new com.ib.client.ExecutionFilter();
 		if (null != secType)
@@ -3662,8 +3311,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		if (null != symbol)
 			executionFilter.m_symbol = symbol;
 		if (null != mktOpen) {
-			executionFilter.m_time = TradingCalendar.getFormattedDate(mktOpen,
-					"yyyyMMdd");
+			executionFilter.m_time = TradingCalendar.getFormattedDate(mktOpen, "yyyyMMdd");
 		}
 
 		if (null != clientId)
@@ -3695,15 +3343,12 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param whyHeld
 	 *            String
 	 */
-	public static void logOrderStatus(int orderId, String status, int filled,
-			int remaining, double avgFillPrice, int permId, int parentId,
-			double lastFillPrice, int clientId, String whyHeld) {
+	public static void logOrderStatus(int orderId, String status, int filled, int remaining, double avgFillPrice,
+			int permId, int parentId, double lastFillPrice, int clientId, String whyHeld) {
 
-		_log.info("orderId: " + orderId + " status: " + status + " filled: "
-				+ filled + " remaining: " + remaining + " avgFillPrice: "
-				+ avgFillPrice + " permId: " + permId + " parentId: "
-				+ parentId + " lastFillPrice: " + lastFillPrice + " clientId: "
-				+ clientId + " whyHeld: " + whyHeld);
+		_log.info("orderId: " + orderId + " status: " + status + " filled: " + filled + " remaining: " + remaining
+				+ " avgFillPrice: " + avgFillPrice + " permId: " + permId + " parentId: " + parentId
+				+ " lastFillPrice: " + lastFillPrice + " clientId: " + clientId + " whyHeld: " + whyHeld);
 	}
 
 	/**
@@ -3714,26 +3359,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public static void logTradeOrder(com.ib.client.Order order) {
 
-		_log.debug("OrderKey: " + +order.m_orderId + " ClientId: "
-				+ order.m_clientId + " PermId: " + order.m_permId + " Action: "
-				+ order.m_action + " TotalQuantity: " + order.m_totalQuantity
-				+ " OrderType: " + order.m_orderType + " LmtPrice: "
-				+ order.m_lmtPrice + " AuxPrice: " + order.m_auxPrice
-				+ " Tif: " + order.m_tif + " OcaGroup: " + order.m_ocaGroup
-				+ " OcaType: " + order.m_ocaType + " OrderRef: "
-				+ order.m_orderRef + " Transmit: " + order.m_transmit
-				+ " DisplaySize: " + order.m_displaySize + " TriggerMethod: "
-				+ order.m_triggerMethod + " Hidden: " + order.m_hidden
-				+ " ParentId: " + order.m_parentId + " GoodAfterTime: "
-				+ order.m_goodAfterTime + " GoodTillDate: "
-				+ order.m_goodTillDate + " TrailStopPrice: "
-				+ order.m_trailStopPrice + " TrailingPercent: "
-				+ order.m_trailingPercent + " OverridePercentageConstraints: "
-				+ order.m_overridePercentageConstraints + " AllOrNone: "
-				+ order.m_allOrNone + " Account: " + order.m_account
-				+ " FAGroup: " + order.m_faGroup + " FAMethod: "
-				+ order.m_faMethod + " FAPercent: " + order.m_faPercentage
-				+ " FAProfile: " + order.m_faProfile);
+		_log.debug("OrderKey: " + +order.m_orderId + " ClientId: " + order.m_clientId + " PermId: " + order.m_permId
+				+ " Action: " + order.m_action + " TotalQuantity: " + order.m_totalQuantity + " OrderType: "
+				+ order.m_orderType + " LmtPrice: " + order.m_lmtPrice + " AuxPrice: " + order.m_auxPrice + " Tif: "
+				+ order.m_tif + " OcaGroup: " + order.m_ocaGroup + " OcaType: " + order.m_ocaType + " OrderRef: "
+				+ order.m_orderRef + " Transmit: " + order.m_transmit + " DisplaySize: " + order.m_displaySize
+				+ " TriggerMethod: " + order.m_triggerMethod + " Hidden: " + order.m_hidden + " ParentId: "
+				+ order.m_parentId + " GoodAfterTime: " + order.m_goodAfterTime + " GoodTillDate: "
+				+ order.m_goodTillDate + " TrailStopPrice: " + order.m_trailStopPrice + " TrailingPercent: "
+				+ order.m_trailingPercent + " OverridePercentageConstraints: " + order.m_overridePercentageConstraints
+				+ " AllOrNone: " + order.m_allOrNone + " Account: " + order.m_account + " FAGroup: " + order.m_faGroup
+				+ " FAMethod: " + order.m_faMethod + " FAPercent: " + order.m_faPercentage + " FAProfile: "
+				+ order.m_faProfile);
 	}
 
 	/**
@@ -3743,13 +3380,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.Contract
 	 */
 	public static void logContract(com.ib.client.Contract contract) {
-		_log.debug("Symbol: " + contract.m_symbol + " Sec Type: "
-				+ contract.m_secType + " Exchange: " + contract.m_exchange
-				+ " Con Id: " + contract.m_conId + " Currency: "
-				+ contract.m_currency + " SecIdType: " + contract.m_secIdType
-				+ " Primary Exch: " + contract.m_primaryExch
-				+ " Local Symbol: " + contract.m_localSymbol + " SecId: "
-				+ contract.m_secId + " Multiplier: " + contract.m_multiplier
+		_log.debug("Symbol: " + contract.m_symbol + " Sec Type: " + contract.m_secType + " Exchange: "
+				+ contract.m_exchange + " Con Id: " + contract.m_conId + " Currency: " + contract.m_currency
+				+ " SecIdType: " + contract.m_secIdType + " Primary Exch: " + contract.m_primaryExch + " Local Symbol: "
+				+ contract.m_localSymbol + " SecId: " + contract.m_secId + " Multiplier: " + contract.m_multiplier
 				+ " Expiry: " + contract.m_expiry);
 	}
 
@@ -3759,27 +3393,18 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param contect
 	 *            com.ib.client.ContractDetails
 	 */
-	public static void logContractDetails(
-			com.ib.client.ContractDetails contractDetails) {
-		_log.debug("Symbol: " + contractDetails.m_summary.m_symbol
-				+ " Sec Type: " + contractDetails.m_summary.m_secType
-				+ " Exchange: " + contractDetails.m_summary.m_exchange
-				+ " Con Id: " + contractDetails.m_summary.m_conId
-				+ " Currency: " + contractDetails.m_summary.m_currency
-				+ " SecIdType: " + contractDetails.m_summary.m_secIdType
-				+ " Primary Exch: " + contractDetails.m_summary.m_primaryExch
-				+ " Local Symbol: " + contractDetails.m_summary.m_localSymbol
-				+ " SecId: " + contractDetails.m_summary.m_secId
-				+ " Multiplier: " + contractDetails.m_summary.m_multiplier
-				+ " Category: " + contractDetails.m_category + " Expiry: "
-				+ contractDetails.m_summary.m_expiry + " ContractMonth: "
-				+ contractDetails.m_contractMonth + " Cusip: "
-				+ contractDetails.m_cusip + " Industry: "
-				+ contractDetails.m_industry + " IssueDate: "
-				+ contractDetails.m_issueDate + " MarketName: "
-				+ contractDetails.m_marketName + " MinTick: "
-				+ contractDetails.m_minTick + " PriceMagnifier: "
-				+ contractDetails.m_priceMagnifier);
+	public static void logContractDetails(com.ib.client.ContractDetails contractDetails) {
+		_log.debug("Symbol: " + contractDetails.m_summary.m_symbol + " Sec Type: " + contractDetails.m_summary.m_secType
+				+ " Exchange: " + contractDetails.m_summary.m_exchange + " Con Id: " + contractDetails.m_summary.m_conId
+				+ " Currency: " + contractDetails.m_summary.m_currency + " SecIdType: "
+				+ contractDetails.m_summary.m_secIdType + " Primary Exch: " + contractDetails.m_summary.m_primaryExch
+				+ " Local Symbol: " + contractDetails.m_summary.m_localSymbol + " SecId: "
+				+ contractDetails.m_summary.m_secId + " Multiplier: " + contractDetails.m_summary.m_multiplier
+				+ " Category: " + contractDetails.m_category + " Expiry: " + contractDetails.m_summary.m_expiry
+				+ " ContractMonth: " + contractDetails.m_contractMonth + " Cusip: " + contractDetails.m_cusip
+				+ " Industry: " + contractDetails.m_industry + " IssueDate: " + contractDetails.m_issueDate
+				+ " MarketName: " + contractDetails.m_marketName + " MinTick: " + contractDetails.m_minTick
+				+ " PriceMagnifier: " + contractDetails.m_priceMagnifier);
 	}
 
 	/**
@@ -3789,14 +3414,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.OrderState
 	 */
 	public static void logOrderState(com.ib.client.OrderState orderState) {
-		_log.debug("Status: " + orderState.m_status + " Comms Amt: "
-				+ orderState.m_commission + " Comms Currency: "
-				+ orderState.m_commissionCurrency + " Warning txt: "
-				+ orderState.m_warningText + " Init Margin: "
-				+ orderState.m_initMargin + " Maint Margin: "
-				+ orderState.m_maintMargin + " Min Comms: "
-				+ orderState.m_minCommission + " Max Comms: "
-				+ orderState.m_maxCommission);
+		_log.debug("Status: " + orderState.m_status + " Comms Amt: " + orderState.m_commission + " Comms Currency: "
+				+ orderState.m_commissionCurrency + " Warning txt: " + orderState.m_warningText + " Init Margin: "
+				+ orderState.m_initMargin + " Maint Margin: " + orderState.m_maintMargin + " Min Comms: "
+				+ orderState.m_minCommission + " Max Comms: " + orderState.m_maxCommission);
 	}
 
 	/**
@@ -3806,10 +3427,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            com.ib.client.Execution
 	 */
 	public static void logExecution(com.ib.client.Execution execution) {
-		_log.debug("execDetails OrderId: " + execution.m_orderId
-				+ " ClientId: " + execution.m_clientId + " PermId: "
-				+ execution.m_permId + " ExecId: " + execution.m_execId
-				+ " Time: " + execution.m_time + " CumQty: "
+		_log.debug("execDetails OrderId: " + execution.m_orderId + " ClientId: " + execution.m_clientId + " PermId: "
+				+ execution.m_permId + " ExecId: " + execution.m_execId + " Time: " + execution.m_time + " CumQty: "
 				+ execution.m_cumQty);
 	}
 
@@ -3819,14 +3438,10 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @param commissionReport
 	 *            com.ib.client.CommissionReport
 	 */
-	public static void logCommissionReport(
-			com.ib.client.CommissionReport commissionReport) {
-		_log.debug("execDetails ExecId: " + commissionReport.m_execId
-				+ " Commission: " + commissionReport.m_commission
-				+ " Currency: " + commissionReport.m_currency
-				+ " RealizedPNL: " + commissionReport.m_realizedPNL
-				+ " yieldRedemptionDate: "
-				+ commissionReport.m_yieldRedemptionDate + " Yield: "
+	public static void logCommissionReport(com.ib.client.CommissionReport commissionReport) {
+		_log.debug("execDetails ExecId: " + commissionReport.m_execId + " Commission: " + commissionReport.m_commission
+				+ " Currency: " + commissionReport.m_currency + " RealizedPNL: " + commissionReport.m_realizedPNL
+				+ " yieldRedemptionDate: " + commissionReport.m_yieldRedemptionDate + " Yield: "
 				+ commissionReport.m_yield);
 	}
 }
