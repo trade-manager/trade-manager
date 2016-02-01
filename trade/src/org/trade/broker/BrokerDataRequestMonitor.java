@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -149,11 +150,11 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 					Tradingday tradingday = (Tradingday) itemTradingday.clone();
 					for (Tradestrategy itemTradestrategy : itemTradingday
 							.getTradestrategies()) {
-						if (backTestBarSize < itemTradestrategy.getBarSize()) {
+						if (getBarSize( tradingday) < itemTradestrategy.getBarSize()) {
 							try {
 								Tradestrategy tradestrategy = (Tradestrategy) itemTradestrategy
 										.clone();
-								tradestrategy.setBarSize(backTestBarSize);
+								tradestrategy.setBarSize(getBarSize( tradingday));
 								tradestrategy.setChartDays(1);
 								tradestrategy
 										.setIdTradeStrategy(this.brokerModel
@@ -607,6 +608,19 @@ public class BrokerDataRequestMonitor extends SwingWorker<Void, String> {
 		}
 
 		return totalSumbitted;
+	}
+	
+	public Integer getBarSize(Tradingday tradingday) {
+
+		if (null !=this.backTestBarSize && this.backTestBarSize == 1) {
+			Duration duration = Duration.between(
+					tradingday.getOpen(), tradingday
+							.getClose());
+			long daySeconds = duration.getSeconds();
+			return ((int) daySeconds) * this.backTestBarSize;
+		}
+		
+		return this.backTestBarSize;
 	}
 
 	/**

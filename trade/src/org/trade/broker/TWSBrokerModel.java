@@ -606,14 +606,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				Integer chartDays = tradestrategy.getChartDays();
 				if (TradingCalendar.getDurationInDays(
 						TradingCalendar.addTradingDays(endDate, (-1 * tradestrategy.getChartDays())),
-						TradingCalendar.getDateTimeNowMarketTimeZone()) > endDate.getDayOfYear()) {
-					chartDays = (int) (endDate.getDayOfYear() - (TradingCalendar.getDurationInDays(endDate,
-							TradingCalendar.getDateTimeNowMarketTimeZone())));
+						TradingCalendar.getDateTimeNowMarketTimeZone()) > 365) {
+					chartDays = 365;
 				}
 
-				_log.debug("onBrokerData Req Id: " + tradestrategy.getId() + " Symbol: "
+				_log.info("onBrokerData Req Id: " + tradestrategy.getId() + " Symbol: "
 						+ tradestrategy.getContract().getSymbol() + " end Time: " + endDateTime + " Period length: "
-						+ tradestrategy.getChartDays() + " Bar size: " + tradestrategy.getBarSize() + " WhatToShow: "
+						+ ChartDays.newInstance(chartDays).getDisplayName() + " Bar size: " + BarSize.newInstance(tradestrategy.getBarSize()).getDisplayName() + " WhatToShow: "
 						+ backfillWhatToShow + " Regular Trading Hrs: " + backfillUseRTH + " Date format: "
 						+ backfillDateFormat);
 				List<TagValue> chartOptions = new ArrayList<TagValue>();
@@ -1427,9 +1426,6 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		BrokerModelException brokerModelException = null;
 		if (m_contractRequests.containsKey(id)) {
 			symbol = m_contractRequests.get(id).getSymbol();
-			synchronized (m_contractRequests) {
-				m_contractRequests.remove(id);
-			}
 		}
 		if (m_historyDataRequests.containsKey(id)) {
 			Tradestrategy tradestrategy = m_historyDataRequests.get(id);
