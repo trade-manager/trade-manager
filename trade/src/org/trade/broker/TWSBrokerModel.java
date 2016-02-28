@@ -42,6 +42,7 @@ import java.text.ParseException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -612,7 +613,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 
 				_log.info("onBrokerData Req Id: " + tradestrategy.getId() + " Symbol: "
 						+ tradestrategy.getContract().getSymbol() + " end Time: " + endDateTime + " Period length: "
-						+ ChartDays.newInstance(chartDays).getDisplayName() + " Bar size: " + BarSize.newInstance(tradestrategy.getBarSize()).getDisplayName() + " WhatToShow: "
+						+ ChartDays.newInstance(chartDays).getDisplayName() + " Bar size: "
+						+ BarSize.newInstance(tradestrategy.getBarSize()).getDisplayName() + " WhatToShow: "
 						+ backfillWhatToShow + " Regular Trading Hrs: " + backfillUseRTH + " Date format: "
 						+ backfillDateFormat);
 				List<TagValue> chartOptions = new ArrayList<TagValue>();
@@ -1506,8 +1508,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 		 * main controller that we could not connect and so return the app to
 		 * test mode.
 		 */
-		if (502 == code)
+		if (502 == code) {
 			this.fireConnectionClosed(false);
+		}
 	}
 
 	/**
@@ -2109,7 +2112,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *      int)
 	 */
 	public void updateMktDepth(int tickerId, int position, int operation, int side, double price, int size) {
-
+		_log.debug("updateMktDepth: " + tickerId + " " + position + " " + operation + " " + side + " " + price + " "
+				+ size);
 	}
 
 	/**
@@ -2134,6 +2138,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void updateMktDepthL2(int tickerId, int position, String marketMaker, int operation, int side, double price,
 			int size) {
+		_log.debug("updateMktDepthL2: " + tickerId + " " + position + " " + operation + " " + side + " " + price + " "
+				+ size);
 
 	}
 
@@ -2151,6 +2157,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#updateNewsBulletin(int, int, String, String)
 	 */
 	public void updateNewsBulletin(int msgId, int msgType, String message, String origExchange) {
+		_log.debug("updateNewsBulletin: " + msgId + " " + msgType + " " + message + " " + origExchange);
 
 	}
 
@@ -2229,7 +2236,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 				break;
 			}
 			default: {
-
+				_log.debug("receiveFA: /n" + xml);
 			}
 			}
 		} catch (Exception ex) {
@@ -2254,7 +2261,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#marketDataType(int, int)
 	 */
 	public void marketDataType(int reqId, int marketDataType) {
-
+		_log.debug("marketDataType: " + reqId + " " + marketDataType);
 	}
 
 	/**
@@ -2381,6 +2388,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#scannerParameters(String)
 	 */
 	public void scannerParameters(String xml) {
+		_log.debug("scannerParameters: " + xml);
 	}
 
 	/**
@@ -2405,7 +2413,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 */
 	public void scannerData(int reqId, int rank, ContractDetails contractDetails, String distance, String benchmark,
 			String projection, String legsStr) {
-
+		_log.debug("scannerData: " + reqId);
 	}
 
 	/**
@@ -2416,7 +2424,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#scannerDataEnd(int)
 	 */
 	public void scannerDataEnd(int reqId) {
-
+		_log.debug("scannerDataEnd: " + reqId);
 	}
 
 	/**
@@ -2501,7 +2509,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#currentTime(long)
 	 */
 	public void currentTime(long time) {
-
+		_log.debug("currentTime: " + new Date(time));
 	}
 
 	/**
@@ -2514,7 +2522,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#fundamentalData(int, String)
 	 */
 	public void fundamentalData(int reqId, String data) {
-
+		_log.debug("fundamentalData: " + reqId + " " + data);
 	}
 
 	/**
@@ -2527,7 +2535,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#deltaNeutralValidation(int, UnderComp)
 	 */
 	public void deltaNeutralValidation(int reqId, UnderComp underComp) {
-
+		_log.debug("deltaNeutralValidation: " + reqId + " " + underComp.toString());
 	}
 
 	/**
@@ -2538,7 +2546,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * @see com.ib.client.EWrapper#tickSnapshotEnd(int)
 	 */
 	public void tickSnapshotEnd(int reqId) {
-
+		_log.debug("tickSnapshotEnd: " + reqId);
 	}
 
 	/**
@@ -2610,8 +2618,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            The currency of the tag.
 	 */
 	public void accountSummary(int arg0, String arg1, String arg2, String arg3, String arg4) {
-		// TODO Auto-generated method stub
-
+		_log.debug("accountSummary: " + arg0 + " " + arg1 + " " + arg2 + " " + arg3 + " " + arg4);
 	}
 
 	/**
@@ -2621,8 +2628,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            integer
 	 */
 	public void accountSummaryEnd(int reqId) {
-		// TODO Auto-generated method stub
-
+		_log.debug("accountSummaryEnd: " + reqId);
 	}
 
 	/**
@@ -2637,8 +2643,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 *            double The position.
 	 */
 	public void position(String arg0, com.ib.client.Contract arg1, int arg2, double arg3) {
-		// TODO Auto-generated method stub
-
+		_log.debug("position: " + arg0 + " " + arg1.toString() + " " + arg2 + " " + arg3);
 	}
 
 	/**
@@ -2646,8 +2651,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 */
 	public void positionEnd() {
-		// TODO Auto-generated method stub
-
+		_log.debug("positionEnd: ");
 	}
 
 	/**
@@ -2655,8 +2659,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 */
 	public void displayGroupList(int arg0, String arg1) {
-		// TODO Auto-generated method stub
-
+		_log.debug("displayGroupList: " + arg0 + " " + arg1);
 	}
 
 	/**
@@ -2664,8 +2667,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 */
 	public void displayGroupUpdated(int arg0, String arg1) {
-		// TODO Auto-generated method stub
-
+		_log.debug("displayGroupUpdated: " + arg0 + " " + arg1);
 	}
 
 	/**
@@ -2673,8 +2675,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 */
 	public void verifyCompleted(boolean arg0, String arg1) {
-		// TODO Auto-generated method stub
-
+		_log.debug("verifyCompleted: " + arg0 + " " + arg1);
 	}
 
 	/**
@@ -2682,8 +2683,7 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 	 * 
 	 */
 	public void verifyMessageAPI(String arg0) {
-		// TODO Auto-generated method stub
-
+		_log.debug("verifyMessageAPI: " + arg0);
 	}
 
 	/**
