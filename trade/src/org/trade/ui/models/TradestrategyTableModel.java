@@ -94,6 +94,7 @@ public class TradestrategyTableModel extends TableModel {
 	private static final String STATUS = "     Status     ";
 	private static final String CURRENCY = "Currency*";
 	private static final String EXCHANGE = "Exchange*";
+	private static final String PRIMARY_EXCHANGE = "Primary Exch";
 	private static final String SEC_TYPE = "SEC Type*";
 	private static final String EXPIRY = "Expiry";
 
@@ -106,35 +107,27 @@ public class TradestrategyTableModel extends TableModel {
 					+ "Note the default on add is set in the config.properties (<b>trade.tradingtab.default.add</b>)</html>",
 			"<html>Your dirctional bias for this contract.<br>"
 					+ "Note this is only needed if your strategy uses it.</html>",
-			"<html>For gaps the grade<br>"
-					+ "See gap rules for tier grading criteria.<br>"
+			"<html>For gaps the grade<br>" + "See gap rules for tier grading criteria.<br>"
 					+ "Note this is only needed if your strategy uses it.</html>",
 			"<html>The strategy to trade with<br>"
 					+ "Note the default is set in the config.properties (<b>trade.strategy.default</b>)</html>",
-			null,
-			"Portfolio",
+			null, "Portfolio",
 			"<html>Bar size for strategy. Note Chart Days/BarSize combinations for IB:<br/>"
 					+ "Note the default is set in the config.properties (<b>trade.backfill.barsize</b>)</html>",
 			"<html>Historical data to pull in i.e 2D is today + yesterday<br>"
 					+ "Note the default is set in the config.properties (<b>trade.backfill.duration</b>)</html>",
 			"<html>Risk amount for trade used to calculate position size<br>"
 					+ "Note the default is set in the config.properties (<b>trade.risk</b>)</html>",
-			"% Change from close",
-			"% Change from open",
-			"<html>Tradestrategy status<br>"
-					+ "Note this is updated by the application</html>",
-			null,
-			null,
-			null,
-			"<html>Expiry date for future contracts<br>"
-					+ "Format MM/YYYY</html>" };
+			"% Change from close", "% Change from open",
+			"<html>Tradestrategy status<br>" + "Note this is updated by the application</html>", null, null, null,
+			"<html>Expiry date for future contracts<br>" + "Format MM/YYYY</html>" };
 
 	private Tradingday m_data = null;
 	private Timer timer = null;
 
 	public TradestrategyTableModel() {
 		super(columnHeaderToolTip);
-		columnNames = new String[18];
+		columnNames = new String[19];
 		columnNames[0] = DATE;
 		columnNames[1] = TRADE;
 		columnNames[2] = SYMBOL;
@@ -151,8 +144,9 @@ public class TradestrategyTableModel extends TableModel {
 		columnNames[13] = STATUS;
 		columnNames[14] = CURRENCY;
 		columnNames[15] = EXCHANGE;
-		columnNames[16] = SEC_TYPE;
-		columnNames[17] = EXPIRY;
+		columnNames[16] = PRIMARY_EXCHANGE;
+		columnNames[17] = SEC_TYPE;
+		columnNames[18] = EXPIRY;
 
 		/*
 		 * Create a 5sec timer to refresh the data this is used for the % chg,
@@ -199,10 +193,8 @@ public class TradestrategyTableModel extends TableModel {
 			}
 		}
 
-		if ((columnNames[column] == DATE)
-				|| (columnNames[column] == STRATEGY_MGR)
-				|| (columnNames[column] == PERCENTCHGFRCLOSE)
-				|| (columnNames[column] == PERCENTCHGFROPEN)
+		if ((columnNames[column] == DATE) || (columnNames[column] == STRATEGY_MGR)
+				|| (columnNames[column] == PERCENTCHGFRCLOSE) || (columnNames[column] == PERCENTCHGFROPEN)
 				|| (columnNames[column] == STATUS)) {
 			return false;
 		}
@@ -240,8 +232,7 @@ public class TradestrategyTableModel extends TableModel {
 			timer.stop();
 		this.m_data = data;
 		this.clearAll();
-		if (null != getData() && null != getData().getTradestrategies()
-				&& !getData().getTradestrategies().isEmpty()) {
+		if (null != getData() && null != getData().getTradestrategies() && !getData().getTradestrategies().isEmpty()) {
 			for (final Tradestrategy element : getData().getTradestrategies()) {
 				final Vector<Object> newRow = new Vector<Object>();
 				getNewRow(newRow, element);
@@ -275,8 +266,7 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 2: {
-			element.getContract().setSymbol(
-					((String) value).trim().toUpperCase());
+			element.getContract().setSymbol(((String) value).trim().toUpperCase());
 			break;
 		}
 		case 3: {
@@ -292,27 +282,23 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 5: {
-			final Strategy strategy = (Strategy) ((DAOStrategy) value)
-					.getObject();
+			final Strategy strategy = (Strategy) ((DAOStrategy) value).getObject();
 			element.setStrategy(strategy);
 
 			if (strategy.hasStrategyManager()) {
-				this.setValueAt(DAOStrategyManager.newInstance(strategy
-						.getStrategyManager().getName()), row, column + 1);
+				this.setValueAt(DAOStrategyManager.newInstance(strategy.getStrategyManager().getName()), row,
+						column + 1);
 			} else {
-				this.setValueAt(DAOStrategyManager.newInstance(Decode.NONE),
-						row, column + 1);
+				this.setValueAt(DAOStrategyManager.newInstance(Decode.NONE), row, column + 1);
 			}
 			break;
 		}
 		case 6: {
-			element.getStrategy().setStrategyManager(
-					(Strategy) ((DAOStrategyManager) value).getObject());
+			element.getStrategy().setStrategyManager((Strategy) ((DAOStrategyManager) value).getObject());
 			break;
 		}
 		case 7: {
-			Portfolio portfolio = (Portfolio) ((DAOPortfolio) value)
-					.getObject();
+			Portfolio portfolio = (Portfolio) ((DAOPortfolio) value).getObject();
 			element.setPortfolio(portfolio);
 			break;
 		}
@@ -347,10 +333,14 @@ public class TradestrategyTableModel extends TableModel {
 			break;
 		}
 		case 16: {
-			element.getContract().setSecType(((SECType) value).getCode());
+			element.getContract().setPrimaryExchange(((Exchange) value).getCode());
 			break;
 		}
 		case 17: {
+			element.getContract().setSecType(((SECType) value).getCode());
+			break;
+		}
+		case 18: {
 			ZonedDateTime zonedDateTime = ((Date) value).getZonedDateTime();
 			zonedDateTime = zonedDateTime.plusMonths(1);
 			zonedDateTime = zonedDateTime.minusDays(1);
@@ -360,8 +350,7 @@ public class TradestrategyTableModel extends TableModel {
 		default: {
 		}
 		}
-		element.setLastUpdateDate(TradingCalendar
-				.getDateTimeNowMarketTimeZone());
+		element.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 		element.setDirty(true);
 	}
 
@@ -373,41 +362,30 @@ public class TradestrategyTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		String symbol = ((String) this.getValueAt(selectedRow, 2)).trim()
-				.toUpperCase();
-		final Strategy strategy = (Strategy) ((DAOStrategy) this.getValueAt(
-				selectedRow, 5)).getObject();
-		Portfolio portfolio = (Portfolio) ((DAOPortfolio) this.getValueAt(
-				selectedRow, 7)).getObject();
-		Integer barSize = new Integer(
-				((BarSize) this.getValueAt(selectedRow, 8)).getCode());
-		String currency = ((Currency) this.getValueAt(selectedRow, 14))
-				.getCode();
-		String exchange = ((Exchange) this.getValueAt(selectedRow, 15))
-				.getCode();
-		String secType = ((SECType) this.getValueAt(selectedRow, 16)).getCode();
+		String symbol = ((String) this.getValueAt(selectedRow, 2)).trim().toUpperCase();
+		final Strategy strategy = (Strategy) ((DAOStrategy) this.getValueAt(selectedRow, 5)).getObject();
+		Portfolio portfolio = (Portfolio) ((DAOPortfolio) this.getValueAt(selectedRow, 7)).getObject();
+		Integer barSize = new Integer(((BarSize) this.getValueAt(selectedRow, 8)).getCode());
+		String currency = ((Currency) this.getValueAt(selectedRow, 14)).getCode();
+		String exchange = ((Exchange) this.getValueAt(selectedRow, 15)).getCode();
+		String priaryExchange = ((Exchange) this.getValueAt(selectedRow, 16)).getCode();
+		String secType = ((SECType) this.getValueAt(selectedRow, 17)).getCode();
 
 		for (final Tradestrategy element : getData().getTradestrategies()) {
 			if (null != barSize && barSize == 1) {
-				long daySeconds = TradingCalendar.getDurationInSeconds(element
-						.getTradingday().getOpen(), element.getTradingday()
-						.getClose());
+				long daySeconds = TradingCalendar.getDurationInSeconds(element.getTradingday().getOpen(),
+						element.getTradingday().getClose());
 				barSize = (int) daySeconds * barSize;
 			}
-			if ((CoreUtils.nullSafeComparator(
-					element.getContract().getSymbol(), symbol) == 0 && null == symbol)
-					|| (CoreUtils.nullSafeComparator(element.getContract()
-							.getSymbol(), symbol) == 0
-							&& element.getStrategy().getName()
-									.equals(strategy.getName())
-							&& element.getPortfolio().getName()
-									.equals(portfolio.getName())
+			if ((CoreUtils.nullSafeComparator(element.getContract().getSymbol(), symbol) == 0 && null == symbol)
+					|| (CoreUtils.nullSafeComparator(element.getContract().getSymbol(), symbol) == 0
+							&& element.getStrategy().getName().equals(strategy.getName())
+							&& element.getPortfolio().getName().equals(portfolio.getName())
 							&& element.getBarSize().equals(barSize)
-							&& element.getContract().getCurrency()
-									.equals(currency)
-							&& element.getContract().getExchange()
-									.equals(exchange) && element.getContract()
-							.getSecType().equals(secType))) {
+							&& element.getContract().getCurrency().equals(currency)
+							&& element.getContract().getExchange().equals(exchange)
+							&& element.getContract().getPrimaryExchange().equals(priaryExchange)
+							&& element.getContract().getSecType().equals(secType))) {
 				getData().getTradestrategies().remove(element);
 				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
@@ -424,47 +402,40 @@ public class TradestrategyTableModel extends TableModel {
 		Tradestrategy tradestrategy = null;
 		String strategyName = null;
 		Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
-		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
-				.getObject();
+		Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance().getObject();
 		Integer chartDays = ChartDays.TWO_DAYS;
 		Integer barSize = BarSize.FIVE_MIN;
 		Integer riskAmount = new Integer(0);
 		if (null != tradingday) {
 			try {
 
-				chartDays = ConfigProperties
-						.getPropAsInt("trade.backfill.duration");
+				chartDays = ConfigProperties.getPropAsInt("trade.backfill.duration");
 				if (!ChartDays.newInstance(chartDays).isValid())
 					chartDays = new Integer(2);
 
-				barSize = ConfigProperties
-						.getPropAsInt("trade.backfill.barsize");
+				barSize = ConfigProperties.getPropAsInt("trade.backfill.barsize");
 				if (!BarSize.newInstance(barSize).isValid())
 					barSize = new Integer(300);
 
 				riskAmount = ConfigProperties.getPropAsInt("trade.risk");
-				strategyName = ConfigProperties
-						.getPropAsString("trade.strategy.default");
+				strategyName = ConfigProperties.getPropAsString("trade.strategy.default");
 				if (!DAOStrategy.newInstance(strategyName).isValid())
 					strategyName = DAOStrategy.newInstance().getCode();
 
 				if (null != strategyName) {
-					strategy = (Strategy) DAOStrategy.newInstance(strategyName)
-							.getObject();
+					strategy = (Strategy) DAOStrategy.newInstance(strategyName).getObject();
 				}
-				tradestrategy = Tradingdays.parseContractLine(ConfigProperties
-						.getPropAsString("trade.tradingtab.default.add"));
+				tradestrategy = Tradingdays
+						.parseContractLine(ConfigProperties.getPropAsString("trade.tradingtab.default.add"));
 
 			} catch (Exception e) {
 				// Do nothing
 			}
 
 			if (null == tradestrategy) {
-				tradestrategy = new Tradestrategy(new Contract(SECType.STOCK,
-						"", Exchange.SMART, Currency.USD, null, null),
-						tradingday, strategy, portfolio, new BigDecimal(
-								riskAmount), null, null, true, chartDays,
-						barSize);
+				tradestrategy = new Tradestrategy(
+						new Contract(SECType.STOCK, "", Exchange.SMART, Currency.USD, null, null), tradingday, strategy,
+						portfolio, new BigDecimal(riskAmount), null, null, true, chartDays, barSize);
 			} else {
 				tradestrategy.setTradingday(tradingday);
 			}
@@ -511,17 +482,14 @@ public class TradestrategyTableModel extends TableModel {
 		} else {
 			newRow.addElement(Tier.newInstance(element.getTier()));
 		}
-		newRow.addElement(DAOStrategy.newInstance(element.getStrategy()
-				.getName()));
+		newRow.addElement(DAOStrategy.newInstance(element.getStrategy().getName()));
 		if (element.getStrategy().hasStrategyManager()) {
-			newRow.addElement(DAOStrategyManager.newInstance(element
-					.getStrategy().getStrategyManager().getName()));
+			newRow.addElement(DAOStrategyManager.newInstance(element.getStrategy().getStrategyManager().getName()));
 		} else {
 			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
 		}
 
-		newRow.addElement(DAOPortfolio.newInstance(element.getPortfolio()
-				.getName()));
+		newRow.addElement(DAOPortfolio.newInstance(element.getPortfolio().getName()));
 		newRow.addElement(BarSize.newInstance(element.getBarSize()));
 		newRow.addElement(ChartDays.newInstance(element.getChartDays()));
 		newRow.addElement(new Money(element.getRiskAmount()));
@@ -531,21 +499,17 @@ public class TradestrategyTableModel extends TableModel {
 		 * hibernate and Eager fetch.
 		 */
 		if (null != element.getStrategyData()) {
-			newRow.addElement(element.getStrategyData().getBaseCandleSeries()
-					.getPercentChangeFromClose());
-			newRow.addElement(element.getStrategyData().getBaseCandleSeries()
-					.getPercentChangeFromOpen());
+			newRow.addElement(element.getStrategyData().getBaseCandleSeries().getPercentChangeFromClose());
+			newRow.addElement(element.getStrategyData().getBaseCandleSeries().getPercentChangeFromOpen());
 		} else {
 			newRow.addElement(new Percent(0));
 			newRow.addElement(new Percent(0));
 		}
 		newRow.addElement(element.getTradestrategyStatus());
-		newRow.addElement(Currency.newInstance(element.getContract()
-				.getCurrency()));
-		newRow.addElement(Exchange.newInstance(element.getContract()
-				.getExchange()));
-		newRow.addElement(SECType.newInstance(element.getContract()
-				.getSecType()));
+		newRow.addElement(Currency.newInstance(element.getContract().getCurrency()));
+		newRow.addElement(Exchange.newInstance(element.getContract().getExchange()));
+		newRow.addElement(Exchange.newInstance(element.getContract().getPrimaryExchange()));
+		newRow.addElement(SECType.newInstance(element.getContract().getSecType()));
 		if (null == element.getContract().getExpiry()) {
 			newRow.addElement(new Date());
 		} else {
