@@ -2,14 +2,14 @@
 	<property file="build.properties" />
 	<property name="base" location=".." />
 	<property environment="env" />
-	<property name="component.base" location=".." />
+
 	<!-- Initialisation. -->
 	<target name="initialise" description="Initialise required settings.">
 		<tstamp />
 		<property name="build" value="${component.base}/bin" />
 		<property name="dist" value="${component.base}/dist" />
-		<property name="srctrade" value="${component.base}/trade/src" />
-		<property name="srccore" value="${component.base}/core/src" />
+		<property name="srctrade" value="${component.base.src}/trade/src" />
+		<property name="srccore" value="${component.base.src}/core/src" />
 		<property name="config" value="${component.base}/config" />
 		<property name="name" value="${dist}/${component.name.base}-${component.name.version}" />
 		<!-- Edit the next line to link to the swt library you want, see README file in the swt folder -->
