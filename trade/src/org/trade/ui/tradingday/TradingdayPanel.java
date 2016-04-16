@@ -732,7 +732,7 @@ public class TradingdayPanel extends BasePanel {
 					String fileName = files[i].getPath();
 					m_tradingdays.populateDataFromFile(fileName, tradingday);
 				}
-				
+
 				m_tradingdayModel.setData(m_tradingdays);
 				if (m_tradingdays.getTradingdays().size() > 0) {
 					m_tradingdayTable.setRowSelectionInterval(selectedRow, selectedRow);

@@ -79,17 +79,17 @@ import org.trade.dictionary.valuetype.TimeInForce;
 import org.trade.dictionary.valuetype.TriggerMethod;
 import org.trade.persistent.PersistentModel;
 import org.trade.persistent.PersistentModelException;
+import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CodeType;
 import org.trade.persistent.dao.CodeValue;
 import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioAccount;
-import org.trade.persistent.dao.TradestrategyOrders;
-import org.trade.persistent.dao.TradePosition;
-import org.trade.persistent.dao.Account;
 import org.trade.persistent.dao.TradeOrder;
+import org.trade.persistent.dao.TradePosition;
 import org.trade.persistent.dao.Tradestrategy;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.Tradingdays;
 import org.trade.strategy.StrategyChangeListener;
@@ -140,13 +140,11 @@ import org.trade.ui.tradingday.TradingdayPanel;
  * the strategy.
  * 
  */
-public class TradeMainControllerPanel extends TabbedAppPanel implements
-		BrokerChangeListener, StrategyChangeListener {
+public class TradeMainControllerPanel extends TabbedAppPanel implements BrokerChangeListener, StrategyChangeListener {
 
 	private static final long serialVersionUID = -7717664255656430982L;
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradeMainControllerPanel.class);
+	private final static Logger _log = LoggerFactory.getLogger(TradeMainControllerPanel.class);
 
 	private static Tradingdays m_tradingdays = null;
 	private BrokerModel m_brokerModel = null;
@@ -185,19 +183,15 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 */
 			setSelected(true);
 			m_tradePersistentModel = (PersistentModel) ClassFactory
-					.getServiceForInterface(PersistentModel._persistentModel,
-							this);
-			Tradingday tradingday = Tradingday.newInstance(TradingCalendar
-					.getCurrentTradingDay());
-			Tradingday todayTradingday = m_tradePersistentModel
-					.findTradingdayByOpenCloseDate(tradingday.getOpen(),
-							tradingday.getClose());
+					.getServiceForInterface(PersistentModel._persistentModel, this);
+			Tradingday tradingday = Tradingday.newInstance(TradingCalendar.getCurrentTradingDay());
+			Tradingday todayTradingday = m_tradePersistentModel.findTradingdayByOpenCloseDate(tradingday.getOpen(),
+					tradingday.getClose());
 			if (null != todayTradingday)
 				tradingday = todayTradingday;
 			m_tradingdays = new Tradingdays();
 			m_tradingdays.add(tradingday);
-			String strategyDir = ConfigProperties
-					.getPropAsString("trade.strategy.default.dir");
+			String strategyDir = ConfigProperties.getPropAsString("trade.strategy.default.dir");
 			dynacode = new DynamicCode();
 			dynacode.addSourceDir(new File(strategyDir));
 
@@ -209,8 +203,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * 
 			 */
 
-			tradingdayPanel = new TradingdayPanel(m_tradingdays, this,
-					m_tradePersistentModel);
+			tradingdayPanel = new TradingdayPanel(m_tradingdays, this, m_tradePersistentModel);
 			/**
 			 * Constructs a new Contract tab that contains all information
 			 * related to the Tradestrategy i.e. charts, Orders for a particular
@@ -218,8 +211,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * 
 			 */
 
-			contractPanel = new ContractPanel(m_tradingdays, this,
-					m_tradePersistentModel);
+			contractPanel = new ContractPanel(m_tradingdays, this, m_tradePersistentModel);
 
 			/**
 			 * Constructs a new Portfolio tab that contains all information
@@ -262,8 +254,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					ex.getMessage(), ex);
 			System.exit(0);
 		} catch (Exception ex1) {
-			this.setErrorMessage("Error During Initialization.",
-					ex1.getMessage(), ex1);
+			this.setErrorMessage("Error During Initialization.", ex1.getMessage(), ex1);
 			System.exit(0);
 		}
 	}
@@ -290,11 +281,9 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doFetch(final Tradestrategy tradestrategy) {
 		try {
 			if (null != tradestrategy.getIdTradeStrategy()) {
-				int result = JOptionPane
-						.showConfirmDialog(
-								this.getFrame(),
-								"Do you want to save orders that did not orginate from TM ?",
-								"Information", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(this.getFrame(),
+						"Do you want to save orders that did not orginate from this TM client?", "Information",
+						JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					m_brokerModel.onReqExecutions(tradestrategy, true);
 				} else {
@@ -316,9 +305,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doData() {
 		if (m_tradingdays.isDirty()) {
-			this.setStatusBarMessage(
-					"Please save before running strategy ...\n",
-					BasePanel.WARNING);
+			this.setStatusBarMessage("Please save before running strategy ...\n", BasePanel.WARNING);
 		} else {
 			runStrategy(m_tradingdays, true);
 		}
@@ -338,13 +325,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 	public void doData(final Tradestrategy tradestrategy) {
 		if (tradestrategy.isDirty()) {
-			this.setStatusBarMessage(
-					"Please save or refresh before running strategy ...\n",
-					BasePanel.WARNING);
+			this.setStatusBarMessage("Please save or refresh before running strategy ...\n", BasePanel.WARNING);
 		} else {
 			Tradingdays tradingdays = new Tradingdays();
-			Tradingday tradingday = Tradingday.newInstance(tradestrategy
-					.getTradingday().getOpen());
+			Tradingday tradingday = Tradingday.newInstance(tradestrategy.getTradingday().getOpen());
 			tradingday.setIdTradingDay(Integer.MAX_VALUE);
 			tradingday.addTradestrategy(tradestrategy);
 			tradingdays.add(tradingday);
@@ -363,29 +347,21 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doExecute(final TradeOrder tradeOrder) {
 		TradeOrder submittedTradeOrder = null;
 		try {
-			this.getFrame().setCursor(
-					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			TradeOrder instance = m_tradePersistentModel
-					.findTradeOrderByKey(tradeOrder.getOrderKey());
+			this.getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			TradeOrder instance = m_tradePersistentModel.findTradeOrderByKey(tradeOrder.getOrderKey());
 			if (null != instance) {
 				if (!instance.getVersion().equals(tradeOrder.getVersion())) {
-					this.setStatusBarMessage(
-							"Please refresh order before sumbitting change ...\n",
-							BasePanel.WARNING);
+					this.setStatusBarMessage("Please refresh order before sumbitting change ...\n", BasePanel.WARNING);
 				}
 			}
-			Tradestrategy tradestrategy = m_tradePersistentModel
-					.findTradestrategyById(tradeOrder.getTradestrategy());
+			Tradestrategy tradestrategy = m_tradePersistentModel.findTradestrategyById(tradeOrder.getTradestrategy());
 			// Check the order is valid.
 			instance.validate();
-			submittedTradeOrder = m_brokerModel.onPlaceOrder(
-					tradestrategy.getContract(), instance);
-			setStatusBarMessage("Order sent to broker.\n",
-					BasePanel.INFORMATION);
+			submittedTradeOrder = m_brokerModel.onPlaceOrder(tradestrategy.getContract(), instance);
+			setStatusBarMessage("Order sent to broker.\n", BasePanel.INFORMATION);
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error submitting Order "
-					+ submittedTradeOrder.getOrderKey(), ex.getMessage(), ex);
+			this.setErrorMessage("Error submitting Order " + submittedTradeOrder.getOrderKey(), ex.getMessage(), ex);
 		} finally {
 			this.getFrame().setCursor(Cursor.getDefaultCursor());
 		}
@@ -401,15 +377,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doRun() {
 		try {
 			if (m_tradingdays.isDirty()) {
-				this.setStatusBarMessage(
-						"Please save or refresh before running strategy ...\n",
-						BasePanel.WARNING);
+				this.setStatusBarMessage("Please save or refresh before running strategy ...\n", BasePanel.WARNING);
 			} else {
 				runStrategy(m_tradingdays, false);
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error running Trade Strategies.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error running Trade Strategies.", ex.getMessage(), ex);
 		}
 	}
 
@@ -425,13 +398,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doRun(final Tradestrategy tradestrategy) {
 		try {
 			if (tradestrategy.isDirty()) {
-				this.setStatusBarMessage(
-						"Please save or refresh before running strategy ...\n",
-						BasePanel.WARNING);
+				this.setStatusBarMessage("Please save or refresh before running strategy ...\n", BasePanel.WARNING);
 			} else {
 				Tradingdays tradingdays = new Tradingdays();
-				Tradingday tradingday = Tradingday.newInstance(tradestrategy
-						.getTradingday().getOpen());
+				Tradingday tradingday = Tradingday.newInstance(tradestrategy.getTradingday().getOpen());
 				tradingday.setIdTradingDay(Integer.MAX_VALUE);
 				tradingday.addTradestrategy(tradestrategy);
 				tradingdays.add(tradingday);
@@ -439,8 +409,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error running Trade Strategies.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error running Trade Strategies.", ex.getMessage(), ex);
 		}
 	}
 
@@ -454,9 +423,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doTest() {
 		try {
 			if (m_tradingdays.isDirty()) {
-				this.setStatusBarMessage(
-						"Please save before running strategy ...\n",
-						BasePanel.WARNING);
+				this.setStatusBarMessage("Please save before running strategy ...\n", BasePanel.WARNING);
 			} else {
 				contractPanel.doCloseAll();
 				/*
@@ -467,60 +434,46 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				 * These must be run one at a time and will require orders to be
 				 * deleted between runs.
 				 */
-				Collections.sort(m_tradingdays.getTradingdays(),
-						Tradingday.DATE_ORDER_DESC);
+				Collections.sort(m_tradingdays.getTradingdays(), Tradingday.DATE_ORDER_DESC);
 				if (m_tradingdays.getTradingdays().isEmpty()) {
 					return;
 				}
-				ZonedDateTime toOpen = m_tradingdays.getTradingdays().get(0)
-						.getOpen();
-				ZonedDateTime fromOpen = m_tradingdays.getTradingdays()
-						.get(m_tradingdays.getTradingdays().size() - 1)
+				ZonedDateTime toOpen = m_tradingdays.getTradingdays().get(0).getOpen();
+				ZonedDateTime fromOpen = m_tradingdays.getTradingdays().get(m_tradingdays.getTradingdays().size() - 1)
 						.getOpen();
 				List<Tradestrategy> strategyBarSizeChartHistItems = m_tradePersistentModel
 						.findTradestrategyDistinctByDateRange(fromOpen, toOpen);
 
 				List<Tradestrategy> contractsItems = m_tradePersistentModel
-						.findTradestrategyContractDistinctByDateRange(fromOpen,
-								toOpen);
+						.findTradestrategyContractDistinctByDateRange(fromOpen, toOpen);
 
-				FilterBackTestPane filterTradestrategyPane = new FilterBackTestPane(
-						fromOpen, toOpen, strategyBarSizeChartHistItems,
-						contractsItems);
-				TextDialog dialog = new TextDialog(this.getFrame(),
-						"Run back test for the following", true,
+				FilterBackTestPane filterTradestrategyPane = new FilterBackTestPane(fromOpen, toOpen,
+						strategyBarSizeChartHistItems, contractsItems);
+				TextDialog dialog = new TextDialog(this.getFrame(), "Run back test for the following", true,
 						filterTradestrategyPane);
 				dialog.setLocationRelativeTo(this);
 				dialog.setVisible(true);
 
 				if (!dialog.getCancel()) {
-					Tradestrategy tradestrategy = filterTradestrategyPane
-							.getSelectedStrategyBarSizeChartHist();
+					Tradestrategy tradestrategy = filterTradestrategyPane.getSelectedStrategyBarSizeChartHist();
 					if (null == tradestrategy)
 						return;
 
-					List<Contract> contracts = filterTradestrategyPane
-							.getSelectedContracts();
+					List<Contract> contracts = filterTradestrategyPane.getSelectedContracts();
 
 					Tradingdays tradingdays = new Tradingdays();
-					for (Tradingday itemTradingday : m_tradingdays
-							.getTradingdays()) {
+					for (Tradingday itemTradingday : m_tradingdays.getTradingdays()) {
 
 						if (!TradingCalendar.between(itemTradingday.getOpen(),
 								filterTradestrategyPane.getSelectedStartDate(),
 								filterTradestrategyPane.getSelectedEndDate()))
 							continue;
 
-						Tradingday tradingday = (Tradingday) itemTradingday
-								.clone();
-						for (Tradestrategy item : itemTradingday
-								.getTradestrategies()) {
-							if (tradestrategy.getBarSize().equals(
-									item.getBarSize())
-									&& tradestrategy.getChartDays().equals(
-											item.getChartDays())
-									&& tradestrategy.getStrategy().equals(
-											item.getStrategy())) {
+						Tradingday tradingday = (Tradingday) itemTradingday.clone();
+						for (Tradestrategy item : itemTradingday.getTradestrategies()) {
+							if (tradestrategy.getBarSize().equals(item.getBarSize())
+									&& tradestrategy.getChartDays().equals(item.getChartDays())
+									&& tradestrategy.getStrategy().equals(item.getStrategy())) {
 								if (contracts.isEmpty()) {
 									tradingday.addTradestrategy(item);
 								} else {
@@ -541,8 +494,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error reconciling open orders.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error reconciling open orders.", ex.getMessage(), ex);
 		}
 	}
 
@@ -557,14 +509,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doTest(final Tradestrategy tradestrategy) {
 
 		if (tradestrategy.isDirty()) {
-			this.setStatusBarMessage(
-					"Please save before running strategy ...\n",
-					BasePanel.WARNING);
+			this.setStatusBarMessage("Please save before running strategy ...\n", BasePanel.WARNING);
 		} else {
 			contractPanel.doClose(tradestrategy);
 			Tradingdays tradingdays = new Tradingdays();
-			Tradingday tradingday = Tradingday.newInstance(tradestrategy
-					.getTradingday().getOpen());
+			Tradingday tradingday = Tradingday.newInstance(tradestrategy.getTradingday().getOpen());
 			tradingday.setIdTradingDay(Integer.MAX_VALUE);
 			tradingday.addTradestrategy(tradestrategy);
 			tradingdays.add(tradingday);
@@ -581,23 +530,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Hashtable<Integer, TradeOrder> the open orders that are from
 	 *            IB TWS.
 	 * 
-	 * @see 
-	 *      org.trade.broker.BrokerChangeListener#openOrderEnd(ConcurrentHashMap<
-	 *      Integer,TradeOrder>)
+	 * @see org.trade.broker.BrokerChangeListener#openOrderEnd(
+	 *      ConcurrentHashMap< Integer,TradeOrder>)
 	 */
 
-	public void openOrderEnd(
-			final ConcurrentHashMap<Integer, TradeOrder> openTradeOrders) {
+	public void openOrderEnd(final ConcurrentHashMap<Integer, TradeOrder> openTradeOrders) {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
 
 					Tradingday todayTradingday = m_tradingdays.getTradingday(
-							TradingCalendar.getTradingDayStart(TradingCalendar
-									.getDateTimeNowMarketTimeZone()),
-							TradingCalendar.getTradingDayEnd(TradingCalendar
-									.getDateTimeNowMarketTimeZone()));
+							TradingCalendar.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone()),
+							TradingCalendar.getTradingDayEnd(TradingCalendar.getDateTimeNowMarketTimeZone()));
 					if (null == todayTradingday) {
 						return;
 					}
@@ -612,21 +557,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 							// tradestrategyId.
 
 							Tradestrategy tradestrategy = m_tradePersistentModel
-									.findTradestrategyById(Integer
-											.parseInt(openOrder
-													.getOrderReference()));
-							int result = JOptionPane.showConfirmDialog(
-									getFrame(), "Missing order key: "
-											+ openOrder.getOrderKey()
-											+ " for contract "
-											+ tradestrategy.getContract()
-													.getSymbol()
-											+ " do you want to save?",
+									.findTradestrategyById(Integer.parseInt(openOrder.getOrderReference()));
+							int result = JOptionPane.showConfirmDialog(getFrame(),
+									"Missing order key: " + openOrder.getOrderKey() + " for contract "
+											+ tradestrategy.getContract().getSymbol() + " do you want to save?",
 									"Information", JOptionPane.YES_NO_OPTION);
 							if (result == JOptionPane.YES_OPTION) {
 								openOrder.setTradestrategy(tradestrategy);
-								openOrder = m_tradePersistentModel
-										.persistTradeOrder(openOrder);
+								openOrder = m_tradePersistentModel.persistTradeOrder(openOrder);
 							}
 						}
 					}
@@ -634,29 +572,20 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					/*
 					 * Cancel any orders that were open and not filled.
 					 */
-					for (Tradestrategy tradestrategy : todayTradingday
-							.getTradestrategies()) {
-						Tradestrategy instance = m_tradePersistentModel
-								.findTradestrategyById(tradestrategy);
-						for (TradeOrder todayTradeOrder : instance
-								.getTradeOrders()) {
+					for (Tradestrategy tradestrategy : todayTradingday.getTradestrategies()) {
+						Tradestrategy instance = m_tradePersistentModel.findTradestrategyById(tradestrategy);
+						for (TradeOrder todayTradeOrder : instance.getTradeOrders()) {
 							if (todayTradeOrder.isActive()) {
-								if (!openTradeOrders
-										.containsKey(todayTradeOrder
-												.getOrderKey())) {
-									todayTradeOrder
-											.setStatus(OrderStatus.CANCELLED);
-									todayTradeOrder.setLastUpdateDate(TradingCalendar
-											.getDateTimeNowMarketTimeZone());
-									m_tradePersistentModel
-											.persistTradeOrder(todayTradeOrder);
+								if (!openTradeOrders.containsKey(todayTradeOrder.getOrderKey())) {
+									todayTradeOrder.setStatus(OrderStatus.CANCELLED);
+									todayTradeOrder.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
+									m_tradePersistentModel.persistTradeOrder(todayTradeOrder);
 								}
 							}
 						}
 					}
 				} catch (Exception ex) {
-					setErrorMessage("Error reconciling open orders.",
-							ex.getMessage(), ex);
+					setErrorMessage("Error reconciling open orders.", ex.getMessage(), ex);
 				}
 			}
 		});
@@ -676,22 +605,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @see org.trade.broker.BrokerChangeListener#executionDetailsEnd(
 	 *      ConcurrentHashMap<Integer,TradeOrder>)
 	 */
-	public void executionDetailsEnd(
-			final ConcurrentHashMap<Integer, TradeOrder> tradeOrders) {
+	public void executionDetailsEnd(final ConcurrentHashMap<Integer, TradeOrder> tradeOrders) {
 		try {
 			Tradingday todayTradingday = m_tradingdays.getTradingday(
-					TradingCalendar.getTradingDayStart(TradingCalendar
-							.getDateTimeNowMarketTimeZone()), TradingCalendar
-							.getTradingDayEnd(TradingCalendar
-									.getDateTimeNowMarketTimeZone()));
+					TradingCalendar.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone()),
+					TradingCalendar.getTradingDayEnd(TradingCalendar.getDateTimeNowMarketTimeZone()));
 			if (null == todayTradingday) {
 				return;
 			}
 			tradingdayPanel.doRefresh(todayTradingday);
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error starting PositionManagerRule.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error starting PositionManagerRule.", ex.getMessage(), ex);
 		}
 	}
 
@@ -711,24 +636,20 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		try {
 			final Tradestrategy tradestrategy = m_tradingdays
-					.getTradestrategy(tradeOrder.getTradestrategyId()
-							.getIdTradeStrategy());
+					.getTradestrategy(tradeOrder.getTradestrategyId().getIdTradeStrategy());
 
 			if (null == tradestrategy) {
-				this.setStatusBarMessage(
-						"Warning position opened but Tradestrategy not found for Order Key: "
-								+ tradeOrder.getOrderKey()
-								+ " in the current Tradingday Tab selection.",
-						BasePanel.WARNING);
+				this.setStatusBarMessage("Warning position opened but Tradestrategy not found for Order Key: "
+						+ tradeOrder.getOrderKey() + " in the current Tradingday Tab selection.", BasePanel.WARNING);
 				return;
 			}
 
 			if (!tradestrategy.getTrade()) {
 				this.setStatusBarMessage(
-						"Warning position opened for Symbol: "
-								+ tradestrategy.getContract().getSymbol()
+						"Warning position opened for Symbol: " + tradestrategy.getContract().getSymbol()
 								+ "  but this tradestrategy is not set to trade. A manual order was created Key: "
-								+ tradeOrder.getOrderKey(), BasePanel.WARNING);
+								+ tradeOrder.getOrderKey(),
+						BasePanel.WARNING);
 				return;
 			}
 
@@ -738,8 +659,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * have a strategy manager if so start the manager and close the
 			 * strategy that opened the position.
 			 */
-			if (tradeOrder.getIsOpenPosition()
-					&& null != tradeOrder.getStopPrice()) {
+			if (tradeOrder.getIsOpenPosition() && null != tradeOrder.getStopPrice()) {
 
 				/*
 				 * If this Strategy has a manager start the Strategy Manager.
@@ -747,38 +667,31 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 				if (tradestrategy.getStrategy().hasStrategyManager()) {
 
-					if (!tradingdayPanel.isStrategyWorkerRunning(tradestrategy
-							.getStrategy().getStrategyManager().getClassName()
-							+ tradestrategy.getIdTradeStrategy())) {
+					if (!tradingdayPanel
+							.isStrategyWorkerRunning(tradestrategy.getStrategy().getStrategyManager().getClassName()
+									+ tradestrategy.getIdTradeStrategy())) {
 						/*
 						 * Kill the worker that got us in if still running its
 						 * job is done.
 						 */
 
-						tradingdayPanel.killStrategyWorker(tradestrategy
-								.getStrategy().getClassName()
-								+ tradestrategy.getIdTradeStrategy());
-						createStrategy(tradestrategy.getStrategy()
-								.getStrategyManager().getClassName(),
-								tradestrategy);
+						tradingdayPanel.killStrategyWorker(
+								tradestrategy.getStrategy().getClassName() + tradestrategy.getIdTradeStrategy());
+						createStrategy(tradestrategy.getStrategy().getStrategyManager().getClassName(), tradestrategy);
 					}
 				} else {
-					String key = tradestrategy.getStrategy().getClassName()
-							+ tradestrategy.getIdTradeStrategy();
+					String key = tradestrategy.getStrategy().getClassName() + tradestrategy.getIdTradeStrategy();
 					if (tradingdayPanel.isStrategyWorkerRunning(key)) {
-						StrategyRule strategy = tradingdayPanel
-								.getStrategyWorker(key);
+						StrategyRule strategy = tradingdayPanel.getStrategyWorker(key);
 						strategy.tradeOrderFilled(tradeOrder);
 					}
 				}
 			}
-			tradestrategy
-					.setStatus(tradeOrder.getTradestrategyId().getStatus());
+			tradestrategy.setStatus(tradeOrder.getTradestrategyId().getStatus());
 			contractPanel.doRefresh(tradestrategy);
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error starting PositionManagerRule.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error starting PositionManagerRule.", ex.getMessage(), ex);
 		}
 	}
 
@@ -797,22 +710,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				public void run() {
 					try {
 						Tradestrategy tradestrategy = m_tradingdays
-								.getTradestrategy(tradeOrder
-										.getTradestrategyId()
-										.getIdTradeStrategy());
+								.getTradestrategy(tradeOrder.getTradestrategyId().getIdTradeStrategy());
 						if (null == tradestrategy) {
 							setStatusBarMessage(
 									"Warning position cancelled but Tradestrategy not found for Order Key: "
-											+ tradeOrder.getOrderKey()
-											+ " in the current Tradingday Tab selection.",
+											+ tradeOrder.getOrderKey() + " in the current Tradingday Tab selection.",
 									BasePanel.WARNING);
 							return;
 						}
 						contractPanel.doRefresh(tradestrategy);
 
 					} catch (Exception ex) {
-						setErrorMessage("Error processing cancelled order.",
-								ex.getMessage(), ex);
+						setErrorMessage("Error processing cancelled order.", ex.getMessage(), ex);
 					}
 				}
 			});
@@ -834,24 +743,19 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				public void run() {
 					try {
 						Tradestrategy tradestrategy = m_tradingdays
-								.getTradestrategy(tradeOrder
-										.getTradestrategyId()
-										.getIdTradeStrategy());
+								.getTradestrategy(tradeOrder.getTradestrategyId().getIdTradeStrategy());
 						if (null == tradestrategy) {
 							setStatusBarMessage(
 									"Warning position opened but Tradestrategy not found for Order Key: "
-											+ tradeOrder.getOrderKey()
-											+ " in the current Tradingday Tab selection.",
+											+ tradeOrder.getOrderKey() + " in the current Tradingday Tab selection.",
 									BasePanel.WARNING);
 							return;
 						}
-						tradestrategy.setStatus(tradeOrder.getTradestrategyId()
-								.getStatus());
+						tradestrategy.setStatus(tradeOrder.getTradestrategyId().getStatus());
 						contractPanel.doRefresh(tradestrategy);
 
 					} catch (Exception ex) {
-						setErrorMessage("Error changing tradeOrder status.",
-								ex.getMessage(), ex);
+						setErrorMessage("Error changing tradeOrder status.", ex.getMessage(), ex);
 					}
 				}
 			});
@@ -874,23 +778,17 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 					try {
 
 						TradePosition currTradePosition = m_tradePersistentModel
-								.findTradePositionById(tradePosition
-										.getIdTradePosition());
-						for (TradeOrder tradeOrder : currTradePosition
-								.getTradeOrders()) {
+								.findTradePositionById(tradePosition.getIdTradePosition());
+						for (TradeOrder tradeOrder : currTradePosition.getTradeOrders()) {
 							Tradestrategy tradestrategy = m_tradePersistentModel
-									.findTradestrategyById(tradeOrder
-											.getTradestrategyId()
-											.getIdTradeStrategy());
-							m_tradingdays.getTradestrategy(
-									tradestrategy.getIdTradeStrategy())
+									.findTradestrategyById(tradeOrder.getTradestrategyId().getIdTradeStrategy());
+							m_tradingdays.getTradestrategy(tradestrategy.getIdTradeStrategy())
 									.setStatus(tradestrategy.getStatus());
 							contractPanel.doRefresh(tradestrategy);
 						}
 
 					} catch (Exception ex) {
-						setErrorMessage("Error position closed: ",
-								ex.getMessage(), ex);
+						setErrorMessage("Error position closed: ", ex.getMessage(), ex);
 					}
 				}
 			});
@@ -904,25 +802,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
 	 */
-	public void strategyComplete(String strategyClassName,
-			Tradestrategy tradestrategy) {
+	public void strategyComplete(String strategyClassName, Tradestrategy tradestrategy) {
 
 		try {
 			if (m_brokerModel.isConnected()) {
-				tradestrategy = m_tradePersistentModel
-						.findTradestrategyById(tradestrategy
-								.getIdTradeStrategy());
-				m_tradingdays.getTradestrategy(
-						tradestrategy.getIdTradeStrategy()).setStatus(
-						tradestrategy.getStatus());
+				tradestrategy = m_tradePersistentModel.findTradestrategyById(tradestrategy.getIdTradeStrategy());
+				m_tradingdays.getTradestrategy(tradestrategy.getIdTradeStrategy()).setStatus(tradestrategy.getStatus());
 				contractPanel.doRefresh(tradestrategy);
 			}
-			tradingdayPanel.removeStrategyWorker(strategyClassName
-					+ tradestrategy.getIdTradeStrategy());
+			tradingdayPanel.removeStrategyWorker(strategyClassName + tradestrategy.getIdTradeStrategy());
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error strategyComplete : ", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Error strategyComplete : ", ex.getMessage(), ex);
 		}
 	}
 
@@ -935,8 +826,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyStarted(Tradestrategy)
 	 */
-	public void strategyStarted(String strategyClassName,
-			final Tradestrategy tradestrategy) {
+	public void strategyStarted(String strategyClassName, final Tradestrategy tradestrategy) {
 
 	}
 
@@ -964,18 +854,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			public void run() {
 				try {
 					if (ex.getErrorId() == 1) {
-						setErrorMessage("Error: " + ex.getErrorCode(),
-								ex.getMessage(), ex);
+						setErrorMessage("Error: " + ex.getErrorCode(), ex.getMessage(), ex);
 					} else if (ex.getErrorId() == 2) {
-						setStatusBarMessage("Warning: " + ex.getMessage(),
-								BasePanel.WARNING);
+						setStatusBarMessage("Warning: " + ex.getMessage(), BasePanel.WARNING);
 					} else if (ex.getErrorId() == 3) {
-						setStatusBarMessage("Information: " + ex.getMessage(),
-								BasePanel.INFORMATION);
+						setStatusBarMessage("Information: " + ex.getMessage(), BasePanel.INFORMATION);
 					} else {
-						setErrorMessage(
-								"Unknown Error Id Code: " + ex.getErrorCode(),
-								ex.getMessage(), ex);
+						setErrorMessage("Unknown Error Id Code: " + ex.getErrorCode(), ex.getMessage(), ex);
 					}
 				} finally {
 					getFrame().setCursor(Cursor.getDefaultCursor());
@@ -995,17 +880,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			disclaimerText = new JEditorPane(file.toURI().toURL());
 			disclaimerText.setEditable(false);
-			TextDialog disclaimer = new TextDialog(this.getFrame(),
-					"Disclaimer", false, disclaimerText);
+			TextDialog disclaimer = new TextDialog(this.getFrame(), "Disclaimer", false, disclaimerText);
 			disclaimer.pack();
-			disclaimer.setSize(new Dimension((int) (this.getFrame().getSize()
-					.getWidth() * 2 / 3), (int) (this.getFrame().getSize()
-					.getHeight() * 2 / 3)));
+			disclaimer.setSize(new Dimension((int) (this.getFrame().getSize().getWidth() * 2 / 3),
+					(int) (this.getFrame().getSize().getHeight() * 2 / 3)));
 			disclaimer.setLocationRelativeTo(this);
 			disclaimer.setVisible(true);
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not load about help.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Could not load about help.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1018,19 +900,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		try {
 			StringBuffer message = new StringBuffer();
 			message.append("Product version: ");
-			message.append(ConfigProperties
-					.getPropAsString("component.name.version"));
+			message.append(ConfigProperties.getPropAsString("component.name.version"));
 			message.append("\nBuild Label:     ");
-			message.append(ConfigProperties
-					.getPropAsString("component.name.base"));
+			message.append(ConfigProperties.getPropAsString("component.name.base"));
 			message.append("\nBuild Time:      ");
-			message.append(ConfigProperties
-					.getPropAsString("component.name.date"));
-			JOptionPane.showMessageDialog(this, message, "About Help",
-					JOptionPane.INFORMATION_MESSAGE);
+			message.append(ConfigProperties.getPropAsString("component.name.date"));
+			JOptionPane.showMessageDialog(this, message, "About Help", JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not load about help.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Could not load about help.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1060,46 +937,37 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 				if (tradestrategy.getTrade()) {
 					if (tradestrategy.isThereOpenTradePosition()) {
-						int result = JOptionPane.showConfirmDialog(this
-								.getFrame(), "Position is open for: "
-								+ tradestrategy.getContract().getSymbol()
-								+ " do you want to run the Strategy ?",
+						int result = JOptionPane.showConfirmDialog(this.getFrame(),
+								"Position is open for: " + tradestrategy.getContract().getSymbol()
+										+ " do you want to run the Strategy ?",
 								"Information", JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.YES_OPTION) {
-							if (tradestrategy.getStrategy()
-									.hasStrategyManager()) {
-								createStrategy(tradestrategy.getStrategy()
-										.getStrategyManager().getClassName(),
+							if (tradestrategy.getStrategy().hasStrategyManager()) {
+								createStrategy(tradestrategy.getStrategy().getStrategyManager().getClassName(),
 										tradestrategy);
 							} else {
-								createStrategy(tradestrategy.getStrategy()
-										.getClassName(), tradestrategy);
+								createStrategy(tradestrategy.getStrategy().getClassName(), tradestrategy);
 							}
 
 						} else {
-							int result1 = JOptionPane.showConfirmDialog(this
-									.getFrame(), "Position is open for: "
-									+ tradestrategy.getContract().getSymbol()
-									+ " do you want to delete all Orders?",
+							int result1 = JOptionPane.showConfirmDialog(this.getFrame(),
+									"Position is open for: " + tradestrategy.getContract().getSymbol()
+											+ " do you want to delete all Orders?",
 									"Information", JOptionPane.YES_NO_OPTION);
 							if (result1 == JOptionPane.YES_OPTION) {
-								m_tradePersistentModel
-										.removeTradestrategyTradeOrders(tradestrategy);
+								m_tradePersistentModel.removeTradestrategyTradeOrders(tradestrategy);
 							}
 						}
 
 					} else {
-						createStrategy(tradestrategy.getStrategy()
-								.getClassName(), tradestrategy);
+						createStrategy(tradestrategy.getStrategy().getClassName(), tradestrategy);
 					}
 				}
 			}
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not start strategy: "
-					+ tradestrategy.getStrategy().getName() + " for Symbol: "
-					+ tradestrategy.getContract().getSymbol(), ex.getMessage(),
-					ex);
+			this.setErrorMessage("Could not start strategy: " + tradestrategy.getStrategy().getName() + " for Symbol: "
+					+ tradestrategy.getContract().getSymbol(), ex.getMessage(), ex);
 		}
 	}
 
@@ -1114,8 +982,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			if ((null != m_brokerModel) && m_brokerModel.isConnected()) {
 				int result = JOptionPane.showConfirmDialog(this.getFrame(),
-						"Already connected. Do you want to disconnect?",
-						"Information", JOptionPane.YES_NO_OPTION);
+						"Already connected. Do you want to disconnect?", "Information", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					doDisconnect();
 				} else {
@@ -1127,28 +994,24 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 
 			final ConnectionPane connectionPane = new ConnectionPane();
-			TextDialog dialog = new TextDialog(this.getFrame(),
-					"Connect to TWS", true, connectionPane, "Connect", "Cancel");
+			TextDialog dialog = new TextDialog(this.getFrame(), "Connect to TWS", true, connectionPane, "Connect",
+					"Cancel");
 			dialog.setLocationRelativeTo(this);
 			dialog.setVisible(true);
 			/*
 			 * Update the default portfolio.
 			 */
-			m_tradePersistentModel.resetDefaultPortfolio(connectionPane
-					.getPortfolio());
+			m_tradePersistentModel.resetDefaultPortfolio(connectionPane.getPortfolio());
 			DBTableLookupServiceProvider.clearLookup();
 
 			if (!dialog.getCancel()) {
 				this.setBrokerModel(BrokerModel._broker);
-				this.getFrame().setCursor(
-						Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				this.setStatusBarMessage("Please wait while login proceeds",
-						BasePanel.INFORMATION);
+				this.getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				this.setStatusBarMessage("Please wait while login proceeds", BasePanel.INFORMATION);
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							m_brokerModel.onConnect(connectionPane.getHost(),
-									connectionPane.getPort(),
+							m_brokerModel.onConnect(connectionPane.getHost(), connectionPane.getPort(),
 									connectionPane.getClientId());
 						} finally {
 							getFrame().setCursor(Cursor.getDefaultCursor());
@@ -1158,12 +1021,10 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			} else {
 				this.setBrokerMenu(BrokerModel._brokerTest);
-				this.setStatusBarMessage("Running in test.",
-						BasePanel.INFORMATION);
+				this.setStatusBarMessage("Running in test.", BasePanel.INFORMATION);
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Could Not Connect/Disconnect From TWS",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Could Not Connect/Disconnect From TWS", ex.getMessage(), ex);
 		}
 	}
 
@@ -1209,18 +1070,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			public void run() {
 				try {
 					if (ex.getErrorId() == 1) {
-						setErrorMessage("Error: " + ex.getErrorCode(),
-								ex.getMessage(), ex);
+						setErrorMessage("Error: " + ex.getErrorCode(), ex.getMessage(), ex);
 					} else if (ex.getErrorId() == 2) {
-						setStatusBarMessage("Warning: " + ex.getMessage(),
-								BasePanel.WARNING);
+						setStatusBarMessage("Warning: " + ex.getMessage(), BasePanel.WARNING);
 					} else if (ex.getErrorId() == 3) {
-						setStatusBarMessage("Information: " + ex.getMessage(),
-								BasePanel.INFORMATION);
+						setStatusBarMessage("Information: " + ex.getMessage(), BasePanel.INFORMATION);
 					} else {
-						setErrorMessage(
-								"Unknown Error Id Code: " + ex.getErrorCode(),
-								ex.getMessage(), ex);
+						setErrorMessage("Unknown Error Id Code: " + ex.getErrorCode(), ex.getMessage(), ex);
 					}
 				} finally {
 					getFrame().setCursor(Cursor.getDefaultCursor());
@@ -1239,16 +1095,13 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		try {
 			tradingdayPanel.killAllStrategyWorker();
 			if (m_brokerModel.isConnected()) {
-				if ((null != brokerDataRequestProgressMonitor)
-						&& !brokerDataRequestProgressMonitor.isDone()) {
+				if ((null != brokerDataRequestProgressMonitor) && !brokerDataRequestProgressMonitor.isDone()) {
 					brokerDataRequestProgressMonitor.cancel(true);
 				}
 
 			}
-			this.getFrame().setCursor(
-					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			this.setStatusBarMessage("Please wait while disconnect proceeds",
-					BasePanel.INFORMATION);
+			this.getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			this.setStatusBarMessage("Please wait while disconnect proceeds", BasePanel.INFORMATION);
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
@@ -1261,8 +1114,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			refreshTradingdays(m_tradingdays);
 		} catch (Exception ex) {
-			this.setErrorMessage("Could Not Disconnect From TWS",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Could Not Disconnect From TWS", ex.getMessage(), ex);
 		}
 	}
 
@@ -1282,10 +1134,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			contractPanel.setConnected(true);
 
 			Tradingday todayTradingday = m_tradingdays.getTradingday(
-					TradingCalendar.getTradingDayStart(TradingCalendar
-							.getDateTimeNowMarketTimeZone()), TradingCalendar
-							.getTradingDayEnd(TradingCalendar
-									.getDateTimeNowMarketTimeZone()));
+					TradingCalendar.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone()),
+					TradingCalendar.getTradingDayEnd(TradingCalendar.getDateTimeNowMarketTimeZone()));
 
 			/*
 			 * Request all the executions for today. This will result in updates
@@ -1295,8 +1145,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				m_brokerModel.onReqAllExecutions(todayTradingday.getOpen());
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error finding excecutions.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Error finding excecutions.", ex.getMessage(), ex);
 		} finally {
 			this.setStatusBarMessage("Running live.", BasePanel.INFORMATION);
 		}
@@ -1326,13 +1175,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			} else {
 				this.setBrokerModel(BrokerModel._brokerTest);
 				this.setBrokerMenu(BrokerModel._brokerTest);
-				this.setStatusBarMessage("Connected to Broker was closed.",
-						BasePanel.INFORMATION);
+				this.setStatusBarMessage("Connected to Broker was closed.", BasePanel.INFORMATION);
 			}
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error finding connection closed.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error finding connection closed.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1355,55 +1202,42 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			int tokens = accountNumbers.replaceAll("[^,]", "").length();
 
-			Portfolio defaultPortfolio = m_tradePersistentModel
-					.findPortfolioDefault();
+			Portfolio defaultPortfolio = m_tradePersistentModel.findPortfolioDefault();
 
 			while (scanLine.hasNext()) {
 				String accountNumber = scanLine.next().trim();
 				if (accountNumber.length() > 0) {
-					Account account = m_tradePersistentModel
-							.findAccountByNumber(accountNumber);
+					Account account = m_tradePersistentModel.findAccountByNumber(accountNumber);
 
 					if (null == account) {
-						account = new Account(accountNumber, accountNumber,
-								Currency.USD, AccountType.INDIVIDUAL);
+						account = new Account(accountNumber, accountNumber, Currency.USD, AccountType.INDIVIDUAL);
 					}
 					/*
 					 * If there is only one account in the incoming string and
 					 * the default portfolio has no accounts add this account to
 					 * the default portfolio.
 					 */
-					if (defaultPortfolio.getPortfolioAccounts().isEmpty()
-							&& tokens == 0) {
-						PortfolioAccount portfolioAccount = new PortfolioAccount(
-								defaultPortfolio, account);
-						defaultPortfolio.getPortfolioAccounts().add(
-								portfolioAccount);
-						defaultPortfolio = m_tradePersistentModel
-								.persistPortfolio(defaultPortfolio);
+					if (defaultPortfolio.getPortfolioAccounts().isEmpty() && tokens == 0) {
+						PortfolioAccount portfolioAccount = new PortfolioAccount(defaultPortfolio, account);
+						defaultPortfolio.getPortfolioAccounts().add(portfolioAccount);
+						defaultPortfolio = m_tradePersistentModel.persistPortfolio(defaultPortfolio);
 						/*
 						 * Update the account (key) to the current account only
 						 * when the default Portfolio has no accounts.
 						 */
 						defaultPortfolio.setName(account.getAccountNumber());
-						defaultPortfolio = m_tradePersistentModel
-								.persistAspect(defaultPortfolio);
+						defaultPortfolio = m_tradePersistentModel.persistAspect(defaultPortfolio);
 
 					} else {
-						Portfolio portfolio = new Portfolio(
-								account.getAccountNumber(),
-								account.getAccountNumber());
-						PortfolioAccount portfolioAccount = new PortfolioAccount(
-								portfolio, account);
+						Portfolio portfolio = new Portfolio(account.getAccountNumber(), account.getAccountNumber());
+						PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio, account);
 						portfolio.getPortfolioAccounts().add(portfolioAccount);
-						portfolio = m_tradePersistentModel
-								.persistPortfolio(portfolio);
+						portfolio = m_tradePersistentModel.persistPortfolio(portfolio);
 						if (tokens == 0) {
 							/*
 							 * Update the default portfolio.
 							 */
-							m_tradePersistentModel
-									.resetDefaultPortfolio(portfolio);
+							m_tradePersistentModel.resetDefaultPortfolio(portfolio);
 						}
 					}
 				}
@@ -1411,20 +1245,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			DBTableLookupServiceProvider.clearLookup();
 			tradingdayPanel.doWindowActivated();
-			defaultPortfolio = m_tradePersistentModel
-					.findPortfolioByName(defaultPortfolio.getName());
-			for (PortfolioAccount item : defaultPortfolio
-					.getPortfolioAccounts()) {
-				m_brokerModel.onSubscribeAccountUpdates(true, item.getAccount()
-						.getAccountNumber());
+			defaultPortfolio = m_tradePersistentModel.findPortfolioByName(defaultPortfolio.getName());
+			for (PortfolioAccount item : defaultPortfolio.getPortfolioAccounts()) {
+				m_brokerModel.onSubscribeAccountUpdates(true, item.getAccount().getAccountNumber());
 			}
 
 			this.setStatusBarMessage(
-					"Connected to IB and subscribed to updates for default portfolio: "
-							+ defaultPortfolio.getName(), BasePanel.INFORMATION);
+					"Connected to IB and subscribed to updates for default portfolio: " + defaultPortfolio.getName(),
+					BasePanel.INFORMATION);
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not retreive account data Msg: ",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Could not retreive account data Msg: ", ex.getMessage(), ex);
 		} finally {
 			scanLine.close();
 		}
@@ -1442,20 +1272,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Account account = m_tradePersistentModel
-							.findAccountByNumber(accountNumber);
+					Account account = m_tradePersistentModel.findAccountByNumber(accountNumber);
 					Portfolio portfolio = account.getDefaultPortfolio();
 					if (null != portfolio) {
-						portfolio = m_tradePersistentModel
-								.findPortfolioById(portfolio.getId());
+						portfolio = m_tradePersistentModel.findPortfolioById(portfolio.getId());
 						tradingdayPanel.setPortfolioLabel(portfolio);
-						setStatusBarMessage("Account: " + accountNumber
-								+ " information updated.",
+						setStatusBarMessage("Account: " + accountNumber + " information updated.",
 								BasePanel.INFORMATION);
 					}
 				} catch (Exception ex) {
-					setErrorMessage("Could not retreive account data Msg: ",
-							ex.getMessage(), ex);
+					setErrorMessage("Could not retreive account data Msg: ", ex.getMessage(), ex);
 				}
 			}
 		});
@@ -1478,15 +1304,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doProperties() {
 		try {
 			for (Tradingday tradingday : m_tradingdays.getTradingdays()) {
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
-					m_brokerModel
-							.onContractDetails(tradestrategy.getContract());
+				for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
+					m_brokerModel.onContractDetails(tradestrategy.getContract());
 				}
 			}
 		} catch (BrokerModelException ex) {
-			this.setErrorMessage("Could not disconnect From TWS",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Could not disconnect From TWS", ex.getMessage(), ex);
 		}
 	}
 
@@ -1499,27 +1322,22 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doStrategyParameters(final Tradestrategy tradestrategy) {
 		try {
 			this.clearStatusBarMessage();
-			CodeType codeType = m_tradePersistentModel.findCodeTypeByNameType(
-					tradestrategy.getStrategy().getName(),
+			CodeType codeType = m_tradePersistentModel.findCodeTypeByNameType(tradestrategy.getStrategy().getName(),
 					CodeType.StrategyParameters);
 			if (null == codeType) {
 				return;
 			} else {
-				Tradestrategy instance = m_tradePersistentModel
-						.findTradestrategyById(tradestrategy);
-				CodeAttributePanel codeAttributePanel = new CodeAttributePanel(
-						codeType, instance.getCodeValues());
+				Tradestrategy instance = m_tradePersistentModel.findTradestrategyById(tradestrategy);
+				CodeAttributePanel codeAttributePanel = new CodeAttributePanel(codeType, instance.getCodeValues());
 				if (null != codeAttributePanel) {
-					TextDialog dialog = new TextDialog(this.getFrame(),
-							"Strategy Parms", true, codeAttributePanel);
+					TextDialog dialog = new TextDialog(this.getFrame(), "Strategy Parms", true, codeAttributePanel);
 					dialog.setLocationRelativeTo(this);
 					dialog.setVisible(true);
 					if (!dialog.getCancel()) {
 						/*
 						 * Populate the code values from the fields.
 						 */
-						for (CodeValue value : codeAttributePanel
-								.getCodeValues()) {
+						for (CodeValue value : codeAttributePanel.getCodeValues()) {
 							if (null == value.getTradestrategy())
 								value.setTradestrategy(instance);
 							m_tradePersistentModel.persistAspect(value);
@@ -1528,8 +1346,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				}
 			}
 		} catch (Exception ex) {
-			setErrorMessage("Error getting Indicator properties.",
-					ex.getMessage(), ex);
+			setErrorMessage("Error getting Indicator properties.", ex.getMessage(), ex);
 		} finally {
 			this.getFrame().setCursor(Cursor.getDefaultCursor());
 		}
@@ -1550,14 +1367,11 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			try {
 				m_brokerModel.onCancelOrder(order);
 			} catch (BrokerModelException ex) {
-				this.setErrorMessage(
-						"Error cancelling Order " + order.getOrderKey(),
-						ex.getMessage(), ex);
+				this.setErrorMessage("Error cancelling Order " + order.getOrderKey(), ex.getMessage(), ex);
 			}
 
 		} else {
-			this.setStatusBarMessage("Order is filled and cannot be cancelled",
-					BasePanel.INFORMATION);
+			this.setStatusBarMessage("Order is filled and cannot be cancelled", BasePanel.INFORMATION);
 		}
 	}
 
@@ -1572,15 +1386,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 		// Cancel the candleWorker if running
 		m_brokerModel.onCancelAllRealtimeData();
-		if ((null != brokerDataRequestProgressMonitor)
-				&& !brokerDataRequestProgressMonitor.isDone()) {
+		if ((null != brokerDataRequestProgressMonitor) && !brokerDataRequestProgressMonitor.isDone()) {
 			brokerDataRequestProgressMonitor.cancel(true);
 		}
 		tradingdayPanel.killAllStrategyWorker();
 		refreshTradingdays(m_tradingdays);
-		this.setStatusBarMessage(
-				"Strategies and live data have been cancelled.",
-				BasePanel.INFORMATION);
+		this.setStatusBarMessage("Strategies and live data have been cancelled.", BasePanel.INFORMATION);
 	}
 
 	/**
@@ -1598,22 +1409,18 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
 				m_brokerModel.onCancelRealtimeBars(tradestrategy);
 				this.setStatusBarMessage(
-						"Realtime data has been cancelled for Symbol: "
-								+ tradestrategy.getContract().getSymbol(),
+						"Realtime data has been cancelled for Symbol: " + tradestrategy.getContract().getSymbol(),
 						BasePanel.INFORMATION);
 			}
 			// Cancel the StrategyWorker if running
 			if (tradingdayPanel.isStrategyWorkerRunning(tradestrategy)) {
-				tradingdayPanel
-						.killAllStrategyWorkersForTradestrategy(tradestrategy);
+				tradingdayPanel.killAllStrategyWorkersForTradestrategy(tradestrategy);
 				this.setStatusBarMessage(
-						"Strategy has been cancelled for Symbol: "
-								+ tradestrategy.getContract().getSymbol(),
+						"Strategy has been cancelled for Symbol: " + tradestrategy.getContract().getSymbol(),
 						BasePanel.INFORMATION);
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not cancel strategy.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Could not cancel strategy.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1624,14 +1431,12 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	public void doCloseAll() {
 		try {
 			for (Tradingday tradingday : m_tradingdays.getTradingdays()) {
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
+				for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 					doCloseAll(tradestrategy);
 				}
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not close position.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Could not close position.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1645,76 +1450,59 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				return;
 			}
 			TradestrategyOrders positionOrders = m_tradePersistentModel
-					.findPositionOrdersByTradestrategyId(tradestrategy
-							.getIdTradeStrategy());
-			Tradestrategy instance = m_tradePersistentModel
-					.findTradestrategyById(tradestrategy.getIdTradeStrategy());
+					.findPositionOrdersByTradestrategyId(tradestrategy.getIdTradeStrategy());
+			Tradestrategy instance = m_tradePersistentModel.findTradestrategyById(tradestrategy.getIdTradeStrategy());
 			for (TradeOrder order : positionOrders.getTradeOrders()) {
 				if (order.isActive()) {
 					m_brokerModel.onCancelOrder(order);
 				}
 			}
 			if (positionOrders.hasOpenTradePosition()) {
-				int result = JOptionPane.showConfirmDialog(this.getFrame(),
-						"Are you sure you want to close "
-								+ tradestrategy.getContract().getSymbol()
-								+ " open position with a market order?",
-						"Information", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane
+						.showConfirmDialog(this.getFrame(),
+								"Are you sure you want to close " + tradestrategy.getContract().getSymbol()
+										+ " open position with a market order?",
+								"Information", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 
 					TradeOrder openTradeOrder = null;
-					for (TradeOrder tradeOrder : positionOrders
-							.getTradeOrders()) {
+					for (TradeOrder tradeOrder : positionOrders.getTradeOrders()) {
 						if (tradeOrder.getIsOpenPosition()) {
 							openTradeOrder = tradeOrder;
 						}
 					}
-					int openQuantity = Math.abs(positionOrders
-							.getOpenTradePosition().getOpenQuantity());
+					int openQuantity = Math.abs(positionOrders.getOpenTradePosition().getOpenQuantity());
 
 					if (openQuantity > 0) {
 						String action = Action.BUY;
-						if (Side.BOT.equals(positionOrders
-								.getOpenTradePosition().getSide())) {
+						if (Side.BOT.equals(positionOrders.getOpenTradePosition().getSide())) {
 							action = Action.SELL;
 						}
-						TradeOrder tradeOrder = new TradeOrder(instance,
-								action,
-								TradingCalendar.getDateTimeNowMarketTimeZone(),
-								OrderType.MKT, openQuantity, null, null,
-								OverrideConstraints.YES, TimeInForce.DAY,
-								TriggerMethod.DEFAULT);
+						TradeOrder tradeOrder = new TradeOrder(instance, action,
+								TradingCalendar.getDateTimeNowMarketTimeZone(), OrderType.MKT, openQuantity, null, null,
+								OverrideConstraints.YES, TimeInForce.DAY, TriggerMethod.DEFAULT);
 						tradeOrder.setTransmit(true);
 						if (null != openTradeOrder.getFAProfile()) {
-							tradeOrder.setFAProfile(openTradeOrder
-									.getFAProfile());
+							tradeOrder.setFAProfile(openTradeOrder.getFAProfile());
 						} else {
 							if (openTradeOrder.getFAGroup() != null) {
-								tradeOrder.setFAGroup(openTradeOrder
-										.getFAGroup());
-								tradeOrder.setFAMethod(openTradeOrder
-										.getFAMethod());
-								tradeOrder.setFAPercent(openTradeOrder
-										.getFAPercent());
+								tradeOrder.setFAGroup(openTradeOrder.getFAGroup());
+								tradeOrder.setFAMethod(openTradeOrder.getFAMethod());
+								tradeOrder.setFAPercent(openTradeOrder.getFAPercent());
 							} else {
-								if (null != instance.getPortfolio()
-										.getIndividualAccount()) {
+								if (null != instance.getPortfolio().getIndividualAccount()) {
 
-									tradeOrder.setAccountNumber(instance
-											.getPortfolio()
-											.getIndividualAccount()
-											.getAccountNumber());
+									tradeOrder.setAccountNumber(
+											instance.getPortfolio().getIndividualAccount().getAccountNumber());
 								}
 							}
 						}
-						tradeOrder = m_brokerModel.onPlaceOrder(
-								instance.getContract(), tradeOrder);
+						tradeOrder = m_brokerModel.onPlaceOrder(instance.getContract(), tradeOrder);
 					}
 				}
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not close position.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Could not close position.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1744,8 +1532,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			PrinterJob pj = PrinterJob.getPrinterJob();
 			PageFormat pageFormat = new PageFormat();
-			ComponentPrintService vista = new ComponentPrintService(
-					((JFrame) this.getFrame()).getContentPane(), pageFormat);
+			ComponentPrintService vista = new ComponentPrintService(((JFrame) this.getFrame()).getContentPane(),
+					pageFormat);
 			vista.scaleToFit(true);
 
 			pj.validatePage(pageFormat);
@@ -1768,18 +1556,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 */
 	public void doTransfer(Integer idTradestrategy) {
 		try {
-			Tradestrategy tradestrategy = m_tradingdays
-					.getTradestrategy(idTradestrategy);
+			Tradestrategy tradestrategy = m_tradingdays.getTradestrategy(idTradestrategy);
 			if (null == tradestrategy) {
-				tradestrategy = m_tradePersistentModel
-						.findTradestrategyById(idTradestrategy);
+				tradestrategy = m_tradePersistentModel.findTradestrategyById(idTradestrategy);
 			}
-			if (null == m_tradingdays.getTradingday(tradestrategy
-					.getTradingday().getOpen(), tradestrategy.getTradingday()
-					.getClose())) {
+			if (null == m_tradingdays.getTradingday(tradestrategy.getTradingday().getOpen(),
+					tradestrategy.getTradingday().getClose())) {
 				Tradingday tradingday = m_tradePersistentModel
-						.findTradingdayById(tradestrategy.getTradingday()
-								.getIdTradingDay());
+						.findTradingdayById(tradestrategy.getTradingday().getIdTradingDay());
 				m_tradingdays.add(tradingday);
 			}
 			if (tradestrategy.isDirty()) {
@@ -1789,8 +1573,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				this.setSelectPanel(contractPanel);
 			}
 		} catch (PersistentModelException ex) {
-			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(), ex);
 		}
 	}
 
@@ -1813,8 +1596,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			getMenu().setEnabledConnect(true);
 		}
 		if (tradingdayPanel == newBasePanel) {
-			if (null == brokerDataRequestProgressMonitor
-					|| brokerDataRequestProgressMonitor.isDone()) {
+			if (null == brokerDataRequestProgressMonitor || brokerDataRequestProgressMonitor.isDone()) {
 				getMenu().setEnabledDelete(true, "Delete all Order");
 				if (m_brokerModel.isConnected()) {
 					getMenu().setEnabledRunStrategy(true);
@@ -1836,132 +1618,86 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @param brokerDataOnly
 	 *            boolean
 	 */
-	private void runStrategy(final Tradingdays tradingdays,
-			boolean brokerDataOnly) {
+	private void runStrategy(final Tradingdays tradingdays, boolean brokerDataOnly) {
 		try {
 			m_brokerModel.setBrokerDataOnly(brokerDataOnly);
-			if ((null != brokerDataRequestProgressMonitor)
-					&& !brokerDataRequestProgressMonitor.isDone()) {
-				this.setStatusBarMessage(
-						"Strategies already running please wait or cancel ...",
-						BasePanel.INFORMATION);
+			if ((null != brokerDataRequestProgressMonitor) && !brokerDataRequestProgressMonitor.isDone()) {
+				this.setStatusBarMessage("Strategies already running please wait or cancel ...", BasePanel.INFORMATION);
 				return;
 			} else {
 				if (brokerDataOnly && !m_brokerModel.isConnected()) {
-					int result = JOptionPane
-							.showConfirmDialog(
-									this.getFrame(),
-									"Yahoo Finance will be used to retrieve candle data."
-											+ "\n"
-											+ "Do you want to continue ?"
-											+ "\n"
-											+ "Note there is a 20min delay to data. This option should "
-											+ " \n"
-											+ "only be used 30mins after market close."
-											+ "\n"
-											+ "Valid Bar Size/Chart Hist vales are:"
-											+ "\n"
-											+ "Chart Hist = 1 D, Bar Size >= 1min"
-											+ "\n"
-											+ "Chart Hist > 1 D to 1 M, Bar Size >= 5min"
-											+ "\n"
-											+ "Chart Hist > 1 M to 3 M, Bar Size = 1 day",
-									"Information", JOptionPane.YES_NO_OPTION);
+					int result = JOptionPane.showConfirmDialog(this.getFrame(),
+							"Yahoo Finance will be used to retrieve candle data." + "\n" + "Do you want to continue ?"
+									+ "\n" + "Note there is a 20min delay to data. This option should " + " \n"
+									+ "only be used 30mins after market close." + "\n"
+									+ "Valid Bar Size/Chart Hist vales are:" + "\n"
+									+ "Chart Hist = 1 D, Bar Size >= 1min" + "\n"
+									+ "Chart Hist > 1 D to 1 M, Bar Size >= 5min" + "\n"
+									+ "Chart Hist > 1 M to 3 M, Bar Size = 1 day",
+							"Information", JOptionPane.YES_NO_OPTION);
 					if (result == JOptionPane.NO_OPTION) {
 						return;
 					}
 				}
 				for (Tradingday tradingday : tradingdays.getTradingdays()) {
 					if (tradingdayPanel.isStrategyWorkerRunning(tradingday)) {
-						this.setStatusBarMessage(
-								"Strategies already running please wait or cancel ...",
+						this.setStatusBarMessage("Strategies already running please wait or cancel ...",
 								BasePanel.INFORMATION);
 						return;
 					}
-					if (Tradingdays.hasTradeOrders(tradingday)
-							&& !brokerDataOnly) {
-						int result = JOptionPane
-								.showConfirmDialog(
-										this.getFrame(),
-										"Tradingday: "
-												+ tradingday.getOpen()
-												+ " has orders. Do you want to delete all orders?",
-										"Information",
-										JOptionPane.YES_NO_OPTION);
+					if (Tradingdays.hasTradeOrders(tradingday) && !brokerDataOnly) {
+						int result = JOptionPane.showConfirmDialog(this.getFrame(),
+								"Tradingday: " + tradingday.getOpen()
+										+ " has orders. Do you want to delete all orders?",
+								"Information", JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.YES_OPTION) {
-							m_tradePersistentModel
-									.removeTradingdayTradeOrders(tradingday);
+							m_tradePersistentModel.removeTradingdayTradeOrders(tradingday);
 						}
 					}
-					for (Tradestrategy tradestrategy : tradingday
-							.getTradestrategies()) {
+					for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 						try {
-							if (brokerDataOnly
-									&& !m_brokerModel
-											.validateBrokerData(tradestrategy)) {
+							if (brokerDataOnly && !m_brokerModel.validateBrokerData(tradestrategy)) {
 								return;
 							}
 						} catch (BrokerModelException ex) {
-							tradingdayPanel
-									.doRefreshTradingdayTable(tradingday);
-							JOptionPane.showConfirmDialog(this.getFrame(),
-									ex.getMessage(), "Warning",
+							tradingdayPanel.doRefreshTradingdayTable(tradingday);
+							JOptionPane.showConfirmDialog(this.getFrame(), ex.getMessage(), "Warning",
 									JOptionPane.OK_CANCEL_OPTION);
 							return;
 						}
 
 						if (m_brokerModel.isRealtimeBarsRunning(tradestrategy)) {
-							int result = JOptionPane.showConfirmDialog(this
-									.getFrame(),
+							int result = JOptionPane.showConfirmDialog(this.getFrame(),
 									"A real time data request is already running for Symbol: "
-											+ tradestrategy.getContract()
-													.getSymbol()
-											+ " Do you want to cancel?",
+											+ tradestrategy.getContract().getSymbol()
+											+ " cancel to run strategy or get data?",
 									"Information", JOptionPane.YES_NO_OPTION);
 							if (result == JOptionPane.YES_OPTION) {
-								m_brokerModel
-										.onCancelRealtimeBars(tradestrategy);
+								m_brokerModel.onCancelRealtimeBars(tradestrategy);
 							} else {
 								return;
 							}
 						}
 
 						if (brokerDataOnly && !m_brokerModel.isConnected()) {
-							ZonedDateTime endDate = TradingCalendar
-									.getDateAtTime(
-											TradingCalendar
-													.getPrevTradingDay(TradingCalendar
-															.addTradingDays(
-																	tradestrategy
-																			.getTradingday()
-																			.getClose(),
-																	0)),
-											tradestrategy.getTradingday()
-													.getClose());
-							ZonedDateTime startDate = endDate
-									.minusDays((tradestrategy.getChartDays() - 1));
-							startDate = TradingCalendar
-									.getPrevTradingDay(startDate);
+							ZonedDateTime endDate = TradingCalendar.getDateAtTime(
+									TradingCalendar.getPrevTradingDay(TradingCalendar
+											.addTradingDays(tradestrategy.getTradingday().getClose(), 0)),
+									tradestrategy.getTradingday().getClose());
+							ZonedDateTime startDate = endDate.minusDays((tradestrategy.getChartDays() - 1));
+							startDate = TradingCalendar.getPrevTradingDay(startDate);
 
-							List<Candle> candles = m_tradePersistentModel
-									.findCandlesByContractDateRangeBarSize(
-											tradestrategy.getContract()
-													.getIdContract(),
-											startDate, endDate, tradestrategy
-													.getBarSize());
+							List<Candle> candles = m_tradePersistentModel.findCandlesByContractDateRangeBarSize(
+									tradestrategy.getContract().getIdContract(), startDate, endDate,
+									tradestrategy.getBarSize());
 							if (!candles.isEmpty()) {
-								int result = JOptionPane.showConfirmDialog(this
-										.getFrame(),
+								int result = JOptionPane.showConfirmDialog(this.getFrame(),
 										"Candle data already exists for Symbol: "
-												+ tradestrategy.getContract()
-														.getSymbol()
-												+ " Do you want to delete?",
-										"Information",
-										JOptionPane.YES_NO_OPTION);
+												+ tradestrategy.getContract().getSymbol() + " Do you want to delete?",
+										"Information", JOptionPane.YES_NO_OPTION);
 								if (result == JOptionPane.YES_OPTION) {
 									for (Candle item : candles) {
-										m_tradePersistentModel
-												.removeAspect(item);
+										m_tradePersistentModel.removeAspect(item);
 									}
 								} else {
 									return;
@@ -1973,19 +1709,14 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 						 */
 						// doStrategyParameters(tradestrategy);
 					}
-
 				}
 			}
 
-			this.getFrame().setCursor(
-					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			this.getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			if (brokerDataOnly) {
-				this.setStatusBarMessage(
-						"Runing data retrieval please wait ...",
-						BasePanel.INFORMATION);
+				this.setStatusBarMessage("Runing data retrieval please wait ...", BasePanel.INFORMATION);
 			} else {
-				this.setStatusBarMessage("Runing strategy please wait ...",
-						BasePanel.INFORMATION);
+				this.setStatusBarMessage("Runing strategy please wait ...", BasePanel.INFORMATION);
 			}
 
 			if (m_brokerModel.isConnected()) {
@@ -2002,44 +1733,32 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * Now run a thread that gets and saves historical data from IB TWS.
 			 */
 			getProgressBar().setMaximum(100);
-			brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(
-					m_brokerModel, m_tradePersistentModel, tradingdays);
-			brokerDataRequestProgressMonitor
-					.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-						public void propertyChange(final PropertyChangeEvent evt) {
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									if ("progress".equals(evt.getPropertyName())) {
-										int progress = (Integer) evt
-												.getNewValue();
-										setProgressBarProgress(progress,
-												brokerDataRequestProgressMonitor);
-									} else if ("information".equals(evt
-											.getPropertyName())) {
-										if (brokerDataRequestProgressMonitor
-												.isDone())
-											refreshTradingdays(tradingdays);
-										setStatusBarMessage(
-												(String) evt.getNewValue(),
-												BasePanel.INFORMATION);
+			brokerDataRequestProgressMonitor = new BrokerDataRequestMonitor(m_brokerModel, m_tradePersistentModel,
+					tradingdays);
+			brokerDataRequestProgressMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+				public void propertyChange(final PropertyChangeEvent evt) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							if ("progress".equals(evt.getPropertyName())) {
+								int progress = (Integer) evt.getNewValue();
+								setProgressBarProgress(progress, brokerDataRequestProgressMonitor);
+							} else if ("information".equals(evt.getPropertyName())) {
+								if (brokerDataRequestProgressMonitor.isDone())
+									refreshTradingdays(tradingdays);
+								setStatusBarMessage((String) evt.getNewValue(), BasePanel.INFORMATION);
 
-									} else if ("error".equals(evt
-											.getPropertyName())) {
-										setErrorMessage(
-												"Error getting history data.",
-												((Exception) evt.getNewValue())
-														.getMessage(),
-												(Exception) evt.getNewValue());
-									}
-								}
-							});
+							} else if ("error".equals(evt.getPropertyName())) {
+								setErrorMessage("Error getting history data.",
+										((Exception) evt.getNewValue()).getMessage(), (Exception) evt.getNewValue());
+							}
 						}
 					});
+				}
+			});
 			brokerDataRequestProgressMonitor.execute();
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error running Strategies or Chart Data.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error running Strategies or Chart Data.", ex.getMessage(), ex);
 		} finally {
 			this.getFrame().setCursor(Cursor.getDefaultCursor());
 		}
@@ -2054,23 +1773,16 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 *            Tradestrategy
 	 * @throws Exception
 	 */
-	private synchronized void createStrategy(String strategyClassName,
-			Tradestrategy tradestrategy) throws Exception {
+	private synchronized void createStrategy(String strategyClassName, Tradestrategy tradestrategy) throws Exception {
 
 		String key = strategyClassName + tradestrategy.getIdTradeStrategy();
 
 		// Only allow one strategy worker per tradestrategy
 		if (tradingdayPanel.isStrategyWorkerRunning(key)) {
 			throw new StrategyRuleException(1, 100,
-					"Strategy already running: "
-							+ strategyClassName
-							+ " Symbol: "
-							+ tradestrategy.getContract().getSymbol()
-							+ " Key: "
-							+ key
-							+ " seriesCount: "
-							+ tradestrategy.getStrategyData()
-									.getBaseCandleSeries().getItemCount());
+					"Strategy already running: " + strategyClassName + " Symbol: "
+							+ tradestrategy.getContract().getSymbol() + " Key: " + key + " seriesCount: "
+							+ tradestrategy.getStrategyData().getBaseCandleSeries().getItemCount());
 		}
 
 		Vector<Object> parm = new Vector<Object>(0);
@@ -2078,9 +1790,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 		parm.add(tradestrategy.getStrategyData());
 		parm.add(tradestrategy.getIdTradeStrategy());
 
-		StrategyRule strategy = (StrategyRule) dynacode.newProxyInstance(
-				StrategyRule.class, StrategyRule.PACKAGE + strategyClassName,
-				parm);
+		StrategyRule strategy = (StrategyRule) dynacode.newProxyInstance(StrategyRule.class,
+				StrategyRule.PACKAGE + strategyClassName, parm);
 
 		strategy.addMessageListener(this);
 
@@ -2089,8 +1800,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			 * For back test the back tester listens to the strategy for orders
 			 * being created/completed.
 			 */
-			strategy.addMessageListener(m_brokerModel
-					.getBackTestBroker(tradestrategy.getId()));
+			strategy.addMessageListener(m_brokerModel.getBackTestBroker(tradestrategy.getId()));
 		}
 		strategy.execute();
 		tradingdayPanel.addStrategyWorker(key, strategy);
@@ -2112,8 +1822,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 			}
 			if (BrokerModel._brokerTest.equals(model)) {
 
-				m_brokerModel = (BrokerModel) ClassFactory
-						.getServiceForInterface(BrokerModel._brokerTest, this);
+				m_brokerModel = (BrokerModel) ClassFactory.getServiceForInterface(BrokerModel._brokerTest, this);
 				tradingdayPanel.setConnected(false);
 				contractPanel.setConnected(false);
 				/*
@@ -2123,8 +1832,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				m_brokerModel.addMessageListener(this);
 
 			} else if (BrokerModel._broker.equals(model)) {
-				m_brokerModel = (BrokerModel) ClassFactory
-						.getServiceForInterface(BrokerModel._broker, this);
+				m_brokerModel = (BrokerModel) ClassFactory.getServiceForInterface(BrokerModel._broker, this);
 				/*
 				 * Controller listens for problems from the TWS interface see
 				 * doError()
@@ -2133,8 +1841,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error running Simulated Mode.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error running Simulated Mode.", ex.getMessage(), ex);
 		}
 	}
 
@@ -2154,8 +1861,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				getMenu().setEnabledRunStrategy(false);
 				getMenu().setEnabledTestStrategy(true);
 				getMenu().setEnabledConnect(true);
-				this.setStatusBarMessage("Running in simulated mode",
-						BasePanel.INFORMATION);
+				this.setStatusBarMessage("Running in simulated mode", BasePanel.INFORMATION);
 			} else if (BrokerModel._broker.equals(model)) {
 
 				getMenu().setEnabledBrokerData(true);
@@ -2170,8 +1876,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				getMenu().setEnabledConnect(true);
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error running Simulated Mode.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error running Simulated Mode.", ex.getMessage(), ex);
 		}
 	}
 
@@ -2190,9 +1895,8 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 				tradingdayPanel.doRefresh(tradingday);
 			}
 
-			tradingdayPanel.doRefreshTradingdayTable(tradingdays
-					.getTradingdays().get(
-							tradingdays.getTradingdays().size() - 1));
+			tradingdayPanel.doRefreshTradingdayTable(
+					tradingdays.getTradingdays().get(tradingdays.getTradingdays().size() - 1));
 		}
 
 		if (m_brokerModel.isConnected()) {
@@ -2220,8 +1924,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements
 	 * @param worker
 	 *            SwingWorker<Void,String>
 	 */
-	private void setProgressBarProgress(int progress,
-			SwingWorker<Void, String> worker) {
+	private void setProgressBarProgress(int progress, SwingWorker<Void, String> worker) {
 
 		getProgressBar().setValue(progress);
 		if (getProgressBar().getMaximum() > 0) {
