@@ -69,8 +69,7 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 	 */
 
 	private static final long serialVersionUID = -6717691162128305191L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(PosMgrHeikinAshiTrailStrategy.class);
+	private final static Logger _log = LoggerFactory.getLogger(PosMgrHeikinAshiTrailStrategy.class);
 
 	private static final Integer _hiekinAshiTrailStartR = 2;
 
@@ -95,8 +94,8 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 	 *            Integer
 	 */
 
-	public PosMgrHeikinAshiTrailStrategy(BrokerModel brokerManagerModel,
-			StrategyData strategyData, Integer idTradestrategy) {
+	public PosMgrHeikinAshiTrailStrategy(BrokerModel brokerManagerModel, StrategyData strategyData,
+			Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
 	}
 
@@ -119,8 +118,7 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
-					.getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod().getStart();
 
 			/*
 			 * Get the current open trade. If no trade is open this Strategy
@@ -128,8 +126,7 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			 */
 
 			if (!this.isThereOpenPosition()) {
-				_log.info("No open position so Cancel Strategy Symbol: "
-						+ getSymbol() + " Time: " + startPeriod);
+				_log.info("No open position so Cancel Strategy Symbol: " + getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 				return;
 			}
@@ -153,40 +150,27 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 				 * bar.
 				 */
 
-				Integer quantity = Math.abs(this.getOpenTradePosition()
-						.getOpenQuantity());
+				Integer quantity = Math.abs(this.getOpenTradePosition().getOpenQuantity());
 
 				// Add a penny to the stop and target
-				Money stopPrice = getRiskMultiplerPrice(stopRiskUnits, true,
-						stopAddAmount, true);
+				Money stopPrice = getRiskMultiplerPrice(stopRiskUnits, true, stopAddAmount, true);
 
-				Money targetPrice = getRiskMultiplerPrice(targetRiskUnits,
-						true, targetAddAmount, false);
+				Money targetPrice = getRiskMultiplerPrice(targetRiskUnits, true, targetAddAmount, false);
 
 				createStopAndTargetOrder(stopPrice, targetPrice, quantity, true);
 
-				_log.info("Open position submit Stop/Tgt orders created Symbol: "
-						+ getSymbol()
-						+ " Time:"
-						+ startPeriod
-						+ " quantity: "
-						+ quantity
-						+ " targetPrice: "
-						+ targetPrice
-						+ " stopPrice: " + stopPrice);
+				_log.info("Open position submit Stop/Tgt orders created Symbol: " + getSymbol() + " Time:" + startPeriod
+						+ " quantity: " + quantity + " targetPrice: " + targetPrice + " stopPrice: " + stopPrice);
 			}
 
 			/*
 			 * At 15:30 Move stop order to b.e. i.e. the average fill price of
 			 * the open order.
 			 */
-			if (startPeriod.equals(this.getTradestrategy().getTradingday()
-					.getClose().minusMinutes(30))
-					&& newBar) {
+			if (startPeriod.equals(this.getTradestrategy().getTradingday().getClose().minusMinutes(30)) && newBar) {
 
-				double avgFillPrice = (Math.abs(this.getOpenTradePosition()
-						.getTotalNetValue().doubleValue()) / Math.abs(this
-						.getOpenTradePosition().getOpenQuantity()));
+				double avgFillPrice = (Math.abs(this.getOpenTradePosition().getTotalNetValue().doubleValue())
+						/ Math.abs(this.getOpenTradePosition().getOpenQuantity()));
 				String action = Action.SELL;
 				if (Side.SLD.equals(getOpenTradePosition().getSide()))
 					action = Action.BUY;
@@ -195,8 +179,7 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 				 * the trade.
 				 */
 				if (getCurrentCandleCount() > 0) {
-					CandleItem prevCandleItem = (CandleItem) candleSeries
-							.getDataItem(getCurrentCandleCount() - 1);
+					CandleItem prevCandleItem = (CandleItem) candleSeries.getDataItem(getCurrentCandleCount() - 1);
 					if (Action.SELL.equals(action)) {
 						if (avgFillPrice < prevCandleItem.getLow())
 							avgFillPrice = prevCandleItem.getLow();
@@ -206,35 +189,26 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 					}
 				}
 
-				Money stopPrice = addPennyAndRoundStop(avgFillPrice,
-						getOpenTradePosition().getSide(), action, 0.01);
+				Money stopPrice = addPennyAndRoundStop(avgFillPrice, getOpenTradePosition().getSide(), action, 0.01);
 				moveStopOCAPrice(stopPrice, true);
-				_log.info("Rule move stop to b.e or prev bars H/L Symbol: "
-						+ getSymbol() + " Time: " + startPeriod
-						+ " stopPrice: " + stopPrice + " Side: "
-						+ this.getOpenTradePosition().getSide());
+				_log.info("Rule move stop to b.e or prev bars H/L Symbol: " + getSymbol() + " Time: " + startPeriod
+						+ " stopPrice: " + stopPrice + " Side: " + this.getOpenTradePosition().getSide());
 			}
 
 			/*
 			 * Trail on Heikin-Ashi above target 1 with a two bar trail.
 			 */
 			if (newBar) {
-				Money target2RPrice = getRiskMultiplerPrice(
-						_hiekinAshiTrailStartR, true, targetAddAmount, false);
-				if ((target2RPrice.isLessThan(new Money(currentCandleItem
-						.getClose())) && Side.BOT.equals(this
-						.getOpenTradePosition().getSide()))
-						|| (target2RPrice.isGreaterThan(new Money(
-								currentCandleItem.getClose())) && Side.SLD
-								.equals(this.getOpenTradePosition().getSide()))) {
-					Money newStop = getHiekinAshiTrailStop(
-							this.getStopPriceMinUnfilled(), 2);
+				Money target2RPrice = getRiskMultiplerPrice(_hiekinAshiTrailStartR, true, targetAddAmount, false);
+				if ((target2RPrice.isLessThan(new Money(currentCandleItem.getClose()))
+						&& Side.BOT.equals(this.getOpenTradePosition().getSide()))
+						|| (target2RPrice.isGreaterThan(new Money(currentCandleItem.getClose()))
+								&& Side.SLD.equals(this.getOpenTradePosition().getSide()))) {
+					Money newStop = getHiekinAshiTrailStop(this.getStopPriceMinUnfilled(), 2);
 					if (!newStop.equals(this.getStopPriceMinUnfilled())) {
 						moveStopOCAPrice(newStop, true);
-						_log.info("Hiekin-AshiTrail: " + getSymbol()
-								+ " Trail Price: " + newStop + " Time: "
-								+ startPeriod + " Side: "
-								+ this.getOpenTradePosition().getSide());
+						_log.info("Hiekin-AshiTrail: " + getSymbol() + " Trail Price: " + newStop + " Time: "
+								+ startPeriod + " Side: " + this.getOpenTradePosition().getSide());
 					}
 				}
 			}
@@ -243,21 +217,15 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().isBefore(
-					this.getTradestrategy().getTradingday().getClose()
-							.minusMinutes(2))) {
+			if (!currentCandleItem.getLastUpdateDate()
+					.isBefore(this.getTradestrategy().getTradingday().getClose().minusMinutes(2))) {
 				cancelOrdersClosePosition(true);
-				_log.info("Close position 2min before close Symbol: "
-						+ getSymbol() + " Time: " + startPeriod);
+				_log.info("Close position 2min before close Symbol: " + getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 			}
 		} catch (StrategyRuleException ex) {
-			_log.error("Error Position Manager exception: " + ex.getMessage(),
-					ex);
-			error(1,
-					40,
-					"Error Position Manager exception: "
-							+ ex.getLocalizedMessage());
+			_log.error("Error Position Manager exception: " + ex.getMessage(), ex);
+			error(1, 40, "Error Position Manager exception: " + ex.getLocalizedMessage());
 		}
 	}
 
@@ -269,22 +237,17 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 	 * i.e. side.
 	 * 
 	 * @param stopPrice
-	 *            Money
 	 * @param bars
-	 *            int
-	 * @return Money new stop or orginal if not trail.
+	 * @return
 	 * @throws StrategyRuleException
 	 */
-	public Money getHiekinAshiTrailStop(Money stopPrice, int bars)
-			throws StrategyRuleException {
+	public Money getHiekinAshiTrailStop(Money stopPrice, int bars) throws StrategyRuleException {
 		boolean trail = false;
 
-		HeikinAshiDataset dataset = (HeikinAshiDataset) getTradestrategy()
-				.getStrategyData().getIndicatorByType(
-						IndicatorSeries.HeikinAshiSeries);
+		HeikinAshiDataset dataset = (HeikinAshiDataset) getTradestrategy().getStrategyData()
+				.getIndicatorByType(IndicatorSeries.HeikinAshiSeries);
 		if (null == dataset) {
-			throw new StrategyRuleException(1, 110,
-					"Error no Hiekin-Ashi indicator defined for this strategy");
+			throw new StrategyRuleException(1, 110, "Error no Hiekin-Ashi indicator defined for this strategy");
 		}
 		HeikinAshiSeries series = dataset.getSeries(0);
 		// Start with the previous bar and work back
@@ -297,14 +260,12 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 				// AbstractStrategyRule.logCandle(candle.getCandle());
 				trail = false;
 				if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
-					if ((candle.getLow() > stopPrice.doubleValue())
-							&& (candle.getOpen() < candle.getClose())) {
+					if ((candle.getLow() > stopPrice.doubleValue()) && (candle.getOpen() < candle.getClose())) {
 						stopPrice = new Money(candle.getLow());
 						trail = true;
 					}
 				} else {
-					if ((candle.getHigh() < stopPrice.doubleValue())
-							&& (candle.getOpen() > candle.getClose())) {
+					if ((candle.getHigh() < stopPrice.doubleValue()) && (candle.getOpen() > candle.getClose())) {
 						stopPrice = new Money(candle.getHigh());
 						trail = true;
 					}
@@ -322,19 +283,14 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 	 * 
 	 * This method is used to get target one order.
 	 * 
-	 * @return TradeOrder target one tradeOrder.
-	 * @throws StrategyRuleException
+	 * @return TradeOrder
 	 */
-
 	public TradeOrder getTargetOneOrder() {
 		if (this.isThereOpenPosition()) {
-			Collections.sort(this.getTradestrategyOrders().getTradeOrders(),
-					TradeOrder.ORDER_KEY);
-			for (TradeOrder tradeOrder : this.getTradestrategyOrders()
-					.getTradeOrders()) {
+			Collections.sort(this.getTradestrategyOrders().getTradeOrders(), TradeOrder.ORDER_KEY);
+			for (TradeOrder tradeOrder : this.getTradestrategyOrders().getTradeOrders()) {
 				if (!tradeOrder.getIsOpenPosition()) {
-					if (OrderType.LMT.equals(tradeOrder.getOrderType())
-							&& null != tradeOrder.getOcaGroupName()) {
+					if (OrderType.LMT.equals(tradeOrder.getOrderType()) && null != tradeOrder.getOcaGroupName()) {
 						return tradeOrder;
 					}
 				}
@@ -348,16 +304,13 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 	 * 
 	 * This method is used to trail on one minute bars over the first target.
 	 * 
+	 * @param candleSeries
 	 * @param stopPrice
-	 *            Money
-	 * @param bars
-	 *            int
-	 * @return Money new stop or orginal if not trail.
+	 * @param currentCandle
+	 * @return
 	 * @throws StrategyRuleException
 	 */
-
-	public Money getOneMinuteTrailStop(CandleSeries candleSeries,
-			Money stopPrice, CandleItem currentCandle)
+	public Money getOneMinuteTrailStop(CandleSeries candleSeries, Money stopPrice, CandleItem currentCandle)
 			throws StrategyRuleException {
 
 		if (!(59 == currentCandle.getLastUpdateDate().getSecond()))
@@ -365,27 +318,19 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 
 		if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
 
-			if (stopPrice.isLessThan(new Money(candleSeries
-					.getPreviousRollingCandle().getVwap())))
-				return new Money(candleSeries.getPreviousRollingCandle()
-						.getVwap());
+			if (stopPrice.isLessThan(new Money(candleSeries.getPreviousRollingCandle().getVwap())))
+				return new Money(candleSeries.getPreviousRollingCandle().getVwap());
 
-			if (candleSeries.getPreviousRollingCandle().getVwap() < candleSeries
-					.getRollingCandle().getVwap())
-				return new Money(candleSeries.getPreviousRollingCandle()
-						.getVwap());
+			if (candleSeries.getPreviousRollingCandle().getVwap() < candleSeries.getRollingCandle().getVwap())
+				return new Money(candleSeries.getPreviousRollingCandle().getVwap());
 
 		} else {
 
-			if (stopPrice.isGreaterThan(new Money(candleSeries
-					.getPreviousRollingCandle().getVwap())))
-				return new Money(candleSeries.getPreviousRollingCandle()
-						.getVwap());
+			if (stopPrice.isGreaterThan(new Money(candleSeries.getPreviousRollingCandle().getVwap())))
+				return new Money(candleSeries.getPreviousRollingCandle().getVwap());
 
-			if (candleSeries.getPreviousRollingCandle().getVwap() > candleSeries
-					.getRollingCandle().getVwap())
-				return new Money(candleSeries.getPreviousRollingCandle()
-						.getVwap());
+			if (candleSeries.getPreviousRollingCandle().getVwap() > candleSeries.getRollingCandle().getVwap())
+				return new Money(candleSeries.getPreviousRollingCandle().getVwap());
 		}
 
 		// if (Side.BOT.equals(this.getOpenTradePosition().getSide())) {
@@ -408,32 +353,36 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 		return stopPrice;
 	}
 
-	private Money getRiskMultiplerPrice(Integer riskMultipler, Boolean round,
-			Double roundAmt, Boolean stop) throws StrategyRuleException {
+	/**
+	 * Method: getRiskMultiplerPrice
+	 * 
+	 * @param riskMultipler
+	 * @param round
+	 * @param roundAmt
+	 * @param stop
+	 * @return
+	 * @throws StrategyRuleException
+	 */
+	private Money getRiskMultiplerPrice(Integer riskMultipler, Boolean round, Double roundAmt, Boolean stop)
+			throws StrategyRuleException {
 
-		Integer quantity = Math.abs(this.getOpenTradePosition()
-				.getOpenQuantity());
-		double avgFillPrice = (Math.abs(this.getOpenTradePosition()
-				.getTotalNetValue().doubleValue()) / quantity);
+		Integer quantity = Math.abs(this.getOpenTradePosition().getOpenQuantity());
+		double avgFillPrice = (Math.abs(this.getOpenTradePosition().getTotalNetValue().doubleValue()) / quantity);
 
-		double riskAmount = Math.abs(this.getTradestrategy().getRiskAmount()
-				.doubleValue()
-				/ quantity);
+		double riskAmount = Math.abs(this.getTradestrategy().getRiskAmount().doubleValue() / quantity);
 		String action = Action.BUY;
 		int buySellMultipliter = 1;
 		if (Side.BOT.equals(getOpenTradePosition().getSide())) {
 			action = Action.SELL;
 			buySellMultipliter = -1;
 		}
-		double amount = (avgFillPrice + (riskAmount * riskMultipler
-				* buySellMultipliter * (stop ? 1 : -1)));
+		double amount = (avgFillPrice + (riskAmount * riskMultipler * buySellMultipliter * (stop ? 1 : -1)));
 
 		if (amount < 0)
 			amount = 0.02;
 
 		if (round) {
-			return addPennyAndRoundStop(amount, this.getOpenTradePosition()
-					.getSide(), action, roundAmt);
+			return addPennyAndRoundStop(amount, this.getOpenTradePosition().getSide(), action, roundAmt);
 		} else {
 			return new Money(amount);
 		}
