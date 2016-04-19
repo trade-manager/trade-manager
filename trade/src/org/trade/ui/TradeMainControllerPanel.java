@@ -614,6 +614,7 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements BrokerCh
 				return;
 			}
 			tradingdayPanel.doRefresh(todayTradingday);
+			tradingdayPanel.doRefreshTradingdayTable(todayTradingday);
 
 		} catch (Exception ex) {
 			this.setErrorMessage("Error starting PositionManagerRule.", ex.getMessage(), ex);
@@ -666,7 +667,6 @@ public class TradeMainControllerPanel extends TabbedAppPanel implements BrokerCh
 				 */
 
 				if (tradestrategy.getStrategy().hasStrategyManager()) {
-
 					if (!tradingdayPanel
 							.isStrategyWorkerRunning(tradestrategy.getStrategy().getStrategyManager().getClassName()
 									+ tradestrategy.getIdTradeStrategy())) {

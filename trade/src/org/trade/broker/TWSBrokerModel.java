@@ -1124,15 +1124,16 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					for (String key : executionDetails.keySet()) {
 						Execution execution = executionDetails.get(key);
 
-						if (tradeOrders.containsKey(execution.m_orderId))
+						if (tradeOrders.containsKey(execution.m_orderId)) {
 							continue;
-
+						}
 						TradeOrderfill tradeOrderfill = new TradeOrderfill();
 						TWSBrokerModel.populateTradeOrderfill(execution, tradeOrderfill);
 
 						String action = Action.SELL;
-						if (Side.BOT.equals(execution.m_side))
+						if (Side.BOT.equals(execution.m_side)) {
 							action = Action.BUY;
+						}
 
 						Integer quantity = tradeOrderfill.getQuantity();
 						TradeOrder tradeOrder = new TradeOrder(tradestrategy, action, tradeOrderfill.getTime(),
@@ -1148,11 +1149,13 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 								TradeOrderfill tradeOrderfill1 = new TradeOrderfill();
 								TWSBrokerModel.populateTradeOrderfill(execution1, tradeOrderfill1);
 								quantity = quantity + tradeOrderfill1.getQuantity();
-								// Make sure the create date for the order is
-								// the
-								// earliest time.
-								if (tradeOrder.getCreateDate().isAfter(tradeOrderfill1.getTime()))
+								/*
+								 * Make sure the create date for the order is
+								 * the earliest time.
+								 */
+								if (tradeOrder.getCreateDate().isAfter(tradeOrderfill1.getTime())) {
 									tradeOrder.setCreateDate(tradeOrderfill1.getTime());
+								}
 							}
 						}
 						tradeOrder.setQuantity(quantity);
@@ -1167,7 +1170,8 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 					Collections.sort(orders, TradeOrder.CREATE_ORDER);
 
 					for (TradeOrder tradeOrder : orders) {
-						tradeOrder = m_tradePersistentModel.persistTradeOrder(tradeOrder);
+						// tradeOrder =
+						// m_tradePersistentModel.persistTradeOrder(tradeOrder);
 						double totalComms = 0;
 						for (String key : executionDetails.keySet()) {
 							Execution execution = executionDetails.get(key);
@@ -1195,8 +1199,9 @@ public class TWSBrokerModel extends AbstractBrokerModel implements EWrapper {
 						TradeOrder transientInstance = m_tradePersistentModel
 								.findTradeOrderByKey(tradeOrder.getOrderKey());
 						// Let the controller know an order was filled
-						if (tradeOrder.getIsFilled())
+						if (tradeOrder.getIsFilled()) {
 							this.fireTradeOrderFilled(transientInstance);
+						}
 					}
 				}
 			}

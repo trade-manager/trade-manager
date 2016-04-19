@@ -882,8 +882,10 @@ public class TradePersistentModel implements PersistentModel {
 						 * here.
 						 */
 						ZonedDateTime positionOpenDate = tradeOrder.getFilledDate();
-						if (null == positionOpenDate)
+						if (null == positionOpenDate) {
 							positionOpenDate = TradingCalendar.getDateTimeNowMarketTimeZone();
+						}
+
 						tradePosition = new TradePosition(tradestrategyOrders.getContract(), positionOpenDate,
 								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT : Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
@@ -964,10 +966,12 @@ public class TradePersistentModel implements PersistentModel {
 				tradePosition.setTotalNetValue(
 						(new BigDecimal(totalSellValue - totalBuyValue)).setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalCommission(comms.getBigDecimalValue());
-				if (openQuantity > 0)
+				if (openQuantity > 0) {
 					tradePosition.setSide(Side.BOT);
-				if (openQuantity < 0)
+				}
+				if (openQuantity < 0) {
 					tradePosition.setSide(Side.SLD);
+				}
 
 				/*
 				 * Position should be closed if openQuantity = 0
@@ -984,8 +988,9 @@ public class TradePersistentModel implements PersistentModel {
 				}
 
 				// Partial fills case.
-				if (null == tradestrategyOrders)
+				if (null == tradestrategyOrders) {
 					tradestrategyOrders = this.findPositionOrdersByTradestrategyId(tradestrategyId);
+				}
 
 				if (!tradePosition.isOpen() && !TradestrategyStatus.CLOSED.equals(tradestrategyOrders.getStatus())) {
 					/*
@@ -1010,8 +1015,9 @@ public class TradePersistentModel implements PersistentModel {
 
 			} else {
 				if (allOrdersCancelled) {
-					if (null == tradestrategyOrders)
+					if (null == tradestrategyOrders) {
 						tradestrategyOrders = this.findPositionOrdersByTradestrategyId(tradestrategyId);
+					}
 					if (!TradestrategyStatus.CANCELLED.equals(tradestrategyOrders.getStatus())) {
 						if (null == tradestrategyOrders.getStatus()) {
 							tradestrategyOrders.setStatus(TradestrategyStatus.CANCELLED);

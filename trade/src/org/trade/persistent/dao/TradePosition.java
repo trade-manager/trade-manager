@@ -116,8 +116,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * @param side
 	 *            String
 	 */
-	public TradePosition(Contract contract, ZonedDateTime positionOpenDate,
-			String side) {
+	public TradePosition(Contract contract, ZonedDateTime positionOpenDate, String side) {
 		this.contract = new ContractLite(contract.getIdContract());
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;
@@ -134,8 +133,7 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * @param side
 	 *            String
 	 */
-	public TradePosition(ContractLite contract, ZonedDateTime positionOpenDate,
-			String side) {
+	public TradePosition(ContractLite contract, ZonedDateTime positionOpenDate, String side) {
 		this.contract = contract;
 		this.positionOpenDate = positionOpenDate;
 		this.side = side;
@@ -168,11 +166,9 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * @param tradeOrders
 	 *            List<TradeOrder>
 	 */
-	public TradePosition(Contract contract, ZonedDateTime positionOpenDate,
-			ZonedDateTime positionCloseDate, Integer openQuantity, String side,
-			BigDecimal totalCommission, Integer totalBuyQuantity,
-			BigDecimal totalBuyValue, Integer totalSellQuantity,
-			BigDecimal totalSellValue, BigDecimal totalNetValue,
+	public TradePosition(Contract contract, ZonedDateTime positionOpenDate, ZonedDateTime positionCloseDate,
+			Integer openQuantity, String side, BigDecimal totalCommission, Integer totalBuyQuantity,
+			BigDecimal totalBuyValue, Integer totalSellQuantity, BigDecimal totalSellValue, BigDecimal totalNetValue,
 			List<TradeOrder> tradeOrders) {
 		this.contract = new ContractLite(contract.getIdContract());
 		this.positionOpenDate = positionOpenDate;
@@ -479,8 +475,8 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return List<TradeOrder>
 	 */
-	@OneToMany(mappedBy = "tradePosition", fetch = FetchType.LAZY, cascade = {
-			CascadeType.REFRESH, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "tradePosition", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH,
+			CascadeType.REMOVE })
 	public List<TradeOrder> getTradeOrders() {
 		return this.tradeOrders;
 	}
@@ -512,8 +508,9 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 */
 	@Transient
 	public boolean isOpen() {
-		if (this.equals(this.getContract().getTradePosition()))
+		if (this.equals(this.getContract().getTradePosition())) {
 			return true;
+		}
 		return false;
 	}
 
@@ -550,18 +547,12 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 		for (TradeOrder order : getTradeOrders()) {
 			if (order.getIsFilled()) {
 				if (null == prevIdTradePosition
-						|| prevIdTradePosition != order.getTradePosition()
-								.getIdTradePosition()) {
+						|| prevIdTradePosition != order.getTradePosition().getIdTradePosition()) {
 
-					prevIdTradePosition = order.getTradePosition()
-							.getIdTradePosition();
-					if (order.getTradePosition().equals(
-							order.getTradePosition().getContract()
-									.getTradePosition())) {
-						unRealizedProfit = order.getTradePosition()
-								.getTotalNetValue().doubleValue()
-								+ (order.getTradePosition().getOpenQuantity() * lastPrice
-										.doubleValue());
+					prevIdTradePosition = order.getTradePosition().getIdTradePosition();
+					if (order.getTradePosition().equals(order.getTradePosition().getContract().getTradePosition())) {
+						unRealizedProfit = order.getTradePosition().getTotalNetValue().doubleValue()
+								+ (order.getTradePosition().getOpenQuantity() * lastPrice.doubleValue());
 
 					}
 				}
@@ -584,45 +575,29 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 
 			if (order.getIsFilled()) {
 				if (null == prevIdTradePosition
-						|| prevIdTradePosition != order.getTradePosition()
-								.getIdTradePosition()) {
+						|| prevIdTradePosition != order.getTradePosition().getIdTradePosition()) {
 
-					prevIdTradePosition = order.getTradePosition()
-							.getIdTradePosition();
+					prevIdTradePosition = order.getTradePosition().getIdTradePosition();
 
-					if (order.getTradePosition().getTotalSellQuantity()
-							.doubleValue() > 0
-							&& order.getTradePosition().getTotalBuyQuantity()
-									.doubleValue() > 0) {
+					if (order.getTradePosition().getTotalSellQuantity().doubleValue() > 0
+							&& order.getTradePosition().getTotalBuyQuantity().doubleValue() > 0) {
 
-						double qty = (order.getTradePosition()
-								.getTotalSellQuantity().doubleValue() - order
-								.getTradePosition().getTotalBuyQuantity()
-								.doubleValue());
+						double qty = (order.getTradePosition().getTotalSellQuantity().doubleValue()
+								- order.getTradePosition().getTotalBuyQuantity().doubleValue());
 						if (qty == 0) {
-							realizedProfit = realizedProfit
-									+ order.getTradePosition()
-											.getTotalNetValue().doubleValue()
-									- order.getTradePosition()
-											.getTotalCommission().doubleValue();
+							realizedProfit = realizedProfit + order.getTradePosition().getTotalNetValue().doubleValue()
+									- order.getTradePosition().getTotalCommission().doubleValue();
 						} else {
 
-							double avgBuy = (order.getTradePosition()
-									.getTotalBuyValue().doubleValue() / order
-									.getTradePosition().getTotalBuyQuantity()
-									.doubleValue());
+							double avgBuy = (order.getTradePosition().getTotalBuyValue().doubleValue()
+									/ order.getTradePosition().getTotalBuyQuantity().doubleValue());
 
-							double avgSell = (order.getTradePosition()
-									.getTotalSellValue().doubleValue() / order
-									.getTradePosition().getTotalSellQuantity()
-									.doubleValue());
+							double avgSell = (order.getTradePosition().getTotalSellValue().doubleValue()
+									/ order.getTradePosition().getTotalSellQuantity().doubleValue());
 
-							int sideVal = (Side.BOT.equals(order
-									.getTradePosition().getSide()) ? -1 : 1);
-							realizedProfit = realizedProfit
-									+ (qty * (avgSell - avgBuy) * sideVal)
-									- order.getTradePosition()
-											.getTotalCommission().doubleValue();
+							int sideVal = (Side.BOT.equals(order.getTradePosition().getSide()) ? -1 : 1);
+							realizedProfit = realizedProfit + (qty * (avgSell - avgBuy) * sideVal)
+									- order.getTradePosition().getTotalCommission().doubleValue();
 						}
 					}
 				}
@@ -637,16 +612,12 @@ public class TradePosition extends Aspect implements java.io.Serializable {
 	 * @return String
 	 */
 	public String toString() {
-		return "TradePosition Id: " + this.getIdTradePosition() + " Version: "
-				+ this.getVersion() + " positionOpenDate: "
-				+ this.getPositionOpenDate() + " positionCloseDate: "
-				+ this.getPositionCloseDate() + " Side: " + this.getSide()
-				+ " Open Qty: " + this.getOpenQuantity() + " Total Buy qty: "
-				+ this.getTotalBuyQuantity() + " Total Buy Value: "
-				+ new Money(this.getTotalBuyValue()) + " Total Sell qty: "
-				+ this.getTotalSellQuantity() + " Total Sell Value: "
-				+ new Money(this.getTotalSellValue()) + " Total Comm: "
-				+ new Money(this.getTotalCommission()) + " updateDate: "
-				+ this.getLastUpdateDate();
+		return "TradePosition Id: " + this.getIdTradePosition() + " Version: " + this.getVersion()
+				+ " positionOpenDate: " + this.getPositionOpenDate() + " positionCloseDate: "
+				+ this.getPositionCloseDate() + " Side: " + this.getSide() + " Open Qty: " + this.getOpenQuantity()
+				+ " Total Buy qty: " + this.getTotalBuyQuantity() + " Total Buy Value: "
+				+ new Money(this.getTotalBuyValue()) + " Total Sell qty: " + this.getTotalSellQuantity()
+				+ " Total Sell Value: " + new Money(this.getTotalSellValue()) + " Total Comm: "
+				+ new Money(this.getTotalCommission()) + " updateDate: " + this.getLastUpdateDate();
 	}
 }

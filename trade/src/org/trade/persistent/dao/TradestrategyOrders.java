@@ -42,9 +42,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -206,8 +206,9 @@ public class TradestrategyOrders extends Aspect implements Serializable {
 	 * @return boolean
 	 */
 	public boolean hasOpenTradePosition() {
-		if (null == getOpenTradePosition())
+		if (null == getOpenTradePosition()) {
 			return false;
+		}
 		return true;
 	}
 
