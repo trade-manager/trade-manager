@@ -52,6 +52,8 @@ import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderStatus;
 import org.trade.dictionary.valuetype.Side;
 import org.trade.dictionary.valuetype.TradestrategyStatus;
+import org.trade.persistent.dao.Account;
+import org.trade.persistent.dao.AccountHome;
 import org.trade.persistent.dao.Candle;
 import org.trade.persistent.dao.CandleHome;
 import org.trade.persistent.dao.CodeType;
@@ -60,24 +62,22 @@ import org.trade.persistent.dao.Contract;
 import org.trade.persistent.dao.ContractHome;
 import org.trade.persistent.dao.Portfolio;
 import org.trade.persistent.dao.PortfolioHome;
-import org.trade.persistent.dao.TradestrategyLite;
-import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Rule;
 import org.trade.persistent.dao.RuleHome;
 import org.trade.persistent.dao.Strategy;
 import org.trade.persistent.dao.StrategyHome;
-import org.trade.persistent.dao.TradePosition;
-import org.trade.persistent.dao.Account;
-import org.trade.persistent.dao.AccountHome;
-import org.trade.persistent.dao.TradePositionHome;
 import org.trade.persistent.dao.TradeOrder;
 import org.trade.persistent.dao.TradeOrderHome;
 import org.trade.persistent.dao.TradeOrderfill;
 import org.trade.persistent.dao.TradeOrderfillHome;
+import org.trade.persistent.dao.TradePosition;
+import org.trade.persistent.dao.TradePositionHome;
 import org.trade.persistent.dao.TradelogHome;
 import org.trade.persistent.dao.TradelogReport;
 import org.trade.persistent.dao.Tradestrategy;
 import org.trade.persistent.dao.TradestrategyHome;
+import org.trade.persistent.dao.TradestrategyLite;
+import org.trade.persistent.dao.TradestrategyOrders;
 import org.trade.persistent.dao.Tradingday;
 import org.trade.persistent.dao.TradingdayHome;
 import org.trade.persistent.dao.Tradingdays;
@@ -143,12 +143,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradelogReport(Account,
 	 *      Date, Date, boolean)
 	 */
-	public TradelogReport findTradelogReport(final Portfolio portfolio,
-			ZonedDateTime start, ZonedDateTime end, boolean filter,
-			String symbol, BigDecimal winLossAmount)
-			throws PersistentModelException {
-		return m_tradelogHome.findByTradelogReport(portfolio, start, end,
-				filter, symbol, winLossAmount);
+	public TradelogReport findTradelogReport(final Portfolio portfolio, ZonedDateTime start, ZonedDateTime end,
+			boolean filter, String symbol, BigDecimal winLossAmount) throws PersistentModelException {
+		return m_tradelogHome.findByTradelogReport(portfolio, start, end, filter, symbol, winLossAmount);
 	}
 
 	/**
@@ -160,12 +157,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAccountById(Integer)
 	 */
-	public Account findAccountById(final Integer id)
-			throws PersistentModelException {
+	public Account findAccountById(final Integer id) throws PersistentModelException {
 		Account instance = m_accountHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException("Account not found for id: "
-					+ id);
+			throw new PersistentModelException("Account not found for id: " + id);
 		return instance;
 	}
 
@@ -178,8 +173,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAccountByNumber(String)
 	 */
-	public Account findAccountByNumber(String accountNumber)
-			throws PersistentModelException {
+	public Account findAccountByNumber(String accountNumber) throws PersistentModelException {
 		return m_accountHome.findByAccountNumber(accountNumber);
 	}
 
@@ -192,12 +186,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradingdayById(Integer)
 	 */
-	public Tradingday findTradingdayById(final Integer id)
-			throws PersistentModelException {
+	public Tradingday findTradingdayById(final Integer id) throws PersistentModelException {
 		Tradingday instance = m_tradingdayHome.findTradingdayById(id);
 		if (null == instance)
-			throw new PersistentModelException("Tradingday not found for id: "
-					+ id);
+			throw new PersistentModelException("Tradingday not found for id: " + id);
 		return instance;
 	}
 
@@ -213,8 +205,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradingdayByOpenDate(Date)
 	 */
-	public Tradingday findTradingdayByOpenCloseDate(
-			final ZonedDateTime openDate, final ZonedDateTime closeDate)
+	public Tradingday findTradingdayByOpenCloseDate(final ZonedDateTime openDate, final ZonedDateTime closeDate)
 			throws PersistentModelException {
 		return m_tradingdayHome.findByOpenCloseDate(openDate, closeDate);
 	}
@@ -228,12 +219,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findContractById(Integer)
 	 */
-	public Contract findContractById(final Integer id)
-			throws PersistentModelException {
+	public Contract findContractById(final Integer id) throws PersistentModelException {
 		Contract instance = m_contractHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException("Contract not found for id: "
-					+ id);
+			throw new PersistentModelException("Contract not found for id: " + id);
 		return instance;
 	}
 
@@ -246,12 +235,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findContractById(Integer)
 	 */
-	public TradeOrder findTradeOrderById(final Integer id)
-			throws PersistentModelException {
+	public TradeOrder findTradeOrderById(final Integer id) throws PersistentModelException {
 		TradeOrder instance = m_tradeOrderHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException("Contract not found for id: "
-					+ id);
+			throw new PersistentModelException("Contract not found for id: " + id);
 		return instance;
 	}
 
@@ -271,11 +258,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findContractByUniqueKey(String,
 	 *      String, String, String)
 	 */
-	public Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, ZonedDateTime expiry)
-			throws PersistentModelException {
-		return m_contractHome.findByUniqueKey(SECType, symbol, exchange,
-				currency, expiry);
+	public Contract findContractByUniqueKey(String SECType, String symbol, String exchange, String currency,
+			ZonedDateTime expiry) throws PersistentModelException {
+		return m_contractHome.findByUniqueKey(SECType, symbol, exchange, currency, expiry);
 	}
 
 	/**
@@ -287,19 +272,14 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyById(Tradestrategy)
 	 */
-	public Tradestrategy findTradestrategyById(final Tradestrategy tradestrategy)
-			throws PersistentModelException {
+	public Tradestrategy findTradestrategyById(final Tradestrategy tradestrategy) throws PersistentModelException {
 		if (null == tradestrategy.getIdTradeStrategy())
 			throw new PersistentModelException(
-					"Please save Tradestrategy for symbol: "
-							+ tradestrategy.getContract().getSymbol());
+					"Please save Tradestrategy for symbol: " + tradestrategy.getContract().getSymbol());
 
-		Tradestrategy instance = m_tradestrategyHome.findById(tradestrategy
-				.getIdTradeStrategy());
+		Tradestrategy instance = m_tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
 		if (null == instance)
-			throw new PersistentModelException(
-					"Tradestrategy not found for id: "
-							+ tradestrategy.getIdTradeStrategy());
+			throw new PersistentModelException("Tradestrategy not found for id: " + tradestrategy.getIdTradeStrategy());
 
 		instance.setStrategyData(tradestrategy.getStrategyData());
 		return instance;
@@ -315,23 +295,19 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	public TradestrategyOrders refreshPositionOrdersByTradestrategyId(
-			final TradestrategyOrders positionOrders)
+	public TradestrategyOrders refreshPositionOrdersByTradestrategyId(final TradestrategyOrders positionOrders)
 			throws PersistentModelException {
 
-		Integer version = m_tradestrategyHome.findVersionById(positionOrders
-				.getIdTradeStrategy());
+		Integer version = m_tradestrategyHome.findVersionById(positionOrders.getIdTradeStrategy());
 
 		if (positionOrders.getVersion().equals(version)) {
 			return positionOrders;
 		} else {
 			TradestrategyOrders instance = m_tradestrategyHome
-					.findPositionOrdersByTradestrategyId(positionOrders
-							.getIdTradeStrategy());
+					.findPositionOrdersByTradestrategyId(positionOrders.getIdTradeStrategy());
 			if (null == instance)
 				throw new PersistentModelException(
-						"Tradestrategy not found for id: "
-								+ positionOrders.getIdTradeStrategy());
+						"Tradestrategy not found for id: " + positionOrders.getIdTradeStrategy());
 			return instance;
 		}
 	}
@@ -346,14 +322,12 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	public TradestrategyOrders findPositionOrdersByTradestrategyId(
-			final Integer idTradestrategy) throws PersistentModelException {
+	public TradestrategyOrders findPositionOrdersByTradestrategyId(final Integer idTradestrategy)
+			throws PersistentModelException {
 
-		TradestrategyOrders instance = m_tradestrategyHome
-				.findPositionOrdersByTradestrategyId(idTradestrategy);
+		TradestrategyOrders instance = m_tradestrategyHome.findPositionOrdersByTradestrategyId(idTradestrategy);
 		if (null == instance)
-			throw new PersistentModelException(
-					"Tradestrategy not found for id: " + idTradestrategy);
+			throw new PersistentModelException("Tradestrategy not found for id: " + idTradestrategy);
 		return instance;
 	}
 
@@ -366,12 +340,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyById(Integer)
 	 */
-	public Tradestrategy findTradestrategyById(final Integer id)
-			throws PersistentModelException {
+	public Tradestrategy findTradestrategyById(final Integer id) throws PersistentModelException {
 		Tradestrategy instance = m_tradestrategyHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException(
-					"Tradestrategy not found for id: " + id);
+			throw new PersistentModelException("Tradestrategy not found for id: " + id);
 		return instance;
 	}
 
@@ -399,13 +371,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyById(Integer)
 	 */
-	public TradestrategyLite findTradestrategyLiteById(final Integer id)
-			throws PersistentModelException {
-		TradestrategyLite instance = m_tradestrategyHome
-				.findTradestrategyLiteById(id);
+	public TradestrategyLite findTradestrategyLiteById(final Integer id) throws PersistentModelException {
+		TradestrategyLite instance = m_tradestrategyHome.findTradestrategyLiteById(id);
 		if (null == instance)
-			throw new PersistentModelException(
-					"TradestrategyLite not found for id: " + id);
+			throw new PersistentModelException("TradestrategyLite not found for id: " + id);
 		return instance;
 	}
 
@@ -418,12 +387,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradeById(Integer)
 	 */
-	public TradePosition findTradePositionById(final Integer id)
-			throws PersistentModelException {
+	public TradePosition findTradePositionById(final Integer id) throws PersistentModelException {
 		TradePosition instance = m_tradePositionHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException(
-					"TradePosition not found for id: " + id);
+			throw new PersistentModelException("TradePosition not found for id: " + id);
 		return instance;
 	}
 
@@ -435,12 +402,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return Portfolio
 	 * @throws PersistentModelException
 	 */
-	public Portfolio findPortfolioById(final Integer id)
-			throws PersistentModelException {
+	public Portfolio findPortfolioById(final Integer id) throws PersistentModelException {
 		Portfolio instance = m_portfolioHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException("Portfolio not found for id: "
-					+ id);
+			throw new PersistentModelException("Portfolio not found for id: " + id);
 		return instance;
 	}
 
@@ -452,8 +417,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return Portfolio
 	 * @throws PersistentModelException
 	 */
-	public Portfolio findPortfolioByName(String name)
-			throws PersistentModelException {
+	public Portfolio findPortfolioByName(String name) throws PersistentModelException {
 		return m_portfolioHome.findByName(name);
 	}
 
@@ -474,16 +438,14 @@ public class TradePersistentModel implements PersistentModel {
 	 *            Portfolio
 	 * @throws PersistentModelException
 	 */
-	public void resetDefaultPortfolio(final Portfolio transientInstance)
-			throws PersistentModelException {
+	public void resetDefaultPortfolio(final Portfolio transientInstance) throws PersistentModelException {
 		try {
 			m_portfolioHome.resetDefaultPortfolio(transientInstance);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error setting default portfolio. Please refresh before save.");
+			throw new PersistentModelException("Error setting default portfolio. Please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving Portfolio: "
-					+ transientInstance.getName() + "\n Msg: " + e.getMessage());
+			throw new PersistentModelException(
+					"Error saving Portfolio: " + transientInstance.getName() + "\n Msg: " + e.getMessage());
 		}
 
 	}
@@ -496,13 +458,11 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 */
 
-	public Portfolio persistPortfolio(final Portfolio instance)
-			throws PersistentModelException {
+	public Portfolio persistPortfolio(final Portfolio instance) throws PersistentModelException {
 		try {
 			return m_portfolioHome.persistPortfolio(instance);
 		} catch (Exception ex) {
-			throw new PersistentModelException(
-					"Error saving PortfolioAccount: " + ex.getMessage());
+			throw new PersistentModelException("Error saving PortfolioAccount: " + ex.getMessage());
 		}
 	}
 
@@ -513,8 +473,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAllTradestrategies()
 	 */
-	public List<Tradestrategy> findAllTradestrategies()
-			throws PersistentModelException {
+	public List<Tradestrategy> findAllTradestrategies() throws PersistentModelException {
 		return m_tradestrategyHome.findAll();
 
 	}
@@ -535,12 +494,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradestrategyByUniqueKeys(Date,
 	 *      String, Integer, String)
 	 */
-	public Tradestrategy findTradestrategyByUniqueKeys(
-			final ZonedDateTime open, final String strategy,
-			final Integer idContract, final String portfolioName)
-			throws PersistentModelException {
-		return m_tradestrategyHome.findTradestrategyByUniqueKeys(open,
-				strategy, idContract, portfolioName);
+	public Tradestrategy findTradestrategyByUniqueKeys(final ZonedDateTime open, final String strategy,
+			final Integer idContract, final String portfolioName) throws PersistentModelException {
+		return m_tradestrategyHome.findTradestrategyByUniqueKeys(open, strategy, idContract, portfolioName);
 	}
 
 	/**
@@ -552,10 +508,9 @@ public class TradePersistentModel implements PersistentModel {
 	 *            ZonedDateTime
 	 * @return List<Tradestrategy>
 	 */
-	public List<Tradestrategy> findTradestrategyDistinctByDateRange(
-			final ZonedDateTime fromOpen, final ZonedDateTime toOpen) {
-		return m_tradestrategyHome.findTradestrategyDistinctByDateRange(
-				fromOpen, toOpen);
+	public List<Tradestrategy> findTradestrategyDistinctByDateRange(final ZonedDateTime fromOpen,
+			final ZonedDateTime toOpen) {
+		return m_tradestrategyHome.findTradestrategyDistinctByDateRange(fromOpen, toOpen);
 	}
 
 	/**
@@ -567,10 +522,9 @@ public class TradePersistentModel implements PersistentModel {
 	 *            ZonedDateTime
 	 * @return List<Tradestrategy>
 	 */
-	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
-			final ZonedDateTime fromOpen, final ZonedDateTime toOpen) {
-		return m_tradestrategyHome
-				.findTradestrategyContractDistinctByDateRange(fromOpen, toOpen);
+	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(final ZonedDateTime fromOpen,
+			final ZonedDateTime toOpen) {
+		return m_tradestrategyHome.findTradestrategyContractDistinctByDateRange(fromOpen, toOpen);
 	}
 
 	/**
@@ -581,10 +535,8 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#removeTradingdayTrades(Tradingday)
 	 */
-	public void removeTradingdayTradeOrders(final Tradingday transientInstance)
-			throws PersistentModelException {
-		for (Tradestrategy tradestrategy : transientInstance
-				.getTradestrategies()) {
+	public void removeTradingdayTradeOrders(final Tradingday transientInstance) throws PersistentModelException {
+		for (Tradestrategy tradestrategy : transientInstance.getTradestrategies()) {
 			this.removeTradestrategyTradeOrders(tradestrategy);
 		}
 	}
@@ -597,39 +549,34 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#removeTradestrategyTrades(Tradestrategy)
 	 */
-	public void removeTradestrategyTradeOrders(final Tradestrategy tradestrategy)
-			throws PersistentModelException {
+	public void removeTradestrategyTradeOrders(final Tradestrategy tradestrategy) throws PersistentModelException {
 
 		try {
 			/*
 			 * Refresh the trade strategy as orders across tradePosition could
 			 * have been deleted if this is a bulk delete of tradestrategies.
 			 */
-			Tradestrategy transientInstance = m_tradestrategyHome
-					.findById(tradestrategy.getIdTradeStrategy());
+			Tradestrategy transientInstance = m_tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
 			transientInstance.setStatus(null);
 			m_aspectHome.persist(transientInstance);
 
 			Hashtable<Integer, TradePosition> tradePositions = new Hashtable<Integer, TradePosition>();
 			for (TradeOrder tradeOrder : transientInstance.getTradeOrders()) {
 				if (tradeOrder.hasTradePosition())
-					tradePositions.put(tradeOrder.getTradePosition()
-							.getIdTradePosition(), tradeOrder
-							.getTradePosition());
+					tradePositions.put(tradeOrder.getTradePosition().getIdTradePosition(),
+							tradeOrder.getTradePosition());
 
 				if (null != tradeOrder.getIdTradeOrder()) {
 					m_aspectHome.remove(tradeOrder);
 				}
 			}
 			for (TradePosition tradePosition : tradePositions.values()) {
-				tradePosition = this.findTradePositionById(tradePosition
-						.getIdTradePosition());
+				tradePosition = this.findTradePositionById(tradePosition.getIdTradePosition());
 				/*
 				 * Remove the open trade position from contract if this is a
 				 * tradePosition to be deleted.
 				 */
-				if (tradePosition.equals(transientInstance.getContract()
-						.getTradePosition())) {
+				if (tradePosition.equals(transientInstance.getContract().getTradePosition())) {
 					transientInstance.getContract().setTradePosition(null);
 					m_aspectHome.persist(transientInstance.getContract());
 				}
@@ -642,10 +589,8 @@ public class TradePersistentModel implements PersistentModel {
 					"Error removing Tradestrategy TradePositions. Please refresh before remove.");
 
 		} catch (Exception ex) {
-			throw new PersistentModelException(
-					"Error removing Tradestrategy TradePositions: "
-							+ tradestrategy.getContract().getSymbol()
-							+ "\n Msg: " + ex.getMessage());
+			throw new PersistentModelException("Error removing Tradestrategy TradePositions: "
+					+ tradestrategy.getContract().getSymbol() + "\n Msg: " + ex.getMessage());
 		}
 	}
 
@@ -658,8 +603,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradeOrderByKey(Integer)
 	 */
-	public TradeOrder findTradeOrderByKey(final Integer orderKey)
-			throws PersistentModelException {
+	public TradeOrder findTradeOrderByKey(final Integer orderKey) throws PersistentModelException {
 		return m_tradeOrderHome.findTradeOrderByKey(orderKey);
 	}
 
@@ -672,8 +616,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findTradeOrderfillByExecId(String)
 	 */
-	public TradeOrderfill findTradeOrderfillByExecId(String execId)
-			throws PersistentModelException {
+	public TradeOrderfill findTradeOrderfillByExecId(String execId) throws PersistentModelException {
 		return m_tradeOrderfillHome.findOrderFillByExecId(execId);
 	}
 
@@ -700,8 +643,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findTradingdaysByDateRange(Date,
 	 *      Date)
 	 */
-	public Tradingdays findTradingdaysByDateRange(
-			final ZonedDateTime startDate, final ZonedDateTime endDate)
+	public Tradingdays findTradingdaysByDateRange(final ZonedDateTime startDate, final ZonedDateTime endDate)
 			throws PersistentModelException {
 		return m_tradingdayHome.findTradingdaysByDateRange(startDate, endDate);
 	}
@@ -720,12 +662,9 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return List<Candle>
 	 * @throws PersistentModelException
 	 */
-	public List<Candle> findCandlesByContractDateRangeBarSize(
-			final Integer idContract, final ZonedDateTime startDate,
-			final ZonedDateTime endDate, final Integer barSize)
-			throws PersistentModelException {
-		return m_candleHome.findCandlesByContractDateRangeBarSize(idContract,
-				startDate, endDate, barSize);
+	public List<Candle> findCandlesByContractDateRangeBarSize(final Integer idContract, final ZonedDateTime startDate,
+			final ZonedDateTime endDate, final Integer barSize) throws PersistentModelException {
+		return m_candleHome.findCandlesByContractDateRangeBarSize(idContract, startDate, endDate, barSize);
 	}
 
 	/**
@@ -740,8 +679,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findCandleCount(Integer,
 	 *      Integer)
 	 */
-	public Long findCandleCount(final Integer idTradingday,
-			final Integer idContract) throws PersistentModelException {
+	public Long findCandleCount(final Integer idTradingday, final Integer idContract) throws PersistentModelException {
 		return m_candleHome.findCandleCount(idTradingday, idContract);
 	}
 
@@ -754,31 +692,24 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistContract(Contract)
 	 */
-	public Contract persistContract(final Contract transientInstance)
-			throws PersistentModelException {
+	public Contract persistContract(final Contract transientInstance) throws PersistentModelException {
 
 		try {
 			if (null == transientInstance.getIdContract()) {
-				Contract currentContract = m_contractHome.findByUniqueKey(
-						transientInstance.getSecType(),
-						transientInstance.getSymbol(),
-						transientInstance.getExchange(),
-						transientInstance.getCurrency(),
+				Contract currentContract = m_contractHome.findByUniqueKey(transientInstance.getSecType(),
+						transientInstance.getSymbol(), transientInstance.getExchange(), transientInstance.getCurrency(),
 						transientInstance.getExpiry());
 				if (null != currentContract) {
-					transientInstance.setIdContract(currentContract
-							.getIdContract());
+					transientInstance.setIdContract(currentContract.getIdContract());
 				}
 			}
 
 			return m_aspectHome.persist(transientInstance, true);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Contract please refresh before save.");
+			throw new PersistentModelException("Error saving Contract please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving Contract: "
-					+ transientInstance.getSymbol() + "\n Msg: "
-					+ e.getMessage());
+			throw new PersistentModelException(
+					"Error saving Contract: " + transientInstance.getSymbol() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -790,28 +721,23 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistCandleSeries(CandleSeries)
 	 */
-	public void persistCandleSeries(final CandleSeries candleSeries)
-			throws PersistentModelException {
+	public void persistCandleSeries(final CandleSeries candleSeries) throws PersistentModelException {
 		try {
 			/*
 			 * This can happen when an indicator is a contract that has never
 			 * been used.
 			 */
 			if (null == candleSeries.getContract().getIdContract()) {
-				Contract contract = this.persistContract(candleSeries
-						.getContract());
-				candleSeries.getContract().setIdContract(
-						contract.getIdContract());
+				Contract contract = this.persistContract(candleSeries.getContract());
+				candleSeries.getContract().setIdContract(contract.getIdContract());
 				candleSeries.getContract().setVersion(contract.getVersion());
 			}
 			m_candleHome.persistCandleSeries(candleSeries);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving CandleSeries please refresh before save.");
+			throw new PersistentModelException("Error saving CandleSeries please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving CandleSeries: "
-					+ candleSeries.getDescription() + "\n Msg: "
-					+ e.getMessage());
+			throw new PersistentModelException(
+					"Error saving CandleSeries: " + candleSeries.getDescription() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -824,28 +750,23 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistCandleItem(CandleItem)
 	 */
-	public Candle persistCandle(final Candle candle)
-			throws PersistentModelException {
+	public Candle persistCandle(final Candle candle) throws PersistentModelException {
 		try {
 			synchronized (candle) {
 				if (null == candle.getTradingday().getIdTradingDay()) {
 
-					Tradingday tradingday = this.findTradingdayByOpenCloseDate(
-							candle.getTradingday().getOpen(), candle
-									.getTradingday().getClose());
+					Tradingday tradingday = this.findTradingdayByOpenCloseDate(candle.getTradingday().getOpen(),
+							candle.getTradingday().getClose());
 
 					if (null == tradingday) {
-						tradingday = m_aspectHome.persist(candle
-								.getTradingday());
+						tradingday = m_aspectHome.persist(candle.getTradingday());
 					}
 					candle.setTradingday(tradingday);
 				}
 				if (null == candle.getIdCandle()) {
-					Candle currCandle = m_candleHome.findByUniqueKey(candle
-							.getTradingday().getIdTradingDay(), candle
-							.getContract().getIdContract(), candle
-							.getStartPeriod(), candle.getEndPeriod(), candle
-							.getBarSize());
+					Candle currCandle = m_candleHome.findByUniqueKey(candle.getTradingday().getIdTradingDay(),
+							candle.getContract().getIdContract(), candle.getStartPeriod(), candle.getEndPeriod(),
+							candle.getBarSize());
 					/*
 					 * Candle exists set the id and version so we can merge the
 					 * incoming candle.
@@ -860,11 +781,10 @@ public class TradePersistentModel implements PersistentModel {
 				return item;
 			}
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Candle please refresh before save.");
+			throw new PersistentModelException("Error saving Candle please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving CandleItem: "
-					+ candle.getOpen() + "\n Msg: " + e.getMessage());
+			throw new PersistentModelException(
+					"Error saving CandleItem: " + candle.getOpen() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -876,17 +796,15 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistTradingday(Tradingday)
 	 */
-	public void persistTradingday(final Tradingday transientInstance)
-			throws PersistentModelException {
+	public void persistTradingday(final Tradingday transientInstance) throws PersistentModelException {
 
 		try {
 			m_tradingdayHome.persist(transientInstance);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving Tradingday please refresh before save.");
+			throw new PersistentModelException("Error saving Tradingday please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving Tradingday: "
-					+ transientInstance.getOpen() + "\n Msg: " + e.getMessage());
+			throw new PersistentModelException(
+					"Error saving Tradingday: " + transientInstance.getOpen() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -900,8 +818,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#persistTradeOrder(TradeOrder)
 	 */
 
-	public synchronized TradeOrder persistTradeOrder(final TradeOrder tradeOrder)
-			throws PersistentModelException {
+	public synchronized TradeOrder persistTradeOrder(final TradeOrder tradeOrder) throws PersistentModelException {
 		try {
 
 			if (null == tradeOrder.getOrderKey()) {
@@ -911,14 +828,12 @@ public class TradePersistentModel implements PersistentModel {
 			/*
 			 * This is a new order set the status to UNSUBMIT
 			 */
-			if (null == tradeOrder.getIdTradeOrder()
-					&& null == tradeOrder.getStatus()) {
+			if (null == tradeOrder.getIdTradeOrder() && null == tradeOrder.getStatus()) {
 				tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 			}
 
 			if (!tradeOrder.getIsFilled()
-					&& CoreUtils.nullSafeComparator(tradeOrder.getQuantity(),
-							tradeOrder.getFilledQuantity()) == 0) {
+					&& CoreUtils.nullSafeComparator(tradeOrder.getQuantity(), tradeOrder.getFilledQuantity()) == 0) {
 				tradeOrder.setIsFilled(true);
 				tradeOrder.setStatus(OrderStatus.FILLED);
 			}
@@ -926,23 +841,18 @@ public class TradePersistentModel implements PersistentModel {
 			/*
 			 * If a partial filled order is cancelled mark the order as filled.
 			 */
-			if (OrderStatus.CANCELLED.equals(tradeOrder.getStatus())
-					&& !tradeOrder.getIsFilled()
-					&& CoreUtils.nullSafeComparator(
-							tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
+			if (OrderStatus.CANCELLED.equals(tradeOrder.getStatus()) && !tradeOrder.getIsFilled()
+					&& CoreUtils.nullSafeComparator(tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
 				tradeOrder.setIsFilled(true);
 				tradeOrder.setStatus(OrderStatus.FILLED);
 			}
 
 			Integer tradestrategyId = null;
 			if (null == tradeOrder.getTradestrategyId()) {
-				tradestrategyId = tradeOrder.getTradestrategy()
-						.getIdTradeStrategy();
-				tradeOrder.setTradestrategyId(this
-						.findTradestrategyLiteById(tradestrategyId));
+				tradestrategyId = tradeOrder.getTradestrategy().getIdTradeStrategy();
+				tradeOrder.setTradestrategyId(this.findTradestrategyLiteById(tradestrategyId));
 			} else {
-				tradestrategyId = tradeOrder.getTradestrategyId()
-						.getIdTradeStrategy();
+				tradestrategyId = tradeOrder.getTradestrategyId().getIdTradeStrategy();
 			}
 
 			/*
@@ -953,19 +863,17 @@ public class TradePersistentModel implements PersistentModel {
 			TradestrategyOrders tradestrategyOrders = null;
 
 			if (!tradeOrder.hasTradePosition()) {
-				if (CoreUtils.nullSafeComparator(
-						tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
+				if (CoreUtils.nullSafeComparator(tradeOrder.getFilledQuantity(), new Integer(0)) == 1) {
 
-					tradestrategyOrders = this
-							.findPositionOrdersByTradestrategyId(tradestrategyId);
+					tradestrategyOrders = this.findPositionOrdersByTradestrategyId(tradestrategyId);
 
 					if (tradestrategyOrders.hasOpenTradePosition()) {
-						tradePosition = this
-								.findTradePositionById(tradestrategyOrders
-										.getContract().getTradePosition()
-										.getIdTradePosition());
-						if (!tradePosition.containsTradeOrder(tradeOrder))
+						tradePosition = this.findTradePositionById(
+								tradestrategyOrders.getContract().getTradePosition().getIdTradePosition());
+						if (!tradePosition.containsTradeOrder(tradeOrder)) {
 							tradePosition.addTradeOrder(tradeOrder);
+						}
+
 					} else {
 						/*
 						 * Note Order status can be fired before execDetails
@@ -973,19 +881,14 @@ public class TradePersistentModel implements PersistentModel {
 						 * does not contain the filled date so we must set it
 						 * here.
 						 */
-						ZonedDateTime positionOpenDate = tradeOrder
-								.getFilledDate();
+						ZonedDateTime positionOpenDate = tradeOrder.getFilledDate();
 						if (null == positionOpenDate)
-							positionOpenDate = TradingCalendar
-									.getDateTimeNowMarketTimeZone();
-						tradePosition = new TradePosition(
-								tradestrategyOrders.getContract(),
-								positionOpenDate, (Action.BUY.equals(tradeOrder
-										.getAction()) ? Side.BOT : Side.SLD));
+							positionOpenDate = TradingCalendar.getDateTimeNowMarketTimeZone();
+						tradePosition = new TradePosition(tradestrategyOrders.getContract(), positionOpenDate,
+								(Action.BUY.equals(tradeOrder.getAction()) ? Side.BOT : Side.SLD));
 						tradeOrder.setIsOpenPosition(true);
 						tradestrategyOrders.setStatus(TradestrategyStatus.OPEN);
-						tradestrategyOrders.setLastUpdateDate(TradingCalendar
-								.getDateTimeNowMarketTimeZone());
+						tradestrategyOrders.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 						this.persistAspect(tradestrategyOrders);
 						tradePosition.addTradeOrder(tradeOrder);
 						tradePosition = this.persistAspect(tradePosition);
@@ -1000,8 +903,7 @@ public class TradePersistentModel implements PersistentModel {
 					return this.persistAspect(tradeOrder);
 				}
 			} else {
-				tradePosition = this.findTradePositionById(tradeOrder
-						.getTradePosition().getIdTradePosition());
+				tradePosition = this.findTradePositionById(tradeOrder.getTradePosition().getIdTradePosition());
 				tradeOrder.setTradePosition(tradePosition);
 			}
 
@@ -1029,21 +931,16 @@ public class TradePersistentModel implements PersistentModel {
 				if (null != order.getFilledQuantity()) {
 
 					if (Action.BUY.equals(order.getAction())) {
-						totalBuyQuantity = totalBuyQuantity
-								+ order.getFilledQuantity();
-						totalBuyValue = totalBuyValue
-								+ (order.getAverageFilledPrice().doubleValue() * order
-										.getFilledQuantity().doubleValue());
+						totalBuyQuantity = totalBuyQuantity + order.getFilledQuantity();
+						totalBuyValue = totalBuyValue + (order.getAverageFilledPrice().doubleValue()
+								* order.getFilledQuantity().doubleValue());
 					} else {
-						totalSellQuantity = totalSellQuantity
-								+ order.getFilledQuantity();
-						totalSellValue = totalSellValue
-								+ (order.getAverageFilledPrice().doubleValue() * order
-										.getFilledQuantity().doubleValue());
+						totalSellQuantity = totalSellQuantity + order.getFilledQuantity();
+						totalSellValue = totalSellValue + (order.getAverageFilledPrice().doubleValue()
+								* order.getFilledQuantity().doubleValue());
 					}
 					if (null != order.getCommission()) {
-						totalCommission = totalCommission
-								+ order.getCommission().doubleValue();
+						totalCommission = totalCommission + order.getCommission().doubleValue();
 					}
 				}
 			}
@@ -1052,24 +949,20 @@ public class TradePersistentModel implements PersistentModel {
 			 * values.
 			 */
 			Money comms = new Money(totalCommission);
-			if (CoreUtils.nullSafeComparator(new Integer(totalBuyQuantity),
-					tradePosition.getTotalBuyQuantity()) != 0
-					|| CoreUtils.nullSafeComparator(new Integer(
-							totalSellQuantity), tradePosition
-							.getTotalSellQuantity()) != 0) {
+			if (CoreUtils.nullSafeComparator(new Integer(totalBuyQuantity), tradePosition.getTotalBuyQuantity()) != 0
+					|| CoreUtils.nullSafeComparator(new Integer(totalSellQuantity),
+							tradePosition.getTotalSellQuantity()) != 0) {
 
 				int openQuantity = totalBuyQuantity - totalSellQuantity;
 				tradePosition.setOpenQuantity(openQuantity);
 				tradePosition.setTotalBuyQuantity(totalBuyQuantity);
-				tradePosition.setTotalBuyValue((new BigDecimal(totalBuyValue))
-						.setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
+				tradePosition.setTotalBuyValue(
+						(new BigDecimal(totalBuyValue)).setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalSellQuantity(totalSellQuantity);
-				tradePosition
-						.setTotalSellValue((new BigDecimal(totalSellValue))
-								.setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
-				tradePosition.setTotalNetValue((new BigDecimal(totalSellValue
-						- totalBuyValue)).setScale(SCALE_5,
-						BigDecimal.ROUND_HALF_EVEN));
+				tradePosition.setTotalSellValue(
+						(new BigDecimal(totalSellValue)).setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
+				tradePosition.setTotalNetValue(
+						(new BigDecimal(totalSellValue - totalBuyValue)).setScale(SCALE_5, BigDecimal.ROUND_HALF_EVEN));
 				tradePosition.setTotalCommission(comms.getBigDecimalValue());
 				if (openQuantity > 0)
 					tradePosition.setSide(Side.BOT);
@@ -1079,11 +972,9 @@ public class TradePersistentModel implements PersistentModel {
 				/*
 				 * Position should be closed if openQuantity = 0
 				 */
-				if (tradePosition.equals(tradePosition.getContract()
-						.getTradePosition())) {
+				if (tradePosition.equals(tradePosition.getContract().getTradePosition())) {
 					if (openQuantity == 0) {
-						tradePosition.setPositionCloseDate(tradeOrder
-								.getFilledDate());
+						tradePosition.setPositionCloseDate(tradeOrder.getFilledDate());
 						tradePosition.getContract().setTradePosition(null);
 						this.persistAspect(tradePosition.getContract());
 					}
@@ -1094,53 +985,37 @@ public class TradePersistentModel implements PersistentModel {
 
 				// Partial fills case.
 				if (null == tradestrategyOrders)
-					tradestrategyOrders = this
-							.findPositionOrdersByTradestrategyId(tradestrategyId);
+					tradestrategyOrders = this.findPositionOrdersByTradestrategyId(tradestrategyId);
 
-				if (!tradePosition.isOpen()
-						&& !TradestrategyStatus.CLOSED
-								.equals(tradestrategyOrders.getStatus())) {
+				if (!tradePosition.isOpen() && !TradestrategyStatus.CLOSED.equals(tradestrategyOrders.getStatus())) {
 					/*
 					 * Now update all the tradestrategies as there could be many
 					 * if the position is across multiple days.
 					 */
 					for (TradeOrder item : tradePosition.getTradeOrders()) {
-						if (!item
-								.getTradestrategyId()
-								.getIdTradeStrategy()
-								.equals(tradestrategyOrders
-										.getIdTradeStrategy())) {
-							item.getTradestrategyId().setStatus(
-									TradestrategyStatus.CLOSED);
-							item.getTradestrategyId().setLastUpdateDate(
-									TradingCalendar
-											.getDateTimeNowMarketTimeZone());
+						if (!item.getTradestrategyId().getIdTradeStrategy()
+								.equals(tradestrategyOrders.getIdTradeStrategy())) {
+							item.getTradestrategyId().setStatus(TradestrategyStatus.CLOSED);
+							item.getTradestrategyId().setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 							this.persistAspect(item.getTradestrategyId());
 						}
 					}
 					tradestrategyOrders.setStatus(TradestrategyStatus.CLOSED);
-					tradestrategyOrders.setLastUpdateDate(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
+					tradestrategyOrders.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 					this.persistAspect(tradestrategyOrders);
 				}
 
-				tradePosition.setLastUpdateDate(TradingCalendar
-						.getDateTimeNowMarketTimeZone());
+				tradePosition.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 				tradePosition = this.persistAspect(tradePosition);
 
 			} else {
 				if (allOrdersCancelled) {
 					if (null == tradestrategyOrders)
-						tradestrategyOrders = this
-								.findPositionOrdersByTradestrategyId(tradestrategyId);
-					if (!TradestrategyStatus.CANCELLED
-							.equals(tradestrategyOrders.getStatus())) {
+						tradestrategyOrders = this.findPositionOrdersByTradestrategyId(tradestrategyId);
+					if (!TradestrategyStatus.CANCELLED.equals(tradestrategyOrders.getStatus())) {
 						if (null == tradestrategyOrders.getStatus()) {
-							tradestrategyOrders
-									.setStatus(TradestrategyStatus.CANCELLED);
-							tradestrategyOrders
-									.setLastUpdateDate(TradingCalendar
-											.getDateTimeNowMarketTimeZone());
+							tradestrategyOrders.setStatus(TradestrategyStatus.CANCELLED);
+							tradestrategyOrders.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 							this.persistAspect(tradestrategyOrders);
 						}
 					}
@@ -1150,12 +1025,9 @@ public class TradePersistentModel implements PersistentModel {
 				 * event after the order may have been filled) have changed
 				 * update the trade.
 				 */
-				if (CoreUtils.nullSafeComparator(comms.getBigDecimalValue(),
-						tradePosition.getTotalCommission()) == 1) {
-					tradePosition
-							.setTotalCommission(comms.getBigDecimalValue());
-					tradePosition.setLastUpdateDate(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
+				if (CoreUtils.nullSafeComparator(comms.getBigDecimalValue(), tradePosition.getTotalCommission()) == 1) {
+					tradePosition.setTotalCommission(comms.getBigDecimalValue());
+					tradePosition.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 					tradePosition = this.persistAspect(tradePosition);
 				}
 			}
@@ -1163,11 +1035,10 @@ public class TradePersistentModel implements PersistentModel {
 			return this.persistAspect(tradeOrder);
 
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving TradeOrder please refresh before save.");
+			throw new PersistentModelException("Error saving TradeOrder please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving TradeOrder: "
-					+ tradeOrder.getOrderKey() + "\n Msg: " + e.getMessage());
+			throw new PersistentModelException(
+					"Error saving TradeOrder: " + tradeOrder.getOrderKey() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -1180,25 +1051,20 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistTradeOrderfill(TradeOrder)
 	 */
-	public synchronized TradeOrder persistTradeOrderfill(
-			final TradeOrder tradeOrder) throws PersistentModelException {
+	public synchronized TradeOrder persistTradeOrderfill(final TradeOrder tradeOrder) throws PersistentModelException {
 		try {
 
 			ZonedDateTime filledDate = null;
 			double filledValue = 0;
 			double commission = 0;
 			int filledQuantity = 0;
-			for (TradeOrderfill tradeOrderfill : tradeOrder
-					.getTradeOrderfills()) {
+			for (TradeOrderfill tradeOrderfill : tradeOrder.getTradeOrderfills()) {
 
 				if (null != tradeOrderfill.getCommission())
-					commission = commission
-							+ tradeOrderfill.getCommission().doubleValue();
+					commission = commission + tradeOrderfill.getCommission().doubleValue();
 
 				filledQuantity = filledQuantity + tradeOrderfill.getQuantity();
-				filledValue = filledValue
-						+ (tradeOrderfill.getPrice().doubleValue() * tradeOrderfill
-								.getQuantity());
+				filledValue = filledValue + (tradeOrderfill.getPrice().doubleValue() * tradeOrderfill.getQuantity());
 				if (null == filledDate)
 					filledDate = tradeOrderfill.getTime();
 
@@ -1207,19 +1073,17 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 			if (filledQuantity > 0) {
-				BigDecimal avgFillPrice = (new BigDecimal(filledValue
-						/ filledQuantity)).setScale(SCALE_5,
+				BigDecimal avgFillPrice = (new BigDecimal(filledValue / filledQuantity)).setScale(SCALE_5,
 						BigDecimal.ROUND_HALF_EVEN);
-				BigDecimal commissionAmount = (new BigDecimal(commission))
-						.setScale(SCALE_2, BigDecimal.ROUND_HALF_EVEN);
+				BigDecimal commissionAmount = (new BigDecimal(commission)).setScale(SCALE_2,
+						BigDecimal.ROUND_HALF_EVEN);
 
 				/*
 				 * If filled qty is greater than current filled qty set the new
 				 * value. Note openOrder can update the filled order quantity
 				 * before the orderFills have arrived.
 				 */
-				if (CoreUtils.nullSafeComparator(new Integer(filledQuantity),
-						tradeOrder.getFilledQuantity()) == 1) {
+				if (CoreUtils.nullSafeComparator(new Integer(filledQuantity), tradeOrder.getFilledQuantity()) == 1) {
 					tradeOrder.setAverageFilledPrice(avgFillPrice);
 					tradeOrder.setFilledQuantity(filledQuantity);
 					tradeOrder.setFilledDate(filledDate);
@@ -1229,22 +1093,19 @@ public class TradePersistentModel implements PersistentModel {
 					 * can be set via the commissionReport event i.e each
 					 * execution or by the openOrder event.
 					 */
-					if (CoreUtils.nullSafeComparator(commissionAmount,
-							tradeOrder.getCommission()) == 1)
+					if (CoreUtils.nullSafeComparator(commissionAmount, tradeOrder.getCommission()) == 1)
 						tradeOrder.setCommission(commissionAmount);
 
-					tradeOrder.setLastUpdateDate(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
+					tradeOrder.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 				}
 			}
 			return persistTradeOrder(tradeOrder);
 
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException(
-					"Error saving TradeOrderfill please refresh before save.");
+			throw new PersistentModelException("Error saving TradeOrderfill please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving TradeOrderfill: "
-					+ tradeOrder.getOrderKey() + "\n Msg: " + e.getMessage());
+			throw new PersistentModelException(
+					"Error saving TradeOrderfill: " + tradeOrder.getOrderKey() + "\n Msg: " + e.getMessage());
 		}
 	}
 
@@ -1273,8 +1134,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findRuleByMaxVersion(Strategy)
 	 */
-	public Integer findRuleByMaxVersion(final Strategy strategy)
-			throws PersistentModelException {
+	public Integer findRuleByMaxVersion(final Strategy strategy) throws PersistentModelException {
 		return m_ruleHome.findByMaxVersion(strategy);
 	}
 
@@ -1287,12 +1147,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findStrategyById(Integer)
 	 */
-	public Strategy findStrategyById(final Integer id)
-			throws PersistentModelException {
+	public Strategy findStrategyById(final Integer id) throws PersistentModelException {
 		Strategy instance = m_strategyHome.findById(id);
 		if (null == instance)
-			throw new PersistentModelException("Strategy not found for Id: "
-					+ id);
+			throw new PersistentModelException("Strategy not found for Id: " + id);
 		return instance;
 	}
 
@@ -1305,8 +1163,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findStrategyByName(String)
 	 */
-	public Strategy findStrategyByName(String name)
-			throws PersistentModelException {
+	public Strategy findStrategyByName(String name) throws PersistentModelException {
 		return m_strategyHome.findByName(name);
 	}
 
@@ -1330,8 +1187,7 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAspectsByClassName(String)
 	 */
-	public Aspects findAspectsByClassName(String aspectClassName)
-			throws PersistentModelException {
+	public Aspects findAspectsByClassName(String aspectClassName) throws PersistentModelException {
 		try {
 
 			if ("org.trade.persistent.dao.Strategy".equals(aspectClassName)) {
@@ -1346,8 +1202,7 @@ public class TradePersistentModel implements PersistentModel {
 				}
 				aspects.setDirty(false);
 				return aspects;
-			} else if ("org.trade.persistent.dao.Portfolio"
-					.equals(aspectClassName)) {
+			} else if ("org.trade.persistent.dao.Portfolio".equals(aspectClassName)) {
 				/*
 				 * Relationship Portfolio -> PortfilioAccount iis LAZY so we
 				 * need to call size() on PortfolioAccount.
@@ -1364,8 +1219,7 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 		} catch (Exception ex) {
-			throw new PersistentModelException("Error finding Aspects: "
-					+ ex.getMessage());
+			throw new PersistentModelException("Error finding Aspects: " + ex.getMessage());
 		}
 	}
 
@@ -1383,14 +1237,12 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#findAspectsByClassNameFieldName(String,
 	 *      String, String)
 	 */
-	public Aspects findAspectsByClassNameFieldName(String className,
-			String fieldname, String value) throws PersistentModelException {
+	public Aspects findAspectsByClassNameFieldName(String className, String fieldname, String value)
+			throws PersistentModelException {
 		try {
-			return m_aspectHome.findByClassNameFieldName(className, fieldname,
-					value);
+			return m_aspectHome.findByClassNameFieldName(className, fieldname, value);
 		} catch (Exception ex) {
-			throw new PersistentModelException("Error finding Aspects: "
-					+ ex.getMessage());
+			throw new PersistentModelException("Error finding Aspects: " + ex.getMessage());
 		}
 	}
 
@@ -1403,12 +1255,10 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findAspectById(Aspect)
 	 */
-	public Aspect findAspectById(final Aspect aspect)
-			throws PersistentModelException {
+	public Aspect findAspectById(final Aspect aspect) throws PersistentModelException {
 		Aspect instance = m_aspectHome.findById(aspect);
 		if (null == instance)
-			throw new PersistentModelException("Aspect not found for Id: "
-					+ aspect.getId());
+			throw new PersistentModelException("Aspect not found for Id: " + aspect.getId());
 		return instance;
 	}
 
@@ -1421,18 +1271,15 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#persistAspect(Aspect)
 	 */
-	public <T extends Aspect> T persistAspect(final T transientInstance)
-			throws PersistentModelException {
+	public <T extends Aspect> T persistAspect(final T transientInstance) throws PersistentModelException {
 		try {
 			return m_aspectHome.persist(transientInstance);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException("Error saving "
-					+ transientInstance.getClass().getSimpleName()
-					+ " please refresh before save.");
+			throw new PersistentModelException(
+					"Error saving " + transientInstance.getClass().getSimpleName() + " please refresh before save.");
 		} catch (Exception ex) {
-			throw new PersistentModelException("Error saving  "
-					+ transientInstance.getClass().getSimpleName() + " : "
-					+ ex.getMessage());
+			throw new PersistentModelException(
+					"Error saving  " + transientInstance.getClass().getSimpleName() + " : " + ex.getMessage());
 		}
 	}
 
@@ -1448,18 +1295,16 @@ public class TradePersistentModel implements PersistentModel {
 	 * 
 	 * @see org.trade.persistent.PersistentModel#persistAspect(Aspect)
 	 */
-	public <T extends Aspect> T persistAspect(final T transientInstance,
-			boolean overrideVersion) throws PersistentModelException {
+	public <T extends Aspect> T persistAspect(final T transientInstance, boolean overrideVersion)
+			throws PersistentModelException {
 		try {
 			return m_aspectHome.persist(transientInstance, overrideVersion);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException("Error saving "
-					+ transientInstance.getClass().getSimpleName()
-					+ " please refresh before save.");
+			throw new PersistentModelException(
+					"Error saving " + transientInstance.getClass().getSimpleName() + " please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error saving  "
-					+ transientInstance.getClass().getSimpleName() + " : "
-					+ e.getMessage());
+			throw new PersistentModelException(
+					"Error saving  " + transientInstance.getClass().getSimpleName() + " : " + e.getMessage());
 		}
 	};
 
@@ -1471,18 +1316,15 @@ public class TradePersistentModel implements PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#removeAspect(Aspect)
 	 */
-	public void removeAspect(final Aspect transientInstance)
-			throws PersistentModelException {
+	public void removeAspect(final Aspect transientInstance) throws PersistentModelException {
 		try {
 			m_aspectHome.remove(transientInstance);
 		} catch (OptimisticLockException ex1) {
-			throw new PersistentModelException("Error removing "
-					+ transientInstance.getClass().getSimpleName()
-					+ " please refresh before save.");
+			throw new PersistentModelException(
+					"Error removing " + transientInstance.getClass().getSimpleName() + " please refresh before save.");
 		} catch (Exception e) {
-			throw new PersistentModelException("Error removing  "
-					+ transientInstance.getClass().getSimpleName() + " : "
-					+ e.getMessage());
+			throw new PersistentModelException(
+					"Error removing  " + transientInstance.getClass().getSimpleName() + " : " + e.getMessage());
 		}
 	}
 
@@ -1499,14 +1341,12 @@ public class TradePersistentModel implements PersistentModel {
 	 * @see org.trade.persistent.PersistentModel#reassignStrategy(Strategy,
 	 *      Strategy, Tradingday)
 	 */
-	public void reassignStrategy(final Strategy fromStrategy,
-			final Strategy toStrategy, final Tradingday tradingday)
+	public void reassignStrategy(final Strategy fromStrategy, final Strategy toStrategy, final Tradingday tradingday)
 			throws PersistentModelException {
 
 		try {
 			for (Tradestrategy item : tradingday.getTradestrategies()) {
-				if (item.getStrategy().getIdStrategy()
-						.equals(fromStrategy.getIdStrategy())) {
+				if (item.getStrategy().getIdStrategy().equals(fromStrategy.getIdStrategy())) {
 					item.setStrategy(toStrategy);
 					item.setDirty(true);
 					item.setStrategyData(null);
@@ -1515,8 +1355,7 @@ public class TradePersistentModel implements PersistentModel {
 			}
 
 		} catch (Exception ex) {
-			throw new PersistentModelException("Error reassign Strategy: "
-					+ ex.getMessage());
+			throw new PersistentModelException("Error reassign Strategy: " + ex.getMessage());
 		}
 	}
 
@@ -1530,13 +1369,11 @@ public class TradePersistentModel implements PersistentModel {
 	 * @return CodeType
 	 * @throws PersistentModelException
 	 */
-	public CodeType findCodeTypeByNameType(String name, String type)
-			throws PersistentModelException {
+	public CodeType findCodeTypeByNameType(String name, String type) throws PersistentModelException {
 		try {
 			return m_codeTypeHome.findByNameAndType(name, type);
 		} catch (Exception ex) {
-			throw new PersistentModelException("Error finding CodeType: "
-					+ ex.getMessage());
+			throw new PersistentModelException("Error finding CodeType: " + ex.getMessage());
 		}
 	}
 }
