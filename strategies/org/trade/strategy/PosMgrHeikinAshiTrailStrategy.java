@@ -41,6 +41,7 @@ import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trade.broker.BrokerModel;
+import org.trade.core.util.TradingCalendar;
 import org.trade.core.valuetype.Money;
 import org.trade.dictionary.valuetype.Action;
 import org.trade.dictionary.valuetype.OrderType;
@@ -161,6 +162,43 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 
 				_log.info("Open position submit Stop/Tgt orders created Symbol: " + getSymbol() + " Time:" + startPeriod
 						+ " quantity: " + quantity + " targetPrice: " + targetPrice + " stopPrice: " + stopPrice);
+			}
+
+			/*
+			 * Manage the stop orders if the current bars Vwap crosses the Vwap
+			 * of the first 5min bar then move the stop price ( currently -2R)
+			 * to the average fill price i.e. break even. This allows for tails
+			 * that break the 5min high/low between 9:40 thru 15:30.
+			 */
+
+			if (startPeriod.isBefore(this.getTradestrategy().getTradingday().getClose().minusHours(30))
+					&& startPeriod.isAfter(this.getTradestrategy().getTradingday().getOpen().plusMinutes(5))) {
+
+				CandleItem firstCandle = this.getCandle(
+						TradingCalendar.getDateAtTime(startPeriod, this.getTradestrategy().getTradingday().getOpen()));
+
+				if (Side.BOT.equals(getOpenTradePosition().getSide())) {
+					if (currentCandleItem.getVwap() < firstCandle.getVwap()) {
+						Money stopPrice = addPennyAndRoundStop(
+								this.getOpenPositionOrder().getAverageFilledPrice().doubleValue(),
+								getOpenTradePosition().getSide(), Action.SELL, 0.01);
+						moveStopOCAPrice(stopPrice, true);
+						_log.info("Move Stop to b.e. Strategy Mgr Symbol: " + getSymbol() + " Time:" + startPeriod
+								+ " Price: " + stopPrice + " first bar Vwap: " + firstCandle.getVwap() + " Curr Vwap: "
+								+ currentCandleItem.getVwap());
+					}
+				} else {
+
+					if (currentCandleItem.getVwap() > firstCandle.getVwap()) {
+						Money stopPrice = addPennyAndRoundStop(
+								this.getOpenPositionOrder().getAverageFilledPrice().doubleValue(),
+								getOpenTradePosition().getSide(), Action.BUY, 0.01);
+						moveStopOCAPrice(stopPrice, true);
+						_log.info("Move Stop to b.e. Strategy Mgr Symbol: " + getSymbol() + " Time:" + startPeriod
+								+ " Price: " + stopPrice + " first bar Vwap: " + firstCandle.getVwap() + " Curr Vwap: "
+								+ currentCandleItem.getVwap());
+					}
+				}
 			}
 
 			/*
