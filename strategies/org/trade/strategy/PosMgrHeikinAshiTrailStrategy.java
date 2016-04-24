@@ -188,7 +188,6 @@ public class PosMgrHeikinAshiTrailStrategy extends AbstractStrategyRule {
 								+ currentCandleItem.getVwap());
 					}
 				} else {
-
 					if (currentCandleItem.getVwap() > firstCandle.getVwap()) {
 						Money stopPrice = addPennyAndRoundStop(
 								this.getOpenPositionOrder().getAverageFilledPrice().doubleValue(),

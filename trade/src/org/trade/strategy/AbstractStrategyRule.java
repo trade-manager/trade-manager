@@ -1130,7 +1130,7 @@ public abstract class AbstractStrategyRule extends Worker implements SeriesChang
 
 		try {
 			if (this.isThereOpenPosition()) {
-				// If the StP order has changed send the update and refresh the
+				// If the STP order has changed send the update and refresh the
 				// version of the order.
 				for (TradeOrder tradeOrder : this.getTradestrategyOrders().getTradeOrders()) {
 					if (!tradeOrder.getIsOpenPosition() && tradeOrder.isActive()) {
@@ -1430,8 +1430,9 @@ public abstract class AbstractStrategyRule extends Worker implements SeriesChang
 				stopPrice = Math.min(stopPrice, tradeOrder.getAuxPrice().doubleValue());
 			}
 		}
-		if (stopPrice < Double.MAX_VALUE)
+		if (stopPrice < Double.MAX_VALUE) {
 			return new Money(stopPrice);
+		}
 
 		return null;
 	}
