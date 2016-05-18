@@ -120,11 +120,9 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public MoneyFlowIndexSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public MoneyFlowIndexSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -147,11 +145,9 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public MoneyFlowIndexSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, Integer length) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public MoneyFlowIndexSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart, Integer length) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.length = length;
 	}
 
@@ -211,8 +207,7 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 		if (!this.isEmpty()) {
 			MoneyFlowIndexItem item0 = (MoneyFlowIndexItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new MoneyFlowIndexItem(period, moneyFlowIndex), true);
@@ -230,10 +225,8 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	public void add(MoneyFlowIndexItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			MoneyFlowIndexItem item0 = (MoneyFlowIndexItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -248,8 +241,7 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) CodeValue.getValueCode(LENGTH,
-						this.getCodeValues());
+				this.length = (Integer) CodeValue.getValueCode(LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -275,8 +267,7 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	public Boolean getRollingCandle() {
 		try {
 			if (null == this.rollingCandle)
-				this.rollingCandle = (Boolean) CodeValue.getValueCode(
-						ROLLING_CANDLE, this.getCodeValues());
+				this.rollingCandle = (Boolean) CodeValue.getValueCode(ROLLING_CANDLE, this.getCodeValues());
 		} catch (Exception e) {
 			this.rollingCandle = null;
 		}
@@ -328,8 +319,7 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 		if (getLength() == null || getLength() < 1) {
-			throw new IllegalArgumentException(
-					"MA period must be greater than zero.");
+			throw new IllegalArgumentException("MA period must be greater than zero.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -338,36 +328,29 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 				// Get the current data item...
 				CandleItem candleItem = (CandleItem) source.getDataItem(skip);
 				// Get the previous candle.
-				CandleItem prevCandleItem = (CandleItem) source
-						.getDataItem(skip - 1);
+				CandleItem prevCandleItem = (CandleItem) source.getDataItem(skip - 1);
 
-				double prevTypicalPrice = (prevCandleItem.getHigh()
-						+ prevCandleItem.getLow() + prevCandleItem.getClose()) / 3;
+				double prevTypicalPrice = (prevCandleItem.getHigh() + prevCandleItem.getLow()
+						+ prevCandleItem.getClose()) / 3;
 				if (this.getRollingCandle()) {
-					prevTypicalPrice = (source.getPreviousRollingCandle()
-							.getClose()
-							+ source.getPreviousRollingCandle().getHigh() + source
-							.getPreviousRollingCandle().getLow()) / 3;
+					prevTypicalPrice = (source.getPreviousRollingCandle().getClose()
+							+ source.getPreviousRollingCandle().getHigh() + source.getPreviousRollingCandle().getLow())
+							/ 3;
 				}
 
 				if (0 != candleItem.getClose()) {
 
-					double typicalPrice = (candleItem.getClose()
-							+ candleItem.getHigh() + candleItem.getLow()) / 3;
+					double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem.getLow()) / 3;
 					double value = typicalPrice * candleItem.getVolume();
 					if (typicalPrice < prevTypicalPrice)
 						value = typicalPrice * candleItem.getVolume() * -1;
 
 					if (this.getRollingCandle()) {
-						typicalPrice = (source.getRollingCandle().getClose()
-								+ source.getRollingCandle().getHigh() + source
-								.getRollingCandle().getLow()) / 3;
-						value = typicalPrice
-								* source.getRollingCandle().getVolume();
+						typicalPrice = (source.getRollingCandle().getClose() + source.getRollingCandle().getHigh()
+								+ source.getRollingCandle().getLow()) / 3;
+						value = typicalPrice * source.getRollingCandle().getVolume();
 						if (typicalPrice < prevTypicalPrice)
-							value = typicalPrice
-									* source.getRollingCandle().getVolume()
-									* -1;
+							value = typicalPrice * source.getRollingCandle().getVolume() * -1;
 					}
 					if (value > 0) {
 						positiveSum = positiveSum + value;
@@ -386,11 +369,9 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 
 						if (newBar) {
 							if (this.yyValues.getLast() > 0) {
-								positiveSum = positiveSum
-										- this.yyValues.getLast();
+								positiveSum = positiveSum - this.yyValues.getLast();
 							} else {
-								negativeSum = negativeSum
-										- Math.abs(this.yyValues.getLast());
+								negativeSum = negativeSum - Math.abs(this.yyValues.getLast());
 							}
 
 							this.yyValues.removeLast();
@@ -399,11 +380,9 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 							this.volValues.addFirst(candleItem.getVolume());
 						} else {
 							if (this.yyValues.getFirst() > 0) {
-								positiveSum = positiveSum
-										- this.yyValues.getFirst();
+								positiveSum = positiveSum - this.yyValues.getFirst();
 							} else {
-								negativeSum = negativeSum
-										- Math.abs(this.yyValues.getFirst());
+								negativeSum = negativeSum - Math.abs(this.yyValues.getFirst());
 							}
 							this.yyValues.removeFirst();
 							this.yyValues.addFirst(value);
@@ -414,11 +393,9 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 							this.volValues.addFirst(candleItem.getVolume());
 						} else {
 							if (this.yyValues.getFirst() > 0) {
-								positiveSum = positiveSum
-										- this.yyValues.getFirst();
+								positiveSum = positiveSum - this.yyValues.getFirst();
 							} else {
-								negativeSum = negativeSum
-										- Math.abs(this.yyValues.getFirst());
+								negativeSum = negativeSum - Math.abs(this.yyValues.getFirst());
 							}
 							this.yyValues.removeFirst();
 							this.yyValues.addFirst(value);
@@ -432,8 +409,8 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 							negativeSum = 1;
 						double mfi = 100 - (100 / (1 + (positiveSum / negativeSum)));
 						if (newBar) {
-							MoneyFlowIndexItem dataItem = new MoneyFlowIndexItem(
-									candleItem.getPeriod(), new BigDecimal(mfi));
+							MoneyFlowIndexItem dataItem = new MoneyFlowIndexItem(candleItem.getPeriod(),
+									new BigDecimal(mfi));
 							this.add(dataItem, false);
 
 						} else {
@@ -453,10 +430,8 @@ public class MoneyFlowIndexSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			MoneyFlowIndexItem dataItem = (MoneyFlowIndexItem) this
-					.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			MoneyFlowIndexItem dataItem = (MoneyFlowIndexItem) this.getDataItem(i);
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getMoneyFlowIndex());
 		}
 	}

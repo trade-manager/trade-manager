@@ -48,8 +48,7 @@ import org.trade.core.validator.Validator;
 
 /**
  */
-public class Decimal extends ValueType implements Comparator<Decimal>,
-		Comparable<Decimal> {
+public class Decimal extends ValueType implements Comparator<Decimal>, Comparable<Decimal> {
 	private static final long serialVersionUID = 4937298768811778585L;
 
 	public final static Decimal ZERO = new Decimal(0L, 0);
@@ -88,8 +87,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 				DECIMAL_POSITIVE_7_SCALE = DECIMAL_POSITIVE_7_SCALE + "#";
 				DECIMAL_NONNEGATIVE_8_SCALE = DECIMAL_NONNEGATIVE_8_SCALE + "#";
 				DECIMAL_POSITIVE_10_SCALE = DECIMAL_POSITIVE_10_SCALE + "#";
-				DECIMAL_NONNEGATIVE_11_SCALE = DECIMAL_NONNEGATIVE_11_SCALE
-						+ "#";
+				DECIMAL_NONNEGATIVE_11_SCALE = DECIMAL_NONNEGATIVE_11_SCALE + "#";
 			}
 		}
 	}
@@ -179,8 +177,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	public Decimal(long nonDecimalAmount, int decimalAmount, int scale) {
 		this(scale);
 		// Set up the default constraints for IP's basic Money values
-		BigDecimal val = new BigDecimal((nonDecimalAmount * 100)
-				+ decimalAmount);
+		BigDecimal val = new BigDecimal((nonDecimalAmount * 100) + decimalAmount);
 		setBigDecimal(val.movePointLeft(SCALE));
 	}
 
@@ -366,8 +363,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 			setBigDecimal(((Decimal) value).m_value);
 		} else {
 			try {
-				setBigDecimal(((Decimal) JavaTypeTranslator.convert(
-						Decimal.class, value)).getBigDecimalValue());
+				setBigDecimal(((Decimal) JavaTypeTranslator.convert(Decimal.class, value)).getBigDecimalValue());
 			} catch (Exception ex) {
 				throw new ValueTypeException(ex);
 			}
@@ -505,8 +501,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
-	public boolean isValid(Validator validator,
-			ExceptionMessageListener receiver) {
+	public boolean isValid(Validator validator, ExceptionMessageListener receiver) {
 		return validator.isValid(m_value, m_invalidValue, null, receiver);
 	}
 
@@ -519,11 +514,9 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	 *            boolean
 	 * @return Validator
 	 */
-	public Validator getDefaultValidator(IMessageFactory messageFactory,
-			boolean isMandatory) {
+	public Validator getDefaultValidator(IMessageFactory messageFactory, boolean isMandatory) {
 		// This allow non-negative 11.2
-		return new DecimalValidator(messageFactory, false, true, 11, 2,
-				isMandatory);
+		return new DecimalValidator(messageFactory, false, true, 11, 2, isMandatory);
 	}
 
 	/**
@@ -549,7 +542,8 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	 * 
 	 * 
 	 * @return Object
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public Object clone() {
@@ -570,8 +564,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	 * @return int
 	 */
 	public int compareTo(final Decimal other) {
-		return CoreUtils.nullSafeComparator(this.getBigDecimalValue(),
-				other.getBigDecimalValue());
+		return CoreUtils.nullSafeComparator(this.getBigDecimalValue(), other.getBigDecimalValue());
 	}
 
 	/**
@@ -585,8 +578,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 	 */
 	public int compare(Decimal o1, Decimal o2) {
 
-		int returnVal = CoreUtils.nullSafeComparator(o1.getBigDecimalValue(),
-				o2.getBigDecimalValue());
+		int returnVal = CoreUtils.nullSafeComparator(o1.getBigDecimalValue(), o2.getBigDecimalValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
 		}
@@ -606,8 +598,7 @@ public class Decimal extends ValueType implements Comparator<Decimal>,
 			return true;
 
 		if (objectToCompare instanceof Decimal) {
-			if (CoreUtils.nullSafeComparator(
-					((Decimal) objectToCompare).getBigDecimalValue(),
+			if (CoreUtils.nullSafeComparator(((Decimal) objectToCompare).getBigDecimalValue(),
 					this.getBigDecimalValue()) == 0)
 				return true;
 		}

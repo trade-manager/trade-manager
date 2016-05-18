@@ -72,8 +72,7 @@ public class DAOStrategy extends DAODecode {
 			boolean isMgr = false;
 			if (!strategy.hasStrategyManager()) {
 				for (final Decode mgrdecode : decodesAll) {
-					final Strategy strategyMgr = (Strategy) mgrdecode
-							.getObject();
+					final Strategy strategyMgr = (Strategy) mgrdecode.getObject();
 					if (strategyMgr.hasStrategyManager()) {
 						if (strategyMgr.getStrategyManager().equals(strategy)) {
 							isMgr = true;

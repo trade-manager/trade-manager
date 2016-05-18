@@ -97,8 +97,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 * @param indicatorSeries
 	 *            IndicatorSeries
 	 */
-	public CodeValue(CodeAttribute codeAttribute, String codeValue,
-			IndicatorSeries indicatorSeries) {
+	public CodeValue(CodeAttribute codeAttribute, String codeValue, IndicatorSeries indicatorSeries) {
 		this.codeValue = codeValue;
 		this.codeAttribute = codeAttribute;
 		this.indicatorSeries = indicatorSeries;
@@ -114,8 +113,7 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 * @param tradestrategy
 	 *            Tradestrategy
 	 */
-	public CodeValue(CodeAttribute codeAttribute, String codeValue,
-			Tradestrategy tradestrategy) {
+	public CodeValue(CodeAttribute codeAttribute, String codeValue, Tradestrategy tradestrategy) {
 		this.codeValue = codeValue;
 		this.codeAttribute = codeAttribute;
 		this.tradestrategy = tradestrategy;
@@ -262,15 +260,13 @@ public class CodeValue extends Aspect implements java.io.Serializable {
 	 * @throws Exception
 	 */
 	@Transient
-	public static Object getValueCode(final String name,
-			final List<CodeValue> codeValues) throws Exception {
+	public static Object getValueCode(final String name, final List<CodeValue> codeValues) throws Exception {
 		Object codeValue = null;
 		for (CodeValue value : codeValues) {
 			if (name.equals(value.getCodeAttribute().getName())) {
 				Vector<Object> parm = new Vector<Object>();
 				parm.add(value.getCodeValue());
-				codeValue = ClassFactory.getCreateClass(value
-						.getCodeAttribute().getClassName(), parm,
+				codeValue = ClassFactory.getCreateClass(value.getCodeAttribute().getClassName(), parm,
 						CodeAttributePanel.class);
 				return codeValue;
 			}

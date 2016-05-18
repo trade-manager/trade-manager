@@ -54,8 +54,7 @@ import org.trade.ui.chart.renderer.VolumeBarRenderer;
 
 /**
  */
-public class VolumeDataset extends AbstractIntervalXYDataset implements
-		IVolumeDataset, IndicatorDataset, Serializable {
+public class VolumeDataset extends AbstractIntervalXYDataset implements IVolumeDataset, IndicatorDataset, Serializable {
 
 	/**
 	 * 
@@ -247,8 +246,7 @@ public class VolumeDataset extends AbstractIntervalXYDataset implements
 	 * @see org.jfree.data.xy.IntervalXYDataset#getStartX(int, int)
 	 */
 	public Number getStartX(int series, int item) {
-		return getX(series, item).doubleValue()
-				- getSeries(series).getBarWidthInMilliseconds() / 2d;
+		return getX(series, item).doubleValue() - getSeries(series).getBarWidthInMilliseconds() / 2d;
 	}
 
 	/**
@@ -262,8 +260,7 @@ public class VolumeDataset extends AbstractIntervalXYDataset implements
 	 * @see org.jfree.data.xy.IntervalXYDataset#getEndX(int, int)
 	 */
 	public Number getEndX(int series, int item) {
-		return getX(series, item).doubleValue()
-				+ getSeries(series).getBarWidthInMilliseconds() / 2d;
+		return getX(series, item).doubleValue() + getSeries(series).getBarWidthInMilliseconds() / 2d;
 	}
 
 	/**
@@ -437,8 +434,7 @@ public class VolumeDataset extends AbstractIntervalXYDataset implements
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		VolumeDataset clone = (VolumeDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -454,8 +450,7 @@ public class VolumeDataset extends AbstractIntervalXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
@@ -463,8 +458,8 @@ public class VolumeDataset extends AbstractIntervalXYDataset implements
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			VolumeSeries series = this.getSeries(i);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

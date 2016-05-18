@@ -207,8 +207,8 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	 *            MessageEvent
 	 * @param parm
 	 *            Vector<Object>
-	 * @see org.trade.ui.base.MessageListener#handleEvent(MessageEvent,
-	 *      Vector<Object>)
+	 * @see org.trade.ui.base.MessageListener#handleEvent(MessageEvent, Vector
+	 *      <Object>)
 	 */
 	public void handleEvent(MessageEvent e, Vector<Object> parm) {
 
@@ -241,8 +241,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	 * @param parm
 	 *            Vector<Object>
 	 */
-	protected synchronized void doFireMethod(String methodName,
-			Vector<Object> parm) {
+	protected synchronized void doFireMethod(String methodName, Vector<Object> parm) {
 
 		int vectorSize = 0;
 		vectorSize = parm.size();
@@ -260,19 +259,16 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 
 		try {
 
-			Method method = Reflector.findMethod(this.getClass(), methodName,
-					parms);
+			Method method = Reflector.findMethod(this.getClass(), methodName, parms);
 
 			if (null != method) {
 				method.invoke(this, objects);
 			}
 		} catch (Exception e) {
 			// Do nothing this panel is not actively listening for this event
-			_log.error("Exception in reflection BasePanel method: "
-					+ methodName + " Parms #: " + vectorSize + " Method "
-					+ methodName + " Parms class: " + classes
-					+ " not found in class: " + this.getClass().getName()
-					+ " Error Msg: " + e.getMessage());
+			_log.error("Exception in reflection BasePanel method: " + methodName + " Parms #: " + vectorSize
+					+ " Method " + methodName + " Parms class: " + classes + " not found in class: "
+					+ this.getClass().getName() + " Error Msg: " + e.getMessage());
 			setStatusBarMessage(e.getMessage(), ERROR);
 		}
 	}
@@ -309,8 +305,7 @@ public abstract class BasePanel extends JPanel implements MessageListener {
 	public void setErrorMessage(String title, String message, Exception ex) {
 		_log.error("Title: " + title + " Msg: " + message, ex);
 		this.setStatusBarMessage(message, ERROR);
-		JOptionPane.showMessageDialog(getFrame(), message
-				+ " See log for details.", title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(getFrame(), message + " See log for details.", title, JOptionPane.ERROR_MESSAGE);
 		this.clearStatusBarMessage();
 	}
 }

@@ -68,8 +68,7 @@ public class CodeTypeHome {
 	public CodeType findById(Integer idCodeType) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CodeType instance = entityManager.find(CodeType.class, idCodeType);
 			entityManager.getTransaction().commit();
@@ -93,16 +92,14 @@ public class CodeTypeHome {
 	public CodeType findByName(String name) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<CodeType> query = builder.createQuery(CodeType.class);
 			Root<CodeType> from = query.from(CodeType.class);
 			query.select(from);
 			query.where(builder.equal(from.get("name"), name));
-			List<CodeType> items = entityManager.createQuery(query)
-					.getResultList();
+			List<CodeType> items = entityManager.createQuery(query).getResultList();
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
 				return items.get(0);
@@ -129,8 +126,7 @@ public class CodeTypeHome {
 	public CodeType findByNameAndType(String codeName, String codeType) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<CodeType> query = builder.createQuery(CodeType.class);
@@ -172,30 +168,23 @@ public class CodeTypeHome {
 	 *            String
 	 * @return CodeValue
 	 */
-	public CodeValue findByAttributeName(String codeTypeName,
-			String codeAttributeName) {
+	public CodeValue findByAttributeName(String codeTypeName, String codeAttributeName) {
 
 		try {
 
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<CodeValue> query = builder
-					.createQuery(CodeValue.class);
+			CriteriaQuery<CodeValue> query = builder.createQuery(CodeValue.class);
 			Root<CodeValue> from = query.from(CodeValue.class);
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			if (null != codeAttributeName) {
-				Join<CodeValue, CodeAttribute> codeAttribute = from
-						.join("codeAttribute");
-				Predicate predicate = builder.equal(codeAttribute.get("name"),
-						codeAttributeName);
+				Join<CodeValue, CodeAttribute> codeAttribute = from.join("codeAttribute");
+				Predicate predicate = builder.equal(codeAttribute.get("name"), codeAttributeName);
 				predicates.add(predicate);
-				Join<CodeAttribute, CodeType> codeType = codeAttribute
-						.join("codeType");
-				Predicate predicate1 = builder.equal(codeType.get("name"),
-						codeTypeName);
+				Join<CodeAttribute, CodeType> codeType = codeAttribute.join("codeType");
+				Predicate predicate1 = builder.equal(codeType.get("name"), codeTypeName);
 				predicates.add(predicate1);
 			}
 
@@ -224,15 +213,13 @@ public class CodeTypeHome {
 	public List<CodeType> findAll() {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<CodeType> query = builder.createQuery(CodeType.class);
 			Root<CodeType> from = query.from(CodeType.class);
 			query.select(from);
-			List<CodeType> items = entityManager.createQuery(query)
-					.getResultList();
+			List<CodeType> items = entityManager.createQuery(query).getResultList();
 			for (CodeType codeType : items) {
 				codeType.getCodeAttribute().size();
 			}

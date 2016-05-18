@@ -57,8 +57,7 @@ public class DateToStringConverter implements JavaTypeConverter {
 		// Default is short version of date and time:
 		// MM/DD/YY HH:MI:SS AM|PM TZ
 		// Timezone is assumed to be the local system timezone.
-		m_dateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-				DateFormat.LONG);
+		m_dateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG);
 	}
 
 	//
@@ -75,21 +74,19 @@ public class DateToStringConverter implements JavaTypeConverter {
 	 *            the java.util.Date value to convert
 	 * 
 	 * 
-	 * @return Object the String representation of the valueToConvert * @exception
-	 *         IllegalArgumentException thrown if the valueToConvert is not of
-	 *         type java.util.Date * @see
+	 * @return Object the String representation of the valueToConvert
+	 *         * @exception IllegalArgumentException thrown if the
+	 *         valueToConvert is not of type java.util.Date * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#convert(Object)
 	 */
-	public Object convert(Object valueToConvert)
-			throws IllegalArgumentException {
+	public Object convert(Object valueToConvert) throws IllegalArgumentException {
 		if (valueToConvert instanceof Date) {
 			if (null != valueToConvert) {
 				return m_dateFormatter.format(valueToConvert);
 			}
 		}
 
-		throw new IllegalArgumentException(
-				"The source object must be of type:java.util.Date");
+		throw new IllegalArgumentException("The source object must be of type:java.util.Date");
 	}
 
 	/**
@@ -97,7 +94,8 @@ public class DateToStringConverter implements JavaTypeConverter {
 	 * from. In this case java.util.Date .
 	 * 
 	 * 
-	 * @return Class the class of the source value which will be converted * @see
+	 * @return Class the class of the source value which will be converted
+	 *         * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#getSourceType()
 	 */
 	public Class<?> getSourceType() {

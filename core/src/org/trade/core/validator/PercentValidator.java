@@ -73,9 +73,8 @@ public class PercentValidator implements Validator {
 	 * @param isMandatory
 	 *            boolean
 	 */
-	public PercentValidator(IMessageFactory messageFactory,
-			boolean allowNegative, boolean allowZero, int maxNonDecimalLength,
-			int maxDecimalLength, boolean isMandatory) {
+	public PercentValidator(IMessageFactory messageFactory, boolean allowNegative, boolean allowZero,
+			int maxNonDecimalLength, int maxDecimalLength, boolean isMandatory) {
 		m_messageFactory = messageFactory;
 		m_allowNegative = allowNegative;
 		m_allowZero = allowZero;
@@ -113,8 +112,8 @@ public class PercentValidator implements Validator {
 	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
 	 *      ExceptionMessageListener)
 	 */
-	public boolean isValid(Object value, String invalidValue,
-			String expectedFormat, ExceptionMessageListener receiver) {
+	public boolean isValid(Object value, String invalidValue, String expectedFormat,
+			ExceptionMessageListener receiver) {
 		if (null == receiver) {
 			receiver = new ExceptionMessageListener() {
 				public void addExceptionMessage(ExceptionMessage e) {
@@ -128,9 +127,8 @@ public class PercentValidator implements Validator {
 			// Enforce optional/mandatory
 			if (m_isMandatory) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED.create()));
 			}
 		} else if (null == invalidValue) // Able to parse input into a
 		// BigDecimal
@@ -141,15 +139,12 @@ public class PercentValidator implements Validator {
 			String decimalString = "";
 			String nonDecimalString = stringValue;
 			if (-1 != indexOfDot) {
-				decimalString = stringValue.substring(indexOfDot + 1,
-						stringValue.length());
+				decimalString = stringValue.substring(indexOfDot + 1, stringValue.length());
 				nonDecimalString = stringValue.substring(0, indexOfDot);
 			}
 
-			if (nonDecimalString.length() > 0
-					&& nonDecimalString.charAt(0) == '-') {
-				nonDecimalString = nonDecimalString.substring(1,
-						nonDecimalString.length());
+			if (nonDecimalString.length() > 0 && nonDecimalString.charAt(0) == '-') {
+				nonDecimalString = nonDecimalString.substring(1, nonDecimalString.length());
 			}
 
 			long nonDecimalLength = nonDecimalString.length();
@@ -160,37 +155,31 @@ public class PercentValidator implements Validator {
 			// Enforce length of portion to right of decimal point
 			if (decimalLength > m_maxDecimalLength) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.PERCENT_RIGHT_OF_DECIMAL_TOO_LONG
-								.create(MessageContextFactory.MAX_LENGTH
-										.create("" + m_maxDecimalLength))));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_RIGHT_OF_DECIMAL_TOO_LONG
+								.create(MessageContextFactory.MAX_LENGTH.create("" + m_maxDecimalLength))));
 			}
 
 			// Enforce length of portion to left of decimal point
 			if (nonDecimalLength > m_maxNonDecimalLength) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.PERCENT_LEFT_OF_DECIMAL_TOO_LONG
-								.create(MessageContextFactory.MAX_LENGTH
-										.create("" + m_maxNonDecimalLength))));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_LEFT_OF_DECIMAL_TOO_LONG
+								.create(MessageContextFactory.MAX_LENGTH.create("" + m_maxNonDecimalLength))));
 			}
 
 			// Disallow zero for certain formats
-			if (!m_allowZero
-					&& (0 == ((BigDecimal) value).compareTo(new BigDecimal(0)))) {
+			if (!m_allowZero && (0 == ((BigDecimal) value).compareTo(new BigDecimal(0)))) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory()
-						.create(MessageContextFactory.PERCENT_ZERO_NOT_ALLOWED
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_ZERO_NOT_ALLOWED.create()));
 			}
 
 			// Disallow negative numbers
-			if (!m_allowNegative
-					&& (((BigDecimal) value).compareTo(new BigDecimal(0)) < 0)) {
+			if (!m_allowNegative && (((BigDecimal) value).compareTo(new BigDecimal(0)) < 0)) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.PERCENT_NEGATIVE_NOT_ALLOWED
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_NEGATIVE_NOT_ALLOWED.create()));
 			}
 		} else
 		// Percent was not able to parse invalidValue into a BigDecimal
@@ -198,46 +187,38 @@ public class PercentValidator implements Validator {
 			Validator validator;
 
 			if (m_allowNegative) {
-				validator = new StringValidator(getMessageFactory(), 1,
-						m_maxNonDecimalLength + m_maxDecimalLength + 2,
+				validator = new StringValidator(getMessageFactory(), 1, m_maxNonDecimalLength + m_maxDecimalLength + 2,
 						StringValidator.DIGITS, "-.", m_isMandatory);
 			} else {
-				validator = new StringValidator(getMessageFactory(), 1,
-						m_maxNonDecimalLength + m_maxDecimalLength + 1,
+				validator = new StringValidator(getMessageFactory(), 1, m_maxNonDecimalLength + m_maxDecimalLength + 1,
 						StringValidator.DIGITS, ".", m_isMandatory);
 			}
 
 			if (invalidValue.equals(".")) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.PERCENT_DOT_WITH_NO_NUMBERS
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_DOT_WITH_NO_NUMBERS.create()));
 			}
 
 			if (invalidValue.indexOf(".") != invalidValue.lastIndexOf(".")) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.PERCENT_MULTIPLE_DOTS.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_MULTIPLE_DOTS.create()));
 			}
 
-			if (m_allowNegative
-					&& (invalidValue.indexOf("-") != invalidValue
-							.lastIndexOf("-"))) {
+			if (m_allowNegative && (invalidValue.indexOf("-") != invalidValue.lastIndexOf("-"))) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.PERCENT_MULTIPLE_DASHES.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_MULTIPLE_DASHES.create()));
 			}
 
-			if (m_allowNegative && (invalidValue.indexOf("-") != -1)
-					&& (invalidValue.indexOf("-") != 0)) {
+			if (m_allowNegative && (invalidValue.indexOf("-") != -1) && (invalidValue.indexOf("-") != 0)) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.PERCENT_DASH_NOT_FIRST_CHARACTER
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.PERCENT_DASH_NOT_FIRST_CHARACTER.create()));
 			}
 
-			valid = validator.isValid(invalidValue, invalidValue,
-					expectedFormat, receiver);
+			valid = validator.isValid(invalidValue, invalidValue, expectedFormat, receiver);
 			if (valid) {
 				valid = false;
 				// TODO: Log this

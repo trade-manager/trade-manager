@@ -45,8 +45,8 @@ public class ButtonRenderer extends BaseButton implements TableCellRenderer {
 	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
 	 *      Object, boolean, boolean, int, int)
 	 */
-	public Component getTableCellRendererComponent(JTable table, Object color,
-			boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 
 		if (isSelected) {
 			this.setBackground(table.getSelectionBackground());

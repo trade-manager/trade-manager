@@ -49,10 +49,8 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 3388042483785305102L;
 
-	private List<TradelogDetail> tradelogDetail = new ArrayList<TradelogDetail>(
-			0);
-	private List<TradelogSummary> tradelogSummary = new ArrayList<TradelogSummary>(
-			0);
+	private List<TradelogDetail> tradelogDetail = new ArrayList<TradelogDetail>(0);
+	private List<TradelogSummary> tradelogSummary = new ArrayList<TradelogSummary>(0);
 
 	public TradelogReport() {
 	}
@@ -75,8 +73,7 @@ public class TradelogReport extends Aspect implements java.io.Serializable {
 	 * @param tradelogDetail
 	 *            List<TradelogDetail>
 	 */
-	public TradelogReport(Integer idTradelogDetail,
-			List<TradelogDetail> tradelogDetail) {
+	public TradelogReport(Integer idTradelogDetail, List<TradelogDetail> tradelogDetail) {
 		this.id = idTradelogDetail;
 		this.tradelogDetail = tradelogDetail;
 

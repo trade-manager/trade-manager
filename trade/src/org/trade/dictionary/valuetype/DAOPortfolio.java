@@ -79,8 +79,7 @@ public class DAOPortfolio extends DAODecode {
 		try {
 			final DAOPortfolio returnInstance = new DAOPortfolio();
 			DAOPortfolio code = null;
-			for (Iterator<Decode> iterCodes = returnInstance.getCodesDecodes()
-					.iterator(); iterCodes.hasNext();) {
+			for (Iterator<Decode> iterCodes = returnInstance.getCodesDecodes().iterator(); iterCodes.hasNext();) {
 				code = (DAOPortfolio) iterCodes.next();
 				Portfolio portfolio = (Portfolio) code.getObject();
 				if (portfolio.getIsDefault())

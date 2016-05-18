@@ -62,13 +62,10 @@ public class EntrylimitTableModel extends AspectTableModel {
 	private static final String ROUND_PRICE = "Round Price";
 	private static final String PIVOT_RANGE = "Pivot Range";
 
-	private static final String[] columnHeaderToolTip = { "Price range start",
-			"Price range end", "For Stop/Limit orders the price range",
-			"The % of contract price for a bars range from H/L",
-			"The max % of margin to use for a trade",
-			"Rounding of shares on a calculated open position",
-			"# cents before/after whole/half number to round over/under",
-			"The min H/L between pivots" };
+	private static final String[] columnHeaderToolTip = { "Price range start", "Price range end",
+			"For Stop/Limit orders the price range", "The % of contract price for a bars range from H/L",
+			"The max % of margin to use for a trade", "Rounding of shares on a calculated open position",
+			"# cents before/after whole/half number to round over/under", "The min H/L between pivots" };
 
 	private Aspects m_data = null;
 
@@ -180,8 +177,7 @@ public class EntrylimitTableModel extends AspectTableModel {
 
 		Money startPrice = (Money) this.getValueAt(selectedRow, 0);
 		for (final Aspect element : getData().getAspect()) {
-			if (CoreUtils.nullSafeComparator(
-					((Entrylimit) element).getStartPrice(),
+			if (CoreUtils.nullSafeComparator(((Entrylimit) element).getStartPrice(),
 					startPrice.getBigDecimalValue()) == 0) {
 				getData().remove(element);
 				getData().setDirty(true);

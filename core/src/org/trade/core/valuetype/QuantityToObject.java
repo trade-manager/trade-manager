@@ -58,16 +58,13 @@ public class QuantityToObject implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Object rVal = null;
 
 		if (valueToConvert instanceof Quantity) {
-			rVal = JavaTypeTranslator.convert(targetType,
-					valueToConvert.toString());
+			rVal = JavaTypeTranslator.convert(targetType, valueToConvert.toString());
 		} else {
-			throw new JavaTypeTranslatorException(
-					"Value to convert must be a Quantity");
+			throw new JavaTypeTranslatorException("Value to convert must be a Quantity");
 		}
 
 		return (rVal);
@@ -81,9 +78,8 @@ public class QuantityToObject implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

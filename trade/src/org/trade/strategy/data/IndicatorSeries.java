@@ -74,13 +74,11 @@ import org.trade.persistent.dao.Strategy;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("IndicatorSeries")
-public abstract class IndicatorSeries extends ComparableObjectSeries implements
-		Cloneable, Serializable {
+public abstract class IndicatorSeries extends ComparableObjectSeries implements Cloneable, Serializable {
 
 	private static final long serialVersionUID = -4985280367851073683L;
 
-	protected final static Logger _log = LoggerFactory
-			.getLogger(CandleSeries.class);
+	protected final static Logger _log = LoggerFactory.getLogger(CandleSeries.class);
 
 	/*
 	 * These names must match the names of the classes for that series.
@@ -141,8 +139,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * @param subChart
 	 *            Boolean
 	 */
-	public IndicatorSeries(String type, Boolean displaySeries,
-			Integer seriesRGBColor, Boolean subChart) {
+	public IndicatorSeries(String type, Boolean displaySeries, Integer seriesRGBColor, Boolean subChart) {
 		super(type, true, false);
 		this.type = type;
 		this.displaySeries = displaySeries;
@@ -165,8 +162,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * @param subChart
 	 *            Boolean
 	 */
-	public IndicatorSeries(String name, String type, Boolean displaySeries,
-			Integer seriesRGBColor, Boolean subChart) {
+	public IndicatorSeries(String name, String type, Boolean displaySeries, Integer seriesRGBColor, Boolean subChart) {
 		super(name, true, false);
 		this.type = type;
 		this.displaySeries = displaySeries;
@@ -193,9 +189,8 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * @param subChart
 	 *            Boolean
 	 */
-	public IndicatorSeries(Strategy strategy, String name, String type,
-			String description, Boolean displaySeries, Integer seriesRGBColor,
-			Boolean subChart) {
+	public IndicatorSeries(Strategy strategy, String name, String type, String description, Boolean displaySeries,
+			Integer seriesRGBColor, Boolean subChart) {
 		super(name, true, false);
 		this.strategy = strategy;
 		this.name = name;
@@ -430,7 +425,8 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * 
 	 * @return List<CodeValue>
 	 */
-	@OneToMany(mappedBy = "indicatorSeries", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
+	@OneToMany(mappedBy = "indicatorSeries", fetch = FetchType.EAGER, orphanRemoval = true, cascade = {
+			CascadeType.ALL })
 	public List<CodeValue> getCodeValues() {
 		return this.codeValues;
 	}
@@ -481,8 +477,7 @@ public abstract class IndicatorSeries extends ComparableObjectSeries implements
 	 * @param newBar
 	 *            boolean
 	 */
-	public abstract void updateSeries(CandleSeries source, int skip,
-			boolean newBar);
+	public abstract void updateSeries(CandleSeries source, int skip, boolean newBar);
 
 	/**
 	 * Method createSeries.

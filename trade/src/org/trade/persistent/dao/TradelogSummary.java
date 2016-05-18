@@ -51,7 +51,8 @@ import org.trade.core.properties.ConfigProperties;
 /**
  */
 @Entity
-@SqlResultSetMappings({ @SqlResultSetMapping(name = "TradelogSummaryMapping", entities = @EntityResult(entityClass = TradelogSummary.class)) })
+@SqlResultSetMappings({
+		@SqlResultSetMapping(name = "TradelogSummaryMapping", entities = @EntityResult(entityClass = TradelogSummary.class) ) })
 public class TradelogSummary extends Aspect implements java.io.Serializable {
 
 	/**
@@ -107,11 +108,9 @@ public class TradelogSummary extends Aspect implements java.io.Serializable {
 	 * @param tradestrategyCount
 	 *            Integer
 	 */
-	public TradelogSummary(Integer idTradelogSummary, String period,
-			BigDecimal battingAverage, BigDecimal simpleSharpeRatio,
-			BigDecimal grossProfitLoss, Integer quantity,
-			BigDecimal commission, BigDecimal netProfitLoss,
-			BigDecimal profitAmount, BigDecimal lossAmount, Integer winCount,
+	public TradelogSummary(Integer idTradelogSummary, String period, BigDecimal battingAverage,
+			BigDecimal simpleSharpeRatio, BigDecimal grossProfitLoss, Integer quantity, BigDecimal commission,
+			BigDecimal netProfitLoss, BigDecimal profitAmount, BigDecimal lossAmount, Integer winCount,
 			Integer lossCount, Integer positionCount, Integer tradestrategyCount) {
 		this.id = idTradelogSummary;
 		this.period = period;
@@ -418,9 +417,8 @@ public class TradelogSummary extends Aspect implements java.io.Serializable {
 	public static String getSQLString() {
 		String sql = null;
 		try {
-			sql = ConfigProperties.readFileAsString(
-					"org/trade/persistent/dao/sql/TradelogSummary.sql", Thread
-							.currentThread().getContextClassLoader());
+			sql = ConfigProperties.readFileAsString("org/trade/persistent/dao/sql/TradelogSummary.sql",
+					Thread.currentThread().getContextClassLoader());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

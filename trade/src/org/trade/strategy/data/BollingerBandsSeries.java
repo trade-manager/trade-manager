@@ -114,11 +114,9 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public BollingerBandsSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public BollingerBandsSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -143,11 +141,9 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public BollingerBandsSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, BigDecimal numberOfSTD, Integer length) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public BollingerBandsSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart, BigDecimal numberOfSTD, Integer length) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.numberOfSTD = numberOfSTD;
 		this.length = length;
 	}
@@ -205,8 +201,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 		if (!this.isEmpty()) {
 			BollingerBandsItem item0 = (BollingerBandsItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new BollingerBandsItem(period, bollingerBands), true);
@@ -224,10 +219,8 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	public void add(BollingerBandsItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			BollingerBandsItem item0 = (BollingerBandsItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -242,8 +235,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) CodeValue.getValueCode(LENGTH,
-						this.getCodeValues());
+				this.length = (Integer) CodeValue.getValueCode(LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -269,8 +261,7 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	public BigDecimal getNumberOfSTD() {
 		try {
 			if (null == this.numberOfSTD)
-				this.numberOfSTD = (BigDecimal) CodeValue.getValueCode(
-						NUMBER_OF_STD, this.getCodeValues());
+				this.numberOfSTD = (BigDecimal) CodeValue.getValueCode(NUMBER_OF_STD, this.getCodeValues());
 		} catch (Exception e) {
 			this.numberOfSTD = null;
 		}
@@ -342,13 +333,11 @@ public class BollingerBandsSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 		if (getLength() == null || getLength() < 1) {
-			throw new IllegalArgumentException(
-					"MA period must be greater than zero.");
+			throw new IllegalArgumentException("MA period must be greater than zero.");
 		}
 
 		if (getNumberOfSTD() == null || getNumberOfSTD().doubleValue() < 1) {
-			throw new IllegalArgumentException(
-					"Number of STD's must be greater than zero.");
+			throw new IllegalArgumentException("Number of STD's must be greater than zero.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -391,16 +380,14 @@ public class BollingerBandsSeries extends IndicatorSeries {
 				}
 
 				if (this.yyValues.size() == getLength()) {
-					double ma = calculateBBands(this.getNumberOfSTD(),
-							this.yyValues, sum);
+					double ma = calculateBBands(this.getNumberOfSTD(), this.yyValues, sum);
 					if (newBar) {
-						BollingerBandsItem dataItem = new BollingerBandsItem(
-								candleItem.getPeriod(), new BigDecimal(ma));
+						BollingerBandsItem dataItem = new BollingerBandsItem(candleItem.getPeriod(),
+								new BigDecimal(ma));
 						this.add(dataItem, false);
 
 					} else {
-						BollingerBandsItem dataItem = (BollingerBandsItem) this
-								.getDataItem(this.getItemCount() - 1);
+						BollingerBandsItem dataItem = (BollingerBandsItem) this.getDataItem(this.getItemCount() - 1);
 						dataItem.setBollingerBands(ma);
 					}
 				}
@@ -421,15 +408,14 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 *            Double
 	 * @return double
 	 */
-	private double calculateBBands(BigDecimal numberOfSTD,
-			LinkedList<Double> yyValues, Double sum) {
+	private double calculateBBands(BigDecimal numberOfSTD, LinkedList<Double> yyValues, Double sum) {
 
 		if (this.isUpper) {
-			return ((sum / this.getLength()) + (standardDeviation(yyValues, sum) * this
-					.getNumberOfSTD().doubleValue()));
+			return ((sum / this.getLength())
+					+ (standardDeviation(yyValues, sum) * this.getNumberOfSTD().doubleValue()));
 		} else {
-			return ((sum / this.getLength()) - (standardDeviation(yyValues, sum) * this
-					.getNumberOfSTD().doubleValue()));
+			return ((sum / this.getLength())
+					- (standardDeviation(yyValues, sum) * this.getNumberOfSTD().doubleValue()));
 		}
 	}
 
@@ -448,10 +434,8 @@ public class BollingerBandsSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			BollingerBandsItem dataItem = (BollingerBandsItem) this
-					.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			BollingerBandsItem dataItem = (BollingerBandsItem) this.getDataItem(i);
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getBollingerBands());
 		}
 	}

@@ -60,15 +60,13 @@ import org.trade.ui.widget.Clock;
 
 /**
  */
-public abstract class TabbedAppPanel extends BasePanel implements
-		ChangeListener {
+public abstract class TabbedAppPanel extends BasePanel implements ChangeListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8405644422808736326L;
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TabbedAppPanel.class);
+	private final static Logger _log = LoggerFactory.getLogger(TabbedAppPanel.class);
 	private final JTabbedPane m_tabbedPane = new JTabbedPane();
 
 	public String m_title = null;
@@ -161,13 +159,11 @@ public abstract class TabbedAppPanel extends BasePanel implements
 	 *            BasePanel
 	 */
 
-	public abstract void tabChanged(BasePanel currBasePanel,
-			BasePanel newBasePanel);
+	public abstract void tabChanged(BasePanel currBasePanel, BasePanel newBasePanel);
 
 	public void doLFMetal() {
 		try {
-			UIManager
-					.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
+			UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
 			SwingUtilities.updateComponentTreeUI(getFrame());
 		} catch (Exception eMetal) {
 			_log.error("Could not load LookAndFeel: " + eMetal);
@@ -260,8 +256,7 @@ public abstract class TabbedAppPanel extends BasePanel implements
 	 * @param parm
 	 *            Vector<Object>
 	 */
-	public void setSelectPanel(int tabIndex, MessageEvent event,
-			Vector<Object> parm) {
+	public void setSelectPanel(int tabIndex, MessageEvent event, Vector<Object> parm) {
 		setSelectPanel(tabIndex);
 		this.currBasePanel.handleEvent(event, parm);
 	}
@@ -315,11 +310,9 @@ public abstract class TabbedAppPanel extends BasePanel implements
 					return;
 				}
 
-				((BasePanel) selectedTab.getComponent(currentTab))
-						.setSelected(false);
+				((BasePanel) selectedTab.getComponent(currentTab)).setSelected(false);
 				currentTab = selectedTab.getSelectedIndex();
-				currBasePanel = (BasePanel) selectedTab
-						.getComponent(currentTab);
+				currBasePanel = (BasePanel) selectedTab.getComponent(currentTab);
 				tabChanged(prevBasePanel, currBasePanel);
 				currBasePanel.clearStatusBarMessage();
 				currBasePanel.setSelected(true);

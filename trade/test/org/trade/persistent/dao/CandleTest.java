@@ -66,8 +66,7 @@ import org.trade.ui.TradeAppLoadConfig;
  */
 public class CandleTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(CandleTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(CandleTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -123,13 +122,10 @@ public class CandleTest {
 			AspectHome aspectHome = new AspectHome();
 
 			RegularTimePeriod period = new CandlePeriod(
-					TradingCalendar.getTradingDayStart(TradingCalendar
-							.getDateTimeNowMarketTimeZone()), 300);
+					TradingCalendar.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone()), 300);
 
-			Candle transientInstance = new Candle(
-					this.tradestrategy.getContract(),
-					this.tradestrategy.getTradingday(), period,
-					period.getStart());
+			Candle transientInstance = new Candle(this.tradestrategy.getContract(), this.tradestrategy.getTradingday(),
+					period, period.getStart());
 			transientInstance.setHigh(new BigDecimal(20.33));
 			transientInstance.setLow(new BigDecimal(20.11));
 			transientInstance.setOpen(new BigDecimal(20.23));
@@ -140,12 +136,10 @@ public class CandleTest {
 
 			transientInstance = aspectHome.persist(transientInstance);
 			assertNotNull("1", transientInstance.getIdCandle());
-			_log.info("testAddCandle IdCandle: "
-					+ transientInstance.getIdCandle());
+			_log.info("testAddCandle IdCandle: " + transientInstance.getIdCandle());
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -159,34 +153,23 @@ public class CandleTest {
 			TradestrategyHome tradestrategyHome = new TradestrategyHome();
 			CandleHome candleHome = new CandleHome();
 			for (Tradestrategy tradestrategy : tradestrategyHome.findAll()) {
-				tradestrategy = tradestrategyHome.findById(tradestrategy
-						.getIdTradeStrategy());
-				tradestrategy.setStrategyData(StrategyData
-						.create(tradestrategy));
-				ZonedDateTime prevTradingday = TradingCalendar.addTradingDays(
-						tradestrategy.getTradingday().getOpen(),
+				tradestrategy = tradestrategyHome.findById(tradestrategy.getIdTradeStrategy());
+				tradestrategy.setStrategyData(StrategyData.create(tradestrategy));
+				ZonedDateTime prevTradingday = TradingCalendar.addTradingDays(tradestrategy.getTradingday().getOpen(),
 						(-1 * (tradestrategy.getChartDays() - 1)));
-				StrategyData.doDummyData(tradestrategy.getStrategyData()
-						.getBaseCandleSeries(), Tradingday
-						.newInstance(prevTradingday), 2, BarSize.FIVE_MIN,
-						true, 0);
-				assertFalse("1", tradestrategy.getStrategyData()
-						.getBaseCandleSeries().isEmpty());
-				candleHome.persistCandleSeries(tradestrategy.getStrategyData()
-						.getBaseCandleSeries());
+				StrategyData.doDummyData(tradestrategy.getStrategyData().getBaseCandleSeries(),
+						Tradingday.newInstance(prevTradingday), 2, BarSize.FIVE_MIN, true, 0);
+				assertFalse("1", tradestrategy.getStrategyData().getBaseCandleSeries().isEmpty());
+				candleHome.persistCandleSeries(tradestrategy.getStrategyData().getBaseCandleSeries());
 
-				_log.info("testAddCandle IdTradeStrategy: "
-						+ tradestrategy.getIdTradeStrategy());
-				assertNotNull("2",
-						((CandleItem) tradestrategy.getStrategyData()
-								.getBaseCandleSeries().getDataItem(0))
-								.getCandle().getIdCandle());
+				_log.info("testAddCandle IdTradeStrategy: " + tradestrategy.getIdTradeStrategy());
+				assertNotNull("2", ((CandleItem) tradestrategy.getStrategyData().getBaseCandleSeries().getDataItem(0))
+						.getCandle().getIdCandle());
 
 			}
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

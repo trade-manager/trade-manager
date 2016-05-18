@@ -85,13 +85,11 @@ import org.slf4j.LoggerFactory;
  * @version $Id: StreamEditorPane.java,v 1.10 2002/01/11 20:06:02 simon Exp $
  * @author Simon Allen
  */
-public class StreamEditorPane extends JEditorPane implements MouseListener,
-		ActionListener {
+public class StreamEditorPane extends JEditorPane implements MouseListener, ActionListener {
 
 	private static final long serialVersionUID = -8068406289677664715L;
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(StreamEditorPane.class);
+	private final static Logger _log = LoggerFactory.getLogger(StreamEditorPane.class);
 
 	protected UndoableEditListener undoHandler = new UndoHandler();
 
@@ -130,8 +128,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 			type = "text/plain";
 		}
 
-		DefaultStyledDocument doc = new DefaultStyledDocument(
-				new StyleContext());
+		DefaultStyledDocument doc = new DefaultStyledDocument(new StyleContext());
 		StyledEditorKit styled = new StyledEditorKit();
 
 		setContentType(type);
@@ -161,8 +158,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 */
 	public void append(String text, AttributeSet attrSet) {
 		try {
-			this.getDocument().insertString(this.getDocument().getLength(),
-					text, attrSet);
+			this.getDocument().insertString(this.getDocument().getLength(), text, attrSet);
 		} catch (BadLocationException ex) {
 			_log.error("Error appending text:", ex);
 		}
@@ -176,8 +172,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * @throws IOException
 	 * @throws BadLocationException
 	 */
-	public void setInputStream(InputStream is) throws IOException,
-			BadLocationException {
+	public void setInputStream(InputStream is) throws IOException, BadLocationException {
 		String type = guessContentType(is);
 
 		if (type == null) {
@@ -190,8 +185,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 		// Now create the appropriate document and install it
 		// Document doc = getEditorKit().createDefaultDocument();
-		DefaultStyledDocument doc = new DefaultStyledDocument(
-				new StyleContext());
+		DefaultStyledDocument doc = new DefaultStyledDocument(new StyleContext());
 		StyledEditorKit styled = new StyledEditorKit();
 
 		setEditorKitForContentType(type, styled);
@@ -224,8 +218,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 		String text = null;
 
 		try {
-			text = super.getDocument().getText(0,
-					super.getDocument().getLength());
+			text = super.getDocument().getText(0, super.getDocument().getLength());
 		} catch (BadLocationException ex) {
 			_log.error("Error appending getting text:", ex);
 		}
@@ -243,17 +236,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	public boolean saveAs() {
 		boolean retSaveAs = false;
 		// Make the dialog visible as a modal (default) dialog box.
-		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "*" },
-				"All Files");
+		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "*" }, "All Files");
 
 		m_fileChooser.addChoosableFileFilter(filter);
 
 		if (null != getDirName()) {
-			m_fileChooser.setSelectedFile(new File(getDirName() + "//"
-					+ getFileName()));
+			m_fileChooser.setSelectedFile(new File(getDirName() + "//" + getFileName()));
 		} else {
-			m_fileChooser.setCurrentDirectory(new File(System
-					.getProperty("user.dir")));
+			m_fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		}
 
 		int returnVal = m_fileChooser.showSaveDialog(this.getRootPane());
@@ -266,14 +256,12 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 			// then do a regular saveFile
 			if (m_fileChooser.getSelectedFile().exists()) {
 				int result = JOptionPane.showConfirmDialog(this.getRootPane(),
-						"File Exists. Do you want to over write ? ", "Warning",
-						JOptionPane.YES_NO_CANCEL_OPTION,
+						"File Exists. Do you want to over write ? ", "Warning", JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 
 				if (result == JOptionPane.YES_OPTION) {
 					setFileName(m_fileChooser.getSelectedFile().getPath());
-					setCurrentDirectory(m_fileChooser.getCurrentDirectory()
-							.toString());
+					setCurrentDirectory(m_fileChooser.getCurrentDirectory().toString());
 
 					retSaveAs = saveFileWriter(getFileName());
 				} else if (result == JOptionPane.NO_OPTION) {
@@ -287,8 +275,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 				}
 			} else {
 				setFileName(m_fileChooser.getSelectedFile().getPath());
-				setCurrentDirectory(m_fileChooser.getCurrentDirectory()
-						.toString());
+				setCurrentDirectory(m_fileChooser.getCurrentDirectory().toString());
 
 				retSaveAs = saveFileWriter(getFileName());
 			}
@@ -309,17 +296,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	public boolean openFile() {
 		boolean retOpenFile = false;
 		// Make the dialog visible as a modal (default) dialog box.
-		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "*" },
-				"All Files");
+		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "*" }, "All Files");
 
 		m_fileChooser.addChoosableFileFilter(filter);
 
 		if (null != getDirName()) {
-			m_fileChooser.setSelectedFile(new File(getDirName() + "//"
-					+ getFileName()));
+			m_fileChooser.setSelectedFile(new File(getDirName() + "//" + getFileName()));
 		} else {
-			m_fileChooser.setCurrentDirectory(new File(System
-					.getProperty("user.dir")));
+			m_fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		}
 
 		int returnVal = m_fileChooser.showOpenDialog(this.getRootPane());
@@ -332,8 +316,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 			// then do a regular saveFile
 			if (m_fileChooser.getSelectedFile().exists()) {
 				setFileName(m_fileChooser.getSelectedFile().getPath());
-				setCurrentDirectory(m_fileChooser.getCurrentDirectory()
-						.toString());
+				setCurrentDirectory(m_fileChooser.getCurrentDirectory().toString());
 
 				retOpenFile = openFileReader(getFileName());
 			}
@@ -399,8 +382,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 			result = true;
 		} catch (Throwable t) {
-			JOptionPane.showMessageDialog(this, "Could not save file "
-					+ fileName, "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Could not save file " + fileName, "Warning",
+					JOptionPane.WARNING_MESSAGE);
 
 			result = false;
 		}
@@ -426,8 +409,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 			result = true;
 		} catch (Throwable t) {
-			JOptionPane.showMessageDialog(this, "Could not save file "
-					+ fileName, "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Could not save file " + fileName, "Warning",
+					JOptionPane.WARNING_MESSAGE);
 
 			result = false;
 		}
@@ -468,16 +451,14 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 		try {
 			String text = getDocument().getText(0, getDocument().getLength());
-			int currstartPosition = text.toUpperCase().indexOf(findTextUpper,
-					startPosition);
+			int currstartPosition = text.toUpperCase().indexOf(findTextUpper, startPosition);
 
 			if (currstartPosition != -1) {
 				this.setSelectionStart(currstartPosition);
 				this.setSelectionEnd(currstartPosition + findTextUpper.length());
 				this.setSelectionColor(Color.red);
 
-				m_startPosition = currstartPosition + findTextUpper.length()
-						+ 1;
+				m_startPosition = currstartPosition + findTextUpper.length() + 1;
 			} else {
 				m_startPosition = 0;
 			}
@@ -509,8 +490,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 			is.reset();
 
-			if ((c1 == '{') && (c2 == '\\') && (c3 == 'r') && (c4 == 't')
-					&& (c5 == 'f')) {
+			if ((c1 == '{') && (c2 == '\\') && (c3 == 'r') && (c4 == 't') && (c5 == 'f')) {
 				type = "text/rtf";
 			}
 			// Add more heuristics here
@@ -528,7 +508,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mousePressed(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
@@ -545,7 +526,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
@@ -562,7 +544,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseClicked(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
@@ -581,7 +564,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseEntered(MouseEvent evt) {
 	}
@@ -595,7 +579,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseExited(MouseEvent evt) {
 	}
@@ -609,7 +594,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * 
 	 * @param point
 	 *            Point
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	protected void createPopup(Point point) {
 
@@ -684,7 +670,8 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	 * 
 	 * @param evt
 	 *            ActionEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		JMenuItem mi = (JMenuItem) evt.getSource();
@@ -781,37 +768,31 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 		if (null == textToReplace)
 			return;
 
-		String replaceText = (String) JOptionPane.showInputDialog(
-				this.getRootPane(), "Replace", "Replace selected text with",
-				JOptionPane.INFORMATION_MESSAGE, null, null, null);
+		String replaceText = (String) JOptionPane.showInputDialog(this.getRootPane(), "Replace",
+				"Replace selected text with", JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
 		try {
 			String text = getDocument().getText(0, getDocument().getLength());
-			int startPosition = text.toUpperCase().indexOf(textToReplace,
-					m_startPosition);
+			int startPosition = text.toUpperCase().indexOf(textToReplace, m_startPosition);
 
 			while (startPosition != -1) {
 				this.setSelectionStart(startPosition);
 				this.setSelectionEnd(startPosition + textToReplace.length());
 				this.setSelectionColor(Color.red);
 
-				int option = JOptionPane.showConfirmDialog(this.getRootPane(),
-						"Do you want to replace ?", "Replace ?",
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.INFORMATION_MESSAGE);
+				int option = JOptionPane.showConfirmDialog(this.getRootPane(), "Do you want to replace ?", "Replace ?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
 				if (option == JOptionPane.YES_OPTION) {
 					this.replaceSelection(replaceText);
 
 					m_startPosition = startPosition + replaceText.length() + 1;
 				} else {
-					m_startPosition = startPosition + textToReplace.length()
-							+ 1;
+					m_startPosition = startPosition + textToReplace.length() + 1;
 				}
 
 				text = getDocument().getText(0, getDocument().getLength());
-				startPosition = text.toUpperCase().indexOf(textToReplace,
-						m_startPosition);
+				startPosition = text.toUpperCase().indexOf(textToReplace, m_startPosition);
 			}
 
 			m_startPosition = 0;
@@ -822,18 +803,15 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 
 	private void find() {
 		String findText = null;
-		Object findObj = JOptionPane.showInputDialog(this.getRootPane(),
-				"Find ", "Find", JOptionPane.INFORMATION_MESSAGE, null, null,
-				this.getSelectedText());
+		Object findObj = JOptionPane.showInputDialog(this.getRootPane(), "Find ", "Find",
+				JOptionPane.INFORMATION_MESSAGE, null, null, this.getSelectedText());
 
 		if (findObj instanceof String) {
 			findText = ((String) findObj).toUpperCase();
 
 			try {
-				String text = getDocument().getText(0,
-						getDocument().getLength());
-				int startPosition = text.toUpperCase().indexOf(findText,
-						m_startPosition);
+				String text = getDocument().getText(0, getDocument().getLength());
+				int startPosition = text.toUpperCase().indexOf(findText, m_startPosition);
 
 				if (startPosition != -1) {
 					this.setSelectionStart(startPosition);
@@ -864,8 +842,7 @@ public class StreamEditorPane extends JEditorPane implements MouseListener,
 	private Component getComponentContainer(Component c) {
 		Component topLevel = c;
 
-		while ((topLevel != null) && !(topLevel instanceof JFrame)
-				&& !(topLevel instanceof JDialog)) {
+		while ((topLevel != null) && !(topLevel instanceof JFrame) && !(topLevel instanceof JDialog)) {
 			topLevel = topLevel.getParent();
 		}
 

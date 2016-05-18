@@ -105,11 +105,9 @@ public class PivotSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public PivotSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public PivotSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -136,11 +134,9 @@ public class PivotSeries extends IndicatorSeries {
 	 * @param bars
 	 *            Integer
 	 */
-	public PivotSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, boolean side, boolean quadratic, Integer bars) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public PivotSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart, boolean side, boolean quadratic, Integer bars) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.side = side;
 		this.quadratic = quadratic;
 		this.bars = bars;
@@ -175,13 +171,11 @@ public class PivotSeries extends IndicatorSeries {
 	 * @param pivotSide
 	 *            the pivotSide-value.
 	 */
-	public void add(RegularTimePeriod period, BigDecimal pivotPrice,
-			String pivotSide) {
+	public void add(RegularTimePeriod period, BigDecimal pivotPrice, String pivotSide) {
 		if (!this.isEmpty()) {
 			PivotItem item0 = (PivotItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new PivotItem(period, pivotPrice, pivotSide), true);
@@ -199,10 +193,8 @@ public class PivotSeries extends IndicatorSeries {
 	public void add(PivotItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			PivotItem item0 = (PivotItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -217,8 +209,7 @@ public class PivotSeries extends IndicatorSeries {
 	public Integer getBars() {
 		try {
 			if (null == this.bars)
-				this.bars = (Integer) CodeValue.getValueCode(BARS,
-						this.getCodeValues());
+				this.bars = (Integer) CodeValue.getValueCode(BARS, this.getCodeValues());
 		} catch (Exception e) {
 			this.bars = null;
 		}
@@ -244,8 +235,7 @@ public class PivotSeries extends IndicatorSeries {
 	public Boolean getSide() {
 		try {
 			if (null == this.side)
-				this.side = (Boolean) CodeValue.getValueCode(SIDE,
-						this.getCodeValues());
+				this.side = (Boolean) CodeValue.getValueCode(SIDE, this.getCodeValues());
 		} catch (Exception e) {
 			this.side = null;
 		}
@@ -271,8 +261,7 @@ public class PivotSeries extends IndicatorSeries {
 	public Boolean getQuadratic() {
 		try {
 			if (null == this.quadratic)
-				this.quadratic = (Boolean) CodeValue.getValueCode(QUADRATIC,
-						this.getCodeValues());
+				this.quadratic = (Boolean) CodeValue.getValueCode(QUADRATIC, this.getCodeValues());
 		} catch (Exception e) {
 			this.quadratic = null;
 		}
@@ -363,8 +352,7 @@ public class PivotSeries extends IndicatorSeries {
 				 * another for 5 bars.
 				 */
 
-				long time = (((CandlePeriod) candleItem.getPeriod())
-						.getDaySerialIndex());
+				long time = (((CandlePeriod) candleItem.getPeriod()).getDaySerialIndex());
 				userDataVector.put(time, new Pair(time, candleItem.getVwap()));
 			}
 
@@ -372,8 +360,7 @@ public class PivotSeries extends IndicatorSeries {
 			 * Calculate the new y points with the curve.
 			 */
 			if (this.getQuadratic()) {
-				calcPivot.calculatePivot(new ArrayList<Pair>(userDataVector
-						.values()));
+				calcPivot.calculatePivot(new ArrayList<Pair>(userDataVector.values()));
 			}
 
 			CandleItem prevCandle = null;
@@ -387,10 +374,9 @@ public class PivotSeries extends IndicatorSeries {
 					 * Set the side based on the Vwap
 					 */
 					if (null == side) {
-						if ((userDataVector.get(((CandlePeriod) candle
-								.getPeriod()).getDaySerialIndex()).y) < (userDataVector
-								.get(((CandlePeriod) prevCandle.getPeriod())
-										.getDaySerialIndex()).y)) {
+						if ((userDataVector
+								.get(((CandlePeriod) candle.getPeriod()).getDaySerialIndex()).y) < (userDataVector
+										.get(((CandlePeriod) prevCandle.getPeriod()).getDaySerialIndex()).y)) {
 							side = Side.BOT;
 							pivotSide = Side.BOT;
 						} else {
@@ -417,16 +403,14 @@ public class PivotSeries extends IndicatorSeries {
 						}
 					}
 
-					if (candle.getPeriod().getStart().getYear() == prevCandle
-							.getPeriod().getStart().getYear()
-							&& candle.getPeriod().getStart().getDayOfYear() == prevCandle
-									.getPeriod().getStart().getDayOfYear()) {
+					if (candle.getPeriod().getStart().getYear() == prevCandle.getPeriod().getStart().getYear()
+							&& candle.getPeriod().getStart().getDayOfYear() == prevCandle.getPeriod().getStart()
+									.getDayOfYear()) {
 
 						if (side.equals(Side.BOT)) {
-							if ((userDataVector.get(((CandlePeriod) candle
-									.getPeriod()).getDaySerialIndex()).y) < (userDataVector
-									.get(((CandlePeriod) prevCandle.getPeriod())
-											.getDaySerialIndex()).y)) {
+							if ((userDataVector
+									.get(((CandlePeriod) candle.getPeriod()).getDaySerialIndex()).y) < (userDataVector
+											.get(((CandlePeriod) prevCandle.getPeriod()).getDaySerialIndex()).y)) {
 								if (this.getSide()) {
 
 									if (i == (startBar - middleBar)) {
@@ -441,10 +425,9 @@ public class PivotSeries extends IndicatorSeries {
 								}
 							}
 						} else {
-							if ((userDataVector.get(((CandlePeriod) candle
-									.getPeriod()).getDaySerialIndex()).y) > (userDataVector
-									.get(((CandlePeriod) prevCandle.getPeriod())
-											.getDaySerialIndex()).y)) {
+							if ((userDataVector
+									.get(((CandlePeriod) candle.getPeriod()).getDaySerialIndex()).y) > (userDataVector
+											.get(((CandlePeriod) prevCandle.getPeriod()).getDaySerialIndex()).y)) {
 								if (this.getSide()) {
 									if (i == (startBar - middleBar)) {
 										pivot = true;
@@ -490,10 +473,8 @@ public class PivotSeries extends IndicatorSeries {
 			if (pivot && (null != pivotCandle)) {
 
 				try {
-					Entrylimit entryLimit = entryLimits.getValue(new Money(
-							pivotCandle.getVwap()));
-					Money pivotRange = new Money(Math.abs((pivotRangeCandle
-							.getVwap() - pivotCandle.getVwap())));
+					Entrylimit entryLimit = entryLimits.getValue(new Money(pivotCandle.getVwap()));
+					Money pivotRange = new Money(Math.abs((pivotRangeCandle.getVwap() - pivotCandle.getVwap())));
 
 					// _log.info("Pivot Date: "
 					// + pivotCandle.getPeriod()
@@ -507,17 +488,12 @@ public class PivotSeries extends IndicatorSeries {
 					// + pivotSide);
 					// _log.info("Pivot: " + calcPivot.toString());
 
-					if (null != entryLimit
-							&& entryLimit.getPivotRange().doubleValue() <= pivotRange
-									.doubleValue()) {
+					if (null != entryLimit && entryLimit.getPivotRange().doubleValue() <= pivotRange.doubleValue()) {
 						Money pivotPrice = new Money(pivotCandle.getVwap());
-						dataItem = new PivotItem(pivotCandle.getPeriod(),
-								pivotPrice.getBigDecimalValue(), pivotSide);
+						dataItem = new PivotItem(pivotCandle.getPeriod(), pivotPrice.getBigDecimalValue(), pivotSide);
 					}
 				} catch (Exception ex) {
-					_log.error(
-							"Error find Pivot Range Msg: " + ex.getMessage(),
-							ex);
+					_log.error("Error find Pivot Range Msg: " + ex.getMessage(), ex);
 				}
 			}
 		}
@@ -525,8 +501,7 @@ public class PivotSeries extends IndicatorSeries {
 			if (this.indexOf(dataItem.getPeriod()) < 0) {
 				this.add(dataItem, false);
 			} else {
-				PivotItem currDataItem = (PivotItem) this.getDataItem(this
-						.indexOf(dataItem.getPeriod()));
+				PivotItem currDataItem = (PivotItem) this.getDataItem(this.indexOf(dataItem.getPeriod()));
 				currDataItem.setPivotPrice(dataItem.getPivotPrice());
 				currDataItem.setPivotSide(dataItem.getPivotSide());
 			}
@@ -539,10 +514,8 @@ public class PivotSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			PivotItem dataItem = (PivotItem) this.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Pivot: "
-					+ dataItem.getPivotPrice() + " Side: "
-					+ dataItem.getPivotSide());
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Pivot: "
+					+ dataItem.getPivotPrice() + " Side: " + dataItem.getPivotSide());
 		}
 	}
 

@@ -65,8 +65,7 @@ public class DecodeToObject implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Object rVal = null;
 
 		if (valueToConvert instanceof Decode) {
@@ -88,9 +87,8 @@ public class DecodeToObject implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

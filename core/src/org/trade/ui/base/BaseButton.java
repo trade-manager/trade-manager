@@ -51,8 +51,7 @@ public class BaseButton extends JButton {
 	 * 
 	 */
 	private static final long serialVersionUID = -47827936580637959L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(BaseButton.class);
+	private final static Logger _log = LoggerFactory.getLogger(BaseButton.class);
 	protected MessageNotifier m_notifier = new MessageNotifier();
 	private String m_method = null;
 	private Object transferObject = null;
@@ -79,8 +78,7 @@ public class BaseButton extends JButton {
 	 * @param margin
 	 *            int
 	 */
-	public BaseButton(BasePanel basePanel,
-			BaseUIPropertyCodes basePropertyCodes, int margin) {
+	public BaseButton(BasePanel basePanel, BaseUIPropertyCodes basePropertyCodes, int margin) {
 		try {
 			if (basePanel != null) {
 				this.addMessageListener(basePanel);
@@ -124,8 +122,7 @@ public class BaseButton extends JButton {
 				this.addMessageListener(basePanel);
 			}
 
-			BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes
-					.newInstance(UICode);
+			BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes.newInstance(UICode);
 
 			if (basePropertyCodes.getImage().length() > 0) {
 				setIcon(ImageBuilder.getImageIcon(basePropertyCodes.getImage()));

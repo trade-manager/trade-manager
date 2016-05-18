@@ -81,8 +81,7 @@ public class SimpleXMLTreeViewPanel extends BasePanel {
 
 		final DOMTree m_tree = new DOMTree(this);
 
-		m_tree.getSelectionModel().setSelectionMode(
-				TreeSelectionModel.SINGLE_TREE_SELECTION);
+		m_tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		// Listen for when the selection changes, call nodeSelected(node)
 		m_tree.addTreeSelectionListener(new TreeSelectionListener() {
@@ -112,8 +111,7 @@ public class SimpleXMLTreeViewPanel extends BasePanel {
 			}
 		}, BorderLayout.CENTER);
 
-		treePanel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createTitledBorder("Tree View"),
+		treePanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Tree View"),
 				BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 
 		// refreshUI loads everthything !
@@ -151,8 +149,7 @@ public class SimpleXMLTreeViewPanel extends BasePanel {
 	public Document getRoot(String xml) {
 
 		if ((xml == null) || xml.equals("")) {
-			setErrorMessage("Error:",
-					" Invalid XML document could not get ROOT");
+			setErrorMessage("Error:", " Invalid XML document could not get ROOT");
 			return null;
 		}
 
@@ -171,13 +168,11 @@ public class SimpleXMLTreeViewPanel extends BasePanel {
 	}
 
 	public void setErrorMessage(String title, Throwable t) {
-		JOptionPane.showMessageDialog(this.getRootPane(), t.getMessage(),
-				title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this.getRootPane(), t.getMessage(), title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void setErrorMessage(String title, String message) {
-		JOptionPane.showMessageDialog(this.getRootPane(), message, title,
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this.getRootPane(), message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void doWindowOpen() {

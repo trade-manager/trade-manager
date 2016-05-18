@@ -58,8 +58,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
 	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable,
 	 *      Object, boolean, int, int)
 	 */
-	public Component getTableCellEditorComponent(JTable table, Object value,
-			boolean isSelected, int row, int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		if (isSelected) {
 			this.button.setBackground(table.getSelectionBackground());
 			this.button.setEnabled(true);

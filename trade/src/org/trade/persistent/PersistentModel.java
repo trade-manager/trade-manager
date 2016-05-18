@@ -72,8 +72,7 @@ public interface PersistentModel {
 	 *            Tradingday
 	 * @throws PersistentModelException
 	 */
-	void persistTradingday(Tradingday transientInstance)
-			throws PersistentModelException;
+	void persistTradingday(Tradingday transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method persistContract.
@@ -83,8 +82,7 @@ public interface PersistentModel {
 	 * @return Contract
 	 * @throws PersistentModelException
 	 */
-	Contract persistContract(Contract transientInstance)
-			throws PersistentModelException;
+	Contract persistContract(Contract transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method persistPortfolio.
@@ -95,8 +93,7 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 */
 
-	Portfolio persistPortfolio(Portfolio instance)
-			throws PersistentModelException;
+	Portfolio persistPortfolio(Portfolio instance) throws PersistentModelException;
 
 	/**
 	 * Method persistTradeOrder.
@@ -106,8 +103,7 @@ public interface PersistentModel {
 	 * @return TradeOrder
 	 * @throws PersistentModelException
 	 */
-	TradeOrder persistTradeOrder(TradeOrder transientInstance)
-			throws PersistentModelException;
+	TradeOrder persistTradeOrder(TradeOrder transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method persistTradeOrderfill.
@@ -117,8 +113,7 @@ public interface PersistentModel {
 	 * @return TradeOrder
 	 * @throws PersistentModelException
 	 */
-	TradeOrder persistTradeOrderfill(TradeOrder tradeOrder)
-			throws PersistentModelException;
+	TradeOrder persistTradeOrderfill(TradeOrder tradeOrder) throws PersistentModelException;
 
 	/**
 	 * Method persistCandleSeries.
@@ -127,8 +122,7 @@ public interface PersistentModel {
 	 *            CandleSeries
 	 * @throws PersistentModelException
 	 */
-	void persistCandleSeries(CandleSeries candleSeries)
-			throws PersistentModelException;
+	void persistCandleSeries(CandleSeries candleSeries) throws PersistentModelException;
 
 	/**
 	 * Method persistCandle.
@@ -158,8 +152,7 @@ public interface PersistentModel {
 	 * @return Account
 	 * @throws PersistentModelException
 	 */
-	Account findAccountByNumber(String accountNumber)
-			throws PersistentModelException;
+	Account findAccountByNumber(String accountNumber) throws PersistentModelException;
 
 	/**
 	 * Method findContractById.
@@ -169,8 +162,7 @@ public interface PersistentModel {
 	 * @return Contract
 	 * @throws PersistentModelException
 	 */
-	Contract findContractById(Integer idContract)
-			throws PersistentModelException;
+	Contract findContractById(Integer idContract) throws PersistentModelException;
 
 	/**
 	 * Method findTradeOrderById.
@@ -180,8 +172,7 @@ public interface PersistentModel {
 	 * @return TradeOrder
 	 * @throws PersistentModelException
 	 */
-	TradeOrder findTradeOrderById(Integer idTradeOrder)
-			throws PersistentModelException;
+	TradeOrder findTradeOrderById(Integer idTradeOrder) throws PersistentModelException;
 
 	/**
 	 * Method findContractByUniqueKey.
@@ -197,9 +188,8 @@ public interface PersistentModel {
 	 * @return Contract
 	 * @throws PersistentModelException
 	 */
-	Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, ZonedDateTime expiry)
-			throws PersistentModelException;
+	Contract findContractByUniqueKey(String SECType, String symbol, String exchange, String currency,
+			ZonedDateTime expiry) throws PersistentModelException;
 
 	/**
 	 * Method findTradestrategyById.
@@ -209,8 +199,7 @@ public interface PersistentModel {
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
-	Tradestrategy findTradestrategyById(Tradestrategy tradestrategy)
-			throws PersistentModelException;
+	Tradestrategy findTradestrategyById(Tradestrategy tradestrategy) throws PersistentModelException;
 
 	/**
 	 * Method findTradestrategyById.
@@ -220,8 +209,7 @@ public interface PersistentModel {
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
-	Tradestrategy findTradestrategyById(Integer idTradestrategy)
-			throws PersistentModelException;
+	Tradestrategy findTradestrategyById(Integer idTradestrategy) throws PersistentModelException;
 
 	/**
 	 * Method existTradestrategyById.
@@ -241,8 +229,7 @@ public interface PersistentModel {
 	 * @return TradestrategyLite
 	 * @throws PersistentModelException
 	 */
-	TradestrategyLite findTradestrategyLiteById(Integer id)
-			throws PersistentModelException;
+	TradestrategyLite findTradestrategyLiteById(Integer id) throws PersistentModelException;
 
 	/**
 	 * Method findPositionOrdersByTradestrategyId.
@@ -252,8 +239,7 @@ public interface PersistentModel {
 	 * @return PositionOrders
 	 * @throws PersistentModelException
 	 */
-	TradestrategyOrders findPositionOrdersByTradestrategyId(
-			Integer idTradestrategy) throws PersistentModelException;
+	TradestrategyOrders findPositionOrdersByTradestrategyId(Integer idTradestrategy) throws PersistentModelException;
 
 	/**
 	 * Method refreshPositionOrdersByTradestrategyId.
@@ -265,8 +251,8 @@ public interface PersistentModel {
 	 * @throws PersistentModelException
 	 * @see org.trade.persistent.PersistentModel#findPositionOrdersById(Integer)
 	 */
-	TradestrategyOrders refreshPositionOrdersByTradestrategyId(
-			TradestrategyOrders positionOrders) throws PersistentModelException;
+	TradestrategyOrders refreshPositionOrdersByTradestrategyId(TradestrategyOrders positionOrders)
+			throws PersistentModelException;
 
 	/**
 	 * Method findTradestrategyByUniqueKeys.
@@ -282,9 +268,8 @@ public interface PersistentModel {
 	 * @return Tradestrategy
 	 * @throws PersistentModelException
 	 */
-	Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open,
-			String strategy, Integer idContract, String portfolioName)
-			throws PersistentModelException;
+	Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open, String strategy, Integer idContract,
+			String portfolioName) throws PersistentModelException;
 
 	/**
 	 * Method findTradestrategyDistinctByDateRange.
@@ -295,8 +280,7 @@ public interface PersistentModel {
 	 *            ZonedDateTime
 	 * @return List<Tradestrategy>
 	 */
-	List<Tradestrategy> findTradestrategyDistinctByDateRange(
-			ZonedDateTime fromOpen, ZonedDateTime toOpen);
+	List<Tradestrategy> findTradestrategyDistinctByDateRange(ZonedDateTime fromOpen, ZonedDateTime toOpen);
 
 	/**
 	 * Method findTradestrategyContractDistinctByDateRange.
@@ -307,8 +291,7 @@ public interface PersistentModel {
 	 *            Date
 	 * @return List<Tradestrategy>
 	 */
-	List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
-			ZonedDateTime fromOpen, ZonedDateTime toOpen);
+	List<Tradestrategy> findTradestrategyContractDistinctByDateRange(ZonedDateTime fromOpen, ZonedDateTime toOpen);
 
 	/**
 	 * Method findAllTradestrategies.
@@ -316,8 +299,7 @@ public interface PersistentModel {
 	 * @return List<Tradestrategy>
 	 * @throws PersistentModelException
 	 */
-	List<Tradestrategy> findAllTradestrategies()
-			throws PersistentModelException;
+	List<Tradestrategy> findAllTradestrategies() throws PersistentModelException;
 
 	/**
 	 * Method findTradePositionById.
@@ -327,8 +309,7 @@ public interface PersistentModel {
 	 * @return TradePosition
 	 * @throws PersistentModelException
 	 */
-	TradePosition findTradePositionById(Integer idTradePosition)
-			throws PersistentModelException;
+	TradePosition findTradePositionById(Integer idTradePosition) throws PersistentModelException;
 
 	/**
 	 * Method findPortfolioById.
@@ -366,8 +347,7 @@ public interface PersistentModel {
 	 *            Portfolio
 	 * @throws PersistentModelException
 	 */
-	void resetDefaultPortfolio(Portfolio transientInstance)
-			throws PersistentModelException;
+	void resetDefaultPortfolio(Portfolio transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method removeTradingdayTradeOrders.
@@ -376,8 +356,7 @@ public interface PersistentModel {
 	 *            Tradingday
 	 * @throws PersistentModelException
 	 */
-	void removeTradingdayTradeOrders(Tradingday transientInstance)
-			throws PersistentModelException;
+	void removeTradingdayTradeOrders(Tradingday transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method removeTradestrategyTradeOrders.
@@ -386,8 +365,7 @@ public interface PersistentModel {
 	 *            Tradestrategy
 	 * @throws PersistentModelException
 	 */
-	void removeTradestrategyTradeOrders(Tradestrategy transientInstance)
-			throws PersistentModelException;
+	void removeTradestrategyTradeOrders(Tradestrategy transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method findTradeOrderByKey.
@@ -397,8 +375,7 @@ public interface PersistentModel {
 	 * @return TradeOrder
 	 * @throws PersistentModelException
 	 */
-	TradeOrder findTradeOrderByKey(Integer orderKey)
-			throws PersistentModelException;
+	TradeOrder findTradeOrderByKey(Integer orderKey) throws PersistentModelException;
 
 	/**
 	 * Method findTradeOrderfillByExecId.
@@ -408,8 +385,7 @@ public interface PersistentModel {
 	 * @return TradeOrderfill
 	 * @throws PersistentModelException
 	 */
-	TradeOrderfill findTradeOrderfillByExecId(String execId)
-			throws PersistentModelException;
+	TradeOrderfill findTradeOrderfillByExecId(String execId) throws PersistentModelException;
 
 	/**
 	 * Method findTradeOrderByMaxKey.
@@ -427,8 +403,7 @@ public interface PersistentModel {
 	 * @return Tradingday
 	 * @throws PersistentModelException
 	 */
-	Tradingday findTradingdayById(Integer idTradingday)
-			throws PersistentModelException;
+	Tradingday findTradingdayById(Integer idTradingday) throws PersistentModelException;
 
 	/**
 	 * Method findTradingdayByOpenDate.
@@ -440,8 +415,8 @@ public interface PersistentModel {
 	 * @return Tradingday
 	 * @throws PersistentModelException
 	 */
-	Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate,
-			ZonedDateTime closeDate) throws PersistentModelException;
+	Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate, ZonedDateTime closeDate)
+			throws PersistentModelException;
 
 	/**
 	 * Method findTradingdaysByDateRange.
@@ -453,8 +428,8 @@ public interface PersistentModel {
 	 * @return Tradingdays
 	 * @throws PersistentModelException
 	 */
-	Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate,
-			ZonedDateTime endDate) throws PersistentModelException;
+	Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate, ZonedDateTime endDate)
+			throws PersistentModelException;
 
 	/**
 	 * Method findTradelogReport.
@@ -474,9 +449,8 @@ public interface PersistentModel {
 	 * @return TradelogReport
 	 * @throws PersistentModelException
 	 */
-	TradelogReport findTradelogReport(Portfolio portfolio, ZonedDateTime start,
-			ZonedDateTime end, boolean filter, String symbol,
-			BigDecimal winLossAmount) throws PersistentModelException;
+	TradelogReport findTradelogReport(Portfolio portfolio, ZonedDateTime start, ZonedDateTime end, boolean filter,
+			String symbol, BigDecimal winLossAmount) throws PersistentModelException;
 
 	/**
 	 * Method findCandlesByContractDateRangeBarSize.
@@ -492,9 +466,8 @@ public interface PersistentModel {
 	 * @return List<Candle>
 	 * @throws PersistentModelException
 	 */
-	List<Candle> findCandlesByContractDateRangeBarSize(Integer idContract,
-			ZonedDateTime startDate, ZonedDateTime endDate, Integer barSize)
-			throws PersistentModelException;
+	List<Candle> findCandlesByContractDateRangeBarSize(Integer idContract, ZonedDateTime startDate,
+			ZonedDateTime endDate, Integer barSize) throws PersistentModelException;
 
 	/**
 	 * Method findCandleCount.
@@ -506,8 +479,7 @@ public interface PersistentModel {
 	 * @return Long
 	 * @throws PersistentModelException
 	 */
-	Long findCandleCount(Integer idTradingday, Integer idContract)
-			throws PersistentModelException;
+	Long findCandleCount(Integer idTradingday, Integer idContract) throws PersistentModelException;
 
 	/**
 	 * Method findRuleById.
@@ -527,8 +499,7 @@ public interface PersistentModel {
 	 * @return Integer
 	 * @throws PersistentModelException
 	 */
-	Integer findRuleByMaxVersion(Strategy strategy)
-			throws PersistentModelException;
+	Integer findRuleByMaxVersion(Strategy strategy) throws PersistentModelException;
 
 	/**
 	 * Method findStrategyById.
@@ -538,8 +509,7 @@ public interface PersistentModel {
 	 * @return Strategy
 	 * @throws PersistentModelException
 	 */
-	Strategy findStrategyById(Integer idStrategy)
-			throws PersistentModelException;
+	Strategy findStrategyById(Integer idStrategy) throws PersistentModelException;
 
 	/**
 	 * Method findStrategyByName.
@@ -567,8 +537,7 @@ public interface PersistentModel {
 	 * @return Aspects
 	 * @throws PersistentModelException
 	 */
-	Aspects findAspectsByClassName(String aspectClassName)
-			throws PersistentModelException;
+	Aspects findAspectsByClassName(String aspectClassName) throws PersistentModelException;
 
 	/**
 	 * Method findAspectsByClassNameFieldName.
@@ -582,8 +551,8 @@ public interface PersistentModel {
 	 * @return Aspects
 	 * @throws PersistentModelException
 	 */
-	Aspects findAspectsByClassNameFieldName(String className, String fieldname,
-			String value) throws PersistentModelException;
+	Aspects findAspectsByClassNameFieldName(String className, String fieldname, String value)
+			throws PersistentModelException;
 
 	/**
 	 * Method findAspectById.
@@ -593,8 +562,7 @@ public interface PersistentModel {
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
-	Aspect findAspectById(Aspect transientInstance)
-			throws PersistentModelException;
+	Aspect findAspectById(Aspect transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method persistAspect.
@@ -604,8 +572,7 @@ public interface PersistentModel {
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
-	<T extends Aspect> T persistAspect(T transientInstance)
-			throws PersistentModelException;
+	<T extends Aspect> T persistAspect(T transientInstance) throws PersistentModelException;
 
 	/**
 	 * Method persistAspect.
@@ -617,8 +584,7 @@ public interface PersistentModel {
 	 * @return Aspect
 	 * @throws PersistentModelException
 	 */
-	<T extends Aspect> T persistAspect(T transientInstance,
-			boolean overrideVersion) throws PersistentModelException;
+	<T extends Aspect> T persistAspect(T transientInstance, boolean overrideVersion) throws PersistentModelException;
 
 	/**
 	 * Method removeAspect.
@@ -640,8 +606,8 @@ public interface PersistentModel {
 	 *            Tradingday
 	 * @throws PersistentModelException
 	 */
-	void reassignStrategy(Strategy fromStrategy, Strategy toStrategy,
-			Tradingday tradingday) throws PersistentModelException;
+	void reassignStrategy(Strategy fromStrategy, Strategy toStrategy, Tradingday tradingday)
+			throws PersistentModelException;
 
 	/**
 	 * Method findCodeTypeByNameType.
@@ -653,6 +619,5 @@ public interface PersistentModel {
 	 * @return CodeType
 	 * @throws PersistentModelException
 	 */
-	public CodeType findCodeTypeByNameType(String name, String type)
-			throws PersistentModelException;
+	public CodeType findCodeTypeByNameType(String name, String type) throws PersistentModelException;
 }

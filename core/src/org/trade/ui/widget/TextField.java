@@ -188,8 +188,7 @@ public class TextField extends JTextField implements FocusListener {
 		 * @see javax.swing.text.Document#insertString(int, String,
 		 *      AttributeSet)
 		 */
-		public void insertString(int offs, String str, AttributeSet a)
-				throws BadLocationException {
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 			if (str != null) {
 				if (!(editMask.isEmpty())) {
 					Character selected = editMask.get(new Integer(offs));

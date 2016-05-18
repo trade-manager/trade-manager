@@ -69,10 +69,9 @@ public class TradelogSummaryTableModel extends TableModel {
 	public static final String POSITION_COUNT = "Positions";
 	public static final String CONTRACT_COUNT = "Contracts";
 
-	private static final String[] columnHeaderToolTip = { null,
-			"% wins vs loss",
-			"Simple sharpe ratio (sum $wins/#wins)/(sum $loss/#loss)", null,
-			null, null, null, null, null, null, null, null, null };
+	private static final String[] columnHeaderToolTip = { null, "% wins vs loss",
+			"Simple sharpe ratio (sum $wins/#wins)/(sum $loss/#loss)", null, null, null, null, null, null, null, null,
+			null, null };
 
 	private TradelogReport m_data = null;
 
@@ -80,7 +79,8 @@ public class TradelogSummaryTableModel extends TableModel {
 	 * OrderModel() -
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public TradelogSummaryTableModel() {
 		super(columnHeaderToolTip);
@@ -129,7 +129,8 @@ public class TradelogSummaryTableModel extends TableModel {
 	 * 
 	 * @param data
 	 *            TradelogReport
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public void setData(TradelogReport data) {
@@ -155,7 +156,8 @@ public class TradelogSummaryTableModel extends TableModel {
 	 *            int
 	 * @param column
 	 *            int
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public void populateDAO(Object value, int row, int column) {
@@ -225,7 +227,8 @@ public class TradelogSummaryTableModel extends TableModel {
 	 * 
 	 * @param selectedRow
 	 *            int
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void deleteRow(int selectedRow) {
 

@@ -61,8 +61,7 @@ public class DateToObject implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Object rVal = null;
 
 		if (valueToConvert instanceof Date) {
@@ -71,16 +70,14 @@ public class DateToObject implements JavaDynamicTypeConverter {
 			if (String.class.equals(targetType)) {
 				rVal = ((Date) valueToConvert).toString();
 			} else {
-				rVal = JavaTypeTranslator.convert(targetType,
-						((Date) valueToConvert).getDate());
+				rVal = JavaTypeTranslator.convert(targetType, ((Date) valueToConvert).getDate());
 			}
 		} else if (valueToConvert instanceof JavaFormatForObject) {
 			// If the target is a Formatted object
 			// Get the object and translate it to a formatted date
 			// representation
 			// before trying to translate it to the target type
-			Object getFor = ((JavaFormatForObject) valueToConvert)
-					.getForObject();
+			Object getFor = ((JavaFormatForObject) valueToConvert).getForObject();
 			String format = ((JavaFormatForObject) valueToConvert).getFormat();
 			if (getFor instanceof Date) {
 				try {
@@ -91,16 +88,13 @@ public class DateToObject implements JavaDynamicTypeConverter {
 					rVal = JavaTypeTranslator.convert(targetType, sDate);
 				} catch (Exception ex) {
 					throw new JavaTypeTranslatorException(ex,
-							"Unable to convert Date to GMT Date representation using format '"
-									+ format + "'");
+							"Unable to convert Date to GMT Date representation using format '" + format + "'");
 				}
 			} else {
-				throw new JavaTypeTranslatorException(
-						"Value of JavaFormatForObject.getForObject() must be a Date");
+				throw new JavaTypeTranslatorException("Value of JavaFormatForObject.getForObject() must be a Date");
 			}
 		} else {
-			throw new JavaTypeTranslatorException(
-					"Value to convert must be a Date");
+			throw new JavaTypeTranslatorException("Value to convert must be a Date");
 		}
 
 		return (rVal);
@@ -114,15 +108,13 @@ public class DateToObject implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;
-		if ((valueToConvert instanceof Date)
-				|| ((valueToConvert instanceof JavaFormatForObject) && (((JavaFormatForObject) valueToConvert)
-						.getForObject() instanceof Date))) {
+		if ((valueToConvert instanceof Date) || ((valueToConvert instanceof JavaFormatForObject)
+				&& (((JavaFormatForObject) valueToConvert).getForObject() instanceof Date))) {
 			rVal = true;
 		}
 

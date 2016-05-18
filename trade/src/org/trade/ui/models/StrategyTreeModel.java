@@ -54,8 +54,7 @@ public class StrategyTreeModel extends DefaultTreeModel implements Serializable 
 
 	private static final long serialVersionUID = -5543286790183657148L;
 
-	static DefaultMutableTreeNode m_root = new DefaultMutableTreeNode(
-			"Strategies");
+	static DefaultMutableTreeNode m_root = new DefaultMutableTreeNode("Strategies");
 	private final Hashtable<MutableTreeNode, Object> m_nodeMap = new Hashtable<MutableTreeNode, Object>();
 
 	/**
@@ -82,8 +81,7 @@ public class StrategyTreeModel extends DefaultTreeModel implements Serializable 
 		((DefaultMutableTreeNode) getRoot()).removeAllChildren();
 		m_nodeMap.clear();
 		buildTree(strategies);
-		fireTreeStructureChanged(this, new Object[] { getRoot() }, new int[0],
-				new Object[0]);
+		fireTreeStructureChanged(this, new Object[] { getRoot() }, new int[0], new Object[0]);
 	}
 
 	/**

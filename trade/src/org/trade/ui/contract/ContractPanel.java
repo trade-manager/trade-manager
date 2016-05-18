@@ -128,8 +128,7 @@ import org.trade.ui.widget.DecodeComboBoxRenderer;
 
 /**
  */
-public class ContractPanel extends BasePanel implements TreeSelectionListener,
-		ChangeListener, ItemListener {
+public class ContractPanel extends BasePanel implements TreeSelectionListener, ChangeListener, ItemListener {
 	/**
 	 * 
 	 */
@@ -155,8 +154,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	private DecodeComboBoxEditor periodEditorComboBox = null;
 	private Integer backfillOffsetDays = 0;
 	private Boolean connected = new Boolean(false);
-	private static final NumberFormat currencyFormater = NumberFormat
-			.getCurrencyInstance();
+	private static final NumberFormat currencyFormater = NumberFormat.getCurrencyInstance();
 	private static final SimpleAttributeSet bold = new SimpleAttributeSet();
 	private static final SimpleAttributeSet colorRedAttr = new SimpleAttributeSet();
 	private static final SimpleAttributeSet colorGreenAttr = new SimpleAttributeSet();
@@ -178,8 +176,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            PersistentModel
 	 */
 
-	public ContractPanel(Tradingdays tradingdays, TabbedAppPanel controller,
-			PersistentModel tradePersistentModel) {
+	public ContractPanel(Tradingdays tradingdays, TabbedAppPanel controller, PersistentModel tradePersistentModel) {
 
 		try {
 			if (null != getMenu())
@@ -189,39 +186,28 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			m_tradingdays = tradingdays;
 
 			currencyFormater.setMinimumFractionDigits(2);
-			backfillOffsetDays = ConfigProperties
-					.getPropAsInt("trade.backfill.offsetDays");
-			propertiesButton = new BaseButton(this,
-					BaseUIPropertyCodes.PROPERTIES, 0);
+			backfillOffsetDays = ConfigProperties.getPropAsInt("trade.backfill.offsetDays");
+			propertiesButton = new BaseButton(this, BaseUIPropertyCodes.PROPERTIES, 0);
 			propertiesButton.setEnabled(false);
-			executeButton = new BaseButton(controller,
-					BaseUIPropertyCodes.EXECUTE);
+			executeButton = new BaseButton(controller, BaseUIPropertyCodes.EXECUTE);
 			executeButton.addMessageListener(this);
-			brokerDataButton = new BaseButton(controller,
-					BaseUIPropertyCodes.DATA);
+			brokerDataButton = new BaseButton(controller, BaseUIPropertyCodes.DATA);
 			brokerDataButton.setToolTipText("Get Chart Data");
-			cancelButton = new BaseButton(controller,
-					BaseUIPropertyCodes.CANCEL);
+			cancelButton = new BaseButton(controller, BaseUIPropertyCodes.CANCEL);
 			cancelButton.setToolTipText("Cancel Order");
 			cancelButton.setTransferObject(new Aspects());
 			cancelButton.addMessageListener(this);
-			cancelStrategiesButton = new BaseButton(controller,
-					BaseUIPropertyCodes.CANCEL);
+			cancelStrategiesButton = new BaseButton(controller, BaseUIPropertyCodes.CANCEL);
 			cancelStrategiesButton.setToolTipText("Cancel Strategy");
 			refreshButton = new BaseButton(this, BaseUIPropertyCodes.REFRESH);
 			closeAllButton = new BaseButton(this, BaseUIPropertyCodes.CLOSE_ALL);
-			closeAllPositionsButton = new BaseButton(controller,
-					BaseUIPropertyCodes.CLOSE_ALL);
-			closeAllPositionsButton
-					.setToolTipText("Cancel Orders & Close Position");
+			closeAllPositionsButton = new BaseButton(controller, BaseUIPropertyCodes.CLOSE_ALL);
+			closeAllPositionsButton.setToolTipText("Cancel Orders & Close Position");
 			m_tradeOrderModel = new TradeOrderTableModel();
 			m_tradeOrderTable = new TradeOrderTable(m_tradeOrderModel);
-			m_tradeOrderTable.getSelectionModel().addListSelectionListener(
-					new TradeOrderTableRowListener());
-			m_tradeOrderTable.setDefaultEditor(TradeOrder.class,
-					new ButtonEditor(propertiesButton));
-			m_tradeOrderTable.setDefaultRenderer(TradeOrder.class,
-					new ButtonRenderer(BaseUIPropertyCodes.PROPERTIES));
+			m_tradeOrderTable.getSelectionModel().addListSelectionListener(new TradeOrderTableRowListener());
+			m_tradeOrderTable.setDefaultEditor(TradeOrder.class, new ButtonEditor(propertiesButton));
+			m_tradeOrderTable.setDefaultRenderer(TradeOrder.class, new ButtonRenderer(BaseUIPropertyCodes.PROPERTIES));
 			m_treeModel = new TradingdayTreeModel(m_tradingdays);
 			m_tree = new Tree(m_treeModel);
 			// Listen for when the selection changes.
@@ -234,16 +220,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jScrollPane1Tree.getViewport().add(m_tree, BorderLayout.CENTER);
 			JPanel jPanel2 = new JPanel(new BorderLayout());
 			jPanel2.add(jScrollPane1Tree, BorderLayout.CENTER);
-			jPanel2.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createTitledBorder("Tradingday"),
+			jPanel2.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Tradingday"),
 					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 			jPanel1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel2.add(jPanel1, BorderLayout.NORTH);
 
 			// Chart Panel
 			JLabel jLabelPeriod = new JLabel("Period:");
-			periodEditorComboBox = new DecodeComboBoxEditor(
-					(new BarSize()).getCodesDecodes());
+			periodEditorComboBox = new DecodeComboBoxEditor((new BarSize()).getCodesDecodes());
 			DecodeComboBoxRenderer periodRenderer = new DecodeComboBoxRenderer();
 			periodEditorComboBox.setRenderer(periodRenderer);
 			periodEditorComboBox.setItem(BarSize.newInstance(BarSize.FIVE_MIN));
@@ -295,8 +279,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			JPanel jPanel19 = new JPanel(new BorderLayout());
 			jPanel19.add(jToolBar1, BorderLayout.WEST);
 			JScrollPane jScrollPane2 = new JScrollPane();
-			jScrollPane2.getViewport().add(m_tradeOrderTable,
-					BorderLayout.CENTER);
+			jScrollPane2.getViewport().add(m_tradeOrderTable, BorderLayout.CENTER);
 			jScrollPane2.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			JPanel jPanel16 = new JPanel(new BorderLayout());
 			Dimension d = m_tradeOrderTable.getPreferredSize();
@@ -310,23 +293,20 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			jPanel16.add(jScrollPane2, BorderLayout.CENTER);
 
 			// use the new JSplitPane to dynamically resize...
-			JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
-					jPanel9, jPanel16);
+			JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, jPanel9, jPanel16);
 			split.setOneTouchExpandable(true);
 			split.setResizeWeight(0.8d);
 			JPanel jPanel15 = new JPanel(new BorderLayout());
 			jPanel15.add(split, BorderLayout.CENTER);
 
-			JSplitPane mainSplitPane = new JSplitPane(
-					JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
+			JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, jPanel2, jPanel15);
 			mainSplitPane.setOneTouchExpandable(true);
 			mainSplitPane.setResizeWeight(0.15d);
 			this.add(mainSplitPane, BorderLayout.CENTER);
 			m_jTabbedPaneContract.addChangeListener(this);
 			this.reFreshTab();
 		} catch (Exception ex) {
-			this.setErrorMessage("Error during initialization.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error during initialization.", ex.getMessage(), ex);
 		}
 	}
 
@@ -348,13 +328,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	public void doProperties(final TradeOrder instance) {
 		try {
 
-			if (null == instance.getTradestrategy().getPortfolio()
-					.getIndividualAccount()) {
-				AllocationMethodPanel allocationMethodPanel = new AllocationMethodPanel(
-						instance);
+			if (null == instance.getTradestrategy().getPortfolio().getIndividualAccount()) {
+				AllocationMethodPanel allocationMethodPanel = new AllocationMethodPanel(instance);
 				if (null != allocationMethodPanel) {
-					TextDialog dialog = new TextDialog(this.getFrame(),
-							"FA Account Properties", true,
+					TextDialog dialog = new TextDialog(this.getFrame(), "FA Account Properties", true,
 							allocationMethodPanel);
 					dialog.setLocationRelativeTo(this);
 					dialog.setVisible(true);
@@ -368,28 +345,22 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 							if (null != instance.getFAGroup()) {
 								instance.setAccountNumber(null);
 							} else {
-								instance.setAccountNumber(instance
-										.getTradestrategy().getPortfolio()
-										.getIndividualAccount()
-										.getAccountNumber());
+								instance.setAccountNumber(instance.getTradestrategy().getPortfolio()
+										.getIndividualAccount().getAccountNumber());
 							}
 						}
 					}
 				}
 			} else {
-				this.setStatusBarMessage(
-						"No properties for Individual accounts ...\n",
-						BasePanel.INFORMATION);
+				this.setStatusBarMessage("No properties for Individual accounts ...\n", BasePanel.INFORMATION);
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error setting FA properties.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error setting FA properties.", ex.getMessage(), ex);
 		}
 	}
 
 	public void doCancel(final Aspects aspects) {
-		this.setStatusBarMessage("Please select an order to cancel ...\n",
-				BasePanel.INFORMATION);
+		this.setStatusBarMessage("Please select an order to cancel ...\n", BasePanel.INFORMATION);
 	}
 
 	public void doCloseAll() {
@@ -400,8 +371,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			}
 			m_tree.clearSelection();
 		} catch (Exception ex) {
-			this.setErrorMessage("Error removing all tabs.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Error removing all tabs.", ex.getMessage(), ex);
 		}
 	}
 
@@ -413,11 +383,9 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 */
 	public void doClose(final Tradestrategy tradestrategy) {
 		for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
-			ChartPanel chart = (ChartPanel) m_jTabbedPaneContract
-					.getComponentAt(index);
+			ChartPanel chart = (ChartPanel) m_jTabbedPaneContract.getComponentAt(index);
 			if ((null != chart)
-					&& chart.getTradestrategy().getIdTradeStrategy()
-							.equals(tradestrategy.getIdTradeStrategy())) {
+					&& chart.getTradestrategy().getIdTradeStrategy().equals(tradestrategy.getIdTradeStrategy())) {
 				doClose(index);
 				break;
 			}
@@ -431,10 +399,8 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            Integer
 	 */
 	public void doClose(Integer index) {
-		ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract
-				.getComponentAt(index);
-		TabbedCloseButton tabbedCloseButton = (TabbedCloseButton) m_jTabbedPaneContract
-				.getTabComponentAt(index);
+		ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract.getComponentAt(index);
+		TabbedCloseButton tabbedCloseButton = (TabbedCloseButton) m_jTabbedPaneContract.getTabComponentAt(index);
 		tabbedCloseButton.removeMessageListener(this);
 		chartPanel.getCandlestickChart().removeChart();
 		chartPanel = null;
@@ -446,8 +412,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	}
 
 	public void doExecute() {
-		this.setStatusBarMessage("Please select an order to execute ...\n",
-				BasePanel.INFORMATION);
+		this.setStatusBarMessage("Please select an order to execute ...\n", BasePanel.INFORMATION);
 	}
 
 	public void doWindowOpen() {
@@ -462,8 +427,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		try {
 			Object selectedObject = brokerDataButton.getTransferObject();
 			if (null == selectedObject) {
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) m_tree
-						.getLastSelectedPathComponent();
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent();
 				if (null != selectedNode)
 					selectedObject = selectedNode.getUserObject();
 			}
@@ -493,8 +457,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	}
 
 	public void doRefresh() {
-		ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
-				.getSelectedComponent();
+		ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract.getSelectedComponent();
 		if (null != currentTab)
 			doRefresh(currentTab.getTradestrategy());
 	}
@@ -510,13 +473,10 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
-						getFrame().setCursor(
-								Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-						ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
-								.getSelectedComponent();
+						getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract.getSelectedComponent();
 						if (null != currentTab) {
-							if (currentTab.getTradestrategy().equals(
-									tradestrategy)) {
+							if (currentTab.getTradestrategy().equals(tradestrategy)) {
 								reFreshTab();
 							}
 						}
@@ -527,8 +487,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			});
 
 		} catch (Exception ex) {
-			setErrorMessage("Error refreshing Tradestrategy.", ex.getMessage(),
-					ex);
+			setErrorMessage("Error refreshing Tradestrategy.", ex.getMessage(), ex);
 		}
 	}
 
@@ -552,29 +511,23 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				return;
 			}
 
-			Object nodeInfo = ((DefaultMutableTreeNode) path
-					.getLastPathComponent()).getUserObject();
+			Object nodeInfo = ((DefaultMutableTreeNode) path.getLastPathComponent()).getUserObject();
 
 			if (nodeInfo instanceof Tradestrategy) {
 				Tradestrategy tradestrategy = (Tradestrategy) nodeInfo;
-				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy
-						.getBarSize()));
+				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy.getBarSize()));
 				int currentTabIndex = -1;
 				for (int index = 0; index < m_jTabbedPaneContract.getTabCount(); index++) {
-					ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract
-							.getComponentAt(index);
-					if ((null != chartPanel)
-							&& chartPanel.getTradestrategy()
-									.getIdTradeStrategy()
-									.equals(tradestrategy.getIdTradeStrategy())) {
+					ChartPanel chartPanel = (ChartPanel) m_jTabbedPaneContract.getComponentAt(index);
+					if ((null != chartPanel) && chartPanel.getTradestrategy().getIdTradeStrategy()
+							.equals(tradestrategy.getIdTradeStrategy())) {
 						currentTabIndex = index;
 						break;
 					}
 				}
 				if (currentTabIndex == -1) {
 					ChartPanel chartPanel = createChartPanel(tradestrategy);
-					m_jTabbedPaneContract.add(chartPanel.getCandlestickChart()
-							.getName(), chartPanel);
+					m_jTabbedPaneContract.add(chartPanel.getCandlestickChart().getName(), chartPanel);
 					currentTabIndex = m_jTabbedPaneContract.getTabCount() - 1;
 					m_jTabbedPaneContract.setTabComponentAt(currentTabIndex,
 							new TabbedCloseButton(m_jTabbedPaneContract, this));
@@ -582,8 +535,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				m_jTabbedPaneContract.setSelectedIndex(currentTabIndex);
 			}
 		} catch (PersistentModelException ex) {
-			setErrorMessage("Error refreshing Tradestrategy.", ex.getMessage(),
-					ex);
+			setErrorMessage("Error refreshing Tradestrategy.", ex.getMessage(), ex);
 		} catch (Exception ex) {
 			setErrorMessage("Error enabling chart.", ex.getMessage(), ex);
 		}
@@ -639,26 +591,20 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 
-			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
-					.getSelectedComponent();
+			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract.getSelectedComponent();
 			Integer newPeriod = new Integer(((BarSize) e.getItem()).getCode());
 
 			if (null != currentTab && !this.isConnected()) {
 				if (newPeriod.equals(BarSize.DAY)) {
 					newPeriod = currentTab.getTradestrategy().getBarSize();
 				}
-				if (!newPeriod.equals(currentTab.getTradestrategy()
-						.getStrategyData().getCandleDataset().getSeries(0)
-						.getBarSize())) {
-					if (newPeriod.compareTo(currentTab.getTradestrategy()
-							.getBarSize()) > -1) {
-						currentTab.getTradestrategy().getStrategyData()
-								.changeCandleSeriesPeriod(newPeriod);
+				if (!newPeriod.equals(
+						currentTab.getTradestrategy().getStrategyData().getCandleDataset().getSeries(0).getBarSize())) {
+					if (newPeriod.compareTo(currentTab.getTradestrategy().getBarSize()) > -1) {
+						currentTab.getTradestrategy().getStrategyData().changeCandleSeriesPeriod(newPeriod);
 						this.clearStatusBarMessage();
 					} else {
-						this.setStatusBarMessage(
-								"Time period not supported by candle series",
-								BasePanel.WARNING);
+						this.setStatusBarMessage("Time period not supported by candle series", BasePanel.WARNING);
 					}
 				}
 			}
@@ -682,8 +628,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 * @return ChartPanel
 	 * @throws PersistentModelException
 	 */
-	private ChartPanel createChartPanel(Tradestrategy tradestrategy)
-			throws PersistentModelException {
+	private ChartPanel createChartPanel(Tradestrategy tradestrategy) throws PersistentModelException {
 
 		ZonedDateTime startDate = null;
 		ZonedDateTime endDate = null;
@@ -693,26 +638,20 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		}
 
 		if (tradestrategy.getStrategyData().getBaseCandleSeries().isEmpty()) {
-			endDate = TradingCalendar.getDateAtTime(TradingCalendar
-					.addTradingDays(tradestrategy.getTradingday().getClose(),
-							backfillOffsetDays), tradestrategy.getTradingday()
-					.getClose());
+			endDate = TradingCalendar.getDateAtTime(
+					TradingCalendar.addTradingDays(tradestrategy.getTradingday().getClose(), backfillOffsetDays),
+					tradestrategy.getTradingday().getClose());
 			startDate = endDate.minusDays((tradestrategy.getChartDays() - 1));
 			startDate = TradingCalendar.getPrevTradingDay(startDate);
-			startDate = TradingCalendar.getDateAtTime(startDate, tradestrategy
-					.getTradingday().getOpen());
-			List<Candle> candles = m_tradePersistentModel
-					.findCandlesByContractDateRangeBarSize(tradestrategy
-							.getContract().getIdContract(), startDate, endDate,
-							tradestrategy.getBarSize());
+			startDate = TradingCalendar.getDateAtTime(startDate, tradestrategy.getTradingday().getOpen());
+			List<Candle> candles = m_tradePersistentModel.findCandlesByContractDateRangeBarSize(
+					tradestrategy.getContract().getIdContract(), startDate, endDate, tradestrategy.getBarSize());
 			if (candles.isEmpty()) {
-				this.setStatusBarMessage("No chart data available for "
-						+ tradestrategy.getContract().getSymbol(),
+				this.setStatusBarMessage("No chart data available for " + tradestrategy.getContract().getSymbol(),
 						BasePanel.INFORMATION);
 			} else {
 				// Populate the candle series.
-				CandleDataset.populateSeries(tradestrategy.getStrategyData(),
-						candles);
+				CandleDataset.populateSeries(tradestrategy.getStrategyData(), candles);
 				candles.clear();
 				populateIndicatorCandleSeries(tradestrategy, startDate, endDate);
 			}
@@ -736,53 +675,39 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            Date
 	 * @throws PersistentModelException
 	 */
-	private void populateIndicatorCandleSeries(Tradestrategy tradestrategy,
-			ZonedDateTime startDate, ZonedDateTime endDate)
-			throws PersistentModelException {
+	private void populateIndicatorCandleSeries(Tradestrategy tradestrategy, ZonedDateTime startDate,
+			ZonedDateTime endDate) throws PersistentModelException {
 
-		CandleDataset candleDataset = (CandleDataset) tradestrategy
-				.getStrategyData().getIndicatorByType(
-						IndicatorSeries.CandleSeries);
+		CandleDataset candleDataset = (CandleDataset) tradestrategy.getStrategyData()
+				.getIndicatorByType(IndicatorSeries.CandleSeries);
 		if (null != candleDataset) {
-			for (int seriesIndex = 0; seriesIndex < candleDataset
-					.getSeriesCount(); seriesIndex++) {
+			for (int seriesIndex = 0; seriesIndex < candleDataset.getSeriesCount(); seriesIndex++) {
 
 				CandleSeries series = candleDataset.getSeries(seriesIndex);
 
-				Contract contract = m_tradePersistentModel
-						.findContractByUniqueKey(series.getSecType(),
-								series.getSymbol(), series.getExchange(),
-								series.getCurrency(), null);
+				Contract contract = m_tradePersistentModel.findContractByUniqueKey(series.getSecType(),
+						series.getSymbol(), series.getExchange(), series.getCurrency(), null);
 				if (null != contract) {
-					Tradestrategy childTradestrategy = new Tradestrategy(
-							contract, tradestrategy.getTradingday(),
-							new Strategy(), tradestrategy.getPortfolio(),
-							new BigDecimal(0), null, null, false,
-							tradestrategy.getChartDays(),
-							tradestrategy.getBarSize());
+					Tradestrategy childTradestrategy = new Tradestrategy(contract, tradestrategy.getTradingday(),
+							new Strategy(), tradestrategy.getPortfolio(), new BigDecimal(0), null, null, false,
+							tradestrategy.getChartDays(), tradestrategy.getBarSize());
 					childTradestrategy.setDirty(false);
 
-					List<Candle> indicatorCandles = m_tradePersistentModel
-							.findCandlesByContractDateRangeBarSize(
-									childTradestrategy.getContract()
-											.getIdContract(), startDate,
-									endDate, childTradestrategy.getBarSize());
+					List<Candle> indicatorCandles = m_tradePersistentModel.findCandlesByContractDateRangeBarSize(
+							childTradestrategy.getContract().getIdContract(), startDate, endDate,
+							childTradestrategy.getBarSize());
 					if (indicatorCandles.isEmpty()) {
-						this.setStatusBarMessage("No chart data available for "
-								+ childTradestrategy.getContract().getSymbol(),
+						this.setStatusBarMessage(
+								"No chart data available for " + childTradestrategy.getContract().getSymbol(),
 								BasePanel.INFORMATION);
 					} else {
-						StrategyData strategyData = StrategyData
-								.create(childTradestrategy);
-						CandleDataset.populateSeries(strategyData,
-								indicatorCandles);
+						StrategyData strategyData = StrategyData.create(childTradestrategy);
+						CandleDataset.populateSeries(strategyData, indicatorCandles);
 						indicatorCandles.clear();
 
-						CandleSeries childSeries = strategyData
-								.getBaseCandleSeries();
+						CandleSeries childSeries = strategyData.getBaseCandleSeries();
 						childSeries.setDisplaySeries(series.getDisplaySeries());
-						childSeries.setSeriesRGBColor(series
-								.getSeriesRGBColor());
+						childSeries.setSeriesRGBColor(series.getSeriesRGBColor());
 						childSeries.setSubChart(series.getSubChart());
 						childSeries.setSymbol(series.getSymbol());
 						childSeries.setSecType(series.getSecType());
@@ -807,17 +732,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 */
 		public void valueChanged(ListSelectionEvent event) {
 			if (!event.getValueIsAdjusting()) {
-				ListSelectionModel model = (ListSelectionModel) event
-						.getSource();
+				ListSelectionModel model = (ListSelectionModel) event.getSource();
 				if (model.getLeadSelectionIndex() > -1) {
 					clearStatusBarMessage();
-					int row = m_tradeOrderTable.convertRowIndexToModel(model
-							.getLeadSelectionIndex());
+					int row = m_tradeOrderTable.convertRowIndexToModel(model.getLeadSelectionIndex());
 
 					int i = 0;
 
-					for (TradeOrder tradeOrder : m_tradeOrderModel.getData()
-							.getTradeOrders()) {
+					for (TradeOrder tradeOrder : m_tradeOrderModel.getData().getTradeOrders()) {
 						if (i == row) {
 							cancelButton.setTransferObject(tradeOrder);
 							executeButton.setTransferObject(tradeOrder);
@@ -851,8 +773,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			String industry = "";
 			String strategyDesc = "";
 			if (null != tradestrategy) {
-				primaryExchange = (tradestrategy.getContract()
-						.getPrimaryExchange() == null ? "No Data Available"
+				primaryExchange = (tradestrategy.getContract().getPrimaryExchange() == null ? "No Data Available"
 						: tradestrategy.getContract().getPrimaryExchange());
 				industry = (tradestrategy.getContract().getIndustry() == null ? "No Data Available"
 						: tradestrategy.getContract().getIndustry());
@@ -860,24 +781,17 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 						: tradestrategy.getStrategy().getDescription());
 			}
 
-			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					"Primary Exch: ", false, bold);
-			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					CoreUtils.padRight(primaryExchange, 8), false, null);
-			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					" Industry:", false, bold);
-			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					CoreUtils.padRight(industry, 30), false, null);
-			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), "\n",
-					false, null);
-			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					"Strategy:", false, bold);
-			CoreUtils.setDocumentText(m_strategyLabel.getDocument(),
-					CoreUtils.padRight(strategyDesc, 30), false, null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), "Primary Exch: ", false, bold);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), CoreUtils.padRight(primaryExchange, 8), false,
+					null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), " Industry:", false, bold);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), CoreUtils.padRight(industry, 30), false, null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), "\n", false, null);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), "Strategy:", false, bold);
+			CoreUtils.setDocumentText(m_strategyLabel.getDocument(), CoreUtils.padRight(strategyDesc, 30), false, null);
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error setting Tradestrategy Label.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error setting Tradestrategy Label.", ex.getMessage(), ex);
 		}
 	}
 
@@ -891,8 +805,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			this.clearStatusBarMessage();
 			Tradestrategy tradestrategy = null;
 			TradestrategyOrders tradestrategyOrders = null;
-			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract
-					.getSelectedComponent();
+			ChartPanel currentTab = (ChartPanel) m_jTabbedPaneContract.getSelectedComponent();
 			if (null == currentTab) {
 				m_tradeOrderModel.setData(new Tradestrategy());
 				closeAllPositionsButton.setTransferObject(new Tradestrategy());
@@ -900,17 +813,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 				/*
 				 * Refresh the Tradestrategy this will get the latest orders.
 				 */
-				tradestrategy = m_tradePersistentModel
-						.findTradestrategyById(currentTab.getTradestrategy());
+				tradestrategy = m_tradePersistentModel.findTradestrategyById(currentTab.getTradestrategy());
 				tradestrategyOrders = m_tradePersistentModel
-						.findPositionOrdersByTradestrategyId(currentTab
-								.getTradestrategy().getIdTradeStrategy());
+						.findPositionOrdersByTradestrategyId(currentTab.getTradestrategy().getIdTradeStrategy());
 				currentTab.setTradestrategy(tradestrategy);
 				m_tradeOrderModel.setData(tradestrategy);
 				RowSorter<?> rsDetail = m_tradeOrderTable.getRowSorter();
 				rsDetail.setSortKeys(null);
-				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy
-						.getBarSize()));
+				periodEditorComboBox.setItem(BarSize.newInstance(tradestrategy.getBarSize()));
 				closeAllPositionsButton.setTransferObject(tradestrategy);
 			}
 			/*
@@ -932,17 +842,15 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			String risk = "";
 			if (null != tradestrategy) {
 				symbol = tradestrategy.getContract().getSymbol();
-				side = (tradestrategy.getSide() == null ? "" : Side
-						.newInstance(tradestrategy.getSide()).getDisplayName());
-				tier = (tradestrategy.getTier() == null ? "" : Tier
-						.newInstance(tradestrategy.getTier()).getDisplayName());
+				side = (tradestrategy.getSide() == null ? ""
+						: Side.newInstance(tradestrategy.getSide()).getDisplayName());
+				tier = (tradestrategy.getTier() == null ? ""
+						: Tier.newInstance(tradestrategy.getTier()).getDisplayName());
 				status = (tradestrategy.getStatus() == null ? ""
-						: TradestrategyStatus.newInstance(
-								tradestrategy.getStatus()).getDisplayName());
+						: TradestrategyStatus.newInstance(tradestrategy.getStatus()).getDisplayName());
 				portfolio = tradestrategy.getPortfolio().getName();
-				risk = currencyFormater
-						.format((tradestrategy.getRiskAmount() == null ? 0
-								: tradestrategy.getRiskAmount().doubleValue()));
+				risk = currencyFormater.format(
+						(tradestrategy.getRiskAmount() == null ? 0 : tradestrategy.getRiskAmount().doubleValue()));
 
 				// Collections.sort(trade.getTradeOrders(), new
 				// TradeOrder());
@@ -960,133 +868,91 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 					if (order.getIsFilled()) {
 						Integer quantity = order.getFilledQuantity();
 						if (null == prevIdTradePosition
-								|| prevIdTradePosition != order
-										.getTradePosition()
-										.getIdTradePosition()) {
-							prevIdTradePosition = order.getTradePosition()
-									.getIdTradePosition();
+								|| prevIdTradePosition != order.getTradePosition().getIdTradePosition()) {
+							prevIdTradePosition = order.getTradePosition().getIdTradePosition();
 						}
 
 						if (null != prevTradeOrder) {
 							if (prevTradeOrder.getIsFilled()
-									&& prevTradeOrder.getFilledDate().equals(
-											order.getFilledDate())
-									&& prevTradeOrder.getAverageFilledPrice()
-											.equals(order
-													.getAverageFilledPrice())) {
-								quantity = quantity
-										+ prevTradeOrder.getFilledQuantity();
+									&& prevTradeOrder.getFilledDate().equals(order.getFilledDate())
+									&& prevTradeOrder.getAverageFilledPrice().equals(order.getAverageFilledPrice())) {
+								quantity = quantity + prevTradeOrder.getFilledQuantity();
 							}
 						}
-						currentTab.getCandlestickChart().addBuySellTradeArrow(
-								order.getAction(),
-								new Money(order.getAverageFilledPrice()),
-								order.getFilledDate(), quantity);
+						currentTab.getCandlestickChart().addBuySellTradeArrow(order.getAction(),
+								new Money(order.getAverageFilledPrice()), order.getFilledDate(), quantity);
 
 					}
 					prevTradeOrder = order;
 				}
 				if (null != prevIdTradePosition) {
-					TradePosition tradePosition = m_tradePersistentModel
-							.findTradePositionById(prevIdTradePosition);
+					TradePosition tradePosition = m_tradePersistentModel.findTradePositionById(prevIdTradePosition);
 
-					unRealizedPL = tradePosition.getUnRealizedProfit(
-							tradestrategy.getStrategyData()
-									.getBaseCandleSeries().getContract()
-									.getLastPrice()).doubleValue();
-					realizedPL = tradePosition.getRealizedProfit()
+					unRealizedPL = tradePosition
+							.getUnRealizedProfit(
+									tradestrategy.getStrategyData().getBaseCandleSeries().getContract().getLastPrice())
 							.doubleValue();
+					realizedPL = tradePosition.getRealizedProfit().doubleValue();
 					netValue = tradePosition.getTotalNetValue().doubleValue();
-					openQuantity = String.valueOf(Math.abs(tradePosition
-							.getOpenQuantity()));
-					commision = tradePosition.getTotalCommission()
-							.doubleValue();
+					openQuantity = String.valueOf(Math.abs(tradePosition.getOpenQuantity()));
+					commision = tradePosition.getTotalCommission().doubleValue();
 				}
 			}
 
 			netValue = netValue - commision;
 
 			m_tradeLabel.setText(null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:",
-					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padRight(symbol, 10), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Side:",
-					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padRight(side, 6), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Tier:",
-					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padRight(tier, 6), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Status:",
-					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padRight(status, 20), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					" Portfolio:", false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padRight(portfolio, 15), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Risk:",
-					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padLeft(risk, 10), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "\n", false,
-					null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Net Total:",
-					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Symbol:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils.padRight(symbol, 10), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Side:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils.padRight(side, 6), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Tier:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils.padRight(tier, 6), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Status:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils.padRight(status, 20), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Portfolio:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils.padRight(portfolio, 15), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Risk:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils.padLeft(risk, 10), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "\n", false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), "Net Total:", false, bold);
 			if (netValue < 0) {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(netValue), 10), false,
-						colorRedAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(netValue), 10), false, colorRedAttr);
 			} else if (netValue > 0) {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(netValue), 10), false,
-						colorGreenAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(netValue), 10), false, colorGreenAttr);
 			} else {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(netValue), 10), false,
-						null);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(netValue), 10), false, null);
 			}
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					" Realized P/L:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Realized P/L:", false, bold);
 			if (realizedPL < 0) {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(realizedPL), 10),
-						false, colorRedAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPL), 10), false, colorRedAttr);
 			} else if (realizedPL > 0) {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(realizedPL), 10),
-						false, colorGreenAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPL), 10), false, colorGreenAttr);
 			} else {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(realizedPL), 10),
-						false, null);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(realizedPL), 10), false, null);
 			}
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					" UnRealized P/L:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " UnRealized P/L:", false, bold);
 			if (unRealizedPL < 0) {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(unRealizedPL), 10),
-						false, colorRedAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(unRealizedPL), 10), false, colorRedAttr);
 			} else if (unRealizedPL > 0) {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(unRealizedPL), 10),
-						false, colorGreenAttr);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(unRealizedPL), 10), false, colorGreenAttr);
 			} else {
-				CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils
-						.padLeft(currencyFormater.format(unRealizedPL), 10),
-						false, null);
+				CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
+						CoreUtils.padLeft(currencyFormater.format(unRealizedPL), 10), false, null);
 			}
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Open Qty:",
-					false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Open Qty:", false, bold);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), CoreUtils.padLeft(openQuantity, 10), false, null);
+			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Comms:", false, bold);
 			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padLeft(openQuantity, 10), false, null);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(), " Comms:",
-					false, bold);
-			CoreUtils.setDocumentText(m_tradeLabel.getDocument(),
-					CoreUtils.padLeft(currencyFormater.format(commision), 10),
-					false, null);
+					CoreUtils.padLeft(currencyFormater.format(commision), 10), false, null);
 		} catch (Exception ex) {
 			this.setErrorMessage("Error refreshing Tab.", ex.getMessage(), ex);
 		}
@@ -1099,8 +965,7 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 	 *            Tradestrategy
 	 * @throws Exception
 	 */
-	private void enableChartButtons(final Tradestrategy tradestrategy)
-			throws Exception {
+	private void enableChartButtons(final Tradestrategy tradestrategy) throws Exception {
 		propertiesButton.setEnabled(false);
 		executeButton.setEnabled(false);
 		closeAllPositionsButton.setEnabled(false);
@@ -1151,16 +1016,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			this.tradestrategy = tradestrategy;
 			this.setLayout(new BorderLayout());
 
-			String ledgend = "("
-					+ tradestrategy.getContract().getSymbol()
-					+ ") "
+			String ledgend = "(" + tradestrategy.getContract().getSymbol() + ") "
 					+ (tradestrategy.getContract().getLongName() == null ? "Contract details not available."
 							: tradestrategy.getContract().getLongName());
-			this.candlestickChart = new CandlestickChart(ledgend,
-					tradestrategy.getStrategyData(),
+			this.candlestickChart = new CandlestickChart(ledgend, tradestrategy.getStrategyData(),
 					tradestrategy.getTradingday());
-			this.candlestickChart.setName(tradestrategy.getContract()
-					.getSymbol());
+			this.candlestickChart.setName(tradestrategy.getContract().getSymbol());
 			this.add(this.candlestickChart);
 		}
 
@@ -1210,15 +1071,14 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 		 * @throws Exception
 		 */
 
-		public AllocationMethodPanel(final TradeOrder tradeOrder)
-				throws Exception {
+		public AllocationMethodPanel(final TradeOrder tradeOrder) throws Exception {
 
 			GridBagLayout gridBagLayout1 = new GridBagLayout();
 			JPanel jPanel1 = new JPanel(gridBagLayout1);
 			this.setLayout(new BorderLayout());
-			this.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createTitledBorder("Select Profile or Group"),
-					BorderFactory.createEmptyBorder(4, 4, 4, 4)));
+			this.setBorder(
+					BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Select Profile or Group"),
+							BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 			JLabel profileLabel = new JLabel("Profile: ");
 			profileLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 			profileLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -1237,16 +1097,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxRenderer profileTableRenderer = new DecodeComboBoxRenderer();
 			profileEditorComboBox.setRenderer(profileTableRenderer);
 			if (null != tradeOrder.getFAProfile())
-				profileEditorComboBox.setItem(DAOProfile.newInstance(tradeOrder
-						.getFAProfile()));
+				profileEditorComboBox.setItem(DAOProfile.newInstance(tradeOrder.getFAProfile()));
 			profileEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if (!Decode.NONE.equals(((DAOProfile) e.getItem())
-								.getDisplayName())) {
-							tradeOrder
-									.setFAProfile(((Portfolio) ((DAOProfile) e
-											.getItem()).getObject()).getName());
+						if (!Decode.NONE.equals(((DAOProfile) e.getItem()).getDisplayName())) {
+							tradeOrder.setFAProfile(((Portfolio) ((DAOProfile) e.getItem()).getObject()).getName());
 						} else {
 							tradeOrder.setFAProfile(null);
 						}
@@ -1259,15 +1115,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxRenderer groupTableRenderer = new DecodeComboBoxRenderer();
 			groupEditorComboBox.setRenderer(groupTableRenderer);
 			if (null != tradeOrder.getFAGroup())
-				groupEditorComboBox.setItem(DAOGroup.newInstance(tradeOrder
-						.getFAGroup()));
+				groupEditorComboBox.setItem(DAOGroup.newInstance(tradeOrder.getFAGroup()));
 			groupEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if (!Decode.NONE.equals(((DAOGroup) e.getItem())
-								.getDisplayName())) {
-							tradeOrder.setFAGroup(((Portfolio) ((DAOGroup) e
-									.getItem()).getObject()).getName());
+						if (!Decode.NONE.equals(((DAOGroup) e.getItem()).getDisplayName())) {
+							tradeOrder.setFAGroup(((Portfolio) ((DAOGroup) e.getItem()).getObject()).getName());
 						} else {
 							tradeOrder.setFAGroup(null);
 						}
@@ -1280,15 +1133,12 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			DecodeComboBoxRenderer methodTableRenderer = new DecodeComboBoxRenderer();
 			methodEditorComboBox.setRenderer(methodTableRenderer);
 			if (null != tradeOrder.getFAMethod())
-				methodEditorComboBox.setItem(AllocationMethod
-						.newInstance(tradeOrder.getFAMethod()));
+				methodEditorComboBox.setItem(AllocationMethod.newInstance(tradeOrder.getFAMethod()));
 			methodEditorComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if (!Decode.NONE.equals(((AllocationMethod) e.getItem())
-								.getDisplayName())) {
-							tradeOrder.setFAMethod(((AllocationMethod) e
-									.getItem()).getCode());
+						if (!Decode.NONE.equals(((AllocationMethod) e.getItem()).getDisplayName())) {
+							tradeOrder.setFAMethod(((AllocationMethod) e.getItem()).getCode());
 						} else {
 							tradeOrder.setFAMethod(null);
 						}
@@ -1297,57 +1147,39 @@ public class ContractPanel extends BasePanel implements TreeSelectionListener,
 			});
 			NumberFormat percentFormat = NumberFormat.getNumberInstance();
 			percentFormat.setMinimumFractionDigits(2);
-			final JFormattedTextField percentTextField = new JFormattedTextField(
-					percentFormat);
+			final JFormattedTextField percentTextField = new JFormattedTextField(percentFormat);
 			if (null != tradeOrder.getFAPercent())
-				percentTextField.setText(Integer.toString(new Integer(
-						tradeOrder.getFAPercent().intValue())));
-			percentTextField
-					.addPropertyChangeListener(new PropertyChangeListener() {
-						public void propertyChange(PropertyChangeEvent e) {
-							Object source = e.getSource();
-							if ("value".equals(e.getPropertyName())) {
-								if (source == percentTextField) {
-									if (percentTextField.isEditValid()
-											&& null != e.getNewValue()) {
-										Number rate = ((Number) percentTextField
-												.getValue()).doubleValue();
-										tradeOrder.setFAPercent(new BigDecimal(
-												rate.doubleValue()));
-									}
-								}
+				percentTextField.setText(Integer.toString(new Integer(tradeOrder.getFAPercent().intValue())));
+			percentTextField.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent e) {
+					Object source = e.getSource();
+					if ("value".equals(e.getPropertyName())) {
+						if (source == percentTextField) {
+							if (percentTextField.isEditValid() && null != e.getNewValue()) {
+								Number rate = ((Number) percentTextField.getValue()).doubleValue();
+								tradeOrder.setFAPercent(new BigDecimal(rate.doubleValue()));
 							}
 						}
-					});
-			jPanel1.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0,
-					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 2), 20, 5));
-			jPanel1.add(groupLabel, new GridBagConstraints(0, 2, 1, 1, 0.0,
-					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 2), 20, 5));
-			jPanel1.add(mthodLabel, new GridBagConstraints(0, 3, 1, 1, 0.0,
-					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 2), 20, 5));
-			jPanel1.add(percentLabel, new GridBagConstraints(0, 4, 1, 1, 0.0,
-					0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-					new Insets(2, 2, 2, 2), 20, 5));
+					}
+				}
+			});
+			jPanel1.add(profileLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+					GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
+			jPanel1.add(groupLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+					GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
+			jPanel1.add(mthodLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+					GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
+			jPanel1.add(percentLabel, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+					GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
 
-			jPanel1.add(profileEditorComboBox, new GridBagConstraints(1, 1, 1,
-					1, 0.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
-					5));
-			jPanel1.add(groupEditorComboBox, new GridBagConstraints(1, 2, 1, 1,
-					0.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
-					5));
-			jPanel1.add(methodEditorComboBox, new GridBagConstraints(1, 3, 1,
-					1, 0.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
-					5));
-			jPanel1.add(percentTextField, new GridBagConstraints(1, 4, 1, 1,
-					0.0, 0.0, GridBagConstraints.WEST,
-					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20,
-					5));
+			jPanel1.add(profileEditorComboBox, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
+			jPanel1.add(groupEditorComboBox, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
+			jPanel1.add(methodEditorComboBox, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
+			jPanel1.add(percentTextField, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+					GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
 			this.add(jPanel1);
 		}
 	}

@@ -68,9 +68,8 @@ public class AccountTableModel extends TableModel {
 	private static final String UNREALIZED_PL = "Unrealized P/L";
 	private static final String LAST_UPDATED = "  Last Update  ";
 
-	private static final String[] columnHeaderToolTip = { null, null,
-			"Use Corp for FA accounts", null, null, null, null, null, null,
-			null, null, null };
+	private static final String[] columnHeaderToolTip = { null, null, "Use Corp for FA accounts", null, null, null,
+			null, null, null, null, null, null };
 
 	private Portfolio m_data = null;
 
@@ -112,8 +111,7 @@ public class AccountTableModel extends TableModel {
 		this.clearAll();
 		if (!getData().getPortfolioAccounts().isEmpty()) {
 
-			for (final PortfolioAccount element : getData()
-					.getPortfolioAccounts()) {
+			for (final PortfolioAccount element : getData().getPortfolioAccounts()) {
 				final Vector<Object> newRow = new Vector<Object>();
 				getNewRow(newRow, element);
 				rows.add(newRow);
@@ -134,8 +132,7 @@ public class AccountTableModel extends TableModel {
 	 */
 	public void populateDAO(Object value, int row, int column) {
 
-		final PortfolioAccount element = (PortfolioAccount) getData()
-				.getPortfolioAccounts().get(row);
+		final PortfolioAccount element = (PortfolioAccount) getData().getPortfolioAccounts().get(row);
 
 		switch (column) {
 		case 0: {
@@ -147,8 +144,7 @@ public class AccountTableModel extends TableModel {
 			break;
 		}
 		case 2: {
-			element.getAccount()
-					.setAccountType(((AccountType) value).getCode());
+			element.getAccount().setAccountType(((AccountType) value).getCode());
 			break;
 		}
 		case 3: {
@@ -160,38 +156,31 @@ public class AccountTableModel extends TableModel {
 			break;
 		}
 		case 5: {
-			element.getAccount().setAvailableFunds(
-					((Money) value).getBigDecimalValue());
+			element.getAccount().setAvailableFunds(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 6: {
-			element.getAccount().setBuyingPower(
-					((Money) value).getBigDecimalValue());
+			element.getAccount().setBuyingPower(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 7: {
-			element.getAccount().setCashBalance(
-					((Money) value).getBigDecimalValue());
+			element.getAccount().setCashBalance(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 8: {
-			element.getAccount().setGrossPositionValue(
-					((Money) value).getBigDecimalValue());
+			element.getAccount().setGrossPositionValue(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 9: {
-			element.getAccount().setRealizedPnL(
-					((Money) value).getBigDecimalValue());
+			element.getAccount().setRealizedPnL(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 10: {
-			element.getAccount().setUnrealizedPnL(
-					((Money) value).getBigDecimalValue());
+			element.getAccount().setUnrealizedPnL(((Money) value).getBigDecimalValue());
 			break;
 		}
 		case 11: {
-			element.getAccount().setLastUpdateDate(
-					((Date) value).getZonedDateTime());
+			element.getAccount().setLastUpdateDate(((Date) value).getZonedDateTime());
 			break;
 		}
 		default: {
@@ -210,8 +199,7 @@ public class AccountTableModel extends TableModel {
 
 		String acctNumber = (String) this.getValueAt(selectedRow, 1);
 		for (final PortfolioAccount element : getData().getPortfolioAccounts()) {
-			if (CoreUtils.nullSafeComparator(element.getAccount()
-					.getAccountNumber(), acctNumber) == 0) {
+			if (CoreUtils.nullSafeComparator(element.getAccount().getAccountNumber(), acctNumber) == 0) {
 				getData().getPortfolioAccounts().remove(element);
 				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
@@ -224,8 +212,7 @@ public class AccountTableModel extends TableModel {
 
 	public void addRow() {
 		final Account account = new Account();
-		final PortfolioAccount element = new PortfolioAccount(getData(),
-				account);
+		final PortfolioAccount element = new PortfolioAccount(getData(), account);
 		getData().getPortfolioAccounts().add(element);
 		final Vector<Object> newRow = new Vector<Object>();
 		getNewRow(newRow, element);
@@ -248,17 +235,14 @@ public class AccountTableModel extends TableModel {
 		if (null == element.getAccount().getAccountType()) {
 			newRow.addElement(new AccountType());
 		} else {
-			newRow.addElement(AccountType.newInstance(element.getAccount()
-					.getAccountType()));
+			newRow.addElement(AccountType.newInstance(element.getAccount().getAccountType()));
 		}
 		newRow.addElement(element.getAccount().getAlias());
-		newRow.addElement(Currency.newInstance(element.getAccount()
-				.getCurrency()));
+		newRow.addElement(Currency.newInstance(element.getAccount().getCurrency()));
 		if (null == element.getAccount().getAvailableFunds()) {
 			newRow.addElement(new Money(0));
 		} else {
-			newRow.addElement(new Money(element.getAccount()
-					.getAvailableFunds()));
+			newRow.addElement(new Money(element.getAccount().getAvailableFunds()));
 		}
 		if (null == element.getAccount().getBuyingPower()) {
 			newRow.addElement(new Money(0));
@@ -273,8 +257,7 @@ public class AccountTableModel extends TableModel {
 		if (null == element.getAccount().getGrossPositionValue()) {
 			newRow.addElement(new Money(0));
 		} else {
-			newRow.addElement(new Money(element.getAccount()
-					.getGrossPositionValue()));
+			newRow.addElement(new Money(element.getAccount().getGrossPositionValue()));
 		}
 		if (null == element.getAccount().getRealizedPnL()) {
 			newRow.addElement(new Money(0));

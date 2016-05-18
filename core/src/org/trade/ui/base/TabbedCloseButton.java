@@ -68,8 +68,7 @@ public class TabbedCloseButton extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 8543984162821384818L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(TabbedCloseButton.class);
+	private final static Logger _log = LoggerFactory.getLogger(TabbedCloseButton.class);
 	protected MessageNotifier m_notifier = new MessageNotifier();
 	private String m_method = null;
 	private Object transferObject = null;
@@ -144,12 +143,10 @@ public class TabbedCloseButton extends JPanel {
 
 			try {
 
-				BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes
-						.newInstance(UICode);
+				BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes.newInstance(UICode);
 
 				if (basePropertyCodes.getImage().length() > 0) {
-					setIcon(ImageBuilder.getImageIcon(basePropertyCodes
-							.getImage()));
+					setIcon(ImageBuilder.getImageIcon(basePropertyCodes.getImage()));
 				} else {
 					setText(basePropertyCodes.getDisplayName());
 					setMnemonic(basePropertyCodes.getMnemonic());
@@ -210,10 +207,8 @@ public class TabbedCloseButton extends JPanel {
 				g2.setColor(Color.MAGENTA);
 			}
 			int delta = 6;
-			g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight()
-					- delta - 1);
-			g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight()
-					- delta - 1);
+			g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
+			g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
 			g2.dispose();
 		}
 	}

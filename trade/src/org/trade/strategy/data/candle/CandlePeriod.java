@@ -60,8 +60,7 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * duration of 5min
 	 */
 	public CandlePeriod() {
-		this(TradingCalendar.getDateTimeNowMarketTimeZone(), TradingCalendar
-				.getDateTimeNowMarketTimeZone());
+		this(TradingCalendar.getDateTimeNowMarketTimeZone(), TradingCalendar.getDateTimeNowMarketTimeZone());
 
 	}
 
@@ -85,8 +84,7 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 		// this.endOfPeriod = this.startOfPeriod
 		// .plusSeconds((this.secondsLength - 1));
 
-		this.endOfPeriod = this.startOfPeriod
-				.plusNanos((this.secondsLength * 1000000000l) - 1000000l);
+		this.endOfPeriod = this.startOfPeriod.plusNanos((this.secondsLength * 1000000000l) - 1000000l);
 	}
 
 	/**
@@ -116,8 +114,7 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 		}
 		this.startOfPeriod = startOfPeriod;
 		this.endOfPeriod = endOfPeriod;
-		this.secondsLength = (int) TradingCalendar.getDurationInSeconds(
-				startOfPeriod, endOfPeriod);
+		this.secondsLength = (int) TradingCalendar.getDurationInSeconds(startOfPeriod, endOfPeriod);
 	}
 
 	/**
@@ -127,8 +124,7 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * @return The second preceding this one.
 	 */
 	public RegularTimePeriod previous() {
-		return new CandlePeriod(this.getStart().minusSeconds(secondsLength),
-				secondsLength);
+		return new CandlePeriod(this.getStart().minusSeconds(secondsLength), secondsLength);
 
 	}
 
@@ -139,8 +135,7 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 * @return The second following this one.
 	 */
 	public RegularTimePeriod next() {
-		return new CandlePeriod(this.getStart().plusSeconds(secondsLength),
-				secondsLength);
+		return new CandlePeriod(this.getStart().plusSeconds(secondsLength), secondsLength);
 	}
 
 	/**
@@ -151,10 +146,8 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	 */
 	public long getSerialIndex() {
 
-		long hourIndex = (this.getStart().getDayOfYear() * 24L)
-				+ this.getStart().getHour();
-		return (hourIndex * 60L) + (this.getStart().getMinute() * 60L)
-				+ this.getStart().getSecond();
+		long hourIndex = (this.getStart().getDayOfYear() * 24L) + this.getStart().getHour();
+		return (hourIndex * 60L) + (this.getStart().getMinute() * 60L) + this.getStart().getSecond();
 	}
 
 	/**
@@ -166,8 +159,7 @@ public class CandlePeriod extends RegularTimePeriod implements Serializable {
 	public long getDaySerialIndex() {
 
 		long hourIndex = this.getStart().getHour();
-		return ((((hourIndex * 60L) + this.getStart().getMinute()) * 60L) + this
-				.getStart().getSecond()) / 60;
+		return ((((hourIndex * 60L) + this.getStart().getMinute()) * 60L) + this.getStart().getSecond()) / 60;
 	}
 
 	/**

@@ -60,9 +60,8 @@ public class MoneyField extends JFormattedTextField {
 		displayFormat.setMinimumFractionDigits(2);
 		NumberFormat editFormat = NumberFormat.getNumberInstance();
 		editFormat.setMinimumFractionDigits(2);
-		this.setFormatterFactory(new DefaultFormatterFactory(
-				new NumberFormatter(displayFormat), new NumberFormatter(
-						displayFormat), new NumberFormatter(editFormat)));
+		this.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(displayFormat),
+				new NumberFormatter(displayFormat), new NumberFormatter(editFormat)));
 		this.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.setValue(new Double(0));
 		this.setColumns(10);

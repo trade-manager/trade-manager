@@ -82,8 +82,7 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	private String description;
 	private Boolean marketData = new Boolean(false);
 	private Strategy strategy;
-	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
-			0);
+	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
 	private List<Rule> rules = new ArrayList<Rule>(0);
 	private List<IndicatorSeries> indicators = new ArrayList<IndicatorSeries>(0);
 	private List<Strategy> strategies = new ArrayList<Strategy>(0);
@@ -134,9 +133,8 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	 * @param strategies
 	 *            List<Strategy>
 	 */
-	public Strategy(String name, String description, Boolean marketData,
-			String className, List<Tradestrategy> tradestrategies,
-			List<Rule> rules, List<Strategy> strategies) {
+	public Strategy(String name, String description, Boolean marketData, String className,
+			List<Tradestrategy> tradestrategies, List<Rule> rules, List<Strategy> strategies) {
 		this.name = name;
 		this.description = description;
 		this.marketData = marketData;
@@ -449,9 +447,7 @@ public class Strategy extends Aspect implements Serializable, Cloneable {
 	public int hashCode() {
 		int hash = super.hashCode();
 		hash = hash + (this.getName() == null ? 0 : this.getName().hashCode());
-		hash = hash
-				+ (this.getClassName() == null ? 0 : this.getClassName()
-						.hashCode());
+		hash = hash + (this.getClassName() == null ? 0 : this.getClassName().hashCode());
 		return hash;
 	}
 

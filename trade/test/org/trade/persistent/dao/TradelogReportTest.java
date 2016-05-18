@@ -61,8 +61,7 @@ import org.trade.ui.TradeAppLoadConfig;
  */
 public class TradelogReportTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradelogReportTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(TradelogReportTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -108,32 +107,21 @@ public class TradelogReportTest {
 
 		try {
 			TradelogHome tradelogHome = new TradelogHome();
-			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
-					.getObject();
-			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(
-					portfolio, TradingCalendar.getYearStart(), TradingCalendar
-							.getTradingDayEnd(TradingCalendar
-									.getDateTimeNowMarketTimeZone()), false,
-					null);
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance().getObject();
+			TradelogReport tradelogReport = tradelogHome.findByTradelogDetail(portfolio, TradingCalendar.getYearStart(),
+					TradingCalendar.getTradingDayEnd(TradingCalendar.getDateTimeNowMarketTimeZone()), false, null);
 			assertFalse("1", !tradelogReport.getTradelogDetail().isEmpty());
-			for (TradelogDetail tradelogDetail : tradelogReport
-					.getTradelogDetail()) {
-				_log.info("testTradelogDetails tradelogDetail: " + " getOpen:"
-						+ tradelogDetail.getOpen() + " getAction:"
-						+ tradelogDetail.getAction() + " getMarketBias:"
-						+ tradelogDetail.getMarketBias() + " getName:"
-						+ tradelogDetail.getName() + " getSymbol:"
-						+ tradelogDetail.getSymbol() + " getQuantity:"
-						+ tradelogDetail.getQuantity() + " getLongShort:"
-						+ tradelogDetail.getLongShort()
-						+ " getAverageFilledPrice:"
-						+ tradelogDetail.getAverageFilledPrice()
-						+ " getFilledDate:" + tradelogDetail.getFilledDate());
+			for (TradelogDetail tradelogDetail : tradelogReport.getTradelogDetail()) {
+				_log.info("testTradelogDetails tradelogDetail: " + " getOpen:" + tradelogDetail.getOpen()
+						+ " getAction:" + tradelogDetail.getAction() + " getMarketBias:"
+						+ tradelogDetail.getMarketBias() + " getName:" + tradelogDetail.getName() + " getSymbol:"
+						+ tradelogDetail.getSymbol() + " getQuantity:" + tradelogDetail.getQuantity() + " getLongShort:"
+						+ tradelogDetail.getLongShort() + " getAverageFilledPrice:"
+						+ tradelogDetail.getAverageFilledPrice() + " getFilledDate:" + tradelogDetail.getFilledDate());
 			}
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -144,31 +132,22 @@ public class TradelogReportTest {
 
 		try {
 			TradelogHome tradelogHome = new TradelogHome();
-			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
-					.getObject();
-			TradelogReport tradelogReport = tradelogHome.findByTradelogSummary(
-					portfolio, TradingCalendar.getYearStart(), TradingCalendar
-							.getTradingDayEnd(TradingCalendar
-									.getDateTimeNowMarketTimeZone()), null,
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance().getObject();
+			TradelogReport tradelogReport = tradelogHome.findByTradelogSummary(portfolio,
+					TradingCalendar.getYearStart(),
+					TradingCalendar.getTradingDayEnd(TradingCalendar.getDateTimeNowMarketTimeZone()), null,
 					new BigDecimal(0));
 			assertFalse("1", !tradelogReport.getTradelogSummary().isEmpty());
-			for (TradelogSummary tradelogSummary : tradelogReport
-					.getTradelogSummary()) {
-				_log.info("testTradelogSummary tradelogDetail: " + "getPeriod:"
-						+ tradelogSummary.getPeriod() + "getBattingAverage:"
-						+ tradelogSummary.getBattingAverage()
-						+ "getSimpleSharpeRatio:"
-						+ tradelogSummary.getSimpleSharpeRatio()
-						+ "getQuantity:" + tradelogSummary.getQuantity()
-						+ "getGrossProfitLoss:"
-						+ tradelogSummary.getGrossProfitLoss() + "getQuantity:"
-						+ tradelogSummary.getQuantity() + "getNetProfitLoss:"
-						+ tradelogSummary.getNetProfitLoss());
+			for (TradelogSummary tradelogSummary : tradelogReport.getTradelogSummary()) {
+				_log.info("testTradelogSummary tradelogDetail: " + "getPeriod:" + tradelogSummary.getPeriod()
+						+ "getBattingAverage:" + tradelogSummary.getBattingAverage() + "getSimpleSharpeRatio:"
+						+ tradelogSummary.getSimpleSharpeRatio() + "getQuantity:" + tradelogSummary.getQuantity()
+						+ "getGrossProfitLoss:" + tradelogSummary.getGrossProfitLoss() + "getQuantity:"
+						+ tradelogSummary.getQuantity() + "getNetProfitLoss:" + tradelogSummary.getNetProfitLoss());
 			}
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

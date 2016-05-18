@@ -80,11 +80,9 @@ public class HeikinAshiItem extends ComparableObjectItem {
 	 * @param lastUpdateDate
 	 *            ZonedDateTime
 	 */
-	public HeikinAshiItem(Contract contract, RegularTimePeriod period,
-			double open, double high, double low, double close,
-			ZonedDateTime lastUpdateDate) {
-		super(period, new Candle(contract, period, open, high, low, close,
-				lastUpdateDate));
+	public HeikinAshiItem(Contract contract, RegularTimePeriod period, double open, double high, double low,
+			double close, ZonedDateTime lastUpdateDate) {
+		super(period, new Candle(contract, period, open, high, low, close, lastUpdateDate));
 	}
 
 	/**

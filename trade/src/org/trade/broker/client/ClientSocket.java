@@ -71,16 +71,13 @@ public class ClientSocket {
 	 *            int
 	 * @throws BrokerModelException
 	 */
-	public void reqHistoricalData(int reqId, Tradestrategy tradestrategy,
-			String endDateTime, String durationStr, String barSizeSetting,
-			String whatToShow, int useRTH, int formatDateInteger)
-			throws BrokerModelException {
+	public void reqHistoricalData(int reqId, Tradestrategy tradestrategy, String endDateTime, String durationStr,
+			String barSizeSetting, String whatToShow, int useRTH, int formatDateInteger) throws BrokerModelException {
 
 		try {
 
 			if (null != endDateTime) {
-				YahooBroker yahooBroker = new YahooBroker(reqId,
-						tradestrategy.getContract(), endDateTime, durationStr,
+				YahooBroker yahooBroker = new YahooBroker(reqId, tradestrategy.getContract(), endDateTime, durationStr,
 						barSizeSetting, m_client);
 				m_backTestBroker.put(reqId, yahooBroker);
 				yahooBroker.execute();
@@ -88,19 +85,15 @@ public class ClientSocket {
 			} else {
 
 				if (tradestrategy.getTrade()) {
-					DBBroker backTestBroker = new DBBroker(
-							tradestrategy.getStrategyData(),
+					DBBroker backTestBroker = new DBBroker(tradestrategy.getStrategyData(),
 							tradestrategy.getIdTradeStrategy(), m_client);
 					m_backTestBroker.put(reqId, backTestBroker);
 					backTestBroker.execute();
 				}
-				m_client.historicalData(reqId,
-						"finished- at yyyyMMdd HH:mm:ss", 0, 0, 0, 0, 0, 0, 0,
-						false);
+				m_client.historicalData(reqId, "finished- at yyyyMMdd HH:mm:ss", 0, 0, 0, 0, 0, 0, 0, false);
 			}
 		} catch (Exception ex) {
-			throw new BrokerModelException(0, 6000,
-					"Error initializing BackTestBroker Msg: " + ex.getMessage());
+			throw new BrokerModelException(0, 6000, "Error initializing BackTestBroker Msg: " + ex.getMessage());
 		}
 	}
 
@@ -149,7 +142,6 @@ public class ClientSocket {
 	 * @param useRTH
 	 *            boolean
 	 */
-	public void reqRealTimeBars(int reqId, Contract contract, int barSize,
-			String whatToShow, boolean useRTH) {
+	public void reqRealTimeBars(int reqId, Contract contract, int barSize, String whatToShow, boolean useRTH) {
 	}
 }

@@ -49,8 +49,7 @@ import org.trade.core.exception.ExceptionMessage;
 public class MessageContextFactory implements IMessageContextFactory {
 	// This is a special case and represents an internal error. It will
 	// be used when other messages cannot be located.
-	public final static IMessageContextFactory DEFAULT = new MessageContextFactory(
-			new ExceptionContext("", "[]"));
+	public final static IMessageContextFactory DEFAULT = new MessageContextFactory(new ExceptionContext("", "[]"));
 
 	// Used by RequestMap to populate XML_STRUCTURE_DOES_NOT_MATCH_REQUEST_TYPE
 	// message
@@ -68,37 +67,32 @@ public class MessageContextFactory implements IMessageContextFactory {
 	// Used by IntRequest.setHostingPartyRequestCreateTime(), possibly
 	// incorrectly
 	public final static IMessageContextFactory DATE_FORMAT_INCORRECT = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					" must be formatted YYYY-MM-DDTHHmmSSZ "));
+			new ExceptionContext("edit_check", " must be formatted YYYY-MM-DDTHHmmSSZ "));
 
 	// Used by Validators
 	public final static IMessageContextFactory MANDATORY_VALUE_NOT_PROVIDED = new MessageContextFactory(
 			new ExceptionContext("edit_check", "A value must be provided"));
 
 	public final static IMessageContextFactory MIN_LENGTH_FAILED = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The length must be at least #min_length#"));
+			new ExceptionContext("edit_check", "The length must be at least #min_length#"));
 
 	public final static IMessageContextFactory MIN_LENGTH = new MessageContextFactory(
 			new ExceptionContext("min_length", ""));
 
 	public final static IMessageContextFactory MAX_LENGTH_EXCEEDED = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The length cannot exceed #max_length#"));
+			new ExceptionContext("edit_check", "The length cannot exceed #max_length#"));
 
 	public final static IMessageContextFactory MAX_LENGTH = new MessageContextFactory(
 			new ExceptionContext("max_length", ""));
 
 	public final static IMessageContextFactory CONTAINS_INVALID_CHARACTERS = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The character(s) [#invalid_characters#] are not permitted"));
+			new ExceptionContext("edit_check", "The character(s) [#invalid_characters#] are not permitted"));
 
 	public final static IMessageContextFactory INVALID_CHARACTERS = new MessageContextFactory(
 			new ExceptionContext("invalid_characters", ""));
 
 	public final static IMessageContextFactory CODE_NOT_VALID = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The code [#invalid_code#] is not known"));
+			new ExceptionContext("edit_check", "The code [#invalid_code#] is not known"));
 
 	public final static IMessageContextFactory INVALID_CODE = new MessageContextFactory(
 			new ExceptionContext("invalid_code", ""));
@@ -107,32 +101,26 @@ public class MessageContextFactory implements IMessageContextFactory {
 			new ExceptionContext("edit_check", "The value specified is illegal"));
 
 	public final static IMessageContextFactory EMAIL_MUST_HAVE_AT_SIGN = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Email addresses must contain the @ symbol"));
+			new ExceptionContext("edit_check", "Email addresses must contain the @ symbol"));
 
 	public final static IMessageContextFactory EMAIL_MUST_HAVE_DOT = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Email addresses must contain the . symbol"));
+			new ExceptionContext("edit_check", "Email addresses must contain the . symbol"));
 
 	public final static IMessageContextFactory EMAIL_MUST_HAVE_DOT_FOLLOWING_AT = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Email addresses must the @ symbol preceding the . symbol"));
+			new ExceptionContext("edit_check", "Email addresses must the @ symbol preceding the . symbol"));
 
 	public final static IMessageContextFactory EMAIL_AT_SIGN_MISPLACED = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The @ symbol is incorrectly located"));
+			new ExceptionContext("edit_check", "The @ symbol is incorrectly located"));
 
 	// from NumericRangeValidator
 	public final static IMessageContextFactory BELOW_MIN_VALUE = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The value cannot be less than #min_value#"));
+			new ExceptionContext("edit_check", "The value cannot be less than #min_value#"));
 
 	public final static IMessageContextFactory MIN_VALUE = new MessageContextFactory(
 			new ExceptionContext("min_value", ""));
 
 	public final static IMessageContextFactory EXCEEDS_MAX_VALUE = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The value cannot be exceed #max_value#"));
+			new ExceptionContext("edit_check", "The value cannot be exceed #max_value#"));
 
 	public final static IMessageContextFactory MAX_VALUE = new MessageContextFactory(
 			new ExceptionContext("max_value", ""));
@@ -142,13 +130,11 @@ public class MessageContextFactory implements IMessageContextFactory {
 			new ExceptionContext("edit_check", "Only US addresses are allowed"));
 
 	public final static IMessageContextFactory ZIP_MUST_MATCH_STATE = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The zip code does not match the state provided"));
+			new ExceptionContext("edit_check", "The zip code does not match the state provided"));
 
 	// from USStreetAddressValidator
 	public final static IMessageContextFactory MUST_BE_STREET_ADDRESS = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Only street addresses are allowed"));
+			new ExceptionContext("edit_check", "Only street addresses are allowed"));
 
 	// To be used for Mutually Exclusive Fields
 	public final static IMessageContextFactory AT_MOST_ONE_FIELD = new MessageContextFactory(
@@ -156,8 +142,7 @@ public class MessageContextFactory implements IMessageContextFactory {
 
 	// To be used for Missing Fields
 	public final static IMessageContextFactory AT_LEAST_ONE_FIELD = new MessageContextFactory(
-			new ExceptionContext("at_least_one_field",
-					"Enter at least one value"));
+			new ExceptionContext("at_least_one_field", "Enter at least one value"));
 
 	// Used by MoneyValidator
 	public final static IMessageContextFactory MONEY_RIGHT_OF_DECIMAL_TOO_LONG = new MessageContextFactory(
@@ -169,27 +154,22 @@ public class MessageContextFactory implements IMessageContextFactory {
 					"At most #max_length# digits are allowed to the left of the decimal point"));
 
 	public final static IMessageContextFactory MONEY_ZERO_NOT_ALLOWED = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Zero is not an acceptable value"));
+			new ExceptionContext("edit_check", "Zero is not an acceptable value"));
 
 	public final static IMessageContextFactory MONEY_NEGATIVE_NOT_ALLOWED = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Negative values are not allowed"));
+			new ExceptionContext("edit_check", "Negative values are not allowed"));
 
 	public final static IMessageContextFactory MONEY_DOT_WITH_NO_NUMBERS = new MessageContextFactory(
 			new ExceptionContext("edit_check", "The value '.' is not permitted"));
 
 	public final static IMessageContextFactory MONEY_MULTIPLE_DOTS = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Multiple decimal points are not permitted"));
+			new ExceptionContext("edit_check", "Multiple decimal points are not permitted"));
 
 	public final static IMessageContextFactory MONEY_MULTIPLE_DASHES = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Multiple dashes are not permitted"));
+			new ExceptionContext("edit_check", "Multiple dashes are not permitted"));
 
 	public final static IMessageContextFactory MONEY_DASH_NOT_FIRST_CHARACTER = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The negative sign must be the first character"));
+			new ExceptionContext("edit_check", "The negative sign must be the first character"));
 
 	public final static IMessageContextFactory PERCENT_RIGHT_OF_DECIMAL_TOO_LONG = new MessageContextFactory(
 			new ExceptionContext("edit_check",
@@ -200,27 +180,22 @@ public class MessageContextFactory implements IMessageContextFactory {
 					"At most #max_length# digits are allowed to the left of the decimal point"));
 
 	public final static IMessageContextFactory PERCENT_ZERO_NOT_ALLOWED = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Zero is not an acceptable value"));
+			new ExceptionContext("edit_check", "Zero is not an acceptable value"));
 
 	public final static IMessageContextFactory PERCENT_NEGATIVE_NOT_ALLOWED = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Negative values are not allowed"));
+			new ExceptionContext("edit_check", "Negative values are not allowed"));
 
 	public final static IMessageContextFactory PERCENT_DOT_WITH_NO_NUMBERS = new MessageContextFactory(
 			new ExceptionContext("edit_check", "The value '.' is not permitted"));
 
 	public final static IMessageContextFactory PERCENT_MULTIPLE_DOTS = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Multiple decimal points are not permitted"));
+			new ExceptionContext("edit_check", "Multiple decimal points are not permitted"));
 
 	public final static IMessageContextFactory PERCENT_MULTIPLE_DASHES = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"Multiple dashes are not permitted"));
+			new ExceptionContext("edit_check", "Multiple dashes are not permitted"));
 
 	public final static IMessageContextFactory PERCENT_DASH_NOT_FIRST_CHARACTER = new MessageContextFactory(
-			new ExceptionContext("edit_check",
-					"The negative sign must be the first character"));
+			new ExceptionContext("edit_check", "The negative sign must be the first character"));
 
 	// Use by AccountNumberValidator
 	public final static IMessageContextFactory ACCT_NBR_FAILS_MOD_10_CHECK = new MessageContextFactory(
@@ -265,8 +240,7 @@ public class MessageContextFactory implements IMessageContextFactory {
 	public ExceptionContext create(ExceptionContext context) {
 		// TODO: This is a pretty back hack. I convert the context to a message
 		// to use parameter substitution (too lazy to do it right).
-		ExceptionMessage message = new ExceptionMessage(
-				new ExceptionCode("XXX"), m_exceptionContext.getValue());
+		ExceptionMessage message = new ExceptionMessage(new ExceptionCode("XXX"), m_exceptionContext.getValue());
 		message.addExceptionContext(context);
 		return create(message.getMessage());
 	}
@@ -283,8 +257,7 @@ public class MessageContextFactory implements IMessageContextFactory {
 	public ExceptionContext create(Object dynamicValue) {
 		// Create a new ExceptionContext with the desired value filled in.
 		ExceptionContext exceptionContext;
-		exceptionContext = new ExceptionContext(m_exceptionContext,
-				dynamicValue);
+		exceptionContext = new ExceptionContext(m_exceptionContext, dynamicValue);
 
 		return exceptionContext;
 	}

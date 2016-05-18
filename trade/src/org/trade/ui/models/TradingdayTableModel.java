@@ -68,23 +68,17 @@ public class TradingdayTableModel extends TableModel {
 					+ "in the config.properties (<b>trade.backfill.useRTH</b>)</html>",
 			"<html>The end time of your trading time-frame.<br>"
 					+ "Note the default is set in the config.properties (<b>trade.market.close</b>)</html>",
-			"<html>Market gap from prev close <br>"
-					+ "For stocks this is usually referes to S&P500 bar<br>"
+			"<html>Market gap from prev close <br>" + "For stocks this is usually referes to S&P500 bar<br>"
 					+ "<b>+NRB</b>=Green narrow range bar<br>"
-					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>"
-					+ "<b>-WRB</b>=Red wide range bar<br>"
+					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>" + "<b>-WRB</b>=Red wide range bar<br>"
 					+ "<b>Darling Doji</b>=Green cross</html>",
-			"<html>Your Market bias for the day<br>"
-					+ "For stocks this is usually referes to S&P500<br>"
+			"<html>Your Market bias for the day<br>" + "For stocks this is usually referes to S&P500<br>"
 					+ "<b>+NRB</b>=Green narrow range bar<br>"
-					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>"
-					+ "<b>-WRB</b>=Red wide range bar<br>"
+					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>" + "<b>-WRB</b>=Red wide range bar<br>"
 					+ "<b>Darling Doji</b>=Green cross</html>",
 
-			"<html>Actual market bar i.e. S&P500<br>"
-					+ "<b>+NRB</b>=Green narrow range bar<br>"
-					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>"
-					+ "<b>-WRB</b>=Red wide range bar<br>"
+			"<html>Actual market bar i.e. S&P500<br>" + "<b>+NRB</b>=Green narrow range bar<br>"
+					+ "<b>-NRB TT</b>=Red narrow range bar with topping tail<br>" + "<b>-WRB</b>=Red wide range bar<br>"
 					+ "<b>Darling Doji</b>=Green cross</html>" };
 
 	private Tradingdays m_data = null;
@@ -122,8 +116,7 @@ public class TradingdayTableModel extends TableModel {
 	public boolean isCellEditable(int row, int column) {
 		Date openDate = (Date) this.getValueAt(row, 0);
 		Date closeDate = (Date) this.getValueAt(row, 1);
-		Tradingday tradingday = getData().getTradingday(
-				openDate.getZonedDateTime(), closeDate.getZonedDateTime());
+		Tradingday tradingday = getData().getTradingday(openDate.getZonedDateTime(), closeDate.getZonedDateTime());
 		if (null != tradingday && Tradingdays.hasTradeOrders(tradingday)) {
 			if ((columnNames[column] == OPEN) || (columnNames[column] == CLOSE)) {
 				return false;
@@ -169,20 +162,15 @@ public class TradingdayTableModel extends TableModel {
 			Date openDate = ((Date) super.getValueAt(row, 0));
 			if (null != closeDate && null != openDate) {
 				if (closeDate.getDate().before(openDate.getDate())) {
-					ZonedDateTime date = TradingCalendar.addTradingDays(
-							closeDate.getZonedDateTime(), 1);
-					if (TradingCalendar.getDurationInDays(
-							openDate.getZonedDateTime(), date) > 1)
+					ZonedDateTime date = TradingCalendar.addTradingDays(closeDate.getZonedDateTime(), 1);
+					if (TradingCalendar.getDurationInDays(openDate.getZonedDateTime(), date) > 1)
 						this.setValueAt(openDate, row, column);
 					return openDate;
 				}
 
-				if (TradingCalendar.getDurationInDays(
-						openDate.getZonedDateTime(),
-						closeDate.getZonedDateTime()) > 1) {
-					Date date = new Date(TradingCalendar.getDateAtTime(
-							openDate.getZonedDateTime(),
-							closeDate.getZonedDateTime()));
+				if (TradingCalendar.getDurationInDays(openDate.getZonedDateTime(), closeDate.getZonedDateTime()) > 1) {
+					Date date = new Date(
+							TradingCalendar.getDateAtTime(openDate.getZonedDateTime(), closeDate.getZonedDateTime()));
 					this.setValueAt(date, row, column);
 					return date;
 				}
@@ -225,8 +213,7 @@ public class TradingdayTableModel extends TableModel {
 
 		Date openDate = (Date) super.getValueAt(row, 0);
 		Date closeDate = (Date) super.getValueAt(row, 1);
-		Tradingday element = getData().getTradingday(
-				openDate.getZonedDateTime(), closeDate.getZonedDateTime());
+		Tradingday element = getData().getTradingday(openDate.getZonedDateTime(), closeDate.getZonedDateTime());
 
 		switch (column) {
 		case 0: {
@@ -265,8 +252,7 @@ public class TradingdayTableModel extends TableModel {
 
 		Date open = (Date) this.getValueAt(selectedRow, 0);
 		Date close = (Date) this.getValueAt(selectedRow, 1);
-		Tradingday element = getData().getTradingday(open.getZonedDateTime(),
-				close.getZonedDateTime());
+		Tradingday element = getData().getTradingday(open.getZonedDateTime(), close.getZonedDateTime());
 		if (!element.getTradestrategies().isEmpty())
 			element.getTradestrategies().clear();
 		getData().remove(element);
@@ -282,13 +268,11 @@ public class TradingdayTableModel extends TableModel {
 		if (!TradingCalendar.isTradingDay(date)) {
 			date = TradingCalendar.getNextTradingDay(date);
 		}
-		Tradingday tradingday = new Tradingday(
-				TradingCalendar.getTradingDayStart(date),
+		Tradingday tradingday = new Tradingday(TradingCalendar.getTradingDayStart(date),
 				TradingCalendar.getTradingDayEnd(date));
 		while (getData().containsTradingday(tradingday)) {
 			date = TradingCalendar.getNextTradingDay(date);
-			tradingday = new Tradingday(
-					TradingCalendar.getTradingDayStart(date),
+			tradingday = new Tradingday(TradingCalendar.getTradingDayStart(date),
 					TradingCalendar.getTradingDayEnd(date));
 		}
 		getData().add(tradingday);

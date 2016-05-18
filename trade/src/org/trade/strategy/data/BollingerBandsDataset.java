@@ -53,8 +53,8 @@ import org.trade.strategy.data.bollingerbands.IBollingerBandsDataset;
 
 /**
  */
-public class BollingerBandsDataset extends AbstractXYDataset implements
-		IndicatorDataset, IBollingerBandsDataset, Serializable {
+public class BollingerBandsDataset extends AbstractXYDataset
+		implements IndicatorDataset, IBollingerBandsDataset, Serializable {
 
 	/**
 	 * 
@@ -120,15 +120,13 @@ public class BollingerBandsDataset extends AbstractXYDataset implements
 		try {
 			((BollingerBandsSeries) series).setIsUpper(true);
 			this.data.add(series);
-			BollingerBandsSeries lowerSeries = (BollingerBandsSeries) series
-					.clone();
+			BollingerBandsSeries lowerSeries = (BollingerBandsSeries) series.clone();
 			((BollingerBandsSeries) lowerSeries).setIsUpper(false);
 			this.data.add(lowerSeries);
 			series.addChangeListener(this);
 			fireDatasetChanged();
 		} catch (CloneNotSupportedException e) {
-			throw new IllegalArgumentException(
-					"BollingerBandsSeries clone failed.");
+			throw new IllegalArgumentException("BollingerBandsSeries clone failed.");
 		}
 	}
 
@@ -382,8 +380,7 @@ public class BollingerBandsDataset extends AbstractXYDataset implements
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		BollingerBandsDataset clone = (BollingerBandsDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -399,16 +396,15 @@ public class BollingerBandsDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			BollingerBandsSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

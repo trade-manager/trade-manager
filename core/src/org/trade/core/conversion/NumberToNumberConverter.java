@@ -64,18 +64,16 @@ public abstract class NumberToNumberConverter implements JavaTypeConverter {
 	 * 
 	 * 
 	 * @return Object the converted value * @exception IllegalArgumentException
-	 *         thrown if the valueToConvert is not of type java.lang.Number * @see
+	 *         thrown if the valueToConvert is not of type java.lang.Number
+	 *         * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#convert(Object)
 	 */
-	public Object convert(Object valueToConvert)
-			throws IllegalArgumentException {
+	public Object convert(Object valueToConvert) throws IllegalArgumentException {
 		if (valueToConvert instanceof java.lang.Number) {
 			return getConvertedNumber((Number) valueToConvert);
 		}
 
-		throw new IllegalArgumentException(
-				"The source object must be of type: "
-						+ getSourceType().getName());
+		throw new IllegalArgumentException("The source object must be of type: " + getSourceType().getName());
 	}
 
 	/**
@@ -83,7 +81,8 @@ public abstract class NumberToNumberConverter implements JavaTypeConverter {
 	 * from. In this case java.lang.Number .
 	 * 
 	 * 
-	 * @return Class the class of the source value which will be converted * @see
+	 * @return Class the class of the source value which will be converted
+	 *         * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#getSourceType()
 	 */
 	public Class<?> getSourceType() {

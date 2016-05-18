@@ -95,10 +95,8 @@ public class CArrowImage extends BufferedImage {
 
 		Map<Key, Object> map = new HashMap<Key, Object>();
 
-		map.put(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		map.put(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
+		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		RenderingHints hints = new RenderingHints(map);
 		Graphics2D g2 = this.createGraphics(); // Create a graphics context for
@@ -123,9 +121,8 @@ public class CArrowImage extends BufferedImage {
 			_pathArrow.lineTo(w, h - 1);
 			_pathArrow.lineTo(0, h - 1);
 			_pathArrow.closePath();
-			g2.setPaint(new GradientPaint(w13, h13,
-					SystemColor.controlLtHighlight, w, h - 1,
-					SystemColor.controlShadow));
+			g2.setPaint(
+					new GradientPaint(w13, h13, SystemColor.controlLtHighlight, w, h - 1, SystemColor.controlShadow));
 			g2.fill(_pathArrow);
 			g2.setColor(SystemColor.controlDkShadow);
 			g2.draw(new Line2D.Float(0, h - 1, w, h - 1));
@@ -140,8 +137,7 @@ public class CArrowImage extends BufferedImage {
 			_pathArrow.lineTo(w, 0);
 			_pathArrow.lineTo(w12, h - 1);
 			_pathArrow.closePath();
-			g2.setPaint(new GradientPaint(0, 0, SystemColor.controlLtHighlight,
-					w23, h23, SystemColor.controlShadow));
+			g2.setPaint(new GradientPaint(0, 0, SystemColor.controlLtHighlight, w23, h23, SystemColor.controlShadow));
 			g2.fill(_pathArrow);
 			g2.setColor(SystemColor.controlDkShadow);
 			g2.draw(new Line2D.Float(w, 0, w12, h - 1));

@@ -51,13 +51,11 @@ import org.trade.persistent.dao.Tradingdays;
 
 /**
  */
-public class TradingdayTreeModel extends DefaultTreeModel implements
-		Serializable {
+public class TradingdayTreeModel extends DefaultTreeModel implements Serializable {
 
 	private static final long serialVersionUID = -5543286790183657148L;
 
-	static DefaultMutableTreeNode m_root = new DefaultMutableTreeNode(
-			"Tradingdays");
+	static DefaultMutableTreeNode m_root = new DefaultMutableTreeNode("Tradingdays");
 	private final Hashtable<MutableTreeNode, Object> m_nodeMap = new Hashtable<MutableTreeNode, Object>();
 
 	/**
@@ -67,8 +65,7 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 	 *            Tradingdays
 	 * @throws ValueTypeException
 	 */
-	public TradingdayTreeModel(Tradingdays tradingdays)
-			throws ValueTypeException {
+	public TradingdayTreeModel(Tradingdays tradingdays) throws ValueTypeException {
 
 		super(m_root);
 		buildTree(tradingdays);
@@ -85,8 +82,7 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 		((DefaultMutableTreeNode) getRoot()).removeAllChildren();
 		m_nodeMap.clear();
 		buildTree(tradingdays);
-		fireTreeStructureChanged(this, new Object[] { getRoot() }, new int[0],
-				new Object[0]);
+		fireTreeStructureChanged(this, new Object[] { getRoot() }, new int[0], new Object[0]);
 	}
 
 	/**
@@ -100,11 +96,9 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 
 		m_nodeMap.put(m_root, m_root.getRoot());
 
-		Collections.sort(tradingdays.getTradingdays(),
-				Tradingday.DATE_ORDER_DESC);
+		Collections.sort(tradingdays.getTradingdays(), Tradingday.DATE_ORDER_DESC);
 		for (Tradingday tradingday : tradingdays.getTradingdays()) {
-			Collections.sort(tradingday.getTradestrategies(),
-					Tradestrategy.DATE_ORDER_ASC);
+			Collections.sort(tradingday.getTradestrategies(), Tradestrategy.DATE_ORDER_ASC);
 			addTradingday(tradingday);
 		}
 	}
@@ -127,8 +121,7 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 		MutableTreeNode tradstrategyNode = null;
 		for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 			Side trdestrategySide = Side.newInstance(tradestrategy.getSide());
-			if (tradstrategyNode == null
-					|| !side.equalsCode(trdestrategySide.getCode())) {
+			if (tradstrategyNode == null || !side.equalsCode(trdestrategySide.getCode())) {
 				side = trdestrategySide;
 				childContract = 0;
 				tradstrategyNode = new DefaultMutableTreeNode(side);
@@ -136,8 +129,7 @@ public class TradingdayTreeModel extends DefaultTreeModel implements
 				tradingdayNode.insert(tradstrategyNode, childStrategy);
 				childStrategy++;
 			}
-			MutableTreeNode contractNode = new DefaultMutableTreeNode(
-					tradestrategy);
+			MutableTreeNode contractNode = new DefaultMutableTreeNode(tradestrategy);
 			m_nodeMap.put(contractNode, tradestrategy);
 			tradstrategyNode.insert(contractNode, childContract);
 			childContract++;

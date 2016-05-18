@@ -61,11 +61,10 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 
 	private static final int PLAIN_TEXT = 1;
 
-	public static final DataFlavor TREEPATH_FLAVOR = new DataFlavor(
-			DataFlavor.javaJVMLocalObjectMimeType, "TreePath");
+	public static final DataFlavor TREEPATH_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType, "TreePath");
 
-	private static final DataFlavor[] flavors = { DataFlavor.stringFlavor,
-			DataFlavor.getTextPlainUnicodeFlavor(), TREEPATH_FLAVOR // deprecated
+	private static final DataFlavor[] flavors = { DataFlavor.stringFlavor, DataFlavor.getTextPlainUnicodeFlavor(),
+			TREEPATH_FLAVOR // deprecated
 	};
 
 	private String m_data = null;
@@ -117,8 +116,8 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 	 *            the requested flavor for the data
 	 * 
 	 * @return true if flavor is equal to <code>DataFlavor.stringFlavor</code>
-	 *         or <code>DataFlavor.plainTextFlavor</code>, false otherwise. * @see
-	 *         java
+	 *         or <code>DataFlavor.plainTextFlavor</code>, false otherwise.
+	 *         * @see java
 	 *         .awt.datatransfer.Transferable#isDataFlavorSupported(DataFlavor)
 	 */
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
@@ -152,8 +151,7 @@ public class StringData implements Transferable, ClipboardOwner, Serializable {
 	 *         <code>DataFlavor.plainTextFlavor</code>. * @throws IOException
 	 * @see java.io.Reader
 	 */
-	public Object getTransferData(DataFlavor flavor)
-			throws UnsupportedFlavorException, IOException {
+	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
 		if (flavor.equals(flavors[STRING])) {
 			return new StringData(m_data);
 		} else if (flavor.equals(flavors[PLAIN_TEXT])) {

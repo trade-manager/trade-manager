@@ -69,54 +69,42 @@ public class CandleHome {
 	 *            CandleSeries
 	 * @throws Exception
 	 */
-	public synchronized void persistCandleSeries(final CandleSeries candleSeries)
-			throws Exception {
+	public synchronized void persistCandleSeries(final CandleSeries candleSeries) throws Exception {
 		Candle transientInstance = null;
 		try {
 			if (candleSeries.isEmpty())
 				return;
 
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingday tradingday = null;
-			Contract contract = findContractById(candleSeries.getContract()
-					.getIdContract());
+			Contract contract = findContractById(candleSeries.getContract().getIdContract());
 			for (int i = 0; i < candleSeries.getItemCount(); i++) {
 
-				CandleItem candleItem = (CandleItem) candleSeries
-						.getDataItem(i);
+				CandleItem candleItem = (CandleItem) candleSeries.getDataItem(i);
 				if (null != candleItem.getCandle().getIdCandle()) {
-					Candle instance = entityManager.find(Candle.class,
-							candleItem.getCandle().getIdCandle());
+					Candle instance = entityManager.find(Candle.class, candleItem.getCandle().getIdCandle());
 					if (instance.equals(candleItem.getCandle())) {
 						continue;
 					} else {
 						// This should never happen.
-						throw new Exception("Count: " + i + " Symbol: "
-								+ candleSeries.getSymbol() + "candleid: "
-								+ candleItem.getCandle().getIdCandle()
-								+ " open: "
+						throw new Exception("Count: " + i + " Symbol: " + candleSeries.getSymbol() + "candleid: "
+								+ candleItem.getCandle().getIdCandle() + " open: "
 								+ candleItem.getCandle().getStartPeriod());
 					}
 				}
 
 				if (!candleItem.getCandle().getTradingday().equals(tradingday)) {
 
-					if (null == candleItem.getCandle().getTradingday()
-							.getIdTradingDay()) {
-						tradingday = findTradingdayByDate(candleItem
-								.getCandle().getTradingday().getOpen(),
-								candleItem.getCandle().getTradingday()
-										.getClose());
+					if (null == candleItem.getCandle().getTradingday().getIdTradingDay()) {
+						tradingday = findTradingdayByDate(candleItem.getCandle().getTradingday().getOpen(),
+								candleItem.getCandle().getTradingday().getClose());
 					} else {
-						tradingday = findTradingdayById(candleItem.getCandle()
-								.getTradingday().getIdTradingDay());
+						tradingday = findTradingdayById(candleItem.getCandle().getTradingday().getIdTradingDay());
 					}
 
 					if (null == tradingday) {
-						entityManager.persist(candleItem.getCandle()
-								.getTradingday());
+						entityManager.persist(candleItem.getCandle().getTradingday());
 						entityManager.getTransaction().commit();
 						entityManager.getTransaction().begin();
 						tradingday = candleItem.getCandle().getTradingday();
@@ -125,10 +113,8 @@ public class CandleHome {
 						Integer idContract = contract.getIdContract();
 						Integer barSize = candleSeries.getBarSize();
 						String hqlDelete = "delete Candle where idContract = :idContract and idTradingday = :idTradingday and barSize = :barSize";
-						entityManager.createQuery(hqlDelete)
-								.setParameter("idContract", idContract)
-								.setParameter("idTradingday", idTradingday)
-								.setParameter("barSize", barSize)
+						entityManager.createQuery(hqlDelete).setParameter("idContract", idContract)
+								.setParameter("idTradingday", idTradingday).setParameter("barSize", barSize)
 								.executeUpdate();
 						entityManager.getTransaction().commit();
 						entityManager.getTransaction().begin();
@@ -148,8 +134,7 @@ public class CandleHome {
 			}
 			entityManager.getTransaction().commit();
 		} catch (Exception re) {
-			EntityManagerHelper.logError("Error persistCandleSeries failed :"
-					+ re.getMessage(), re);
+			EntityManagerHelper.logError("Error persistCandleSeries failed :" + re.getMessage(), re);
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -168,12 +153,11 @@ public class CandleHome {
 	 *            Date
 	 * @return List<Candle>
 	 */
-	public List<Candle> findByContractAndDateRange(Integer idContract,
-			ZonedDateTime startPeriod, ZonedDateTime endPeriod, Integer barSize) {
+	public List<Candle> findByContractAndDateRange(Integer idContract, ZonedDateTime startPeriod,
+			ZonedDateTime endPeriod, Integer barSize) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Candle> query = builder.createQuery(Candle.class);
@@ -183,14 +167,12 @@ public class CandleHome {
 
 			if (null != idContract) {
 				Join<Candle, Contract> contract = from.join("contract");
-				Predicate predicate = builder.equal(contract.get("idContract"),
-						idContract);
+				Predicate predicate = builder.equal(contract.get("idContract"), idContract);
 				predicates.add(predicate);
 			}
 			if (null != startPeriod) {
 				Expression<ZonedDateTime> start = from.get("startPeriod");
-				Predicate predicate = builder.greaterThanOrEqualTo(start,
-						startPeriod);
+				Predicate predicate = builder.greaterThanOrEqualTo(start, startPeriod);
 				predicates.add(predicate);
 			}
 			if (null != endPeriod) {
@@ -199,8 +181,7 @@ public class CandleHome {
 				predicates.add(predicate);
 			}
 			if (null != barSize) {
-				Predicate predicate = builder.equal(from.get("barSize"),
-						barSize);
+				Predicate predicate = builder.equal(from.get("barSize"), barSize);
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));
@@ -230,13 +211,11 @@ public class CandleHome {
 	 *            Integer
 	 * @return List<Candle>
 	 */
-	public List<Candle> findCandlesByContractDateRangeBarSize(
-			Integer idContract, ZonedDateTime startOpenDate,
+	public List<Candle> findCandlesByContractDateRangeBarSize(Integer idContract, ZonedDateTime startOpenDate,
 			ZonedDateTime endOpenDate, Integer barSize) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Candle> query = builder.createQuery(Candle.class);
@@ -246,26 +225,21 @@ public class CandleHome {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			if (null != idContract) {
 				Join<Candle, Contract> contract = from.join("contract");
-				Predicate predicateContract = builder.equal(
-						contract.get("idContract"), idContract);
+				Predicate predicateContract = builder.equal(contract.get("idContract"), idContract);
 				predicates.add(predicateContract);
 			}
 			if (null != startOpenDate) {
-				Join<Candle, Tradingday> tradingdayOpenDate = from
-						.join("tradingday");
-				Predicate predicateStartDate = builder.greaterThanOrEqualTo(
-						tradingdayOpenDate.get("open").as(ZonedDateTime.class),
-						startOpenDate);
+				Join<Candle, Tradingday> tradingdayOpenDate = from.join("tradingday");
+				Predicate predicateStartDate = builder
+						.greaterThanOrEqualTo(tradingdayOpenDate.get("open").as(ZonedDateTime.class), startOpenDate);
 				predicates.add(predicateStartDate);
-				Predicate predicateEndDate = builder.lessThanOrEqualTo(
-						tradingdayOpenDate.get("open").as(ZonedDateTime.class),
-						endOpenDate);
+				Predicate predicateEndDate = builder
+						.lessThanOrEqualTo(tradingdayOpenDate.get("open").as(ZonedDateTime.class), endOpenDate);
 				predicates.add(predicateEndDate);
 			}
 
 			if (null != barSize) {
-				Predicate predicate = builder.equal(from.get("barSize"),
-						barSize);
+				Predicate predicate = builder.equal(from.get("barSize"), barSize);
 				predicates.add(predicate);
 			}
 
@@ -293,8 +267,7 @@ public class CandleHome {
 	public Candle findById(Integer idCandle) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Candle instance = entityManager.find(Candle.class, idCandle);
 			entityManager.getTransaction().commit();
@@ -321,12 +294,11 @@ public class CandleHome {
 	 *            ZonedDateTime
 	 * @return Candle
 	 */
-	public Candle findByUniqueKey(Integer idTradingday, Integer idContract,
-			ZonedDateTime startPeriod, ZonedDateTime endPeriod, Integer barSize) {
+	public Candle findByUniqueKey(Integer idTradingday, Integer idContract, ZonedDateTime startPeriod,
+			ZonedDateTime endPeriod, Integer barSize) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Candle> query = builder.createQuery(Candle.class);
@@ -336,29 +308,24 @@ public class CandleHome {
 
 			if (null != idTradingday) {
 				Join<Candle, Tradingday> tradingday = from.join("tradingday");
-				Predicate predicate = builder.equal(
-						tradingday.get("idTradingDay"), idTradingday);
+				Predicate predicate = builder.equal(tradingday.get("idTradingDay"), idTradingday);
 				predicates.add(predicate);
 			}
 			if (null != idContract) {
 				Join<Candle, Contract> contract = from.join("contract");
-				Predicate predicate = builder.equal(contract.get("idContract"),
-						idContract);
+				Predicate predicate = builder.equal(contract.get("idContract"), idContract);
 				predicates.add(predicate);
 			}
 			if (null != startPeriod) {
-				Predicate predicate = builder.equal(from.get("startPeriod"),
-						startPeriod);
+				Predicate predicate = builder.equal(from.get("startPeriod"), startPeriod);
 				predicates.add(predicate);
 			}
 			if (null != endPeriod) {
-				Predicate predicate = builder.equal(from.get("endPeriod"),
-						endPeriod);
+				Predicate predicate = builder.equal(from.get("endPeriod"), endPeriod);
 				predicates.add(predicate);
 			}
 			if (null != barSize) {
-				Predicate predicate = builder.equal(from.get("barSize"),
-						barSize);
+				Predicate predicate = builder.equal(from.get("barSize"), barSize);
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));
@@ -389,8 +356,7 @@ public class CandleHome {
 	public Long findCandleCount(Integer idTradingday, Integer idContract) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> query = builder.createQuery();
@@ -402,14 +368,12 @@ public class CandleHome {
 
 			if (null != idTradingday) {
 				Join<Candle, Tradingday> tradingday = from.join("tradingday");
-				Predicate predicate = builder.equal(
-						tradingday.get("idTradingDay"), idTradingday);
+				Predicate predicate = builder.equal(tradingday.get("idTradingDay"), idTradingday);
 				predicates.add(predicate);
 			}
 			if (null != idContract) {
 				Join<Candle, Contract> contract = from.join("contract");
-				Predicate predicate = builder.equal(contract.get("idContract"),
-						idContract);
+				Predicate predicate = builder.equal(contract.get("idContract"), idContract);
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));
@@ -440,8 +404,7 @@ public class CandleHome {
 	private Contract findContractById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			Contract instance = entityManager.find(Contract.class, id);
 			return instance;
 		} catch (Exception re) {
@@ -459,8 +422,7 @@ public class CandleHome {
 	private Tradingday findTradingdayById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			Tradingday instance = entityManager.find(Tradingday.class, id);
 			return instance;
 		} catch (Exception re) {
@@ -477,23 +439,19 @@ public class CandleHome {
 	 *            ZonedDateTime
 	 * @return Tradingday
 	 */
-	private Tradingday findTradingdayByDate(ZonedDateTime open,
-			ZonedDateTime close) {
+	private Tradingday findTradingdayByDate(ZonedDateTime open, ZonedDateTime close) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradingday> query = builder
-					.createQuery(Tradingday.class);
+			CriteriaQuery<Tradingday> query = builder.createQuery(Tradingday.class);
 			Root<Tradingday> from = query.from(Tradingday.class);
 			query.select(from);
 			if (null != open)
 				query.where(builder.equal(from.get("open"), open));
 			if (null != close)
 				query.where(builder.equal(from.get("close"), close));
-			List<Tradingday> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Tradingday> items = entityManager.createQuery(query).getResultList();
 
 			if (items.size() > 0) {
 				return items.get(0);

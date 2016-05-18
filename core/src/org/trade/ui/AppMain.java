@@ -64,9 +64,8 @@ public class AppMain {
 		AppFrame frame = new AppFrame();
 		frame.setIconImage(ImageBuilder.getImage("trade.gif"));
 		frame.setSize((int) appWidth, (int) appHieght);
-		frame.setLocation((int) ((screenSize.getWidth() - frame.getSize()
-				.getWidth()) / 2), (int) ((screenSize.getHeight() - frame
-				.getSize().getHeight()) / 2));
+		frame.setLocation((int) ((screenSize.getWidth() - frame.getSize().getWidth()) / 2),
+				(int) ((screenSize.getHeight() - frame.getSize().getHeight()) / 2));
 		frame.validate();
 		frame.repaint();
 		frame.setVisible(true);

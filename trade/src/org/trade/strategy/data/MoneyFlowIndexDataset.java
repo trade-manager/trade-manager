@@ -53,8 +53,8 @@ import org.trade.strategy.data.mfi.MoneyFlowIndexItem;
 
 /**
  */
-public class MoneyFlowIndexDataset extends AbstractXYDataset implements
-		IndicatorDataset, IMoneyFlowIndexDataset, Serializable {
+public class MoneyFlowIndexDataset extends AbstractXYDataset
+		implements IndicatorDataset, IMoneyFlowIndexDataset, Serializable {
 
 	/**
 	 * 
@@ -365,8 +365,7 @@ public class MoneyFlowIndexDataset extends AbstractXYDataset implements
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		MoneyFlowIndexDataset clone = (MoneyFlowIndexDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -382,16 +381,15 @@ public class MoneyFlowIndexDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			MoneyFlowIndexSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

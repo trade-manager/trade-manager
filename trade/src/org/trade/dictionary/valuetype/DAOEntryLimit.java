@@ -85,11 +85,8 @@ public class DAOEntryLimit extends DAODecode {
 			while (enumDAODecode.hasMoreElements()) {
 				final Decode decode = enumDAODecode.nextElement();
 				final Entrylimit entryLimit = (Entrylimit) decode.getObject();
-				if ((entryLimit.getStartPrice()
-						.subtract(price.getBigDecimalValue()).doubleValue() <= 0)
-						&& (entryLimit.getEndPrice()
-								.subtract(price.getBigDecimalValue())
-								.doubleValue() >= 0)) {
+				if ((entryLimit.getStartPrice().subtract(price.getBigDecimalValue()).doubleValue() <= 0)
+						&& (entryLimit.getEndPrice().subtract(price.getBigDecimalValue()).doubleValue() >= 0)) {
 					return entryLimit;
 				}
 			}

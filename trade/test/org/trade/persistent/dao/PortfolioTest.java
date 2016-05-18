@@ -58,8 +58,7 @@ import org.trade.ui.TradeAppLoadConfig;
  */
 public class PortfolioTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(PortfolioTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(PortfolioTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -111,20 +110,16 @@ public class PortfolioTest {
 
 		try {
 			PortfolioHome portfolioHome = new PortfolioHome();
-			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance()
-					.getObject();
+			Portfolio portfolio = (Portfolio) DAOPortfolio.newInstance().getObject();
 			portfolio = portfolioHome.findByName(portfolio.getName());
-			Account account = new Account("Test", "T123456", Currency.USD,
-					AccountType.INDIVIDUAL);
-			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio,
-					account);
+			Account account = new Account("Test", "T123456", Currency.USD, AccountType.INDIVIDUAL);
+			PortfolioAccount portfolioAccount = new PortfolioAccount(portfolio, account);
 			portfolio.getPortfolioAccounts().add(portfolioAccount);
 			portfolio = aspectHome.persist(portfolio);
 			assertNotNull("1", portfolio.getIndividualAccount());
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

@@ -55,7 +55,8 @@ public class YesNo extends BaseDecode {
 	 * isYes
 	 * 
 	 * @return boolean
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public boolean isYes() {
@@ -66,7 +67,8 @@ public class YesNo extends BaseDecode {
 	 * isNo
 	 * 
 	 * @return boolean
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public boolean isNo() {
@@ -79,7 +81,8 @@ public class YesNo extends BaseDecode {
 	 * @param code
 	 *            String
 	 * @return YesNo
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public static YesNo newInstance(String code) {

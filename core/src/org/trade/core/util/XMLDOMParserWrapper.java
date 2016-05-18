@@ -111,8 +111,7 @@ public class XMLDOMParserWrapper {
 	 * @param elementContentWhitespace
 	 *            boolean
 	 */
-	public XMLDOMParserWrapper(boolean validation,
-			boolean elementContentWhitespace) {
+	public XMLDOMParserWrapper(boolean validation, boolean elementContentWhitespace) {
 		try {
 
 			// Step 1: create a DocumentBuilderFactory
@@ -129,9 +128,8 @@ public class XMLDOMParserWrapper {
 
 			// Step 2: create a DocumentBuilder
 			setDocumentBuilder(dbf.newDocumentBuilder());
-			setErrorHandler(new XMLDOMParserErrorHandler(new PrintWriter(
-					new OutputStreamWriter(System.err, PRINTWRITER_ENCODING),
-					true)));
+			setErrorHandler(new XMLDOMParserErrorHandler(
+					new PrintWriter(new OutputStreamWriter(System.err, PRINTWRITER_ENCODING), true)));
 			getDocumentBuilder().setErrorHandler(getErrorHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -198,8 +196,7 @@ public class XMLDOMParserWrapper {
 	 */
 	public Document parse(File file) throws SAXException, IOException {
 		if (null == file) {
-			throw new SAXException(
-					"empyt file string is sometimes represented as null");
+			throw new SAXException("empyt file string is sometimes represented as null");
 		}
 
 		Document doc = null;
@@ -226,15 +223,13 @@ public class XMLDOMParserWrapper {
 	 */
 	public Document parse(String xml) throws SAXException, IOException {
 		if (null == xml) {
-			throw new SAXException(
-					"empyt xml string is sometimes represented as null");
+			throw new SAXException("empyt xml string is sometimes represented as null");
 		}
 
 		Document doc = null;
 
 		// Step 3: parse the input file to get a Document object
-		doc = getDocumentBuilder().parse(
-				new InputSource(new ByteArrayInputStream(xml.getBytes())));
+		doc = getDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(xml.getBytes())));
 
 		return doc;
 	}
@@ -302,8 +297,7 @@ public class XMLDOMParserWrapper {
 				}
 
 				// only add this if the encoding is not null or empty string
-				xml.append("<?xml version=\"1.0\" encoding=\"" + Encoding
-						+ "\"?>");
+				xml.append("<?xml version=\"1.0\" encoding=\"" + Encoding + "\"?>");
 			} else {
 
 				// if no endoding is speified then still add xml version 1.0
@@ -315,7 +309,7 @@ public class XMLDOMParserWrapper {
 			break;
 		}
 
-		// print element with attributes
+			// print element with attributes
 		case Node.ELEMENT_NODE: {
 
 			nodeName = node.getNodeName();
@@ -328,10 +322,7 @@ public class XMLDOMParserWrapper {
 				if (!"XSL:".equals(nodeName.substring(0, 4))) {
 					String displayName = formatDisplayName(node.getNodeName());
 
-					nodeName = "Attribute name=\""
-							+ nodeName
-							+ "\" displayName=\""
-							+ displayName
+					nodeName = "Attribute name=\"" + nodeName + "\" displayName=\"" + displayName
 							+ "\" type=\"String\" length=\"80\" precision=\"0\" required=\"false\"";
 				} else {
 					NodeList children = node.getChildNodes();
@@ -375,8 +366,7 @@ public class XMLDOMParserWrapper {
 			for (Attr attr : attrs) {
 
 				if (function == CREATE_RULE) {
-					if ((attr.getNodeName().equals("class") || attr
-							.getNodeName().equals("attrib"))) {
+					if ((attr.getNodeName().equals("class") || attr.getNodeName().equals("attrib"))) {
 						xml.append(' ');
 						xml.append(attr.getNodeName());
 						xml.append("=\"");
@@ -414,7 +404,7 @@ public class XMLDOMParserWrapper {
 			break;
 		}
 
-		// handle entity reference nodes
+			// handle entity reference nodes
 		case Node.ENTITY_REFERENCE_NODE: {
 			if (canonical) {
 				NodeList children = node.getChildNodes();
@@ -435,7 +425,7 @@ public class XMLDOMParserWrapper {
 			break;
 		}
 
-		// print cdata sections
+			// print cdata sections
 		case Node.CDATA_SECTION_NODE: {
 
 			if (canonical) {
@@ -450,13 +440,11 @@ public class XMLDOMParserWrapper {
 			break;
 		}
 
-		// print text
+			// print text
 		case Node.TEXT_NODE: {
-			if ((function == CREATE_STYPE_SHEET)
-					&& (null != node.getNodeValue())
+			if ((function == CREATE_STYPE_SHEET) && (null != node.getNodeValue())
 					&& (node.getNodeValue().trim().length() > 0)) {
-				xml.append("<xsl:value-of select=\""
-						+ node.getParentNode().getNodeName() + "\"/>");
+				xml.append("<xsl:value-of select=\"" + node.getParentNode().getNodeName() + "\"/>");
 			} else {
 				if (function != CREATE_RULE) {
 					xml.append(normalize(node.getNodeValue()));
@@ -467,7 +455,7 @@ public class XMLDOMParserWrapper {
 			break;
 		}
 
-		// print processing instruction
+			// print processing instruction
 		case Node.PROCESSING_INSTRUCTION_NODE: {
 			xml.append("<?");
 			xml.append(node.getNodeName());
@@ -485,8 +473,7 @@ public class XMLDOMParserWrapper {
 		}
 		}
 
-		if ((type == Node.ELEMENT_NODE) && (function != CREATE_KNOWLEDGE)
-				&& (function != CREATE_RULE)) {
+		if ((type == Node.ELEMENT_NODE) && (function != CREATE_KNOWLEDGE) && (function != CREATE_RULE)) {
 			xml.append("</");
 			xml.append(nodeName);
 			xml.append('>');
@@ -554,11 +541,10 @@ public class XMLDOMParserWrapper {
 			int charInt = Integer.valueOf(Integer.toString(ch)).intValue();
 
 			if (charInt < 32) {
-				if ((charInt == 10 /* line feed */) || (charInt == 13 /*
-																		 * carridge
-																		 * return
-																		 */)
-						|| (charInt == 9 /* tab */)) {
+				if ((charInt == 10 /* line feed */)
+						|| (charInt == 13 /*
+											 * carridge return
+											 */) || (charInt == 9 /* tab */)) {
 				} else {
 
 					// set it to spaces
@@ -779,8 +765,7 @@ public class XMLDOMParserWrapper {
 		// Print children if any
 		m_indent++;
 
-		for (Node child = n.getFirstChild(); child != null; child = child
-				.getNextSibling()) {
+		for (Node child = n.getFirstChild(); child != null; child = child.getNextSibling()) {
 			echo(child);
 		}
 
@@ -885,8 +870,7 @@ public class XMLDOMParserWrapper {
 				systemId = "null";
 			}
 
-			String info = "URI=" + systemId + " Line=" + spe.getLineNumber()
-					+ ": " + spe.getMessage();
+			String info = "URI=" + systemId + " Line=" + spe.getLineNumber() + ": " + spe.getMessage();
 
 			return info;
 		}

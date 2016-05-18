@@ -51,10 +51,8 @@ public abstract class StringWrapper extends ValueType {
 
 	static {
 		// Register the appropriate converters
-		JavaTypeTranslator
-				.registerDynamicTypeConverter(new ObjectToStringWrapper());
-		JavaTypeTranslator
-				.registerDynamicTypeConverter(new StringWrapperToObject());
+		JavaTypeTranslator.registerDynamicTypeConverter(new ObjectToStringWrapper());
+		JavaTypeTranslator.registerDynamicTypeConverter(new StringWrapperToObject());
 	}
 
 	private String m_value = "";
@@ -82,8 +80,7 @@ public abstract class StringWrapper extends ValueType {
 	 * @return boolean
 	 */
 	public boolean isValid() {
-		return isValid(
-				getDefaultOptionalValidator(MessageFactory.SYSTEM_ERROR), null);
+		return isValid(getDefaultOptionalValidator(MessageFactory.SYSTEM_ERROR), null);
 	}
 
 	/**
@@ -95,8 +92,7 @@ public abstract class StringWrapper extends ValueType {
 	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
-	public boolean isValid(Validator validator,
-			ExceptionMessageListener receiver) {
+	public boolean isValid(Validator validator, ExceptionMessageListener receiver) {
 		return validator.isValid(m_value, null, null, receiver);
 	}
 
@@ -131,8 +127,7 @@ public abstract class StringWrapper extends ValueType {
 	 *            boolean
 	 * @return Validator
 	 */
-	protected abstract Validator getDefaultValidator(
-			IMessageFactory messageFactory, boolean isMandatory);
+	protected abstract Validator getDefaultValidator(IMessageFactory messageFactory, boolean isMandatory);
 
 	/**
 	 * Method isEmpty.
@@ -162,8 +157,7 @@ public abstract class StringWrapper extends ValueType {
 			return false;
 		}
 
-		return (getInternalValue().equals(((StringWrapper) objectToCompare)
-				.getInternalValue()));
+		return (getInternalValue().equals(((StringWrapper) objectToCompare).getInternalValue()));
 	}
 
 	/**

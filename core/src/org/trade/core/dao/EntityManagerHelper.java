@@ -77,8 +77,7 @@ public class EntityManagerHelper {
 	private static final EntityManagerFactory factory;
 	private static ValidatorFactory validatorFactory;
 	private static final ThreadLocal<EntityManager> threadLocal;
-	private final static Logger _log = LoggerFactory
-			.getLogger(EntityManagerHelper.class);
+	private final static Logger _log = LoggerFactory.getLogger(EntityManagerHelper.class);
 
 	static {
 		factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
@@ -217,8 +216,7 @@ public class EntityManagerHelper {
 	 * </p>
 	 */
 	public static void rollback() {
-		if ((getEntityManager().getTransaction() != null)
-				&& getEntityManager().getTransaction().isActive()) {
+		if ((getEntityManager().getTransaction() != null) && getEntityManager().getTransaction().isActive()) {
 			getEntityManager().getTransaction().rollback();
 		}
 	}

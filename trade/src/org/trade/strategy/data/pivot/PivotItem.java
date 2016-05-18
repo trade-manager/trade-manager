@@ -64,8 +64,7 @@ public class PivotItem extends ComparableObjectItem {
 	 * @param pivotSide
 	 *            the pivot side.
 	 */
-	public PivotItem(RegularTimePeriod period, BigDecimal pivotPrice,
-			String pivotSide) {
+	public PivotItem(RegularTimePeriod period, BigDecimal pivotPrice, String pivotSide) {
 		super(period, new Pivot(pivotPrice, pivotSide));
 	}
 

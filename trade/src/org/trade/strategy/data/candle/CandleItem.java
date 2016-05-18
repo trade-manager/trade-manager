@@ -85,12 +85,10 @@ public class CandleItem extends ComparableObjectItem {
 	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public CandleItem(Contract contract, Tradingday tradingday,
-			RegularTimePeriod period, double open, double high, double low,
-			double close, long volume, double vwap, int count,
-			ZonedDateTime lastUpdateDate) {
-		super(period, new Candle(contract, tradingday, period, open, high, low,
-				close, volume, vwap, count, lastUpdateDate));
+	public CandleItem(Contract contract, Tradingday tradingday, RegularTimePeriod period, double open, double high,
+			double low, double close, long volume, double vwap, int count, ZonedDateTime lastUpdateDate) {
+		super(period,
+				new Candle(contract, tradingday, period, open, high, low, close, volume, vwap, count, lastUpdateDate));
 	}
 
 	/**

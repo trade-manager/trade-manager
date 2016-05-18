@@ -69,20 +69,17 @@ public class SQLTimestampToStringConverter implements JavaTypeConverter {
 	 *            the java.sql.Timestamp value to convert
 	 * 
 	 * 
-	 * @return Object the String representation of the valueToConvert * @exception
-	 *         IllegalArgumentException thrown if the valueToConvert is not of
-	 *         type java.sql.Timestamp * @see
+	 * @return Object the String representation of the valueToConvert
+	 *         * @exception IllegalArgumentException thrown if the
+	 *         valueToConvert is not of type java.sql.Timestamp * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#convert(Object)
 	 */
-	public Object convert(Object valueToConvert)
-			throws IllegalArgumentException {
+	public Object convert(Object valueToConvert) throws IllegalArgumentException {
 		if (valueToConvert instanceof java.sql.Timestamp) {
 			return ((Timestamp) valueToConvert).toString();
 		}
 
-		throw new IllegalArgumentException(
-				"The source object must be of type: "
-						+ getSourceType().getName());
+		throw new IllegalArgumentException("The source object must be of type: " + getSourceType().getName());
 	}
 
 	/**
@@ -90,7 +87,8 @@ public class SQLTimestampToStringConverter implements JavaTypeConverter {
 	 * from. In this case java.sql.Timestamp .
 	 * 
 	 * 
-	 * @return Class the class of the source value which will be converted * @see
+	 * @return Class the class of the source value which will be converted
+	 *         * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#getSourceType()
 	 */
 	public Class<?> getSourceType() {

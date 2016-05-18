@@ -77,22 +77,19 @@ public class TradingdayTable extends Table {
 	public TradingdayTable(TableModel model) throws ValueTypeException {
 		super(model);
 		DecodeTableEditor marketBarEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new MarketBar()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new MarketBar()).getCodesDecodes()));
 		this.setDefaultEditor(MarketBar.class, marketBarEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(TradingCalendar
-						.getDateTimeNowMarketTimeZone()),
-				DATETIMEFORMAT, Calendar.MINUTE);
+				new org.trade.core.valuetype.Date(TradingCalendar.getDateTimeNowMarketTimeZone()), DATETIMEFORMAT,
+				Calendar.MINUTE);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		this.setPreferredScrollableViewportSize(new Dimension(250, 40));
 		this.setFillsViewportHeight(true);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
-				model);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(model);
 		this.setRowSorter(sorter);
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));

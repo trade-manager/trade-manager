@@ -128,11 +128,9 @@ public class MACDSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public MACDSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public MACDSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -157,12 +155,9 @@ public class MACDSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public MACDSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, Integer fastLength, Integer slowLength,
-			Integer signalSmoothing) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public MACDSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart, Integer fastLength, Integer slowLength, Integer signalSmoothing) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.fastLength = fastLength;
 		this.slowLength = slowLength;
 		this.signalSmoothing = signalSmoothing;
@@ -227,13 +222,11 @@ public class MACDSeries extends IndicatorSeries {
 	 * @param MACD
 	 *            the MACD.
 	 */
-	public void add(RegularTimePeriod period, BigDecimal MACD,
-			BigDecimal signalLine, BigDecimal MACDHistogram) {
+	public void add(RegularTimePeriod period, BigDecimal MACD, BigDecimal signalLine, BigDecimal MACDHistogram) {
 		if (!this.isEmpty()) {
 			MACDItem item0 = (MACDItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new MACDItem(period, MACD, signalLine, MACDHistogram), true);
@@ -251,10 +244,8 @@ public class MACDSeries extends IndicatorSeries {
 	public void add(MACDItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			MACDItem item0 = (MACDItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -269,8 +260,7 @@ public class MACDSeries extends IndicatorSeries {
 	public Integer getFastLength() {
 		try {
 			if (null == this.fastLength)
-				this.fastLength = (Integer) CodeValue.getValueCode(FAST_LENGTH,
-						this.getCodeValues());
+				this.fastLength = (Integer) CodeValue.getValueCode(FAST_LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.fastLength = null;
 		}
@@ -296,8 +286,7 @@ public class MACDSeries extends IndicatorSeries {
 	public Integer getSlowLength() {
 		try {
 			if (null == this.slowLength)
-				this.slowLength = (Integer) CodeValue.getValueCode(SLOW_LENGTH,
-						this.getCodeValues());
+				this.slowLength = (Integer) CodeValue.getValueCode(SLOW_LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.slowLength = null;
 		}
@@ -323,8 +312,7 @@ public class MACDSeries extends IndicatorSeries {
 	public Integer getSignalSmoothing() {
 		try {
 			if (null == this.signalSmoothing)
-				this.signalSmoothing = (Integer) CodeValue.getValueCode(
-						SIGNAL_SMOOTHING, this.getCodeValues());
+				this.signalSmoothing = (Integer) CodeValue.getValueCode(SIGNAL_SMOOTHING, this.getCodeValues());
 		} catch (Exception e) {
 			this.signalSmoothing = null;
 		}
@@ -350,8 +338,7 @@ public class MACDSeries extends IndicatorSeries {
 	public Boolean getSimpleMAType() {
 		try {
 			if (null == this.simpleMAType)
-				this.simpleMAType = (Boolean) CodeValue.getValueCode(SMA_TYPE,
-						this.getCodeValues());
+				this.simpleMAType = (Boolean) CodeValue.getValueCode(SMA_TYPE, this.getCodeValues());
 		} catch (Exception e) {
 			this.simpleMAType = null;
 		}
@@ -403,23 +390,19 @@ public class MACDSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 		if (getFastLength() == null || getFastLength() < 1) {
-			throw new IllegalArgumentException(
-					"Fast MA must be greater than zero.");
+			throw new IllegalArgumentException("Fast MA must be greater than zero.");
 		}
 
 		if (getSlowLength() == null || getSlowLength() < 1) {
-			throw new IllegalArgumentException(
-					"Slow MA must be greater than zero.");
+			throw new IllegalArgumentException("Slow MA must be greater than zero.");
 		}
 
 		if (getSignalSmoothing() == null || getSignalSmoothing() < 1) {
-			throw new IllegalArgumentException(
-					"Signal Smoothing must be greater than zero.");
+			throw new IllegalArgumentException("Signal Smoothing must be greater than zero.");
 		}
 
 		if (getSlowLength() < getFastLength()) {
-			throw new IllegalArgumentException(
-					"Fast MA must be greater than Slow MA.");
+			throw new IllegalArgumentException("Fast MA must be greater than Slow MA.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -441,14 +424,12 @@ public class MACDSeries extends IndicatorSeries {
 					 * each time.
 					 */
 					if (newBar) {
-						fastSum = fastSum - this.fastYYValues.getLast()
-								+ yy.doubleValue();
+						fastSum = fastSum - this.fastYYValues.getLast() + yy.doubleValue();
 						this.fastYYValues.removeLast();
 						this.fastYYValues.addFirst(yy.doubleValue());
 
 					} else {
-						fastSum = fastSum - this.fastYYValues.getFirst()
-								+ yy.doubleValue();
+						fastSum = fastSum - this.fastYYValues.getFirst() + yy.doubleValue();
 						this.fastYYValues.removeFirst();
 						this.fastYYValues.addFirst(yy.doubleValue());
 					}
@@ -457,8 +438,7 @@ public class MACDSeries extends IndicatorSeries {
 						fastSum = fastSum + yy.doubleValue();
 						this.fastYYValues.addFirst(yy.doubleValue());
 					} else {
-						fastSum = fastSum + yy.doubleValue()
-								- this.fastYYValues.getFirst();
+						fastSum = fastSum + yy.doubleValue() - this.fastYYValues.getFirst();
 						this.fastYYValues.removeFirst();
 						this.fastYYValues.addFirst(yy.doubleValue());
 					}
@@ -473,14 +453,12 @@ public class MACDSeries extends IndicatorSeries {
 					 * each time.
 					 */
 					if (newBar) {
-						slowSum = slowSum - this.slowYYValues.getLast()
-								+ yy.doubleValue();
+						slowSum = slowSum - this.slowYYValues.getLast() + yy.doubleValue();
 						this.slowYYValues.removeLast();
 						this.slowYYValues.addFirst(yy.doubleValue());
 
 					} else {
-						slowSum = slowSum - this.slowYYValues.getFirst()
-								+ yy.doubleValue();
+						slowSum = slowSum - this.slowYYValues.getFirst() + yy.doubleValue();
 						this.slowYYValues.removeFirst();
 						this.slowYYValues.addFirst(yy.doubleValue());
 					}
@@ -489,8 +467,7 @@ public class MACDSeries extends IndicatorSeries {
 						slowSum = slowSum + yy.doubleValue();
 						this.slowYYValues.addFirst(yy.doubleValue());
 					} else {
-						slowSum = slowSum + yy.doubleValue()
-								- this.slowYYValues.getFirst();
+						slowSum = slowSum + yy.doubleValue() - this.slowYYValues.getFirst();
 						this.slowYYValues.removeFirst();
 						this.slowYYValues.addFirst(yy.doubleValue());
 					}
@@ -503,8 +480,7 @@ public class MACDSeries extends IndicatorSeries {
 						fastEMA = fastSum / this.getFastLength();
 						fastMultiplyer = 2 / (this.getFastLength() + 1.0d);
 					} else {
-						fastEMA = ((this.fastYYValues.getFirst() - prevFastEMA) * fastMultiplyer)
-								+ prevFastEMA;
+						fastEMA = ((this.fastYYValues.getFirst() - prevFastEMA) * fastMultiplyer) + prevFastEMA;
 					}
 					prevFastEMA = fastEMA;
 					double slowEMA = 0;
@@ -512,13 +488,11 @@ public class MACDSeries extends IndicatorSeries {
 						slowEMA = slowSum / this.getSlowLength();
 						slowMultiplyer = 2 / (this.getSlowLength() + 1.0d);
 					} else {
-						slowEMA = ((this.slowYYValues.getFirst() - prevSlowEMA) * slowMultiplyer)
-								+ prevSlowEMA;
+						slowEMA = ((this.slowYYValues.getFirst() - prevSlowEMA) * slowMultiplyer) + prevSlowEMA;
 					}
 					prevSlowEMA = slowEMA;
 					double MACD = fastEMA - slowEMA;
-					if (this.signalSmoothingYYValues.size() == this
-							.getSignalSmoothing()) {
+					if (this.signalSmoothingYYValues.size() == this.getSignalSmoothing()) {
 						/*
 						 * If the item does not exist in the series then this is
 						 * a new time period and so we need to remove the last
@@ -529,16 +503,12 @@ public class MACDSeries extends IndicatorSeries {
 						 */
 
 						if (newBar) {
-							signalSmoothingSum = signalSmoothingSum
-									- this.signalSmoothingYYValues.getLast()
-									+ MACD;
+							signalSmoothingSum = signalSmoothingSum - this.signalSmoothingYYValues.getLast() + MACD;
 							this.signalSmoothingYYValues.removeLast();
 							this.signalSmoothingYYValues.addFirst(MACD);
 
 						} else {
-							signalSmoothingSum = signalSmoothingSum
-									- this.signalSmoothingYYValues.getFirst()
-									+ MACD;
+							signalSmoothingSum = signalSmoothingSum - this.signalSmoothingYYValues.getFirst() + MACD;
 							this.signalSmoothingYYValues.removeFirst();
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
@@ -548,8 +518,7 @@ public class MACDSeries extends IndicatorSeries {
 							signalSmoothingSum = signalSmoothingSum + MACD;
 							this.signalSmoothingYYValues.addFirst(MACD);
 						} else {
-							signalSmoothingSum = signalSmoothingSum + MACD
-									- this.signalSmoothingYYValues.getFirst();
+							signalSmoothingSum = signalSmoothingSum + MACD - this.signalSmoothingYYValues.getFirst();
 							this.signalSmoothingYYValues.removeFirst();
 							this.signalSmoothingYYValues.addFirst(MACD);
 						}
@@ -557,24 +526,18 @@ public class MACDSeries extends IndicatorSeries {
 					double signalLine = Double.MAX_VALUE;
 					if (this.signalSmoothingYYValues.size() == getSignalSmoothing()) {
 
-						signalLine = calculateSmoothingMA(
-								this.signalSmoothingYYValues.getFirst(),
-								this.prevSignalSmoothingEMA,
-								this.signalSmoothingSum);
+						signalLine = calculateSmoothingMA(this.signalSmoothingYYValues.getFirst(),
+								this.prevSignalSmoothingEMA, this.signalSmoothingSum);
 						this.prevSignalSmoothingEMA = signalLine;
 					}
 					if (newBar) {
-						MACDItem dataItem = new MACDItem(
-								candleItem.getPeriod(), new BigDecimal(MACD),
-								(signalLine == Double.MAX_VALUE ? null
-										: new BigDecimal(signalLine)),
-								(signalLine == Double.MAX_VALUE ? null
-										: new BigDecimal(MACD - signalLine)));
+						MACDItem dataItem = new MACDItem(candleItem.getPeriod(), new BigDecimal(MACD),
+								(signalLine == Double.MAX_VALUE ? null : new BigDecimal(signalLine)),
+								(signalLine == Double.MAX_VALUE ? null : new BigDecimal(MACD - signalLine)));
 						this.add(dataItem, false);
 
 					} else {
-						MACDItem dataItem = (MACDItem) this.getDataItem(this
-								.getItemCount() - 1);
+						MACDItem dataItem = (MACDItem) this.getDataItem(this.getItemCount() - 1);
 						dataItem.setMACD(MACD);
 						if (signalLine == Double.MAX_VALUE) {
 							dataItem.setSignalLine(signalLine);
@@ -599,8 +562,7 @@ public class MACDSeries extends IndicatorSeries {
 	 *            Double
 	 * @return double
 	 */
-	private double calculateSmoothingMA(double close,
-			double prevSignalSmoothingEMA, Double sum) {
+	private double calculateSmoothingMA(double close, double prevSignalSmoothingEMA, Double sum) {
 
 		double ma = 0;
 		if (this.getSimpleMAType()) {
@@ -615,8 +577,7 @@ public class MACDSeries extends IndicatorSeries {
 				ma = sum / getSignalSmoothing();
 				this.signalSmoothingMultiplyer = 2 / (getSignalSmoothing() + 1.0d);
 			} else {
-				ma = ((close - prevSignalSmoothingEMA) * this.signalSmoothingMultiplyer)
-						+ prevSignalSmoothingEMA;
+				ma = ((close - prevSignalSmoothingEMA) * this.signalSmoothingMultiplyer) + prevSignalSmoothingEMA;
 			}
 
 		}
@@ -630,8 +591,7 @@ public class MACDSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			MACDItem dataItem = (MACDItem) this.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getMACD());
 		}
 	}

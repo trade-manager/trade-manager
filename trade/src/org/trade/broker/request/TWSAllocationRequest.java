@@ -42,32 +42,26 @@ public class TWSAllocationRequest extends SaxMapper {
 		};
 
 		final TagTracker allocationProfileTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 				Portfolio aspect = new Portfolio();
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
 			}
 		};
 
-		rootTagTracker.track("ListOfAllocationProfiles/AllocationProfile",
-				allocationProfileTracker);
-		allocationProfileTracker.track("AllocationProfile",
-				allocationProfileTracker);
+		rootTagTracker.track("ListOfAllocationProfiles/AllocationProfile", allocationProfileTracker);
+		allocationProfileTracker.track("AllocationProfile", allocationProfileTracker);
 
 		final TagTracker nameTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
 				final Portfolio temp = (Portfolio) m_stack.peek();
 				temp.setName(value);
@@ -78,12 +72,10 @@ public class TWSAllocationRequest extends SaxMapper {
 		nameTracker.track("name", nameTracker);
 
 		final TagTracker typeTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
 				final Portfolio temp = (Portfolio) m_stack.peek();
 				temp.setAllocationMethod(value);
@@ -93,52 +85,42 @@ public class TWSAllocationRequest extends SaxMapper {
 		typeTracker.track("type", typeTracker);
 
 		final TagTracker listOfAllocationsTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 				final Portfolio temp = (Portfolio) m_stack.peek();
 				m_stack.push(temp);
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
 			}
 		};
 
-		allocationProfileTracker.track("AllocationProfile/ListOfAllocations",
-				listOfAllocationsTracker);
-		listOfAllocationsTracker.track("ListOfAllocations",
-				listOfAllocationsTracker);
+		allocationProfileTracker.track("AllocationProfile/ListOfAllocations", listOfAllocationsTracker);
+		listOfAllocationsTracker.track("ListOfAllocations", listOfAllocationsTracker);
 
 		final TagTracker allocationTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 				final Portfolio portfolio = (Portfolio) m_stack.peek();
-				PortfolioAccount temp = new PortfolioAccount(portfolio,
-						new Account());
+				PortfolioAccount temp = new PortfolioAccount(portfolio, new Account());
 				portfolio.getPortfolioAccounts().add(temp);
 				m_stack.push(temp);
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
 			}
 		};
 
-		allocationProfileTracker.track("ListOfAllocations/Allocation",
-				allocationTracker);
+		allocationProfileTracker.track("ListOfAllocations/Allocation", allocationTracker);
 		allocationTracker.track("Allocation", allocationTracker);
 
 		final TagTracker acctTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
 				PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
 				temp.getAccount().setAccountNumber(value);
@@ -148,12 +130,10 @@ public class TWSAllocationRequest extends SaxMapper {
 		acctTracker.track("acct", acctTracker);
 
 		final TagTracker amountTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				// final String value = new String(contents.toString());
 				// final PortfolioAccount aspect = (PortfolioAccount) m_stack
 				// .peek();
@@ -164,12 +144,10 @@ public class TWSAllocationRequest extends SaxMapper {
 		amountTracker.track("amount", amountTracker);
 
 		final TagTracker posEffTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				// final String value = new String(contents.toString());
 				// PortfolioAccount temp = (PortfolioAccount) m_stack.peek();
 				// .peek();

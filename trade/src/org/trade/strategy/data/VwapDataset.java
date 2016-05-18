@@ -53,8 +53,7 @@ import org.trade.strategy.data.vwap.VwapItem;
 
 /**
  */
-public class VwapDataset extends AbstractXYDataset implements IVwapDataset,
-		IndicatorDataset, Serializable {
+public class VwapDataset extends AbstractXYDataset implements IVwapDataset, IndicatorDataset, Serializable {
 
 	/**
 	 * 
@@ -379,8 +378,7 @@ public class VwapDataset extends AbstractXYDataset implements IVwapDataset,
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		VwapDataset clone = (VwapDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -396,8 +394,7 @@ public class VwapDataset extends AbstractXYDataset implements IVwapDataset,
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
@@ -405,8 +402,8 @@ public class VwapDataset extends AbstractXYDataset implements IVwapDataset,
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			VwapSeries series = this.getSeries(i);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 
 		}
 	}

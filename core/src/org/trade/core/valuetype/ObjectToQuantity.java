@@ -59,13 +59,11 @@ public class ObjectToQuantity implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Quantity rVal = null;
 
 		if (valueToConvert == null) {
-			throw new JavaTypeTranslatorException(
-					"Null passed toObjectToMoney.convert()");
+			throw new JavaTypeTranslatorException("Null passed toObjectToMoney.convert()");
 		}
 
 		// If we get a string we will convert it using the default money format
@@ -74,8 +72,7 @@ public class ObjectToQuantity implements JavaDynamicTypeConverter {
 			String stringValue = (String) valueToConvert;
 			rVal = new Quantity(stringValue);
 		} else {
-			throw new JavaTypeTranslatorException(
-					"internal error parsing value");
+			throw new JavaTypeTranslatorException("internal error parsing value");
 		}
 
 		return (rVal);
@@ -90,9 +87,8 @@ public class ObjectToQuantity implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

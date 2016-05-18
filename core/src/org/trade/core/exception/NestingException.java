@@ -151,8 +151,7 @@ public class NestingException extends Exception {
 	 * @param exceptionContext
 	 *            ExceptionContext
 	 */
-	public NestingException(ExceptionMessage exceptionMessage,
-			ExceptionContext exceptionContext) {
+	public NestingException(ExceptionMessage exceptionMessage, ExceptionContext exceptionContext) {
 		this();
 		addExceptionMessage(exceptionMessage);
 		addExceptionContext(exceptionContext);
@@ -181,8 +180,7 @@ public class NestingException extends Exception {
 	 * @param message
 	 *            String
 	 */
-	public NestingException(ExceptionMessage exceptionMessage,
-			ExceptionContext exceptionContext, String message) {
+	public NestingException(ExceptionMessage exceptionMessage, ExceptionContext exceptionContext, String message) {
 		this(message);
 		addExceptionMessage(exceptionMessage);
 		addExceptionContext(exceptionContext);
@@ -211,8 +209,7 @@ public class NestingException extends Exception {
 	 * @param t
 	 *            Throwable
 	 */
-	public NestingException(ExceptionMessage exceptionMessage,
-			String gruesomeDetails, Throwable t) {
+	public NestingException(ExceptionMessage exceptionMessage, String gruesomeDetails, Throwable t) {
 		this(t, gruesomeDetails);
 		addExceptionMessage(exceptionMessage);
 	}
@@ -226,8 +223,7 @@ public class NestingException extends Exception {
 	 */
 	private void assimilateContext(NestingException nestingException) {
 		// Get the contexts to be added if any.
-		Enumeration<ExceptionContext> enumExeptions = nestingException
-				.getExceptionContexts();
+		Enumeration<ExceptionContext> enumExeptions = nestingException.getExceptionContexts();
 
 		if (enumExeptions.hasMoreElements()) {
 			// Add each of the contexts to this
@@ -281,8 +277,7 @@ public class NestingException extends Exception {
 	 * @param exceptionContext
 	 *            ExceptionContext
 	 */
-	public void addExceptionMessage(ExceptionMessage exceptionMessage,
-			ExceptionContext exceptionContext) {
+	public void addExceptionMessage(ExceptionMessage exceptionMessage, ExceptionContext exceptionContext) {
 		addExceptionMessage(exceptionMessage);
 		addExceptionContext(exceptionContext);
 	}
@@ -368,8 +363,7 @@ public class NestingException extends Exception {
 	 * @param nestingException
 	 *            NestingException
 	 */
-	public void addExceptionMessage(ExceptionCode code, String message,
-			NestingException nestingException) {
+	public void addExceptionMessage(ExceptionCode code, String message, NestingException nestingException) {
 		m_exceptionMessages.addElement(new ExceptionMessage(code, message));
 		assimilateContext(nestingException);
 	}
@@ -382,8 +376,7 @@ public class NestingException extends Exception {
 	 * @param nestingException
 	 *            NestingException
 	 */
-	public void addExceptionMessage(ExceptionMessage userFriendlyMessage,
-			NestingException nestingException) {
+	public void addExceptionMessage(ExceptionMessage userFriendlyMessage, NestingException nestingException) {
 		m_exceptionMessages.addElement(userFriendlyMessage);
 		assimilateContext(nestingException);
 	}
@@ -431,8 +424,7 @@ public class NestingException extends Exception {
 		boolean returnValue = false;
 
 		if (m_nestedException != null) {
-			if (!m_exceptionMessages.isEmpty()
-					|| m_nestedException.hasExceptionMessages()) {
+			if (!m_exceptionMessages.isEmpty() || m_nestedException.hasExceptionMessages()) {
 				returnValue = true;
 			}
 		} else {
@@ -493,8 +485,7 @@ public class NestingException extends Exception {
 	 * Prints the stack trace for this exception to the console.
 	 */
 	public void printStackTrace() {
-		m_stackTrace = ExceptionUtil.fillInExceptionMessage(this, m_stackTrace,
-				getMessage());
+		m_stackTrace = ExceptionUtil.fillInExceptionMessage(this, m_stackTrace, getMessage());
 
 		System.out.print(m_stackTrace);
 	}
@@ -507,8 +498,7 @@ public class NestingException extends Exception {
 	 *            The <code>PrintWriter</code> to use.
 	 */
 	public void printStackTrace(PrintWriter writer) {
-		m_stackTrace = ExceptionUtil.fillInExceptionMessage(this, m_stackTrace,
-				getMessage());
+		m_stackTrace = ExceptionUtil.fillInExceptionMessage(this, m_stackTrace, getMessage());
 
 		writer.print(m_stackTrace);
 	}

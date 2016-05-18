@@ -62,8 +62,7 @@ public class ObjectToDecode implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Object rVal = null;
 
 		if (Decode.class.isAssignableFrom(targetType)) {
@@ -78,8 +77,7 @@ public class ObjectToDecode implements JavaDynamicTypeConverter {
 				throw new JavaTypeTranslatorException(ex, "Unable to set code");
 			}
 		} else {
-			throw new JavaTypeTranslatorException(
-					"Target type must be a com.aceva.devtools.valuetype.base.Decode");
+			throw new JavaTypeTranslatorException("Target type must be a com.aceva.devtools.valuetype.base.Decode");
 		}
 
 		return (rVal);
@@ -93,9 +91,8 @@ public class ObjectToDecode implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

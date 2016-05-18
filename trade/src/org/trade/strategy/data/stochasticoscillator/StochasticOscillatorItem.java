@@ -63,8 +63,7 @@ public class StochasticOscillatorItem extends ComparableObjectItem {
 	 * @param stochasticOscillator
 	 *            BigDecimal
 	 */
-	public StochasticOscillatorItem(RegularTimePeriod period,
-			BigDecimal stochasticOscillator) {
+	public StochasticOscillatorItem(RegularTimePeriod period, BigDecimal stochasticOscillator) {
 		super(period, new StochasticOscillator(stochasticOscillator));
 	}
 
@@ -95,8 +94,7 @@ public class StochasticOscillatorItem extends ComparableObjectItem {
 	public void setStochasticOscillator(double stochasticOscillator) {
 		StochasticOscillator dataItem = (StochasticOscillator) getObject();
 		if (dataItem != null) {
-			dataItem.setStochasticOscillator(new BigDecimal(
-					stochasticOscillator));
+			dataItem.setStochasticOscillator(new BigDecimal(stochasticOscillator));
 		}
 
 	}

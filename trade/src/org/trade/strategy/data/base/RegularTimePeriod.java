@@ -66,8 +66,7 @@ import org.trade.core.util.TradingCalendar;
  * <P>
  * This class is immutable, and all subclasses should be immutable also.
  */
-public abstract class RegularTimePeriod implements TimePeriod,
-		Comparable<TimePeriod> {
+public abstract class RegularTimePeriod implements TimePeriod, Comparable<TimePeriod> {
 
 	private static final String DATETIMEFORMAT = "MM/dd/yyyy HH:mm:ss";
 
@@ -193,8 +192,7 @@ public abstract class RegularTimePeriod implements TimePeriod,
 		if (obj == this) {
 			return true;
 		}
-		if (this.getStart().equals(obj.getStart())
-				&& this.getEnd().equals(obj.getEnd()))
+		if (this.getStart().equals(obj.getStart()) && this.getEnd().equals(obj.getEnd()))
 			return true;
 		return false;
 	}
@@ -227,8 +225,7 @@ public abstract class RegularTimePeriod implements TimePeriod,
 	 */
 
 	public String toString() {
-		return TradingCalendar
-				.getFormattedDate(this.getStart(), DATETIMEFORMAT);
+		return TradingCalendar.getFormattedDate(this.getStart(), DATETIMEFORMAT);
 	}
 
 }

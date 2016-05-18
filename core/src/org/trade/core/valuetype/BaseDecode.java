@@ -74,8 +74,7 @@ public class BaseDecode extends Decode {
 	 * @param values
 	 *            Vector<Object>
 	 */
-	public BaseDecode(String codeDecodeType, Vector<String> columnNames,
-			Vector<Object> values) {
+	public BaseDecode(String codeDecodeType, Vector<String> columnNames, Vector<Object> values) {
 		super(codeDecodeType, columnNames, values, BASE_DECODE_IDENTIFIER);
 	}
 

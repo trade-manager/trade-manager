@@ -83,8 +83,7 @@ public class StringToByteConverter extends StringToObjectConverter {
 	 *         IllegalArgumentException thrown if the String to convert is not
 	 *         in the correct format
 	 */
-	protected Object getConvertedString(String aString)
-			throws IllegalArgumentException {
+	protected Object getConvertedString(String aString) throws IllegalArgumentException {
 		return new Byte(aString);
 	}
 }

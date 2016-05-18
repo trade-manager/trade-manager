@@ -56,8 +56,7 @@ public class ClassFactory {
 	private ClassFactory() {
 	}
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(ClassFactory.class);
+	private final static Logger _log = LoggerFactory.getLogger(ClassFactory.class);
 
 	/**
 	 * Method getServiceForInterface.
@@ -74,18 +73,15 @@ public class ClassFactory {
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
-	public static Object getServiceForInterface(String theInterface,
-			Object context) throws IOException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException,
+	public static Object getServiceForInterface(String theInterface, Object context)
+			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
 
 		String className = ConfigProperties.getPropAsString(theInterface);
 
 		if (className == null) {
-			throw new PropertyNotFoundException("The interface \""
-					+ theInterface + "\" could not be located.  Check "
-					+ "to see if the property file \""
-					+ ConfigProperties.getDeploymentPropertyFileName()
+			throw new PropertyNotFoundException("The interface \"" + theInterface + "\" could not be located.  Check "
+					+ "to see if the property file \"" + ConfigProperties.getDeploymentPropertyFileName()
 					+ "\" is installed and available.");
 		}
 		Class<?>[] args = new Class[1];
@@ -112,9 +108,8 @@ public class ClassFactory {
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
-	public static Object getCreateClass(String className, Vector<Object> parm,
-			Object context) throws IOException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException,
+	public static Object getCreateClass(String className, Vector<Object> parm, Object context)
+			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
 
 		int vectorSize = 0;
@@ -144,21 +139,18 @@ public class ClassFactory {
 			instance = constructor.newInstance(object);
 		} catch (Exception e) {
 
-			_log.debug("Could not find constructor for default parms["
-					+ classes + "] will test all constructors.");
+			_log.debug("Could not find constructor for default parms[" + classes + "] will test all constructors.");
 			Constructor<?>[] constructors = c.getConstructors();
 			for (Constructor<?> constructor2 : constructors) {
 				try {
 					instance = constructor2.newInstance(object);
 					if (null != instance) {
-						_log.info("Found constructor: "
-								+ constructor2.toGenericString()
-								+ " for parms[" + classes + "]");
+						_log.info(
+								"Found constructor: " + constructor2.toGenericString() + " for parms[" + classes + "]");
 						break;
 					}
 				} catch (Exception ex) {
-					_log.error("Constructor: " + constructor2.toGenericString()
-							+ " failed!!");
+					_log.error("Constructor: " + constructor2.toGenericString() + " failed!!");
 				}
 			}
 		}

@@ -63,8 +63,7 @@ import org.trade.core.valuetype.Money;
  */
 public class CoreUtilsTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(CoreUtilsTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(CoreUtilsTest.class);
 
 	@Rule
 	public TestName name = new TestName();
@@ -111,14 +110,11 @@ public class CoreUtilsTest {
 	public void testIsBetween() {
 		try {
 
-			assertTrue("1", CoreUtils.isBetween(new BigDecimal(12.20),
-					new BigDecimal(12.24), new BigDecimal(12.23)));
+			assertTrue("1", CoreUtils.isBetween(new BigDecimal(12.20), new BigDecimal(12.24), new BigDecimal(12.23)));
 
-			assertTrue("2", CoreUtils.isBetween(new Integer(12),
-					new Integer(18), new Integer(15)));
+			assertTrue("2", CoreUtils.isBetween(new Integer(12), new Integer(18), new Integer(15)));
 
-			assertFalse("3", CoreUtils.isBetween(new Integer(12), new Integer(
-					18), new Integer(6)));
+			assertFalse("3", CoreUtils.isBetween(new Integer(12), new Integer(18), new Integer(6)));
 
 			assertTrue("4", CoreUtils.isBetween(12.20d, 12.24d, 12.23d));
 
@@ -139,8 +135,7 @@ public class CoreUtilsTest {
 			assertFalse("12", CoreUtils.isBetween(12, 14, 15));
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -150,27 +145,22 @@ public class CoreUtilsTest {
 	public void testNullSafe() {
 		try {
 
-			int returnVal = CoreUtils.nullSafeComparator(null, new BigDecimal(
-					1.23));
+			int returnVal = CoreUtils.nullSafeComparator(null, new BigDecimal(1.23));
 			assertEquals("1", -1, returnVal);
 
-			returnVal = CoreUtils
-					.nullSafeComparator(new BigDecimal(1.23), null);
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.23), null);
 			assertEquals("2", 1, returnVal);
 
-			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(-1.23),
-					new BigDecimal(-1.24));
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(-1.23), new BigDecimal(-1.24));
 			assertEquals("3", 1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, null);
 			assertEquals("4", 0, returnVal);
 
-			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.23),
-					new BigDecimal(1.24));
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.23), new BigDecimal(1.24));
 			assertEquals("5", -1, returnVal);
 
-			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.25),
-					new BigDecimal(1.24));
+			returnVal = CoreUtils.nullSafeComparator(new BigDecimal(1.25), new BigDecimal(1.24));
 			assertEquals("6", 1, returnVal);
 
 			returnVal = CoreUtils.nullSafeComparator(null, 1);
@@ -179,12 +169,10 @@ public class CoreUtilsTest {
 			returnVal = CoreUtils.nullSafeComparator(null, new Integer(0));
 			assertEquals("8", -1, returnVal);
 
-			returnVal = CoreUtils.nullSafeComparator(new Integer(0),
-					new Integer(0));
+			returnVal = CoreUtils.nullSafeComparator(new Integer(0), new Integer(0));
 			assertEquals("9", 0, returnVal);
 
-			returnVal = CoreUtils.nullSafeComparator(new Integer(1),
-					new Integer(0));
+			returnVal = CoreUtils.nullSafeComparator(new Integer(1), new Integer(0));
 			assertEquals("10", 1, returnVal);
 
 			Money avgFilledPrice = new Money(186.75);
@@ -199,88 +187,47 @@ public class CoreUtilsTest {
 
 			int buySellMultiplier = 1;
 
-			if (CoreUtils.nullSafeComparator(auxPrice, avgFilledPrice) == -1
-					* buySellMultiplier) {
-				if ((CoreUtils.nullSafeComparator(
-						lastPrice.getBigDecimalValue(),
-						avgFilledPrice.getBigDecimalValue().add(
-								initialStopTriggerAmount.getBigDecimalValue()
-										.multiply(
-												new BigDecimal(
-														buySellMultiplier)))) == 1 * buySellMultiplier)
-						|| (CoreUtils
-								.nullSafeComparator(
-										lastPrice.getBigDecimalValue(),
-										avgFilledPrice
-												.getBigDecimalValue()
-												.add(initialStopTriggerAmount
-														.getBigDecimalValue()
-														.multiply(
-																new BigDecimal(
-																		buySellMultiplier)))) == 0)) {
+			if (CoreUtils.nullSafeComparator(auxPrice, avgFilledPrice) == -1 * buySellMultiplier) {
+				if ((CoreUtils.nullSafeComparator(lastPrice.getBigDecimalValue(),
+						avgFilledPrice.getBigDecimalValue()
+								.add(initialStopTriggerAmount.getBigDecimalValue()
+										.multiply(new BigDecimal(buySellMultiplier)))) == 1 * buySellMultiplier)
+						|| (CoreUtils.nullSafeComparator(lastPrice.getBigDecimalValue(),
+								avgFilledPrice.getBigDecimalValue().add(initialStopTriggerAmount.getBigDecimalValue()
+										.multiply(new BigDecimal(buySellMultiplier)))) == 0)) {
 
-					auxPrice = new Money(
-							avgFilledPrice
-									.getBigDecimalValue()
-									.add(initialStopMoveAmount
-											.getBigDecimalValue().multiply(
-													new BigDecimal(
-															buySellMultiplier))));
+					auxPrice = new Money(avgFilledPrice.getBigDecimalValue().add(
+							initialStopMoveAmount.getBigDecimalValue().multiply(new BigDecimal(buySellMultiplier))));
 
 				}
 			}
 			assertEquals(
-					new Money(
-							avgFilledPrice
-									.getBigDecimalValue()
-									.add(initialStopMoveAmount
-											.getBigDecimalValue().multiply(
-													new BigDecimal(
-															buySellMultiplier)))),
+					new Money(avgFilledPrice.getBigDecimalValue().add(
+							initialStopMoveAmount.getBigDecimalValue().multiply(new BigDecimal(buySellMultiplier)))),
 					auxPrice);
 
-			lastPrice = new Money(lastPrice.getBigDecimalValue().add(
-					stopTriggerAmount.getBigDecimalValue().multiply(
-							new BigDecimal(buySellMultiplier))));
+			lastPrice = new Money(lastPrice.getBigDecimalValue()
+					.add(stopTriggerAmount.getBigDecimalValue().multiply(new BigDecimal(buySellMultiplier))));
 
 			if (CoreUtils.nullSafeComparator(auxPrice, avgFilledPrice) == 1 * buySellMultiplier) {
-				if ((CoreUtils.nullSafeComparator(
-						lastPrice.getBigDecimalValue(),
-						auxPrice.getBigDecimalValue().add(
-								stopTriggerAmount.getBigDecimalValue()
-										.multiply(
-												new BigDecimal(
-														buySellMultiplier)))) == 1 * buySellMultiplier)
-						|| (CoreUtils
-								.nullSafeComparator(
-										lastPrice.getBigDecimalValue(),
-										auxPrice.getBigDecimalValue()
-												.add(stopTriggerAmount
-														.getBigDecimalValue()
-														.multiply(
-																new BigDecimal(
-																		buySellMultiplier)))) == 0)) {
-					auxPrice = new Money(
-							lastPrice
-									.getBigDecimalValue()
-									.subtract(
-											stopMoveAmount
-													.getBigDecimalValue()
-													.multiply(
-															new BigDecimal(
-																	buySellMultiplier))));
+				if ((CoreUtils.nullSafeComparator(lastPrice.getBigDecimalValue(),
+						auxPrice.getBigDecimalValue()
+								.add(stopTriggerAmount.getBigDecimalValue()
+										.multiply(new BigDecimal(buySellMultiplier)))) == 1 * buySellMultiplier)
+						|| (CoreUtils.nullSafeComparator(lastPrice.getBigDecimalValue(),
+								auxPrice.getBigDecimalValue().add(stopTriggerAmount.getBigDecimalValue()
+										.multiply(new BigDecimal(buySellMultiplier)))) == 0)) {
+					auxPrice = new Money(lastPrice.getBigDecimalValue()
+							.subtract(stopMoveAmount.getBigDecimalValue().multiply(new BigDecimal(buySellMultiplier))));
 				}
 			}
-			assertEquals(
-					"11",
-					new Money(lastPrice.getBigDecimalValue().subtract(
-							stopMoveAmount.getBigDecimalValue().multiply(
-									new BigDecimal(buySellMultiplier)))),
+			assertEquals("11",
+					new Money(lastPrice.getBigDecimalValue()
+							.subtract(stopMoveAmount.getBigDecimalValue().multiply(new BigDecimal(buySellMultiplier)))),
 					auxPrice);
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -289,12 +236,10 @@ public class CoreUtilsTest {
 	@Test
 	public void testBigDecimalRounding() {
 
-		BigDecimal avgFillPrice = new BigDecimal("35.34567897").setScale(SCALE,
-				BigDecimal.ROUND_HALF_EVEN);
+		BigDecimal avgFillPrice = new BigDecimal("35.34567897").setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 		assertEquals("1", new BigDecimal("35.34568"), avgFillPrice);
 
-		avgFillPrice = new BigDecimal("35.34567344").setScale(SCALE,
-				BigDecimal.ROUND_HALF_EVEN);
+		avgFillPrice = new BigDecimal("35.34567344").setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 		assertEquals("2", new BigDecimal("35.34567"), avgFillPrice);
 
 		assertEquals("3", 0, BigDecimal.ZERO.compareTo(new BigDecimal(0.00)));
@@ -326,17 +271,14 @@ public class CoreUtilsTest {
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
 				while (timerRunning.get() < (1000 * sleeptime)) {
-					String message = "Please wait "
-							+ (sleeptime - (timerRunning.get() / 1000))
-							+ " seconds.";
+					String message = "Please wait " + (sleeptime - (timerRunning.get() / 1000)) + " seconds.";
 					_log.info(message);
 					lockCoreUtilsTest.wait();
 				}
 			}
 			timer.stop();
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -356,8 +298,7 @@ public class CoreUtilsTest {
 				}
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

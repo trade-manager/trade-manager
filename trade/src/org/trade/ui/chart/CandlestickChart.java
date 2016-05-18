@@ -115,14 +115,12 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 * @param strategyData
 	 *            StrategyData
 	 */
-	public CandlestickChart(final String title, StrategyData strategyData,
-			Tradingday tradingday) {
+	public CandlestickChart(final String title, StrategyData strategyData, Tradingday tradingday) {
 
 		this.strategyData = strategyData;
 		this.setLayout(new BorderLayout());
 		// Used to mark the current price
-		stroke = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 3 }, 0);
+		stroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 3 }, 0);
 		valueMarker = new ValueMarker(0.00, Color.black, stroke);
 
 		this.chart = createChart(this.strategyData, title, tradingday);
@@ -148,21 +146,17 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			}
 
 			public void chartMouseClicked(final ChartMouseEvent e) {
-				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) e
-						.getChart().getPlot();
+				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) e.getChart().getPlot();
 				@SuppressWarnings("unchecked")
 				List<XYPlot> subplots = combinedXYplot.getSubplots();
 				if (e.getTrigger().getClickCount() == 2) {
 					double xItem = 0;
 					double yItem = 0;
 					if (e.getEntity() instanceof XYItemEntity) {
-						XYItemEntity xYItemEntity = ((XYItemEntity) e
-								.getEntity());
-						xItem = xYItemEntity.getDataset().getXValue(
-								xYItemEntity.getSeriesIndex(),
+						XYItemEntity xYItemEntity = ((XYItemEntity) e.getEntity());
+						xItem = xYItemEntity.getDataset().getXValue(xYItemEntity.getSeriesIndex(),
 								xYItemEntity.getItem());
-						yItem = xYItemEntity.getDataset().getYValue(
-								xYItemEntity.getSeriesIndex(),
+						yItem = xYItemEntity.getDataset().getYValue(xYItemEntity.getSeriesIndex(),
 								xYItemEntity.getItem());
 					} else {
 						PlotEntity plotEntity = ((PlotEntity) e.getEntity());
@@ -187,49 +181,38 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 						double rangeUpperRight = 0;
 						double yRightLocation = 0;
 						for (int index = 0; index < xyplot.getRangeAxisCount(); index++) {
-							AxisLocation axisLocation = xyplot
-									.getRangeAxisLocation(index);
+							AxisLocation axisLocation = xyplot.getRangeAxisLocation(index);
 							Range range = xyplot.getRangeAxis(index).getRange();
 
-							if (axisLocation
-									.equals(AxisLocation.BOTTOM_OR_LEFT)
-									|| axisLocation
-											.equals(AxisLocation.TOP_OR_LEFT)) {
+							if (axisLocation.equals(AxisLocation.BOTTOM_OR_LEFT)
+									|| axisLocation.equals(AxisLocation.TOP_OR_LEFT)) {
 								rangeLowerLeft = range.getLowerBound();
 								rangeUpperLeft = range.getUpperBound();
-								rightAxisName = ", "
-										+ xyplot.getRangeAxis(index).getLabel()
-										+ ": ";
+								rightAxisName = ", " + xyplot.getRangeAxis(index).getLabel() + ": ";
 							}
-							if (y >= range.getLowerBound()
-									&& y <= range.getUpperBound()
-									&& (axisLocation
-											.equals(AxisLocation.BOTTOM_OR_RIGHT) || axisLocation
-											.equals(AxisLocation.TOP_OR_RIGHT))) {
+							if (y >= range.getLowerBound() && y <= range.getUpperBound()
+									&& (axisLocation.equals(AxisLocation.BOTTOM_OR_RIGHT)
+											|| axisLocation.equals(AxisLocation.TOP_OR_RIGHT))) {
 								rangeUpperRight = range.getUpperBound();
 								rangeLowerRight = range.getLowerBound();
 							}
 						}
 						if ((rangeUpperRight - rangeLowerRight) > 0) {
-							yRightLocation = rangeLowerLeft
-									+ ((rangeUpperLeft - rangeLowerLeft) * ((y - rangeLowerRight) / (rangeUpperRight - rangeLowerRight)));
+							yRightLocation = rangeLowerLeft + ((rangeUpperLeft - rangeLowerLeft)
+									* ((y - rangeLowerRight) / (rangeUpperRight - rangeLowerRight)));
 						} else {
 							yRightLocation = y;
 						}
 
 						String text = " Time: "
 								+ TradingCalendar.getFormattedDate(
-										TradingCalendar
-												.getZonedDateTimeFromMilli((long) (x)),
-										TIME_FORMAT_SHORT) + rightAxisName
-								+ new Money(y);
+										TradingCalendar.getZonedDateTimeFromMilli((long) (x)), TIME_FORMAT_SHORT)
+								+ rightAxisName + new Money(y);
 						if (x == xItem && y == yItem) {
 							titleLegend1.setText(text);
 							if (null == clickCrossHairs) {
-								clickCrossHairs = new XYTextAnnotation(text, x,
-										yRightLocation);
-								clickCrossHairs
-										.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+								clickCrossHairs = new XYTextAnnotation(text, x, yRightLocation);
+								clickCrossHairs.setTextAnchor(TextAnchor.BOTTOM_LEFT);
 								xyplot.addAnnotation(clickCrossHairs);
 							} else {
 								clickCrossHairs.setText(text);
@@ -238,8 +221,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 							}
 						}
 					}
-				} else if (e.getTrigger().getClickCount() == 1
-						&& null != clickCrossHairs) {
+				} else if (e.getTrigger().getClickCount() == 1 && null != clickCrossHairs) {
 					for (XYPlot xyplot : subplots) {
 						if (xyplot.removeAnnotation(clickCrossHairs)) {
 							clickCrossHairs = null;
@@ -251,13 +233,11 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			}
 		});
 		this.add(chartPanel, null);
-		this.strategyData.getCandleDataset().getSeries(0)
-				.addChangeListener(this);
+		this.strategyData.getCandleDataset().getSeries(0).addChangeListener(this);
 	}
 
 	public void removeChart() {
-		this.strategyData.getCandleDataset().getSeries(0)
-				.removeChangeListener(this);
+		this.strategyData.getCandleDataset().getSeries(0).removeChangeListener(this);
 		this.chart.getXYPlot().clearAnnotations();
 		this.chart.getXYPlot().clearDomainAxes();
 		this.chart.getXYPlot().clearDomainMarkers();
@@ -283,8 +263,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            String
 	 * @return JFreeChart
 	 */
-	private JFreeChart createChart(StrategyData strategyData, String title,
-			Tradingday tradingday) {
+	private JFreeChart createChart(StrategyData strategyData, String title, Tradingday tradingday) {
 
 		DateAxis dateAxis = new DateAxis("Date");
 		dateAxis.setVerticalTickLabels(true);
@@ -293,9 +272,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		NumberAxis priceAxis = new NumberAxis("Price");
 		priceAxis.setAutoRange(true);
 		priceAxis.setAutoRangeIncludesZero(false);
-		XYPlot pricePlot = new XYPlot(strategyData.getCandleDataset(),
-				dateAxis, priceAxis, strategyData.getCandleDataset()
-						.getRenderer());
+		XYPlot pricePlot = new XYPlot(strategyData.getCandleDataset(), dateAxis, priceAxis,
+				strategyData.getCandleDataset().getRenderer());
 		pricePlot.setOrientation(PlotOrientation.VERTICAL);
 		pricePlot.setDomainPannable(true);
 		pricePlot.setRangePannable(true);
@@ -311,37 +289,28 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 		 * Calculate the number of 15min segments in this trading day. i.e.
 		 * 6.5hrs/15min = 26 and there are a total of 96 = one day
 		 */
-		int segments15min = (int) (TradingCalendar.getDurationInSeconds(
-				tradingday.getOpen(), tradingday.getClose()) / (60 * 15));
+		int segments15min = (int) (TradingCalendar.getDurationInSeconds(tradingday.getOpen(), tradingday.getClose())
+				/ (60 * 15));
 
-		SegmentedTimeline segmentedTimeline = new SegmentedTimeline(
-				SegmentedTimeline.FIFTEEN_MINUTE_SEGMENT_SIZE, segments15min,
-				(96 - segments15min));
+		SegmentedTimeline segmentedTimeline = new SegmentedTimeline(SegmentedTimeline.FIFTEEN_MINUTE_SEGMENT_SIZE,
+				segments15min, (96 - segments15min));
 
 		ZonedDateTime startDate = tradingday.getOpen();
 		ZonedDateTime endDate = tradingday.getClose();
 
 		if (!strategyData.getCandleDataset().getSeries(0).isEmpty()) {
-			startDate = ((CandleItem) strategyData.getCandleDataset()
-					.getSeries(0).getDataItem(0)).getPeriod().getStart();
-			startDate = TradingCalendar.getDateAtTime(startDate,
-					tradingday.getOpen());
-			endDate = ((CandleItem) strategyData
-					.getCandleDataset()
-					.getSeries(0)
-					.getDataItem(
-							strategyData.getCandleDataset().getSeries(0)
-									.getItemCount() - 1)).getPeriod()
+			startDate = ((CandleItem) strategyData.getCandleDataset().getSeries(0).getDataItem(0)).getPeriod()
 					.getStart();
-			endDate = TradingCalendar.getDateAtTime(endDate,
-					tradingday.getClose());
+			startDate = TradingCalendar.getDateAtTime(startDate, tradingday.getOpen());
+			endDate = ((CandleItem) strategyData.getCandleDataset().getSeries(0)
+					.getDataItem(strategyData.getCandleDataset().getSeries(0).getItemCount() - 1)).getPeriod()
+							.getStart();
+			endDate = TradingCalendar.getDateAtTime(endDate, tradingday.getClose());
 		}
 
-		segmentedTimeline.setStartTime(TradingCalendar
-				.geMillisFromZonedDateTime(startDate));
-		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate,
-				endDate, tradingday.getOpen(), tradingday.getClose(),
-				segmentedTimeline));
+		segmentedTimeline.setStartTime(TradingCalendar.geMillisFromZonedDateTime(startDate));
+		segmentedTimeline.addExceptions(getNonTradingPeriods(startDate, endDate, tradingday.getOpen(),
+				tradingday.getClose(), segmentedTimeline));
 		dateAxis.setTimeline(segmentedTimeline);
 
 		// Build Combined Plot
@@ -372,10 +341,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 				if (indicator.getSubChart(0)) {
 					String axisName = "Price";
-					if (IndicatorSeries.CandleSeries.equals(indicator
-							.getType(0))) {
-						axisName = ((CandleSeries) indicator.getSeries(0))
-								.getSymbol();
+					if (IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
+						axisName = ((CandleSeries) indicator.getSeries(0)).getSymbol();
 					} else {
 						org.trade.dictionary.valuetype.IndicatorSeries code = org.trade.dictionary.valuetype.IndicatorSeries
 								.newInstance(indicator.getType(0));
@@ -385,8 +352,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					subPlotAxis.setAutoRange(true);
 					subPlotAxis.setAutoRangeIncludesZero(false);
 
-					XYPlot subPlot = new XYPlot((XYDataset) indicator,
-							dateAxis, subPlotAxis, indicator.getRenderer());
+					XYPlot subPlot = new XYPlot((XYDataset) indicator, dateAxis, subPlotAxis, indicator.getRenderer());
 
 					subPlot.setOrientation(PlotOrientation.VERTICAL);
 					subPlot.setDomainPannable(true);
@@ -398,46 +364,33 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 					subPlot.setRangeGridlinePaint(new Color(204, 204, 204));
 					subPlot.setDomainGridlinePaint(new Color(204, 204, 204));
 					subPlot.setBackgroundPaint(Color.white);
-					XYItemRenderer renderer = subPlot
-							.getRendererForDataset((XYDataset) indicator);
-					for (int seriesIndex = 0; seriesIndex < ((XYDataset) indicator)
-							.getSeriesCount(); seriesIndex++) {
-						renderer.setSeriesPaint(seriesIndex,
-								indicator.getSeriesColor(seriesIndex));
+					XYItemRenderer renderer = subPlot.getRendererForDataset((XYDataset) indicator);
+					for (int seriesIndex = 0; seriesIndex < ((XYDataset) indicator).getSeriesCount(); seriesIndex++) {
+						renderer.setSeriesPaint(seriesIndex, indicator.getSeriesColor(seriesIndex));
 					}
 					mainPlot.add(subPlot, 1);
 
 				} else {
 					datasetIndex++;
 					pricePlot.setDataset(datasetIndex, (XYDataset) indicator);
-					if (IndicatorSeries.CandleSeries.equals(indicator
-							.getType(0))) {
+					if (IndicatorSeries.CandleSeries.equals(indicator.getType(0))) {
 						// add secondary axis
 						axixIndex++;
 
-						final NumberAxis axis2 = new NumberAxis(
-								((CandleSeries) indicator.getSeries(0))
-										.getSymbol());
+						final NumberAxis axis2 = new NumberAxis(((CandleSeries) indicator.getSeries(0)).getSymbol());
 						axis2.setAutoRange(true);
 						axis2.setAutoRangeIncludesZero(false);
 						pricePlot.setRangeAxis(datasetIndex, axis2);
-						pricePlot.setRangeAxisLocation(i + 1,
-								AxisLocation.BOTTOM_OR_RIGHT);
-						pricePlot
-								.mapDatasetToRangeAxis(datasetIndex, axixIndex);
-						pricePlot.setRenderer(datasetIndex,
-								new StandardXYItemRenderer());
+						pricePlot.setRangeAxisLocation(i + 1, AxisLocation.BOTTOM_OR_RIGHT);
+						pricePlot.mapDatasetToRangeAxis(datasetIndex, axixIndex);
+						pricePlot.setRenderer(datasetIndex, new StandardXYItemRenderer());
 					} else {
-						pricePlot.setRenderer(datasetIndex,
-								indicator.getRenderer());
+						pricePlot.setRenderer(datasetIndex, indicator.getRenderer());
 					}
-					XYItemRenderer renderer = pricePlot
-							.getRendererForDataset((XYDataset) indicator);
+					XYItemRenderer renderer = pricePlot.getRendererForDataset((XYDataset) indicator);
 
-					for (int seriesIndex = 0; seriesIndex < ((XYDataset) indicator)
-							.getSeriesCount(); seriesIndex++) {
-						renderer.setSeriesPaint(seriesIndex,
-								indicator.getSeriesColor(seriesIndex));
+					for (int seriesIndex = 0; seriesIndex < ((XYDataset) indicator).getSeriesCount(); seriesIndex++) {
+						renderer.setSeriesPaint(seriesIndex, indicator.getSeriesColor(seriesIndex));
 					}
 				}
 			}
@@ -461,37 +414,26 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 
 			CandleSeries candleSeries = (CandleSeries) series;
 			if (!candleSeries.isEmpty()) {
-				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
-						.getPlot();
+				CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart.getPlot();
 				@SuppressWarnings("unchecked")
 				List<XYPlot> subplots = combinedXYplot.getSubplots();
 				XYPlot xyplot = subplots.get(0);
 
-				CandleItem candleItem = (CandleItem) candleSeries
-						.getDataItem(candleSeries.getItemCount() - 1);
-				String msg = "Time: "
-						+ TradingCalendar.getFormattedDate(
-								candleItem.getLastUpdateDate(), TIME_FORMAT)
-						+ " Open: " + new Money(candleItem.getOpen())
-						+ " High: " + new Money(candleItem.getHigh())
-						+ " Low: " + new Money(candleItem.getLow())
-						+ " Close: " + new Money(candleItem.getClose())
+				CandleItem candleItem = (CandleItem) candleSeries.getDataItem(candleSeries.getItemCount() - 1);
+				String msg = "Time: " + TradingCalendar.getFormattedDate(candleItem.getLastUpdateDate(), TIME_FORMAT)
+						+ " Open: " + new Money(candleItem.getOpen()) + " High: " + new Money(candleItem.getHigh())
+						+ " Low: " + new Money(candleItem.getLow()) + " Close: " + new Money(candleItem.getClose())
 						+ " Vwap: " + new Money(candleItem.getVwap());
 				titleLegend2.setText(msg);
 				valueMarker.setValue(candleItem.getClose());
 
-				double x = TradingCalendar
-						.geMillisFromZonedDateTime(TradingCalendar
-								.getDateAtTime(candleItem.getPeriod()
-										.getStart(), candleSeries
-										.getStartTime()));
+				double x = TradingCalendar.geMillisFromZonedDateTime(
+						TradingCalendar.getDateAtTime(candleItem.getPeriod().getStart(), candleSeries.getStartTime()));
 				String annotationText = "("
-						+ TradingCalendar.getFormattedDate(
-								candleItem.getLastUpdateDate(), TIME_FORMAT)
-						+ ", " + new Money(candleItem.getClose()) + ")";
+						+ TradingCalendar.getFormattedDate(candleItem.getLastUpdateDate(), TIME_FORMAT) + ", "
+						+ new Money(candleItem.getClose()) + ")";
 				if (null == closePriceLine) {
-					closePriceLine = new XYTextAnnotation(annotationText, x,
-							candleItem.getY());
+					closePriceLine = new XYTextAnnotation(annotationText, x, candleItem.getY());
 					closePriceLine.setTextAnchor(TextAnchor.BOTTOM_RIGHT);
 					xyplot.addAnnotation(closePriceLine);
 					xyplot.addRangeMarker(valueMarker);
@@ -519,12 +461,10 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            Integer
 	 * @throws ValueTypeException
 	 */
-	public void addBuySellTradeArrow(String action, Money price,
-			ZonedDateTime time, Integer quantity) throws ValueTypeException {
-		String label = Action.newInstance(action) + " " + quantity + "@"
-				+ price;
-		XYPointerAnnotation arrow = new XYPointerAnnotation(label,
-				TradingCalendar.geMillisFromZonedDateTime(time),
+	public void addBuySellTradeArrow(String action, Money price, ZonedDateTime time, Integer quantity)
+			throws ValueTypeException {
+		String label = Action.newInstance(action) + " " + quantity + "@" + price;
+		XYPointerAnnotation arrow = new XYPointerAnnotation(label, TradingCalendar.geMillisFromZonedDateTime(time),
 				price.doubleValue(), 90d);
 		arrow.setLabelOffset(5.0);
 		arrow.setBackgroundPaint(Color.GREEN);
@@ -532,8 +472,7 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			arrow.setAngle(-90d);
 			arrow.setBackgroundPaint(Color.RED);
 		}
-		CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart
-				.getPlot();
+		CombinedDomainXYPlot combinedXYplot = (CombinedDomainXYPlot) this.chart.getPlot();
 		@SuppressWarnings("unchecked")
 		List<XYPlot> subplots = combinedXYplot.getSubplots();
 		XYPlot xyplot = subplots.get(0);
@@ -559,9 +498,8 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 	 *            int
 	 * @return List<Date>
 	 */
-	private List<java.util.Date> getNonTradingPeriods(ZonedDateTime startDate,
-			ZonedDateTime endDate, ZonedDateTime openDate,
-			ZonedDateTime closeDate, SegmentedTimeline segmentedTimeline) {
+	private List<java.util.Date> getNonTradingPeriods(ZonedDateTime startDate, ZonedDateTime endDate,
+			ZonedDateTime openDate, ZonedDateTime closeDate, SegmentedTimeline segmentedTimeline) {
 		/*
 		 * Add all 15min periods that are not trading times.
 		 */
@@ -572,21 +510,16 @@ public class CandlestickChart extends JPanel implements SeriesChangeListener {
 			 * 96 15min periods per day
 			 */
 			for (int j = 0; j < 96; j++) {
-				ZonedDateTime segmentStartDate = TradingCalendar.getDateAtTime(
-						startDate, openDate);
+				ZonedDateTime segmentStartDate = TradingCalendar.getDateAtTime(startDate, openDate);
 				segmentStartDate = segmentStartDate.plusMinutes(j * 15);
 
 				if (!TradingCalendar.isTradingDay(segmentStartDate)
-						|| !TradingCalendar.isMarketHours(openDate, closeDate,
-								segmentStartDate)) {
+						|| !TradingCalendar.isMarketHours(openDate, closeDate, segmentStartDate)) {
 					Segment segment = segmentedTimeline
-							.getSegment(TradingCalendar
-									.geMillisFromZonedDateTime(segmentStartDate));
+							.getSegment(TradingCalendar.geMillisFromZonedDateTime(segmentStartDate));
 					if (segment.inIncludeSegments()) {
 						noneTradingSegments
-								.add(new java.util.Date(
-										TradingCalendar
-												.geMillisFromZonedDateTime(segmentStartDate)));
+								.add(new java.util.Date(TradingCalendar.geMillisFromZonedDateTime(segmentStartDate)));
 					}
 				}
 			}

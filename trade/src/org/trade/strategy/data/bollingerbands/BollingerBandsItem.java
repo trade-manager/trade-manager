@@ -64,8 +64,7 @@ public class BollingerBandsItem extends ComparableObjectItem {
 	 * @param bollingerBands
 	 *            BigDecimal
 	 */
-	public BollingerBandsItem(RegularTimePeriod period,
-			BigDecimal bollingerBands) {
+	public BollingerBandsItem(RegularTimePeriod period, BigDecimal bollingerBands) {
 		super(period, new BollingerBands(bollingerBands));
 	}
 

@@ -80,8 +80,7 @@ import org.trade.dictionary.valuetype.TriggerMethod;
  */
 @Entity
 @Table(name = "tradeorder")
-public class TradeOrder extends Aspect implements java.io.Serializable,
-		Cloneable {
+public class TradeOrder extends Aspect implements java.io.Serializable, Cloneable {
 
 	private static final long serialVersionUID = -832064631322873796L;
 
@@ -132,8 +131,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	private String warningMessage;
 	private String whyHeld;
 	private ZonedDateTime lastUpdateDate;
-	private List<TradeOrderfill> tradeOrderfills = new ArrayList<TradeOrderfill>(
-			0);
+	private List<TradeOrderfill> tradeOrderfills = new ArrayList<TradeOrderfill>(0);
 
 	public TradeOrder() {
 	}
@@ -156,12 +154,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param createDate
 	 *            ZonedDateTime
 	 */
-	public TradeOrder(Tradestrategy tradestrategy, String action,
-			String orderType, Integer quantity, BigDecimal auxPrice,
-			BigDecimal limitPrice, ZonedDateTime createDate) {
-		this(tradestrategy, action, createDate, orderType, quantity, auxPrice,
-				limitPrice, OverrideConstraints.YES, TimeInForce.DAY,
-				TriggerMethod.DEFAULT);
+	public TradeOrder(Tradestrategy tradestrategy, String action, String orderType, Integer quantity,
+			BigDecimal auxPrice, BigDecimal limitPrice, ZonedDateTime createDate) {
+		this(tradestrategy, action, createDate, orderType, quantity, auxPrice, limitPrice, OverrideConstraints.YES,
+				TimeInForce.DAY, TriggerMethod.DEFAULT);
 	}
 
 	/**
@@ -188,11 +184,9 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param triggerMethod
 	 *            Integer
 	 */
-	public TradeOrder(Tradestrategy tradestrategy, String action,
-			ZonedDateTime createDate, String orderType, Integer quantity,
-			BigDecimal auxPrice, BigDecimal limitPrice,
-			Integer overrideConstraints, String timeInForce,
-			Integer triggerMethod) {
+	public TradeOrder(Tradestrategy tradestrategy, String action, ZonedDateTime createDate, String orderType,
+			Integer quantity, BigDecimal auxPrice, BigDecimal limitPrice, Integer overrideConstraints,
+			String timeInForce, Integer triggerMethod) {
 		this.tradestrategy = tradestrategy;
 		this.action = action;
 		this.auxPrice = auxPrice;
@@ -204,8 +198,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.timeInForce = timeInForce;
 		this.triggerMethod = triggerMethod;
 		this.lastUpdateDate = createDate;
-		this.orderReference = this.tradestrategy.getIdTradeStrategy()
-				.toString();
+		this.orderReference = this.tradestrategy.getIdTradeStrategy().toString();
 	}
 
 	/**
@@ -251,20 +244,16 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 *            BigDecimal
 	 */
 
-	public TradeOrder(Tradestrategy tradestrategy, String action,
-			ZonedDateTime createDate, String orderType, Money limitPrice,
-			Money auxPrice, Integer quantity, String ocaGroupName,
-			Integer parentId, Integer triggerMethod,
-			Integer overrideConstraints, String timeInForce, Boolean transmit,
-			Money trailStopPrice, Percent trailingPercent, String FAProfile,
-			String FAGroup, String FAMethod, BigDecimal FAPercent) {
+	public TradeOrder(Tradestrategy tradestrategy, String action, ZonedDateTime createDate, String orderType,
+			Money limitPrice, Money auxPrice, Integer quantity, String ocaGroupName, Integer parentId,
+			Integer triggerMethod, Integer overrideConstraints, String timeInForce, Boolean transmit,
+			Money trailStopPrice, Percent trailingPercent, String FAProfile, String FAGroup, String FAMethod,
+			BigDecimal FAPercent) {
 		this.tradestrategy = tradestrategy;
 		this.action = action;
 		this.createDate = createDate;
-		this.auxPrice = (null == auxPrice ? null : auxPrice
-				.getBigDecimalValue());
-		this.limitPrice = (null == limitPrice ? null : limitPrice
-				.getBigDecimalValue());
+		this.auxPrice = (null == auxPrice ? null : auxPrice.getBigDecimalValue());
+		this.limitPrice = (null == limitPrice ? null : limitPrice.getBigDecimalValue());
 		this.ocaGroupName = ocaGroupName;
 		this.orderType = orderType;
 		this.overrideConstraints = overrideConstraints;
@@ -273,10 +262,8 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		this.timeInForce = timeInForce;
 		this.transmit = transmit;
 		this.triggerMethod = triggerMethod;
-		this.trailStopPrice = (null == trailStopPrice ? null : trailStopPrice
-				.getBigDecimalValue());
-		this.trailingPercent = (null == trailingPercent ? null
-				: trailingPercent.getBigDecimalValue());
+		this.trailStopPrice = (null == trailStopPrice ? null : trailStopPrice.getBigDecimalValue());
+		this.trailingPercent = (null == trailingPercent ? null : trailingPercent.getBigDecimalValue());
 		this.FAProfile = FAProfile;
 		this.FAGroup = FAGroup;
 		this.FAMethod = FAMethod;
@@ -362,20 +349,14 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @param tradeOrderfills
 	 *            List<TradeOrderfill>
 	 */
-	public TradeOrder(TradePosition tradePosition, String action,
-			BigDecimal averageFilledPrice, Boolean allOrNothing,
-			BigDecimal auxPrice, Integer clientId, BigDecimal commission,
-			ZonedDateTime createDate, Integer displayQuantity,
-			ZonedDateTime filledDate, Integer filledQuantity,
-			ZonedDateTime goodAfterTime, ZonedDateTime goodTillTime,
-			Boolean hidden, Boolean isOpenPosition, Boolean isFilled,
-			BigDecimal limitPrice, String ocaGroupName, Integer ocaType,
-			Integer orderKey, String orderReference, String orderType,
-			Integer overrideConstraints, Integer parentId, Integer permId,
-			Integer quantity, String timeInForce, String status,
-			BigDecimal stopPrice, Boolean transmit, BigDecimal trailStopPrice,
-			BigDecimal trailingPercent, Integer triggerMethod,
-			String warningMessage, String whyHeld,
+	public TradeOrder(TradePosition tradePosition, String action, BigDecimal averageFilledPrice, Boolean allOrNothing,
+			BigDecimal auxPrice, Integer clientId, BigDecimal commission, ZonedDateTime createDate,
+			Integer displayQuantity, ZonedDateTime filledDate, Integer filledQuantity, ZonedDateTime goodAfterTime,
+			ZonedDateTime goodTillTime, Boolean hidden, Boolean isOpenPosition, Boolean isFilled, BigDecimal limitPrice,
+			String ocaGroupName, Integer ocaType, Integer orderKey, String orderReference, String orderType,
+			Integer overrideConstraints, Integer parentId, Integer permId, Integer quantity, String timeInForce,
+			String status, BigDecimal stopPrice, Boolean transmit, BigDecimal trailStopPrice,
+			BigDecimal trailingPercent, Integer triggerMethod, String warningMessage, String whyHeld,
 			ZonedDateTime lastUpdateDate, List<TradeOrderfill> tradeOrderfills) {
 		this.tradePosition = tradePosition;
 		this.action = action;
@@ -1184,8 +1165,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	@Transient
 	public boolean isActive() {
 
-		if (!this.getIsFilled()
-				&& !OrderStatus.CANCELLED.equals(this.getStatus())
+		if (!this.getIsFilled() && !OrderStatus.CANCELLED.equals(this.getStatus())
 				&& !OrderStatus.INACTIVE.equals(this.getStatus()))
 			return true;
 		return false;
@@ -1447,54 +1427,39 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		if (0 == this.getQuantity())
 			throw new Exception("Quantity cannot be zero");
 
-		if (OrderType.LMT.equals(this.getOrderType())
-				&& null == this.getLimitPrice())
+		if (OrderType.LMT.equals(this.getOrderType()) && null == this.getLimitPrice())
 			throw new Exception("Limit price cannot be null");
 
 		if (OrderType.STPLMT.equals(this.getOrderType())
 				&& (null == this.getLimitPrice() || null == this.getAuxPrice()))
 			throw new Exception("Limit/Aux price cannot be null");
 
-		if (OrderType.STPLMT.equals(this.getOrderType())
-				&& Action.BUY.equals(this.getAction())
-				&& (-1 == CoreUtils.nullSafeComparator(this.getLimitPrice(),
-						this.getAuxPrice())))
-			throw new Exception(
-					"Limit Price must be greater than Stop Price for Buy order");
+		if (OrderType.STPLMT.equals(this.getOrderType()) && Action.BUY.equals(this.getAction())
+				&& (-1 == CoreUtils.nullSafeComparator(this.getLimitPrice(), this.getAuxPrice())))
+			throw new Exception("Limit Price must be greater than Stop Price for Buy order");
 
-		if (OrderType.STPLMT.equals(this.getOrderType())
-				&& Action.SELL.equals(this.getAction())
-				&& (-1 == CoreUtils.nullSafeComparator(this.getAuxPrice(),
-						this.getLimitPrice())))
-			throw new Exception(
-					"Limit Price must be less than Stop Price for Sell order");
+		if (OrderType.STPLMT.equals(this.getOrderType()) && Action.SELL.equals(this.getAction())
+				&& (-1 == CoreUtils.nullSafeComparator(this.getAuxPrice(), this.getLimitPrice())))
+			throw new Exception("Limit Price must be less than Stop Price for Sell order");
 
-		if (((OrderType.TRAIL.equals(this.getOrderType()) || (OrderType.TRAILLIMIT
-				.equals(this.getOrderType()))) && null == this.getAuxPrice() && null == this
-					.getTrailingPercent()))
-			throw new Exception(
-					"Trail orders must have either AuxPrice or Trailing Percent set");
+		if (((OrderType.TRAIL.equals(this.getOrderType()) || (OrderType.TRAILLIMIT.equals(this.getOrderType())))
+				&& null == this.getAuxPrice() && null == this.getTrailingPercent()))
+			throw new Exception("Trail orders must have either AuxPrice or Trailing Percent set");
 
-		if ((OrderType.TRAILLIMIT.equals(this.getOrderType()))
-				&& null == this.getLimitPrice())
-			throw new Exception(
-					"Limit Price cannot be null for a TrailLimit order");
+		if ((OrderType.TRAILLIMIT.equals(this.getOrderType())) && null == this.getLimitPrice())
+			throw new Exception("Limit Price cannot be null for a TrailLimit order");
 
 		if (null == this.getFAProfile()) {
 			if (null == this.getFAGroup()) {
-				if (null != this.getTradestrategy().getPortfolio()
-						.getIndividualAccount()) {
-					this.setAccountNumber(this.getTradestrategy()
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber());
+				if (null != this.getTradestrategy().getPortfolio().getIndividualAccount()) {
+					this.setAccountNumber(
+							this.getTradestrategy().getPortfolio().getIndividualAccount().getAccountNumber());
 				}
 			} else {
 				if (null == this.getFAMethod())
-					throw new Exception(
-							"FAGroup is set FAMethod cannot be null.");
+					throw new Exception("FAGroup is set FAMethod cannot be null.");
 				if (null == this.getFAMethod() || null == this.getFAPercent())
-					throw new Exception(
-							"FAGroup is set FAPercent cannot be null.");
+					throw new Exception("FAGroup is set FAPercent cannot be null.");
 			}
 		} else {
 			this.setFAGroup(null);
@@ -1526,8 +1491,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	public TradeOrder clone() {
 		try {
 			TradeOrder order = (TradeOrder) super.clone();
-			List<TradeOrderfill> tradeOrderfills = new ArrayList<TradeOrderfill>(
-					0);
+			List<TradeOrderfill> tradeOrderfills = new ArrayList<TradeOrderfill>(0);
 			order.setTradeOrderfills(tradeOrderfills);
 			return order;
 		} catch (CloneNotSupportedException e) {
@@ -1556,8 +1520,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		if (!theOtherOrder.getAction().equals((this.getAction()))) {
 			return false;
 		}
-		if (theOtherOrder.getAverageFilledPrice() != this
-				.getAverageFilledPrice()) {
+		if (theOtherOrder.getAverageFilledPrice() != this.getAverageFilledPrice()) {
 			return false;
 		}
 		if (theOtherOrder.getAllOrNothing() != this.getAllOrNothing()) {
@@ -1617,8 +1580,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		if (!theOtherOrder.getOrderType().equals(this.getOrderType())) {
 			return false;
 		}
-		if (theOtherOrder.getOverrideConstraints() != this
-				.getOverrideConstraints()) {
+		if (theOtherOrder.getOverrideConstraints() != this.getOverrideConstraints()) {
 			return false;
 		}
 		if (theOtherOrder.getPermId() != this.getPermId()) {
@@ -1658,13 +1620,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		public int compare(TradeOrder o1, TradeOrder o2) {
 			m_ascending = true;
 			int returnVal = 0;
-			if (CoreUtils.nullSafeComparator(o1.getFilledDate(),
-					o2.getFilledDate()) == 0) {
-				returnVal = CoreUtils.nullSafeComparator(o1.getAction(),
-						o2.getAction());
+			if (CoreUtils.nullSafeComparator(o1.getFilledDate(), o2.getFilledDate()) == 0) {
+				returnVal = CoreUtils.nullSafeComparator(o1.getAction(), o2.getAction());
 			} else {
-				returnVal = CoreUtils.nullSafeComparator(o1.getFilledDate(),
-						o2.getFilledDate());
+				returnVal = CoreUtils.nullSafeComparator(o1.getFilledDate(), o2.getFilledDate());
 			}
 
 			if (m_ascending.equals(Boolean.FALSE)) {
@@ -1678,13 +1637,10 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 		public int compare(TradeOrder o1, TradeOrder o2) {
 			m_ascending = true;
 			int returnVal = 0;
-			if (CoreUtils.nullSafeComparator(o1.getCreateDate(),
-					o2.getCreateDate()) == 0) {
-				returnVal = CoreUtils.nullSafeComparator(o1.getAction(),
-						o2.getAction());
+			if (CoreUtils.nullSafeComparator(o1.getCreateDate(), o2.getCreateDate()) == 0) {
+				returnVal = CoreUtils.nullSafeComparator(o1.getAction(), o2.getAction());
 			} else {
-				returnVal = CoreUtils.nullSafeComparator(o1.getCreateDate(),
-						o2.getCreateDate());
+				returnVal = CoreUtils.nullSafeComparator(o1.getCreateDate(), o2.getCreateDate());
 			}
 
 			if (m_ascending.equals(Boolean.FALSE)) {
@@ -1699,8 +1655,7 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 			m_ascending = true;
 			int returnVal = 0;
 
-			returnVal = CoreUtils.nullSafeComparator(o1.getOrderKey(),
-					o2.getOrderKey());
+			returnVal = CoreUtils.nullSafeComparator(o1.getOrderKey(), o2.getOrderKey());
 
 			if (m_ascending.equals(Boolean.FALSE)) {
 				returnVal = returnVal * -1;
@@ -1715,16 +1670,12 @@ public class TradeOrder extends Aspect implements java.io.Serializable,
 	 * @return String
 	 */
 	public String toString() {
-		return "OrderKey: " + this.getOrderKey() + " Id: "
-				+ this.getIdTradeOrder() + " Version: " + this.getVersion()
-				+ " Action: " + this.getAction() + " Quantity: "
-				+ this.getQuantity() + " Status: " + this.getStatus()
-				+ " OrderType: " + this.getOrderType() + " AuxPrice: "
-				+ new Money(this.getAuxPrice()) + " LmtPrice: "
-				+ new Money(this.getLimitPrice()) + " Open Position: "
-				+ this.getIsOpenPosition() + " Filled: " + this.getIsFilled()
-				+ " Filled Qty: " + this.getFilledQuantity() + " Trade Id: "
-				+ this.getTradePosition().getIdTradePosition()
-				+ " Trade Version: " + this.getTradePosition().getVersion();
+		return "OrderKey: " + this.getOrderKey() + " Id: " + this.getIdTradeOrder() + " Version: " + this.getVersion()
+				+ " Action: " + this.getAction() + " Quantity: " + this.getQuantity() + " Status: " + this.getStatus()
+				+ " OrderType: " + this.getOrderType() + " AuxPrice: " + new Money(this.getAuxPrice()) + " LmtPrice: "
+				+ new Money(this.getLimitPrice()) + " Open Position: " + this.getIsOpenPosition() + " Filled: "
+				+ this.getIsFilled() + " Filled Qty: " + this.getFilledQuantity() + " Trade Id: "
+				+ this.getTradePosition().getIdTradePosition() + " Trade Version: "
+				+ this.getTradePosition().getVersion();
 	}
 }

@@ -183,8 +183,7 @@ public class DateField extends JTextField {
 		 * @see javax.swing.text.Document#insertString(int, String,
 		 *      AttributeSet)
 		 */
-		public void insertString(int offs, String str, AttributeSet a)
-				throws BadLocationException {
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 
 			if (editMask.isEmpty()) {
 				char[] maskChars = str.toCharArray();

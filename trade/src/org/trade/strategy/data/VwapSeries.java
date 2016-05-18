@@ -89,11 +89,9 @@ public class VwapSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public VwapSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public VwapSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	public VwapSeries() {
@@ -128,8 +126,7 @@ public class VwapSeries extends IndicatorSeries {
 		if (!this.isEmpty()) {
 			VwapItem item0 = (VwapItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new VwapItem(period, vwapPrice), true);
@@ -147,10 +144,8 @@ public class VwapSeries extends IndicatorSeries {
 	public void add(VwapItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			VwapItem item0 = (VwapItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -200,13 +195,11 @@ public class VwapSeries extends IndicatorSeries {
 			 * the set.
 			 */
 			if (newBar) {
-				VwapItem dataItem = new VwapItem(source.getRollingCandle()
-						.getPeriod(), new BigDecimal(source.getRollingCandle()
-						.getVwap()));
+				VwapItem dataItem = new VwapItem(source.getRollingCandle().getPeriod(),
+						new BigDecimal(source.getRollingCandle().getVwap()));
 				this.add(dataItem, false);
 			} else {
-				VwapItem dataItem = (VwapItem) this.getDataItem(this
-						.getItemCount() - 1);
+				VwapItem dataItem = (VwapItem) this.getDataItem(this.getItemCount() - 1);
 				dataItem.setVwapPrice(source.getRollingCandle().getVwap());
 			}
 		}
@@ -219,8 +212,7 @@ public class VwapSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			VwapItem dataItem = (VwapItem) this.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getVwapPrice());
 		}
 	}

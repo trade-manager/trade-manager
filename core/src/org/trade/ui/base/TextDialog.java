@@ -85,8 +85,8 @@ public class TextDialog extends JDialog {
 	 * @param cancelButtonText
 	 *            String
 	 */
-	public TextDialog(Frame frame, String title, boolean modal,
-			JComponent component, String oKButtonText, String cancelButtonText) {
+	public TextDialog(Frame frame, String title, boolean modal, JComponent component, String oKButtonText,
+			String cancelButtonText) {
 		super(frame, title, modal);
 		if (null != oKButtonText)
 			okButton.setText(oKButtonText);
@@ -124,13 +124,11 @@ public class TextDialog extends JDialog {
 		JPanel jPanel2 = new JPanel(new BorderLayout());
 		JPanel jPanel3 = new JPanel(new GridLayout());
 
-		jPanel1.add(okButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
-						5, 5, 5), 5, 5));
+		jPanel1.add(okButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 5, 5));
 
-		jPanel1.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 5, 5, 5), 5, 5));
+		jPanel1.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 5, 5));
 
 		detailArea.getViewport().add(m_component, null);
 		jPanel2.add(detailArea, BorderLayout.CENTER);
@@ -153,8 +151,7 @@ public class TextDialog extends JDialog {
 	 * @param component
 	 *            JComponent
 	 */
-	public TextDialog(Frame frame, String title, boolean modal,
-			JComponent component) {
+	public TextDialog(Frame frame, String title, boolean modal, JComponent component) {
 		this(frame, title, modal, component, null, null);
 	}
 

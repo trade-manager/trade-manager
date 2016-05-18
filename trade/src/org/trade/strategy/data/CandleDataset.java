@@ -56,8 +56,7 @@ import org.trade.ui.chart.renderer.CandleRenderer;
 
 /**
  */
-public class CandleDataset extends AbstractXYDataset implements
-		OHLCVwapDataset, IndicatorDataset, Serializable {
+public class CandleDataset extends AbstractXYDataset implements OHLCVwapDataset, IndicatorDataset, Serializable {
 
 	/**
 	 * 
@@ -555,8 +554,7 @@ public class CandleDataset extends AbstractXYDataset implements
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		CandleDataset clone = (CandleDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -584,16 +582,14 @@ public class CandleDataset extends AbstractXYDataset implements
 	 *            int
 	 * @return CandleSeries
 	 */
-	public static CandleSeries createSeries(CandleDataset source,
-			int seriesIndex, Contract contract, int bars,
+	public static CandleSeries createSeries(CandleDataset source, int seriesIndex, Contract contract, int bars,
 			ZonedDateTime startTime, ZonedDateTime endTime) {
 
 		if (source.getSeries(seriesIndex) == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
-		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex),
-				bars, startTime, endTime);
+		CandleSeries series = new CandleSeries(source.getSeries(seriesIndex), bars, startTime, endTime);
 		for (int i = 0; i < source.getSeries(seriesIndex).getItemCount() - 1; i++) {
 			series.updateSeries(source.getSeries(seriesIndex), i, true);
 		}
@@ -610,21 +606,15 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @param candles
 	 *            List<Candle>
 	 */
-	public static void populateSeries(StrategyData strategyData,
-			List<Candle> candles) {
+	public static void populateSeries(StrategyData strategyData, List<Candle> candles) {
 		strategyData.clearBaseCandleDataset();
 		for (Candle candle : candles) {
-			strategyData.buildCandle(candle.getStartPeriod(), candle.getOpen()
-					.doubleValue(), candle.getHigh().doubleValue(), candle
-					.getLow().doubleValue(), candle.getClose().doubleValue(),
-					candle.getVolume(), candle.getVwap().doubleValue(), candle
-							.getTradeCount(), 1, null);
-			strategyData.getBaseCandleSeries().getContract()
-					.setLastAskPrice(candle.getClose());
-			strategyData.getBaseCandleSeries().getContract()
-					.setLastBidPrice(candle.getClose());
-			strategyData.getBaseCandleSeries().getContract()
-					.setLastPrice(candle.getClose());
+			strategyData.buildCandle(candle.getStartPeriod(), candle.getOpen().doubleValue(),
+					candle.getHigh().doubleValue(), candle.getLow().doubleValue(), candle.getClose().doubleValue(),
+					candle.getVolume(), candle.getVwap().doubleValue(), candle.getTradeCount(), 1, null);
+			strategyData.getBaseCandleSeries().getContract().setLastAskPrice(candle.getClose());
+			strategyData.getBaseCandleSeries().getContract().setLastBidPrice(candle.getClose());
+			strategyData.getBaseCandleSeries().getContract().setLastPrice(candle.getClose());
 		}
 	}
 
@@ -640,16 +630,15 @@ public class CandleDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			CandleSeries series = this.getSeries(i);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

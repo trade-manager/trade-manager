@@ -59,8 +59,7 @@ public class CodeValidator implements Validator {
 	 * @param isMandatory
 	 *            boolean
 	 */
-	public CodeValidator(IMessageFactory messageFactory,
-			Collection<?> acceptableValues, boolean isMandatory) {
+	public CodeValidator(IMessageFactory messageFactory, Collection<?> acceptableValues, boolean isMandatory) {
 		m_messageFactory = messageFactory;
 		m_acceptableValues = acceptableValues;
 		m_isMandatory = isMandatory;
@@ -90,8 +89,8 @@ public class CodeValidator implements Validator {
 	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
 	 *      ExceptionMessageListener)
 	 */
-	public boolean isValid(Object value, String invalidValue,
-			String expectedFormat, ExceptionMessageListener receiver) {
+	public boolean isValid(Object value, String invalidValue, String expectedFormat,
+			ExceptionMessageListener receiver) {
 		boolean valid = true;
 
 		if (null == value) {
@@ -102,9 +101,8 @@ public class CodeValidator implements Validator {
 		{
 			if (m_isMandatory) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED.create()));
 			}
 		} else
 		// 0 < length so check valid values
@@ -112,9 +110,7 @@ public class CodeValidator implements Validator {
 			if (!m_acceptableValues.contains(value)) {
 				valid = false;
 				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.CODE_NOT_VALID
-								.create(MessageContextFactory.INVALID_CODE
-										.create(value))));
+						MessageContextFactory.CODE_NOT_VALID.create(MessageContextFactory.INVALID_CODE.create(value))));
 			}
 		}
 

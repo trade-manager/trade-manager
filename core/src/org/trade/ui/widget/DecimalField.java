@@ -51,8 +51,8 @@ import org.trade.core.valuetype.Decimal;
  */
 public class DecimalField extends JFormattedTextField {
 	/**
-* 
-*/
+	* 
+	*/
 	private static final long serialVersionUID = -4264304378113205235L;
 	private static int _SCALE = 2;
 
@@ -62,9 +62,8 @@ public class DecimalField extends JFormattedTextField {
 		displayFormat.setMinimumFractionDigits(_SCALE);
 		NumberFormat editFormat = NumberFormat.getNumberInstance();
 		editFormat.setMinimumFractionDigits(_SCALE);
-		this.setFormatterFactory(new DefaultFormatterFactory(
-				new NumberFormatter(displayFormat), new NumberFormatter(
-						displayFormat), new NumberFormatter(editFormat)));
+		this.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(displayFormat),
+				new NumberFormatter(displayFormat), new NumberFormatter(editFormat)));
 		this.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.setValue(new Double(0));
 		this.setColumns(10);

@@ -74,8 +74,7 @@ public class MissingPropertiesException extends java.lang.Exception {
 	 * @return String
 	 */
 	public String getMessage() {
-		StringBuffer message = new StringBuffer(
-				"The following properties are missing: ");
+		StringBuffer message = new StringBuffer("The following properties are missing: ");
 		Enumeration<String> missingProperties = getMissingProperties();
 
 		if (null == missingProperties) {

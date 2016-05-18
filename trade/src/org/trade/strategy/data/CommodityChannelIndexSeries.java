@@ -118,11 +118,9 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public CommodityChannelIndexSeries(Strategy strategy, String name,
-			String type, String description, Boolean displayOnChart,
-			Integer chartRGBColor, Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public CommodityChannelIndexSeries(Strategy strategy, String name, String type, String description,
+			Boolean displayOnChart, Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -145,11 +143,9 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public CommodityChannelIndexSeries(Strategy strategy, String name,
-			String type, String description, Boolean displayOnChart,
-			Integer chartRGBColor, Boolean subChart, Integer length) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public CommodityChannelIndexSeries(Strategy strategy, String name, String type, String description,
+			Boolean displayOnChart, Integer chartRGBColor, Boolean subChart, Integer length) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.length = length;
 	}
 
@@ -164,8 +160,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 * @throws CloneNotSupportedException
 	 */
 	public Object clone() throws CloneNotSupportedException {
-		CommodityChannelIndexSeries clone = (CommodityChannelIndexSeries) super
-				.clone();
+		CommodityChannelIndexSeries clone = (CommodityChannelIndexSeries) super.clone();
 		clone.typicalPriceValues = new LinkedList<Double>();
 		return clone;
 	}
@@ -205,11 +200,9 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 */
 	public void add(RegularTimePeriod period, BigDecimal cciAverage) {
 		if (!this.isEmpty()) {
-			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this
-					.getDataItem(0);
+			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new CommodityChannelIndexItem(period, cciAverage), true);
@@ -226,12 +219,9 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 */
 	public void add(CommodityChannelIndexItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
-			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this
-					.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			CommodityChannelIndexItem item0 = (CommodityChannelIndexItem) this.getDataItem(0);
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -246,8 +236,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) CodeValue.getValueCode(LENGTH,
-						this.getCodeValues());
+				this.length = (Integer) CodeValue.getValueCode(LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -273,8 +262,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	public Boolean getRollingCandle() {
 		try {
 			if (null == this.rollingCandle)
-				this.rollingCandle = (Boolean) CodeValue.getValueCode(
-						ROLLING_CANDLE, this.getCodeValues());
+				this.rollingCandle = (Boolean) CodeValue.getValueCode(ROLLING_CANDLE, this.getCodeValues());
 		} catch (Exception e) {
 			this.rollingCandle = null;
 		}
@@ -315,10 +303,8 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			CommodityChannelIndexItem dataItem = (CommodityChannelIndexItem) this
-					.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			CommodityChannelIndexItem dataItem = (CommodityChannelIndexItem) this.getDataItem(i);
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getCommodityChannelIndex());
 		}
 	}
@@ -339,8 +325,7 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 		if (getLength() == null || getLength() < 1) {
-			throw new IllegalArgumentException(
-					"CCI period must be  greater than zero.");
+			throw new IllegalArgumentException("CCI period must be  greater than zero.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -352,12 +337,10 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 			 * Rolling candles can be used to smooth transition between bars.
 			 */
 
-			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem
-					.getLow()) / 3;
+			double typicalPrice = (candleItem.getClose() + candleItem.getHigh() + candleItem.getLow()) / 3;
 			if (this.getRollingCandle()) {
-				typicalPrice = (source.getRollingCandle().getClose()
-						+ source.getRollingCandle().getHigh() + source
-						.getRollingCandle().getLow()) / 3;
+				typicalPrice = (source.getRollingCandle().getClose() + source.getRollingCandle().getHigh()
+						+ source.getRollingCandle().getLow()) / 3;
 			}
 			if (0 != typicalPrice) {
 				if (typicalPriceValues.size() == getLength()) {
@@ -370,13 +353,11 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 					 * each time.
 					 */
 					if (newBar) {
-						sumTypicalPrice = sumTypicalPrice
-								- typicalPriceValues.getLast() + typicalPrice;
+						sumTypicalPrice = sumTypicalPrice - typicalPriceValues.getLast() + typicalPrice;
 						typicalPriceValues.removeLast();
 						typicalPriceValues.addFirst(typicalPrice);
 					} else {
-						sumTypicalPrice = sumTypicalPrice
-								- typicalPriceValues.getFirst() + typicalPrice;
+						sumTypicalPrice = sumTypicalPrice - typicalPriceValues.getFirst() + typicalPrice;
 						typicalPriceValues.removeFirst();
 						typicalPriceValues.addFirst(typicalPrice);
 					}
@@ -385,21 +366,19 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 						sumTypicalPrice = sumTypicalPrice + typicalPrice;
 						typicalPriceValues.addFirst(typicalPrice);
 					} else {
-						sumTypicalPrice = sumTypicalPrice + typicalPrice
-								- typicalPriceValues.getFirst();
+						sumTypicalPrice = sumTypicalPrice + typicalPrice - typicalPriceValues.getFirst();
 						typicalPriceValues.removeFirst();
 						typicalPriceValues.addFirst(typicalPrice);
 					}
 				}
 
 				if (typicalPriceValues.size() == getLength()) {
-					double cci = calculateCCI(sumTypicalPrice,
-							typicalPriceValues);
+					double cci = calculateCCI(sumTypicalPrice, typicalPriceValues);
 					// _log.info("Period: " + candleItem.getPeriod() + " CCI: "
 					// + cci + " newBar: " + newBar);
 					if (newBar) {
-						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(
-								candleItem.getPeriod(), new BigDecimal(cci));
+						CommodityChannelIndexItem dataItem = new CommodityChannelIndexItem(candleItem.getPeriod(),
+								new BigDecimal(cci));
 						this.add(dataItem, false);
 
 					} else {
@@ -425,17 +404,14 @@ public class CommodityChannelIndexSeries extends IndicatorSeries {
 	 *            Double
 	 * @return double
 	 */
-	private double calculateCCI(Double sumTypicalPrice,
-			LinkedList<Double> typicalPriceValues) {
+	private double calculateCCI(Double sumTypicalPrice, LinkedList<Double> typicalPriceValues) {
 		double typicalPriceSMA = sumTypicalPrice / getLength();
 		double sumMeanDeviation = 0;
 		for (double typicalPrice : typicalPriceValues) {
-			sumMeanDeviation = sumMeanDeviation
-					+ Math.abs(typicalPriceSMA - typicalPrice);
+			sumMeanDeviation = sumMeanDeviation + Math.abs(typicalPriceSMA - typicalPrice);
 		}
 		if (sumMeanDeviation == 0)
 			return 0;
-		return (typicalPriceValues.getFirst() - typicalPriceSMA)
-				/ (0.015 * (sumMeanDeviation / getLength()));
+		return (typicalPriceValues.getFirst() - typicalPriceSMA) / (0.015 * (sumMeanDeviation / getLength()));
 	}
 }

@@ -58,25 +58,21 @@ public class ObjectToDate implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Date rVal = null;
 
 		if (!Date.class.equals(targetType)) {
-			throw new JavaTypeTranslatorException(
-					"The target type must be an Date");
+			throw new JavaTypeTranslatorException("The target type must be an Date");
 		}
 
 		if (valueToConvert == null) {
-			throw new JavaTypeTranslatorException(
-					"The object to be converted cannot be null");
+			throw new JavaTypeTranslatorException("The object to be converted cannot be null");
 		}
 
 		String dateFormat = null;
 
 		if (valueToConvert instanceof JavaFormatForObject) {
-			valueToConvert = ((JavaFormatForObject) valueToConvert)
-					.getForObject();
+			valueToConvert = ((JavaFormatForObject) valueToConvert).getForObject();
 			dateFormat = ((JavaFormatForObject) valueToConvert).getFormat();
 
 		}
@@ -88,8 +84,7 @@ public class ObjectToDate implements JavaDynamicTypeConverter {
 			// that is okay
 		} else {
 			throw new JavaTypeTranslatorException(
-					"The object to be converted cannot be a "
-							+ valueToConvert.getClass());
+					"The object to be converted cannot be a " + valueToConvert.getClass());
 		}
 
 		return (rVal);
@@ -103,9 +98,8 @@ public class ObjectToDate implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

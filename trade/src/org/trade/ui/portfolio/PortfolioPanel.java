@@ -97,8 +97,7 @@ import org.trade.ui.widget.StringField;
 
 /**
  */
-public class PortfolioPanel extends BasePanel implements ChangeListener,
-		ItemListener {
+public class PortfolioPanel extends BasePanel implements ChangeListener, ItemListener {
 
 	private static final long serialVersionUID = 98016024273398947L;
 
@@ -133,21 +132,17 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 *            PersistentModel
 	 */
 
-	public PortfolioPanel(BasePanel controller,
-			PersistentModel tradePersistentModel) {
+	public PortfolioPanel(BasePanel controller, PersistentModel tradePersistentModel) {
 		try {
 			if (null != getMenu())
 				getMenu().addMessageListener(this);
 			this.setLayout(new BorderLayout());
 
 			m_tradePersistentModel = tradePersistentModel;
-			m_csvDefaultDir = ConfigProperties
-					.getPropAsString("trade.csv.default.dir");
-			transferButton = new BaseButton(controller,
-					BaseUIPropertyCodes.TRANSFER);
+			m_csvDefaultDir = ConfigProperties.getPropAsString("trade.csv.default.dir");
+			transferButton = new BaseButton(controller, BaseUIPropertyCodes.TRANSFER);
 			JLabel portfolioLabel = new JLabel("Portfolio:");
-			portfolioEditorComboBox = new DAODecodeComboBoxEditor(DAOPortfolio
-					.newInstance().getCodesDecodes());
+			portfolioEditorComboBox = new DAODecodeComboBoxEditor(DAOPortfolio.newInstance().getCodesDecodes());
 			DecodeComboBoxRenderer portfolioRenderer = new DecodeComboBoxRenderer();
 			portfolioEditorComboBox.setRenderer(portfolioRenderer);
 			this.portfolio = (Portfolio) DAOPortfolio.newInstance().getObject();
@@ -155,24 +150,19 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			portfolioEditorComboBox.addItemListener(this);
 
 			m_tradelogSummaryModel = new TradelogSummaryTableModel();
-			m_tableTradelogSummary = new TradelogSummaryTable(
-					m_tradelogSummaryModel);
+			m_tableTradelogSummary = new TradelogSummaryTable(m_tradelogSummaryModel);
 			m_tradelogDetailModel = new TradelogDetailTableModel();
-			m_tableTradelogDetail = new TradelogDetailTable(
-					m_tradelogDetailModel);
+			m_tableTradelogDetail = new TradelogDetailTable(m_tradelogDetailModel);
 			spinnerStart.setModel(new SpinnerDateModel());
-			JSpinner.DateEditor dateStart = new JSpinner.DateEditor(
-					spinnerStart, DATEFORMAT);
+			JSpinner.DateEditor dateStart = new JSpinner.DateEditor(spinnerStart, DATEFORMAT);
 			spinnerStart.setEditor(dateStart);
-			spinnerStart.setValue((new Date(TradingCalendar.getYearStart()))
-					.getDate());
+			spinnerStart.setValue((new Date(TradingCalendar.getYearStart())).getDate());
 			spinnerEnd.setModel(new SpinnerDateModel());
-			JSpinner.DateEditor dateEnd = new JSpinner.DateEditor(spinnerEnd,
-					DATEFORMAT);
+			JSpinner.DateEditor dateEnd = new JSpinner.DateEditor(spinnerEnd, DATEFORMAT);
 			spinnerEnd.setEditor(dateEnd);
-			spinnerEnd.setValue((new Date(TradingCalendar
-					.getTradingDayStart(TradingCalendar
-							.getDateTimeNowMarketTimeZone()))).getDate());
+			spinnerEnd.setValue(
+					(new Date(TradingCalendar.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone())))
+							.getDate());
 			filterButton.setSelected(false);
 
 			JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -185,8 +175,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			JLabel startLabel = new JLabel("Start Date:");
 			JLabel endLabel = new JLabel("End Date:");
 			JLabel symbolLabel = new JLabel("Symbol:");
-			symbolField = new StringField(new MaskFormatter(MASK), VALID_CHARS,
-					PLACE_HOLDER);
+			symbolField = new StringField(new MaskFormatter(MASK), VALID_CHARS, PLACE_HOLDER);
 			symbolField.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jPanel2.add(portfolioLabel, null);
 			jPanel2.add(portfolioEditorComboBox, null);
@@ -205,44 +194,35 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			jToolBar.add(jPanel1, BorderLayout.EAST);
 
 			m_tableTradelogSummary.setEnabled(false);
-			m_tableTradelogSummary.setFont(new Font("Monospaced", Font.PLAIN,
-					12));
+			m_tableTradelogSummary.setFont(new Font("Monospaced", Font.PLAIN, 12));
 			JScrollPane jScrollPane = new JScrollPane();
-			jScrollPane.getViewport().add(m_tableTradelogSummary,
-					BorderLayout.CENTER);
+			jScrollPane.getViewport().add(m_tableTradelogSummary, BorderLayout.CENTER);
 			jScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jScrollPane.addMouseListener(m_tableTradelogSummary);
 			JPanel jPanel3 = new JPanel(new BorderLayout());
 			jPanel3.add(jScrollPane, BorderLayout.CENTER);
 
-			m_tableTradelogDetail
-					.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			m_tableTradelogDetail
-					.setFont(new Font("Monospaced", Font.PLAIN, 12));
+			m_tableTradelogDetail.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			m_tableTradelogDetail.setFont(new Font("Monospaced", Font.PLAIN, 12));
 			JScrollPane jScrollPane1 = new JScrollPane();
-			jScrollPane1.getViewport().add(m_tableTradelogDetail,
-					BorderLayout.CENTER);
+			jScrollPane1.getViewport().add(m_tableTradelogDetail, BorderLayout.CENTER);
 			jScrollPane1.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			jScrollPane1.addMouseListener(m_tableTradelogDetail);
 			JPanel jPanel4 = new JPanel(new BorderLayout());
 			jPanel4.add(jScrollPane1, BorderLayout.CENTER);
 
-			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-					true, jPanel3, jPanel4);
+			JSplitPane jSplitPane1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, jPanel3, jPanel4);
 			jSplitPane1.setOneTouchExpandable(true);
 			jSplitPane1.setResizeWeight(0.2d);
 			this.add(jToolBar, BorderLayout.NORTH);
 			this.add(jSplitPane1, BorderLayout.CENTER);
 
-			m_tableTradelogDetail.getSelectionModel().addListSelectionListener(
-					new TradelogDetailTableRowListener());
+			m_tableTradelogDetail.getSelectionModel().addListSelectionListener(new TradelogDetailTableRowListener());
 			m_tableTradelogDetail.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
 						if (null != selectedTradelogDetail) {
-							transferButton
-									.setTransferObject(selectedTradelogDetail
-											.getIdTradestrategy());
+							transferButton.setTransferObject(selectedTradelogDetail.getIdTradestrategy());
 							transferButton.doClick();
 						}
 					}
@@ -250,8 +230,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			});
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error during initialization.",
-					ex.getMessage(), ex);
+			this.setErrorMessage("Error during initialization.", ex.getMessage(), ex);
 		}
 	}
 
@@ -260,13 +239,11 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 		try {
 
 			ZonedDateTime startDate = TradingCalendar
-					.getZonedDateTimeFromMilli(((java.util.Date) spinnerStart
-							.getValue()).getTime());
+					.getZonedDateTimeFromMilli(((java.util.Date) spinnerStart.getValue()).getTime());
 			startDate = TradingCalendar.getDateAtTime(startDate, 0, 0, 0);
 
 			ZonedDateTime endDate = TradingCalendar
-					.getZonedDateTimeFromMilli(((java.util.Date) spinnerEnd
-							.getValue()).getTime());
+					.getZonedDateTimeFromMilli(((java.util.Date) spinnerEnd.getValue()).getTime());
 			endDate = TradingCalendar.getDateAtTime(endDate, 23, 59, 59);
 
 			if (endDate.isBefore(startDate)) {
@@ -277,14 +254,11 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			if (symbol.length() == 0)
 				symbol = null;
 
-			m_tradelogReport = m_tradePersistentModel.findTradelogReport(
-					this.portfolio, startDate, endDate, filterButton
-							.isSelected(), symbol, m_lossGainAmt.getMoney()
-							.getBigDecimalValue());
+			m_tradelogReport = m_tradePersistentModel.findTradelogReport(this.portfolio, startDate, endDate,
+					filterButton.isSelected(), symbol, m_lossGainAmt.getMoney().getBigDecimalValue());
 			this.clearStatusBarMessage();
 			if (m_tradelogReport.getTradelogDetail().isEmpty()) {
-				this.setStatusBarMessage("No data found for selected criteria",
-						INFORMATION);
+				this.setStatusBarMessage("No data found for selected criteria", INFORMATION);
 			}
 
 			m_tradelogDetailModel.setData(m_tradelogReport);
@@ -295,8 +269,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			rsSummary.setSortKeys(null);
 
 		} catch (Exception ex) {
-			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Error finding Tradingday.", ex.getMessage(), ex);
 		}
 	}
 
@@ -310,8 +283,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	public void itemStateChanged(ItemEvent e) {
 
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			this.portfolio = (Portfolio) ((DAOPortfolio) e.getItem())
-					.getObject();
+			this.portfolio = (Portfolio) ((DAOPortfolio) e.getItem()).getObject();
 		}
 	}
 
@@ -339,8 +311,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 */
 	public void doProperties() {
 		if (null != selectedTradelogDetail) {
-			transferButton.setTransferObject(selectedTradelogDetail
-					.getIdTradestrategy());
+			transferButton.setTransferObject(selectedTradelogDetail.getIdTradestrategy());
 			transferButton.doClick();
 		}
 	}
@@ -364,8 +335,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 				doSearch();
 			}
 		} catch (Exception ex) {
-			this.setErrorMessage("Error activating window.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Error activating window.", ex.getMessage(), ex);
 		}
 	}
 
@@ -386,13 +356,10 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 * @throws ValueTypeException
 	 */
 
-	private void resetPortfolioComboBox(
-			final DAODecodeComboBoxEditor editorComboBox)
-			throws ValueTypeException {
+	private void resetPortfolioComboBox(final DAODecodeComboBoxEditor editorComboBox) throws ValueTypeException {
 
 		Vector<Decode> codesNew = ((new DAOPortfolio()).getCodesDecodes());
-		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(
-				codesNew);
+		DefaultComboBoxModel<Decode> model = new DefaultComboBoxModel<Decode>(codesNew);
 		editorComboBox.setModel(model);
 		editorComboBox.setItem(DAOPortfolio.newInstance());
 		editorComboBox.setRenderer(new DecodeComboBoxRenderer());
@@ -400,8 +367,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 
 	/**
 	 */
-	private class TradelogDetailTableRowListener implements
-			ListSelectionListener {
+	private class TradelogDetailTableRowListener implements ListSelectionListener {
 		/**
 		 * Method valueChanged.
 		 * 
@@ -411,15 +377,10 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 		 */
 		public void valueChanged(ListSelectionEvent event) {
 			if (!event.getValueIsAdjusting()) {
-				ListSelectionModel model = (ListSelectionModel) event
-						.getSource();
+				ListSelectionModel model = (ListSelectionModel) event.getSource();
 				if (model.getLeadSelectionIndex() > -1) {
-					selectedTradelogDetail = m_tradelogDetailModel
-							.getData()
-							.getTradelogDetail()
-							.get(m_tableTradelogDetail
-									.convertRowIndexToModel(model
-											.getLeadSelectionIndex()));
+					selectedTradelogDetail = m_tradelogDetailModel.getData().getTradelogDetail()
+							.get(m_tableTradelogDetail.convertRowIndexToModel(model.getLeadSelectionIndex()));
 				}
 			}
 		}
@@ -433,8 +394,7 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private String openFileChooser() {
 
 		String fileName = null;
-		ExampleFileFilter filter = new ExampleFileFilter(
-				new String[] { "csv" }, "Portfolio Files");
+		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "csv" }, "Portfolio Files");
 		// Start in the curr dir
 
 		if (null == m_csvDefaultDir) {
@@ -459,9 +419,8 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 			// Call openFile to attempt to load the text from file into TextArea
 			if (filer1.getSelectedFile().exists()) {
 
-				int result = JOptionPane.showConfirmDialog(this.getFrame(),
-						"File Exists. Do you want to over write ?", "Warning",
-						JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(this.getFrame(), "File Exists. Do you want to over write ?",
+						"Warning", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					fileName = filer1.getSelectedFile().getPath();
 
@@ -489,61 +448,42 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	private void doReadWrite(String fileName) {
 
 		if (null != fileName) {
-			this.setStatusBarMessage("Saving file " + fileName,
-					BasePanel.INFORMATION);
-			try (FileWriter fileWriter = new FileWriter(fileName);
-					PrintWriter writer = new PrintWriter(fileWriter);) {
+			this.setStatusBarMessage("Saving file " + fileName, BasePanel.INFORMATION);
+			try (FileWriter fileWriter = new FileWriter(fileName); PrintWriter writer = new PrintWriter(fileWriter);) {
 
 				// Write out the header
-				writer.println(TradelogSummaryTableModel.PERIOD + ","
-						+ TradelogSummaryTableModel.BATTING_AVERAGE + ","
-						+ TradelogSummaryTableModel.SHARPE_RATIO + ","
-						+ TradelogSummaryTableModel.GROSS_PL + ","
-						+ TradelogSummaryTableModel.QUANTITY + ","
-						+ TradelogSummaryTableModel.COMMISSION + ","
-						+ TradelogSummaryTableModel.NET_PL + ","
-						+ TradelogSummaryTableModel.WIN_COUNT + ","
-						+ TradelogSummaryTableModel.WIN_AMOUNT + ","
-						+ TradelogSummaryTableModel.LOSS_COUNT + ","
-						+ TradelogSummaryTableModel.LOSS_AMOUNT + ","
-						+ TradelogSummaryTableModel.POSITION_COUNT + ","
+				writer.println(TradelogSummaryTableModel.PERIOD + "," + TradelogSummaryTableModel.BATTING_AVERAGE + ","
+						+ TradelogSummaryTableModel.SHARPE_RATIO + "," + TradelogSummaryTableModel.GROSS_PL + ","
+						+ TradelogSummaryTableModel.QUANTITY + "," + TradelogSummaryTableModel.COMMISSION + ","
+						+ TradelogSummaryTableModel.NET_PL + "," + TradelogSummaryTableModel.WIN_COUNT + ","
+						+ TradelogSummaryTableModel.WIN_AMOUNT + "," + TradelogSummaryTableModel.LOSS_COUNT + ","
+						+ TradelogSummaryTableModel.LOSS_AMOUNT + "," + TradelogSummaryTableModel.POSITION_COUNT + ","
 						+ TradelogSummaryTableModel.CONTRACT_COUNT);
 				// Write out the lines
 				if (null != m_tradelogReport) {
-					for (TradelogSummary tradelogSummary : m_tradelogReport
-							.getTradelogSummary()) {
+					for (TradelogSummary tradelogSummary : m_tradelogReport.getTradelogSummary()) {
 						writer.println(formatTradelogSummaryLine(tradelogSummary));
 					}
 				}
 				// Write out the header
-				writer.println(TradelogDetailTableModel.DATE + ","
-						+ TradelogDetailTableModel.SYMBOL + ","
-						+ TradelogDetailTableModel.LONGSHORT + ","
-						+ TradelogDetailTableModel.TIER + ","
-						+ TradelogDetailTableModel.MARKET_BIAS + ","
-						+ TradelogDetailTableModel.MARKET_BAR + ","
-						+ TradelogDetailTableModel.STRATEGY + ","
-						+ TradelogDetailTableModel.STATUS + ","
-						+ TradelogDetailTableModel.ACTION + ","
-						+ TradelogDetailTableModel.STOP_PRICE + ","
-						+ TradelogDetailTableModel.STATUS + ","
-						+ TradelogDetailTableModel.FILLED_DATE + ","
-						+ TradelogDetailTableModel.QUANTITY + ","
-						+ TradelogDetailTableModel.AVG_FILL_PRICE + ","
-						+ TradelogDetailTableModel.COMMISION + ","
-						+ TradelogDetailTableModel.PROFIT_LOSS);
+				writer.println(TradelogDetailTableModel.DATE + "," + TradelogDetailTableModel.SYMBOL + ","
+						+ TradelogDetailTableModel.LONGSHORT + "," + TradelogDetailTableModel.TIER + ","
+						+ TradelogDetailTableModel.MARKET_BIAS + "," + TradelogDetailTableModel.MARKET_BAR + ","
+						+ TradelogDetailTableModel.STRATEGY + "," + TradelogDetailTableModel.STATUS + ","
+						+ TradelogDetailTableModel.ACTION + "," + TradelogDetailTableModel.STOP_PRICE + ","
+						+ TradelogDetailTableModel.STATUS + "," + TradelogDetailTableModel.FILLED_DATE + ","
+						+ TradelogDetailTableModel.QUANTITY + "," + TradelogDetailTableModel.AVG_FILL_PRICE + ","
+						+ TradelogDetailTableModel.COMMISION + "," + TradelogDetailTableModel.PROFIT_LOSS);
 				// Write out the lines
 				if (null != m_tradelogReport) {
-					for (TradelogDetail tradelogDetail : m_tradelogReport
-							.getTradelogDetail()) {
+					for (TradelogDetail tradelogDetail : m_tradelogReport.getTradelogDetail()) {
 						writer.println(formatTradelogDetailLine(tradelogDetail));
 					}
 				}
 				writer.flush();
 				writer.close();
 				fileWriter.close();
-				this.setStatusBarMessage("File: " + fileName + " saved.",
-						BasePanel.INFORMATION);
+				this.setStatusBarMessage("File: " + fileName + " saved.", BasePanel.INFORMATION);
 			} catch (Exception ex) {
 				setErrorMessage("Error Reading Writing.", ex.getMessage(), ex);
 			}
@@ -557,47 +497,27 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 *            TradelogSummary
 	 * @return StringBuffer
 	 */
-	private StringBuffer formatTradelogSummaryLine(
-			final TradelogSummary tradelogSummary) {
+	private StringBuffer formatTradelogSummaryLine(final TradelogSummary tradelogSummary) {
 		StringBuffer tradelogLine = new StringBuffer();
-		tradelogLine.append((tradelogSummary.getPeriod() == null ? ""
-				: tradelogSummary.getPeriod())
-				+ ","
-				+ (tradelogSummary.getBattingAverage() == null ? ""
-						: new Money(tradelogSummary.getBattingAverage()))
-				+ ","
-				+ (tradelogSummary.getSimpleSharpeRatio() == null ? ""
-						: new Money(tradelogSummary.getSimpleSharpeRatio()))
-				+ ","
-				+ (tradelogSummary.getGrossProfitLoss() == null ? ""
-						: tradelogSummary.getGrossProfitLoss())
-				+ ","
-				+ (tradelogSummary.getQuantity() == null ? "" : tradelogSummary
-						.getQuantity())
-				+ ","
-				+ (tradelogSummary.getCommission() == null ? ""
-						: tradelogSummary.getCommission())
-				+ ","
-				+ (tradelogSummary.getNetProfitLoss() == null ? ""
-						: tradelogSummary.getNetProfitLoss())
-				+ ","
-				+ (tradelogSummary.getWinCount() == null ? "" : tradelogSummary
-						.getWinCount())
-				+ ","
-				+ (tradelogSummary.getProfitAmount() == null ? ""
-						: tradelogSummary.getProfitAmount())
-				+ ","
-				+ (tradelogSummary.getLossCount() == null ? ""
-						: tradelogSummary.getLossCount())
-				+ ","
-				+ (tradelogSummary.getLossAmount() == null ? ""
-						: tradelogSummary.getLossAmount())
-				+ ","
-				+ (tradelogSummary.getPositionCount() == null ? ""
-						: tradelogSummary.getPositionCount())
-				+ ","
-				+ (tradelogSummary.getTradestrategyCount() == null ? ""
-						: tradelogSummary.getTradestrategyCount()));
+		tradelogLine
+				.append((tradelogSummary.getPeriod() == null ? "" : tradelogSummary.getPeriod()) + ","
+						+ (tradelogSummary.getBattingAverage() == null ? ""
+								: new Money(tradelogSummary.getBattingAverage()))
+						+ ","
+						+ (tradelogSummary.getSimpleSharpeRatio() == null ? ""
+								: new Money(tradelogSummary.getSimpleSharpeRatio()))
+						+ ","
+						+ (tradelogSummary.getGrossProfitLoss() == null ? "" : tradelogSummary.getGrossProfitLoss())
+						+ "," + (tradelogSummary.getQuantity() == null ? "" : tradelogSummary.getQuantity()) + ","
+						+ (tradelogSummary.getCommission() == null ? "" : tradelogSummary.getCommission()) + ","
+						+ (tradelogSummary.getNetProfitLoss() == null ? "" : tradelogSummary.getNetProfitLoss()) + ","
+						+ (tradelogSummary.getWinCount() == null ? "" : tradelogSummary.getWinCount()) + ","
+						+ (tradelogSummary.getProfitAmount() == null ? "" : tradelogSummary.getProfitAmount()) + ","
+						+ (tradelogSummary.getLossCount() == null ? "" : tradelogSummary.getLossCount()) + ","
+						+ (tradelogSummary.getLossAmount() == null ? "" : tradelogSummary.getLossAmount()) + ","
+						+ (tradelogSummary.getPositionCount() == null ? "" : tradelogSummary.getPositionCount()) + ","
+						+ (tradelogSummary.getTradestrategyCount() == null ? ""
+								: tradelogSummary.getTradestrategyCount()));
 
 		return tradelogLine;
 	}
@@ -609,55 +529,24 @@ public class PortfolioPanel extends BasePanel implements ChangeListener,
 	 *            TradelogDetail
 	 * @return StringBuffer
 	 */
-	private StringBuffer formatTradelogDetailLine(
-			final TradelogDetail tradelogDetail) {
+	private StringBuffer formatTradelogDetailLine(final TradelogDetail tradelogDetail) {
 		StringBuffer tradelogLine = new StringBuffer();
-		tradelogLine.append(tradelogDetail.getOpen()
-				+ ","
-				+ (tradelogDetail.getSymbol() == null ? "" : tradelogDetail
-						.getSymbol())
-				+ ","
-				+ (tradelogDetail.getLongShort() == null ? "" : tradelogDetail
-						.getLongShort())
-				+ ","
-				+ (tradelogDetail.getTier() == null ? "" : tradelogDetail
-						.getTier())
-				+ ","
-				+ (tradelogDetail.getMarketBias() == null ? ""
-						: ("\'" + tradelogDetail.getMarketBias()))
-				+ ","
-				+ (tradelogDetail.getMarketBar() == null ? ""
-						: ("\'" + tradelogDetail.getMarketBar()))
-				+ ","
-				+ (tradelogDetail.getName() == null ? "" : tradelogDetail
-						.getName())
-				+ ","
-				+ (tradelogDetail.getStatus() == null ? "" : tradelogDetail
-						.getStatus())
-				+ ","
-				+ (tradelogDetail.getAction() == null ? "" : tradelogDetail
-						.getAction())
-				+ ","
-				+ (tradelogDetail.getStopPrice() == null ? "" : tradelogDetail
-						.getStopPrice())
-				+ ","
-				+ (tradelogDetail.getOrderStatus() == null ? ""
-						: tradelogDetail.getOrderStatus())
-				+ ","
-				+ (tradelogDetail.getFilledDate() == null ? "" : tradelogDetail
-						.getFilledDate())
-				+ ","
-				+ (tradelogDetail.getQuantity() == null ? "" : tradelogDetail
-						.getQuantity())
-				+ ","
-				+ (tradelogDetail.getAverageFilledPrice() == null ? ""
-						: tradelogDetail.getAverageFilledPrice())
-				+ ","
-				+ (tradelogDetail.getCommission() == null ? "" : tradelogDetail
-						.getCommission())
-				+ ","
-				+ (tradelogDetail.getProfitLoss() == null ? "" : tradelogDetail
-						.getProfitLoss()));
+		tradelogLine.append(
+				tradelogDetail.getOpen() + "," + (tradelogDetail.getSymbol() == null ? "" : tradelogDetail.getSymbol())
+						+ "," + (tradelogDetail.getLongShort() == null ? "" : tradelogDetail.getLongShort()) + ","
+						+ (tradelogDetail.getTier() == null ? "" : tradelogDetail.getTier()) + ","
+						+ (tradelogDetail.getMarketBias() == null ? "" : ("\'" + tradelogDetail.getMarketBias())) + ","
+						+ (tradelogDetail.getMarketBar() == null ? "" : ("\'" + tradelogDetail.getMarketBar())) + ","
+						+ (tradelogDetail.getName() == null ? "" : tradelogDetail.getName()) + ","
+						+ (tradelogDetail.getStatus() == null ? "" : tradelogDetail.getStatus()) + ","
+						+ (tradelogDetail.getAction() == null ? "" : tradelogDetail.getAction()) + ","
+						+ (tradelogDetail.getStopPrice() == null ? "" : tradelogDetail.getStopPrice()) + ","
+						+ (tradelogDetail.getOrderStatus() == null ? "" : tradelogDetail.getOrderStatus()) + ","
+						+ (tradelogDetail.getFilledDate() == null ? "" : tradelogDetail.getFilledDate()) + ","
+						+ (tradelogDetail.getQuantity() == null ? "" : tradelogDetail.getQuantity()) + ","
+						+ (tradelogDetail.getAverageFilledPrice() == null ? "" : tradelogDetail.getAverageFilledPrice())
+						+ "," + (tradelogDetail.getCommission() == null ? "" : tradelogDetail.getCommission()) + ","
+						+ (tradelogDetail.getProfitLoss() == null ? "" : tradelogDetail.getProfitLoss()));
 
 		return tradelogLine;
 	}

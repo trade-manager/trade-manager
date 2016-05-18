@@ -119,8 +119,7 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 	public int getMnemonic() {
 		int returnValue = 0;
 
-		if ((null != getValue(UI_WIDGET_MNEMONIC))
-				&& (getValue(UI_WIDGET_MNEMONIC).length() > 0)) {
+		if ((null != getValue(UI_WIDGET_MNEMONIC)) && (getValue(UI_WIDGET_MNEMONIC).length() > 0)) {
 			returnValue = getValue(UI_WIDGET_MNEMONIC).charAt(0);
 		}
 
@@ -138,7 +137,8 @@ public class UIPropertyCodes extends BaseUIPropertyCodes {
 	 * @param code
 	 *            String
 	 * @return UIPropertyCodes
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public static UIPropertyCodes newInstance(String code) {
 		UIPropertyCodes returnInstance = null;

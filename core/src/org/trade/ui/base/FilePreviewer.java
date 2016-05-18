@@ -77,8 +77,7 @@ public class FilePreviewer extends JComponent implements PropertyChangeListener 
 			ImageIcon tmpIcon = new ImageIcon(f.getPath());
 
 			if (tmpIcon.getIconWidth() > 90) {
-				thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance(
-						90, -1, Image.SCALE_DEFAULT));
+				thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance(90, -1, Image.SCALE_DEFAULT));
 			} else {
 				thumbnail = tmpIcon;
 			}

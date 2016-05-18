@@ -56,8 +56,7 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 	 * 
 	 */
 	private static final long serialVersionUID = -2281013751087462982L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(PosMgrAll5MinBarStrategy.class);
+	private final static Logger _log = LoggerFactory.getLogger(PosMgrAll5MinBarStrategy.class);
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -74,8 +73,8 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 	 *            Integer
 	 */
 
-	public PosMgrAll5MinBarStrategy(BrokerModel brokerManagerModel,
-			StrategyData strategyData, Integer idTradestrategy) {
+	public PosMgrAll5MinBarStrategy(BrokerModel brokerManagerModel, StrategyData strategyData,
+			Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
 	}
 
@@ -100,34 +99,26 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 
 		try {
 			// Get the current candle
-			CandleItem currentCandleItem = (CandleItem) candleSeries
-					.getDataItem(getCurrentCandleCount());
-			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
-					.getStart();
+			CandleItem currentCandleItem = (CandleItem) candleSeries.getDataItem(getCurrentCandleCount());
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod().getStart();
 
 			// _log.info(getTradestrategy().getStrategy().getClassName()
 			// + " symbol: " + getSymbol() + " startPeriod: "
 			// + startPeriod);
 
 			if (!this.isThereOpenPosition()) {
-				_log.info("No open position so Cancel Strategy Mgr Symbol: "
-						+ getSymbol() + " Time:" + startPeriod);
+				_log.info("No open position so Cancel Strategy Mgr Symbol: " + getSymbol() + " Time:" + startPeriod);
 				this.cancel();
 				return;
 			}
 
 			// Is it the the 9:35 candle?
-			if (startPeriod.equals(this.getTradestrategy().getTradingday()
-					.getOpen().plusMinutes(5))
-					&& newBar) {
+			if (startPeriod.equals(this.getTradestrategy().getTradingday().getOpen().plusMinutes(5)) && newBar) {
 
-			} else if (startPeriod.equals(this.getTradestrategy()
-					.getTradingday().getOpen().plusMinutes(60))) {
+			} else if (startPeriod.equals(this.getTradestrategy().getTradingday().getOpen().plusMinutes(60))) {
 
-			} else if (startPeriod.isAfter(this.getTradestrategy()
-					.getTradingday().getOpen().plusMinutes(60))) {
-				_log.info("Rule after 10:30:00 bar, close the "
-						+ getTradestrategy().getStrategy().getClassName()
+			} else if (startPeriod.isAfter(this.getTradestrategy().getTradingday().getOpen().plusMinutes(60))) {
+				_log.info("Rule after 10:30:00 bar, close the " + getTradestrategy().getStrategy().getClassName()
 						+ " Symbol: " + getSymbol());
 				// Kill this process we are done!
 				this.cancel();
@@ -137,12 +128,10 @@ public class PosMgrAll5MinBarStrategy extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at the end of the
 			 * day.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().isBefore(
-					this.getTradestrategy().getTradingday().getClose()
-							.minusMinutes(2))) {
+			if (!currentCandleItem.getLastUpdateDate()
+					.isBefore(this.getTradestrategy().getTradingday().getClose().minusMinutes(2))) {
 				cancelOrdersClosePosition(true);
-				_log.info("Rule 15:58:00 close all open positions: "
-						+ getSymbol() + " Time: " + startPeriod);
+				_log.info("Rule 15:58:00 close all open positions: " + getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 			}
 		} catch (StrategyRuleException ex) {

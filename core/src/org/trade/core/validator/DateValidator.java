@@ -94,8 +94,8 @@ public class DateValidator implements Validator {
 	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
 	 *      ExceptionMessageListener)
 	 */
-	public boolean isValid(Object value, String invalidValue,
-			String expectedFormat, ExceptionMessageListener receiver) {
+	public boolean isValid(Object value, String invalidValue, String expectedFormat,
+			ExceptionMessageListener receiver) {
 		if (null == receiver) {
 			receiver = new ExceptionMessageListener() {
 				public void addExceptionMessage(ExceptionMessage e) {
@@ -112,23 +112,20 @@ public class DateValidator implements Validator {
 				expectedFormat = DATE_TIME_FORMAT;
 			}
 			receiver.addExceptionMessage(getMessageFactory().create(
-					new ExceptionContext("edit_check",
-							"Value is not in the following format: "
-									+ expectedFormat)));
+					new ExceptionContext("edit_check", "Value is not in the following format: " + expectedFormat)));
 		} else if (null == value) {
 			if (m_isMandatory) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED.create()));
 			}
 		} else {
 			String errorMessage = validateDateValue((java.util.Date) value);
 
 			if (errorMessage != null) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						new ExceptionContext("edit_check", errorMessage)));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(new ExceptionContext("edit_check", errorMessage)));
 			}
 		}
 
@@ -164,8 +161,7 @@ public class DateValidator implements Validator {
 			return "month field of date is < 1 or > 12";
 		}
 
-		if ((day > 30)
-				&& ((month == 9) || (month == 4) || (month == 6) || (month == 11))) {
+		if ((day > 30) && ((month == 9) || (month == 4) || (month == 6) || (month == 11))) {
 			return "day field of date is invalid - 31st of a day with 30 days";
 		}
 
@@ -177,8 +173,7 @@ public class DateValidator implements Validator {
 			}
 
 			if (day > days) {
-				return "day field of date is invalid - no day " + day
-						+ " in February of " + year;
+				return "day field of date is invalid - no day " + day + " in February of " + year;
 			}
 		}
 

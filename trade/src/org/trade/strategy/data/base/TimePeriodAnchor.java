@@ -54,16 +54,13 @@ public final class TimePeriodAnchor implements Serializable {
 	private static final long serialVersionUID = 2011955697457548862L;
 
 	/** Start of period. */
-	public static final TimePeriodAnchor START = new TimePeriodAnchor(
-			"TimePeriodAnchor.START");
+	public static final TimePeriodAnchor START = new TimePeriodAnchor("TimePeriodAnchor.START");
 
 	/** Middle of period. */
-	public static final TimePeriodAnchor MIDDLE = new TimePeriodAnchor(
-			"TimePeriodAnchor.MIDDLE");
+	public static final TimePeriodAnchor MIDDLE = new TimePeriodAnchor("TimePeriodAnchor.MIDDLE");
 
 	/** End of period. */
-	public static final TimePeriodAnchor END = new TimePeriodAnchor(
-			"TimePeriodAnchor.END");
+	public static final TimePeriodAnchor END = new TimePeriodAnchor("TimePeriodAnchor.END");
 
 	/** The name. */
 	private String name;

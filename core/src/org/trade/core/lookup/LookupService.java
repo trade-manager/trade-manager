@@ -63,16 +63,15 @@ public class LookupService {
 	 * @return Lookup
 	 * @exception LookupException
 	 */
-	public static Lookup getLookup(String lookupName,
-			LookupQualifier qualifier, boolean optional) throws LookupException {
+	public static Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean optional)
+			throws LookupException {
 		Lookup lookup = null;
 		// Loop through the registered providers and find and try to find one
 		// that can provide the lookup
 		int providersSize = _providers.size();
 
 		for (int i = 0; i < providersSize; i++) {
-			lookup = _providers.elementAt(i).getLookup(lookupName, qualifier,
-					optional);
+			lookup = _providers.elementAt(i).getLookup(lookupName, qualifier, optional);
 
 			if (null != lookup) {
 				// Have found a Lookup - don't care if another provider can
@@ -101,8 +100,7 @@ public class LookupService {
 	 * @param provider
 	 *            LookupServiceProvider
 	 */
-	public static void removeLookupServiceProvider(
-			LookupServiceProvider provider) {
+	public static void removeLookupServiceProvider(LookupServiceProvider provider) {
 		_providers.removeElement(provider);
 	}
 }

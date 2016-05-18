@@ -99,8 +99,8 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 * @param updateDate
 	 *            Date
 	 */
-	public Rule(Strategy strategy, Integer version, String comment,
-			ZonedDateTime createDate, ZonedDateTime lastUpdateDate) {
+	public Rule(Strategy strategy, Integer version, String comment, ZonedDateTime createDate,
+			ZonedDateTime lastUpdateDate) {
 		this.strategy = strategy;
 		this.version = version;
 		this.comment = comment;
@@ -124,8 +124,8 @@ public class Rule extends Aspect implements java.io.Serializable {
 	 * @param updateDate
 	 *            Date
 	 */
-	public Rule(Strategy strategy, Integer version, String comment,
-			ZonedDateTime createDate, byte[] rule, ZonedDateTime lastUpdateDate) {
+	public Rule(Strategy strategy, Integer version, String comment, ZonedDateTime createDate, byte[] rule,
+			ZonedDateTime lastUpdateDate) {
 		this.strategy = strategy;
 		this.version = version;
 		this.comment = comment;
@@ -310,8 +310,7 @@ public class Rule extends Aspect implements java.io.Serializable {
 
 	public static final Comparator<Rule> VERSION_ORDER = new Comparator<Rule>() {
 		public int compare(Rule o1, Rule o2) {
-			return CoreUtils.nullSafeComparator(o1.getVersion(),
-					o2.getVersion());
+			return CoreUtils.nullSafeComparator(o1.getVersion(), o2.getVersion());
 		}
 	};
 
@@ -332,12 +331,8 @@ public class Rule extends Aspect implements java.io.Serializable {
 				return false;
 			}
 
-			if (this.getStrategy()
-					.getIdStrategy()
-					.equals(((Rule) objectToCompare).getStrategy()
-							.getIdStrategy())
-					&& this.getVersion().equals(
-							((Rule) objectToCompare).getVersion())) {
+			if (this.getStrategy().getIdStrategy().equals(((Rule) objectToCompare).getStrategy().getIdStrategy())
+					&& this.getVersion().equals(((Rule) objectToCompare).getVersion())) {
 				return true;
 			}
 

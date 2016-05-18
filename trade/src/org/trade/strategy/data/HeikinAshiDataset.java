@@ -53,8 +53,7 @@ import org.trade.ui.chart.renderer.HeikinAshiRenderer;
 
 /**
  */
-public class HeikinAshiDataset extends AbstractXYDataset implements
-		IndicatorDataset, IHeikinAshiDataset, Serializable {
+public class HeikinAshiDataset extends AbstractXYDataset implements IndicatorDataset, IHeikinAshiDataset, Serializable {
 
 	/**
 	 * 
@@ -489,8 +488,7 @@ public class HeikinAshiDataset extends AbstractXYDataset implements
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		HeikinAshiDataset clone = (HeikinAshiDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -506,8 +504,7 @@ public class HeikinAshiDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
@@ -515,8 +512,8 @@ public class HeikinAshiDataset extends AbstractXYDataset implements
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			HeikinAshiSeries series = this.getSeries(i);
 
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 
 		}
 	}

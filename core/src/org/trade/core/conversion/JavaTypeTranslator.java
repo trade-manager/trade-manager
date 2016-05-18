@@ -122,8 +122,7 @@ public class JavaTypeTranslator {
 	 * @return Object the converted object * @exception
 	 *         JavaTypeTranslatorException thrown if any exception occurs
 	 */
-	public static Object convert(Class<?> targetType, Object sourceValue)
-			throws JavaTypeTranslatorException {
+	public static Object convert(Class<?> targetType, Object sourceValue) throws JavaTypeTranslatorException {
 		// before: simply return the value if it is already of the correct type
 		// (meaning that null simply returns null, which is always the correct
 		// type
@@ -144,8 +143,7 @@ public class JavaTypeTranslator {
 				} catch (Exception illegalX) // ille
 				{
 					throw new JavaTypeTranslatorException(illegalX,
-							"permission is denied to create an instance of "
-									+ targetType.toString());
+							"permission is denied to create an instance of " + targetType.toString());
 				}
 			}
 		}
@@ -171,8 +169,7 @@ public class JavaTypeTranslator {
 		Class<?> sourceType = sourceValue.getClass();
 
 		while (sourceType != null) {
-			JavaTypeConverter converter = (JavaTypeConverter) innerTable
-					.get(sourceType);
+			JavaTypeConverter converter = (JavaTypeConverter) innerTable.get(sourceType);
 
 			if (converter != null) {
 				// there is a converter for the given targetType and sourceType,
@@ -180,12 +177,9 @@ public class JavaTypeTranslator {
 				try {
 					return converter.convert(sourceValue);
 				} catch (IllegalArgumentException iae) {
-					throw new JavaTypeTranslatorException(
-							"The source value, of type "
-									+ sourceValue.getClass().getName()
-									+ ", cannot be converted to "
-									+ targetType.getName()
-									+ " because it is not in the proper format");
+					throw new JavaTypeTranslatorException("The source value, of type "
+							+ sourceValue.getClass().getName() + ", cannot be converted to " + targetType.getName()
+							+ " because it is not in the proper format");
 				}
 			}
 
@@ -195,8 +189,7 @@ public class JavaTypeTranslator {
 					// Check the Dynamic Converters
 					Enumeration<Object> en = m_dynConverters.elements();
 					while (en.hasMoreElements()) {
-						JavaDynamicTypeConverter dc = (JavaDynamicTypeConverter) en
-								.nextElement();
+						JavaDynamicTypeConverter dc = (JavaDynamicTypeConverter) en.nextElement();
 
 						if (dc.supportsConversion(targetType, sourceValue)) {
 							// The first matching dynamic converter will be used
@@ -221,10 +214,8 @@ public class JavaTypeTranslator {
 
 		// If I get to here - there are no registered converters to handle the
 		// conversion
-		throw new JavaTypeTranslatorException(
-				"There is no converter for converting "
-						+ sourceValue.getClass().getName() + " values to "
-						+ targetType.getName());
+		throw new JavaTypeTranslatorException("There is no converter for converting " + sourceValue.getClass().getName()
+				+ " values to " + targetType.getName());
 	}
 
 	/**
@@ -240,8 +231,7 @@ public class JavaTypeTranslator {
 	public static void registerConverter(JavaTypeConverter theConverter) {
 		Class<?> targetType = theConverter.getTargetType();
 		Class<?> sourceType = theConverter.getSourceType();
-		Hashtable<Class<?>, JavaTypeConverter> innerTable = m_converters
-				.get(targetType);
+		Hashtable<Class<?>, JavaTypeConverter> innerTable = m_converters.get(targetType);
 
 		if (innerTable != null) {
 			// add the converter to the existing list of
@@ -267,8 +257,7 @@ public class JavaTypeTranslator {
 	 * @param theConverter
 	 *            the converter instance to register
 	 */
-	public static void registerDynamicTypeConverter(
-			JavaDynamicTypeConverter theConverter) {
+	public static void registerDynamicTypeConverter(JavaDynamicTypeConverter theConverter) {
 		if (!m_dynConverters.contains(theConverter)) {
 			m_dynConverters.addElement(theConverter);
 		}

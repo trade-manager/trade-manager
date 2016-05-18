@@ -66,8 +66,7 @@ public interface BrokerChangeListener extends EventListener {
 	 * @param execDetails
 	 *            ConcurrentHashMap<Integer,TradeOrder>
 	 */
-	public void executionDetailsEnd(
-			ConcurrentHashMap<Integer, TradeOrder> execDetails);
+	public void executionDetailsEnd(ConcurrentHashMap<Integer, TradeOrder> execDetails);
 
 	/**
 	 * Method historicalDataComplete.

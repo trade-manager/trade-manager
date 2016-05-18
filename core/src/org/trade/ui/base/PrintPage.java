@@ -82,8 +82,7 @@ public class PrintPage implements Pageable {
 	 *            The description of the pages on to which the canvas will be
 	 *            drawn.
 	 */
-	public PrintPage(float width, float height, Printable painter,
-			PageFormat format) {
+	public PrintPage(float width, float height, Printable painter, PageFormat format) {
 		setPrintable(painter);
 		setPageFormat(format);
 		setSize(width, height);
@@ -126,10 +125,8 @@ public class PrintPage implements Pageable {
 	 *            The height, in 1/72nds of an inch, of the vista's canvas.
 	 */
 	protected void setSize(float width, float height) {
-		m_NumPagesX = (int) (((width + m_Format.getImageableWidth()) - 1) / m_Format
-				.getImageableWidth());
-		m_NumPagesY = (int) (((height + m_Format.getImageableHeight()) - 1) / m_Format
-				.getImageableHeight());
+		m_NumPagesX = (int) (((width + m_Format.getImageableWidth()) - 1) / m_Format.getImageableWidth());
+		m_NumPagesY = (int) (((height + m_Format.getImageableHeight()) - 1) / m_Format.getImageableHeight());
 		m_NumPages = m_NumPagesX * m_NumPagesY;
 	}
 
@@ -165,8 +162,7 @@ public class PrintPage implements Pageable {
 	 *         IndexOutOfBoundsException the Pageable does not contain the
 	 *         requested page. * @see java.awt.print.Pageable#getPageFormat(int)
 	 */
-	public PageFormat getPageFormat(int pageIndex)
-			throws IndexOutOfBoundsException {
+	public PageFormat getPageFormat(int pageIndex) throws IndexOutOfBoundsException {
 		if (pageIndex >= m_NumPages) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -194,16 +190,13 @@ public class PrintPage implements Pageable {
 	 *         IndexOutOfBoundsException the Pageable does not contain the
 	 *         requested page. * @see java.awt.print.Pageable#getPrintable(int)
 	 */
-	public Printable getPrintable(int pageIndex)
-			throws IndexOutOfBoundsException {
+	public Printable getPrintable(int pageIndex) throws IndexOutOfBoundsException {
 		if (pageIndex >= m_NumPages) {
 			throw new IndexOutOfBoundsException();
 		}
 
-		double originX = (pageIndex % m_NumPagesX)
-				* m_Format.getImageableWidth();
-		double originY = (pageIndex / (double) m_NumPagesX)
-				* m_Format.getImageableHeight();
+		double originX = (pageIndex % m_NumPagesX) * m_Format.getImageableWidth();
+		double originY = (pageIndex / (double) m_NumPagesX) * m_Format.getImageableHeight();
 		Point2D.Double origin = new Point2D.Double(originX, originY);
 
 		return new TranslatedPrintable(m_Painter, origin);
@@ -268,15 +261,14 @@ public class PrintPage implements Pageable {
 		 * 
 		 * 
 		 * @return PAGE_EXISTS if the page is rendered successfully or
-		 *         NO_SUCH_PAGE if pageIndex specifies a non-existent page. * @throws
-		 *         PrinterException
+		 *         NO_SUCH_PAGE if pageIndex specifies a non-existent page.
+		 *         * @throws PrinterException
 		 * @exception java.awt.print.PrinterException
 		 *                thrown when the print job is terminated. * @see
 		 *                java.awt.print.Printable#print(Graphics, PageFormat,
 		 *                int)
 		 */
-		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-				throws PrinterException {
+		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 			Graphics2D g2 = (Graphics2D) graphics;
 			g2.translate(-m_Origin.getX(), -m_Origin.getY());
 			return m_Painter.print(g2, pageFormat, pageIndex);

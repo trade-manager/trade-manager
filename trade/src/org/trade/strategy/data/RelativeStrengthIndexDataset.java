@@ -53,8 +53,8 @@ import org.trade.strategy.data.rsi.RelativeStrengthIndexItem;
 
 /**
  */
-public class RelativeStrengthIndexDataset extends AbstractXYDataset implements
-		IndicatorDataset, IRelativeStrengthIndexDataset, Serializable {
+public class RelativeStrengthIndexDataset extends AbstractXYDataset
+		implements IndicatorDataset, IRelativeStrengthIndexDataset, Serializable {
 
 	/**
 	 * 
@@ -272,10 +272,8 @@ public class RelativeStrengthIndexDataset extends AbstractXYDataset implements
 	 *         int)
 	 */
 	public double getXValue(int series, int item) {
-		RelativeStrengthIndexSeries s = (RelativeStrengthIndexSeries) this.data
-				.get(series);
-		RelativeStrengthIndexItem di = (RelativeStrengthIndexItem) s
-				.getDataItem(item);
+		RelativeStrengthIndexSeries s = (RelativeStrengthIndexSeries) this.data.get(series);
+		RelativeStrengthIndexItem di = (RelativeStrengthIndexItem) s.getDataItem(item);
 		RegularTimePeriod period = di.getPeriod();
 		return getX(period);
 	}
@@ -307,10 +305,8 @@ public class RelativeStrengthIndexDataset extends AbstractXYDataset implements
 	 * @return The y-value. * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
-		RelativeStrengthIndexSeries s = (RelativeStrengthIndexSeries) this.data
-				.get(series);
-		RelativeStrengthIndexItem di = (RelativeStrengthIndexItem) s
-				.getDataItem(item);
+		RelativeStrengthIndexSeries s = (RelativeStrengthIndexSeries) this.data.get(series);
+		RelativeStrengthIndexItem di = (RelativeStrengthIndexItem) s.getDataItem(item);
 		return new Double(di.getY());
 	}
 
@@ -328,10 +324,8 @@ public class RelativeStrengthIndexDataset extends AbstractXYDataset implements
 	 *         #getRelativeStrengthIndexValue(int, int)
 	 */
 	public double getRelativeStrengthIndexValue(int series, int item) {
-		RelativeStrengthIndexSeries s = (RelativeStrengthIndexSeries) this.data
-				.get(series);
-		RelativeStrengthIndexItem di = (RelativeStrengthIndexItem) s
-				.getDataItem(item);
+		RelativeStrengthIndexSeries s = (RelativeStrengthIndexSeries) this.data.get(series);
+		RelativeStrengthIndexItem di = (RelativeStrengthIndexItem) s.getDataItem(item);
 		return di.getRelativeStrengthIndex();
 	}
 
@@ -386,10 +380,8 @@ public class RelativeStrengthIndexDataset extends AbstractXYDataset implements
 	 */
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
-		RelativeStrengthIndexDataset clone = (RelativeStrengthIndexDataset) super
-				.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		RelativeStrengthIndexDataset clone = (RelativeStrengthIndexDataset) super.clone();
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -405,16 +397,15 @@ public class RelativeStrengthIndexDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			RelativeStrengthIndexSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

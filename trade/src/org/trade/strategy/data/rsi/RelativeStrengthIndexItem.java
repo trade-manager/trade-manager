@@ -62,8 +62,7 @@ public class RelativeStrengthIndexItem extends ComparableObjectItem {
 	 * @param relativeStrengthIndex
 	 *            the relativeStrengthIndex.
 	 */
-	public RelativeStrengthIndexItem(RegularTimePeriod period,
-			BigDecimal relativeStrengthIndex) {
+	public RelativeStrengthIndexItem(RegularTimePeriod period, BigDecimal relativeStrengthIndex) {
 		super(period, new RelativeStrengthIndex(relativeStrengthIndex));
 	}
 
@@ -97,8 +96,7 @@ public class RelativeStrengthIndexItem extends ComparableObjectItem {
 	public void setRelativeStrengthIndex(double relativeStrengthIndex) {
 		RelativeStrengthIndex dataItem = (RelativeStrengthIndex) getObject();
 		if (dataItem != null) {
-			dataItem.setRelativeStrengthIndex(new BigDecimal(
-					relativeStrengthIndex));
+			dataItem.setRelativeStrengthIndex(new BigDecimal(relativeStrengthIndex));
 		}
 
 	}

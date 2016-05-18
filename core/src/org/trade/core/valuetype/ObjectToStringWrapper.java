@@ -59,8 +59,7 @@ public class ObjectToStringWrapper implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Object rVal = null;
 
 		if (StringWrapper.class.isAssignableFrom(targetType)) {
@@ -77,12 +76,10 @@ public class ObjectToStringWrapper implements JavaDynamicTypeConverter {
 
 				rVal = vt;
 			} catch (Exception ex) {
-				throw new JavaTypeTranslatorException(ex,
-						"Unable to set value for StringWrapper");
+				throw new JavaTypeTranslatorException(ex, "Unable to set value for StringWrapper");
 			}
 		} else {
-			throw new JavaTypeTranslatorException(
-					"Target type must be a StringWrapper");
+			throw new JavaTypeTranslatorException("Target type must be a StringWrapper");
 		}
 
 		return (rVal);
@@ -96,9 +93,8 @@ public class ObjectToStringWrapper implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

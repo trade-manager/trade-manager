@@ -181,46 +181,34 @@ public abstract class AbstractNumberValueType extends StringWrapper {
 	 *            boolean
 	 * @return validator * @see <code>Validator</code>
 	 */
-	protected Validator getDefaultValidator(IMessageFactory messageFactory,
-			boolean isMandatory) {
-		return new StringValidator(messageFactory, getMaximumLength(),
-				StringValidator.DIGITS, "", isMandatory) {
-			public boolean isValid(Object value, String invalidValue,
-					String expectedFormat, ExceptionMessageListener receiver) {
-				boolean valid = super.isValid(value, invalidValue,
-						expectedFormat, receiver);
+	protected Validator getDefaultValidator(IMessageFactory messageFactory, boolean isMandatory) {
+		return new StringValidator(messageFactory, getMaximumLength(), StringValidator.DIGITS, "", isMandatory) {
+			public boolean isValid(Object value, String invalidValue, String expectedFormat,
+					ExceptionMessageListener receiver) {
+				boolean valid = super.isValid(value, invalidValue, expectedFormat, receiver);
 
 				do {
 					if (valid && !AbstractNumberValueType.this.isEmpty()) {
-						Long max = AbstractNumberValueType.this
-								.getMaximumValue();
-						Long min = AbstractNumberValueType.this
-								.getMinimumValue();
+						Long max = AbstractNumberValueType.this.getMaximumValue();
+						Long min = AbstractNumberValueType.this.getMinimumValue();
 						long longValue = 0;
 
 						try {
 							longValue = Long.parseLong((String) value);
 						} catch (Throwable t) {
-							receiver.addExceptionMessage(getMessageFactory()
-									.create(new ExceptionContext(
-											"edit_check",
-											"Value ["
-													+ value
-													+ "] is not in correct number format.")));
+							receiver.addExceptionMessage(getMessageFactory().create(new ExceptionContext("edit_check",
+									"Value [" + value + "] is not in correct number format.")));
 							break;
 						}
 
 						if ((max != null) && (longValue > max.longValue())) {
-							receiver.addExceptionMessage(getMessageFactory()
-									.create(new ExceptionContext("edit_check",
-											"Value can not be greater than "
-													+ max)));
+							receiver.addExceptionMessage(getMessageFactory().create(
+									new ExceptionContext("edit_check", "Value can not be greater than " + max)));
 
 						}
 						if ((min != null) && (longValue < min.longValue())) {
 							receiver.addExceptionMessage(getMessageFactory()
-									.create(new ExceptionContext("edit_check",
-											"Value can not be less than " + min)));
+									.create(new ExceptionContext("edit_check", "Value can not be less than " + min)));
 						}
 					}
 				} while (false);

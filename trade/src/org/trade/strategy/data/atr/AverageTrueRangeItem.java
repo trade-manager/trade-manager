@@ -62,8 +62,7 @@ public class AverageTrueRangeItem extends ComparableObjectItem {
 	 * @param averageTrueRange
 	 *            the AverageTrueRange.
 	 */
-	public AverageTrueRangeItem(RegularTimePeriod period,
-			BigDecimal averageTrueRange) {
+	public AverageTrueRangeItem(RegularTimePeriod period, BigDecimal averageTrueRange) {
 		super(period, new AverageTrueRange(averageTrueRange));
 	}
 

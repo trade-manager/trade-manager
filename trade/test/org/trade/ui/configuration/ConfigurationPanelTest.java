@@ -67,8 +67,7 @@ import org.trade.ui.TradeAppLoadConfig;
  */
 public class ConfigurationPanelTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(ConfigurationPanelTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(ConfigurationPanelTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -112,22 +111,20 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateIntegerClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average",
-					CodeType.IndicatorParameters, "Moving Average");
-			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length",
-					"The length of the MA", "10", "java.lang.Integer", null);
+			CodeType codeType = new CodeType("Moving Average", CodeType.IndicatorParameters, "Moving Average");
+			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length", "The length of the MA", "10",
+					"java.lang.Integer", null);
 			CodeValue codeValue = new CodeValue(codeAttribute, "20");
 
 			Vector<Object> parm = new Vector<Object>();
 			parm.add(codeValue.getCodeValue());
 
-			Integer value = (Integer) ClassFactory.getCreateClass(codeValue
-					.getCodeAttribute().getClassName(), parm, this);
+			Integer value = (Integer) ClassFactory.getCreateClass(codeValue.getCodeAttribute().getClassName(), parm,
+					this);
 			_log.info("Value is: " + value);
 			assertEquals("1", 20, value, 0);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -136,22 +133,20 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateBooleanClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average",
-					CodeType.IndicatorParameters, "Moving Average");
-			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length",
-					"The length of the MA", "true", "java.lang.Boolean", null);
+			CodeType codeType = new CodeType("Moving Average", CodeType.IndicatorParameters, "Moving Average");
+			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length", "The length of the MA", "true",
+					"java.lang.Boolean", null);
 			CodeValue codeValue = new CodeValue(codeAttribute, "true");
 
 			Vector<Object> parm = new Vector<Object>();
 			parm.add(codeValue.getCodeValue());
 
-			Boolean value = (Boolean) ClassFactory.getCreateClass(codeValue
-					.getCodeAttribute().getClassName(), parm, this);
+			Boolean value = (Boolean) ClassFactory.getCreateClass(codeValue.getCodeAttribute().getClassName(), parm,
+					this);
 			_log.info("Value is: " + value);
 			assertEquals("1", new Boolean(true), value);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -160,22 +155,20 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateStringClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average",
-					CodeType.IndicatorParameters, "Moving Average");
-			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length",
-					"The length of the MA", "Test", "java.lang.String", null);
+			CodeType codeType = new CodeType("Moving Average", CodeType.IndicatorParameters, "Moving Average");
+			CodeAttribute codeAttribute = new CodeAttribute(codeType, "Length", "The length of the MA", "Test",
+					"java.lang.String", null);
 			CodeValue codeValue = new CodeValue(codeAttribute, "Simple");
 
 			Vector<Object> parm = new Vector<Object>();
 			parm.add(codeValue.getCodeValue());
 
-			String value = (String) ClassFactory.getCreateClass(codeValue
-					.getCodeAttribute().getClassName(), parm, this);
+			String value = (String) ClassFactory.getCreateClass(codeValue.getCodeAttribute().getClassName(), parm,
+					this);
 			assertEquals("1", "Simple", value);
 			_log.info("Value is: " + value);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -184,27 +177,21 @@ public class ConfigurationPanelTest {
 	@Test
 	public void testCreateDecodeClass() {
 		try {
-			CodeType codeType = new CodeType("Moving Average",
-					CodeType.IndicatorParameters, "Moving Average");
-			CodeAttribute codeAttribute = new CodeAttribute(codeType,
-					"SMAType", "The length of the MA", "LINEAR",
+			CodeType codeType = new CodeType("Moving Average", CodeType.IndicatorParameters, "Moving Average");
+			CodeAttribute codeAttribute = new CodeAttribute(codeType, "SMAType", "The length of the MA", "LINEAR",
 					"org.trade.dictionary.valuetype.CalculationType", null);
-			CodeValue codeValue = new CodeValue(codeAttribute,
-					CalculationType.LINEAR);
+			CodeValue codeValue = new CodeValue(codeAttribute, CalculationType.LINEAR);
 
 			Vector<Object> parm = new Vector<Object>();
 			// parm.add(codeValue.getCodeValue());
 
 			CalculationType value = (CalculationType) ClassFactory
-					.getCreateClass(
-							codeValue.getCodeAttribute().getClassName(), parm,
-							this);
+					.getCreateClass(codeValue.getCodeAttribute().getClassName(), parm, this);
 			value.setValue(CalculationType.LINEAR);
 			assertEquals("1", CalculationType.LINEAR, value.getCode());
 			_log.info("Value is: " + value);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -215,8 +202,7 @@ public class ConfigurationPanelTest {
 		try {
 
 			final String packageName = "org.trade.strategy.data.";
-			Strategy strategy = (Strategy) DAOStrategy.newInstance()
-					.getObject();
+			Strategy strategy = (Strategy) DAOStrategy.newInstance().getObject();
 			Vector<Object> parm = new Vector<Object>();
 			parm.add(strategy);
 			parm.add("20-SMA");
@@ -225,17 +211,14 @@ public class ConfigurationPanelTest {
 			parm.add(new Boolean(false));
 			parm.add(new Integer(0));
 			parm.add(new Boolean(false));
-			String className = packageName
-					+ IndicatorSeries.MovingAverageSeries;
+			String className = packageName + IndicatorSeries.MovingAverageSeries;
 
-			IndicatorSeries value = (IndicatorSeries) ClassFactory
-					.getCreateClass(className, parm, this);
+			IndicatorSeries value = (IndicatorSeries) ClassFactory.getCreateClass(className, parm, this);
 
 			assertEquals("1", value.getClass().getName(), className);
 			_log.info("Value is: " + value);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

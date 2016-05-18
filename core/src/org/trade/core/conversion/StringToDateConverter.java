@@ -58,8 +58,7 @@ public class StringToDateConverter extends StringToObjectConverter {
 		// Default is short version of date and time:
 		// MM/DD/YY HH:MI:SS AM|PM TZ
 		// Timezone is assumed to be the local system timezone.
-		m_dateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-				DateFormat.LONG);
+		m_dateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG);
 	}
 
 	//
@@ -92,8 +91,7 @@ public class StringToDateConverter extends StringToObjectConverter {
 	 *         IllegalArgumentException thrown if the String to convert is not
 	 *         in the correct format
 	 */
-	protected Object getConvertedString(String aString)
-			throws IllegalArgumentException {
+	protected Object getConvertedString(String aString) throws IllegalArgumentException {
 		if ((aString == null) || ((aString.trim().length()) == 0)) {
 			return null; // Return A null Date
 		} else {

@@ -64,8 +64,7 @@ public class PortfolioTableModel extends AspectTableModel {
 	private static final String MASTER_ACCT_NUMBER = "Add Acct #*";
 	private static final String IS_DEFAULT = "Default";
 
-	private static final String[] columnHeaderToolTip = { null, null, null,
-			"The account that is subscribed to", null };
+	private static final String[] columnHeaderToolTip = { null, null, null, "The account that is subscribed to", null };
 
 	private Aspects m_data = null;
 
@@ -144,13 +143,11 @@ public class PortfolioTableModel extends AspectTableModel {
 			Account account = (Account) ((DAOAccount) value).getObject();
 			boolean exists = false;
 			for (PortfolioAccount item : element.getPortfolioAccounts()) {
-				if (account.getAccountNumber().equals(
-						item.getAccount().getAccountNumber()))
+				if (account.getAccountNumber().equals(item.getAccount().getAccountNumber()))
 					exists = true;
 			}
 			if (!exists) {
-				PortfolioAccount portfolioAccount = new PortfolioAccount(
-						element, account);
+				PortfolioAccount portfolioAccount = new PortfolioAccount(element, account);
 				element.getPortfolioAccounts().add(portfolioAccount);
 			}
 			break;
@@ -158,8 +155,7 @@ public class PortfolioTableModel extends AspectTableModel {
 		case 5: {
 			for (Aspect item : getData().getAspect()) {
 				Portfolio portfolio = (Portfolio) item;
-				if (!portfolio.getName().equals(element.getName())
-						&& portfolio.getIsDefault()) {
+				if (!portfolio.getName().equals(element.getName()) && portfolio.getIsDefault()) {
 					portfolio.setIsDefault(false);
 					portfolio.setDirty(true);
 				}
@@ -170,8 +166,7 @@ public class PortfolioTableModel extends AspectTableModel {
 		default: {
 		}
 		}
-		element.setLastUpdateDate(TradingCalendar
-				.getDateTimeNowMarketTimeZone());
+		element.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 		element.setDirty(true);
 	}
 
@@ -185,8 +180,7 @@ public class PortfolioTableModel extends AspectTableModel {
 		if (getData().getAspect().size() > 1) {
 			String name = (String) this.getValueAt(selectedRow, 0);
 			for (final Aspect element : getData().getAspect()) {
-				if (CoreUtils.nullSafeComparator(
-						((Portfolio) element).getName(), name) == 0) {
+				if (CoreUtils.nullSafeComparator(((Portfolio) element).getName(), name) == 0) {
 					getData().remove(element);
 					getData().setDirty(true);
 					final Vector<Object> currRow = rows.get(selectedRow);
@@ -224,8 +218,7 @@ public class PortfolioTableModel extends AspectTableModel {
 		if (null == element.getAllocationMethod()) {
 			newRow.addElement(AllocationMethod.newInstance(Decode.NONE));
 		} else {
-			newRow.addElement(AllocationMethod.newInstance(element
-					.getAllocationMethod()));
+			newRow.addElement(AllocationMethod.newInstance(element.getAllocationMethod()));
 		}
 		newRow.addElement(DAOAccount.newInstance(Decode.NONE));
 		newRow.addElement(YesNo.newInstance(element.getIsDefault()));

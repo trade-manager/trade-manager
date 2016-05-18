@@ -70,8 +70,7 @@ public class CandlestickChartApp extends BasePanel {
 	 * 
 	 */
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(CandlestickChartApp.class);
+	private final static Logger _log = LoggerFactory.getLogger(CandlestickChartApp.class);
 
 	private JPanel m_menuPanel = null;
 
@@ -92,32 +91,25 @@ public class CandlestickChartApp extends BasePanel {
 					// StrategyData data = CandlestickChartTest
 					// .getPriceDataSetYahooDay(symbol);
 					Integer numberOfDays = 2;
-					StrategyData strategyData = CandlestickChartApp
-							.getPriceDataSetYahooIntraday(symbol, numberOfDays,
-									BarSize.FIVE_MIN);
-					CandlestickChart chart = new CandlestickChart(symbol,
-							strategyData, Tradingday
-									.newInstance(TradingCalendar
-											.getDateTimeNowMarketTimeZone()));
+					StrategyData strategyData = CandlestickChartApp.getPriceDataSetYahooIntraday(symbol, numberOfDays,
+							BarSize.FIVE_MIN);
+					CandlestickChart chart = new CandlestickChart(symbol, strategyData,
+							Tradingday.newInstance(TradingCalendar.getDateTimeNowMarketTimeZone()));
 					CandlestickChartApp panel = new CandlestickChartApp(chart);
 
 					frame.getContentPane().add(panel);
 					frame.setSize(1200, 900);
 					Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 
-					frame.setLocation((d.width - frame.getSize().width) / 2,
-							(d.height - frame.getSize().height) / 2);
+					frame.setLocation((d.width - frame.getSize().width) / 2, (d.height - frame.getSize().height) / 2);
 					frame.setIconImage(ImageBuilder.getImage("trade.gif"));
 					frame.validate();
 					frame.repaint();
 					frame.setVisible(true);
 					EventQueue waitQue = new WaitCursorEventQueue(500);
-					Toolkit.getDefaultToolkit().getSystemEventQueue()
-							.push(waitQue);
+					Toolkit.getDefaultToolkit().getSystemEventQueue().push(waitQue);
 				} catch (Exception ex) {
-					_log.error(
-							"Error getting Yahoo data msg: " + ex.getMessage(),
-							ex);
+					_log.error("Error getting Yahoo data msg: " + ex.getMessage(), ex);
 				}
 			}
 		});
@@ -215,8 +207,8 @@ public class CandlestickChartApp extends BasePanel {
 		try {
 
 			PageFormat pageFormat = new PageFormat();
-			ComponentPrintService vista = new ComponentPrintService(
-					((JFrame) this.getFrame()).getContentPane(), pageFormat);
+			ComponentPrintService vista = new ComponentPrintService(((JFrame) this.getFrame()).getContentPane(),
+					pageFormat);
 			vista.scaleToFit(true);
 			// vista.print();
 			PrinterJob pj = PrinterJob.getPrinterJob();
@@ -244,15 +236,12 @@ public class CandlestickChartApp extends BasePanel {
 		try {
 
 			List<Candle> candles = new ArrayList<Candle>();
-			Strategy daoStrategy = (Strategy) DAOStrategy.newInstance()
-					.getObject();
+			Strategy daoStrategy = (Strategy) DAOStrategy.newInstance().getObject();
 			StrategyHome home = new StrategyHome();
 			String name = daoStrategy.getName();
 			Strategy strategy = home.findByName(name);
-			Contract contract = new Contract(SECType.STOCK, symbol,
-					Exchange.SMART, Currency.USD, null, null);
-			ZonedDateTime today = TradingCalendar
-					.getDateTimeNowMarketTimeZone();
+			Contract contract = new Contract(SECType.STOCK, symbol, Exchange.SMART, Currency.USD, null, null);
+			ZonedDateTime today = TradingCalendar.getDateTimeNowMarketTimeZone();
 			ZonedDateTime startDate = today.minusMonths(3);
 
 			/*
@@ -262,14 +251,11 @@ public class CandlestickChartApp extends BasePanel {
 			 * &e=30&f=2012&ignore=.csv"
 			 */
 
-			String strUrl = "http://ichart.finance.yahoo.com/table.csv?s="
-					+ symbol + "&a=" + startDate.getMonth() + "&b="
-					+ startDate.getDayOfMonth() + "&c=" + startDate.getYear()
-					+ "&d=" + today.getMonth() + "&e=" + today.getDayOfMonth()
-					+ "&f=" + today.getYear() + "&ignore=.csv";
+			String strUrl = "http://ichart.finance.yahoo.com/table.csv?s=" + symbol + "&a=" + startDate.getMonth()
+					+ "&b=" + startDate.getDayOfMonth() + "&c=" + startDate.getYear() + "&d=" + today.getMonth() + "&e="
+					+ today.getDayOfMonth() + "&f=" + today.getYear() + "&ignore=.csv";
 			URL url = new URL(strUrl);
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			DateTimeFormatter df = DateTimeFormatter.ofPattern("y-M-d");
 
 			String inputLine;
@@ -284,14 +270,11 @@ public class CandlestickChartApp extends BasePanel {
 				double close = Double.parseDouble(st.nextToken());
 				long volume = Long.parseLong(st.nextToken());
 				// double adjClose = Double.parseDouble( st.nextToken() );
-				CandlePeriod period = new CandlePeriod(
-						TradingCalendar.getTradingDayStart(date),
+				CandlePeriod period = new CandlePeriod(TradingCalendar.getTradingDayStart(date),
 						TradingCalendar.getTradingDayEnd(date).minusSeconds(1));
 
-				Candle candle = new Candle(contract, period, open, high, low,
-						close, volume, (open + close) / 2,
-						((int) volume / 100),
-						TradingCalendar.getDateTimeNowMarketTimeZone());
+				Candle candle = new Candle(contract, period, open, high, low, close, volume, (open + close) / 2,
+						((int) volume / 100), TradingCalendar.getDateTimeNowMarketTimeZone());
 
 				candle.setContract(contract);
 				candle.setTradingday(tradingday);
@@ -302,14 +285,11 @@ public class CandlestickChartApp extends BasePanel {
 
 			Collections.reverse(candles);
 			CandleDataset candleDataset = new CandleDataset();
-			int daySeconds = (int) TradingCalendar.getDurationInSeconds(
-					TradingCalendar.getTradingDayStart(today),
+			int daySeconds = (int) TradingCalendar.getDurationInSeconds(TradingCalendar.getTradingDayStart(today),
 					TradingCalendar.getTradingDayEnd(today));
-			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
-					contract, daySeconds, startDate, today);
+			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(), contract, daySeconds, startDate, today);
 			candleDataset.addSeries(candleSeries);
-			StrategyData strategyData = new StrategyData(strategy,
-					candleDataset);
+			StrategyData strategyData = new StrategyData(strategy, candleDataset);
 			CandleDataset.populateSeries(strategyData, candles);
 			return strategyData;
 		} catch (Exception ex) {
@@ -329,26 +309,21 @@ public class CandlestickChartApp extends BasePanel {
 	 *            int
 	 * @return StrategyData
 	 */
-	protected static StrategyData getPriceDataSetYahooIntraday(String symbol,
-			int days, int periodSeconds) {
+	protected static StrategyData getPriceDataSetYahooIntraday(String symbol, int days, int periodSeconds) {
 		try {
-			ZonedDateTime today = TradingCalendar
-					.getDateTimeNowMarketTimeZone();
+			ZonedDateTime today = TradingCalendar.getDateTimeNowMarketTimeZone();
 			ZonedDateTime startDate = today.minusDays(days);
 			startDate = TradingCalendar.getPrevTradingDay(startDate);
-			Strategy daoStrategy = (Strategy) DAOStrategy.newInstance()
-					.getObject();
+			Strategy daoStrategy = (Strategy) DAOStrategy.newInstance().getObject();
 			StrategyHome home = new StrategyHome();
 			String name = daoStrategy.getName();
 			Strategy strategy = home.findByName(name);
-			Contract contract = new Contract(SECType.STOCK, symbol,
-					Exchange.SMART, Currency.USD, null, null);
+			Contract contract = new Contract(SECType.STOCK, symbol, Exchange.SMART, Currency.USD, null, null);
 			CandleDataset candleDataset = new CandleDataset();
-			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(),
-					contract, periodSeconds, startDate, today);
+			CandleSeries candleSeries = new CandleSeries(contract.getSymbol(), contract, periodSeconds, startDate,
+					today);
 			candleDataset.addSeries(candleSeries);
-			StrategyData strategyData = new StrategyData(strategy,
-					candleDataset);
+			StrategyData strategyData = new StrategyData(strategy, candleDataset);
 
 			/*
 			 * Yahoo finance
@@ -356,25 +331,22 @@ public class CandlestickChartApp extends BasePanel {
 			 * /chartdata;type=quote;range=1d/csv/
 			 */
 
-			String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/"
-					+ symbol + "/chartdata;type=quote;range=" + days + "d/csv/";
+			String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/" + symbol
+					+ "/chartdata;type=quote;range=" + days + "d/csv/";
 
 			_log.info("URL : " + strUrl);
 			URL url = new URL(strUrl);
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
 			String inputLine;
 			in.readLine();
 			while ((inputLine = in.readLine()) != null) {
 
 				if (inputLine.indexOf(":") == -1) {
-					StringTokenizer scanLine = new StringTokenizer(inputLine,
-							",");
+					StringTokenizer scanLine = new StringTokenizer(inputLine, ",");
 					while (scanLine.hasMoreTokens()) {
 						ZonedDateTime time = TradingCalendar
-								.getZonedDateTimeFromMilli(Long
-										.parseLong(scanLine.nextToken()) * 1000);
+								.getZonedDateTimeFromMilli(Long.parseLong(scanLine.nextToken()) * 1000);
 
 						// values:Timestamp,close,high,low,open,volume
 						double close = Double.parseDouble(scanLine.nextToken());
@@ -382,14 +354,11 @@ public class CandlestickChartApp extends BasePanel {
 						double low = Double.parseDouble(scanLine.nextToken());
 						double open = Double.parseDouble(scanLine.nextToken());
 						long volume = Long.parseLong(scanLine.nextToken());
-						_log.info("Time : " + time + " Open: " + open
-								+ " High: " + high + " Low: " + low
-								+ " Close: " + close + " Volume: " + volume);
+						_log.info("Time : " + time + " Open: " + open + " High: " + high + " Low: " + low + " Close: "
+								+ close + " Volume: " + volume);
 						if (startDate.isBefore(time)) {
-							strategyData.buildCandle(time, open, high, low,
-									close, volume, (open + close) / 2,
-									((int) volume / 100), periodSeconds
-											/ BarSize.FIVE_MIN, null);
+							strategyData.buildCandle(time, open, high, low, close, volume, (open + close) / 2,
+									((int) volume / 100), periodSeconds / BarSize.FIVE_MIN, null);
 						}
 					}
 				}

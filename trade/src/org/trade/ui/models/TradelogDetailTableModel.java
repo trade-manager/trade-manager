@@ -86,7 +86,8 @@ public class TradelogDetailTableModel extends TableModel {
 	 * OrderModel() -
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public TradelogDetailTableModel() {
 
@@ -162,7 +163,8 @@ public class TradelogDetailTableModel extends TableModel {
 	 *            int
 	 * @param column
 	 *            int
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void populateDAO(Object value, int row, int column) {
 		final TradelogDetail element = getData().getTradelogDetail().get(row);
@@ -226,8 +228,7 @@ public class TradelogDetailTableModel extends TableModel {
 			break;
 		}
 		case 15: {
-			element.setAverageFilledPrice(((Decimal) value)
-					.getBigDecimalValue());
+			element.setAverageFilledPrice(((Decimal) value).getBigDecimalValue());
 			break;
 		}
 		case 16: {
@@ -248,7 +249,8 @@ public class TradelogDetailTableModel extends TableModel {
 	 * 
 	 * @param selectedRow
 	 *            int
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void deleteRow(int selectedRow) {
 
@@ -341,8 +343,7 @@ public class TradelogDetailTableModel extends TableModel {
 		if (null == element.getStatus()) {
 			newRow.addElement(new TradestrategyStatus());
 		} else {
-			newRow.addElement(TradestrategyStatus.newInstance((element
-					.getStatus())));
+			newRow.addElement(TradestrategyStatus.newInstance((element.getStatus())));
 		}
 		if (null == element.getSide()) {
 			newRow.addElement(new Side());

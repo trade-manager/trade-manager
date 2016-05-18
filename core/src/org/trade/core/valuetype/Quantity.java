@@ -47,8 +47,7 @@ import org.trade.core.validator.Validator;
 
 /**
  */
-public class Quantity extends ValueType implements Comparator<Quantity>,
-		Comparable<Quantity> {
+public class Quantity extends ValueType implements Comparator<Quantity>, Comparable<Quantity> {
 	/**
 	 * 
 	 */
@@ -311,8 +310,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 			setInteger(((Quantity) value).m_value);
 		} else {
 			try {
-				setInteger(((Quantity) JavaTypeTranslator.convert(
-						Quantity.class, value)).getIntegerValue());
+				setInteger(((Quantity) JavaTypeTranslator.convert(Quantity.class, value)).getIntegerValue());
 			} catch (Exception ex) {
 				throw new ValueTypeException(ex);
 			}
@@ -450,8 +448,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
-	public boolean isValid(Validator validator,
-			ExceptionMessageListener receiver) {
+	public boolean isValid(Validator validator, ExceptionMessageListener receiver) {
 		return validator.isValid(m_value, m_invalidValue, null, receiver);
 	}
 
@@ -464,11 +461,9 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 *            boolean
 	 * @return Validator
 	 */
-	public Validator getDefaultValidator(IMessageFactory messageFactory,
-			boolean isMandatory) {
+	public Validator getDefaultValidator(IMessageFactory messageFactory, boolean isMandatory) {
 		// This allow non-negative 11.2
-		return new DecimalValidator(messageFactory, false, true, 11, 2,
-				isMandatory);
+		return new DecimalValidator(messageFactory, false, true, 11, 2, isMandatory);
 	}
 
 	/**
@@ -480,7 +475,8 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 * 
 	 * 
 	 * @return Object
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public Object clone() {
@@ -501,8 +497,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 * @return int
 	 */
 	public int compareTo(final Quantity other) {
-		return CoreUtils.nullSafeComparator(this.getBigIntegerValue(),
-				other.getBigIntegerValue());
+		return CoreUtils.nullSafeComparator(this.getBigIntegerValue(), other.getBigIntegerValue());
 	}
 
 	/**
@@ -516,8 +511,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 	 */
 	public int compare(Quantity o1, Quantity o2) {
 
-		int returnVal = CoreUtils.nullSafeComparator(o1.getBigIntegerValue(),
-				o2.getBigIntegerValue());
+		int returnVal = CoreUtils.nullSafeComparator(o1.getBigIntegerValue(), o2.getBigIntegerValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
 		}
@@ -537,8 +531,7 @@ public class Quantity extends ValueType implements Comparator<Quantity>,
 			return true;
 
 		if (objectToCompare instanceof Quantity) {
-			if (CoreUtils.nullSafeComparator(
-					((Quantity) objectToCompare).getBigIntegerValue(),
+			if (CoreUtils.nullSafeComparator(((Quantity) objectToCompare).getBigIntegerValue(),
 					this.getBigIntegerValue()) == 0)
 				return true;
 		}

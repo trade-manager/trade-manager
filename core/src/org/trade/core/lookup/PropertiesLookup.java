@@ -43,8 +43,7 @@ import java.util.Vector;
  * 
  * @author Simon Allen
  */
-public class PropertiesLookup implements Lookup, Cloneable,
-		java.io.Serializable {
+public class PropertiesLookup implements Lookup, Cloneable, java.io.Serializable {
 	/**
 	 * 
 	 */
@@ -178,8 +177,7 @@ public class PropertiesLookup implements Lookup, Cloneable,
 	 * @see org.trade.core.lookup.Lookup#setDefaultPos(String)
 	 */
 	public boolean setDefaultPos(String colName) throws LookupException {
-		return (doSetPos(doGetValue(0, doGetColPos(colName)),
-				doGetColPos(colName)));
+		return (doSetPos(doGetValue(0, doGetColPos(colName)), doGetColPos(colName)));
 	}
 
 	/**
@@ -193,8 +191,7 @@ public class PropertiesLookup implements Lookup, Cloneable,
 	 * @throws LookupException
 	 * @see org.trade.core.lookup.Lookup#setPos(Object, String)
 	 */
-	public boolean setPos(Object colValue, String colName)
-			throws LookupException {
+	public boolean setPos(Object colValue, String colName) throws LookupException {
 		return (doSetPos(colValue, doGetColPos(colName)));
 	}
 

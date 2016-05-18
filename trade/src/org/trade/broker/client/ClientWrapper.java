@@ -49,12 +49,10 @@ public interface ClientWrapper {
 
 	void connectionClosed();
 
-	void orderStatus(int orderId, String status, int filled, int remaining,
-			double avgFillPrice, int permId, int parentId,
-			double lastFillPrice, int clientId, String whyHeld);
+	void orderStatus(int orderId, String status, int filled, int remaining, double avgFillPrice, int permId,
+			int parentId, double lastFillPrice, int clientId, String whyHeld);
 
-	void openOrder(int orderId, Contract contract, TradeOrder order,
-			OrderState orderState);
+	void openOrder(int orderId, Contract contract, TradeOrder order, OrderState orderState);
 
 	void nextValidId(int orderId);
 
@@ -66,12 +64,11 @@ public interface ClientWrapper {
 
 	void execDetailsEnd(int reqId);
 
-	void historicalData(int reqId, String date, double open, double high,
-			double low, double close, int volume, int count, double WAP,
-			boolean hasGaps);
+	void historicalData(int reqId, String date, double open, double high, double low, double close, int volume,
+			int count, double WAP, boolean hasGaps);
 
-	void realtimeBar(int reqId, long time, double open, double high,
-			double low, double close, long volume, double wap, int count);
+	void realtimeBar(int reqId, long time, double open, double high, double low, double close, long volume, double wap,
+			int count);
 
 	void onCancelRealtimeBars(Tradestrategy tradestrategy);
 

@@ -69,15 +69,14 @@ import org.trade.ui.widget.Clock;
  * @version $Id: MDIAppPanel,v 1.28 2002/01/24 18:13:18 simon Exp $
  * @author Simon Allen
  */
-public abstract class MDIAppPanel extends BasePanel implements ActionListener,
-		VetoableChangeListener, PropertyChangeListener {
+public abstract class MDIAppPanel extends BasePanel
+		implements ActionListener, VetoableChangeListener, PropertyChangeListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8405644422808736326L;
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(MDIAppPanel.class);
+	private final static Logger _log = LoggerFactory.getLogger(MDIAppPanel.class);
 
 	private final ExtendedDesktopPane m_desktopPane = new ExtendedDesktopPane();
 
@@ -103,12 +102,10 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 			this.setLayout(new BorderLayout());
 
 			m_menuPanel.setLayout(new BorderLayout());
-			m_desktopPane.setDesktopManager(new ExtendedDesktopManager(
-					m_desktopPane));
+			m_desktopPane.setDesktopManager(new ExtendedDesktopManager(m_desktopPane));
 
 			JPanel jPanel1 = new JPanel(new BorderLayout());
-			JPanel jPanelProgressBar = new JPanel(new FlowLayout(
-					FlowLayout.RIGHT));
+			JPanel jPanelProgressBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			JProgressBar progressBar = new JProgressBar(0, 0);
 			jPanelProgressBar.add(progressBar);
 
@@ -121,8 +118,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 			jTextFieldStatus.setRequestFocusEnabled(false);
 			jTextFieldStatus.setMargin(new Insets(5, 5, 5, 5));
 			jTextFieldStatus.setBackground(Color.white);
-			jTextFieldStatus
-					.setBorder(BorderFactory.createLoweredBevelBorder());
+			jTextFieldStatus.setBorder(BorderFactory.createLoweredBevelBorder());
 			jPanelStatus.add(jTextFieldStatus);
 
 			JPanel jPanel3 = new JPanel(new BorderLayout());
@@ -171,8 +167,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 		try {
 			currentIFrame.setFrameIcon(ImageBuilder.getImageIcon("trade.gif"));
 		} catch (Exception ex) {
-			_log.error("Could not get Image trade.gif Msg: " + ex.getMessage(),
-					ex);
+			_log.error("Could not get Image trade.gif Msg: " + ex.getMessage(), ex);
 		}
 		frameCount++;
 		// Increment the tile in case the same frame is open more than once
@@ -184,8 +179,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 		// 10),
 		// currentIFrame.getPreferredSize().width,
 		// currentIFrame.getPreferredSize().height);
-		currentIFrame
-				.setContentPane(new MyPanel(layer, frameCount, innerPanel));
+		currentIFrame.setContentPane(new MyPanel(layer, frameCount, innerPanel));
 		m_desktopPane.add(currentIFrame, new Integer(layer));
 
 		try {
@@ -219,8 +213,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 
 	public void doLFMetal() {
 		try {
-			UIManager
-					.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
+			UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
 			SwingUtilities.updateComponentTreeUI(getFrame());
 		} catch (Exception eMetal) {
 			_log.error("Could not load LookAndFeel: " + eMetal);
@@ -350,8 +343,7 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 			String name = epc.getPropertyName();
 			Object value = epc.getNewValue();
 
-			if (name.equals(JInternalFrame.IS_CLOSED_PROPERTY)
-					&& ((Boolean) value == Boolean.TRUE)) {
+			if (name.equals(JInternalFrame.IS_CLOSED_PROPERTY) && ((Boolean) value == Boolean.TRUE)) {
 
 				currentIFrame = (JInternalFrame) epc.getSource();
 				((BasePanel) currentIFrame.getContentPane()).doWindowClose();
@@ -359,16 +351,13 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 				currentIFrame.removePropertyChangeListener(this);
 				currentIFrame.removeVetoableChangeListener(this);
 
-			} else if (name.equals(JInternalFrame.IS_SELECTED_PROPERTY)
-					&& ((Boolean) value == Boolean.TRUE)) {
+			} else if (name.equals(JInternalFrame.IS_SELECTED_PROPERTY) && ((Boolean) value == Boolean.TRUE)) {
 				// switch current frame
 				((BasePanel) currentIFrame.getContentPane()).setSelected(false);
 				currentIFrame = (JInternalFrame) epc.getSource();
-				((BasePanel) currentIFrame.getContentPane())
-						.clearStatusBarMessage();
+				((BasePanel) currentIFrame.getContentPane()).clearStatusBarMessage();
 				((BasePanel) currentIFrame.getContentPane()).setSelected(true);
-				((BasePanel) currentIFrame.getContentPane())
-						.doWindowActivated();
+				((BasePanel) currentIFrame.getContentPane()).doWindowActivated();
 			}
 		}
 	}
@@ -381,15 +370,13 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 	 * @throws PropertyVetoException
 	 * @see java.beans.VetoableChangeListener#vetoableChange(PropertyChangeEvent)
 	 */
-	public void vetoableChange(PropertyChangeEvent evc)
-			throws PropertyVetoException {
+	public void vetoableChange(PropertyChangeEvent evc) throws PropertyVetoException {
 		if (evc.getSource() instanceof JInternalFrame) {
 			currentIFrame = (JInternalFrame) evc.getSource();
 
 			String name = evc.getPropertyName();
 			Object value = evc.getNewValue();
-			if (name.equals(JInternalFrame.IS_CLOSED_PROPERTY)
-					&& ((Boolean) value == Boolean.TRUE)) {
+			if (name.equals(JInternalFrame.IS_CLOSED_PROPERTY) && ((Boolean) value == Boolean.TRUE)) {
 
 			}
 		}
@@ -403,17 +390,14 @@ public abstract class MDIAppPanel extends BasePanel implements ActionListener,
 	 */
 	private void setComponentSize(Component component) {
 		if ((20 + component.getHeight()) > this.getVisibleRect().height) {
-			component.setSize(new Dimension(component.getSize().width, (this
-					.getVisibleRect().height - 20)));
+			component.setSize(new Dimension(component.getSize().width, (this.getVisibleRect().height - 20)));
 		}
 
 		if ((20 + component.getWidth()) > this.getVisibleRect().width) {
-			component.setSize(new Dimension((this.getVisibleRect().width - 20),
-					component.getSize().height));
+			component.setSize(new Dimension((this.getVisibleRect().width - 20), component.getSize().height));
 		}
 
-		component.setSize(new Dimension(this.getVisibleRect().width, this
-				.getVisibleRect().height));
+		component.setSize(new Dimension(this.getVisibleRect().width, this.getVisibleRect().height));
 	}
 
 	/**

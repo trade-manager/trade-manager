@@ -65,8 +65,7 @@ import org.trade.core.valuetype.Money;
  */
 @Entity
 @Table(name = "tradeorderfill")
-public class TradeOrderfill extends Aspect implements java.io.Serializable,
-		Cloneable {
+public class TradeOrderfill extends Aspect implements java.io.Serializable, Cloneable {
 
 	private static final long serialVersionUID = -4345234694835258864L;
 
@@ -113,10 +112,9 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	 * @param time
 	 *            Date
 	 */
-	public TradeOrderfill(TradeOrder tradeOrder, String accountNumber,
-			BigDecimal averagePrice, Integer cumulativeQuantity,
-			String exchange, String execId, BigDecimal price, Integer quantity,
-			String side, ZonedDateTime time) {
+	public TradeOrderfill(TradeOrder tradeOrder, String accountNumber, BigDecimal averagePrice,
+			Integer cumulativeQuantity, String exchange, String execId, BigDecimal price, Integer quantity, String side,
+			ZonedDateTime time) {
 		this.tradeOrder = tradeOrder;
 		this.accountNumber = accountNumber;
 		this.averagePrice = averagePrice;
@@ -455,16 +453,11 @@ public class TradeOrderfill extends Aspect implements java.io.Serializable,
 	 * @return String
 	 */
 	public String toString() {
-		return "Order Id: " + this.getTradeOrder().getIdTradeOrder()
-				+ " OrderKey: " + this.getTradeOrder().getOrderKey()
-				+ " Trade Order Version: " + this.getTradeOrder().getVersion()
-				+ " Order Fill Id: " + this.getIdTradeOrderFill()
-				+ " Order Fill Version: " + this.getVersion() + " Quantity: "
-				+ this.getQuantity() + " Avg Price: "
-				+ new Money(this.getAveragePrice()) + " Cum Qty: "
-				+ this.getCumulativeQuantity() + " Price: "
-				+ new Money(this.getPrice()) + " Exchange: "
-				+ this.getExchange() + " Side: " + this.getSide() + " Time: "
-				+ this.getTime();
+		return "Order Id: " + this.getTradeOrder().getIdTradeOrder() + " OrderKey: "
+				+ this.getTradeOrder().getOrderKey() + " Trade Order Version: " + this.getTradeOrder().getVersion()
+				+ " Order Fill Id: " + this.getIdTradeOrderFill() + " Order Fill Version: " + this.getVersion()
+				+ " Quantity: " + this.getQuantity() + " Avg Price: " + new Money(this.getAveragePrice()) + " Cum Qty: "
+				+ this.getCumulativeQuantity() + " Price: " + new Money(this.getPrice()) + " Exchange: "
+				+ this.getExchange() + " Side: " + this.getSide() + " Time: " + this.getTime();
 	}
 }

@@ -51,16 +51,14 @@ public class MessageFactory implements IMessageFactory {
 	// This is a special case and represents an internal error. It will
 	// be used when other messages cannot be located.
 
-	public final static IMessageFactory SYSTEM_ERROR = new MessageFactory(
-			createDefaultMessage());
+	public final static IMessageFactory SYSTEM_ERROR = new MessageFactory(createDefaultMessage());
 
 	// Start modifications here, please follow the formatting.
 
 	public final static IMessageFactory ERROR_UNABLE_TO_PROCESS_REQUEST = new MessageFactory(
 			"ERROR_UNABLE_TO_PROCESS_REQUEST");
 
-	public final static IMessageFactory MISSING_XML_ELEMENT = new MessageFactory(
-			"MISSING_XML_ELEMENT");
+	public final static IMessageFactory MISSING_XML_ELEMENT = new MessageFactory("MISSING_XML_ELEMENT");
 
 	public final static IMessageFactory XML_STRUCTURE_DOES_NOT_MATCH_REQUEST_TYPE = new MessageFactory(
 			"XML_STRUCTURE_DOES_NOT_MATCH_REQUEST_TYPE");
@@ -70,12 +68,10 @@ public class MessageFactory implements IMessageFactory {
 	public final static IMessageFactory ERROR_UNABLE_TO_PERFORM_SECURITY_AUTHORIZATION = new MessageFactory(
 			"ERROR_UNABLE_TO_PERFORM_SECURITY_AUTHORIZATION");
 
-	public final static IMessageFactory ERROR_UNAUTHORIZED_REQUEST = new MessageFactory(
-			"ERROR_UNAUTHORIZED_REQUEST");
+	public final static IMessageFactory ERROR_UNAUTHORIZED_REQUEST = new MessageFactory("ERROR_UNAUTHORIZED_REQUEST");
 
 	// Used by the XmlAdapter class.
-	public final static IMessageFactory XML_NOT_WELL_FORMED = new MessageFactory(
-			"XML_NOT_WELL_FORMED");
+	public final static IMessageFactory XML_NOT_WELL_FORMED = new MessageFactory("XML_NOT_WELL_FORMED");
 
 	public final static IMessageFactory XML_REQUEST_TYPE_NOT_RECOGNIZED = new MessageFactory(
 			"XML_REQUEST_TYPE_NOT_RECOGNIZED");
@@ -103,8 +99,7 @@ public class MessageFactory implements IMessageFactory {
 	 */
 	private MessageFactory(String indexIntoMessageFile) {
 		try {
-			m_exceptionMessage = MessageTranslator
-					.retrieveExceptionMessage(indexIntoMessageFile);
+			m_exceptionMessage = MessageTranslator.retrieveExceptionMessage(indexIntoMessageFile);
 		} catch (Exception e) {
 			// Log the fact we could not load the message
 			// and default to the generic system error.
@@ -131,8 +126,8 @@ public class MessageFactory implements IMessageFactory {
 	 * @see org.trade.core.message.IMessageFactory#create(int)
 	 */
 	public ExceptionMessage create(int fieldSequence) {
-		return new ExceptionMessage(m_exceptionMessage.getExceptionCode()
-				.createSequencedCode(fieldSequence), m_exceptionMessage);
+		return new ExceptionMessage(m_exceptionMessage.getExceptionCode().createSequencedCode(fieldSequence),
+				m_exceptionMessage);
 	}
 
 	/**
@@ -163,8 +158,7 @@ public class MessageFactory implements IMessageFactory {
 	 * @see org.trade.core.message.IMessageFactory#create(ExceptionContext,
 	 *      ExceptionContext)
 	 */
-	public ExceptionMessage create(ExceptionContext exceptionContext1,
-			ExceptionContext exceptionContext2) {
+	public ExceptionMessage create(ExceptionContext exceptionContext1, ExceptionContext exceptionContext2) {
 		ExceptionMessage returnValue;
 		returnValue = new ExceptionMessage(m_exceptionMessage);
 
@@ -180,7 +174,6 @@ public class MessageFactory implements IMessageFactory {
 	 * @return ExceptionMessage
 	 */
 	private static final ExceptionMessage createDefaultMessage() {
-		return new ExceptionMessage(new ExceptionCode("SYS0001"),
-				"Unable to process request due to a system error");
+		return new ExceptionMessage(new ExceptionCode("SYS0001"), "Unable to process request due to a system error");
 	}
 }

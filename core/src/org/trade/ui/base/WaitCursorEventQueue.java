@@ -121,18 +121,15 @@ public class WaitCursorEventQueue extends EventQueue {
 					if (source instanceof Component) {
 						parent = SwingUtilities.getRoot((Component) source);
 					} else if (source instanceof MenuComponent) {
-						MenuContainer mParent = ((MenuComponent) source)
-								.getParent();
+						MenuContainer mParent = ((MenuComponent) source).getParent();
 
 						if (mParent instanceof Component) {
-							parent = SwingUtilities
-									.getRoot((Component) mParent);
+							parent = SwingUtilities.getRoot((Component) mParent);
 						}
 					}
 
 					if ((parent != null) && parent.isShowing()) {
-						parent.setCursor(Cursor
-								.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					}
 				} catch (InterruptedException ie) {
 				}

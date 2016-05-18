@@ -126,11 +126,9 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 *            Boolean
 	 */
 
-	public HeikinAshiSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public HeikinAshiSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 
 	}
 
@@ -172,17 +170,15 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	 * @param lastUpdateDate
 	 *            ZonedDateTime
 	 */
-	public void add(Contract contract, RegularTimePeriod period, double open,
-			double high, double low, double close, ZonedDateTime lastUpdateDate) {
+	public void add(Contract contract, RegularTimePeriod period, double open, double high, double low, double close,
+			ZonedDateTime lastUpdateDate) {
 		if (!this.isEmpty()) {
 			HeikinAshiItem item0 = (HeikinAshiItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
-		super.add(new HeikinAshiItem(contract, period, open, high, low, close,
-				lastUpdateDate), true);
+		super.add(new HeikinAshiItem(contract, period, open, high, low, close, lastUpdateDate), true);
 	}
 
 	/**
@@ -197,10 +193,8 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	public void add(HeikinAshiItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			HeikinAshiItem item0 = (HeikinAshiItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -281,42 +275,35 @@ public class HeikinAshiSeries extends IndicatorSeries {
 						xOpenPrev = candleItem.getOpen();
 						xClosePrev = candleItem.getClose();
 					} else {
-						HeikinAshiItem prevItem = (HeikinAshiItem) this
-								.getDataItem(this.getItemCount() - 1);
+						HeikinAshiItem prevItem = (HeikinAshiItem) this.getDataItem(this.getItemCount() - 1);
 						xClosePrev = prevItem.getClose();
 						xOpenPrev = prevItem.getOpen();
 					}
 				} else {
-					HeikinAshiItem prevItem = (HeikinAshiItem) this
-							.getDataItem(this.getItemCount() - 2);
+					HeikinAshiItem prevItem = (HeikinAshiItem) this.getDataItem(this.getItemCount() - 2);
 					xClosePrev = prevItem.getClose();
 					xOpenPrev = prevItem.getOpen();
 				}
 
-				double xClose = (candleItem.getOpen() + candleItem.getHigh()
-						+ candleItem.getLow() + candleItem.getClose()) / 4;
+				double xClose = (candleItem.getOpen() + candleItem.getHigh() + candleItem.getLow()
+						+ candleItem.getClose()) / 4;
 
 				double xOpen = (xOpenPrev + xClosePrev) / 2;
 
-				double xHigh = Math.max(candleItem.getHigh(),
-						Math.max(xClosePrev, xOpenPrev));
+				double xHigh = Math.max(candleItem.getHigh(), Math.max(xClosePrev, xOpenPrev));
 
-				double xLow = Math.min(candleItem.getLow(),
-						Math.min(xClosePrev, xOpenPrev));
+				double xLow = Math.min(candleItem.getLow(), Math.min(xClosePrev, xOpenPrev));
 
 				if (index < 0) {
-					this.add(new HeikinAshiItem(source.getContract(),
-							candleItem.getPeriod(), xOpen, xHigh, xLow, xClose,
-							candleItem.getLastUpdateDate()), false);
+					this.add(new HeikinAshiItem(source.getContract(), candleItem.getPeriod(), xOpen, xHigh, xLow,
+							xClose, candleItem.getLastUpdateDate()), false);
 				} else {
-					HeikinAshiItem currDataItem = (HeikinAshiItem) this
-							.getDataItem(index);
+					HeikinAshiItem currDataItem = (HeikinAshiItem) this.getDataItem(index);
 					currDataItem.setOpen(xOpen);
 					currDataItem.setHigh(xHigh);
 					currDataItem.setLow(xLow);
 					currDataItem.setClose(xClose);
-					currDataItem.setLastUpdateDate(candleItem
-							.getLastUpdateDate());
+					currDataItem.setLastUpdateDate(candleItem.getLastUpdateDate());
 				}
 			}
 		}
@@ -329,10 +316,8 @@ public class HeikinAshiSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			HeikinAshiItem dataItem = (HeikinAshiItem) this.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Open: "
-					+ dataItem.getOpen() + " Close: " + dataItem.getClose()
-					+ " High: " + dataItem.getHigh() + " Low: "
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Open: "
+					+ dataItem.getOpen() + " Close: " + dataItem.getClose() + " High: " + dataItem.getHigh() + " Low: "
 					+ dataItem.getLow());
 		}
 	}

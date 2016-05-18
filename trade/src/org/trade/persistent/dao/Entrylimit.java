@@ -84,8 +84,7 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 	 * @param limitAmount
 	 *            BigDecimal
 	 */
-	public Entrylimit(BigDecimal startPrice, BigDecimal endPrice,
-			BigDecimal limitAmount) {
+	public Entrylimit(BigDecimal startPrice, BigDecimal endPrice, BigDecimal limitAmount) {
 		this.startPrice = startPrice;
 		this.endPrice = endPrice;
 		this.limitAmount = limitAmount;
@@ -109,10 +108,8 @@ public class Entrylimit extends Aspect implements java.io.Serializable {
 	 * @param pivotRange
 	 *            BigDecimal
 	 */
-	public Entrylimit(BigDecimal startPrice, BigDecimal endPrice,
-			BigDecimal limitAmount, BigDecimal percentOfPrice,
-			BigDecimal priceRound, BigDecimal percentOfMargin,
-			Integer shareRound, BigDecimal pivotRange) {
+	public Entrylimit(BigDecimal startPrice, BigDecimal endPrice, BigDecimal limitAmount, BigDecimal percentOfPrice,
+			BigDecimal priceRound, BigDecimal percentOfMargin, Integer shareRound, BigDecimal pivotRange) {
 		this.startPrice = startPrice;
 		this.endPrice = endPrice;
 		this.limitAmount = limitAmount;

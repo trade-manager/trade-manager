@@ -65,8 +65,7 @@ import org.trade.ui.widget.DecodeComboBoxRenderer;
 public class ConnectionPane extends JPanel {
 
 	private static final long serialVersionUID = -4696247761711464150L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(ConnectionPane.class);
+	private final static Logger _log = LoggerFactory.getLogger(ConnectionPane.class);
 
 	private JTextField hostTextField = null;
 	private JFormattedTextField portTextField = null;
@@ -83,10 +82,8 @@ public class ConnectionPane extends JPanel {
 		Integer port = new Integer(7496);
 		String host = "localhost";
 		try {
-			clientId = new Integer(
-					ConfigProperties.getPropAsString("trade.tws.clientId"));
-			port = new Integer(
-					ConfigProperties.getPropAsString("trade.tws.port"));
+			clientId = new Integer(ConfigProperties.getPropAsString("trade.tws.clientId"));
+			port = new Integer(ConfigProperties.getPropAsString("trade.tws.port"));
 			host = ConfigProperties.getPropAsString("trade.tws.host");
 		} catch (Exception ex) {
 			_log.error("Could not find config.properties in root Dir", ex);
@@ -99,15 +96,12 @@ public class ConnectionPane extends JPanel {
 		DecodeComboBoxRenderer portfolioTableRenderer = new DecodeComboBoxRenderer();
 		portfolioEditorComboBox.setRenderer(portfolioTableRenderer);
 		if (null != portfolio)
-			portfolioEditorComboBox.setItem(DAOPortfolio.newInstance(portfolio
-					.getName()));
+			portfolioEditorComboBox.setItem(DAOPortfolio.newInstance(portfolio.getName()));
 		portfolioEditorComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (!Decode.NONE.equals(((DAOPortfolio) e.getItem())
-							.getDisplayName())) {
-						portfolio = (Portfolio) ((DAOPortfolio) e.getItem())
-								.getObject();
+					if (!Decode.NONE.equals(((DAOPortfolio) e.getItem()).getDisplayName())) {
+						portfolio = (Portfolio) ((DAOPortfolio) e.getItem()).getObject();
 					}
 				}
 			}
@@ -129,30 +123,22 @@ public class ConnectionPane extends JPanel {
 		jLabel4.setHorizontalTextPosition(SwingConstants.RIGHT);
 		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		jPanel1.add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
-						2, 2, 2), 20, 5));
-		jPanel1.add(jLabel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
-						2, 2, 2), 20, 5));
-		jPanel1.add(jLabel3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
-						2, 2, 2), 20, 5));
-		jPanel1.add(jLabel4, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2,
-						2, 2, 2), 20, 5));
+		jPanel1.add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
+		jPanel1.add(jLabel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
+		jPanel1.add(jLabel3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
+		jPanel1.add(jLabel4, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 20, 5));
 
-		jPanel1.add(hostTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(2, 2, 2, 20), 20, 5));
-		jPanel1.add(portTextField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(2, 2, 2, 20), 20, 5));
-		jPanel1.add(clientIdTextField, new GridBagConstraints(1, 2, 1, 1, 0.0,
-				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-				new Insets(2, 2, 2, 20), 20, 5));
-		jPanel1.add(portfolioEditorComboBox, new GridBagConstraints(1, 3, 1, 1,
-				0.0, 0.0, GridBagConstraints.WEST,
+		jPanel1.add(hostTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
+		jPanel1.add(portTextField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
+		jPanel1.add(clientIdTextField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
+		jPanel1.add(portfolioEditorComboBox, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 20), 20, 5));
 		this.add(jPanel1);
 	}

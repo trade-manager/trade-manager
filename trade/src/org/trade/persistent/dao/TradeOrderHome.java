@@ -67,20 +67,15 @@ public class TradeOrderHome {
 	public synchronized TradeOrder persist(final TradeOrder transientInstance) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			transientInstance.setLastUpdateDate(TradingCalendar
-					.getDateTimeNowMarketTimeZone());
+			transientInstance.setLastUpdateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 			if (null == transientInstance.getIdTradeOrder()) {
 				if (null != transientInstance.getTradePosition()) {
-					if (null != transientInstance.getTradePosition()
-							.getIdTradePosition()) {
+					if (null != transientInstance.getTradePosition().getIdTradePosition()) {
 						entityManager.find(TradePosition.class,
-								transientInstance.getTradePosition()
-										.getIdTradePosition());
-						TradePosition instance = entityManager
-								.merge(transientInstance.getTradePosition());
+								transientInstance.getTradePosition().getIdTradePosition());
+						TradePosition instance = entityManager.merge(transientInstance.getTradePosition());
 						transientInstance.setTradePosition(instance);
 					}
 				}
@@ -94,8 +89,7 @@ public class TradeOrderHome {
 				return instance;
 			}
 		} catch (Exception re) {
-			EntityManagerHelper.logError("ERROR saving TradeOrder Msg: "
-					+ re.getCause().getMessage(), re);
+			EntityManagerHelper.logError("ERROR saving TradeOrder Msg: " + re.getCause().getMessage(), re);
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -113,8 +107,7 @@ public class TradeOrderHome {
 	public TradeOrder findById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			TradeOrder instance = entityManager.find(TradeOrder.class, id);
 			entityManager.getTransaction().commit();
@@ -137,17 +130,14 @@ public class TradeOrderHome {
 	public synchronized TradeOrder findTradeOrderByKey(Integer orderKey) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<TradeOrder> query = builder
-					.createQuery(TradeOrder.class);
+			CriteriaQuery<TradeOrder> query = builder.createQuery(TradeOrder.class);
 			Root<TradeOrder> from = query.from(TradeOrder.class);
 			query.select(from);
 			query.where(builder.equal(from.get("orderKey"), orderKey));
-			List<TradeOrder> items = entityManager.createQuery(query)
-					.getResultList();
+			List<TradeOrder> items = entityManager.createQuery(query).getResultList();
 			for (TradeOrder tradeOrder : items) {
 				tradeOrder.getTradeOrderfills().size();
 			}
@@ -173,8 +163,7 @@ public class TradeOrderHome {
 	public Integer findTradeOrderByMaxKey() {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> query = builder.createQuery();

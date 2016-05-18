@@ -64,8 +64,7 @@ public class StrategyHome {
 	public Strategy findById(Integer idStrategy) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Strategy instance = entityManager.find(Strategy.class, idStrategy);
 			if (null != instance) {
@@ -93,16 +92,14 @@ public class StrategyHome {
 	public Strategy findByName(String name) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Strategy> query = builder.createQuery(Strategy.class);
 			Root<Strategy> from = query.from(Strategy.class);
 			query.select(from);
 			query.where(builder.equal(from.get("name"), name));
-			List<Strategy> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Strategy> items = entityManager.createQuery(query).getResultList();
 			for (Strategy strategy : items) {
 				strategy.getIndicatorSeries().size();
 				strategy.getRules().size();
@@ -129,15 +126,13 @@ public class StrategyHome {
 	public List<Strategy> findAll() {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Strategy> query = builder.createQuery(Strategy.class);
 			Root<Strategy> from = query.from(Strategy.class);
 			query.select(from);
-			List<Strategy> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Strategy> items = entityManager.createQuery(query).getResultList();
 			for (Strategy strategy : items) {
 				strategy.getIndicatorSeries().size();
 				strategy.getRules().size();

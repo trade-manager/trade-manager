@@ -114,11 +114,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public AverageTrueRangeSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public AverageTrueRangeSeries(Strategy strategy, String name, String type, String description,
+			Boolean displayOnChart, Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -141,11 +139,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public AverageTrueRangeSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, Integer length) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public AverageTrueRangeSeries(Strategy strategy, String name, String type, String description,
+			Boolean displayOnChart, Integer chartRGBColor, Boolean subChart, Integer length) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.length = length;
 	}
 
@@ -201,11 +197,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 */
 	public void add(RegularTimePeriod period, BigDecimal averageTrueRange) {
 		if (!this.isEmpty()) {
-			AverageTrueRangeItem item0 = (AverageTrueRangeItem) this
-					.getDataItem(0);
+			AverageTrueRangeItem item0 = (AverageTrueRangeItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new AverageTrueRangeItem(period, averageTrueRange), true);
@@ -221,12 +215,9 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 */
 	public void add(AverageTrueRangeItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
-			AverageTrueRangeItem item0 = (AverageTrueRangeItem) this
-					.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			AverageTrueRangeItem item0 = (AverageTrueRangeItem) this.getDataItem(0);
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -241,8 +232,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) CodeValue.getValueCode(LENGTH,
-						this.getCodeValues());
+				this.length = (Integer) CodeValue.getValueCode(LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -268,8 +258,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	public Boolean getRollingCandle() {
 		try {
 			if (null == this.rollingCandle)
-				this.rollingCandle = (Boolean) CodeValue.getValueCode(
-						ROLLING_CANDLE, this.getCodeValues());
+				this.rollingCandle = (Boolean) CodeValue.getValueCode(ROLLING_CANDLE, this.getCodeValues());
 		} catch (Exception e) {
 			this.rollingCandle = null;
 		}
@@ -321,8 +310,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 		if (getLength() == null || getLength() < 1) {
-			throw new IllegalArgumentException(
-					"ATR period must be greater than 0.");
+			throw new IllegalArgumentException("ATR period must be greater than 0.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -333,20 +321,16 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 			// get the current data item...
 			double highLessLow = candleItem.getHigh() - candleItem.getLow();
 			if (this.getRollingCandle()) {
-				highLessLow = source.getRollingCandle().getHigh()
-						- source.getRollingCandle().getLow();
+				highLessLow = source.getRollingCandle().getHigh() - source.getRollingCandle().getLow();
 			}
 
 			double absHighLessPrevClose = 0;
 			double absLowLessPrevClose = 0;
 			if (source.getItemCount() > 1) {
-				CandleItem prevCandleItem = (CandleItem) source
-						.getDataItem(skip - 1);
+				CandleItem prevCandleItem = (CandleItem) source.getDataItem(skip - 1);
 
-				absHighLessPrevClose = Math.abs(candleItem.getHigh()
-						- prevCandleItem.getClose());
-				absLowLessPrevClose = Math.abs(candleItem.getLow()
-						- prevCandleItem.getClose());
+				absHighLessPrevClose = Math.abs(candleItem.getHigh() - prevCandleItem.getClose());
+				absLowLessPrevClose = Math.abs(candleItem.getLow() - prevCandleItem.getClose());
 
 				// absHighLessPrevClose =
 				// Math.abs(source.getRollingCandle().getHigh()
@@ -355,8 +339,7 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 				// Math.abs(source.getRollingCandle().getLow()
 				// - source.getPreviousRollingCandle().getClose());
 
-				double tR = Math.max(highLessLow,
-						Math.max(absHighLessPrevClose, absLowLessPrevClose));
+				double tR = Math.max(highLessLow, Math.max(absHighLessPrevClose, absLowLessPrevClose));
 
 				if (newBar) {
 					sum = sum + tR;
@@ -372,12 +355,11 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 					if (currATR == -1) {
 						currATR = sum / getLength();
 					} else {
-						currATR = ((prevATR * (getLength() - 1)) + tR)
-								/ getLength();
+						currATR = ((prevATR * (getLength() - 1)) + tR) / getLength();
 					}
 					if (newBar) {
-						AverageTrueRangeItem dataItem = new AverageTrueRangeItem(
-								candleItem.getPeriod(), new BigDecimal(currATR));
+						AverageTrueRangeItem dataItem = new AverageTrueRangeItem(candleItem.getPeriod(),
+								new BigDecimal(currATR));
 						this.add(dataItem, false);
 
 					} else {
@@ -398,10 +380,8 @@ public class AverageTrueRangeSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this
-					.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			AverageTrueRangeItem dataItem = (AverageTrueRangeItem) this.getDataItem(i);
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getAverageTrueRange());
 		}
 	}

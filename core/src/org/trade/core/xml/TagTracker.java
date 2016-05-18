@@ -76,8 +76,7 @@ public class TagTracker {
 		} else {
 			// if it is not a simple tag name recursively add the tag.
 			final String topTagName = tagName.substring(0, slashOffset);
-			final String remainderOfTagName = tagName
-					.substring(slashOffset + 1);
+			final String remainderOfTagName = tagName.substring(slashOffset + 1);
 			TagTracker child = (TagTracker) trackers.get(topTagName);
 			if (child == null) {
 				// Not currently tracking this tag. Add new tracker.
@@ -94,8 +93,8 @@ public class TagTracker {
 	 * tracking to a child tag tracker or putting a skipping place marker on the
 	 * stack.
 	 */
-	public void startElement(String namespaceURI, String localName,
-			String qName, Attributes attr, Stack<TagTracker> tagStack) {
+	public void startElement(String namespaceURI, String localName, String qName, Attributes attr,
+			Stack<TagTracker> tagStack) {
 
 		if ((null == localName) || (localName.trim().length() == 0)) {
 			localName = qName;
@@ -134,9 +133,8 @@ public class TagTracker {
 	 * its parent tag tracker ( next to top of stack ) when it has been notified
 	 * of the closing tag.
 	 */
-	public void endElement(String namespaceURI, String localName, String qName,
-			CharArrayWriter contents, Stack<TagTracker> tagStack)
-			throws ParseException {
+	public void endElement(String namespaceURI, String localName, String qName, CharArrayWriter contents,
+			Stack<TagTracker> tagStack) throws ParseException {
 
 		if ((null == localName) || (localName.trim().length() == 0)) {
 			localName = qName;
@@ -160,8 +158,7 @@ public class TagTracker {
 	 * overridden with specific actions for nodes in the tag tracking network
 	 * that require
 	 */
-	public void onStart(String namespaceURI, String localName, String qName,
-			Attributes attr) {
+	public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 		// default is no action...
 	}
 
@@ -169,8 +166,8 @@ public class TagTracker {
 		// default is no action...
 	}
 
-	public void onEnd(String namespaceURI, String localName, String qName,
-			CharArrayWriter contents) throws ParseException {
+	public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents)
+			throws ParseException {
 		// default is no action...
 	}
 
@@ -197,8 +194,8 @@ class SkippingTagTracker extends TagTracker {
 	 * Since this class never varies its behavior, it is OK for it to skip new
 	 * tag names by placing itself on the stack again.
 	 */
-	public void startElement(String namespaceURI, String localName,
-			String qName, Attributes attr, Stack<TagTracker> tagStack) {
+	public void startElement(String namespaceURI, String localName, String qName, Attributes attr,
+			Stack<TagTracker> tagStack) {
 
 		if ((null == localName) || (localName.trim().length() == 0)) {
 			localName = qName;
@@ -217,8 +214,8 @@ class SkippingTagTracker extends TagTracker {
 	 * replaces it with its parent as the "active," top of stack tag tracker.
 	 */
 
-	public void endElement(String namespaceURI, String localName, String qName,
-			CharArrayWriter contents, Stack<TagTracker> tagStack) {
+	public void endElement(String namespaceURI, String localName, String qName, CharArrayWriter contents,
+			Stack<TagTracker> tagStack) {
 		if ((null == localName) || (localName.trim().length() == 0)) {
 			localName = qName;
 		}

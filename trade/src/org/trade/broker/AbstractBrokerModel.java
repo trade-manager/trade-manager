@@ -60,8 +60,7 @@ import org.trade.persistent.dao.Tradestrategy;
  * @author Simon Allen
  * @version $Revision: 1.0 $
  */
-public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
-		Serializable, ObjectInputValidation {
+public abstract class AbstractBrokerModel implements BrokerModel, Cloneable, Serializable, ObjectInputValidation {
 
 	/**
 	 * 
@@ -153,8 +152,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.connectionClosed(forced);
+				((BrokerChangeListener) listeners[i + 1]).connectionClosed(forced);
 			}
 		}
 	}
@@ -168,13 +166,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 *            ConcurrentHashMap<Integer,TradeOrder>
 	 * @see #addChangeListener(BrokerChangeListener)
 	 */
-	protected void fireExecutionDetailsEnd(
-			ConcurrentHashMap<Integer, TradeOrder> execDetails) {
+	protected void fireExecutionDetailsEnd(ConcurrentHashMap<Integer, TradeOrder> execDetails) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.executionDetailsEnd(execDetails);
+				((BrokerChangeListener) listeners[i + 1]).executionDetailsEnd(execDetails);
 			}
 		}
 	}
@@ -192,8 +188,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.historicalDataComplete(tradestrategy);
+				((BrokerChangeListener) listeners[i + 1]).historicalDataComplete(tradestrategy);
 			}
 		}
 	}
@@ -211,8 +206,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.managedAccountsUpdated(accountNumber);
+				((BrokerChangeListener) listeners[i + 1]).managedAccountsUpdated(accountNumber);
 			}
 		}
 	}
@@ -246,8 +240,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.updateAccountTime(accountNumber);
+				((BrokerChangeListener) listeners[i + 1]).updateAccountTime(accountNumber);
 			}
 		}
 	}
@@ -265,8 +258,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.brokerError(brokerError);
+				((BrokerChangeListener) listeners[i + 1]).brokerError(brokerError);
 			}
 		}
 	}
@@ -284,8 +276,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.tradeOrderFilled(tradeOrder);
+				((BrokerChangeListener) listeners[i + 1]).tradeOrderFilled(tradeOrder);
 			}
 		}
 	}
@@ -303,8 +294,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.tradeOrderStatusChanged(tradeOrder);
+				((BrokerChangeListener) listeners[i + 1]).tradeOrderStatusChanged(tradeOrder);
 			}
 		}
 	}
@@ -322,8 +312,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.positionClosed(tradePosition);
+				((BrokerChangeListener) listeners[i + 1]).positionClosed(tradePosition);
 			}
 		}
 	}
@@ -341,8 +330,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.tradeOrderCancelled(tradeOrder);
+				((BrokerChangeListener) listeners[i + 1]).tradeOrderCancelled(tradeOrder);
 			}
 		}
 	}
@@ -356,13 +344,11 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 *            ConcurrentHashMap<Integer,TradeOrder>
 	 * @see #addChangeListener(BrokerChangeListener)
 	 */
-	protected void fireOpenOrderEnd(
-			ConcurrentHashMap<Integer, TradeOrder> openOrders) {
+	protected void fireOpenOrderEnd(ConcurrentHashMap<Integer, TradeOrder> openOrders) {
 		Object[] listeners = this.listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
 			if (listeners[i] == BrokerChangeListener.class) {
-				((BrokerChangeListener) listeners[i + 1])
-						.openOrderEnd(openOrders);
+				((BrokerChangeListener) listeners[i + 1]).openOrderEnd(openOrders);
 			}
 		}
 	}
@@ -431,8 +417,7 @@ public abstract class AbstractBrokerModel implements BrokerModel, Cloneable,
 	 *             if there is an I/O problem. * @throws ClassNotFoundException
 	 *             if there is a problem loading a class.
 	 */
-	private void readObject(ObjectInputStream stream) throws IOException,
-			ClassNotFoundException {
+	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
 		stream.defaultReadObject();
 		this.listenerList = new EventListenerList();
 		stream.registerValidation(this, 10); // see comments about priority of

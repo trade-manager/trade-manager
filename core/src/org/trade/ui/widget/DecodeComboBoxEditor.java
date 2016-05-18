@@ -56,8 +56,7 @@ import org.trade.core.valuetype.Decode;
  * @author Simon Allen
  */
 
-public class DecodeComboBoxEditor extends JComboBox<Decode> implements
-		ComboBoxEditor, ItemListener, FocusListener {
+public class DecodeComboBoxEditor extends JComboBox<Decode> implements ComboBoxEditor, ItemListener, FocusListener {
 	/**
 	 * 
 	 */
@@ -92,8 +91,8 @@ public class DecodeComboBoxEditor extends JComboBox<Decode> implements
 	}
 
 	/**
-	 * Set the item that should be edited. Cancel any editing if necessary * @param
-	 * anObject Object
+	 * Set the item that should be edited. Cancel any editing if necessary
+	 * * @param anObject Object
 	 * 
 	 * @see javax.swing.ComboBoxEditor#setItem(Object)
 	 */

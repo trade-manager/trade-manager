@@ -51,8 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CodeTypeTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(CodeTypeTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(CodeTypeTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -100,13 +99,11 @@ public class CodeTypeTest {
 			CodeType codeType = codeTypeHome.findByName("MovingAverage");
 			assertNotNull("1", codeType);
 			_log.info("CodeType id: " + codeType.getIdCodeType());
-			CodeValue codeValue = codeTypeHome.findByAttributeName(
-					codeType.getName(), "Length");
+			CodeValue codeValue = codeTypeHome.findByAttributeName(codeType.getName(), "Length");
 			assertNotNull("2", codeValue);
 			_log.info("CodeValue id: " + codeValue.getIdCodeValue());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

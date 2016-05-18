@@ -142,8 +142,7 @@ public interface BrokerModel {
 	 *            String
 	 * @throws BrokerModelException
 	 */
-	void onSubscribeAccountUpdates(boolean subscribe, String accountNumber)
-			throws BrokerModelException;
+	void onSubscribeAccountUpdates(boolean subscribe, String accountNumber) throws BrokerModelException;
 
 	/**
 	 * Method onCancelAccountUpdates.
@@ -170,8 +169,7 @@ public interface BrokerModel {
 	 *            int
 	 * @throws BrokerModelException
 	 */
-	void onReqReplaceFinancialAccount(int faDataType, String xml)
-			throws BrokerModelException;
+	void onReqReplaceFinancialAccount(int faDataType, String xml) throws BrokerModelException;
 
 	/**
 	 * Method onReqManagedAccount.
@@ -204,8 +202,7 @@ public interface BrokerModel {
 	 * 
 	 * @throws BrokerModelException
 	 */
-	public void onBrokerData(Tradestrategy tradestrategy, ZonedDateTime endDate)
-			throws BrokerModelException;
+	public void onBrokerData(Tradestrategy tradestrategy, ZonedDateTime endDate) throws BrokerModelException;
 
 	/**
 	 * Method onReqRealTimeBars.
@@ -216,8 +213,7 @@ public interface BrokerModel {
 	 *            boolean
 	 * @throws BrokerModelException
 	 */
-	void onReqRealTimeBars(Contract contract, boolean mktData)
-			throws BrokerModelException;
+	void onReqRealTimeBars(Contract contract, boolean mktData) throws BrokerModelException;
 
 	/**
 	 * Method onReqMarketData.
@@ -230,8 +226,7 @@ public interface BrokerModel {
 	 *            boolean
 	 * @throws BrokerModelException
 	 */
-	void onReqMarketData(Contract contract, String genericTicklist,
-			boolean snapshot) throws BrokerModelException;
+	void onReqMarketData(Contract contract, String genericTicklist, boolean snapshot) throws BrokerModelException;
 
 	/**
 	 * Method onReqAllExecutions.
@@ -240,8 +235,7 @@ public interface BrokerModel {
 	 *            ZonedDateTime
 	 * @throws BrokerModelException
 	 */
-	void onReqAllExecutions(ZonedDateTime mktOpenDate)
-			throws BrokerModelException;
+	void onReqAllExecutions(ZonedDateTime mktOpenDate) throws BrokerModelException;
 
 	/**
 	 * Method onReqExecutions.
@@ -254,8 +248,7 @@ public interface BrokerModel {
 	 * @throws BrokerModelException
 	 * @see org.trade.broker.BrokerModel#onReqExecutions(Tradestrategy)
 	 */
-	void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders)
-			throws BrokerModelException;
+	void onReqExecutions(Tradestrategy tradestrategy, boolean addOrders) throws BrokerModelException;
 
 	/**
 	 * Method isHistoricalDataRunning.
@@ -404,8 +397,7 @@ public interface BrokerModel {
 	 * @return TradeOrder
 	 * @throws BrokerModelException
 	 */
-	TradeOrder onPlaceOrder(Contract contract, TradeOrder tradeOrder)
-			throws BrokerModelException;
+	TradeOrder onPlaceOrder(Contract contract, TradeOrder tradeOrder) throws BrokerModelException;
 
 	/**
 	 * Method onCancelOrder.
@@ -441,7 +433,6 @@ public interface BrokerModel {
 	 * @throws BrokerModelException
 	 */
 
-	boolean validateBrokerData(Tradestrategy tradestrategy)
-			throws BrokerModelException;
+	boolean validateBrokerData(Tradestrategy tradestrategy) throws BrokerModelException;
 
 }

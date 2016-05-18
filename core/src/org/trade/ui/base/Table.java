@@ -130,16 +130,14 @@ public class Table extends JTable implements MouseListener, ActionListener {
 		int columns = this.getTableHeader().getColumnModel().getColumnCount();
 
 		for (int i = 0; i < columns; i++) {
-			TableColumn thc = this.getTableHeader().getColumnModel()
-					.getColumn(i);
+			TableColumn thc = this.getTableHeader().getColumnModel().getColumn(i);
 			thc.setMinWidth((thc.getHeaderValue().toString().length() * 6) + 10);
 		}
 
 		DateRenderer rDate = new DateRenderer(DATEFORMAT);
 		rDate.setHorizontalAlignment(SwingConstants.CENTER);
-		DateEditor eDate = new DateEditor(new DateField(DATEFORMAT), new Date(
-				TradingCalendar.getDateTimeNowMarketTimeZone()), DATEFORMAT,
-				Calendar.DAY_OF_MONTH);
+		DateEditor eDate = new DateEditor(new DateField(DATEFORMAT),
+				new Date(TradingCalendar.getDateTimeNowMarketTimeZone()), DATEFORMAT, Calendar.DAY_OF_MONTH);
 		MoneyRenderer rMoney = new MoneyRenderer();
 		MoneyEditor eMoney = new MoneyEditor(new MoneyField());
 		DecimalRenderer rDecimal = new DecimalRenderer();
@@ -203,7 +201,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mousePressed(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
@@ -216,7 +215,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
@@ -229,7 +229,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseClicked(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
@@ -242,7 +243,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseEntered(MouseEvent evt) {
 	}
@@ -252,7 +254,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * 
 	 * @param evt
 	 *            MouseEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void mouseExited(MouseEvent evt) {
 	}
@@ -270,10 +273,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 				java.awt.Point p = e.getPoint();
 				int index = columnModel.getColumnIndexAtX(p.x);
 				if (index > -1) {
-					int realIndex = columnModel.getColumn(index)
-							.getModelIndex();
-					return ((TableModel) this.getTable().getModel())
-							.getColumnHeaderToolTip(realIndex);
+					int realIndex = columnModel.getColumn(index).getModelIndex();
+					return ((TableModel) this.getTable().getModel()).getColumnHeaderToolTip(realIndex);
 				}
 				return null;
 			}
@@ -285,7 +286,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * 
 	 * @param point
 	 *            Point
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void createPopup(Point point) {
 
@@ -318,7 +320,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * 
 	 * @param evt
 	 *            ActionEvent
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		JMenuItem mi = (JMenuItem) evt.getSource();
@@ -407,8 +410,7 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	private Component getComponentContainer(Component c) {
 		Component topLevel = c;
 
-		while ((topLevel != null) && !(topLevel instanceof JFrame)
-				&& !(topLevel instanceof JDialog)) {
+		while ((topLevel != null) && !(topLevel instanceof JFrame) && !(topLevel instanceof JDialog)) {
 			topLevel = topLevel.getParent();
 		}
 
@@ -418,19 +420,20 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * delete a row() -
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void delete() {
 		if (this.getSelectedRow() > -1) {
-			((TableModel) this.getModel()).deleteRow(this
-					.convertRowIndexToModel((this.getSelectedRow())));
+			((TableModel) this.getModel()).deleteRow(this.convertRowIndexToModel((this.getSelectedRow())));
 		}
 	}
 
 	/**
 	 * clear all rows() -
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void clearAll() {
 		int rowCount = this.getRowCount();
@@ -442,7 +445,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	/**
 	 * print all rows() -
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	/**
@@ -451,8 +455,7 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 * @param <B>
 	 *            Component c </B> Returns the container of the component
 	 * @return Component
-	 * @exception
-	 * @see
+	 * @exception @see
 	 */
 	public void add() {
 		((TableModel) this.getModel()).addRow();
@@ -465,16 +468,14 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	 *            Component c </B> Returns the container of the component
 	 * @return Component
 	 * @throws IOException
-	 * @exception
-	 * @see
+	 * @exception @see
 	 */
 	private void saveAs() throws IOException {
 
 		int width = Math.max(this.getWidth(), this.getTableHeader().getWidth());
 		int height = this.getHeight() + this.getTableHeader().getHeight();
 
-		BufferedImage bi = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = bi.createGraphics();
 		this.getTableHeader().paint(g2);
 		g2.translate(0, this.getTableHeader().getHeight());
@@ -492,8 +493,7 @@ public class Table extends JTable implements MouseListener, ActionListener {
 	private String openFileChooser() {
 
 		String fileName = null;
-		ExampleFileFilter filter = new ExampleFileFilter(
-				new String[] { "png" }, "PNG Files");
+		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "png" }, "PNG Files");
 		// Start in the curr dir
 
 		if (null == m_pngDefaultDir) {
@@ -518,10 +518,8 @@ public class Table extends JTable implements MouseListener, ActionListener {
 			// Call openFile to attempt to load the text from file into TextArea
 			if (filer1.getSelectedFile().exists()) {
 
-				int result = JOptionPane.showConfirmDialog(
-						getComponentContainer(this),
-						"File Exists. Do you want to over write ?", "Warning",
-						JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(getComponentContainer(this),
+						"File Exists. Do you want to over write ?", "Warning", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					fileName = filer1.getSelectedFile().getPath();
 

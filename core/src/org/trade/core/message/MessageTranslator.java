@@ -126,10 +126,8 @@ public class MessageTranslator {
 			unbuffered = getClass().getResourceAsStream(getPropertyFileName());
 
 			if (unbuffered == null) {
-				throw new PropertyFileNotFoundException("Check "
-						+ "to see if the property file \""
-						+ getPropertyFileName()
-						+ "\" is installed and available in the class path.");
+				throw new PropertyFileNotFoundException("Check " + "to see if the property file \""
+						+ getPropertyFileName() + "\" is installed and available in the class path.");
 			} else {
 				InputStream in = new BufferedInputStream(unbuffered);
 				m_props = new PropertyResourceBundle(in);
@@ -141,8 +139,7 @@ public class MessageTranslator {
 		try {
 			ret = m_props.getString(key);
 		} catch (MissingResourceException e) {
-			throw new PropertyNotFoundException("The property \"" + key
-					+ "\" was not found in the property file \""
+			throw new PropertyNotFoundException("The property \"" + key + "\" was not found in the property file \""
 					+ getPropertyFileName() + "\".  Check the file.");
 		}
 
@@ -157,8 +154,7 @@ public class MessageTranslator {
 
 	public static String getPropertyFileName() {
 		try {
-			return ConfigProperties
-					.getPropAsString(NAME_OF_MESSAGE_FILE_IN_PROPERTIES);
+			return ConfigProperties.getPropAsString(NAME_OF_MESSAGE_FILE_IN_PROPERTIES);
 		} catch (Exception e) {
 			// default value
 			return "messages.properties";
@@ -184,8 +180,7 @@ public class MessageTranslator {
 	 *         code, field reference, and message * @throws
 	 *         MessageTranslatorException
 	 */
-	public static ExceptionMessage translateExceptionMessage(
-			ExceptionCode code, Dictionary<?, ?> params)
+	public static ExceptionMessage translateExceptionMessage(ExceptionCode code, Dictionary<?, ?> params)
 			throws MessageTranslatorException {
 		return translateExceptionMessage(code.getCode(), params);
 	}
@@ -206,8 +201,8 @@ public class MessageTranslator {
 	 *         code, field reference, and message * @throws
 	 *         MessageTranslatorException
 	 */
-	public static ExceptionMessage translateExceptionMessage(String code,
-			Dictionary<?, ?> params) throws MessageTranslatorException {
+	public static ExceptionMessage translateExceptionMessage(String code, Dictionary<?, ?> params)
+			throws MessageTranslatorException {
 		// first look up the message + other info based on the code
 
 		MessageFormat mf = lookupMessageFormat(code); // this can throw an
@@ -240,8 +235,7 @@ public class MessageTranslator {
 		if (fieldRef == null) {
 			return new ExceptionMessage(new ExceptionCode(newCode), message);
 		} else {
-			return new ExceptionMessage(new ExceptionCode(newCode, fieldRef),
-					message);
+			return new ExceptionMessage(new ExceptionCode(newCode, fieldRef), message);
 		}
 	}
 
@@ -253,8 +247,7 @@ public class MessageTranslator {
 	 * @return ExceptionMessage
 	 * @throws MessageTranslatorException
 	 */
-	public static ExceptionMessage retrieveExceptionMessage(String index)
-			throws MessageTranslatorException {
+	public static ExceptionMessage retrieveExceptionMessage(String index) throws MessageTranslatorException {
 		String code;
 		String message;
 		String field = null;
@@ -275,8 +268,7 @@ public class MessageTranslator {
 		}
 
 		ExceptionMessage exceptionMessage;
-		exceptionMessage = new ExceptionMessage(new ExceptionCode(code, field),
-				message);
+		exceptionMessage = new ExceptionMessage(new ExceptionCode(code, field), message);
 
 		return exceptionMessage;
 	}
@@ -313,11 +305,9 @@ public class MessageTranslator {
 	 *         code, field reference, and message
 	 */
 
-	public static ExceptionMessage translateExceptionMessage(
-			ExceptionMessage oldMessage, Dictionary<?, ?> params) {
+	public static ExceptionMessage translateExceptionMessage(ExceptionMessage oldMessage, Dictionary<?, ?> params) {
 		try {
-			return translateExceptionMessage(oldMessage.getExceptionCode()
-					.getCode(), params);
+			return translateExceptionMessage(oldMessage.getExceptionCode().getCode(), params);
 		} catch (MessageTranslatorException x) {
 			return oldMessage;
 		}
@@ -331,8 +321,7 @@ public class MessageTranslator {
 	 * @return ExceptionMessage
 	 * @throws MessageTranslatorException
 	 */
-	public static ExceptionMessage translateExceptionMessage(String code)
-			throws MessageTranslatorException {
+	public static ExceptionMessage translateExceptionMessage(String code) throws MessageTranslatorException {
 		return translateExceptionMessage(code, null);
 	}
 
@@ -344,8 +333,7 @@ public class MessageTranslator {
 	 * @return ExceptionMessage
 	 * @throws MessageTranslatorException
 	 */
-	public static ExceptionMessage translateExceptionMessage(ExceptionCode code)
-			throws MessageTranslatorException {
+	public static ExceptionMessage translateExceptionMessage(ExceptionCode code) throws MessageTranslatorException {
 		return translateExceptionMessage(code.getCode(), null);
 	}
 
@@ -359,8 +347,7 @@ public class MessageTranslator {
 	 * @return String
 	 * @throws MessageTranslatorException
 	 */
-	public static String translateMessage(String code, Dictionary<?, ?> params)
-			throws MessageTranslatorException {
+	public static String translateMessage(String code, Dictionary<?, ?> params) throws MessageTranslatorException {
 		MessageFormat mf = lookupMessageFormat(code); // this can throw an
 		// exception
 		String[] indexNames = lookupArrayIndexNames(code);
@@ -393,8 +380,7 @@ public class MessageTranslator {
 	 * @return String
 	 * @throws MessageTranslatorException
 	 */
-	public static String translateMessage(String code)
-			throws MessageTranslatorException {
+	public static String translateMessage(String code) throws MessageTranslatorException {
 		return translateMessage(code, null);
 	}
 
@@ -411,8 +397,7 @@ public class MessageTranslator {
 	 * @return MessageFormat
 	 * @throws MessageTranslatorException
 	 */
-	private static MessageFormat lookupMessageFormat(String code)
-			throws MessageTranslatorException {
+	private static MessageFormat lookupMessageFormat(String code) throws MessageTranslatorException {
 		MessageFormat mf = messageFormats.get(code);
 		if (mf == null) {
 			loadMessageFormat(code); // this can throw a translator exception
@@ -431,8 +416,7 @@ public class MessageTranslator {
 	 *            String
 	 * @throws MessageTranslatorException
 	 */
-	private static void loadMessageFormat(String code)
-			throws MessageTranslatorException {
+	private static void loadMessageFormat(String code) throws MessageTranslatorException {
 
 		try {
 			String formatString = getPropAsString(code); // let it throw an
@@ -483,8 +467,7 @@ public class MessageTranslator {
 	 *            String
 	 * @throws MessageTranslatorException
 	 */
-	public static void loadExceptionCode(String code)
-			throws MessageTranslatorException {
+	public static void loadExceptionCode(String code) throws MessageTranslatorException {
 		try {
 			String newCode = getPropAsString(code + CODE_SUFFIX); // let it
 			// throw an
@@ -499,8 +482,7 @@ public class MessageTranslator {
 				throw new Exception("null value for exception code " + code);
 			}
 		} catch (Exception x) {
-			throw new MessageTranslatorException(x,
-					"unable to load exception code for " + code);
+			throw new MessageTranslatorException(x, "unable to load exception code for " + code);
 		}
 	}
 
@@ -558,8 +540,7 @@ public class MessageTranslator {
 	 * @return String
 	 * @throws MessageTranslatorException
 	 */
-	private static String lookupCodeName(String code)
-			throws MessageTranslatorException {
+	private static String lookupCodeName(String code) throws MessageTranslatorException {
 		String newCode = codes.get(code);
 		if (null == newCode) {
 			loadExceptionCode(code);

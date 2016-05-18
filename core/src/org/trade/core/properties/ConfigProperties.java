@@ -61,8 +61,7 @@ import org.slf4j.LoggerFactory;
  * @author Simon Allen
  */
 public class ConfigProperties {
-	private final static Logger _log = LoggerFactory
-			.getLogger(ConfigProperties.class);
+	private final static Logger _log = LoggerFactory.getLogger(ConfigProperties.class);
 
 	public final static String MANDATORY_PROPERTY = "mandatory_property";
 	private static String _filename = null;
@@ -95,9 +94,7 @@ public class ConfigProperties {
 
 		try {
 			if (null == _filename) {
-				_filename = System.getProperty(
-						ENVIRONMENT_VARIABLE_PROPERTY_FILE,
-						DEFAULT_PROPERTY_FILE);
+				_filename = System.getProperty(ENVIRONMENT_VARIABLE_PROPERTY_FILE, DEFAULT_PROPERTY_FILE);
 				_filename = _filename.replaceFirst("file:", "");
 				File file = new File(_filename);
 				_filename = file.toString();
@@ -119,8 +116,7 @@ public class ConfigProperties {
 	 * @return Properties
 	 * @throws IOException
 	 */
-	public static Properties getDeploymentProperties(Object context,
-			String fileName) throws IOException {
+	public static Properties getDeploymentProperties(Object context, String fileName) throws IOException {
 		return m_theConfig.getProperties(context, fileName);
 	}
 
@@ -133,8 +129,7 @@ public class ConfigProperties {
 	 *            String
 	 * @throws IOException
 	 */
-	public static void loadDeploymentProperties(Object context, String fileName)
-			throws IOException {
+	public static void loadDeploymentProperties(Object context, String fileName) throws IOException {
 		m_theConfig.getProperties(context, fileName);
 	}
 
@@ -180,8 +175,7 @@ public class ConfigProperties {
 	 * @return Enumeration<String>
 	 * @throws IOException
 	 */
-	public static Enumeration<String> getPropAsEnumeration(String keyRoot)
-			throws IOException {
+	public static Enumeration<String> getPropAsEnumeration(String keyRoot) throws IOException {
 		Vector<String> resVec = null;
 		int iNumEntries = getPropAsInt(keyRoot + "_NumOfItems");
 		StringBuffer key = new StringBuffer(keyRoot);
@@ -210,14 +204,13 @@ public class ConfigProperties {
 	 * @return Properties[]
 	 * @throws IOException
 	 */
-	public static Properties[] getPropertiesAsArrayOfProperties(String keyRoot,
-			Dictionary<?, ?> keyNames) throws IOException {
+	public static Properties[] getPropertiesAsArrayOfProperties(String keyRoot, Dictionary<?, ?> keyNames)
+			throws IOException {
 		int iNumItems = getPropAsInt(keyRoot + "_NumOfItems");
 		Properties[] propArray = new Properties[iNumItems];
 
 		for (int iCount = 1; iCount <= iNumItems; iCount++) {
-			propArray[iCount - 1] = getSetOfProperties(keyRoot + "_" + iCount,
-					keyNames);
+			propArray[iCount - 1] = getSetOfProperties(keyRoot + "_" + iCount, keyNames);
 		}
 
 		return propArray;
@@ -233,16 +226,13 @@ public class ConfigProperties {
 	 * @return Properties
 	 * @throws IOException
 	 */
-	private Properties getProperties(Object context, String fileName)
-			throws IOException {
+	private Properties getProperties(Object context, String fileName) throws IOException {
 		Properties systemProperties = new Properties();
 
-		loadPropertiesAsResource(m_theConfig, getSystemPropertyFileName(),
-				systemProperties);
+		loadPropertiesAsResource(m_theConfig, getSystemPropertyFileName(), systemProperties);
 		loadPropertiesAsResource(context, fileName, systemProperties);
 		Properties deploymentProperties = new Properties(systemProperties);
-		loadPropertiesAsFile(getDeploymentPropertyFileName(),
-				deploymentProperties);
+		loadPropertiesAsFile(getDeploymentPropertyFileName(), deploymentProperties);
 		m_properties = deploymentProperties;
 
 		return deploymentProperties;
@@ -258,8 +248,7 @@ public class ConfigProperties {
 	 * @return Properties
 	 * @throws IOException
 	 */
-	private static Properties getSetOfProperties(String keyRoot,
-			Dictionary<?, ?> keyNames) throws IOException {
+	private static Properties getSetOfProperties(String keyRoot, Dictionary<?, ?> keyNames) throws IOException {
 		Enumeration<?> enumKey = keyNames.keys();
 		Properties result = new Properties();
 
@@ -297,8 +286,7 @@ public class ConfigProperties {
 	 * @return Enumeration<?>
 	 * @throws IOException
 	 */
-	public static Enumeration<?> getCommaSeparatedStrings(String key)
-			throws IOException {
+	public static Enumeration<?> getCommaSeparatedStrings(String key) throws IOException {
 		String list = getPropAsString(key);
 		StringTokenizer t = new StringTokenizer(list, ",");
 		return t;
@@ -318,13 +306,11 @@ public class ConfigProperties {
 		if (null == m_properties) {
 			Properties systemProperties = new Properties();
 
-			loadPropertiesAsResource(m_theConfig, getSystemPropertyFileName(),
-					systemProperties);
+			loadPropertiesAsResource(m_theConfig, getSystemPropertyFileName(), systemProperties);
 
 			Properties deploymentProperties = new Properties(systemProperties);
 
-			loadPropertiesAsFile(getDeploymentPropertyFileName(),
-					deploymentProperties);
+			loadPropertiesAsFile(getDeploymentPropertyFileName(), deploymentProperties);
 
 			m_properties = deploymentProperties;
 		}
@@ -332,10 +318,8 @@ public class ConfigProperties {
 		ret = m_properties.getProperty(key);
 
 		if (null == ret) {
-			throw new PropertyNotFoundException("The property \"" + key
-					+ "\" was not found in the property file \""
-					+ getDeploymentPropertyFileName()
-					+ "\". \n Check the file is in the applications root dir.");
+			throw new PropertyNotFoundException("The property \"" + key + "\" was not found in the property file \""
+					+ getDeploymentPropertyFileName() + "\". \n Check the file is in the applications root dir.");
 		}
 
 		return ret;
@@ -349,8 +333,7 @@ public class ConfigProperties {
 	 * @return String
 	 * @throws IOException
 	 */
-	public static String getPropertyAfterEnvSubstitution(String key)
-			throws IOException {
+	public static String getPropertyAfterEnvSubstitution(String key) throws IOException {
 		String strRet = null;
 
 		strRet = m_theConfig.retrieveProperty(key);
@@ -373,8 +356,7 @@ public class ConfigProperties {
 	 * @return String
 	 * @throws java.io.IOException
 	 */
-	public static String readFileAsString(String filePath, ClassLoader loader)
-			throws java.io.IOException {
+	public static String readFileAsString(String filePath, ClassLoader loader) throws java.io.IOException {
 
 		StringBuffer fileData = new StringBuffer(1000);
 		InputStream inputStream = loader.getResourceAsStream(filePath);
@@ -403,22 +385,18 @@ public class ConfigProperties {
 	 *            Properties
 	 * @throws IOException
 	 */
-	private void loadPropertiesAsResource(Object context, String filename,
-			Properties properties) throws IOException {
+	private void loadPropertiesAsResource(Object context, String filename, Properties properties) throws IOException {
 		InputStream unbuffered;
 
 		if (null == filename) {
-			throw new PropertyFileNotFoundException(
-					"No property file name found"
-							+ " please check your command line parameters e.g. "
-							+ "-Dconfig.properties=/filename.properties ");
+			throw new PropertyFileNotFoundException("No property file name found"
+					+ " please check your command line parameters e.g. " + "-Dconfig.properties=/filename.properties ");
 		} else {
 			unbuffered = context.getClass().getResourceAsStream(filename);
 		}
 
 		if (unbuffered == null) {
-			throw new PropertyFileNotFoundException("Check "
-					+ "to see if the property file \"" + filename
+			throw new PropertyFileNotFoundException("Check " + "to see if the property file \"" + filename
 					+ "\" is installed and available in the class path.");
 		} else {
 			InputStream in = new BufferedInputStream(unbuffered);
@@ -437,8 +415,7 @@ public class ConfigProperties {
 	 *            Properties
 	 * @throws IOException
 	 */
-	private void loadPropertiesAsFile(String filename, Properties properties)
-			throws IOException {
+	private void loadPropertiesAsFile(String filename, Properties properties) throws IOException {
 		if (null != filename) {
 			File propertyFile = new File(filename);
 			String propertyFilePath = propertyFile.getAbsolutePath();
@@ -448,8 +425,7 @@ public class ConfigProperties {
 				properties.load(is);
 				is.close();
 			} else {
-				_log.debug("The property file " + propertyFilePath
-						+ " does not exist -- using defaults");
+				_log.debug("The property file " + propertyFilePath + " does not exist -- using defaults");
 			}
 		} else {
 			_log.debug("The property file does not exist -- using defaults");
@@ -462,8 +438,7 @@ public class ConfigProperties {
 	 * @param propertyFileLocation
 	 *            String
 	 */
-	public static void reNumberDecodesInPropertiesFile(
-			String propertyFileLocation) {
+	public static void reNumberDecodesInPropertiesFile(String propertyFileLocation) {
 
 		FileInputStream fileInputStream = null;
 		Scanner scanString = null;
@@ -503,8 +478,7 @@ public class ConfigProperties {
 				if (null != token && token.contains(codeName)) {
 
 					if (null != delimiter) {
-						if (null != token
-								&& !token.endsWith(lookupServiceProvideName)) {
+						if (null != token && !token.endsWith(lookupServiceProvideName)) {
 							if (!delimiter.equals(oldDelimiter)) {
 								count++;
 							}

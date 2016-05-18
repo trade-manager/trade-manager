@@ -8,8 +8,7 @@ import org.trade.persistent.dao.Tradestrategy;
 import org.trade.strategy.StrategyChangeListener;
 import org.trade.strategy.StrategyRuleException;
 
-public abstract class Broker extends SwingWorker<Void, Void> implements
-		StrategyChangeListener {
+public abstract class Broker extends SwingWorker<Void, Void> implements StrategyChangeListener {
 
 	protected AtomicInteger ruleComplete = new AtomicInteger(0);
 	protected AtomicInteger strategiesRunning = new AtomicInteger(0);
@@ -28,8 +27,7 @@ public abstract class Broker extends SwingWorker<Void, Void> implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyComplete(Tradestrategy)
 	 */
-	public synchronized void strategyComplete(String strategyClassName,
-			Tradestrategy tradestrategy) {
+	public synchronized void strategyComplete(String strategyClassName, Tradestrategy tradestrategy) {
 		synchronized (lockBackTestWorker) {
 			strategiesRunning.getAndDecrement();
 			lockBackTestWorker.notifyAll();
@@ -45,8 +43,7 @@ public abstract class Broker extends SwingWorker<Void, Void> implements
 	 *            Tradestrategy
 	 * @see org.trade.strategy.StrategyChangeListener#strategyStarted(Tradestrategy)
 	 */
-	public synchronized void strategyStarted(String strategyClassName,
-			Tradestrategy tradestrategy) {
+	public synchronized void strategyStarted(String strategyClassName, Tradestrategy tradestrategy) {
 		synchronized (lockBackTestWorker) {
 			strategiesRunning.getAndIncrement();
 			lockBackTestWorker.notifyAll();

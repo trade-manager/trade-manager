@@ -55,8 +55,7 @@ public class BaseMenuItem extends JMenuItem {
 	 */
 	private static final long serialVersionUID = 5816221538464868893L;
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(BaseMenuItem.class);
+	private final static Logger _log = LoggerFactory.getLogger(BaseMenuItem.class);
 
 	protected MessageNotifier m_notifier = new MessageNotifier();
 
@@ -73,7 +72,8 @@ public class BaseMenuItem extends JMenuItem {
 	 *            BasePanel
 	 * @param basePropertyCodes
 	 *            BaseUIPropertyCodes
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public BaseMenuItem(BasePanel p, BaseUIPropertyCodes basePropertyCodes) {
 		try {
@@ -114,7 +114,8 @@ public class BaseMenuItem extends JMenuItem {
 	 *            BasePanel
 	 * @param UICode
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public BaseMenuItem(BasePanel p, String UICode) {
 		try {
@@ -122,8 +123,7 @@ public class BaseMenuItem extends JMenuItem {
 				this.addMessageListener(p);
 			}
 
-			BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes
-					.newInstance(UICode);
+			BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes.newInstance(UICode);
 
 			if (basePropertyCodes.getDisplayName().length() == 0) {
 				setIcon(ImageBuilder.getImageIcon(basePropertyCodes.getImage()));
@@ -154,7 +154,8 @@ public class BaseMenuItem extends JMenuItem {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private void buttonPressed() {
 		if (getMethod() != null) {
@@ -172,7 +173,8 @@ public class BaseMenuItem extends JMenuItem {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
@@ -188,7 +190,8 @@ public class BaseMenuItem extends JMenuItem {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
@@ -203,11 +206,11 @@ public class BaseMenuItem extends JMenuItem {
 	 * 
 	 * @param selection
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	protected void messageEvent(String selection) {
-		m_notifier.notifyEvent(new MessageEvent(selection),
-				new Vector<Object>());
+		m_notifier.notifyEvent(new MessageEvent(selection), new Vector<Object>());
 	}
 
 	/**
@@ -219,7 +222,8 @@ public class BaseMenuItem extends JMenuItem {
 	 * 
 	 * @param method
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private void setMethod(String method) {
 		m_method = method;
@@ -233,7 +237,8 @@ public class BaseMenuItem extends JMenuItem {
 	 * 
 	 * 
 	 * @return String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public String getMethod() {
 		return m_method;

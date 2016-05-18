@@ -76,9 +76,9 @@ public interface Lookup {
 	 * 
 	 * @param colPos
 	 *            int
-	 * @return Returns the Object from the current row and column position. * @exception
-	 *         LookupException Thrown if the column position or row position is
-	 *         out of range.
+	 * @return Returns the Object from the current row and column position.
+	 *         * @exception LookupException Thrown if the column position or row
+	 *         position is out of range.
 	 */
 	Object getValueAt(int colPos) throws LookupException;
 
@@ -92,9 +92,9 @@ public interface Lookup {
 	 * 
 	 * @param colName
 	 *            String
-	 * @return Returns the Object from the current row and named column. * @exception
-	 *         LookupException Thrown if the column name does not exist or the
-	 *         row position is out of range.
+	 * @return Returns the Object from the current row and named column.
+	 *         * @exception LookupException Thrown if the column name does not
+	 *         exist or the row position is out of range.
 	 */
 	Object getValueAt(String colName) throws LookupException;
 

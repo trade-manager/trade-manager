@@ -149,8 +149,7 @@ public abstract class SaxMapper extends DefaultHandler {
 	 * java.lang.String, java.lang.String, org.xml.sax.Attributes)
 	 */
 
-	public void startElement(String namespaceURI, String localName,
-			String qName, Attributes attr) throws SAXException {
+	public void startElement(String namespaceURI, String localName, String qName, Attributes attr) throws SAXException {
 		/*
 		 * Resetting contents buffer. Assuming that tags either tag content or
 		 * children, not both. This is usually the case with XML that is
@@ -163,25 +162,21 @@ public abstract class SaxMapper extends DefaultHandler {
 
 		// delegate the event handling to the tag tracker network.
 		final TagTracker activeTracker = (TagTracker) tagStack.peek();
-		activeTracker.startElement(namespaceURI, localName, qName, attr,
-				tagStack);
+		activeTracker.startElement(namespaceURI, localName, qName, attr, tagStack);
 	}
 
-	public void endElement(String namespaceURI, String localName, String qName)
-			throws SAXException {
+	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
 
 		// delegate the event handling to the tag tracker network.
 		final TagTracker activeTracker = (TagTracker) tagStack.peek();
 		try {
-			activeTracker.endElement(namespaceURI, localName, qName, contents,
-					tagStack);
+			activeTracker.endElement(namespaceURI, localName, qName, contents, tagStack);
 		} catch (ParseException e) {
 			throw new SAXException(e);
 		}
 	}
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+	public void characters(char[] ch, int start, int length) throws SAXException {
 		// accumulate the contents into a buffer.
 		contents.write(ch, start, length);
 	}

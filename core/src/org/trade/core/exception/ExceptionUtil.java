@@ -107,8 +107,7 @@ public class ExceptionUtil implements Serializable {
 	 *            String
 	 * @return String
 	 */
-	public static final String fillInExceptionMessage(
-			NestingException nestingException, String stackTrace,
+	public static final String fillInExceptionMessage(NestingException nestingException, String stackTrace,
 			String errorMesg) {
 		if (stackTrace != null) {
 			int index = stackTrace.indexOf(':');
@@ -131,8 +130,7 @@ public class ExceptionUtil implements Serializable {
 
 			// Construct the lines in the stack trace that display the
 			// user friendly messages.
-			Enumeration<?> enumeration = nestingException
-					.getAllExceptionMessages();
+			Enumeration<?> enumeration = nestingException.getAllExceptionMessages();
 			while (enumeration.hasMoreElements()) {
 				ExceptionMessage exceptionMessage;
 				exceptionMessage = (ExceptionMessage) enumeration.nextElement();

@@ -62,8 +62,7 @@ import org.trade.ui.TradeAppLoadConfig;
  */
 public class TradingdayTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradingdayTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(TradingdayTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -115,23 +114,19 @@ public class TradingdayTest {
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			AspectHome aspectHome = new AspectHome();
-			ZonedDateTime open = TradingCalendar
-					.getTradingDayStart(TradingCalendar
-							.getPrevTradingDay(TradingCalendar
-									.getDateTimeNowMarketTimeZone()));
-			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
-					open, TradingCalendar.getTradingDayEnd(open));
+			ZonedDateTime open = TradingCalendar.getTradingDayStart(
+					TradingCalendar.getPrevTradingDay(TradingCalendar.getDateTimeNowMarketTimeZone()));
+			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(open,
+					TradingCalendar.getTradingDayEnd(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}
 			tradingdayHome.persist(transientInstance);
-			_log.info("Tradingday added Id = "
-					+ transientInstance.getIdTradingDay());
+			_log.info("Tradingday added Id = " + transientInstance.getIdTradingDay());
 			assertNotNull(transientInstance.getIdTradingDay());
 			aspectHome.remove(transientInstance);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -148,25 +143,20 @@ public class TradingdayTest {
 
 			TradingdayHome tradingdayHome = new TradingdayHome();
 			AspectHome aspectHome = new AspectHome();
-			ZonedDateTime open = TradingCalendar
-					.getTradingDayStart(TradingCalendar
-							.getPrevTradingDay(TradingCalendar
-									.getDateTimeNowMarketTimeZone()));
-			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(
-					open, TradingCalendar.getTradingDayEnd(open));
+			ZonedDateTime open = TradingCalendar.getTradingDayStart(
+					TradingCalendar.getPrevTradingDay(TradingCalendar.getDateTimeNowMarketTimeZone()));
+			Tradingday transientInstance = tradingdayHome.findByOpenCloseDate(open,
+					TradingCalendar.getTradingDayEnd(open));
 			if (null == transientInstance) {
 				transientInstance = Tradingday.newInstance(open);
 			}
-			transientInstance.setMarketBar(MarketBar.newInstance("+WRB")
-					.getCode());
+			transientInstance.setMarketBar(MarketBar.newInstance("+WRB").getCode());
 			tradingdayHome.persist(transientInstance);
-			_log.info("Tradingday Update Id = "
-					+ transientInstance.getIdTradingDay());
+			_log.info("Tradingday Update Id = " + transientInstance.getIdTradingDay());
 			assertNotNull(transientInstance.getIdTradingDay());
 			aspectHome.remove(transientInstance);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

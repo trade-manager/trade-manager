@@ -98,64 +98,46 @@ public class TradestrategyTable extends Table {
 	 * @throws ParseException
 	 */
 
-	public TradestrategyTable(TableModel model,
-			ConcurrentHashMap<String, StrategyRule> strategyWorkers)
+	public TradestrategyTable(TableModel model, ConcurrentHashMap<String, StrategyRule> strategyWorkers)
 			throws ValueTypeException, ParseException {
 		super(model);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(TradingCalendar
-						.getDateTimeNowMarketTimeZone()),
-				DATETIMEFORMAT, Calendar.MONTH);
+				new org.trade.core.valuetype.Date(TradingCalendar.getDateTimeNowMarketTimeZone()), DATETIMEFORMAT,
+				Calendar.MONTH);
 
 		this.getColumn("Expiry").setCellEditor(eDate);
 		this.getColumn("Expiry").setCellRenderer(rDate);
 		DecodeTableEditor currencyEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Currency()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Currency()).getCodesDecodes()));
 		DecodeTableEditor exchangeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Exchange()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Exchange()).getCodesDecodes()));
 		DecodeTableEditor sECIdTypeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new SECIdType()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new SECIdType()).getCodesDecodes()));
 		DecodeTableEditor sECTypeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new SECType()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new SECType()).getCodesDecodes()));
 		DecodeTableEditor sideEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Side()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Side()).getCodesDecodes()));
 		DecodeTableEditor tradestrategyStatusEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new TradestrategyStatus())
-								.getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new TradestrategyStatus()).getCodesDecodes()));
 		DecodeTableEditor tierEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Tier()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Tier()).getCodesDecodes()));
 
-		DAOStrategyRenderer dAOStrategyRenderer = new DAOStrategyRenderer(
-				strategyWorkers);
-		DAOStrategyManagerRenderer dAOStrategyManagerRenderer = new DAOStrategyManagerRenderer(
-				strategyWorkers);
+		DAOStrategyRenderer dAOStrategyRenderer = new DAOStrategyRenderer(strategyWorkers);
+		DAOStrategyManagerRenderer dAOStrategyManagerRenderer = new DAOStrategyManagerRenderer(strategyWorkers);
 		DecodeTableEditor strategyEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new DAOStrategy()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new DAOStrategy()).getCodesDecodes()));
 		JComboBox<Decode> strategyManagerComboBox = new JComboBox<Decode>(
 				(Vector<Decode>) (new DAOStrategyManager()).getCodesDecodes());
-		DecodeTableEditor strategyManagerEditor = new DecodeTableEditor(
-				strategyManagerComboBox);
+		DecodeTableEditor strategyManagerEditor = new DecodeTableEditor(strategyManagerComboBox);
 		DecodeTableEditor portfolioEditor = new DecodeTableEditor(
-				new JComboBox<Decode>((Vector<Decode>) (new DAOPortfolio())
-						.getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new DAOPortfolio()).getCodesDecodes()));
 		DecodeTableEditor chartDaysEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new ChartDays()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new ChartDays()).getCodesDecodes()));
 		DecodeTableEditor barSizeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new BarSize()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new BarSize()).getCodesDecodes()));
 
-		StringEditor eString = new StringEditor(new StringField(
-				new MaskFormatter(MASK), VALID_CHARS, PLACE_HOLDER));
+		StringEditor eString = new StringEditor(new StringField(new MaskFormatter(MASK), VALID_CHARS, PLACE_HOLDER));
 		this.setDefaultEditor(String.class, eString);
 		StringRenderer rString = new StringRenderer();
 		this.setDefaultRenderer(String.class, rString);
@@ -168,11 +150,9 @@ public class TradestrategyTable extends Table {
 		this.setDefaultEditor(SECType.class, sECTypeEditor);
 		this.setDefaultEditor(Side.class, sideEditor);
 		this.setDefaultEditor(Tier.class, tierEditor);
-		this.setDefaultEditor(TradestrategyStatus.class,
-				tradestrategyStatusEditor);
+		this.setDefaultEditor(TradestrategyStatus.class, tradestrategyStatusEditor);
 		this.setDefaultRenderer(DAOStrategy.class, dAOStrategyRenderer);
-		this.setDefaultRenderer(DAOStrategyManager.class,
-				dAOStrategyManagerRenderer);
+		this.setDefaultRenderer(DAOStrategyManager.class, dAOStrategyManagerRenderer);
 		this.setDefaultEditor(ChartDays.class, chartDaysEditor);
 		this.setDefaultEditor(BarSize.class, barSizeEditor);
 		this.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -198,29 +178,19 @@ public class TradestrategyTable extends Table {
 			int realRowIndex = convertRowIndexToModel(rowIndex);
 			int realColumnIndex = convertColumnIndexToModel(colIndex);
 
-			Contract contract = ((TradestrategyTableModel) this.getModel())
-					.getData().getTradestrategies().get(realRowIndex)
-					.getContract();
+			Contract contract = ((TradestrategyTableModel) this.getModel()).getData().getTradestrategies()
+					.get(realRowIndex).getContract();
 
 			if (realColumnIndex == 2) { // Symbol column result = new
 				result = new StringBuilder("<html>");
-				result.append("<b>Symbol: </b> ").append(contract.getSymbol())
-						.append("<br/>");
-				result.append("<b>LongName: </b> ")
-						.append(contract.getLongName()).append("<br/>");
-				result.append("<b>Primary Exch: </b> ")
-						.append(contract.getPrimaryExchange()).append("<br/>");
-				result.append("<b>Category: </b> ")
-						.append(contract.getCategory()).append("<br/>");
-				result.append("<b>Industry: </b> ")
-						.append(contract.getIndustry()).append("<br/>");
-				result.append("<b>Sub Category: </b> ")
-						.append(contract.getSubCategory()).append("<br/>");
-				result.append("<b>Min Tick: </b> ")
-						.append(contract.getMinTick()).append("<br/>");
-				result.append("<b>Trading Class: </b> ")
-						.append(contract.getTradingClass())
-						.append("<br/></html>");
+				result.append("<b>Symbol: </b> ").append(contract.getSymbol()).append("<br/>");
+				result.append("<b>LongName: </b> ").append(contract.getLongName()).append("<br/>");
+				result.append("<b>Primary Exch: </b> ").append(contract.getPrimaryExchange()).append("<br/>");
+				result.append("<b>Category: </b> ").append(contract.getCategory()).append("<br/>");
+				result.append("<b>Industry: </b> ").append(contract.getIndustry()).append("<br/>");
+				result.append("<b>Sub Category: </b> ").append(contract.getSubCategory()).append("<br/>");
+				result.append("<b>Min Tick: </b> ").append(contract.getMinTick()).append("<br/>");
+				result.append("<b>Trading Class: </b> ").append(contract.getTradingClass()).append("<br/></html>");
 				return result.toString();
 			}
 		}

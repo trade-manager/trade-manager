@@ -27,8 +27,7 @@ public class Tree extends JTree {
 	 */
 	public Tree(DefaultTreeModel model) {
 		super(model);
-		this.getSelectionModel().setSelectionMode(
-				TreeSelectionModel.SINGLE_TREE_SELECTION);
+		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		this.setRowHeight(18);
 		this.setFont(new Font("dialog", Font.PLAIN, 12));
 		this.setExpandsSelectedPaths(true);
@@ -42,8 +41,8 @@ public class Tree extends JTree {
 	 * @return TreePath
 	 */
 	public TreePath findTreePathByObject(Object tofind) {
-		return findTreePathByObject(this.getModel(), (TreeNode) this.getModel()
-				.getRoot(), this.getPathForRow(0), tofind);
+		return findTreePathByObject(this.getModel(), (TreeNode) this.getModel().getRoot(), this.getPathForRow(0),
+				tofind);
 	}
 
 	/**
@@ -59,19 +58,16 @@ public class Tree extends JTree {
 	 *            Object
 	 * @return TreePath
 	 */
-	private TreePath findTreePathByObject(TreeModel model, TreeNode base,
-			TreePath parent, Object tofind) {
+	private TreePath findTreePathByObject(TreeModel model, TreeNode base, TreePath parent, Object tofind) {
 		int childCount = model.getChildCount(base);
 		for (int i = 0; i < childCount; i++) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) model
-					.getChild(base, i);
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) model.getChild(base, i);
 			if (child.getUserObject().equals(tofind)) {
 				return parent.pathByAddingChild(child);
 			}
 
 			if (!model.isLeaf(child)) {
-				TreePath foundTreePath = findTreePathByObject(model, child,
-						parent.pathByAddingChild(child), tofind);
+				TreePath foundTreePath = findTreePathByObject(model, child, parent.pathByAddingChild(child), tofind);
 				if (null != foundTreePath)
 					return foundTreePath;
 			}

@@ -74,12 +74,10 @@ public class MainControllerPanel extends TabbedAppPanel {
 			/* This is always true as main panel needs to receive all events */
 			setSelected(true);
 			title = ConfigProperties.getPropAsString("component.name.base");
-			version = ConfigProperties
-					.getPropAsString("component.name.version");
+			version = ConfigProperties.getPropAsString("component.name.version");
 			date = ConfigProperties.getPropAsString("component.name.date");
 		} catch (Exception e) {
-			this.setErrorMessage("Error During Initialization.",
-					e.getMessage(), e);
+			this.setErrorMessage("Error During Initialization.", e.getMessage(), e);
 		}
 	}
 
@@ -97,11 +95,9 @@ public class MainControllerPanel extends TabbedAppPanel {
 			message.append(MainControllerPanel.title);
 			message.append("\nBuild Time:      ");
 			message.append(MainControllerPanel.date);
-			JOptionPane.showMessageDialog(this, message, "About Help",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, message, "About Help", JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ex) {
-			this.setErrorMessage("Could not load about help.", ex.getMessage(),
-					ex);
+			this.setErrorMessage("Could not load about help.", ex.getMessage(), ex);
 		}
 	}
 

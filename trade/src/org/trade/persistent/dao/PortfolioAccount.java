@@ -96,8 +96,7 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Portfolio
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "idPortfolio", nullable = false)
 	public Portfolio getPortfolio() {
 		return this.portfolio;
@@ -118,8 +117,7 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 	 * 
 	 * @return Account
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "idAccount", nullable = false)
 	public Account getAccount() {
 		return this.account;
@@ -173,13 +171,11 @@ public class PortfolioAccount extends Aspect implements java.io.Serializable {
 
 		PortfolioAccount theOtherOrder = (PortfolioAccount) objectToCompare;
 
-		if (!theOtherOrder.getAccount().getAccountNumber()
-				.equals((this.getAccount().getAccountNumber()))) {
+		if (!theOtherOrder.getAccount().getAccountNumber().equals((this.getAccount().getAccountNumber()))) {
 			return false;
 		}
 
-		if (!theOtherOrder.getPortfolio().getName()
-				.equals((this.getPortfolio().getName()))) {
+		if (!theOtherOrder.getPortfolio().getName().equals((this.getPortfolio().getName()))) {
 			return false;
 		}
 		return true;

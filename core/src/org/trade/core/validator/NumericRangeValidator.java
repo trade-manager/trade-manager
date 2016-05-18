@@ -59,8 +59,8 @@ public class NumericRangeValidator extends StringValidator {
 	 * @param isMandatory
 	 *            boolean
 	 */
-	public NumericRangeValidator(IMessageFactory messageFactory, int maxLength,
-			long minValue, long maxValue, boolean isMandatory) {
+	public NumericRangeValidator(IMessageFactory messageFactory, int maxLength, long minValue, long maxValue,
+			boolean isMandatory) {
 		super(messageFactory, maxLength, StringValidator.DIGITS, isMandatory);
 
 		m_minValue = minValue;
@@ -82,8 +82,8 @@ public class NumericRangeValidator extends StringValidator {
 	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
 	 *      ExceptionMessageListener)
 	 */
-	public boolean isValid(Object value, String invalidValue,
-			String expectedFormat, ExceptionMessageListener receiver) {
+	public boolean isValid(Object value, String invalidValue, String expectedFormat,
+			ExceptionMessageListener receiver) {
 		boolean valid = true;
 
 		if (null == value) {
@@ -99,26 +99,20 @@ public class NumericRangeValidator extends StringValidator {
 				long i = Long.parseLong(((String) value));
 				if (i < m_minValue) {
 					valid = false;
-					receiver.addExceptionMessage(getMessageFactory().create(
-							MessageContextFactory.BELOW_MIN_VALUE
-									.create(MessageContextFactory.MIN_VALUE
-											.create(new Long(m_minValue)))));
+					receiver.addExceptionMessage(getMessageFactory().create(MessageContextFactory.BELOW_MIN_VALUE
+							.create(MessageContextFactory.MIN_VALUE.create(new Long(m_minValue)))));
 				}
 
 				if (i > m_maxValue) {
 					valid = false;
-					receiver.addExceptionMessage(getMessageFactory().create(
-							MessageContextFactory.EXCEEDS_MAX_VALUE
-									.create(MessageContextFactory.MAX_VALUE
-											.create(new Long(m_maxValue)))));
+					receiver.addExceptionMessage(getMessageFactory().create(MessageContextFactory.EXCEEDS_MAX_VALUE
+							.create(MessageContextFactory.MAX_VALUE.create(new Long(m_maxValue)))));
 				}
 			} catch (Exception ex) {
 				// Should not happen as I already have checked it for
 				// being numeric
-				throw new Error(
-						"Coding error - received an exception attempting to conver "
-								+ value
-								+ " to a long.  This should never happen");
+				throw new Error("Coding error - received an exception attempting to conver " + value
+						+ " to a long.  This should never happen");
 			}
 		}
 

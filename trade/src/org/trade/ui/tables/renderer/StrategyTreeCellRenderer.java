@@ -78,14 +78,12 @@ public class StrategyTreeCellRenderer extends DefaultTreeCellRenderer {
 	 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree,
 	 *      Object, boolean, boolean, boolean, int, boolean)
 	 */
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean selected, boolean expanded, boolean leaf, int row,
-			boolean hasFocus) {
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+			boolean leaf, int row, boolean hasFocus) {
 
 		Object node = ((StrategyTreeModel) tree.getModel()).getNode(value);
 
-		Component comp = super.getTreeCellRendererComponent(tree, value,
-				selected, expanded, leaf, row, hasFocus);
+		Component comp = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 		if (selected) {
 			this.setBackgroundSelectionColor(backgroundSelectionColor);
 		}
@@ -96,8 +94,7 @@ public class StrategyTreeCellRenderer extends DefaultTreeCellRenderer {
 					setBackgroundSelectionColor(Color.RED);
 				}
 			} else if ((node instanceof Strategy)) {
-				this.setToolTipText("Class name: "
-						+ ((Strategy) node).getClassName());
+				this.setToolTipText("Class name: " + ((Strategy) node).getClassName());
 			} else if (expanded) {
 
 			} else {

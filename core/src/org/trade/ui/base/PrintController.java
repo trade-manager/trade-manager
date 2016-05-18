@@ -69,7 +69,8 @@ public class PrintController {
 	 *            Component
 	 * @param printJobName
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void printComponent(Frame frame, Component comp, String printJobName) {
 		if (printJobName == null) {
@@ -77,16 +78,14 @@ public class PrintController {
 		}
 
 		if ((frame != null) && (comp != null)) {
-			PrintJob pj = Toolkit.getDefaultToolkit().getPrintJob(frame,
-					printJobName, props);
+			PrintJob pj = Toolkit.getDefaultToolkit().getPrintJob(frame, printJobName, props);
 
 			if (pj != null) {
 				Graphics g = pj.getGraphics();
 				Dimension od = comp.getSize();
 				Dimension pd = pj.getPageDimension();
 
-				g.translate((pd.width - od.width) / 2,
-						(pd.height - od.height) / 2);
+				g.translate((pd.width - od.width) / 2, (pd.height - od.height) / 2);
 
 				if (comp instanceof JFrame) {
 					comp.printAll(g);

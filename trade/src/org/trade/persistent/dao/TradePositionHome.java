@@ -58,12 +58,10 @@ public class TradePositionHome {
 	public void remove(final TradePosition transientInstance) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradePosition tradePosition = entityManager
-					.find(TradePosition.class,
-							transientInstance.getIdTradePosition());
+			TradePosition tradePosition = entityManager.find(TradePosition.class,
+					transientInstance.getIdTradePosition());
 			if (null != tradePosition) {
 				entityManager.remove(tradePosition);
 			}
@@ -87,11 +85,9 @@ public class TradePositionHome {
 	public TradePosition findById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradePosition instance = entityManager
-					.find(TradePosition.class, id);
+			TradePosition instance = entityManager.find(TradePosition.class, id);
 			if (null != instance)
 				instance.getTradeOrders().size();
 			entityManager.getTransaction().commit();

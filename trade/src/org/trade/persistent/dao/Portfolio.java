@@ -72,10 +72,8 @@ public class Portfolio extends Aspect implements Serializable, Cloneable {
 	private String description;
 	private Boolean isDefault = new Boolean(false);
 	private ZonedDateTime lastUpdateDate;
-	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
-			0);
-	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
-			0);
+	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
+	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(0);
 
 	public Portfolio() {
 		this.lastUpdateDate = TradingCalendar.getDateTimeNowMarketTimeZone();

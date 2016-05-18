@@ -130,8 +130,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 		double scaleY = scaleX;
 
 		if (scaleX < 1) {
-			setSize((float) format.getImageableWidth(),
-					(float) (componentBounds.height * scaleY));
+			setSize((float) format.getImageableWidth(), (float) (componentBounds.height * scaleY));
 			setScale(scaleX, scaleY);
 		}
 	}
@@ -143,8 +142,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 		double scaleX = scaleY;
 
 		if (scaleY < 1) {
-			setSize((float) (componentBounds.width * scaleX),
-					(float) format.getImageableHeight());
+			setSize((float) (componentBounds.width * scaleX), (float) format.getImageableHeight());
 			setScale(scaleX, scaleY);
 		}
 	}
@@ -170,8 +168,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 				}
 			}
 
-			setSize((float) (componentBounds.width * scaleX),
-					(float) (componentBounds.height * scaleY));
+			setSize((float) (componentBounds.width * scaleX), (float) (componentBounds.height * scaleY));
 			setScale(scaleX, scaleY);
 		}
 	}
@@ -189,8 +186,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 	 * @throws PrinterException
 	 * @see java.awt.print.Printable#print(Graphics, PageFormat, int)
 	 */
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-			throws PrinterException {
+	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 
 		if (pageIndex > 0) {
 			return NO_SUCH_PAGE;
@@ -219,8 +215,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 	public boolean print() throws Exception {
 		boolean showDialogs = !GraphicsEnvironment.isHeadless();
 
-		return print(PrintMode.FIT_WIDTH, null, null, showDialogs, null,
-				showDialogs, null);
+		return print(PrintMode.FIT_WIDTH, null, null, showDialogs, null, showDialogs, null);
 	}
 
 	/**
@@ -243,10 +238,9 @@ public class ComponentPrintService extends PrintPage implements Printable {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	public boolean print(PrintMode printMode, MessageFormat headerFormat,
-			MessageFormat footerFormat, boolean showPrintDialog,
-			PrintRequestAttributeSet attr, boolean interactive,
-			PrintService service) throws Exception {
+	public boolean print(PrintMode printMode, MessageFormat headerFormat, MessageFormat footerFormat,
+			boolean showPrintDialog, PrintRequestAttributeSet attr, boolean interactive, PrintService service)
+					throws Exception {
 		// complain early if an invalid parameter is specified for headless mode
 		boolean isHeadless = GraphicsEnvironment.isHeadless();
 		if (isHeadless) {
@@ -273,8 +267,7 @@ public class ComponentPrintService extends PrintPage implements Printable {
 
 		DocFlavor doc_flavor = DocFlavor.INPUT_STREAM.JPEG;
 		PrintRequestAttributeSet attr_set = new HashPrintRequestAttributeSet();
-		PrintService[] services = PrintServiceLookup.lookupPrintServices(
-				doc_flavor, attr_set);
+		PrintService[] services = PrintServiceLookup.lookupPrintServices(doc_flavor, attr_set);
 		if (services.length > 0) {
 			service = services[1];
 		}
@@ -438,20 +431,20 @@ public class ComponentPrintService extends PrintPage implements Printable {
 		 * 
 		 * 
 		 * @return PAGE_EXISTS if the page is rendered successfully, or
-		 *         NO_SUCH_PAGE if a non-existent page index is specified * @throws
-		 *         PrinterException if an error causes printing to be aborted * @see
-		 *         java.awt.print.Printable#print(Graphics, PageFormat, int)
+		 *         NO_SUCH_PAGE if a non-existent page index is specified
+		 *         * @throws PrinterException if an error causes printing to be
+		 *         aborted * @see java.awt.print.Printable#print(Graphics,
+		 *         PageFormat, int)
 		 */
-		public int print(final Graphics graphics, final PageFormat pageFormat,
-				final int pageIndex) throws PrinterException {
+		public int print(final Graphics graphics, final PageFormat pageFormat, final int pageIndex)
+				throws PrinterException {
 
 			// We'll use this Runnable
 			Runnable runnable = new Runnable() {
 				public synchronized void run() {
 					try {
 						// call into the delegate and save the return value
-						retVal = printDelegate.print(graphics, pageFormat,
-								pageIndex);
+						retVal = printDelegate.print(graphics, pageFormat, pageIndex);
 					} catch (Throwable throwable) {
 						// save any Throwable to be rethrown
 						retThrowable = throwable;

@@ -59,11 +59,8 @@ public class StrategyTableModel extends AspectTableModel {
 	private static final String CLASSNAME = "    Class Name*  ";
 	private static final String STRATEGY_MANAGER_NAME = "Strategy Mgr Name";
 
-	private static final String[] columnHeaderToolTip = {
-			"The name of the strategy",
-			null,
-			"<html>The java class name for the strategy.<br>"
-					+ "This file is stored in the strategy dir.<br>"
+	private static final String[] columnHeaderToolTip = { "The name of the strategy", null,
+			"<html>The java class name for the strategy.<br>" + "This file is stored in the strategy dir.<br>"
 					+ "Note the dir is set in the config.properties (<b>trade.strategy.default.dir</b>)</html>",
 			"The strategy manager used to managed the open position",
 			"<html>If checked then TWS Mkt data api will run.<br>"
@@ -141,10 +138,8 @@ public class StrategyTableModel extends AspectTableModel {
 		}
 		case 3: {
 			if (value instanceof DAOStrategyManager) {
-				if (!Decode.NONE.equals(((DAOStrategyManager) value)
-						.getDisplayName())) {
-					element.setStrategyManager((Strategy) ((DAOStrategyManager) value)
-							.getObject());
+				if (!Decode.NONE.equals(((DAOStrategyManager) value).getDisplayName())) {
+					element.setStrategyManager((Strategy) ((DAOStrategyManager) value).getObject());
 				} else {
 					element.setStrategyManager(null);
 				}
@@ -171,8 +166,7 @@ public class StrategyTableModel extends AspectTableModel {
 
 		String name = (String) this.getValueAt(selectedRow, 0);
 		for (final Aspect element : getData().getAspect()) {
-			if (CoreUtils.nullSafeComparator(((Strategy) element).getName(),
-					name) == 0) {
+			if (CoreUtils.nullSafeComparator(((Strategy) element).getName(), name) == 0) {
 				getData().remove(element);
 				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
@@ -208,8 +202,7 @@ public class StrategyTableModel extends AspectTableModel {
 		newRow.addElement(element.getDescription());
 		newRow.addElement(element.getClassName());
 		if (element.hasStrategyManager()) {
-			newRow.addElement(DAOStrategyManager.newInstance(element
-					.getStrategyManager().getName()));
+			newRow.addElement(DAOStrategyManager.newInstance(element.getStrategyManager().getName()));
 		} else {
 			newRow.addElement(DAOStrategyManager.newInstance(Decode.NONE));
 		}

@@ -63,8 +63,7 @@ public class MoneyFlowIndexItem extends ComparableObjectItem {
 	 * @param moneyFlowIndex
 	 *            BigDecimal
 	 */
-	public MoneyFlowIndexItem(RegularTimePeriod period,
-			BigDecimal moneyFlowIndex) {
+	public MoneyFlowIndexItem(RegularTimePeriod period, BigDecimal moneyFlowIndex) {
 		super(period, new MoneyFlowIndex(moneyFlowIndex));
 	}
 

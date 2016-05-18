@@ -96,8 +96,7 @@ public class ModelException extends NestingException {
 	 * @param gruesomeDetails
 	 *            String
 	 */
-	public ModelException(ExceptionMessage exceptionMessage,
-			String gruesomeDetails) {
+	public ModelException(ExceptionMessage exceptionMessage, String gruesomeDetails) {
 		super(exceptionMessage, gruesomeDetails);
 	}
 
@@ -111,8 +110,7 @@ public class ModelException extends NestingException {
 	 * @param t
 	 *            Throwable
 	 */
-	public ModelException(ExceptionMessage exceptionMessage,
-			String gruesomeDetails, Throwable t) {
+	public ModelException(ExceptionMessage exceptionMessage, String gruesomeDetails, Throwable t) {
 		super(exceptionMessage, gruesomeDetails, t);
 	}
 

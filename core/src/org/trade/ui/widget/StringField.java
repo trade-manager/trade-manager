@@ -67,15 +67,12 @@ public class StringField extends JFormattedTextField implements FocusListener {
 	 * @param placeHolder
 	 *            String
 	 */
-	public StringField(MaskFormatter mask, String validCharacters,
-			String placeHolder) {
+	public StringField(MaskFormatter mask, String validCharacters, String placeHolder) {
 		super(mask);
 		if (null != validCharacters)
-			((MaskFormatter) this.getFormatter())
-					.setValidCharacters(validCharacters);
+			((MaskFormatter) this.getFormatter()).setValidCharacters(validCharacters);
 		if (null != placeHolder)
-			((MaskFormatter) this.getFormatter())
-					.setPlaceholderCharacter(placeHolder.charAt(0));
+			((MaskFormatter) this.getFormatter()).setPlaceholderCharacter(placeHolder.charAt(0));
 		this.setHorizontalAlignment(SwingConstants.LEFT);
 		this.setBorder(new EmptyBorder(new Insets(2, 2, 2, 2)));
 		this.addFocusListener(this);

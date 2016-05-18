@@ -132,9 +132,8 @@ public class DOMWriter {
 	 * @throws UnsupportedEncodingException
 	 * @throws IOException
 	 */
-	public void printDocument(String encoding, boolean canonical,
-			String fileName, Node doc) throws UnsupportedEncodingException,
-			IOException {
+	public void printDocument(String encoding, boolean canonical, String fileName, Node doc)
+			throws UnsupportedEncodingException, IOException {
 		m_out = new FileWriter(fileName);
 		m_canonical = canonical;
 
@@ -203,8 +202,7 @@ public class DOMWriter {
 					Encoding = "UTF-16";
 				}
 
-				m_out.write("<?xml version=\"1.0\" encoding=\"" + Encoding
-						+ "\"?>");
+				m_out.write("<?xml version=\"1.0\" encoding=\"" + Encoding + "\"?>");
 			}
 
 			print(((Document) node).getDocumentElement());
@@ -212,7 +210,7 @@ public class DOMWriter {
 
 			break;
 		}
-		// print element with attributes
+			// print element with attributes
 		case Node.ELEMENT_NODE: {
 			m_out.write('<');
 			m_out.write(node.getNodeName());
@@ -241,7 +239,7 @@ public class DOMWriter {
 
 			break;
 		}
-		// handle entity reference nodes
+			// handle entity reference nodes
 		case Node.ENTITY_REFERENCE_NODE: {
 			if (m_canonical) {
 				NodeList children = node.getChildNodes();
@@ -261,7 +259,7 @@ public class DOMWriter {
 
 			break;
 		}
-		// print cdata sections
+			// print cdata sections
 		case Node.CDATA_SECTION_NODE: {
 			if (m_canonical) {
 				m_out.write(normalize(node.getNodeValue()));
@@ -273,13 +271,13 @@ public class DOMWriter {
 
 			break;
 		}
-		// print text
+			// print text
 		case Node.TEXT_NODE: {
 			m_out.write(normalize(node.getNodeValue()));
 
 			break;
 		}
-		// print processing instruction
+			// print processing instruction
 		case Node.PROCESSING_INSTRUCTION_NODE: {
 			m_out.write("<?");
 			m_out.write(node.getNodeName());
@@ -357,9 +355,9 @@ public class DOMWriter {
 	 * argopt.setUsage( new String[] { "usage: java dom.DOMWriter (options) uri
 	 * ...","", "options:", " -n | -N Turn on/off namespace [default=on]", " -v
 	 * | -V Turn on/off validation [default=on]", " -s | -S Turn on/off Schema
-	 * support [default=on]", " -d | -D Turn on/off deferred DOM
-	 * [default=on]", " -c Canonical XML output.", " -h This help screen.", " -e
-	 * Output Java Encoding.", " Default encoding: UTF-8"} );
+	 * support [default=on]", " -d | -D Turn on/off deferred DOM [default=on]
+	 * ", " -c Canonical XML output.", " -h This help screen.", " -e Output Java
+	 * Encoding.", " Default encoding: UTF-8"} );
 	 * 
 	 * // is there anything to do? if ( argv.length == 0 ) {
 	 * argopt.printUsage(); System.exit(1); } // vars String parserName =
@@ -438,8 +436,8 @@ public class DOMWriter {
 		return (str.toString());
 	} // normalize(String):String
 	/*
-	 * private static void printValidJavaEncoding() {
-	 * System.err.println("    ENCODINGS:"); System.err.print("   ");
+	 * private static void printValidJavaEncoding() { System.err.println(
+	 * "    ENCODINGS:"); System.err.print("   ");
 	 * 
 	 * for (int i = 0; i < MIME2JAVA_ENCODINGS.length; i++) {
 	 * System.err.print(MIME2JAVA_ENCODINGS[i] + " ");

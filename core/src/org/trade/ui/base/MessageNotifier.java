@@ -55,7 +55,8 @@ public class MessageNotifier {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public MessageNotifier() {
 		this.listeners = new EventListenerList();
@@ -71,7 +72,8 @@ public class MessageNotifier {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void add(MessageListener listener) {
 		this.listeners.add(MessageListener.class, listener);
@@ -87,7 +89,8 @@ public class MessageNotifier {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void remove(MessageListener listener) {
 		this.listeners.remove(MessageListener.class, listener);
@@ -102,7 +105,8 @@ public class MessageNotifier {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void removeAll() {
 		Object[] listenerList = this.listeners.getListenerList();
@@ -125,7 +129,8 @@ public class MessageNotifier {
 	 *            MessageEvent
 	 * @param parm
 	 *            Vector<Object>
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void notifyEvent(MessageEvent e, Vector<Object> parm) {
 		Object[] listenerList = this.listeners.getListenerList();

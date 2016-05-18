@@ -180,8 +180,7 @@ public class BaseUIPropertyCodes extends Decode {
 	public int getMnemonic() {
 		int returnValue = 0;
 
-		if ((null != getValue(BASE_UI_WIDGET_MNEMONIC))
-				&& (getValue(BASE_UI_WIDGET_MNEMONIC).length() > 0)) {
+		if ((null != getValue(BASE_UI_WIDGET_MNEMONIC)) && (getValue(BASE_UI_WIDGET_MNEMONIC).length() > 0)) {
 			returnValue = getValue(BASE_UI_WIDGET_MNEMONIC).charAt(0);
 		}
 
@@ -199,7 +198,8 @@ public class BaseUIPropertyCodes extends Decode {
 	 * @param code
 	 *            String
 	 * @return BaseUIPropertyCodes
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public static BaseUIPropertyCodes newInstance(String code) {
 		BaseUIPropertyCodes returnInstance = null;

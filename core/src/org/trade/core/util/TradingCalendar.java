@@ -65,8 +65,7 @@ public class TradingCalendar {
 	 * add i.e. -Duser.timezone=EST
 	 */
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradingCalendar.class);
+	private final static Logger _log = LoggerFactory.getLogger(TradingCalendar.class);
 
 	public static ZoneId LOCAL_TIMEZONE = null;
 	public static ZoneId MKT_TIMEZONE = null;
@@ -91,12 +90,10 @@ public class TradingCalendar {
 	static {
 		try {
 			if (null == LOCAL_TIMEZONE) {
-				String localTimeZone = ConfigProperties
-						.getPropAsString("trade.tws.timezone");
+				String localTimeZone = ConfigProperties.getPropAsString("trade.tws.timezone");
 				LOCAL_TIMEZONE = ZoneId.of(localTimeZone);
 				MKT_TIMEZONE = TimeZone.getDefault().toZoneId();
-				ZonedDateTime currentDateTime = ZonedDateTime
-						.now(LOCAL_TIMEZONE);
+				ZonedDateTime currentDateTime = ZonedDateTime.now(LOCAL_TIMEZONE);
 				currentYear = new Integer(currentDateTime.getYear());
 				currentMonth = new Integer(currentDateTime.getMonthValue());
 				currentDay = new Integer(currentDateTime.getDayOfMonth());
@@ -109,46 +106,38 @@ public class TradingCalendar {
 
 		try {
 			if (null == openHour) {
-				String open = ConfigProperties
-						.getPropAsString("trade.market.open");
-				String close = ConfigProperties
-						.getPropAsString("trade.market.close");
+				String open = ConfigProperties.getPropAsString("trade.market.open");
+				String close = ConfigProperties.getPropAsString("trade.market.close");
 				openHour = new Integer(open.substring(0, open.indexOf(":")));
-				openMinute = new Integer(open.substring(open.indexOf(":") + 1,
-						open.length()));
+				openMinute = new Integer(open.substring(open.indexOf(":") + 1, open.length()));
 				closeHour = new Integer(close.substring(0, close.indexOf(":")));
-				closeMinute = new Integer(close.substring(
-						close.indexOf(":") + 1, close.length()));
+				closeMinute = new Integer(close.substring(close.indexOf(":") + 1, close.length()));
 				/*
 				 * If the close time if before or equal to the open time assume
 				 * its the next day.
 				 */
-				if (closeHour < openHour
-						|| (closeHour == openHour && closeMinute <= openMinute)) {
+				if (closeHour < openHour || (closeHour == openHour && closeMinute <= openMinute)) {
 					closeDayOffset++;
 				}
 			}
 		} catch (IOException ex) {
-			_log.warn("Property trade.market.open/trade.market.close not set in config.properties will use default 9:30am EST");
+			_log.warn(
+					"Property trade.market.open/trade.market.close not set in config.properties will use default 9:30am EST");
 		}
 
 		try {
 			if (HOLIDAYS.isEmpty()) {
-				int year = TradingCalendar.getDateTimeNowMarketTimeZone()
-						.getYear();
-				String holidaysString = ConfigProperties
-						.getPropAsString("trade.holidays." + year);
+				int year = TradingCalendar.getDateTimeNowMarketTimeZone().getYear();
+				String holidaysString = ConfigProperties.getPropAsString("trade.holidays." + year);
 				parseHolidayIntegerCSVString(HOLIDAYS, year, holidaysString);
 			}
 
 		} catch (IOException ex) {
-			_log.warn("Property trade.holidays."
-					+ TradingCalendar.getDateTimeNowMarketTimeZone().getYear()
+			_log.warn("Property trade.holidays." + TradingCalendar.getDateTimeNowMarketTimeZone().getYear()
 					+ " not set in org/trade/core/util/config.properties");
 		}
 		try {
-			String nontradingdays = ConfigProperties
-					.getPropAsString("trade.market.nontradingdays");
+			String nontradingdays = ConfigProperties.getPropAsString("trade.market.nontradingdays");
 			StringTokenizer st = new StringTokenizer(nontradingdays, ",");
 			if (st.countTokens() > 0) {
 				NONTRADINGDAYS = new int[(st.countTokens())];
@@ -224,10 +213,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getDateTimeNowMarketTimeZone() {
-		ZonedDateTime defaultZonedDateTime = ZonedDateTime.now(TimeZone
-				.getDefault().toZoneId());
-		return defaultZonedDateTime.withZoneSameInstant(TimeZone.getDefault()
-				.toZoneId());
+		ZonedDateTime defaultZonedDateTime = ZonedDateTime.now(TimeZone.getDefault().toZoneId());
+		return defaultZonedDateTime.withZoneSameInstant(TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -238,8 +225,7 @@ public class TradingCalendar {
 	 * 
 	 * @return ZonedDateTime
 	 */
-	public static ZonedDateTime adjustDateTimeToMarketTimeZone(
-			ZonedDateTime dateTime) {
+	public static ZonedDateTime adjustDateTimeToMarketTimeZone(ZonedDateTime dateTime) {
 		return dateTime.withZoneSameInstant(TimeZone.getDefault().toZoneId());
 	}
 
@@ -251,7 +237,8 @@ public class TradingCalendar {
 	 * @param format
 	 *            String
 	 * @return String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public static String getFormattedDate(LocalDate date, String format) {
 		return date.format(DateTimeFormatter.ofPattern(format));
@@ -265,7 +252,8 @@ public class TradingCalendar {
 	 * @param format
 	 *            String
 	 * @return String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public static String getFormattedDate(LocalDateTime date, String format) {
 		return date.format(DateTimeFormatter.ofPattern(format));
@@ -279,7 +267,8 @@ public class TradingCalendar {
 	 * @param format
 	 *            String
 	 * @return String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public static String getFormattedDate(ZonedDateTime date, String format) {
 		return date.format(DateTimeFormatter.ofPattern(format));
@@ -297,10 +286,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 * @throws ParseException
 	 */
-	public static ZonedDateTime getZonedDateTimeFromDateString(String date,
-			String format, ZoneId zoneId) {
-		LocalDate localDate = LocalDate.parse(date,
-				DateTimeFormatter.ofPattern(format));
+	public static ZonedDateTime getZonedDateTimeFromDateString(String date, String format, ZoneId zoneId) {
+		LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
 		return ZonedDateTime.of(localDate, LocalTime.of(0, 0), zoneId);
 	}
 
@@ -316,10 +303,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 * @throws ParseException
 	 */
-	public static ZonedDateTime getZonedDateTimeFromDateTimeString(
-			String dateTime, String format, ZoneId zoneId) {
-		LocalDateTime localDateTime = LocalDateTime.parse(dateTime,
-				DateTimeFormatter.ofPattern(format));
+	public static ZonedDateTime getZonedDateTimeFromDateTimeString(String dateTime, String format, ZoneId zoneId) {
+		LocalDateTime localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(format));
 		return ZonedDateTime.of(localDateTime, zoneId);
 	}
 
@@ -333,12 +318,9 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 * @throws ParseException
 	 */
-	public static ZonedDateTime getZonedDateTimeFromDateTimeString(
-			String dateTime, String format) {
-		LocalDateTime localDateTime = LocalDateTime.parse(dateTime,
-				DateTimeFormatter.ofPattern(format));
-		return ZonedDateTime
-				.of(localDateTime, TimeZone.getDefault().toZoneId());
+	public static ZonedDateTime getZonedDateTimeFromDateTimeString(String dateTime, String format) {
+		LocalDateTime localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(format));
+		return ZonedDateTime.of(localDateTime, TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -351,8 +333,7 @@ public class TradingCalendar {
 	 * @return LocalDate
 	 * @throws ParseException
 	 */
-	public static LocalDate getLocalDateFromDateString(String date,
-			String format) {
+	public static LocalDate getLocalDateFromDateString(String date, String format) {
 		return LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
 	}
 
@@ -366,10 +347,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 * @throws ParseException
 	 */
-	public static LocalDateTime getLocalDateTimeFromDateTimeString(
-			String dateTime, String format) {
-		return LocalDateTime.parse(dateTime,
-				DateTimeFormatter.ofPattern(format));
+	public static LocalDateTime getLocalDateTimeFromDateTimeString(String dateTime, String format) {
+		return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(format));
 	}
 
 	/**
@@ -380,9 +359,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getTradingDayStart(ZonedDateTime date) {
-		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date
-				.getDayOfMonth(), openHour, openMinute, 0, 0, TimeZone
-				.getDefault().toZoneId());
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), openHour, openMinute, 0, 0,
+				TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -393,9 +371,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getTradingDayEnd(ZonedDateTime date) {
-		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date
-				.getDayOfMonth(), closeHour, closeMinute, 0, 0, TimeZone
-				.getDefault().toZoneId());
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), closeHour, closeMinute, 0,
+				0, TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -407,11 +384,9 @@ public class TradingCalendar {
 	 *            ZonedDateTime
 	 * @return ZonedDateTime
 	 */
-	public static ZonedDateTime getDateAtTime(ZonedDateTime date,
-			ZonedDateTime atTime) {
-		return ZonedDateTime.of(date.getYear(), date.getMonthValue(),
-				date.getDayOfMonth(), atTime.getHour(), atTime.getMinute(),
-				atTime.getSecond(), 0, TimeZone.getDefault().toZoneId());
+	public static ZonedDateTime getDateAtTime(ZonedDateTime date, ZonedDateTime atTime) {
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), atTime.getHour(),
+				atTime.getMinute(), atTime.getSecond(), 0, TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -427,11 +402,9 @@ public class TradingCalendar {
 	 *            int
 	 * @return ZonedDateTime
 	 */
-	public static ZonedDateTime getDateAtTime(ZonedDateTime date, int atHour,
-			int atMinute, int atSecond) {
-		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date
-				.getDayOfMonth(), atHour, atMinute, atSecond, 0, TimeZone
-				.getDefault().toZoneId());
+	public static ZonedDateTime getDateAtTime(ZonedDateTime date, int atHour, int atMinute, int atSecond) {
+		return ZonedDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), atHour, atMinute, atSecond,
+				0, TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -443,8 +416,7 @@ public class TradingCalendar {
 	 *            ZonedDateTime
 	 * @return ZonedDateTime
 	 */
-	public static long getDurationInSeconds(ZonedDateTime startOfPeriod,
-			ZonedDateTime endOfPeriod) {
+	public static long getDurationInSeconds(ZonedDateTime startOfPeriod, ZonedDateTime endOfPeriod) {
 		Duration duration = Duration.between(startOfPeriod, endOfPeriod);
 		return duration.getSeconds();
 	}
@@ -458,8 +430,7 @@ public class TradingCalendar {
 	 *            ZonedDateTime
 	 * @return ZonedDateTime
 	 */
-	public static long getDurationInDays(ZonedDateTime startOfPeriod,
-			ZonedDateTime endOfPeriod) {
+	public static long getDurationInDays(ZonedDateTime startOfPeriod, ZonedDateTime endOfPeriod) {
 		Duration duration = Duration.between(startOfPeriod, endOfPeriod);
 		return (duration.getSeconds() / (24 * 60 * 60));
 	}
@@ -472,9 +443,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getCurrentDayAtTime(ZonedDateTime time) {
-		return ZonedDateTime.of(currentYear, currentMonth, currentDay, time
-				.getHour(), time.getMinute(), time.getSecond(), 0, TimeZone
-				.getDefault().toZoneId());
+		return ZonedDateTime.of(currentYear, currentMonth, currentDay, time.getHour(), time.getMinute(),
+				time.getSecond(), 0, TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -483,9 +453,8 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getYearStart() {
-		return ZonedDateTime.of(TradingCalendar.getDateTimeNowMarketTimeZone()
-				.toLocalDate().with(TemporalAdjusters.firstDayOfYear())
-				.atStartOfDay(), TimeZone.getDefault().toZoneId());
+		return ZonedDateTime.of(TradingCalendar.getDateTimeNowMarketTimeZone().toLocalDate()
+				.with(TemporalAdjusters.firstDayOfYear()).atStartOfDay(), TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -513,15 +482,12 @@ public class TradingCalendar {
 	 *            ZonedDateTime
 	 * @return boolean
 	 */
-	public static boolean isMarketHours(ZonedDateTime openDate,
-			ZonedDateTime closeDate, ZonedDateTime date) {
+	public static boolean isMarketHours(ZonedDateTime openDate, ZonedDateTime closeDate, ZonedDateTime date) {
 
 		if (isTradingDay(date)) {
-			int diffDays = (int) (TradingCalendar.getDurationInDays(openDate,
-					closeDate));
-			if (TradingCalendar.between(date, TradingCalendar.getDateAtTime(
-					date, openDate), TradingCalendar.addTradingDays(
-					TradingCalendar.getDateAtTime(date, closeDate), diffDays))) {
+			int diffDays = (int) (TradingCalendar.getDurationInDays(openDate, closeDate));
+			if (TradingCalendar.between(date, TradingCalendar.getDateAtTime(date, openDate),
+					TradingCalendar.addTradingDays(TradingCalendar.getDateAtTime(date, closeDate), diffDays))) {
 				return true;
 			}
 		}
@@ -550,8 +516,7 @@ public class TradingCalendar {
 	 * @return boolean
 	 */
 	public static boolean isAfterHours(ZonedDateTime date) {
-		if (getTradingDayEnd(date).isBefore(date)
-				|| (getTradingDayEnd(date).compareTo(date) == 0)) {
+		if (getTradingDayEnd(date).isBefore(date) || (getTradingDayEnd(date).compareTo(date) == 0)) {
 			return true;
 		}
 		return false;
@@ -567,8 +532,7 @@ public class TradingCalendar {
 	 * @return boolean
 	 */
 	public static boolean sameDay(ZonedDateTime date1, ZonedDateTime date2) {
-		if (date1.getYear() == date2.getYear()
-				&& date1.getMonthValue() == date2.getMonthValue()
+		if (date1.getYear() == date2.getYear() && date1.getMonthValue() == date2.getMonthValue()
 				&& date1.getDayOfMonth() == date2.getDayOfMonth())
 			return true;
 		return false;
@@ -581,8 +545,7 @@ public class TradingCalendar {
 	 */
 	public static ZonedDateTime getCurrentTradingDay() {
 		ZonedDateTime currTradingDay = TradingCalendar
-				.getTradingDayStart(TradingCalendar
-						.getDateTimeNowMarketTimeZone());
+				.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone());
 		while (!TradingCalendar.isTradingDay(currTradingDay)) {
 			currTradingDay = currTradingDay.minusDays(1);
 		}
@@ -597,8 +560,7 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getPrevTradingDay(ZonedDateTime input) {
-		ZonedDateTime prevTradingDay = TradingCalendar
-				.getTradingDayStart(input);
+		ZonedDateTime prevTradingDay = TradingCalendar.getTradingDayStart(input);
 		prevTradingDay = prevTradingDay.minusDays(1);
 		while (!TradingCalendar.isTradingDay(prevTradingDay)) {
 			prevTradingDay = prevTradingDay.minusDays(1);
@@ -614,8 +576,7 @@ public class TradingCalendar {
 	 * @return ZonedDateTime
 	 */
 	public static ZonedDateTime getNextTradingDay(ZonedDateTime input) {
-		ZonedDateTime nextTradingday = TradingCalendar
-				.getTradingDayStart(input);
+		ZonedDateTime nextTradingday = TradingCalendar.getTradingDayStart(input);
 		nextTradingday = nextTradingday.plusDays(1);
 
 		while (!TradingCalendar.isTradingDay(nextTradingday)) {
@@ -657,10 +618,8 @@ public class TradingCalendar {
 	 * 
 	 * @return boolean
 	 */
-	public static boolean between(ZonedDateTime date, ZonedDateTime openDate,
-			ZonedDateTime closeDate) {
-		if ((date.isAfter(openDate) || date.equals(openDate))
-				&& (date.isBefore(closeDate)))
+	public static boolean between(ZonedDateTime date, ZonedDateTime openDate, ZonedDateTime closeDate) {
+		if ((date.isAfter(openDate) || date.equals(openDate)) && (date.isBefore(closeDate)))
 			return true;
 		return false;
 	}
@@ -675,8 +634,7 @@ public class TradingCalendar {
 	 */
 	public static ZonedDateTime getZonedDateTimeFromMilli(long millis) {
 		Instant instant = Instant.ofEpochMilli(millis);
-		return ZonedDateTime.ofInstant(instant, TimeZone.getDefault()
-				.toZoneId());
+		return ZonedDateTime.ofInstant(instant, TimeZone.getDefault().toZoneId());
 	}
 
 	/**
@@ -719,8 +677,7 @@ public class TradingCalendar {
 	 * @return java.util.Date
 	 */
 
-	public static java.util.Date convertTimeZone(java.util.Date date,
-			TimeZone fromTZ, TimeZone toTZ) {
+	public static java.util.Date convertTimeZone(java.util.Date date, TimeZone fromTZ, TimeZone toTZ) {
 		long fromTZDst = 0;
 		if (fromTZ.inDaylightTime(date)) {
 			fromTZDst = fromTZ.getDSTSavings();
@@ -745,8 +702,7 @@ public class TradingCalendar {
 	 * @param HOLIDAYS
 	 *            HashMap<Integer, int[]>
 	 */
-	private static void parseHolidayIntegerCSVString(
-			HashMap<Integer, int[]> HOLIDAYS, Integer year, String csvString) {
+	private static void parseHolidayIntegerCSVString(HashMap<Integer, int[]> HOLIDAYS, Integer year, String csvString) {
 		StringTokenizer st = new StringTokenizer(csvString, ",");
 		if (st.countTokens() > 0) {
 			int[] dates = new int[(st.countTokens())];

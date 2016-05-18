@@ -78,8 +78,7 @@ public class PercentRenderer extends DefaultTableCellRenderer {
 				if (null == ((Percent) value).getBigDecimalValue()) {
 					setText(value.toString());
 				} else {
-					setText(m_formater.format(((Percent) value)
-							.getBigDecimalValue()));
+					setText(m_formater.format(((Percent) value).getBigDecimalValue()));
 				}
 			} else {
 				setText(value.toString());
@@ -106,14 +105,12 @@ public class PercentRenderer extends DefaultTableCellRenderer {
 	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
 	 *      Object, boolean, boolean, int, int)
 	 */
-	public synchronized Component getTableCellRendererComponent(JTable table,
-			Object object, boolean isSelected, boolean hasFocus, int row,
-			int column) {
+	public synchronized Component getTableCellRendererComponent(JTable table, Object object, boolean isSelected,
+			boolean hasFocus, int row, int column) {
 
 		synchronized (object) {
 			setBackground(null);
-			super.getTableCellRendererComponent(table, object, isSelected,
-					hasFocus, row, column);
+			super.getTableCellRendererComponent(table, object, isSelected, hasFocus, row, column);
 			Percent percent = (Percent) object;
 			if (row > -1) {
 				if (!isSelected) {

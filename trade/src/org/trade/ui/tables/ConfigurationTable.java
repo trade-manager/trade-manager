@@ -79,59 +79,46 @@ public class ConfigurationTable extends Table {
 	public ConfigurationTable(TableModel model) throws ValueTypeException {
 		super(model);
 		DecodeTableEditor currencyEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Currency()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Currency()).getCodesDecodes()));
 		DecodeTableEditor accountTypeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new AccountType()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new AccountType()).getCodesDecodes()));
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(TradingCalendar
-						.getDateTimeNowMarketTimeZone()),
-				DATETIMEFORMAT, Calendar.MINUTE);
+				new org.trade.core.valuetype.Date(TradingCalendar.getDateTimeNowMarketTimeZone()), DATETIMEFORMAT,
+				Calendar.MINUTE);
 		DecodeTableEditor dataTypeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new DataType()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new DataType()).getCodesDecodes()));
 
 		JComboBox<Decode> indicatorComboBoxEditor = new JComboBox<Decode>(
 				(Vector<Decode>) (new IndicatorSeries()).getCodesDecodes());
 		ListCellRenderer<Object> indicatorRenderer = new DefaultListCellRenderer() {
 			private static final long serialVersionUID = -3146015541332720784L;
 
-			public Component getListCellRendererComponent(JList<?> list,
-					Object value, int index, boolean isSelected,
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				if (value instanceof Decode) {
-					String indicatorName = ((Decode) value).getCode()
-							.substring(
-									0,
-									((Decode) value).getCode()
-											.indexOf("Series"));
+					String indicatorName = ((Decode) value).getCode().substring(0,
+							((Decode) value).getCode().indexOf("Series"));
 					setToolTipText(indicatorName);
 					value = ((Decode) value).getDisplayName();
 				} else {
 					setToolTipText(null);
 				}
-				return super.getListCellRendererComponent(list, value, index,
-						isSelected, cellHasFocus);
+				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			}
 		};
 		indicatorComboBoxEditor.setRenderer(indicatorRenderer);
-		DecodeTableEditor indicatorSeriesEditor = new DecodeTableEditor(
-				indicatorComboBoxEditor);
+		DecodeTableEditor indicatorSeriesEditor = new DecodeTableEditor(indicatorComboBoxEditor);
 
 		JComboBox<Decode> strategyManagerComboBox = new JComboBox<Decode>(
 				(Vector<Decode>) (new DAOStrategyManager()).getCodesDecodes());
-		DecodeTableEditor dAOStrategyManagerEditor = new DecodeTableEditor(
-				strategyManagerComboBox);
+		DecodeTableEditor dAOStrategyManagerEditor = new DecodeTableEditor(strategyManagerComboBox);
 		JComboBox<Decode> daoAccountComboBox = new JComboBox<Decode>(
 				(Vector<Decode>) (new DAOAccount()).getCodesDecodes());
-		DecodeTableEditor dAOAccountEditor = new DecodeTableEditor(
-				daoAccountComboBox);
+		DecodeTableEditor dAOAccountEditor = new DecodeTableEditor(daoAccountComboBox);
 		JComboBox<Decode> allocationMethodComboBox = new JComboBox<Decode>(
 				(Vector<Decode>) (new AllocationMethod()).getCodesDecodes());
-		DecodeTableEditor allocationMethodEditor = new DecodeTableEditor(
-				allocationMethodComboBox);
+		DecodeTableEditor allocationMethodEditor = new DecodeTableEditor(allocationMethodComboBox);
 		this.setDefaultEditor(Currency.class, currencyEditor);
 		this.setDefaultEditor(AllocationMethod.class, allocationMethodEditor);
 		this.setDefaultEditor(AccountType.class, accountTypeEditor);
@@ -139,8 +126,7 @@ public class ConfigurationTable extends Table {
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setDefaultEditor(DataType.class, dataTypeEditor);
 		this.setDefaultEditor(IndicatorSeries.class, indicatorSeriesEditor);
-		this.setDefaultEditor(DAOStrategyManager.class,
-				dAOStrategyManagerEditor);
+		this.setDefaultEditor(DAOStrategyManager.class, dAOStrategyManagerEditor);
 		this.setDefaultEditor(DAOAccount.class, dAOAccountEditor);
 	}
 }

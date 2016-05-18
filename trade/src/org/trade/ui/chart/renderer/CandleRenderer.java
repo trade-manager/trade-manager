@@ -71,8 +71,7 @@ public class CandleRenderer extends CandlestickRenderer {
 	 */
 	private static final long serialVersionUID = -6761905072507196822L;
 
-	private final DateFormat TOOLTIP_DATE_FORMAT = new SimpleDateFormat(
-			"H:mma MM/dd/yy");
+	private final DateFormat TOOLTIP_DATE_FORMAT = new SimpleDateFormat("H:mma MM/dd/yy");
 	public boolean nightMode = false;
 	private double margin = 0.25;
 
@@ -99,8 +98,7 @@ public class CandleRenderer extends CandlestickRenderer {
 
 	private void configureToolTips() {
 		setBaseToolTipGenerator(new XYToolTipGenerator() {
-			public String generateToolTip(XYDataset dataset, int series,
-					int item) {
+			public String generateToolTip(XYDataset dataset, int series, int item) {
 				StringBuilder result = new StringBuilder("<html>");
 				if (dataset instanceof CandleDataset) {
 					CandleDataset d = (CandleDataset) dataset;
@@ -111,27 +109,13 @@ public class CandleRenderer extends CandlestickRenderer {
 					Number close = d.getClose(series, item);
 					Number vwap = d.getVwap(series, item);
 					Number volume = d.getVolume(series, item);
-					result.append("<b>Open:</b> ")
-							.append(new Money(open.doubleValue()))
-							.append("<br/>");
-					result.append("<b>High:</b> ")
-							.append(new Money(high.doubleValue()))
-							.append("<br/>");
-					result.append("<b>Low:</b> ")
-							.append(new Money(low.doubleValue()))
-							.append("<br/>");
-					result.append("<b>Close:</b> ")
-							.append(new Money(close.doubleValue()))
-							.append("<br/>");
-					result.append("<b>Vwap:</b> ")
-							.append(new Money(vwap.doubleValue()))
-							.append("<br/>");
-					result.append("<b>Volume:</b> ")
-							.append(new Quantity(volume.intValue()))
-							.append("<br/>");
-					result.append("<b>Date:</b> ")
-							.append(TOOLTIP_DATE_FORMAT.format(time))
-							.append("<br/>");
+					result.append("<b>Open:</b> ").append(new Money(open.doubleValue())).append("<br/>");
+					result.append("<b>High:</b> ").append(new Money(high.doubleValue())).append("<br/>");
+					result.append("<b>Low:</b> ").append(new Money(low.doubleValue())).append("<br/>");
+					result.append("<b>Close:</b> ").append(new Money(close.doubleValue())).append("<br/>");
+					result.append("<b>Vwap:</b> ").append(new Money(vwap.doubleValue())).append("<br/>");
+					result.append("<b>Volume:</b> ").append(new Quantity(volume.intValue())).append("<br/>");
+					result.append("<b>Date:</b> ").append(TOOLTIP_DATE_FORMAT.format(time)).append("<br/>");
 				}
 				return result.toString();
 			}
@@ -169,10 +153,9 @@ public class CandleRenderer extends CandlestickRenderer {
 	 *      XYItemRendererState, Rectangle2D, PlotRenderingInfo, XYPlot,
 	 *      ValueAxis, ValueAxis, XYDataset, int, int, CrosshairState, int)
 	 */
-	public void drawItem(Graphics2D g2, XYItemRendererState state,
-			Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-			ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-			int series, int item, CrosshairState crosshairState, int pass) {
+	public void drawItem(Graphics2D g2, XYItemRendererState state, Rectangle2D dataArea, PlotRenderingInfo info,
+			XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+			CrosshairState crosshairState, int pass) {
 
 		if (dataset instanceof OHLCVwapDataset) {
 
@@ -183,8 +166,7 @@ public class CandleRenderer extends CandlestickRenderer {
 			}
 
 			CandleDataset candleDataset = (CandleDataset) dataset;
-			CandleItem candle = (CandleItem) candleDataset.getSeries(series)
-					.getDataItem(item);
+			CandleItem candle = (CandleItem) candleDataset.getSeries(series).getDataItem(item);
 
 			double startX = candle.getPeriod().getFirstMillisecond();
 			if (Double.isNaN(startX)) {
@@ -206,13 +188,10 @@ public class CandleRenderer extends CandlestickRenderer {
 			}
 
 			RectangleEdge location = plot.getDomainAxisEdge();
-			double translatedStartX = domainAxis.valueToJava2D(startX,
-					dataArea, location);
-			double translatedEndX = domainAxis.valueToJava2D(endX, dataArea,
-					location);
+			double translatedStartX = domainAxis.valueToJava2D(startX, dataArea, location);
+			double translatedEndX = domainAxis.valueToJava2D(endX, dataArea, location);
 
-			double translatedWidth = Math.max(1,
-					Math.abs(translatedEndX - translatedStartX));
+			double translatedWidth = Math.max(1, Math.abs(translatedEndX - translatedStartX));
 
 			if (getMargin() > 0.0) {
 				double cut = translatedWidth * getMargin();
@@ -252,8 +231,7 @@ public class CandleRenderer extends CandlestickRenderer {
 
 			if (yHigh > maxOpenClose) {
 				if (highlight) {
-					body = new Rectangle2D.Double(xx - (translatedWidth / 2),
-							yyHigh - 10, translatedWidth,
+					body = new Rectangle2D.Double(xx - (translatedWidth / 2), yyHigh - 10, translatedWidth,
 							(yyMaxOpenClose - yyHigh) + 10);
 					g2.setPaint(Color.YELLOW);
 					g2.fill(body);
@@ -280,8 +258,7 @@ public class CandleRenderer extends CandlestickRenderer {
 			 **********************************/
 			if (yLow < minOpenClose) {
 				if (highlight) {
-					body = new Rectangle2D.Double(xx - (translatedWidth / 2),
-							yyMinOpenClose, translatedWidth,
+					body = new Rectangle2D.Double(xx - (translatedWidth / 2), yyMinOpenClose, translatedWidth,
 							(yyLow - yyMinOpenClose) + 10);
 					g2.setPaint(Color.YELLOW);
 					g2.fill(body);
@@ -305,9 +282,8 @@ public class CandleRenderer extends CandlestickRenderer {
 			 * draw the body
 			 **********************************/
 
-			body = new Rectangle2D.Double(xx - (translatedWidth / 2),
-					yyMinOpenClose, translatedWidth, yyMaxOpenClose
-							- yyMinOpenClose);
+			body = new Rectangle2D.Double(xx - (translatedWidth / 2), yyMinOpenClose, translatedWidth,
+					yyMaxOpenClose - yyMinOpenClose);
 
 			if (nightMode) {
 				g2.setPaint(Color.white);
@@ -340,8 +316,7 @@ public class CandleRenderer extends CandlestickRenderer {
 					tip = generator.generateToolTip(dataset, series, item);
 				}
 
-				XYItemEntity entity = new XYItemEntity(body, dataset, series,
-						item, tip, null);
+				XYItemEntity entity = new XYItemEntity(body, dataset, series, item, tip, null);
 
 				entities.add(entity);
 			}
@@ -350,12 +325,11 @@ public class CandleRenderer extends CandlestickRenderer {
 			double x1 = dataset.getXValue(series, item);
 			double y1 = dataset.getYValue(series, item);
 			double transX1 = domainAxis.valueToJava2D(x1, dataArea, location);
-			double transY1 = rangeAxis.valueToJava2D(y1, dataArea,
-					plot.getRangeAxisEdge());
+			double transY1 = rangeAxis.valueToJava2D(y1, dataArea, plot.getRangeAxisEdge());
 			int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
 			int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
-			updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
-					rangeAxisIndex, transX1, transY1, plot.getOrientation());
+			updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex, rangeAxisIndex, transX1, transY1,
+					plot.getOrientation());
 		}
 	}
 

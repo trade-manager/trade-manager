@@ -53,8 +53,8 @@ import org.trade.strategy.data.stochasticoscillator.StochasticOscillatorItem;
 
 /**
  */
-public class StochasticOscillatorDataset extends AbstractXYDataset implements
-		IndicatorDataset, IStochasticOscillatorDataset, Serializable {
+public class StochasticOscillatorDataset extends AbstractXYDataset
+		implements IndicatorDataset, IStochasticOscillatorDataset, Serializable {
 
 	/**
 	 * 
@@ -261,10 +261,8 @@ public class StochasticOscillatorDataset extends AbstractXYDataset implements
 	 * @see org.jfree.data.xy.XYDataset#getXValue(int, int)
 	 */
 	public double getXValue(int series, int item) {
-		StochasticOscillatorSeries s = (StochasticOscillatorSeries) this.data
-				.get(series);
-		StochasticOscillatorItem di = (StochasticOscillatorItem) s
-				.getDataItem(item);
+		StochasticOscillatorSeries s = (StochasticOscillatorSeries) this.data.get(series);
+		StochasticOscillatorItem di = (StochasticOscillatorItem) s.getDataItem(item);
 		RegularTimePeriod period = di.getPeriod();
 		return getX(period);
 	}
@@ -297,10 +295,8 @@ public class StochasticOscillatorDataset extends AbstractXYDataset implements
 	 * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
-		StochasticOscillatorSeries s = (StochasticOscillatorSeries) this.data
-				.get(series);
-		StochasticOscillatorItem di = (StochasticOscillatorItem) s
-				.getDataItem(item);
+		StochasticOscillatorSeries s = (StochasticOscillatorSeries) this.data.get(series);
+		StochasticOscillatorItem di = (StochasticOscillatorItem) s.getDataItem(item);
 		return new Double(di.getY());
 	}
 
@@ -317,10 +313,8 @@ public class StochasticOscillatorDataset extends AbstractXYDataset implements
 	 *      #getStochasticOscillatorValue(int, int)
 	 */
 	public double getStochasticOscillatorValue(int series, int item) {
-		StochasticOscillatorSeries s = (StochasticOscillatorSeries) this.data
-				.get(series);
-		StochasticOscillatorItem di = (StochasticOscillatorItem) s
-				.getDataItem(item);
+		StochasticOscillatorSeries s = (StochasticOscillatorSeries) this.data.get(series);
+		StochasticOscillatorItem di = (StochasticOscillatorItem) s.getDataItem(item);
 		return di.getStochasticOscillator();
 	}
 
@@ -371,10 +365,8 @@ public class StochasticOscillatorDataset extends AbstractXYDataset implements
 	 */
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
-		StochasticOscillatorDataset clone = (StochasticOscillatorDataset) super
-				.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		StochasticOscillatorDataset clone = (StochasticOscillatorDataset) super.clone();
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -390,16 +382,15 @@ public class StochasticOscillatorDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			StochasticOscillatorSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

@@ -71,8 +71,8 @@ public class IdentityService {
 		}
 
 		if (null == m_localHost) {
-			throw new IdentityServiceException("Unable to resolve hostname.  "
-					+ "Is your networking configured Properly?");
+			throw new IdentityServiceException(
+					"Unable to resolve hostname.  " + "Is your networking configured Properly?");
 		}
 
 		String hostName;
@@ -82,8 +82,7 @@ public class IdentityService {
 		// Construct the identity and return it.
 		String identity;
 
-		identity = "AT-" + date.toString() + "-" + hostName + "-"
-				+ hostUniqueId.toString();
+		identity = "AT-" + date.toString() + "-" + hostName + "-" + hostUniqueId.toString();
 
 		return (identity);
 	}

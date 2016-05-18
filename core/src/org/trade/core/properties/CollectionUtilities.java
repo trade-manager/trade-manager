@@ -91,8 +91,7 @@ public class CollectionUtilities {
 
 		// try relative to java.home
 		try {
-			File file = new File(System.getProperty("java.home")
-					+ File.separator + filepath);
+			File file = new File(System.getProperty("java.home") + File.separator + filepath);
 
 			bis = new BufferedInputStream(new FileInputStream(file));
 			rval = new Properties();
@@ -112,8 +111,7 @@ public class CollectionUtilities {
 			}
 		}
 
-		throw new FileNotFoundException("Property file " + filepath
-				+ " not found");
+		throw new FileNotFoundException("Property file " + filepath + " not found");
 	}
 
 	/**
@@ -125,8 +123,11 @@ public class CollectionUtilities {
 	 *            Properties
 	 * @throws IOException
 	 */
-	public static void write(String filepath, Properties theProperties)
-			throws IOException { // put filepath as a comment
+	public static void write(String filepath, Properties theProperties) throws IOException { // put
+																								// filepath
+																								// as
+																								// a
+																								// comment
 		write(filepath, theProperties, filepath);
 	}
 
@@ -141,8 +142,7 @@ public class CollectionUtilities {
 	 *            String
 	 * @throws IOException
 	 */
-	public static void write(String filepath, Properties theProperties,
-			String propComments) throws IOException {
+	public static void write(String filepath, Properties theProperties, String propComments) throws IOException {
 		BufferedOutputStream bos = null;
 
 		try {
@@ -169,8 +169,7 @@ public class CollectionUtilities {
 	 *            Properties
 	 * @throws MissingPropertiesException
 	 */
-	public static void checkProperties(String[] myKeys, Properties p)
-			throws MissingPropertiesException {
+	public static void checkProperties(String[] myKeys, Properties p) throws MissingPropertiesException {
 		if ((myKeys == null) || (p == null)) {
 			return;
 		}
@@ -209,12 +208,10 @@ public class CollectionUtilities {
 	 * @param result
 	 *            Dictionary<String,Object>
 	 */
-	public static void getSubset(Dictionary<String, Object> superset,
-			String tag, Dictionary<String, Object> result) {
+	public static void getSubset(Dictionary<String, Object> superset, String tag, Dictionary<String, Object> result) {
 		if ((result == null) || (tag == null) || (superset == null)) {
 			throw new IllegalArgumentException(
-					"Invalid arguments specified : superset = " + superset
-							+ " tag = " + tag + " result = " + result);
+					"Invalid arguments specified : superset = " + superset + " tag = " + tag + " result = " + result);
 		}
 
 		String key;
@@ -244,12 +241,10 @@ public class CollectionUtilities {
 	 * @param destination
 	 *            Dictionary<Object,Object>
 	 */
-	public static void copyOverwrite(Dictionary<Object, Object> source,
-			Dictionary<Object, Object> destination) {
+	public static void copyOverwrite(Dictionary<Object, Object> source, Dictionary<Object, Object> destination) {
 		if ((destination == null) || (source == null)) {
 			throw new IllegalArgumentException(
-					"Invalid arguments specified : source = " + source
-							+ " destination = " + destination);
+					"Invalid arguments specified : source = " + source + " destination = " + destination);
 		}
 
 		Object key;

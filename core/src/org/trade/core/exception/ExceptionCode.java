@@ -102,8 +102,7 @@ public class ExceptionCode implements java.io.Serializable {
 		if (null == m_fieldRef) {
 			newExceptionCode = this; // Okay because this class is immutable.
 		} else {
-			newExceptionCode = new ExceptionCode(m_code, m_fieldRef
-					+ FIELD_SEQUENCE_SEPARATOR + sequence);
+			newExceptionCode = new ExceptionCode(m_code, m_fieldRef + FIELD_SEQUENCE_SEPARATOR + sequence);
 		}
 
 		return newExceptionCode;

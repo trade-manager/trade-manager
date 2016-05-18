@@ -53,8 +53,7 @@ import org.trade.ui.chart.renderer.MACDItemRenderer;
 
 /**
  */
-public class MACDDataset extends AbstractXYDataset implements IndicatorDataset,
-		IMACDDataset, Serializable {
+public class MACDDataset extends AbstractXYDataset implements IndicatorDataset, IMACDDataset, Serializable {
 
 	/**
 	 * 
@@ -369,8 +368,7 @@ public class MACDDataset extends AbstractXYDataset implements IndicatorDataset,
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		MACDDataset clone = (MACDDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -386,16 +384,15 @@ public class MACDDataset extends AbstractXYDataset implements IndicatorDataset,
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			MACDSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

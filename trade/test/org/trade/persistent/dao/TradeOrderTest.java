@@ -71,8 +71,7 @@ import com.ib.client.Execution;
  */
 public class TradeOrderTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradeOrderTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(TradeOrderTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -141,15 +140,11 @@ public class TradeOrderTest {
 			double stop = 0.20;
 			BigDecimal price = new BigDecimal(20);
 			int quantity = (int) ((int) risk / stop);
-			ZonedDateTime createDate = this.tradestrategy.getTradingday()
-					.getOpen().plusMinutes(5);
+			ZonedDateTime createDate = this.tradestrategy.getTradingday().getOpen().plusMinutes(5);
 
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, action,
-					OrderType.STPLMT, quantity, price,
-					price.add(new BigDecimal(0.004)),
-					TradingCalendar.getDateTimeNowMarketTimeZone());
-			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, action, OrderType.STPLMT, quantity, price,
+					price.add(new BigDecimal(0.004)), TradingCalendar.getDateTimeNowMarketTimeZone());
+			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setTransmit(true);
 			tradeOrder.setStatus("SUBMITTED");
@@ -158,13 +153,11 @@ public class TradeOrderTest {
 			assertNotNull("1", tradeOrder);
 			_log.info("IdOrder: " + tradeOrder.getIdTradeOrder());
 
-			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.STP, quantity,
+			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, Action.SELL, OrderType.STP, quantity,
 					price.subtract(new BigDecimal(1)), null, createDate);
 
 			tradeOrder1.setAuxPrice(price.subtract(new BigDecimal(1)));
-			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			tradeOrder1.setClientId(clientId);
 			tradeOrder1.setTransmit(true);
 			tradeOrder1.setStatus("SUBMITTED");
@@ -172,8 +165,7 @@ public class TradeOrderTest {
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 			assertNotNull("2", tradeOrder1);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -194,13 +186,11 @@ public class TradeOrderTest {
 			double stop = 0.20;
 			BigDecimal price = new BigDecimal(20);
 			int quantity = (int) ((int) risk / stop);
-			ZonedDateTime createDate = this.tradestrategy.getTradingday()
-					.getOpen().plusMinutes(5);
+			ZonedDateTime createDate = this.tradestrategy.getTradingday().getOpen().plusMinutes(5);
 
-			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, action,
-					OrderType.STPLMT, quantity, price, price, createDate);
-			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, action, OrderType.STPLMT, quantity, price,
+					price, createDate);
+			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			tradeOrder1.setClientId(clientId);
 			tradeOrder1.setOcaGroupName("");
 			tradeOrder1.setTransmit(true);
@@ -216,50 +206,38 @@ public class TradeOrderTest {
 				buySellMultiplier = -1;
 			}
 
-			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy, action,
-					OrderType.LMT, quantity / 2, null,
-					price.add(new BigDecimal((stop * 3) * buySellMultiplier)),
-					createDate);
+			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy, action, OrderType.LMT, quantity / 2, null,
+					price.add(new BigDecimal((stop * 3) * buySellMultiplier)), createDate);
 
 			tradeOrder2.setClientId(clientId);
-			tradeOrder2.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			tradeOrder2.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			tradeOrder2.setOcaType(2);
-			tradeOrder2.setOcaGroupName(this.tradestrategy.getIdTradeStrategy()
-					+ "q1w2e3");
+			tradeOrder2.setOcaGroupName(this.tradestrategy.getIdTradeStrategy() + "q1w2e3");
 			tradeOrder2.setTransmit(true);
 			tradeOrder2.setStatus("SUBMITTED");
 			tradeOrder2.validate();
 			tradeOrder2 = tradeOrderHome.persist(tradeOrder2);
 
-			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy, action,
-					OrderType.LMT, quantity / 2, null,
-					price.add(new BigDecimal((stop * 4) * buySellMultiplier)),
-					createDate);
+			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy, action, OrderType.LMT, quantity / 2, null,
+					price.add(new BigDecimal((stop * 4) * buySellMultiplier)), createDate);
 
 			tradeOrder3.setClientId(clientId);
-			tradeOrder3.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			tradeOrder3.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			tradeOrder3.setOcaType(2);
-			tradeOrder3.setOcaGroupName(this.tradestrategy.getIdTradeStrategy()
-					+ "q1w2e3");
+			tradeOrder3.setOcaGroupName(this.tradestrategy.getIdTradeStrategy() + "q1w2e3");
 			tradeOrder3.setTransmit(true);
 			tradeOrder3.setStatus("SUBMITTED");
 			tradeOrder3.validate();
 			tradeOrder3 = tradeOrderHome.persist(tradeOrder3);
 
-			TradeOrder tradeOrder4 = new TradeOrder(this.tradestrategy, action,
-					OrderType.STP, quantity, price.add(new BigDecimal(stop
-							* buySellMultiplier * -1)), null, createDate);
+			TradeOrder tradeOrder4 = new TradeOrder(this.tradestrategy, action, OrderType.STP, quantity,
+					price.add(new BigDecimal(stop * buySellMultiplier * -1)), null, createDate);
 			tradeOrder4.setLimitPrice(new BigDecimal(0));
-			tradeOrder4.setAuxPrice(price.add(new BigDecimal(stop
-					* buySellMultiplier * -1)));
+			tradeOrder4.setAuxPrice(price.add(new BigDecimal(stop * buySellMultiplier * -1)));
 			tradeOrder4.setClientId(clientId);
-			tradeOrder4.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			tradeOrder4.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			tradeOrder4.setOcaType(2);
-			tradeOrder4.setOcaGroupName(this.tradestrategy.getIdTradeStrategy()
-					+ "q1w2e3");
+			tradeOrder4.setOcaGroupName(this.tradestrategy.getIdTradeStrategy() + "q1w2e3");
 			tradeOrder4.setTransmit(true);
 			tradeOrder4.setStatus("SUBMITTED");
 			tradeOrder4.validate();
@@ -267,8 +245,7 @@ public class TradeOrderTest {
 
 			_log.info("IdOrder: " + tradeOrder1.getIdTradeOrder());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -284,61 +261,42 @@ public class TradeOrderTest {
 
 			for (TradeOrder tradeOrder : this.tradestrategy.getTradeOrders()) {
 
-				tradeOrder = tradeOrderHome.findTradeOrderByKey(tradeOrder
-						.getOrderKey());
+				tradeOrder = tradeOrderHome.findTradeOrderByKey(tradeOrder.getOrderKey());
 				minute = minute + 3;
-				ZonedDateTime filledDate = this.tradestrategy.getTradingday()
-						.getOpen().plusMinutes(minute);
+				ZonedDateTime filledDate = this.tradestrategy.getTradingday().getOpen().plusMinutes(minute);
 				if (tradeOrder.getIsOpenPosition()) {
 
-					TradeOrderfill orderfill = new TradeOrderfill(tradeOrder,
-							"Paper", tradeOrder.getLimitPrice(),
-							tradeOrder.getQuantity() / 2, "ISLAND", "1234",
-							tradeOrder.getLimitPrice(),
-							tradeOrder.getQuantity() / 2,
-							this.tradestrategy.getSide(), filledDate);
+					TradeOrderfill orderfill = new TradeOrderfill(tradeOrder, "Paper", tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2, "ISLAND", "1234", tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2, this.tradestrategy.getSide(), filledDate);
 
 					tradeOrder.addTradeOrderfill(orderfill);
 
-					TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrder,
-							"Paper", tradeOrder.getLimitPrice(),
-							tradeOrder.getQuantity() / 2, "ISLAND", "12345",
-							tradeOrder.getLimitPrice(),
-							tradeOrder.getQuantity() / 2,
-							this.tradestrategy.getSide(),
-							filledDate.plusMinutes(3));
+					TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrder, "Paper", tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2, "ISLAND", "12345", tradeOrder.getLimitPrice(),
+							tradeOrder.getQuantity() / 2, this.tradestrategy.getSide(), filledDate.plusMinutes(3));
 					tradeOrder.addTradeOrderfill(orderfill1);
 					tradeOrder.setIsFilled(true);
 					tradeOrder.setFilledQuantity(tradeOrder.getQuantity());
 					tradeOrder.setStatus("FILLED");
 					tradeOrder.setFilledDate(filledDate.plusMinutes(3));
-					tradeOrder
-							.setAverageFilledPrice(tradeOrder.getLimitPrice());
-					tradeOrder.setCommission(new BigDecimal(tradeOrder
-							.getQuantity() * 0.005));
+					tradeOrder.setAverageFilledPrice(tradeOrder.getLimitPrice());
+					tradeOrder.setCommission(new BigDecimal(tradeOrder.getQuantity() * 0.005));
 
 				} else {
 					if (stopped) {
 						if (OrderType.STP.equals(tradeOrder.getOrderType())) {
 
-							TradeOrderfill orderfill = new TradeOrderfill(
-									tradeOrder, "Paper",
-									tradeOrder.getAuxPrice(),
-									tradeOrder.getQuantity(), "ISLAND",
-									"12345", tradeOrder.getAuxPrice(),
-									tradeOrder.getQuantity(),
-									this.tradestrategy.getSide(),
-									filledDate.plusMinutes(5));
+							TradeOrderfill orderfill = new TradeOrderfill(tradeOrder, "Paper", tradeOrder.getAuxPrice(),
+									tradeOrder.getQuantity(), "ISLAND", "12345", tradeOrder.getAuxPrice(),
+									tradeOrder.getQuantity(), this.tradestrategy.getSide(), filledDate.plusMinutes(5));
 							tradeOrder.addTradeOrderfill(orderfill);
 							tradeOrder.setIsFilled(true);
 							tradeOrder.setStatus(OrderStatus.FILLED);
-							tradeOrder.setAverageFilledPrice(tradeOrder
-									.getAuxPrice());
+							tradeOrder.setAverageFilledPrice(tradeOrder.getAuxPrice());
 							tradeOrder.setFilledDate(filledDate.plusMinutes(5));
-							tradeOrder.setCommission(new BigDecimal(tradeOrder
-									.getQuantity() * 0.005));
-							tradeOrder.setFilledQuantity(tradeOrder
-									.getQuantity());
+							tradeOrder.setCommission(new BigDecimal(tradeOrder.getQuantity() * 0.005));
+							tradeOrder.setFilledQuantity(tradeOrder.getQuantity());
 
 						} else {
 							tradeOrder.setStatus(OrderStatus.CANCELLED);
@@ -346,35 +304,23 @@ public class TradeOrderTest {
 					} else {
 						if (OrderType.LMT.equals(tradeOrder.getOrderType())) {
 
-							TradeOrderfill orderfill = new TradeOrderfill(
-									tradeOrder, "Paper",
-									tradeOrder.getLimitPrice(),
-									tradeOrder.getQuantity() / 2, "ISLAND",
-									"12345", tradeOrder.getLimitPrice(),
-									tradeOrder.getQuantity() / 2,
-									this.tradestrategy.getSide(),
-									filledDate.plusMinutes(5));
+							TradeOrderfill orderfill = new TradeOrderfill(tradeOrder, "Paper",
+									tradeOrder.getLimitPrice(), tradeOrder.getQuantity() / 2, "ISLAND", "12345",
+									tradeOrder.getLimitPrice(), tradeOrder.getQuantity() / 2,
+									this.tradestrategy.getSide(), filledDate.plusMinutes(5));
 							tradeOrder.addTradeOrderfill(orderfill);
-							TradeOrderfill orderfill1 = new TradeOrderfill(
-									tradeOrder, "Paper",
-									tradeOrder.getLimitPrice(),
-									tradeOrder.getQuantity() / 2, "ISLAND",
-									"12345", tradeOrder.getLimitPrice(),
-									tradeOrder.getQuantity() / 2,
-									this.tradestrategy.getSide(),
-									filledDate.plusMinutes(6));
+							TradeOrderfill orderfill1 = new TradeOrderfill(tradeOrder, "Paper",
+									tradeOrder.getLimitPrice(), tradeOrder.getQuantity() / 2, "ISLAND", "12345",
+									tradeOrder.getLimitPrice(), tradeOrder.getQuantity() / 2,
+									this.tradestrategy.getSide(), filledDate.plusMinutes(6));
 							orderfill1.setTradeOrder(tradeOrder);
 							tradeOrder.addTradeOrderfill(orderfill1);
 							tradeOrder.setIsFilled(true);
 							tradeOrder.setStatus(OrderStatus.FILLED);
-							tradeOrder.setFilledQuantity(tradeOrder
-									.getQuantity());
-							tradeOrder
-									.setFilledDate(filledDate.plusMinutes(15));
-							tradeOrder.setAverageFilledPrice(tradeOrder
-									.getLimitPrice());
-							tradeOrder.setCommission(new BigDecimal(tradeOrder
-									.getQuantity() * 0.005));
+							tradeOrder.setFilledQuantity(tradeOrder.getQuantity());
+							tradeOrder.setFilledDate(filledDate.plusMinutes(15));
+							tradeOrder.setAverageFilledPrice(tradeOrder.getLimitPrice());
+							tradeOrder.setCommission(new BigDecimal(tradeOrder.getQuantity() * 0.005));
 
 						} else {
 							tradeOrder.setStatus(OrderStatus.CANCELLED);
@@ -383,14 +329,12 @@ public class TradeOrderTest {
 				}
 
 				tradeOrder = tradeOrderHome.persist(tradeOrder);
-				_log.info("IdOrder: " + tradeOrder.getIdTradeOrder()
-						+ " Action:" + tradeOrder.getAction() + " OrderType:"
-						+ tradeOrder.getOrderType() + " Status:"
-						+ tradeOrder.getStatus() + " filledDate:" + filledDate);
+				_log.info("IdOrder: " + tradeOrder.getIdTradeOrder() + " Action:" + tradeOrder.getAction()
+						+ " OrderType:" + tradeOrder.getOrderType() + " Status:" + tradeOrder.getStatus()
+						+ " filledDate:" + filledDate);
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -405,18 +349,14 @@ public class TradeOrderTest {
 				action = Action.SELL;
 			}
 
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, action,
-					OrderType.STPLMT, 100, new BigDecimal(20.20),
-					new BigDecimal(20.23),
-					TradingCalendar.getDateTimeNowMarketTimeZone());
-			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, action, OrderType.STPLMT, 100,
+					new BigDecimal(20.20), new BigDecimal(20.23), TradingCalendar.getDateTimeNowMarketTimeZone());
+			tradeOrder.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			// Save new order with detached trade
 			tradeOrder = tradeOrderHome.persist(tradeOrder);
 			Execution execution = new Execution();
 			execution.m_side = side;
-			execution.m_time = TradingCalendar.getFormattedDate(
-					TradingCalendar.getDateTimeNowMarketTimeZone(),
+			execution.m_time = TradingCalendar.getFormattedDate(TradingCalendar.getDateTimeNowMarketTimeZone(),
 					"yyyyMMdd HH:mm:ss");
 			execution.m_exchange = "ISLAND";
 			execution.m_shares = tradeOrder.getQuantity();
@@ -436,17 +376,14 @@ public class TradeOrderTest {
 			} else {
 				action = Action.BUY;
 			}
-			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, action,
-					OrderType.LMT, 300, null, new BigDecimal(23.41),
-					TradingCalendar.getDateTimeNowMarketTimeZone());
-			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000)))
-					.intValue());
+			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, action, OrderType.LMT, 300, null,
+					new BigDecimal(23.41), TradingCalendar.getDateTimeNowMarketTimeZone());
+			tradeOrder1.setOrderKey((new BigDecimal((Math.random() * 1000000))).intValue());
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 
 			Execution execution1 = new Execution();
 			execution1.m_side = side;
-			execution1.m_time = TradingCalendar.getFormattedDate(
-					TradingCalendar.getDateTimeNowMarketTimeZone(),
+			execution1.m_time = TradingCalendar.getFormattedDate(TradingCalendar.getDateTimeNowMarketTimeZone(),
 					"yyyyMMdd HH:mm:ss");
 			execution1.m_exchange = "ISLAND";
 			execution1.m_shares = tradeOrder1.getQuantity();
@@ -460,8 +397,7 @@ public class TradeOrderTest {
 			tradeOrder1.addTradeOrderfill(orderfill1);
 			tradeOrder1 = tradeOrderHome.persist(tradeOrder1);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -474,8 +410,7 @@ public class TradeOrderTest {
 			Integer orderKey = tradePersistentModel.findTradeOrderByMaxKey();
 			_log.info("Max Order key: " + orderKey);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

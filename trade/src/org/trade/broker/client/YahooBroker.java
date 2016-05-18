@@ -59,8 +59,7 @@ import org.trade.strategy.data.candle.CandlePeriod;
  */
 public class YahooBroker extends Broker {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(YahooBroker.class);
+	private final static Logger _log = LoggerFactory.getLogger(YahooBroker.class);
 
 	private Integer reqId = null;
 	private Contract contract = null;
@@ -84,8 +83,8 @@ public class YahooBroker extends Broker {
 	 *            ClientWrapper
 	 * 
 	 */
-	public YahooBroker(Integer reqId, Contract contract, String endDateTime,
-			String durationStr, String barSizeSetting, ClientWrapper brokerModel) {
+	public YahooBroker(Integer reqId, Contract contract, String endDateTime, String durationStr, String barSizeSetting,
+			ClientWrapper brokerModel) {
 		this.reqId = reqId;
 		this.contract = contract;
 		this.barSizeSetting = barSizeSetting;
@@ -108,41 +107,31 @@ public class YahooBroker extends Broker {
 			this.brokerModel.contractDetails(contract.getId(), contract);
 			this.brokerModel.contractDetailsEnd(contract.getId());
 
-			ZonedDateTime endDate = TradingCalendar
-					.getZonedDateTimeFromDateTimeString(this.endDateTime,
-							"yyyyMMdd HH:mm:ss");
+			ZonedDateTime endDate = TradingCalendar.getZonedDateTimeFromDateTimeString(this.endDateTime,
+					"yyyyMMdd HH:mm:ss");
 			ChartDays chartDays = ChartDays.newInstance();
 			chartDays.setDisplayName(this.durationStr);
 
 			BarSize barSize = BarSize.newInstance();
 			barSize.setDisplayName(this.barSizeSetting);
 
-			ZonedDateTime startDate = endDate.minusDays((Integer
-					.parseInt(chartDays.getCode()) - 1));
+			ZonedDateTime startDate = endDate.minusDays((Integer.parseInt(chartDays.getCode()) - 1));
 			startDate = TradingCalendar.getPrevTradingDay(startDate);
 			startDate = TradingCalendar.getDateAtTime(startDate, 0, 0, 0);
 
 			if (BarSize.DAY == Integer.parseInt(barSize.getCode())) {
-				this.setYahooPriceDataDay(this.reqId,
-						this.contract.getSymbol(), startDate, endDate);
+				this.setYahooPriceDataDay(this.reqId, this.contract.getSymbol(), startDate, endDate);
 			} else {
-				this.setYahooPriceDataIntraday(this.reqId,
-						this.contract.getSymbol(),
-						Integer.parseInt(chartDays.getCode()), startDate,
-						endDate);
+				this.setYahooPriceDataIntraday(this.reqId, this.contract.getSymbol(),
+						Integer.parseInt(chartDays.getCode()), startDate, endDate);
 			}
-			_log.debug("YahooBroker.doInBackground finished ReqId: "
-					+ this.reqId + " Symbol: " + this.contract.getSymbol()
-					+ " Start Date: " + startDate + " End Date: " + endDate
-					+ " BarSize: " + barSize.getCode() + " ChartDays: "
-					+ chartDays.getCode());
-			this.brokerModel.historicalData(this.reqId,
-					"finished- at yyyyMMdd HH:mm:ss", 0, 0, 0, 0, 0, 0, 0,
-					false);
+			_log.debug("YahooBroker.doInBackground finished ReqId: " + this.reqId + " Symbol: "
+					+ this.contract.getSymbol() + " Start Date: " + startDate + " End Date: " + endDate + " BarSize: "
+					+ barSize.getCode() + " ChartDays: " + chartDays.getCode());
+			this.brokerModel.historicalData(this.reqId, "finished- at yyyyMMdd HH:mm:ss", 0, 0, 0, 0, 0, 0, 0, false);
 
 		} catch (Exception ex) {
-			_log.error("Error YahooBroker Symbol: " + contract.getSymbol()
-					+ " Msg: " + ex.getMessage(), ex);
+			_log.error("Error YahooBroker Symbol: " + contract.getSymbol() + " Msg: " + ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -166,13 +155,11 @@ public class YahooBroker extends Broker {
 		/*
 		 * Yahoo finance http://finance.yahoo.com/d/quotes.csv?s=XOM&f=n
 		 */
-		String strUrl = "http://finance.yahoo.com/d/quotes.csv?s="
-				+ contract.getSymbol() + "&f=n";
+		String strUrl = "http://finance.yahoo.com/d/quotes.csv?s=" + contract.getSymbol() + "&f=n";
 
 		// _log.info("URL : " + strUrl);
 		URL url = new URL(strUrl);
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				url.openStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 		String inputLine;
 		while ((inputLine = in.readLine()) != null) {
 			contract.setLongName(inputLine.replaceAll("\"", ""));
@@ -196,9 +183,8 @@ public class YahooBroker extends Broker {
 	 *            ZonedDateTime
 	 * @throws IOException
 	 */
-	private void setYahooPriceDataIntraday(int reqId, String symbol,
-			int chartDays, ZonedDateTime startDate, ZonedDateTime endDate)
-			throws IOException {
+	private void setYahooPriceDataIntraday(int reqId, String symbol, int chartDays, ZonedDateTime startDate,
+			ZonedDateTime endDate) throws IOException {
 
 		/*
 		 * Yahoo finance http://chartapi.finance.yahoo.com/instrument/1.0/IBM
@@ -207,13 +193,12 @@ public class YahooBroker extends Broker {
 		long days = (TradingCalendar.getDurationInDays(startDate,
 				TradingCalendar.getDateTimeNowMarketTimeZone().plusDays(1)));
 
-		String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/"
-				+ symbol + "/chartdata;type=quote;range=" + days + "d/csv/";
+		String strUrl = "http://chartapi.finance.yahoo.com/instrument/1.0/" + symbol + "/chartdata;type=quote;range="
+				+ days + "d/csv/";
 
 		_log.debug("URL : " + strUrl);
 		URL url = new URL(strUrl);
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				url.openStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 		String inputLine;
 		in.readLine();
 		while ((inputLine = in.readLine()) != null) {
@@ -222,9 +207,7 @@ public class YahooBroker extends Broker {
 				StringTokenizer scanLine = new StringTokenizer(inputLine, ",");
 				while (scanLine.hasMoreTokens()) {
 					String dateString = scanLine.nextToken();
-					ZonedDateTime time = TradingCalendar
-							.getZonedDateTimeFromMilli((Long
-									.parseLong(dateString) * 1000));
+					ZonedDateTime time = TradingCalendar.getZonedDateTimeFromMilli((Long.parseLong(dateString) * 1000));
 					// values:Timestamp,close,high,low,open,volume
 					double close = Double.parseDouble(scanLine.nextToken());
 					double high = Double.parseDouble(scanLine.nextToken());
@@ -235,13 +218,9 @@ public class YahooBroker extends Broker {
 					// + high + " Low: " + low + " Close: " + close
 					// + " Volume: " + volume);
 
-					if ((time.isAfter(startDate) || time.equals(startDate))
-							&& time.isBefore(endDate)) {
-						this.brokerModel
-								.historicalData(reqId, dateString, open, high,
-										low, close, ((int) volume / 100),
-										((int) volume / 100),
-										(open + close) / 2, false);
+					if ((time.isAfter(startDate) || time.equals(startDate)) && time.isBefore(endDate)) {
+						this.brokerModel.historicalData(reqId, dateString, open, high, low, close, ((int) volume / 100),
+								((int) volume / 100), (open + close) / 2, false);
 					}
 				}
 			}
@@ -263,9 +242,8 @@ public class YahooBroker extends Broker {
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	private void setYahooPriceDataDay(int reqId, String symbol,
-			ZonedDateTime startDate, ZonedDateTime endDate) throws IOException,
-			ParseException {
+	private void setYahooPriceDataDay(int reqId, String symbol, ZonedDateTime startDate, ZonedDateTime endDate)
+			throws IOException, ParseException {
 
 		/*
 		 * Yahoo finance So IBM form 1/1/2012 thru 06/30/2012
@@ -274,26 +252,21 @@ public class YahooBroker extends Broker {
 		 */
 		List<Candle> candles = new ArrayList<Candle>();
 
-		String strUrl = "http://ichart.finance.yahoo.com/table.csv?s=" + symbol
-				+ "&a=" + startDate.getMonthValue() + "&b="
-				+ startDate.getDayOfMonth() + "&c=" + startDate.getYear()
-				+ "&d=" + endDate.getMonth() + "&e=" + endDate.getDayOfMonth()
-				+ "&f=" + endDate.getYear() + "&ignore=.csv";
+		String strUrl = "http://ichart.finance.yahoo.com/table.csv?s=" + symbol + "&a=" + startDate.getMonthValue()
+				+ "&b=" + startDate.getDayOfMonth() + "&c=" + startDate.getYear() + "&d=" + endDate.getMonth() + "&e="
+				+ endDate.getDayOfMonth() + "&f=" + endDate.getYear() + "&ignore=.csv";
 
 		// _log.info(strUrl);
 		URL url = new URL(strUrl);
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				url.openStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 		String inputLine;
 		in.readLine();
 		while ((inputLine = in.readLine()) != null) {
 			StringTokenizer st = new StringTokenizer(inputLine, ",");
 
-			ZonedDateTime candleDate = TradingCalendar
-					.getZonedDateTimeFromDateString(st.nextToken(), "y-M-d",
-							TradingCalendar.MKT_TIMEZONE);
-			ZonedDateTime time = TradingCalendar.getDateAtTime(candleDate,
-					startDate);
+			ZonedDateTime candleDate = TradingCalendar.getZonedDateTimeFromDateString(st.nextToken(), "y-M-d",
+					TradingCalendar.MKT_TIMEZONE);
+			ZonedDateTime time = TradingCalendar.getDateAtTime(candleDate, startDate);
 
 			double open = Double.parseDouble(st.nextToken());
 			double high = Double.parseDouble(st.nextToken());
@@ -305,12 +278,10 @@ public class YahooBroker extends Broker {
 			// + high + " Low: " + low + " Close: " + close
 			// + " Volume: " + volume);
 
-			CandlePeriod period = new CandlePeriod(time, TradingCalendar
-					.getDateAtTime(time, endDate).minusSeconds(1));
+			CandlePeriod period = new CandlePeriod(time, TradingCalendar.getDateAtTime(time, endDate).minusSeconds(1));
 
-			Candle candle = new Candle(null, period, open, high, low, close,
-					(volume / 100), (open + close) / 2, ((int) volume / 100),
-					TradingCalendar.getDateTimeNowMarketTimeZone());
+			Candle candle = new Candle(null, period, open, high, low, close, (volume / 100), (open + close) / 2,
+					((int) volume / 100), TradingCalendar.getDateTimeNowMarketTimeZone());
 
 			candle.setLastUpdateDate(time);
 			candles.add(candle);
@@ -320,15 +291,11 @@ public class YahooBroker extends Broker {
 		Collections.reverse(candles);
 		for (Candle candle : candles) {
 
-			long millis = TradingCalendar.geMillisFromZonedDateTime(candle
-					.getStartPeriod());
+			long millis = TradingCalendar.geMillisFromZonedDateTime(candle.getStartPeriod());
 
-			this.brokerModel.historicalData(reqId, String
-					.valueOf(millis / 1000), candle.getOpen().doubleValue(),
-					candle.getHigh().doubleValue(), candle.getLow()
-							.doubleValue(), candle.getClose().doubleValue(),
-					candle.getVolume().intValue(), candle.getTradeCount(),
-					candle.getVwap().doubleValue(), false);
+			this.brokerModel.historicalData(reqId, String.valueOf(millis / 1000), candle.getOpen().doubleValue(),
+					candle.getHigh().doubleValue(), candle.getLow().doubleValue(), candle.getClose().doubleValue(),
+					candle.getVolume().intValue(), candle.getTradeCount(), candle.getVwap().doubleValue(), false);
 		}
 	}
 }

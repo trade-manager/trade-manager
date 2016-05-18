@@ -53,8 +53,8 @@ import org.trade.strategy.data.base.TimePeriodAnchor;
 
 /**
  */
-public class AverageTrueRangeDataset extends AbstractXYDataset implements
-		IndicatorDataset, IAverageTrueRangeDataset, Serializable {
+public class AverageTrueRangeDataset extends AbstractXYDataset
+		implements IndicatorDataset, IAverageTrueRangeDataset, Serializable {
 
 	/**
 	 * 
@@ -272,8 +272,7 @@ public class AverageTrueRangeDataset extends AbstractXYDataset implements
 	 *         int)
 	 */
 	public double getXValue(int series, int item) {
-		AverageTrueRangeSeries s = (AverageTrueRangeSeries) this.data
-				.get(series);
+		AverageTrueRangeSeries s = (AverageTrueRangeSeries) this.data.get(series);
 		AverageTrueRangeItem di = (AverageTrueRangeItem) s.getDataItem(item);
 		RegularTimePeriod period = di.getPeriod();
 		return getX(period);
@@ -306,8 +305,7 @@ public class AverageTrueRangeDataset extends AbstractXYDataset implements
 	 * @return The y-value. * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
-		AverageTrueRangeSeries s = (AverageTrueRangeSeries) this.data
-				.get(series);
+		AverageTrueRangeSeries s = (AverageTrueRangeSeries) this.data.get(series);
 		AverageTrueRangeItem di = (AverageTrueRangeItem) s.getDataItem(item);
 		return new Double(di.getY());
 	}
@@ -326,8 +324,7 @@ public class AverageTrueRangeDataset extends AbstractXYDataset implements
 	 *         #getAverageTrueRangeValue(int, int)
 	 */
 	public double getAverageTrueRangeValue(int series, int item) {
-		AverageTrueRangeSeries s = (AverageTrueRangeSeries) this.data
-				.get(series);
+		AverageTrueRangeSeries s = (AverageTrueRangeSeries) this.data.get(series);
 		AverageTrueRangeItem di = (AverageTrueRangeItem) s.getDataItem(item);
 		return di.getAverageTrueRange();
 	}
@@ -385,8 +382,7 @@ public class AverageTrueRangeDataset extends AbstractXYDataset implements
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		AverageTrueRangeDataset clone = (AverageTrueRangeDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -402,16 +398,15 @@ public class AverageTrueRangeDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			AverageTrueRangeSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

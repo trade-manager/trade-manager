@@ -89,8 +89,7 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 	 */
 
 	private static final long serialVersionUID = -2517966650638318307L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(FiveMinWRBGapBarStrategy.class);
+	private final static Logger _log = LoggerFactory.getLogger(FiveMinWRBGapBarStrategy.class);
 
 	private Integer openPositionOrderKey = null;
 
@@ -109,8 +108,8 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 	 *            Integer
 	 */
 
-	public FiveMinWRBGapBarStrategy(BrokerModel brokerManagerModel,
-			StrategyData strategyData, Integer idTradestrategy) {
+	public FiveMinWRBGapBarStrategy(BrokerModel brokerManagerModel, StrategyData strategyData,
+			Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
 
 	}
@@ -131,26 +130,23 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 			CandleItem currentCandleItem = this.getCurrentCandle();
 			// AbstractStrategyRule.logCandle(this,
 			// currentCandleItem.getCandle());
-			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
-					.getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod().getStart();
 
 			/*
 			 * Trade is open kill this Strategy as its job is done.
 			 */
 			if (this.isThereOpenPosition()) {
-				_log.info("Strategy complete open position filled symbol: "
-						+ getSymbol() + " startPeriod: " + startPeriod);
+				_log.info("Strategy complete open position filled symbol: " + getSymbol() + " startPeriod: "
+						+ startPeriod);
 				/*
 				 * If the order is partial filled chaeck and if the risk goes
 				 * beyond 1 risk unit cancel the openPositionOrder this will
 				 * cause it to be marked as filled.
 				 */
-				if (OrderStatus.PARTIALFILLED.equals(this
-						.getOpenPositionOrder().getStatus())) {
-					if (isRiskViolated(currentCandleItem.getClose(), this
-							.getTradestrategy().getRiskAmount(), this
-							.getOpenPositionOrder().getQuantity(), this
-							.getOpenPositionOrder().getAverageFilledPrice())) {
+				if (OrderStatus.PARTIALFILLED.equals(this.getOpenPositionOrder().getStatus())) {
+					if (isRiskViolated(currentCandleItem.getClose(), this.getTradestrategy().getRiskAmount(),
+							this.getOpenPositionOrder().getQuantity(),
+							this.getOpenPositionOrder().getAverageFilledPrice())) {
 						this.cancelOrder(this.getOpenPositionOrder());
 					}
 				}
@@ -162,10 +158,9 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 			 * Open position order was cancelled kill this Strategy as its job
 			 * is done.
 			 */
-			if (null != openPositionOrderKey
-					&& !this.getTradeOrder(openPositionOrderKey).isActive()) {
-				_log.info("Strategy complete open position cancelled symbol: "
-						+ getSymbol() + " startPeriod: " + startPeriod);
+			if (null != openPositionOrderKey && !this.getTradeOrder(openPositionOrderKey).isActive()) {
+				_log.info("Strategy complete open position cancelled symbol: " + getSymbol() + " startPeriod: "
+						+ startPeriod);
 				updateTradestrategyStatus(TradestrategyStatus.CANCELLED);
 				this.cancel();
 				return;
@@ -175,43 +170,29 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 			 * Is it the the 9:35 candle? and we have not created an open
 			 * position trade.
 			 */
-			if (startPeriod.equals(this.getTradestrategy().getTradingday()
-					.getOpen()
-					.plusMinutes(this.getTradestrategy().getBarSize() / 60))
-					&& newBar) {
+			if (startPeriod.equals(this.getTradestrategy().getTradingday().getOpen()
+					.plusMinutes(this.getTradestrategy().getBarSize() / 60)) && newBar) {
 
 				Candle candleAvgBar = candleSeries.getAverageBar(
-						TradingCalendar.getDateAtTime(
-								TradingCalendar.getPrevTradingDay(startPeriod),
-								this.getTradestrategy().getTradingday()
-										.getOpen()), TradingCalendar
-								.getDateAtTime(TradingCalendar
-										.getPrevTradingDay(startPeriod), this
-										.getTradestrategy().getTradingday()
-										.getClose()), true);
-				_log.info("Market Wieghted bar Open: " + candleAvgBar.getOpen()
-						+ " High: " + candleAvgBar.getHigh() + " Low: "
-						+ candleAvgBar.getLow() + " Close: "
-						+ candleAvgBar.getClose());
+						TradingCalendar.getDateAtTime(TradingCalendar.getPrevTradingDay(startPeriod),
+								this.getTradestrategy().getTradingday().getOpen()),
+						TradingCalendar.getDateAtTime(TradingCalendar.getPrevTradingDay(startPeriod),
+								this.getTradestrategy().getTradingday().getClose()),
+						true);
+				_log.info("Market Wieghted bar Open: " + candleAvgBar.getOpen() + " High: " + candleAvgBar.getHigh()
+						+ " Low: " + candleAvgBar.getLow() + " Close: " + candleAvgBar.getClose());
 
-				Candle candleBar = candleSeries.getBar(TradingCalendar
-						.getDateAtTime(
-								TradingCalendar.getPrevTradingDay(startPeriod),
-								this.getTradestrategy().getTradingday()
-										.getOpen()), TradingCalendar
-						.getDateAtTime(
-								TradingCalendar.getPrevTradingDay(startPeriod),
-								this.getTradestrategy().getTradingday()
-										.getClose()));
-				_log.info("Market Wieghted bar Open: " + candleBar.getOpen()
-						+ " High: " + candleBar.getHigh() + " Low: "
-						+ candleBar.getLow() + " Close: "
-						+ candleBar.getClose());
+				Candle candleBar = candleSeries.getBar(
+						TradingCalendar.getDateAtTime(TradingCalendar.getPrevTradingDay(startPeriod),
+								this.getTradestrategy().getTradingday().getOpen()),
+						TradingCalendar.getDateAtTime(TradingCalendar.getPrevTradingDay(startPeriod),
+								this.getTradestrategy().getTradingday().getClose()));
+				_log.info("Market Wieghted bar Open: " + candleBar.getOpen() + " High: " + candleBar.getHigh()
+						+ " Low: " + candleBar.getLow() + " Close: " + candleBar.getClose());
 
 				CandleItem prevCandleItem = null;
 				if (getCurrentCandleCount() > 0) {
-					prevCandleItem = (CandleItem) candleSeries
-							.getDataItem(getCurrentCandleCount() - 1);
+					prevCandleItem = (CandleItem) candleSeries.getDataItem(getCurrentCandleCount() - 1);
 					// AbstractStrategyRule
 					// .logCandle(this, prevCandleItem.getCandle());
 				}
@@ -232,45 +213,39 @@ public class FiveMinWRBGapBarStrategy extends AbstractStrategyRule {
 				Money priceClose = new Money(prevCandleItem.getClose());
 				Entrylimit entrylimit = getEntryLimit().getValue(priceClose);
 
-				double highLowRange = Math.abs(prevCandleItem.getHigh()
-						- prevCandleItem.getLow());
+				double highLowRange = Math.abs(prevCandleItem.getHigh() - prevCandleItem.getLow());
 				// double openCloseRange = Math.abs(prevCandleItem
 				// .getOpen() - prevCandleItem.getClose());
 
 				priceStop = new Money(prevCandleItem.getOpen());
 
 				// If the candle less than the entry limit %
-				if ((highLowRange / prevCandleItem.getClose()) < entrylimit
-						.getPercentOfPrice().doubleValue()) {
+				if ((highLowRange / prevCandleItem.getClose()) < entrylimit.getPercentOfPrice().doubleValue()) {
 					// TODO add the tails as a % of the body.
-					_log.info(" We have a trade!!  Symbol: " + getSymbol()
-							+ " Time: " + startPeriod);
+					_log.info(" We have a trade!!  Symbol: " + getSymbol() + " Time: " + startPeriod);
 					/*
 					 * Create an open position.
 					 */
-					TradeOrder tradeOrder = createRiskOpenPosition(action,
-							price, priceStop, true, null, null, null, null);
+					TradeOrder tradeOrder = createRiskOpenPosition(action, price, priceStop, true, null, null, null,
+							null);
 					openPositionOrderKey = tradeOrder.getOrderKey();
 
 				} else {
-					_log.info("Rule 9:35 5min bar outside % limits. Symbol: "
-							+ getSymbol() + " Time: " + startPeriod);
+					_log.info("Rule 9:35 5min bar outside % limits. Symbol: " + getSymbol() + " Time: " + startPeriod);
 					this.updateTradestrategyStatus(TradestrategyStatus.PERCENT);
 					// Kill this process we are done!
 					this.cancel();
 				}
 
-			} else if (!startPeriod.isBefore(this.getTradestrategy()
-					.getTradingday().getOpen().plusMinutes(60))) {
+			} else if (!startPeriod.isBefore(this.getTradestrategy().getTradingday().getOpen().plusMinutes(60))) {
 
 				if (!this.isThereOpenPosition()
-						&& !TradestrategyStatus.CANCELLED
-								.equals(getTradestrategy().getStatus())) {
+						&& !TradestrategyStatus.CANCELLED.equals(getTradestrategy().getStatus())) {
 					this.updateTradestrategyStatus(TradestrategyStatus.TO);
 					this.cancelAllOrders();
 					// No trade we timed out
-					_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: "
-							+ getSymbol() + " Time: " + startPeriod);
+					_log.info("Rule 10:30:00 bar, time out unfilled open position Symbol: " + getSymbol() + " Time: "
+							+ startPeriod);
 				}
 				this.cancel();
 			}

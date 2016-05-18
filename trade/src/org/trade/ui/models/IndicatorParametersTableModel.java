@@ -131,8 +131,7 @@ public class IndicatorParametersTableModel extends AspectTableModel {
 
 		String name = (String) this.getValueAt(selectedRow, 0);
 		for (final Aspect element : getData().getAspect()) {
-			if (CoreUtils.nullSafeComparator(((CodeType) element).getName(),
-					name) == 0) {
+			if (CoreUtils.nullSafeComparator(((CodeType) element).getName(), name) == 0) {
 				getData().remove(element);
 				getData().setDirty(true);
 				final Vector<Object> currRow = rows.get(selectedRow);
@@ -145,8 +144,7 @@ public class IndicatorParametersTableModel extends AspectTableModel {
 
 	public void addRow() {
 
-		final IndicatorParameters element = new IndicatorParameters("",
-				CodeType.IndicatorParameters, "");
+		final IndicatorParameters element = new IndicatorParameters("", CodeType.IndicatorParameters, "");
 		getData().add(element);
 		getData().setDirty(true);
 		final Vector<Object> newRow = new Vector<Object>();

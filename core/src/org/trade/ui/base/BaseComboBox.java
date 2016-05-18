@@ -70,7 +70,8 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 *            String
 	 * @param items
 	 *            Vector<Object>
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public BaseComboBox(BasePanel p, String UICode, Vector<Decode> items) {
@@ -90,7 +91,8 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 *            BasePanel
 	 * @param UICode
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public BaseComboBox(BasePanel p, String UICode) {
 		jbInit(p, UICode);
@@ -109,8 +111,7 @@ public class BaseComboBox extends JComboBox<Decode> {
 			this.addMessageListener(p);
 		}
 
-		BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes
-				.newInstance(UICode);
+		BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes.newInstance(UICode);
 
 		setMethod(basePropertyCodes.getMethod());
 		this.setName(basePropertyCodes.getDisplayName());
@@ -133,7 +134,8 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
@@ -149,7 +151,8 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
@@ -164,11 +167,11 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 * 
 	 * @param selection
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	protected void messageEvent(String selection) {
-		m_notifier.notifyEvent(new MessageEvent(selection),
-				new Vector<Object>());
+		m_notifier.notifyEvent(new MessageEvent(selection), new Vector<Object>());
 	}
 
 	/**
@@ -178,7 +181,8 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private void itemChanged() {
 		if (getMethod() != null) {
@@ -195,7 +199,8 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 * 
 	 * @param method
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private void setMethod(String method) {
 		m_method = method;
@@ -209,7 +214,8 @@ public class BaseComboBox extends JComboBox<Decode> {
 	 * 
 	 * 
 	 * @return String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private String getMethod() {
 		return m_method;

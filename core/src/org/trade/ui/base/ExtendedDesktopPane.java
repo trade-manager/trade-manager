@@ -135,11 +135,9 @@ public class ExtendedDesktopPane extends JDesktopPane {
 
 				if ((comp instanceof JInternalFrame) && comp.isVisible()) {
 					if (((JInternalFrame) comp).isResizable()) {
-						manager.setBoundsForFrame((JComponent) comp, x, y,
-								columnWidth, rowHeight);
+						manager.setBoundsForFrame((JComponent) comp, x, y, columnWidth, rowHeight);
 					} else {
-						manager.setBoundsForFrame((JComponent) comp, x, y,
-								comp.getSize().width, comp.getSize().height);
+						manager.setBoundsForFrame((JComponent) comp, x, y, comp.getSize().width, comp.getSize().height);
 					}
 
 					y += rowHeight;
@@ -213,18 +211,15 @@ public class ExtendedDesktopPane extends JDesktopPane {
 			return;
 		}
 
-		if (((nextX + targetWidth) > paneSize.width)
-				|| ((nextY + targetHeight) > paneSize.height)) {
+		if (((nextX + targetWidth) > paneSize.width) || ((nextY + targetHeight) > paneSize.height)) {
 			nextX = 0;
 			nextY = 0;
 		}
 
 		if (((JInternalFrame) comp).isResizable()) {
-			manager.setBoundsForFrame((JComponent) comp, nextX, nextY,
-					targetWidth, targetHeight);
+			manager.setBoundsForFrame((JComponent) comp, nextX, nextY, targetWidth, targetHeight);
 		} else {
-			manager.setBoundsForFrame((JComponent) comp, nextX, nextY,
-					comp.getSize().width, comp.getSize().height);
+			manager.setBoundsForFrame((JComponent) comp, nextX, nextY, comp.getSize().width, comp.getSize().height);
 		}
 
 		// manager.setBoundsForFrame((JComponent)comp, nextX, nextY,

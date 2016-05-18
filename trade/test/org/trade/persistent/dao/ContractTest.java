@@ -59,8 +59,7 @@ import org.trade.dictionary.valuetype.SECType;
  */
 public class ContractTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(ContractTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(ContractTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -109,29 +108,23 @@ public class ContractTest {
 			// values in it by reading them from form object
 			AspectHome aspectHome = new AspectHome();
 			ContractHome contractHome = new ContractHome();
-			Contract transientInstance = new Contract(SECType.STOCK, "QQQ",
-					Exchange.SMART, Currency.USD, null, null);
+			Contract transientInstance = new Contract(SECType.STOCK, "QQQ", Exchange.SMART, Currency.USD, null, null);
 
 			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
-			Contract contract = contractHome.findByUniqueKey(
-					transientInstance.getSecType(),
-					transientInstance.getSymbol(),
-					transientInstance.getExchange(),
-					transientInstance.getCurrency(), null);
-			assertNotNull("Contract not found: " + contract.getSymbol(),
-					contract);
+			Contract contract = contractHome.findByUniqueKey(transientInstance.getSecType(),
+					transientInstance.getSymbol(), transientInstance.getExchange(), transientInstance.getCurrency(),
+					null);
+			assertNotNull("Contract not found: " + contract.getSymbol(), contract);
 
 			if (null != contract) {
 				aspectHome.remove(contract);
-				_log.info("Contract deleted Id:"
-						+ transientInstance.getIdContract());
+				_log.info("Contract deleted Id:" + transientInstance.getIdContract());
 			}
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -147,36 +140,31 @@ public class ContractTest {
 			AspectHome aspectHome = new AspectHome();
 			ContractHome contractHome = new ContractHome();
 
-			ZonedDateTime expiry = TradingCalendar.getDateAtTime(
-					TradingCalendar.getDateTimeNowMarketTimeZone(), 19, 0, 0);
+			ZonedDateTime expiry = TradingCalendar.getDateAtTime(TradingCalendar.getDateTimeNowMarketTimeZone(), 19, 0,
+					0);
 			expiry = expiry.plusMonths(1);
 
 			_log.info("Expiry Date: " + expiry);
-			Contract transientInstance = new Contract(SECType.FUTURE, "ES",
-					Exchange.SMART, Currency.USD, expiry, new BigDecimal(50));
+			Contract transientInstance = new Contract(SECType.FUTURE, "ES", Exchange.SMART, Currency.USD, expiry,
+					new BigDecimal(50));
 			transientInstance = aspectHome.persist(transientInstance);
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
 			expiry = expiry.plusDays(1);
 			_log.info("Expiry Date: " + expiry);
-			Contract contract = contractHome.findByUniqueKey(
-					transientInstance.getSecType(),
-					transientInstance.getSymbol(),
-					transientInstance.getExchange(),
-					transientInstance.getCurrency(), expiry);
-			assertNotNull("Contract not found: " + contract.getSymbol(),
-					contract);
+			Contract contract = contractHome.findByUniqueKey(transientInstance.getSecType(),
+					transientInstance.getSymbol(), transientInstance.getExchange(), transientInstance.getCurrency(),
+					expiry);
+			assertNotNull("Contract not found: " + contract.getSymbol(), contract);
 
 			if (null != contract) {
 				aspectHome.remove(contract);
-				_log.info("Contract deleted Id:"
-						+ transientInstance.getIdContract());
+				_log.info("Contract deleted Id:" + transientInstance.getIdContract());
 			}
 			_log.info("Contract added Id:" + transientInstance.getIdContract());
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

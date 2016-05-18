@@ -65,8 +65,7 @@ public class ImageBuilder extends Object {
 			URL url = ImageBuilder.class.getResource("images/" + name);
 			Toolkit tk = Toolkit.getDefaultToolkit();
 
-			return (new ImageIcon(tk.createImage((ImageProducer) url
-					.getContent())));
+			return (new ImageIcon(tk.createImage((ImageProducer) url.getContent())));
 		} catch (Exception e) {
 			return null;
 		}

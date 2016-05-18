@@ -66,13 +66,11 @@ public class DateEditor extends DefaultCellEditor {
 	 * @param field
 	 *            int
 	 */
-	public DateEditor(final DateField dateField, Date date, String mask,
-			int field) {
+	public DateEditor(final DateField dateField, Date date, String mask, int field) {
 		super(dateField);
 		dateField.setDate(date);
 		spinner.setModel(new SpinnerDateModel(date.getDate(), null, null, field));
-		final JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner,
-				mask);
+		final JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, mask);
 		spinner.setEditor(editor);
 	}
 
@@ -94,8 +92,7 @@ public class DateEditor extends DefaultCellEditor {
 	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable,
 	 *      Object, boolean, int, int)
 	 */
-	public Component getTableCellEditorComponent(JTable table, Object value,
-			boolean isSelected, int row, int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		if (null == ((Date) value).getDate()) {
 			spinner.setValue(new java.util.Date());
 		} else {

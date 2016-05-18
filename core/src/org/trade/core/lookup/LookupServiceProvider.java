@@ -52,7 +52,6 @@ public interface LookupServiceProvider {
 	 * @return Lookup
 	 * @exception LookupException
 	 */
-	Lookup getLookup(String lookupName, LookupQualifier qualifier,
-			boolean optional) throws LookupException;
+	Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean optional) throws LookupException;
 
 }

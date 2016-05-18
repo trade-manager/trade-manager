@@ -74,8 +74,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TradingCalendarTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradingCalendarTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(TradingCalendarTest.class);
 
 	@Rule
 	public TestName name = new TestName();
@@ -120,14 +119,11 @@ public class TradingCalendarTest {
 	public void testAddBusinessDays() {
 		try {
 			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone();
-			assertTrue("1", TradingCalendar.isTradingDay(TradingCalendar
-					.addTradingDays(date, -4)));
-			assertTrue("2", TradingCalendar.isTradingDay(TradingCalendar
-					.addTradingDays(date, -5)));
+			assertTrue("1", TradingCalendar.isTradingDay(TradingCalendar.addTradingDays(date, -4)));
+			assertTrue("2", TradingCalendar.isTradingDay(TradingCalendar.addTradingDays(date, -5)));
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -136,24 +132,19 @@ public class TradingCalendarTest {
 	@Test
 	public void testGetDateAtTime() {
 		try {
-			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone()
-					.minusDays(1);
+			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone().minusDays(1);
 			_log.debug("date: " + date);
 
 			ZonedDateTime todayStartDate = TradingCalendar
-					.getTradingDayStart(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
+					.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone());
 			_log.debug("todayStartDate: " + todayStartDate);
-			ZonedDateTime prevStartDate = TradingCalendar.getDateAtTime(date,
-					todayStartDate);
+			ZonedDateTime prevStartDate = TradingCalendar.getDateAtTime(date, todayStartDate);
 			_log.debug("prevStartDate: " + prevStartDate);
 
 			assertEquals("1", todayStartDate.getHour(), prevStartDate.getHour());
-			assertEquals("2", todayStartDate.getMinute(),
-					prevStartDate.getMinute());
+			assertEquals("2", todayStartDate.getMinute(), prevStartDate.getMinute());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -168,8 +159,7 @@ public class TradingCalendarTest {
 			assertTrue("1", TradingCalendar.isTradingDay(date));
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -184,8 +174,7 @@ public class TradingCalendarTest {
 			assertTrue("1", TradingCalendar.isTradingDay(date));
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -200,8 +189,7 @@ public class TradingCalendarTest {
 			assertTrue("1", TradingCalendar.isTradingDay(date));
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -217,8 +205,7 @@ public class TradingCalendarTest {
 				_log.info("TZ: " + timeZones[i]);
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -233,47 +220,34 @@ public class TradingCalendarTest {
 			// Date closeDate = TradingCalendar.getBusinessDayEnd(new Date());
 			// Date date = TradingCalendar.addBusinessDays(new Date(), -1);
 
-			ZonedDateTime openDate = TradingCalendar
-					.getTradingDayStart(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
-			ZonedDateTime closeDate = TradingCalendar
-					.getTradingDayEnd(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
-			ZonedDateTime date = TradingCalendar.addTradingDays(
-					TradingCalendar.getDateTimeNowMarketTimeZone(), -1);
+			ZonedDateTime openDate = TradingCalendar.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone());
+			ZonedDateTime closeDate = TradingCalendar.getTradingDayEnd(TradingCalendar.getDateTimeNowMarketTimeZone());
+			ZonedDateTime date = TradingCalendar.addTradingDays(TradingCalendar.getDateTimeNowMarketTimeZone(), -1);
 			date = TradingCalendar.getDateAtTime(date, 9, 30, 0);
-			_log.debug("Business day openDate: " + openDate
-					+ " Business day closeDate: " + closeDate + " Date: "
-					+ date);
+			_log.debug(
+					"Business day openDate: " + openDate + " Business day closeDate: " + closeDate + " Date: " + date);
 
 			assertTrue(TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 			date = TradingCalendar.getDateAtTime(date, 16, 0, 0);
-			_log.debug("Business day openDate: " + openDate
-					+ " Business day closeDate: " + closeDate + " Date: "
-					+ date);
+			_log.debug(
+					"Business day openDate: " + openDate + " Business day closeDate: " + closeDate + " Date: " + date);
 
-			assertFalse("1",
-					TradingCalendar.isMarketHours(openDate, closeDate, date));
+			assertFalse("1", TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 			date = TradingCalendar.getDateAtTime(date, 15, 0, 0);
-			_log.debug("Business day openDate: " + openDate
-					+ " Business day closeDate: " + closeDate + " Date: "
-					+ date);
+			_log.debug(
+					"Business day openDate: " + openDate + " Business day closeDate: " + closeDate + " Date: " + date);
 
-			assertTrue("2",
-					TradingCalendar.isMarketHours(openDate, closeDate, date));
+			assertTrue("2", TradingCalendar.isMarketHours(openDate, closeDate, date));
 
 			date = TradingCalendar.getDateAtTime(date, 17, 0, 0);
-			_log.debug("Business day openDate: " + openDate
-					+ " Business day closeDate: " + closeDate + " Date: "
-					+ date);
+			_log.debug(
+					"Business day openDate: " + openDate + " Business day closeDate: " + closeDate + " Date: " + date);
 
-			assertFalse("3",
-					TradingCalendar.isMarketHours(openDate, closeDate, date));
+			assertFalse("3", TradingCalendar.isMarketHours(openDate, closeDate, date));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -282,9 +256,7 @@ public class TradingCalendarTest {
 	@Test
 	public void testIsTradingday() {
 		try {
-			ZonedDateTime date = TradingCalendar
-					.getPrevTradingDay(TradingCalendar
-							.getDateTimeNowMarketTimeZone());
+			ZonedDateTime date = TradingCalendar.getPrevTradingDay(TradingCalendar.getDateTimeNowMarketTimeZone());
 			assertTrue("1", TradingCalendar.isTradingDay(date));
 
 			while (date.getDayOfWeek().compareTo(DayOfWeek.SUNDAY) != 0) {
@@ -293,8 +265,7 @@ public class TradingCalendarTest {
 			}
 			assertFalse("2", TradingCalendar.isTradingDay(date));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -304,21 +275,16 @@ public class TradingCalendarTest {
 	public void testIsGreaterThan365() {
 		try {
 			Integer chartDays = 365;
-			ZonedDateTime endDate = TradingCalendar
-					.getDateTimeNowMarketTimeZone();
+			ZonedDateTime endDate = TradingCalendar.getDateTimeNowMarketTimeZone();
 			if (TradingCalendar.getDurationInDays(endDate.minusDays(chartDays),
-					TradingCalendar.getDateTimeNowMarketTimeZone()) > TradingCalendar
-					.getDaysInYear(endDate)) {
-				chartDays = (int) (TradingCalendar.getDaysInYear(endDate) - TradingCalendar
-						.getDurationInDays(
-								TradingCalendar.getDateTimeNowMarketTimeZone(),
-								endDate));
+					TradingCalendar.getDateTimeNowMarketTimeZone()) > TradingCalendar.getDaysInYear(endDate)) {
+				chartDays = (int) (TradingCalendar.getDaysInYear(endDate)
+						- TradingCalendar.getDurationInDays(TradingCalendar.getDateTimeNowMarketTimeZone(), endDate));
 			}
 			_log.debug("chartDays: " + chartDays);
 			assertEquals("1", 365, chartDays.intValue());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -329,16 +295,13 @@ public class TradingCalendarTest {
 		try {
 			AtomicInteger reqId = null;
 			ZonedDateTime date = TradingCalendar.getDateTimeNowMarketTimeZone();
-			_log.debug("date: "
-					+ TradingCalendar.geMillisFromZonedDateTime(date));
-			reqId = new AtomicInteger(
-					(int) (TradingCalendar.geMillisFromZonedDateTime(date) / 1000d));
+			_log.debug("date: " + TradingCalendar.geMillisFromZonedDateTime(date));
+			reqId = new AtomicInteger((int) (TradingCalendar.geMillisFromZonedDateTime(date) / 1000d));
 			_log.debug("reqId: " + reqId);
 			_log.debug("reqId: " + reqId.incrementAndGet());
 			assertNotNull("1", reqId);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -347,16 +310,14 @@ public class TradingCalendarTest {
 	@Test
 	public void testCreateChartPanel() {
 		try {
-			ZonedDateTime endDate = TradingCalendar
-					.getDateTimeNowMarketTimeZone();
-			ZonedDateTime close = TradingCalendar.getDateAtTime(
-					TradingCalendar.getDateTimeNowMarketTimeZone(), 16, 0, 0);
-			ZonedDateTime open = TradingCalendar.getDateAtTime(
-					TradingCalendar.getDateTimeNowMarketTimeZone(), 9, 30, 0);
+			ZonedDateTime endDate = TradingCalendar.getDateTimeNowMarketTimeZone();
+			ZonedDateTime close = TradingCalendar.getDateAtTime(TradingCalendar.getDateTimeNowMarketTimeZone(), 16, 0,
+					0);
+			ZonedDateTime open = TradingCalendar.getDateAtTime(TradingCalendar.getDateTimeNowMarketTimeZone(), 9, 30,
+					0);
 
-			endDate = TradingCalendar.getDateAtTime(
-					TradingCalendar.getPrevTradingDay(TradingCalendar
-							.addTradingDays(close, 0)), close);
+			endDate = TradingCalendar
+					.getDateAtTime(TradingCalendar.getPrevTradingDay(TradingCalendar.addTradingDays(close, 0)), close);
 			assertTrue("1", TradingCalendar.isTradingDay(endDate));
 
 			ZonedDateTime startDate = endDate.minusDays((2 - 1));
@@ -368,8 +329,7 @@ public class TradingCalendarTest {
 
 			_log.debug("startDate: " + startDate);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -378,35 +338,29 @@ public class TradingCalendarTest {
 	@Test
 	public void testZonedDateTimeConverter() {
 		try {
-			ZonedDateTime mktDateTime = TradingCalendar
-					.getDateTimeNowMarketTimeZone();
+			ZonedDateTime mktDateTime = TradingCalendar.getDateTimeNowMarketTimeZone();
 			_log.debug("mktDateTime: " + mktDateTime);
 
 			Instant instant = mktDateTime.toInstant();
 			_log.debug("instant: " + instant);
 
-			java.util.Date javaDate = (java.util.Date) java.util.Date
-					.from(instant);
+			java.util.Date javaDate = (java.util.Date) java.util.Date.from(instant);
 			_log.debug("javaDate: " + javaDate);
 
-			javaDate = TradingCalendar.convertTimeZone(javaDate,
-					TimeZone.getDefault(),
+			javaDate = TradingCalendar.convertTimeZone(javaDate, TimeZone.getDefault(),
 					TimeZone.getTimeZone(TradingCalendar.MKT_TIMEZONE));
 			_log.debug("javaDate convertTimeZone: " + javaDate);
 
-			javaDate = TradingCalendar.convertTimeZone(javaDate,
-					TimeZone.getTimeZone(TradingCalendar.MKT_TIMEZONE),
+			javaDate = TradingCalendar.convertTimeZone(javaDate, TimeZone.getTimeZone(TradingCalendar.MKT_TIMEZONE),
 					TimeZone.getDefault());
 			_log.debug("javaDate: " + javaDate);
 
 			Instant javaDateInstant = Instant.ofEpochMilli(javaDate.getTime());
 			_log.debug("javaDateInstant: " + javaDateInstant);
-			ZonedDateTime convZonedDatetime = ZonedDateTime.ofInstant(
-					javaDateInstant, TradingCalendar.MKT_TIMEZONE);
+			ZonedDateTime convZonedDatetime = ZonedDateTime.ofInstant(javaDateInstant, TradingCalendar.MKT_TIMEZONE);
 			_log.debug("convZonedDatetime: " + convZonedDatetime);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -416,9 +370,8 @@ public class TradingCalendarTest {
 	public void testZonedDateTimeSnippits() {
 
 		try {
-			LocalDateTime specificTime = LocalDateTime.of(LocalDateTime.now()
-					.getYear(), LocalDateTime.now().getMonthValue(),
-					LocalDateTime.now().getDayOfMonth(), 9, 30, 0);
+			LocalDateTime specificTime = LocalDateTime.of(LocalDateTime.now().getYear(),
+					LocalDateTime.now().getMonthValue(), LocalDateTime.now().getDayOfMonth(), 9, 30, 0);
 			_log.debug("specificTime: " + specificTime);
 
 			ZoneId zone = ZoneId.systemDefault();
@@ -431,54 +384,43 @@ public class TradingCalendarTest {
 			long seconds = duration.getSeconds();
 			_log.debug("Duration: " + seconds);
 
-			Period period = Period.between(endOfPeriod.toLocalDate(),
-					specificTime.toLocalDate());
+			Period period = Period.between(endOfPeriod.toLocalDate(), specificTime.toLocalDate());
 			_log.debug("period: " + period.get(ChronoUnit.DAYS));
 
-			ZonedDateTime zonedDateTime1 = endOfPeriod.atZone(ZoneId
-					.of("America/Los_Angeles"));
+			ZonedDateTime zonedDateTime1 = endOfPeriod.atZone(ZoneId.of("America/Los_Angeles"));
 			_log.debug("zonedDateTime at America/Los_Angeles: "
-					+ zonedDateTime1.plusHours((zonedDateTime1.getOffset()
-							.getTotalSeconds() / 3600)));
+					+ zonedDateTime1.plusHours((zonedDateTime1.getOffset().getTotalSeconds() / 3600)));
 
 			ZoneOffset offset = zonedDateTime1.getOffset();
-			_log.debug("ZoneOffset at America/Los_Angeles: "
-					+ offset.getTotalSeconds() / 3600);
+			_log.debug("ZoneOffset at America/Los_Angeles: " + offset.getTotalSeconds() / 3600);
 
 			long millis = zonedDateTime1.toInstant().toEpochMilli();
 			_log.debug("millis: " + millis);
-			_log.debug("seconds: " + (millis / 1000) + " milli: "
-					+ ((int) (millis % 1000)));
-			LocalDateTime dateTime = LocalDateTime.ofEpochSecond(
-					(millis / 1000), ((int) (millis % 1000)), offset);
+			_log.debug("seconds: " + (millis / 1000) + " milli: " + ((int) (millis % 1000)));
+			LocalDateTime dateTime = LocalDateTime.ofEpochSecond((millis / 1000), ((int) (millis % 1000)), offset);
 			_log.debug("dateTime: " + dateTime);
 
 			java.util.Date inDate = new java.util.Date();
 			_log.debug("inDate: " + inDate);
-			LocalDateTime localDateTime = LocalDateTime.ofInstant(
-					inDate.toInstant(), ZoneId.systemDefault());
+			LocalDateTime localDateTime = LocalDateTime.ofInstant(inDate.toInstant(), ZoneId.systemDefault());
 			_log.debug("localDateTime: " + localDateTime);
 
-			java.util.Date outDate = java.util.Date.from(localDateTime.atZone(
-					ZoneId.systemDefault()).toInstant());
+			java.util.Date outDate = java.util.Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 			_log.debug("outDate: " + outDate);
-			ZonedDateTime formattedDate = TradingCalendar
-					.getZonedDateTimeFromDateString("03/31/2015", "MM/dd/yyyy",
-							TradingCalendar.MKT_TIMEZONE);
+			ZonedDateTime formattedDate = TradingCalendar.getZonedDateTimeFromDateString("03/31/2015", "MM/dd/yyyy",
+					TradingCalendar.MKT_TIMEZONE);
 
 			_log.debug("formattedDate: " + formattedDate);
 
 			String stringDate = "20150331";
-			LocalDate date = TradingCalendar.getLocalDateFromDateString(
-					stringDate, "yyyyMMdd");
+			LocalDate date = TradingCalendar.getLocalDateFromDateString(stringDate, "yyyyMMdd");
 			LocalDateTime localDateTime1 = date.atStartOfDay();
 			_log.debug("localDateTime: " + localDateTime1);
 
 			// FORMAT: 20060505 08:00:00 {time zone}
 			stringDate = "20150331 16:30:01";
-			LocalDateTime goodTillDate = TradingCalendar
-					.getLocalDateTimeFromDateTimeString(stringDate,
-							"yyyyMMdd HH:mm:ss");
+			LocalDateTime goodTillDate = TradingCalendar.getLocalDateTimeFromDateTimeString(stringDate,
+					"yyyyMMdd HH:mm:ss");
 			_log.debug("goodTillDate: " + goodTillDate);
 			/*
 			 * TimeZone twsTimeZone = TimeZone.getTimeZone(ConfigProperties
@@ -488,17 +430,14 @@ public class TradingCalendarTest {
 			 * sdf.parse(execution.m_time);
 			 */
 
-			ZonedDateTime localZonedDateTime = ZonedDateTime.of(goodTillDate,
-					TimeZone.getDefault().toZoneId());
+			ZonedDateTime localZonedDateTime = ZonedDateTime.of(goodTillDate, TimeZone.getDefault().toZoneId());
 			_log.debug("localZonedDateTime: " + localZonedDateTime);
 
-			ZonedDateTime mktZonedDateTime = localZonedDateTime
-					.withZoneSameInstant(TradingCalendar.MKT_TIMEZONE);
+			ZonedDateTime mktZonedDateTime = localZonedDateTime.withZoneSameInstant(TradingCalendar.MKT_TIMEZONE);
 			_log.debug("mktZonedDateTime: " + mktZonedDateTime);
 
 			stringDate = "2015-3-31";
-			LocalDate candleDate = TradingCalendar.getLocalDateFromDateString(
-					stringDate, "y-M-d");
+			LocalDate candleDate = TradingCalendar.getLocalDateFromDateString(stringDate, "y-M-d");
 			_log.debug("candleDate: " + candleDate);
 
 			// SimpleDateFormat _sdfLocal = new SimpleDateFormat(
@@ -535,8 +474,7 @@ public class TradingCalendarTest {
 			// endDate.toLocalDate(), DATEFORMAT),
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -546,32 +484,26 @@ public class TradingCalendarTest {
 	public void testGetLocalDateFromDateString() {
 		try {
 			LocalDate date = LocalDate.of(2015, 3, 31);
-			LocalDate formattedDate = TradingCalendar
-					.getLocalDateFromDateString("03/31/2015", "MM/dd/yyyy");
+			LocalDate formattedDate = TradingCalendar.getLocalDateFromDateString("03/31/2015", "MM/dd/yyyy");
 
 			_log.debug("formattedDate: " + formattedDate);
 			assertEquals("1", date, formattedDate);
 
-			formattedDate = TradingCalendar.getLocalDateFromDateString(
-					"2015-3-31", "y-M-d");
+			formattedDate = TradingCalendar.getLocalDateFromDateString("2015-3-31", "y-M-d");
 
 			_log.debug("formattedDate: " + formattedDate);
 			assertEquals("2", date, formattedDate);
 
-			ZonedDateTime zonedDateTime = ZonedDateTime.of(2015, 3, 31, 0, 0,
-					0, 0, TradingCalendar.MKT_TIMEZONE);
+			ZonedDateTime zonedDateTime = ZonedDateTime.of(2015, 3, 31, 0, 0, 0, 0, TradingCalendar.MKT_TIMEZONE);
 
-			ZonedDateTime zonedDateTimeFormatted = TradingCalendar
-					.getZonedDateTimeFromDateString("20150331", "yyyyMMdd",
-							TradingCalendar.MKT_TIMEZONE);
+			ZonedDateTime zonedDateTimeFormatted = TradingCalendar.getZonedDateTimeFromDateString("20150331",
+					"yyyyMMdd", TradingCalendar.MKT_TIMEZONE);
 
-			_log.debug("zonedDateTimeFormatted: " + zonedDateTimeFormatted
-					+ " zonedDateTime: " + zonedDateTime);
+			_log.debug("zonedDateTimeFormatted: " + zonedDateTimeFormatted + " zonedDateTime: " + zonedDateTime);
 			assertEquals("3", zonedDateTimeFormatted, zonedDateTime);
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -581,17 +513,15 @@ public class TradingCalendarTest {
 	public void testGetLocalDateTimeFromDateTimeString() {
 		try {
 			LocalDateTime date = LocalDateTime.of(2015, 3, 31, 9, 59, 59);
-			LocalDateTime formattedDate = TradingCalendar
-					.getLocalDateTimeFromDateTimeString("20150331 09:59:59",
-							"yyyyMMdd HH:mm:ss");
+			LocalDateTime formattedDate = TradingCalendar.getLocalDateTimeFromDateTimeString("20150331 09:59:59",
+					"yyyyMMdd HH:mm:ss");
 
 			_log.debug("formattedDate: " + formattedDate);
 			_log.debug("date: " + date);
 			assertEquals("1", date, formattedDate);
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -600,42 +530,33 @@ public class TradingCalendarTest {
 	@Test
 	public void testGetFormattedDate() {
 		try {
-			ZonedDateTime date = ZonedDateTime.of(2015, 3, 31, 9, 59, 59, 0,
-					TimeZone.getDefault().toZoneId());
+			ZonedDateTime date = ZonedDateTime.of(2015, 3, 31, 9, 59, 59, 0, TimeZone.getDefault().toZoneId());
 
 			_log.debug("date: " + date);
 
 			String DATE_FORMAT = "yyyyMMdd HH:mm:ss";
 
-			String dateFormated = TradingCalendar.getFormattedDate(date,
-					DATE_FORMAT);
+			String dateFormated = TradingCalendar.getFormattedDate(date, DATE_FORMAT);
 			_log.debug("dateFormated ZonedDateTime: " + dateFormated);
 
-			dateFormated = TradingCalendar.getFormattedDate(
-					date.toLocalDateTime(), DATE_FORMAT);
+			dateFormated = TradingCalendar.getFormattedDate(date.toLocalDateTime(), DATE_FORMAT);
 			_log.debug("dateFormated LocalDateTime: " + dateFormated);
 
 			DATE_FORMAT = "yyyyMMdd";
-			dateFormated = TradingCalendar.getFormattedDate(date.toLocalDate(),
-					"yyyyMMdd");
+			dateFormated = TradingCalendar.getFormattedDate(date.toLocalDate(), "yyyyMMdd");
 			_log.debug("dateFormated LocalDate: " + dateFormated);
 
-			ZonedDateTime dateBegin = ZonedDateTime.of(
-					LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC),
+			ZonedDateTime dateBegin = ZonedDateTime.of(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC),
 					ZoneOffset.UTC.normalized());
 			_log.debug("dateBegin: " + dateBegin);
 
 			String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HHmmss'Z'";
-			dateFormated = TradingCalendar.getFormattedDate(date,
-					DATE_TIME_FORMAT);
+			dateFormated = TradingCalendar.getFormattedDate(date, DATE_TIME_FORMAT);
 			_log.debug("dateFormated: " + dateFormated);
 
-			assertEquals("1", date,
-					TradingCalendar.getZonedDateTimeFromDateTimeString(
-							dateFormated, DATE_TIME_FORMAT));
+			assertEquals("1", date, TradingCalendar.getZonedDateTimeFromDateTimeString(dateFormated, DATE_TIME_FORMAT));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -645,28 +566,24 @@ public class TradingCalendarTest {
 	public void getDateTimeNowMarketTimeZone() {
 		try {
 			LocalDateTime date = LocalDateTime.of(2015, 3, 31, 9, 59, 59);
-			LocalDateTime formattedDate = TradingCalendar
-					.getLocalDateTimeFromDateTimeString("20150331 09:59:59",
-							"yyyyMMdd HH:mm:ss");
+			LocalDateTime formattedDate = TradingCalendar.getLocalDateTimeFromDateTimeString("20150331 09:59:59",
+					"yyyyMMdd HH:mm:ss");
 
 			_log.debug("formattedDate: " + formattedDate);
 			_log.debug("date: " + date);
 			assertEquals(date, formattedDate);
 
-			ZonedDateTime nowMkt = TradingCalendar
-					.getDateTimeNowMarketTimeZone();
+			ZonedDateTime nowMkt = TradingCalendar.getDateTimeNowMarketTimeZone();
 			_log.debug("nowMkt: " + nowMkt);
 
 			ZonedDateTime nowPcZone = ZonedDateTime.now();
 			_log.debug("nowPcZone: " + nowPcZone);
-			ZonedDateTime now = TradingCalendar
-					.adjustDateTimeToMarketTimeZone(nowPcZone);
+			ZonedDateTime now = TradingCalendar.adjustDateTimeToMarketTimeZone(nowPcZone);
 			_log.debug("now: " + now);
 			assertEquals("1", now.getZone(), nowMkt.getZone());
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -682,20 +599,17 @@ public class TradingCalendarTest {
 			ZonedDateTime endOfPeriod = startOfPeriod.plusSeconds(299);
 			_log.debug("endOfPeriod: " + endOfPeriod);
 
-			long seconds = TradingCalendar.getDurationInSeconds(startOfPeriod,
-					endOfPeriod);
+			long seconds = TradingCalendar.getDurationInSeconds(startOfPeriod, endOfPeriod);
 			_log.debug("Duration: " + seconds);
 			assertEquals("1", seconds, 299);
 
 			endOfPeriod = endOfPeriod.plusDays(3);
-			long days = TradingCalendar.getDurationInDays(startOfPeriod,
-					endOfPeriod);
+			long days = TradingCalendar.getDurationInDays(startOfPeriod, endOfPeriod);
 			_log.debug("Duration: " + days);
 			assertEquals("2", days, 3);
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -708,13 +622,11 @@ public class TradingCalendarTest {
 			Instant timestamp = new java.util.Date().toInstant();
 			// Now we can convert Instant to ZonedDateTime or other similar
 			// classes
-			LocalDateTime date = LocalDateTime.ofInstant(timestamp,
-					ZoneId.of(ZoneId.SHORT_IDS.get("PST")));
+			LocalDateTime date = LocalDateTime.ofInstant(timestamp, ZoneId.of(ZoneId.SHORT_IDS.get("PST")));
 			_log.debug("date: " + date);
 
 			// Get the date in JVM timeZone
-			ZonedDateTime date1 = ZonedDateTime.now(TimeZone.getDefault()
-					.toZoneId());
+			ZonedDateTime date1 = ZonedDateTime.now(TimeZone.getDefault().toZoneId());
 			_log.debug("date1: " + date1);
 
 			// Calendar to Instant in GMT
@@ -734,8 +646,7 @@ public class TradingCalendarTest {
 			ZonedDateTime defaultZonedDateTime = ZonedDateTime.now(defaultZone);
 			_log.debug("defaultZonedDateTime: " + defaultZonedDateTime);
 
-			ZonedDateTime zonedDateTime = new GregorianCalendar()
-					.toZonedDateTime();
+			ZonedDateTime zonedDateTime = new GregorianCalendar().toZonedDateTime();
 			_log.debug("zonedDateTime: " + zonedDateTime);
 
 			// Date API to Legacy classes
@@ -750,24 +661,16 @@ public class TradingCalendarTest {
 			_log.debug("gc date: " + gc.getTime());
 
 			DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
-			DateTimeFormatter formatter = builder
-					.appendLiteral("Day is:")
-					.appendValue(ChronoField.DAY_OF_MONTH)
-					.appendLiteral(", month is:")
-					.appendValue(ChronoField.MONTH_OF_YEAR)
-					.appendLiteral(", and year:")
-					.appendPattern("u")
-					.appendLiteral(" with the time:")
-					.appendValue(ChronoField.HOUR_OF_DAY)
-					.appendLiteral(":")
-					.appendText(ChronoField.MINUTE_OF_HOUR,
-							TextStyle.NARROW_STANDALONE).toFormatter();
+			DateTimeFormatter formatter = builder.appendLiteral("Day is:").appendValue(ChronoField.DAY_OF_MONTH)
+					.appendLiteral(", month is:").appendValue(ChronoField.MONTH_OF_YEAR).appendLiteral(", and year:")
+					.appendPattern("u").appendLiteral(" with the time:").appendValue(ChronoField.HOUR_OF_DAY)
+					.appendLiteral(":").appendText(ChronoField.MINUTE_OF_HOUR, TextStyle.NARROW_STANDALONE)
+					.toFormatter();
 			ZonedDateTime dateTime = ZonedDateTime.now();
 			String str = dateTime.format(formatter);
 			_log.debug("Formatted String: " + str);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

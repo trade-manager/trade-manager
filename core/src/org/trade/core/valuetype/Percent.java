@@ -48,8 +48,7 @@ import org.trade.core.validator.Validator;
 
 /**
  */
-public class Percent extends ValueType implements Comparator<Percent>,
-		Comparable<Percent> {
+public class Percent extends ValueType implements Comparator<Percent>, Comparable<Percent> {
 	/**
 	 * 
 	 */
@@ -189,8 +188,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 */
 	public Percent(long nonDecimalAmount, int decimalAmount) {
 		// Set up the default constraints for basic Percent values
-		BigDecimal val = new BigDecimal((nonDecimalAmount * 100)
-				+ decimalAmount);
+		BigDecimal val = new BigDecimal((nonDecimalAmount * 100) + decimalAmount);
 		setBigDecimal(val.movePointLeft(SCALE));
 	}
 
@@ -386,8 +384,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 			setBigDecimal(((Percent) value).m_value);
 		} else {
 			try {
-				setBigDecimal(((Percent) JavaTypeTranslator.convert(
-						Percent.class, value)).getBigDecimalValue());
+				setBigDecimal(((Percent) JavaTypeTranslator.convert(Percent.class, value)).getBigDecimalValue());
 			} catch (Exception ex) {
 				throw new ValueTypeException(ex);
 			}
@@ -519,8 +516,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
-	public boolean isValid(Validator validator,
-			ExceptionMessageListener receiver) {
+	public boolean isValid(Validator validator, ExceptionMessageListener receiver) {
 		return validator.isValid(m_value, m_invalidValue, null, receiver);
 	}
 
@@ -533,11 +529,9 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 *            boolean
 	 * @return Validator
 	 */
-	public Validator getDefaultValidator(IMessageFactory messageFactory,
-			boolean isMandatory) {
+	public Validator getDefaultValidator(IMessageFactory messageFactory, boolean isMandatory) {
 		// This allow non-negative 11.2
-		return new PercentValidator(messageFactory, false, true, 7, 5,
-				isMandatory);
+		return new PercentValidator(messageFactory, false, true, 7, 5, isMandatory);
 	}
 
 	/**
@@ -563,8 +557,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 		String error = null;
 
 		if (!isEmpty()) {
-			long nonDecimalLength = Long.toString(getNonDecimalAmount())
-					.length();
+			long nonDecimalLength = Long.toString(getNonDecimalAmount()).length();
 
 			// Note that the decimal length will be 1 for 00-09.
 			long decimalLength = Long.toString(getDecimalAmount()).length();
@@ -576,8 +569,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 
 			// Add three to account for the decimal portion and decimal point.
 			if ((nonDecimalLength + 3) > getMaxLength()) {
-				error = "length of digits and decimal point should not exceed "
-						+ getMaxLength();
+				error = "length of digits and decimal point should not exceed " + getMaxLength();
 			}
 
 			// Disallow zero for certain formats
@@ -616,7 +608,8 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * 
 	 * 
 	 * @return Object
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 
 	public Object clone() {
@@ -637,8 +630,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @return int
 	 */
 	public int compareTo(final Percent other) {
-		return CoreUtils.nullSafeComparator(this.getBigDecimalValue(),
-				other.getBigDecimalValue());
+		return CoreUtils.nullSafeComparator(this.getBigDecimalValue(), other.getBigDecimalValue());
 	}
 
 	/**
@@ -651,8 +643,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 	 * @return int
 	 */
 	public int compare(Percent o1, Percent o2) {
-		int returnVal = CoreUtils.nullSafeComparator(o1.getBigDecimalValue(),
-				o2.getBigDecimalValue());
+		int returnVal = CoreUtils.nullSafeComparator(o1.getBigDecimalValue(), o2.getBigDecimalValue());
 		if (m_ascending.equals(Boolean.FALSE)) {
 			returnVal = returnVal * -1;
 		}
@@ -672,8 +663,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 			return true;
 
 		if (objectToCompare instanceof Percent) {
-			if (CoreUtils.nullSafeComparator(
-					((Percent) objectToCompare).getBigDecimalValue(),
+			if (CoreUtils.nullSafeComparator(((Percent) objectToCompare).getBigDecimalValue(),
 					this.getBigDecimalValue()) == 0)
 				return true;
 		}
@@ -694,8 +684,7 @@ public class Percent extends ValueType implements Comparator<Percent>,
 			m_value = new BigDecimal(0.0);
 		} else {
 			// m_value = value;
-			m_value = (new BigDecimal(value)).setScale(SCALE,
-					BigDecimal.ROUND_HALF_EVEN);
+			m_value = (new BigDecimal(value)).setScale(SCALE, BigDecimal.ROUND_HALF_EVEN);
 		}
 
 		// Clear any invalid values

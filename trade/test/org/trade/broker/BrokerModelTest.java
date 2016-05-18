@@ -83,8 +83,7 @@ import org.trade.ui.base.BasePanel;
  */
 public class BrokerModelTest implements BrokerChangeListener {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(BrokerModelTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(BrokerModelTest.class);
 
 	@Rule
 	public TestName name = new TestName();
@@ -133,13 +132,11 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void setUp() throws Exception {
 		try {
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-			backTestbrokerModel = (BrokerModel) ClassFactory
-					.getServiceForInterface(_broker, BrokerModelTest.class);
+			backTestbrokerModel = (BrokerModel) ClassFactory.getServiceForInterface(_broker, BrokerModelTest.class);
 			backTestbrokerModel.onConnect(host, port, clientId);
 			assertNotNull("1", this.tradestrategy);
 
-			backTestbrokerModel = (BrokerModel) ClassFactory
-					.getServiceForInterface(_broker, BrokerModelTest.class);
+			backTestbrokerModel = (BrokerModel) ClassFactory.getServiceForInterface(_broker, BrokerModelTest.class);
 			backTestbrokerModel.onConnect(host, port, clientId);
 
 			timerRunning = new AtomicInteger(0);
@@ -153,12 +150,10 @@ public class BrokerModelTest implements BrokerChangeListener {
 			}
 			timer.stop();
 			if (backTestbrokerModel.isConnected())
-				_log.warn("Could not connect to TWS test will be ignored.",
-						backTestbrokerModel.isConnected());
+				_log.warn("Could not connect to TWS test will be ignored.", backTestbrokerModel.isConnected());
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -174,15 +169,13 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		// Wait for the BackTestBroker to complete. These tests use the testing
 		// client from org.trade.brokerclient that runs its own thread.
-		Broker backTestBroker = backTestbrokerModel
-				.getBackTestBroker(this.tradestrategy.getId());
+		Broker backTestBroker = backTestbrokerModel.getBackTestBroker(this.tradestrategy.getId());
 		if (null != backTestBroker) {
 			// Ping the broker to see if its completed. Not isConnected always
 			// returns false for BackTestBrokerModel.
 			timer.start();
 			synchronized (lockCoreUtilsTest) {
-				while (!backTestbrokerModel.isConnected() && !connectionFailed
-						&& !backTestBroker.isDone()) {
+				while (!backTestbrokerModel.isConnected() && !connectionFailed && !backTestBroker.isDone()) {
 					lockCoreUtilsTest.wait();
 				}
 			}
@@ -209,24 +202,19 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.STPLMT, 100, price,
-					price.add(new BigDecimal(0.02)),
-					TradingCalendar.getDateTimeNowMarketTimeZone());
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, Action.BUY, OrderType.STPLMT, 100, price,
+					price.add(new BigDecimal(0.02)), TradingCalendar.getDateTimeNowMarketTimeZone());
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setTransmit(new Boolean(true));
 			tradeOrder.setStatus(OrderStatus.UNSUBMIT);
 
-			tradeOrder = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder);
+			tradeOrder = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder);
 
-			_log.info("IdTradeOrder: " + tradeOrder.getIdTradeOrder()
-					+ " OrderKey: " + tradeOrder.getOrderKey());
+			_log.info("IdTradeOrder: " + tradeOrder.getIdTradeOrder() + " OrderKey: " + tradeOrder.getOrderKey());
 			assertNotNull("1", tradeOrder);
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -238,25 +226,20 @@ public class BrokerModelTest implements BrokerChangeListener {
 		try {
 			_log.info("Symbol: " + this.tradestrategy.getContract().getSymbol());
 
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.STPLMT, 100,
-					price.subtract(new BigDecimal(0.70)),
-					price.subtract(new BigDecimal(0.73)),
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, Action.SELL, OrderType.STPLMT, 100,
+					price.subtract(new BigDecimal(0.70)), price.subtract(new BigDecimal(0.73)),
 					TradingCalendar.getDateTimeNowMarketTimeZone());
 
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setTransmit(new Boolean(true));
 			tradeOrder.setStatus(OrderStatus.UNSUBMIT);
-			tradeOrder = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder);
+			tradeOrder = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder);
 
-			_log.info("IdTradeOrder: " + tradeOrder.getIdTradeOrder()
-					+ " OrderKey: " + tradeOrder.getOrderKey());
+			_log.info("IdTradeOrder: " + tradeOrder.getIdTradeOrder() + " OrderKey: " + tradeOrder.getOrderKey());
 			assertNotNull("1", tradeOrder.getIdTradeOrder());
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -266,27 +249,21 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testSubmitComboOrder() {
 
 		try {
-			String ocaID = new String(Integer.toString((new BigDecimal(Math
-					.random() * 1000000)).intValue()));
+			String ocaID = new String(Integer.toString((new BigDecimal(Math.random() * 1000000)).intValue()));
 
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.LMT, 50, null,
-					price.add(new BigDecimal(1.0)),
-					TradingCalendar.getDateTimeNowMarketTimeZone());
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, Action.SELL, OrderType.LMT, 50, null,
+					price.add(new BigDecimal(1.0)), TradingCalendar.getDateTimeNowMarketTimeZone());
 
 			tradeOrder.setClientId(clientId);
 			tradeOrder.setOcaType(2);
 			tradeOrder.setOcaGroupName(ocaID);
 			tradeOrder.setTransmit(true);
 			tradeOrder.setStatus(OrderStatus.UNSUBMIT);
-			tradeOrder = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder);
+			tradeOrder = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder);
 			assertNotNull("1", tradeOrder.getIdTradeOrder());
 
-			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.LMT, 50,
-					price.subtract(new BigDecimal(1.0)),
-					price.add(new BigDecimal(2.0)),
+			TradeOrder tradeOrder1 = new TradeOrder(this.tradestrategy, Action.SELL, OrderType.LMT, 50,
+					price.subtract(new BigDecimal(1.0)), price.add(new BigDecimal(2.0)),
 					TradingCalendar.getDateTimeNowMarketTimeZone());
 
 			tradeOrder1.setClientId(clientId);
@@ -295,69 +272,53 @@ public class BrokerModelTest implements BrokerChangeListener {
 			tradeOrder1.setTransmit(false);
 			tradeOrder1.setStatus(OrderStatus.UNSUBMIT);
 
-			tradeOrder1 = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder1);
+			tradeOrder1 = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder1);
 			assertNotNull("2", tradeOrder1.getIdTradeOrder());
 
-			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.STP, 50,
-					price.subtract(new BigDecimal(1.0)), null,
-					TradingCalendar.getDateTimeNowMarketTimeZone());
+			TradeOrder tradeOrder2 = new TradeOrder(this.tradestrategy, Action.SELL, OrderType.STP, 50,
+					price.subtract(new BigDecimal(1.0)), null, TradingCalendar.getDateTimeNowMarketTimeZone());
 			ocaID = ocaID + "abc";
 			tradeOrder2.setClientId(clientId);
 			tradeOrder2.setOcaType(2);
 			tradeOrder2.setOcaGroupName(ocaID);
 			tradeOrder2.setTransmit(true);
 			tradeOrder2.setStatus(OrderStatus.UNSUBMIT);
-			tradeOrder2 = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder2);
+			tradeOrder2 = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder2);
 			assertNotNull("3", tradeOrder2.getIdTradeOrder());
 
-			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy,
-					Action.SELL, OrderType.STP, 50,
-					price.subtract(new BigDecimal(2.0)), null,
-					TradingCalendar.getDateTimeNowMarketTimeZone());
+			TradeOrder tradeOrder3 = new TradeOrder(this.tradestrategy, Action.SELL, OrderType.STP, 50,
+					price.subtract(new BigDecimal(2.0)), null, TradingCalendar.getDateTimeNowMarketTimeZone());
 			tradeOrder3.setClientId(clientId);
 			tradeOrder3.setOcaType(2);
 			tradeOrder3.setOcaGroupName(ocaID);
 			tradeOrder3.setTransmit(false);
 			tradeOrder3.setStatus(OrderStatus.UNSUBMIT);
-			tradeOrder3 = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder3);
+			tradeOrder3 = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder3);
 			assertNotNull("4", tradeOrder3.getIdTradeOrder());
-			_log.info("IdTradeOrder: " + tradeOrder3.getIdTradeOrder()
-					+ " OrderKey2: " + tradeOrder2.getOrderKey()
-					+ " OrderKey2 Price: " + tradeOrder2.getLimitPrice()
-					+ " OrderKey3: " + tradeOrder3.getOrderKey()
+			_log.info("IdTradeOrder: " + tradeOrder3.getIdTradeOrder() + " OrderKey2: " + tradeOrder2.getOrderKey()
+					+ " OrderKey2 Price: " + tradeOrder2.getLimitPrice() + " OrderKey3: " + tradeOrder3.getOrderKey()
 					+ " OrderKey3 Price: " + tradeOrder3.getAuxPrice());
 			// Update the Stop price
 			tradeOrder2.setAuxPrice(price.subtract(new BigDecimal(0.9)));
 			tradeOrder2.setStatus(OrderStatus.UNSUBMIT);
-			tradeOrder2 = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder2);
+			tradeOrder2 = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder2);
 
 			tradeOrder3.setAuxPrice(price.subtract(new BigDecimal(0.9)));
 			tradeOrder3.setStatus(OrderStatus.UNSUBMIT);
-			tradeOrder3 = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder3);
-			_log.info("IdTradeOrder: " + tradeOrder3.getIdTradeOrder()
-					+ " OrderKey2: " + tradeOrder2.getOrderKey()
-					+ " OrderKey2 Price: " + tradeOrder2.getLimitPrice()
-					+ " OrderKey3: " + tradeOrder3.getOrderKey()
+			tradeOrder3 = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder3);
+			_log.info("IdTradeOrder: " + tradeOrder3.getIdTradeOrder() + " OrderKey2: " + tradeOrder2.getOrderKey()
+					+ " OrderKey2 Price: " + tradeOrder2.getLimitPrice() + " OrderKey3: " + tradeOrder3.getOrderKey()
 					+ " OrderKey3 Price: " + tradeOrder3.getAuxPrice());
 
 			tradeOrder3.setTransmit(new Boolean(true));
 			tradeOrder3.setStatus(OrderStatus.UNSUBMIT);
-			tradeOrder3 = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder3);
+			tradeOrder3 = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder3);
 
-			_log.info("IdTradeOrder: " + tradeOrder2.getIdTradeOrder()
-					+ " OrderKey: " + tradeOrder3.getOrderKey());
+			_log.info("IdTradeOrder: " + tradeOrder2.getIdTradeOrder() + " OrderKey: " + tradeOrder3.getOrderKey());
 			assertNotNull("5", tradeOrder3);
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -367,33 +328,22 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnBrokerData() {
 
 		try {
-			StrategyData.doDummyData(this.tradestrategy.getStrategyData()
-					.getCandleDataset().getSeries(0),
-					tradestrategy.getTradingday(),
-					tradestrategy.getChartDays(), tradestrategy.getBarSize(),
-					true, 0);
+			StrategyData.doDummyData(this.tradestrategy.getStrategyData().getCandleDataset().getSeries(0),
+					tradestrategy.getTradingday(), tradestrategy.getChartDays(), tradestrategy.getBarSize(), true, 0);
 			backTestbrokerModel.setBrokerDataOnly(true);
-			backTestbrokerModel.onBrokerData(tradestrategy, tradestrategy
-					.getTradingday().getClose());
+			backTestbrokerModel.onBrokerData(tradestrategy, tradestrategy.getTradingday().getClose());
 
-			assertFalse("1", this.tradestrategy.getStrategyData()
-					.getCandleDataset().getSeries(0).isEmpty());
+			assertFalse("1", this.tradestrategy.getStrategyData().getCandleDataset().getSeries(0).isEmpty());
 
-			IndicatorSeries candleseries = this.tradestrategy.getStrategyData()
-					.getCandleDataset().getSeries(0);
+			IndicatorSeries candleseries = this.tradestrategy.getStrategyData().getCandleDataset().getSeries(0);
 			IndicatorSeries sma1Series = this.tradestrategy.getStrategyData()
-					.getIndicatorByType(IndicatorSeries.MovingAverageSeries)
-					.getSeries(0);
+					.getIndicatorByType(IndicatorSeries.MovingAverageSeries).getSeries(0);
 			IndicatorSeries sma2Series = this.tradestrategy.getStrategyData()
-					.getIndicatorByType(IndicatorSeries.MovingAverageSeries)
-					.getSeries(1);
+					.getIndicatorByType(IndicatorSeries.MovingAverageSeries).getSeries(1);
 			IndicatorSeries vwapSeries = this.tradestrategy.getStrategyData()
-					.getIndicatorByType(IndicatorSeries.VwapSeries)
-					.getSeries(0);
-			IndicatorSeries heikinAshiSeries = this.tradestrategy
-					.getStrategyData()
-					.getIndicatorByType(IndicatorSeries.HeikinAshiSeries)
-					.getSeries(0);
+					.getIndicatorByType(IndicatorSeries.VwapSeries).getSeries(0);
+			IndicatorSeries heikinAshiSeries = this.tradestrategy.getStrategyData()
+					.getIndicatorByType(IndicatorSeries.HeikinAshiSeries).getSeries(0);
 
 			for (int i = 0; i < candleseries.getItemCount(); i++) {
 				CandleItem candle = (CandleItem) candleseries.getDataItem(i);
@@ -406,64 +356,48 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 				int b = heikinAshiSeries.indexOf(period);
 				if (b > -1) {
-					heikinAshiCandle = (CandleItem) heikinAshiSeries
-							.getDataItem(b);
+					heikinAshiCandle = (CandleItem) heikinAshiSeries.getDataItem(b);
 				}
 
-				int c = vwapSeries.indexOf(new Long(period
-						.getMiddleMillisecond()));
+				int c = vwapSeries.indexOf(new Long(period.getMiddleMillisecond()));
 				if (c > -1) {
 					vwap = (VwapItem) vwapSeries.getDataItem(c);
 				}
-				int d = sma1Series.indexOf(new Long(period
-						.getMiddleMillisecond()));
+				int d = sma1Series.indexOf(new Long(period.getMiddleMillisecond()));
 				if (d > -1) {
 					sma1 = (MovingAverageItem) sma1Series.getDataItem(d);
 				}
-				int e = sma2Series.indexOf(new Long(period
-						.getMiddleMillisecond()));
+				int e = sma2Series.indexOf(new Long(period.getMiddleMillisecond()));
 				if (e > -1) {
 					sma2 = (MovingAverageItem) sma2Series.getDataItem(e);
 				}
 				if (null != candle) {
-					_log.info("    Period Start: " + period.getStart()
-							+ " Period End: " + period.getEnd() + " H: "
-							+ new Money(candle.getHigh()) + " L: "
-							+ new Money(candle.getLow()) + " O: "
-							+ new Money(candle.getOpen()) + " C: "
-							+ new Money(candle.getClose()) + " Vol: "
-							+ new Money(candle.getVolume()) + " Vwap: "
-							+ new Money(candle.getVwap()));
+					_log.info("    Period Start: " + period.getStart() + " Period End: " + period.getEnd() + " H: "
+							+ new Money(candle.getHigh()) + " L: " + new Money(candle.getLow()) + " O: "
+							+ new Money(candle.getOpen()) + " C: " + new Money(candle.getClose()) + " Vol: "
+							+ new Money(candle.getVolume()) + " Vwap: " + new Money(candle.getVwap()));
 				}
 				if (null != heikinAshiCandle) {
-					_log.info("HA  Period Start: " + period.getStart()
-							+ " Period End: " + period.getEnd() + " HA H: "
-							+ new Money(heikinAshiCandle.getHigh()) + " HA L: "
-							+ new Money(heikinAshiCandle.getLow()) + " HA O: "
-							+ new Money(heikinAshiCandle.getOpen()) + " HA C: "
-							+ new Money(heikinAshiCandle.getClose())
-							+ " HA Vol: "
-							+ new Money(heikinAshiCandle.getVolume())
-							+ " HA Vwap: "
+					_log.info("HA  Period Start: " + period.getStart() + " Period End: " + period.getEnd() + " HA H: "
+							+ new Money(heikinAshiCandle.getHigh()) + " HA L: " + new Money(heikinAshiCandle.getLow())
+							+ " HA O: " + new Money(heikinAshiCandle.getOpen()) + " HA C: "
+							+ new Money(heikinAshiCandle.getClose()) + " HA Vol: "
+							+ new Money(heikinAshiCandle.getVolume()) + " HA Vwap: "
 							+ new Money(heikinAshiCandle.getVwap()));
 				}
 				if (null != vwap) {
-					_log.info("Vwp Period Start: " + period + " Vwap: "
-							+ new Money(vwap.getY()));
+					_log.info("Vwp Period Start: " + period + " Vwap: " + new Money(vwap.getY()));
 				}
 				if (null != sma1) {
-					_log.info("S8  Period Start: " + period + " Sma 8: "
-							+ new Money(sma1.getY()));
+					_log.info("S8  Period Start: " + period + " Sma 8: " + new Money(sma1.getY()));
 				}
 				if (null != sma2) {
-					_log.info("S20 Period Start: " + period + " Sma 20: "
-							+ new Money(sma2.getY()));
+					_log.info("S20 Period Start: " + period + " Sma 20: " + new Money(sma2.getY()));
 				}
 			}
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -479,8 +413,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 				assertTrue("2", backTestbrokerModel.isConnected());
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -497,8 +430,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 				assertTrue("2", backTestbrokerModel.isConnected());
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -511,8 +443,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 			Integer id = backTestbrokerModel.getNextRequestId();
 			assertNotNull("1", id);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -522,17 +453,13 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnSubscribeAccountUpdates() {
 
 		try {
-			backTestbrokerModel.onSubscribeAccountUpdates(true, tradestrategy
-					.getPortfolio().getIndividualAccount().getAccountNumber());
-			assertFalse(
-					"1",
-					backTestbrokerModel.isAccountUpdatesRunning(tradestrategy
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber()));
+			backTestbrokerModel.onSubscribeAccountUpdates(true,
+					tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber());
+			assertFalse("1", backTestbrokerModel
+					.isAccountUpdatesRunning(tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber()));
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -542,18 +469,14 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnCancelAccountUpdates() {
 
 		try {
-			backTestbrokerModel.onSubscribeAccountUpdates(true, tradestrategy
-					.getPortfolio().getIndividualAccount().getAccountNumber());
-			backTestbrokerModel.onCancelAccountUpdates(tradestrategy
-					.getPortfolio().getIndividualAccount().getAccountNumber());
-			assertFalse(
-					"1",
-					backTestbrokerModel.isAccountUpdatesRunning(tradestrategy
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber()));
+			backTestbrokerModel.onSubscribeAccountUpdates(true,
+					tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber());
+			backTestbrokerModel
+					.onCancelAccountUpdates(tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber());
+			assertFalse("1", backTestbrokerModel
+					.isAccountUpdatesRunning(tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber()));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -564,14 +487,10 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 			backTestbrokerModel.onReqManagedAccount();
-			assertFalse(
-					"1",
-					backTestbrokerModel.isAccountUpdatesRunning(tradestrategy
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber()));
+			assertFalse("1", backTestbrokerModel
+					.isAccountUpdatesRunning(tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber()));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -583,8 +502,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 		try {
 			backTestbrokerModel.onReqAllOpenOrders();
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -596,8 +514,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 		try {
 			backTestbrokerModel.onReqOpenOrders();
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -608,15 +525,11 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 
-			this.tradestrategy.getContract().addTradestrategy(
-					this.tradestrategy);
-			backTestbrokerModel.onReqRealTimeBars(
-					this.tradestrategy.getContract(), false);
-			assertFalse("1",
-					backTestbrokerModel.isRealtimeBarsRunning(tradestrategy));
+			this.tradestrategy.getContract().addTradestrategy(this.tradestrategy);
+			backTestbrokerModel.onReqRealTimeBars(this.tradestrategy.getContract(), false);
+			assertFalse("1", backTestbrokerModel.isRealtimeBarsRunning(tradestrategy));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -626,11 +539,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnReqAllExecutions() {
 
 		try {
-			backTestbrokerModel.onReqAllExecutions(this.tradestrategy
-					.getTradingday().getOpen());
+			backTestbrokerModel.onReqAllExecutions(this.tradestrategy.getTradingday().getOpen());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -642,8 +553,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 		try {
 			backTestbrokerModel.onReqExecutions(this.tradestrategy, false);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -654,12 +564,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 			backTestbrokerModel.onCancelRealtimeBars(this.tradestrategy);
-			assertFalse("1",
-					backTestbrokerModel
-							.isRealtimeBarsRunning(this.tradestrategy));
+			assertFalse("1", backTestbrokerModel.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -669,16 +576,12 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testIsAccountUpdatesRunning() {
 
 		try {
-			backTestbrokerModel.onCancelAccountUpdates(tradestrategy
-					.getPortfolio().getIndividualAccount().getAccountNumber());
-			assertFalse(
-					"1",
-					backTestbrokerModel.isAccountUpdatesRunning(tradestrategy
-							.getPortfolio().getIndividualAccount()
-							.getAccountNumber()));
+			backTestbrokerModel
+					.onCancelAccountUpdates(tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber());
+			assertFalse("1", backTestbrokerModel
+					.isAccountUpdatesRunning(tradestrategy.getPortfolio().getIndividualAccount().getAccountNumber()));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -689,12 +592,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 			backTestbrokerModel.onCancelBrokerData(this.tradestrategy);
-			assertFalse("1",
-					backTestbrokerModel
-							.isHistoricalDataRunning(this.tradestrategy));
+			assertFalse("1", backTestbrokerModel.isHistoricalDataRunning(this.tradestrategy));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -704,15 +604,10 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testIsHistoricalDataRunningContract() {
 
 		try {
-			backTestbrokerModel.onCancelBrokerData(this.tradestrategy
-					.getContract());
-			assertFalse("1",
-					backTestbrokerModel
-							.isHistoricalDataRunning(this.tradestrategy
-									.getContract()));
+			backTestbrokerModel.onCancelBrokerData(this.tradestrategy.getContract());
+			assertFalse("1", backTestbrokerModel.isHistoricalDataRunning(this.tradestrategy.getContract()));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -723,12 +618,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 			backTestbrokerModel.onCancelAllRealtimeData();
-			assertFalse("1",
-					backTestbrokerModel
-							.isRealtimeBarsRunning(this.tradestrategy));
+			assertFalse("1", backTestbrokerModel.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -739,12 +631,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 			backTestbrokerModel.onCancelRealtimeBars(this.tradestrategy);
-			assertFalse("1",
-					backTestbrokerModel
-							.isRealtimeBarsRunning(this.tradestrategy));
+			assertFalse("1", backTestbrokerModel.isRealtimeBarsRunning(this.tradestrategy));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -755,12 +644,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 			backTestbrokerModel.onCancelBrokerData(this.tradestrategy);
-			assertFalse("1",
-					backTestbrokerModel
-							.isHistoricalDataRunning(this.tradestrategy));
+			assertFalse("1", backTestbrokerModel.isHistoricalDataRunning(this.tradestrategy));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -770,11 +656,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnCancelContractDetails() {
 
 		try {
-			backTestbrokerModel.onCancelContractDetails(this.tradestrategy
-					.getContract());
+			backTestbrokerModel.onCancelContractDetails(this.tradestrategy.getContract());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -784,11 +668,9 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnContractDetails() {
 
 		try {
-			backTestbrokerModel.onContractDetails(this.tradestrategy
-					.getContract());
+			backTestbrokerModel.onContractDetails(this.tradestrategy.getContract());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -798,12 +680,10 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testGetHistoricalData() {
 
 		try {
-			ConcurrentHashMap<Integer, Tradestrategy> historicalDataList = backTestbrokerModel
-					.getHistoricalData();
+			ConcurrentHashMap<Integer, Tradestrategy> historicalDataList = backTestbrokerModel.getHistoricalData();
 			assertNotNull("1", historicalDataList);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -813,15 +693,12 @@ public class BrokerModelTest implements BrokerChangeListener {
 	public void testOnPlaceOrder() {
 
 		try {
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.MKT, 1000, null, null,
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, Action.BUY, OrderType.MKT, 1000, null, null,
 					TradingCalendar.getDateTimeNowMarketTimeZone());
-			tradeOrder = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder);
+			tradeOrder = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder);
 			assertNotNull("1", tradeOrder);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -832,16 +709,13 @@ public class BrokerModelTest implements BrokerChangeListener {
 
 		try {
 
-			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy,
-					Action.BUY, OrderType.MKT, 1000, null, null,
+			TradeOrder tradeOrder = new TradeOrder(this.tradestrategy, Action.BUY, OrderType.MKT, 1000, null, null,
 					TradingCalendar.getDateTimeNowMarketTimeZone());
-			tradeOrder = backTestbrokerModel.onPlaceOrder(
-					this.tradestrategy.getContract(), tradeOrder);
+			tradeOrder = backTestbrokerModel.onPlaceOrder(this.tradestrategy.getContract(), tradeOrder);
 			assertNotNull("1", tradeOrder);
 			backTestbrokerModel.onCancelOrder(tradeOrder);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -854,8 +728,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 			boolean result = backTestbrokerModel.isBrokerDataOnly();
 			assertFalse("1", result);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -876,8 +749,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 	 * @param execDetails
 	 *            ConcurrentHashMap<Integer,TradeOrder>
 	 */
-	public void executionDetailsEnd(
-			ConcurrentHashMap<Integer, TradeOrder> execDetails) {
+	public void executionDetailsEnd(ConcurrentHashMap<Integer, TradeOrder> execDetails) {
 
 	}
 
@@ -937,8 +809,7 @@ public class BrokerModelTest implements BrokerChangeListener {
 		} else if (ex.getErrorId() == 3) {
 			_log.info("Information: " + ex.getMessage(), BasePanel.INFORMATION);
 		} else {
-			_log.error("Unknown Error Id Code: " + ex.getErrorCode(),
-					ex.getMessage(), ex);
+			_log.error("Unknown Error Id Code: " + ex.getErrorCode(), ex.getMessage(), ex);
 		}
 	}
 

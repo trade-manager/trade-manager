@@ -85,11 +85,9 @@ public class VolumeSeries extends IndicatorSeries {
 	 *            Boolean
 	 */
 
-	public VolumeSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public VolumeSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -112,11 +110,9 @@ public class VolumeSeries extends IndicatorSeries {
 	 * @param barWidthInMilliseconds
 	 *            long
 	 */
-	public VolumeSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, long barWidthInMilliseconds) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public VolumeSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart, long barWidthInMilliseconds) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.barWidthInMilliseconds = barWidthInMilliseconds;
 	}
 
@@ -154,8 +150,7 @@ public class VolumeSeries extends IndicatorSeries {
 		if (!this.isEmpty()) {
 			VolumeItem item0 = (VolumeItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new VolumeItem(period, volume, side), true);
@@ -173,10 +168,8 @@ public class VolumeSeries extends IndicatorSeries {
 	public void add(VolumeItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			VolumeItem item0 = (VolumeItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -230,12 +223,11 @@ public class VolumeSeries extends IndicatorSeries {
 			 * the set.
 			 */
 			if (newBar) {
-				VolumeItem dataItem = new VolumeItem(candleItem.getPeriod(),
-						new Long(candleItem.getVolume()), candleItem.getSide());
+				VolumeItem dataItem = new VolumeItem(candleItem.getPeriod(), new Long(candleItem.getVolume()),
+						candleItem.getSide());
 				this.add(dataItem, true);
 			} else {
-				VolumeItem dataItem = (VolumeItem) this.getDataItem(this
-						.getItemCount() - 1);
+				VolumeItem dataItem = (VolumeItem) this.getDataItem(this.getItemCount() - 1);
 				dataItem.setVolume(candleItem.getVolume());
 				dataItem.setSide(candleItem.getSide());
 			}
@@ -250,8 +242,7 @@ public class VolumeSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			VolumeItem dataItem = (VolumeItem) this.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Volume: "
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Volume: "
 					+ dataItem.getVolume());
 		}
 	}

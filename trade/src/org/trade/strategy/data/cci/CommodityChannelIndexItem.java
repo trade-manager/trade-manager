@@ -64,8 +64,7 @@ public class CommodityChannelIndexItem extends ComparableObjectItem {
 	 * @param movingAverage
 	 *            BigDecimal
 	 */
-	public CommodityChannelIndexItem(RegularTimePeriod period,
-			BigDecimal cciAverage) {
+	public CommodityChannelIndexItem(RegularTimePeriod period, BigDecimal cciAverage) {
 		super(period, new CommodityChannelIndex(cciAverage));
 	}
 

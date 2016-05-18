@@ -64,11 +64,9 @@ public class TradeOrderfillHome {
 	public TradeOrderfill findById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradeOrderfill instance = entityManager.find(TradeOrderfill.class,
-					id);
+			TradeOrderfill instance = entityManager.find(TradeOrderfill.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
 		} catch (Exception re) {
@@ -89,17 +87,14 @@ public class TradeOrderfillHome {
 	public synchronized TradeOrderfill findOrderFillByExecId(String execId) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<TradeOrderfill> query = builder
-					.createQuery(TradeOrderfill.class);
+			CriteriaQuery<TradeOrderfill> query = builder.createQuery(TradeOrderfill.class);
 			Root<TradeOrderfill> from = query.from(TradeOrderfill.class);
 			query.select(from);
 			query.where(builder.equal(from.get("execId"), execId));
-			List<TradeOrderfill> items = entityManager.createQuery(query)
-					.getResultList();
+			List<TradeOrderfill> items = entityManager.createQuery(query).getResultList();
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
 				return items.get(0);

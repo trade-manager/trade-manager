@@ -57,8 +57,7 @@ import org.trade.core.dao.AspectHome;
  */
 public class StrategyTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(StrategyTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(StrategyTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -114,14 +113,12 @@ public class StrategyTest {
 				transientInstance = new Strategy(name);
 			}
 			transientInstance = aspectHome.persist(transientInstance);
-			_log.info("Strategy added Id = "
-					+ transientInstance.getIdStrategy());
+			_log.info("Strategy added Id = " + transientInstance.getIdStrategy());
 			assertNotNull("1", transientInstance.getIdStrategy());
 			aspectHome.remove(transientInstance);
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

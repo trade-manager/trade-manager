@@ -259,7 +259,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doNew() {
 		// Handle the File|New menu item.
@@ -283,7 +284,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doOpen() {
 		if (!okToAbandon()) {
@@ -293,8 +295,7 @@ public class ErrorPanel extends BasePanel {
 		jpgIcon = new ImageIcon("images/jpgIcon.jpg");
 		gifIcon = new ImageIcon("images/gifIcon.gif");
 
-		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "jpg",
-				"gif" }, "JPEG and GIF Image Files");
+		ExampleFileFilter filter = new ExampleFileFilter(new String[] { "jpg", "gif" }, "JPEG and GIF Image Files");
 		ExampleFileChooser fileView = new ExampleFileChooser();
 
 		fileView.putIcon("jpg", jpgIcon);
@@ -333,29 +334,28 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void openFile(String fileName) {
 		Cursor oldCursor = getFrame().getCursor();
 
 		getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		try (InputStream is = new BufferedInputStream(new FileInputStream(
-				currFileName));) {
+		try (InputStream is = new BufferedInputStream(new FileInputStream(currFileName));) {
 
 			// Load the data from the stream
 			jTextArea1.setInputStream(is);
 		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(this, "Failed to open file "
-					+ fileName, "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Failed to open file " + fileName, "Warning",
+					JOptionPane.WARNING_MESSAGE);
 			statusBar.setText("Error opening " + fileName);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this, "Error while reading file "
-					+ fileName, "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error while reading file " + fileName, "Warning",
+					JOptionPane.WARNING_MESSAGE);
 			statusBar.setText("Error opening " + fileName);
 		} catch (Throwable t) {
-			JOptionPane.showMessageDialog(this, "Unexpected exception: " + t,
-					"Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Unexpected exception: " + t, "Warning", JOptionPane.WARNING_MESSAGE);
 			statusBar.setText("Error opening " + fileName);
 		}
 
@@ -377,7 +377,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doSave() {
 		doSaveFile();
@@ -420,7 +421,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doSaveAs() {
 		saveAs();
@@ -466,16 +468,16 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @return true if user saved here (Yes), or didn't care (No) * @exception * @see
+	 * @return true if user saved here (Yes), or didn't care (No) * @exception
+	 *         * @see
 	 */
 	private boolean okToAbandon() {
 		if (!dirty) {
 			return true;
 		}
 
-		int result = JOptionPane.showInternalConfirmDialog(this,
-				"Save changes ? ", "Warning", JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.WARNING_MESSAGE);
+		int result = JOptionPane.showInternalConfirmDialog(this, "Save changes ? ", "Warning",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 		if (result == JOptionPane.YES_OPTION) {
 			return saveAs();
@@ -497,7 +499,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private void updateCaption() {
 		String caption;
@@ -526,7 +529,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doColor() {
 		// Handle the "Foreground Color" menu item
@@ -545,8 +549,7 @@ public class ErrorPanel extends BasePanel {
 		// obtain the new color from the ColorChooser's
 		// value property. First test the result property to see if the
 		// user pressed OK.
-		Color color = JColorChooser.showDialog(this, "Set Text Color",
-				jTextArea1.getForeground());
+		Color color = JColorChooser.showDialog(this, "Set Text Color", jTextArea1.getForeground());
 
 		if (color != null) {
 			// set the foreground of textArea1 to the color
@@ -568,11 +571,12 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 * 
-	 *            private void doDataChanged() { if (!dirty) { dirty = true;
+	 *                private void doDataChanged() { if (!dirty) { dirty = true;
 	 * 
-	 *            updateCaption(); } }
+	 *                updateCaption(); } }
 	 */
 
 	/**
@@ -583,8 +587,7 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * @return
-	 * @exception
-	 * @see
+	 * @exception @see
 	 */
 	public void doPrint() {
 		PrintController printer = new PrintController();
@@ -602,7 +605,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * @return boolean
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public boolean saveFileWriter() {
 		boolean result = false;
@@ -616,8 +620,8 @@ public class ErrorPanel extends BasePanel {
 
 			result = true;
 		} catch (Throwable t) {
-			JOptionPane.showMessageDialog(this, "Could not save file "
-					+ currFileName, "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Could not save file " + currFileName, "Warning",
+					JOptionPane.WARNING_MESSAGE);
 
 			result = false;
 		}
@@ -635,7 +639,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * @return boolean
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public boolean saveFileStream() {
 		boolean result = false;
@@ -643,15 +648,14 @@ public class ErrorPanel extends BasePanel {
 		try {
 			OutputStream o = new FileOutputStream(currFileName);
 
-			jTextArea1.getEditorKit().write(o, jTextArea1.getDocument(), 0,
-					jTextArea1.getDocument().getLength());
+			jTextArea1.getEditorKit().write(o, jTextArea1.getDocument(), 0, jTextArea1.getDocument().getLength());
 			o.close();
 			statusBar.setText("Saving " + currFileName);
 
 			result = true;
 		} catch (Throwable t) {
-			JOptionPane.showMessageDialog(this, "Could not save file "
-					+ currFileName, "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Could not save file " + currFileName, "Warning",
+					JOptionPane.WARNING_MESSAGE);
 
 			result = false;
 		}
@@ -668,7 +672,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doWindowActivated() {
 	}
@@ -697,7 +702,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doWindowClose() {
 		okToAbandon();
@@ -717,7 +723,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * @param parm
 	 *            Object
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doWindowOpen(Object parm) {
 		if (parm instanceof String) {
@@ -734,7 +741,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doCopy() {
 		jTextArea1.copy();
@@ -749,7 +757,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doCut() {
 		jTextArea1.cut();
@@ -764,7 +773,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doPaste() {
 		jTextArea1.paste();
@@ -779,7 +789,8 @@ public class ErrorPanel extends BasePanel {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void doDelete() {
 		jTextArea1.setText("");

@@ -83,8 +83,7 @@ public class StringToIntegerConverter extends StringToObjectConverter {
 	 *         IllegalArgumentException thrown if the String to convert is not
 	 *         in the correct format
 	 */
-	protected Object getConvertedString(String aString)
-			throws IllegalArgumentException {
+	protected Object getConvertedString(String aString) throws IllegalArgumentException {
 		if ((aString == null) || ((aString.trim().length()) == 0)) {
 			return null;
 		} else {

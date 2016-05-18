@@ -65,8 +65,7 @@ public class AspectHome {
 	 * @return Aspect
 	 * @throws Exception
 	 */
-	public synchronized <T extends Aspect> T persist(T transientInstance)
-			throws Exception {
+	public synchronized <T extends Aspect> T persist(T transientInstance) throws Exception {
 		return persist(transientInstance, false);
 	}
 
@@ -81,14 +80,12 @@ public class AspectHome {
 	 * @throws Exception
 	 */
 
-	public synchronized <T extends Aspect> T persist(T transientInstance,
-			boolean overrideVersion) throws Exception {
+	public synchronized <T extends Aspect> T persist(T transientInstance, boolean overrideVersion) throws Exception {
 
 		try {
 
 			validate(transientInstance);
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 
 			if (null == transientInstance.getId()) {
@@ -98,9 +95,7 @@ public class AspectHome {
 				return transientInstance;
 			} else {
 				if (overrideVersion) {
-					Aspect aspect = entityManager.find(
-							transientInstance.getClass(),
-							transientInstance.getId());
+					Aspect aspect = entityManager.find(transientInstance.getClass(), transientInstance.getId());
 					transientInstance.setVersion(aspect.getVersion());
 				}
 				T instance = entityManager.merge(transientInstance);
@@ -127,12 +122,9 @@ public class AspectHome {
 
 		try {
 			if (null != transientInstance.getId()) {
-				EntityManager entityManager = EntityManagerHelper
-						.getEntityManager();
+				EntityManager entityManager = EntityManagerHelper.getEntityManager();
 				entityManager.getTransaction().begin();
-				Object aspect = entityManager
-						.find(transientInstance.getClass(),
-								transientInstance.getId());
+				Object aspect = entityManager.find(transientInstance.getClass(), transientInstance.getId());
 				if (null != aspect) {
 					entityManager.remove(aspect);
 				}
@@ -155,17 +147,14 @@ public class AspectHome {
 	 * @return Aspects
 	 * @throws ClassNotFoundException
 	 */
-	public Aspects findByClassName(String className)
-			throws ClassNotFoundException {
+	public Aspects findByClassName(String className) throws ClassNotFoundException {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Aspects aspects = new Aspects();
 			Class<?> c = Class.forName(className);
-			CriteriaBuilder criteriaBuilder = entityManager
-					.getCriteriaBuilder();
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
 			Root<?> from = criteriaQuery.from(c);
 			CriteriaQuery<Object> select = criteriaQuery.select(from);
@@ -196,12 +185,11 @@ public class AspectHome {
 	 * @return Aspects
 	 * @throws ClassNotFoundException
 	 */
-	public Aspects findByClassNameFieldName(String className, String fieldname,
-			String value) throws ClassNotFoundException {
+	public Aspects findByClassNameFieldName(String className, String fieldname, String value)
+			throws ClassNotFoundException {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Aspects aspects = new Aspects();
 			Class<?> c = Class.forName(className);
@@ -237,11 +225,9 @@ public class AspectHome {
 	public <T extends Aspect> Aspect findById(Aspect transientInstance) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			Object aspect = entityManager.find(transientInstance.getClass(),
-					transientInstance.getId());
+			Object aspect = entityManager.find(transientInstance.getClass(), transientInstance.getId());
 			entityManager.getTransaction().commit();
 			return (Aspect) aspect;
 		} catch (Exception re) {
@@ -263,16 +249,15 @@ public class AspectHome {
 
 	public boolean validate(Aspect transientInstance) throws Exception {
 
-		Set<ConstraintViolation<Aspect>> constraintViolations = EntityManagerHelper
-				.getValidator().validate(transientInstance);
+		Set<ConstraintViolation<Aspect>> constraintViolations = EntityManagerHelper.getValidator()
+				.validate(transientInstance);
 
 		if (!constraintViolations.isEmpty()) {
 			String errorMsg = "";
 			for (ConstraintViolation<Aspect> error : constraintViolations) {
 				Path path = error.getPropertyPath();
 				for (Node node : path) {
-					errorMsg = errorMsg + " Column: " + node.getName()
-							+ " Value: " + error.getInvalidValue();
+					errorMsg = errorMsg + " Column: " + node.getName() + " Value: " + error.getInvalidValue();
 				}
 				errorMsg = errorMsg + " " + error.getMessage();
 			}

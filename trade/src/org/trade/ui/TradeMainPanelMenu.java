@@ -54,46 +54,26 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 	 */
 	private static final long serialVersionUID = -2716722655140661891L;
 
-	private final BaseMenuItem searchMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.SEARCH);
-	private final BaseButton searchButton = new BaseButton(null,
-			BaseUIPropertyCodes.SEARCH);
-	private final BaseMenuItem refreshMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.REFRESH);
-	private final BaseButton refreshButton = new BaseButton(null,
-			BaseUIPropertyCodes.REFRESH);
-	private final BaseButton deleteButton = new BaseButton(null,
-			BaseUIPropertyCodes.DELETE);
-	private final BaseMenuItem deleteMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.DELETE);
-	private final BaseMenuItem brokerDataMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.DATA);
-	private final BaseButton brokerDataButton = new BaseButton(null,
-			BaseUIPropertyCodes.DATA);
-	private final BaseButton runStrategyButton = new BaseButton(null,
-			BaseUIPropertyCodes.RUN);
-	private final BaseMenuItem runStrategyMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.RUN);
-	private final BaseButton testStrategyButton = new BaseButton(null,
-			BaseUIPropertyCodes.TEST);
-	private final BaseMenuItem testStrategyMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.TEST);
-	private final BaseButton cancelButton = new BaseButton(null,
-			BaseUIPropertyCodes.CANCEL);
-	private final BaseMenuItem cancelMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.CANCEL);
-	private final BaseButton closeAllButton = new BaseButton(null,
-			BaseUIPropertyCodes.CLOSE_ALL);
-	private final BaseMenuItem closeAllMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.CLOSE_ALL);
-	private final BaseMenuItem propertiesMenu = new BaseMenuItem(null,
-			BaseUIPropertyCodes.PROPERTIES);
-	private final BaseMenuItem connect = new BaseMenuItem(null,
-			BaseUIPropertyCodes.CONNECT);
-	private final BaseMenuItem disconnect = new BaseMenuItem(null,
-			BaseUIPropertyCodes.DISCONNECT);
-	private final BaseMenuItem disclaimer = new BaseMenuItem(null,
-			BaseUIPropertyCodes.DISCLAIMER);
+	private final BaseMenuItem searchMenu = new BaseMenuItem(null, BaseUIPropertyCodes.SEARCH);
+	private final BaseButton searchButton = new BaseButton(null, BaseUIPropertyCodes.SEARCH);
+	private final BaseMenuItem refreshMenu = new BaseMenuItem(null, BaseUIPropertyCodes.REFRESH);
+	private final BaseButton refreshButton = new BaseButton(null, BaseUIPropertyCodes.REFRESH);
+	private final BaseButton deleteButton = new BaseButton(null, BaseUIPropertyCodes.DELETE);
+	private final BaseMenuItem deleteMenu = new BaseMenuItem(null, BaseUIPropertyCodes.DELETE);
+	private final BaseMenuItem brokerDataMenu = new BaseMenuItem(null, BaseUIPropertyCodes.DATA);
+	private final BaseButton brokerDataButton = new BaseButton(null, BaseUIPropertyCodes.DATA);
+	private final BaseButton runStrategyButton = new BaseButton(null, BaseUIPropertyCodes.RUN);
+	private final BaseMenuItem runStrategyMenu = new BaseMenuItem(null, BaseUIPropertyCodes.RUN);
+	private final BaseButton testStrategyButton = new BaseButton(null, BaseUIPropertyCodes.TEST);
+	private final BaseMenuItem testStrategyMenu = new BaseMenuItem(null, BaseUIPropertyCodes.TEST);
+	private final BaseButton cancelButton = new BaseButton(null, BaseUIPropertyCodes.CANCEL);
+	private final BaseMenuItem cancelMenu = new BaseMenuItem(null, BaseUIPropertyCodes.CANCEL);
+	private final BaseButton closeAllButton = new BaseButton(null, BaseUIPropertyCodes.CLOSE_ALL);
+	private final BaseMenuItem closeAllMenu = new BaseMenuItem(null, BaseUIPropertyCodes.CLOSE_ALL);
+	private final BaseMenuItem propertiesMenu = new BaseMenuItem(null, BaseUIPropertyCodes.PROPERTIES);
+	private final BaseMenuItem connect = new BaseMenuItem(null, BaseUIPropertyCodes.CONNECT);
+	private final BaseMenuItem disconnect = new BaseMenuItem(null, BaseUIPropertyCodes.DISCONNECT);
+	private final BaseMenuItem disclaimer = new BaseMenuItem(null, BaseUIPropertyCodes.DISCLAIMER);
 
 	/**
 	 * Constructor for TradeMainPanelMenu.
@@ -127,12 +107,11 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 			}
 		});
 		runStrategyButton.setToolTipText("Run Strategy");
-		runStrategyButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						messageEvent(runStrategyButton.getMethod());
-					}
-				});
+		runStrategyButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				messageEvent(runStrategyButton.getMethod());
+			}
+		});
 		runStrategyMenu.setText("Run Strategy");
 		runStrategyMenu.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -140,12 +119,11 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 			}
 		});
 		testStrategyButton.setToolTipText("Test Strategy");
-		testStrategyButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						messageEvent(testStrategyButton.getMethod());
-					}
-				});
+		testStrategyButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				messageEvent(testStrategyButton.getMethod());
+			}
+		});
 		testStrategyMenu.setText("Test Strategy");
 		testStrategyMenu.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -219,40 +197,35 @@ public class TradeMainPanelMenu extends BasePanelMenu {
 			}
 		});
 
-		final BaseMenuItem close = new BaseMenuItem(null,
-				BaseUIPropertyCodes.CLOSE);
+		final BaseMenuItem close = new BaseMenuItem(null, BaseUIPropertyCodes.CLOSE);
 		close.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(close.getMethod());
 			}
 		});
 
-		final BaseMenuItem closeAll = new BaseMenuItem(null,
-				BaseUIPropertyCodes.CLOSE_ALL);
+		final BaseMenuItem closeAll = new BaseMenuItem(null, BaseUIPropertyCodes.CLOSE_ALL);
 		closeAll.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(closeAll.getMethod());
 			}
 		});
 
-		final BaseMenuItem cascade = new BaseMenuItem(null,
-				BaseUIPropertyCodes.CASCADE);
+		final BaseMenuItem cascade = new BaseMenuItem(null, BaseUIPropertyCodes.CASCADE);
 		cascade.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(cascade.getMethod());
 			}
 		});
 
-		final BaseMenuItem cascadeAll = new BaseMenuItem(null,
-				BaseUIPropertyCodes.CASCADE_ALL);
+		final BaseMenuItem cascadeAll = new BaseMenuItem(null, BaseUIPropertyCodes.CASCADE_ALL);
 		cascadeAll.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(cascadeAll.getMethod());
 			}
 		});
 
-		final BaseMenuItem tileAll = new BaseMenuItem(null,
-				BaseUIPropertyCodes.TILE_ALL);
+		final BaseMenuItem tileAll = new BaseMenuItem(null, BaseUIPropertyCodes.TILE_ALL);
 		tileAll.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				messageEvent(tileAll.getMethod());

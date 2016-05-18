@@ -53,8 +53,7 @@ public class Clock extends JPanel {
 	 */
 	private static final long serialVersionUID = 2205177128289778533L;
 	private JTextField timeField = new JTextField(5); // set by timer listener
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"HH:mm:ss");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
 	public Clock() {
 		// Build the GUI - only one panel

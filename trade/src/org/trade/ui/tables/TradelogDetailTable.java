@@ -76,41 +76,31 @@ public class TradelogDetailTable extends Table {
 	public TradelogDetailTable(TableModel model) throws ValueTypeException {
 		super(model);
 		DecodeTableEditor sideEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Side()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Side()).getCodesDecodes()));
 		DecodeTableEditor tierEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Tier()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Tier()).getCodesDecodes()));
 		DecodeTableEditor tradestrategyStatusEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new TradestrategyStatus())
-								.getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new TradestrategyStatus()).getCodesDecodes()));
 		DecodeTableEditor strategyEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new DAOStrategy()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new DAOStrategy()).getCodesDecodes()));
 		DecodeTableEditor marketBiasEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new MarketBias()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new MarketBias()).getCodesDecodes()));
 		DecodeTableEditor marketBarEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new MarketBar()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new MarketBar()).getCodesDecodes()));
 		DecodeTableEditor actionEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Action()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Action()).getCodesDecodes()));
 		this.setDefaultEditor(DAOStrategy.class, strategyEditor);
 		this.setDefaultEditor(Side.class, sideEditor);
 		this.setDefaultEditor(Tier.class, tierEditor);
-		this.setDefaultEditor(TradestrategyStatus.class,
-				tradestrategyStatusEditor);
+		this.setDefaultEditor(TradestrategyStatus.class, tradestrategyStatusEditor);
 		this.setDefaultEditor(MarketBias.class, marketBiasEditor);
 		this.setDefaultEditor(MarketBar.class, marketBarEditor);
 		this.setDefaultEditor(Action.class, actionEditor);
 
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(TradingCalendar
-						.getDateTimeNowMarketTimeZone()),
-				DATETIMEFORMAT, Calendar.DAY_OF_MONTH);
+				new org.trade.core.valuetype.Date(TradingCalendar.getDateTimeNowMarketTimeZone()), DATETIMEFORMAT,
+				Calendar.DAY_OF_MONTH);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

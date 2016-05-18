@@ -53,8 +53,7 @@ public interface StrategyRule {
 	 *            boolean
 	 * @throws StrategyRuleException
 	 */
-	void runStrategy(CandleSeries candleSeries, boolean newBar)
-			throws StrategyRuleException;
+	void runStrategy(CandleSeries candleSeries, boolean newBar) throws StrategyRuleException;
 
 	/**
 	 * Method error.

@@ -76,8 +76,7 @@ public class MoneyRenderer extends DefaultTableCellRenderer {
 				if (null == ((Money) value).getBigDecimalValue()) {
 					setText(value.toString());
 				} else {
-					setText(m_formater.format(((Money) value)
-							.getBigDecimalValue()));
+					setText(m_formater.format(((Money) value).getBigDecimalValue()));
 				}
 
 			} else {

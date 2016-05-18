@@ -67,12 +67,12 @@ public class ObjectToStringConverter implements JavaTypeConverter {
 	 *            the value to convert
 	 * 
 	 * 
-	 * @return Object the String representation of the valueToConvert * @exception
-	 *         IllegalArgumentException which should never be thrown * @see
+	 * @return Object the String representation of the valueToConvert
+	 *         * @exception IllegalArgumentException which should never be
+	 *         thrown * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#convert(Object)
 	 */
-	public Object convert(Object valueToConvert)
-			throws IllegalArgumentException {
+	public Object convert(Object valueToConvert) throws IllegalArgumentException {
 		if (null == valueToConvert) {
 			return (null);
 		}
@@ -85,7 +85,8 @@ public class ObjectToStringConverter implements JavaTypeConverter {
 	 * from. In this case java.lang.Object .
 	 * 
 	 * 
-	 * @return Class the class of the source value which will be converted * @see
+	 * @return Class the class of the source value which will be converted
+	 *         * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#getSourceType()
 	 */
 	public Class<?> getSourceType() {

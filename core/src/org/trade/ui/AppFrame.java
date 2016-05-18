@@ -64,8 +64,7 @@ public class AppFrame extends JFrame {
 
 	static {
 		try {
-			UIManager.setLookAndFeel(UIManager
-					.getCrossPlatformLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			UIManager.put("swing.boldMetal", Boolean.FALSE);
 			AppLoadConfig.loadAppProperties();
 

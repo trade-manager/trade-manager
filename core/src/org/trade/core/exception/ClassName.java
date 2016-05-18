@@ -45,19 +45,15 @@ public class ClassName {
 	 */
 	public static void main(String[] args) {
 		if (args.length != 1) {
-			System.out
-					.println("Usage = java com.aceva.devtool.ClassName <full class name>");
+			System.out.println("Usage = java com.aceva.devtool.ClassName <full class name>");
 			System.exit(1);
 		} else {
 			try {
 				Class<?> aClass = Class.forName(args[0]);
 				ClassName className = new ClassName(aClass);
-				System.out.println("Entire Package Name = "
-						+ className.getEntirePackageName());
-				System.out.println("PackageName = "
-						+ className.getPackageName());
-				System.out.println("Entire Class Name = "
-						+ className.getEntireClassName());
+				System.out.println("Entire Package Name = " + className.getEntirePackageName());
+				System.out.println("PackageName = " + className.getPackageName());
+				System.out.println("Entire Class Name = " + className.getEntireClassName());
 				System.out.println("Class Name = " + className.getClassName());
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -94,8 +94,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	private BigDecimal realizedPnL = new BigDecimal(0);
 	private BigDecimal unrealizedPnL = new BigDecimal(0);
 	private ZonedDateTime lastUpdateDate;
-	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(
-			0);
+	private List<PortfolioAccount> portfolioAccounts = new ArrayList<PortfolioAccount>(0);
 
 	public Account() {
 		this.accountType = AccountType.INDIVIDUAL;
@@ -117,8 +116,7 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 * @param isDefault
 	 *            Boolean
 	 */
-	public Account(String name, String accountNumber, String currency,
-			String accountType) {
+	public Account(String name, String accountNumber, String currency, String accountType) {
 		this.accountNumber = accountNumber;
 		this.accountType = accountType;
 		this.name = name;
@@ -152,11 +150,9 @@ public class Account extends Aspect implements Serializable, Cloneable {
 	 * @param tradestrategies
 	 *            List<Tradestrategy>
 	 */
-	public Account(String accountNumber, String name, String accountType,
-			BigDecimal availableFunds, BigDecimal buyingPower,
-			BigDecimal cashBalance, String currency,
-			BigDecimal grossPositionValue, BigDecimal realizedPnL,
-			BigDecimal unrealizedPnL) {
+	public Account(String accountNumber, String name, String accountType, BigDecimal availableFunds,
+			BigDecimal buyingPower, BigDecimal cashBalance, String currency, BigDecimal grossPositionValue,
+			BigDecimal realizedPnL, BigDecimal unrealizedPnL) {
 		this.accountNumber = accountNumber;
 		this.accountType = accountType;
 		this.name = name;

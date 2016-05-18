@@ -16,8 +16,7 @@ import org.xml.sax.Attributes;
 
 public class TWSAccountAliasRequest extends SaxMapper {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TWSAccountAliasRequest.class);
+	private final static Logger _log = LoggerFactory.getLogger(TWSAccountAliasRequest.class);
 
 	private Aspects m_target = null;
 	private final Stack<Object> m_stack = new Stack<Object>();
@@ -51,33 +50,28 @@ public class TWSAccountAliasRequest extends SaxMapper {
 		};
 
 		final TagTracker accountAliasTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 				_log.trace("accountAliasTracker onStart()");
 				Account aspect = new Account();
 				m_target.add(aspect);
 				m_stack.push(aspect);
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				// Clean up the directory stack...
 				m_stack.pop();
 				_log.trace("accountAliasTracker onEnd() " + contents.toString());
 			}
 		};
 
-		rootTagTracker.track("ListOfAccountAliases/AccountAlias",
-				accountAliasTracker);
+		rootTagTracker.track("ListOfAccountAliases/AccountAlias", accountAliasTracker);
 		accountAliasTracker.track("AccountAlias", accountAliasTracker);
 
 		final TagTracker accountTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
 				final Account temp = (Account) m_stack.peek();
 				temp.setAccountNumber(value);
@@ -89,12 +83,10 @@ public class TWSAccountAliasRequest extends SaxMapper {
 		accountTracker.track("account", accountTracker);
 
 		final TagTracker aliasTracker = new TagTracker() {
-			public void onStart(String namespaceURI, String localName,
-					String qName, Attributes attr) {
+			public void onStart(String namespaceURI, String localName, String qName, Attributes attr) {
 			}
 
-			public void onEnd(String namespaceURI, String localName,
-					String qName, CharArrayWriter contents) {
+			public void onEnd(String namespaceURI, String localName, String qName, CharArrayWriter contents) {
 				final String value = new String(contents.toString());
 				final Account temp = (Account) m_stack.peek();
 				temp.setAlias(value);

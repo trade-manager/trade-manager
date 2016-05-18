@@ -53,8 +53,7 @@ import org.trade.core.validator.Validator;
 
 /**
  */
-public class Date extends ValueType implements Comparator<Date>,
-		Comparable<Date> {
+public class Date extends ValueType implements Comparator<Date>, Comparable<Date> {
 	/**
 	 * 
 	 */
@@ -68,9 +67,8 @@ public class Date extends ValueType implements Comparator<Date>,
 
 	public final static int LEN_STRING_IN_DATE_FORMAT = 8;
 
-	public static final Date NULLIPDATE = new Date(ZonedDateTime.of(
-			LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC),
-			ZoneOffset.UTC.normalized()));
+	public static final Date NULLIPDATE = new Date(
+			ZonedDateTime.of(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC), ZoneOffset.UTC.normalized()));
 
 	static {
 		// Register the appropriate converters
@@ -112,8 +110,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 *            java.uti.Date
 	 */
 	public Date(java.util.Date date) {
-		m_date = ZonedDateTime.ofInstant(date.toInstant(),
-				ZoneId.systemDefault());
+		m_date = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 	}
 
 	/**
@@ -155,8 +152,7 @@ public class Date extends ValueType implements Comparator<Date>,
 				|| (m_format.equals(DATE_FORMAT) && (date.length() != LEN_STRING_IN_DATE_FORMAT))) {
 			m_invalidDate = date;
 		} else {
-			m_date = TradingCalendar.getZonedDateTimeFromDateTimeString(
-					date.trim(), m_format);
+			m_date = TradingCalendar.getZonedDateTimeFromDateTimeString(date.trim(), m_format);
 			m_invalidDate = null;
 		}
 	}
@@ -230,8 +226,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 * @return int
 	 */
 	public int compareTo(final Date other) {
-		return CoreUtils.nullSafeComparator(this.getZonedDateTime(),
-				other.getZonedDateTime());
+		return CoreUtils.nullSafeComparator(this.getZonedDateTime(), other.getZonedDateTime());
 	}
 
 	/**
@@ -244,8 +239,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 * @return int
 	 */
 	public int compare(Date o1, Date o2) {
-		return CoreUtils.nullSafeComparator(o1.getZonedDateTime(),
-				o2.getZonedDateTime());
+		return CoreUtils.nullSafeComparator(o1.getZonedDateTime(), o2.getZonedDateTime());
 	}
 
 	/**
@@ -254,8 +248,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 */
 	public String toString() {
 		if (null != this.getZonedDateTime())
-			return TradingCalendar.getFormattedDate(this.getZonedDateTime(),
-					DATE_TIME_FORMAT);
+			return TradingCalendar.getFormattedDate(this.getZonedDateTime(), DATE_TIME_FORMAT);
 		return null;
 	}
 
@@ -330,8 +323,7 @@ public class Date extends ValueType implements Comparator<Date>,
 			setDate(((org.trade.core.valuetype.Date) value).m_date);
 		} else {
 			try {
-				setValue(JavaTypeTranslator.convert(
-						org.trade.core.valuetype.Date.class, value));
+				setValue(JavaTypeTranslator.convert(org.trade.core.valuetype.Date.class, value));
 			} catch (Exception ex) {
 				throw new ValueTypeException(ex);
 			}
@@ -344,8 +336,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 * @return boolean
 	 */
 	public boolean isValid() {
-		return isValid(
-				getDefaultOptionalValidator(MessageFactory.SYSTEM_ERROR), null);
+		return isValid(getDefaultOptionalValidator(MessageFactory.SYSTEM_ERROR), null);
 	}
 
 	/**
@@ -357,8 +348,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
-	public boolean isValid(Validator validator,
-			ExceptionMessageListener receiver) {
+	public boolean isValid(Validator validator, ExceptionMessageListener receiver) {
 		return validator.isValid(m_date, m_invalidDate, m_format, receiver);
 	}
 
@@ -393,8 +383,7 @@ public class Date extends ValueType implements Comparator<Date>,
 	 *            boolean
 	 * @return Validator
 	 */
-	public Validator getDefaultValidator(IMessageFactory messageFactory,
-			boolean isMandatory) {
+	public Validator getDefaultValidator(IMessageFactory messageFactory, boolean isMandatory) {
 		return new DateValidator(messageFactory, isMandatory);
 	}
 

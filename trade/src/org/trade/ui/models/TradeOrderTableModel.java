@@ -79,11 +79,9 @@ public class TradeOrderTableModel extends TableModel {
 	private static final String STOP_PRICE = "Stop Price";
 	private static final String PROPERTIES = "Alloc Props";
 
-	private static final String[] columnHeaderToolTip = { null,
-			"System generated key", "Buy/Sell/Short", null, null, null,
-			"Stop/Mkt price", "Transmit to mkt in TWS", null,
-			"One Cancels Another(OCA) id must be unique for day", null, null,
-			null, null, "FA account assignment" };
+	private static final String[] columnHeaderToolTip = { null, "System generated key", "Buy/Sell/Short", null, null,
+			null, "Stop/Mkt price", "Transmit to mkt in TWS", null,
+			"One Cancels Another(OCA) id must be unique for day", null, null, null, null, "FA account assignment" };
 	private Tradestrategy m_data = null;
 
 	public TradeOrderTableModel() {
@@ -121,19 +119,14 @@ public class TradeOrderTableModel extends TableModel {
 	public boolean isCellEditable(int row, int column) {
 		OrderStatus orderStatus = (OrderStatus) this.getValueAt(row, 8);
 		if (null != orderStatus) {
-			if (OrderStatus.CANCELLED.equals(orderStatus.getCode())
-					|| OrderStatus.FILLED.equals(orderStatus.getCode())
+			if (OrderStatus.CANCELLED.equals(orderStatus.getCode()) || OrderStatus.FILLED.equals(orderStatus.getCode())
 					|| OrderStatus.INACTIVE.equals(orderStatus.getCode())) {
 				return false;
 			}
 		}
-		if ((columnNames[column] == SYMBOL)
-				|| (columnNames[column] == ORDER_KEY)
-				|| (columnNames[column] == STATUS)
-				|| (columnNames[column] == AVG_PRICE)
-				|| (columnNames[column] == FILLED_DATE)
-				|| (columnNames[column] == FILLED_QTY)
-				|| (columnNames[column] == STOP_PRICE)) {
+		if ((columnNames[column] == SYMBOL) || (columnNames[column] == ORDER_KEY) || (columnNames[column] == STATUS)
+				|| (columnNames[column] == AVG_PRICE) || (columnNames[column] == FILLED_DATE)
+				|| (columnNames[column] == FILLED_QTY) || (columnNames[column] == STOP_PRICE)) {
 			return false;
 		}
 		return true;
@@ -152,58 +145,44 @@ public class TradeOrderTableModel extends TableModel {
 
 	public Object getValueAt(int row, int column) {
 
-		if (columnNames[column] == LMT_PRICE
-				&& null != super.getValueAt(row, column)) {
+		if (columnNames[column] == LMT_PRICE && null != super.getValueAt(row, column)) {
 			if (((OrderType) super.getValueAt(row, 3)).isValid()) {
-				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
-						OrderType.MKT)
-						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.STP)
-						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.TRAIL)) {
+				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.MKT)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.STP)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.TRAIL)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() != 0) {
 						Money price = new Money(0);
 						this.setValueAt(price, row, column);
 						return price;
 					}
 				}
-				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
-						OrderType.LMT)
-						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.STPLMT)
-						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.TRAILLIMIT)) {
+				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.LMT)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.STPLMT)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.TRAILLIMIT)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() == 0) {
-						Money price = new Money(this.getData()
-								.getStrategyData().getBaseCandleSeries()
-								.getContract().getLastPrice());
+						Money price = new Money(
+								this.getData().getStrategyData().getBaseCandleSeries().getContract().getLastPrice());
 						this.setValueAt(price, row, column);
 						return price;
 					}
 				}
 			}
 		}
-		if (columnNames[column] == AUX_PRICE
-				&& null != super.getValueAt(row, column)) {
+		if (columnNames[column] == AUX_PRICE && null != super.getValueAt(row, column)) {
 			if (((OrderType) super.getValueAt(row, 3)).isValid()) {
-				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
-						OrderType.MKT)
-						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.LMT)) {
+				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.MKT)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.LMT)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() != 0) {
 						Money price = new Money(0);
 						this.setValueAt(price, row, column);
 						return price;
 					}
 				}
-				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(
-						OrderType.STP)
-						|| ((OrderType) super.getValueAt(row, 3)).getCode()
-								.equals(OrderType.STPLMT)) {
+				if (((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.STP)
+						|| ((OrderType) super.getValueAt(row, 3)).getCode().equals(OrderType.STPLMT)) {
 					if (((Money) super.getValueAt(row, column)).doubleValue() == 0) {
-						Money price = new Money(this.getData()
-								.getStrategyData().getBaseCandleSeries()
-								.getContract().getLastPrice());
+						Money price = new Money(
+								this.getData().getStrategyData().getBaseCandleSeries().getContract().getLastPrice());
 						this.setValueAt(price, row, column);
 						return price;
 					}
@@ -325,8 +304,7 @@ public class TradeOrderTableModel extends TableModel {
 			break;
 		}
 		case 10: {
-			element.setAverageFilledPrice(((Decimal) value)
-					.getBigDecimalValue());
+			element.setAverageFilledPrice(((Decimal) value).getBigDecimalValue());
 			break;
 		}
 		case 11: {
@@ -368,11 +346,9 @@ public class TradeOrderTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		Integer orderKey = ((Quantity) this.getValueAt(selectedRow, 1))
-				.getIntegerValue();
+		Integer orderKey = ((Quantity) this.getValueAt(selectedRow, 1)).getIntegerValue();
 		for (final TradeOrder tradeOrder : getData().getTradeOrders()) {
-			if (CoreUtils
-					.nullSafeComparator(tradeOrder.getOrderKey(), orderKey) == 0) {
+			if (CoreUtils.nullSafeComparator(tradeOrder.getOrderKey(), orderKey) == 0) {
 				getData().getTradeOrders().remove(tradeOrder);
 				final Vector<Object> currRow = rows.get(selectedRow);
 				rows.remove(currRow);
@@ -410,15 +386,12 @@ public class TradeOrderTableModel extends TableModel {
 		double risk = tradestrategy.getRiskAmount().doubleValue();
 		double stop = 1.0d;
 
-		Money price = new Money(tradestrategy.getStrategyData()
-				.getBaseCandleSeries().getContract().getLastPrice());
+		Money price = new Money(tradestrategy.getStrategyData().getBaseCandleSeries().getContract().getLastPrice());
 
-		final Entrylimit entrylimit = DAOEntryLimit.newInstance().getValue(
-				price);
+		final Entrylimit entrylimit = DAOEntryLimit.newInstance().getValue(price);
 
-		Money limitPrice = Action.BUY.equals(action) ? price.add(new Money(
-				entrylimit.getLimitAmount().doubleValue())) : price
-				.subtract(new Money(entrylimit.getLimitAmount().doubleValue()));
+		Money limitPrice = Action.BUY.equals(action) ? price.add(new Money(entrylimit.getLimitAmount().doubleValue()))
+				: price.subtract(new Money(entrylimit.getLimitAmount().doubleValue()));
 
 		int quantity = (int) ((int) risk / stop);
 		if (tradestrategy.isThereOpenTradePosition()) {
@@ -439,9 +412,8 @@ public class TradeOrderTableModel extends TableModel {
 			}
 		}
 
-		final TradeOrder tradeOrder = new TradeOrder(tradestrategy, action,
-				orderType, quantity, price.getBigDecimalValue(),
-				limitPrice.getBigDecimalValue(),
+		final TradeOrder tradeOrder = new TradeOrder(tradestrategy, action, orderType, quantity,
+				price.getBigDecimalValue(), limitPrice.getBigDecimalValue(),
 				TradingCalendar.getDateTimeNowMarketTimeZone());
 		tradeOrder.setOcaGroupName("");
 		tradeOrder.setTransmit(true);

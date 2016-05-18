@@ -17,8 +17,7 @@ import org.trade.ui.TradeAppLoadConfig;
 
 public class CandleSeriesTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(CandleSeriesTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(CandleSeriesTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -46,8 +45,7 @@ public class CandleSeriesTest {
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
 			assertNotNull("1", this.tradestrategy);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -76,17 +74,14 @@ public class CandleSeriesTest {
 	public void testCandleSeriessClone() {
 		try {
 
-			CandleSeries candleSeries = this.tradestrategy.getStrategyData()
-					.getBaseCandleSeries();
-			CandleSeries series = (CandleSeries) this.tradestrategy
-					.getStrategyData().getBaseCandleSeries().clone();
+			CandleSeries candleSeries = this.tradestrategy.getStrategyData().getBaseCandleSeries();
+			CandleSeries series = (CandleSeries) this.tradestrategy.getStrategyData().getBaseCandleSeries().clone();
 			if (candleSeries.equals(series)) {
 				_log.info("CandleSeries: " + series.toString());
 			}
 			assertEquals("1", series, candleSeries);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

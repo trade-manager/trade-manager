@@ -45,8 +45,7 @@ import java.util.PropertyResourceBundle;
  * 
  * @author Simon Allen
  */
-public class ExceptionResourceBundle extends PropertyResourceBundle implements
-		Serializable {
+public class ExceptionResourceBundle extends PropertyResourceBundle implements Serializable {
 
 	/**
 	 * 
@@ -64,8 +63,7 @@ public class ExceptionResourceBundle extends PropertyResourceBundle implements
 	 * @exception java.io.IOException
 	 *                : thrown when the input stream doesn't find the resource
 	 */
-	public ExceptionResourceBundle(InputStream resourceStream)
-			throws IOException {
+	public ExceptionResourceBundle(InputStream resourceStream) throws IOException {
 		super(resourceStream);
 	}
 

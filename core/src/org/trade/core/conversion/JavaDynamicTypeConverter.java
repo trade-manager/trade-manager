@@ -55,8 +55,7 @@ public interface JavaDynamicTypeConverter {
 	 * @return Object the converted object * @exception
 	 *         JavaTypeTranslatorException
 	 */
-	Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException;
+	Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException;
 
 	/**
 	 * This method is used by the JavaTypeTranslator to determine wether or not

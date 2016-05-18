@@ -72,8 +72,7 @@ public class TradingdayHome {
 	public void persist(final Tradingday detachedInstance) throws Exception {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			/*
 			 * Check the incoming tradingday to see if it exists if it does
@@ -81,15 +80,12 @@ public class TradingdayHome {
 			 */
 			Tradingday tradingday = null;
 			if (null == detachedInstance.getIdTradingDay()) {
-				tradingday = this
-						.findTradingdayByOpenCloseDate(
-								detachedInstance.getOpen(),
-								detachedInstance.getClose());
+				tradingday = this.findTradingdayByOpenCloseDate(detachedInstance.getOpen(),
+						detachedInstance.getClose());
 				if (null == tradingday) {
 					entityManager.persist(detachedInstance);
 				} else {
-					detachedInstance.setIdTradingDay(tradingday
-							.getIdTradingDay());
+					detachedInstance.setIdTradingDay(tradingday.getIdTradingDay());
 					detachedInstance.setVersion(tradingday.getVersion());
 					tradingday = entityManager.merge(detachedInstance);
 				}
@@ -100,11 +96,9 @@ public class TradingdayHome {
 				detachedInstance.setVersion(tradingday.getVersion());
 			}
 
-			for (Tradestrategy tradestrategy : detachedInstance
-					.getTradestrategies()) {
+			for (Tradestrategy tradestrategy : detachedInstance.getTradestrategies()) {
 				// If it has trades do nothing
-				if (tradestrategy.getTradeOrders().isEmpty()
-						&& tradestrategy.isDirty()) {
+				if (tradestrategy.getTradeOrders().isEmpty() && tradestrategy.isDirty()) {
 					entityManager.getTransaction().begin();
 
 					/*
@@ -118,8 +112,7 @@ public class TradingdayHome {
 					 * via this tab, as they are a drop down list. So find the
 					 * persisted one and set this.
 					 */
-					Strategy strategy = this.findStrategyByName(tradestrategy
-							.getStrategy().getName());
+					Strategy strategy = this.findStrategyByName(tradestrategy.getStrategy().getName());
 					if (null != strategy) {
 						tradestrategy.setStrategy(strategy);
 					}
@@ -127,12 +120,9 @@ public class TradingdayHome {
 					 * Check to see if the contract exists if it does merge and
 					 * set the new persisted one. If no persist the contract.
 					 */
-					Contract contract = this.findContractByUniqueKey(
-							tradestrategy.getContract().getSecType(),
-							tradestrategy.getContract().getSymbol(),
-							tradestrategy.getContract().getExchange(),
-							tradestrategy.getContract().getCurrency(),
-							tradestrategy.getContract().getExpiry());
+					Contract contract = this.findContractByUniqueKey(tradestrategy.getContract().getSecType(),
+							tradestrategy.getContract().getSymbol(), tradestrategy.getContract().getExchange(),
+							tradestrategy.getContract().getCurrency(), tradestrategy.getContract().getExpiry());
 					if (null != contract) {
 						tradestrategy.setContract(contract);
 					}
@@ -143,8 +133,7 @@ public class TradingdayHome {
 						entityManager.persist(tradestrategy);
 						entityManager.getTransaction().commit();
 					} else {
-						Tradestrategy instance = entityManager
-								.merge(tradestrategy);
+						Tradestrategy instance = entityManager.merge(tradestrategy);
 						entityManager.getTransaction().commit();
 						tradestrategy.setVersion(instance.getVersion());
 					}
@@ -152,13 +141,11 @@ public class TradingdayHome {
 				}
 			}
 			entityManager.getTransaction().begin();
-			List<Tradestrategy> tradestrategies = findTradestrategyByIdTradingday(detachedInstance
-					.getIdTradingDay());
+			List<Tradestrategy> tradestrategies = findTradestrategyByIdTradingday(detachedInstance.getIdTradingDay());
 
 			for (Tradestrategy tradestrategy : tradestrategies) {
 				boolean exists = false;
-				for (Tradestrategy newTradestrategy : detachedInstance
-						.getTradestrategies()) {
+				for (Tradestrategy newTradestrategy : detachedInstance.getTradestrategies()) {
 					if (newTradestrategy.equals(tradestrategy)) {
 						exists = true;
 						break;
@@ -168,13 +155,9 @@ public class TradingdayHome {
 					if (tradestrategy.getTradeOrders().isEmpty()) {
 						entityManager.remove(tradestrategy);
 					} else {
-						throw new Exception(
-								"The following Contract:"
-										+ tradestrategy.getContract()
-												.getSymbol()
-										+ " Strategy:"
-										+ tradestrategy.getStrategy().getName()
-										+ " already exists with trades. \n Please delete orders before removing.");
+						throw new Exception("The following Contract:" + tradestrategy.getContract().getSymbol()
+								+ " Strategy:" + tradestrategy.getStrategy().getName()
+								+ " already exists with trades. \n Please delete orders before removing.");
 					}
 				}
 			}
@@ -182,8 +165,7 @@ public class TradingdayHome {
 			detachedInstance.setDirty(false);
 
 		} catch (Exception re) {
-			EntityManagerHelper.logError(
-					"Error saving Tradingdays: " + re.getMessage(), re);
+			EntityManagerHelper.logError("Error saving Tradingdays: " + re.getMessage(), re);
 			EntityManagerHelper.rollback();
 			throw re;
 		} finally {
@@ -201,13 +183,11 @@ public class TradingdayHome {
 	public Tradingday findTradingdayById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingday instance = entityManager.find(Tradingday.class, id);
 			if (null != instance) {
-				for (Tradestrategy tradestrategy : instance
-						.getTradestrategies()) {
+				for (Tradestrategy tradestrategy : instance.getTradestrategies()) {
 					tradestrategy.getStrategy().getIndicatorSeries().size();
 					tradestrategy.getTradeOrders().size();
 				}
@@ -231,41 +211,34 @@ public class TradingdayHome {
 	 *            ZonedDateTime
 	 * @return Tradingdays
 	 */
-	public Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate,
-			ZonedDateTime endDate) {
+	public Tradingdays findTradingdaysByDateRange(ZonedDateTime startDate, ZonedDateTime endDate) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Tradingdays tradingdays = new Tradingdays();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradingday> query = builder
-					.createQuery(Tradingday.class);
+			CriteriaQuery<Tradingday> query = builder.createQuery(Tradingday.class);
 			Root<Tradingday> from = query.from(Tradingday.class);
 			query.select(from);
 			query.orderBy(builder.desc(from.get("open")));
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (null != startDate) {
-				Predicate predicate = builder.greaterThanOrEqualTo(
-						from.get("open").as(ZonedDateTime.class), startDate);
+				Predicate predicate = builder.greaterThanOrEqualTo(from.get("open").as(ZonedDateTime.class), startDate);
 				predicates.add(predicate);
 			}
 			if (null != endDate) {
-				Predicate predicate = builder.lessThanOrEqualTo(from
-						.get("open").as(ZonedDateTime.class), endDate);
+				Predicate predicate = builder.lessThanOrEqualTo(from.get("open").as(ZonedDateTime.class), endDate);
 				predicates.add(predicate);
 			}
 
 			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<Tradingday> typedQuery = entityManager
-					.createQuery(query);
+			TypedQuery<Tradingday> typedQuery = entityManager.createQuery(query);
 			List<Tradingday> items = typedQuery.getResultList();
 			for (Tradingday tradingday : items) {
 				tradingdays.add(tradingday);
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
+				for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 					tradestrategy.getTradeOrders().size();
 					tradestrategy.getPortfolio().getPortfolioAccounts().size();
 					tradestrategy.getStrategy().getIndicatorSeries().size();
@@ -291,27 +264,22 @@ public class TradingdayHome {
 	 *            ZonedDateTime
 	 * @return Tradingday
 	 */
-	public Tradingday findByOpenCloseDate(ZonedDateTime openDate,
-			ZonedDateTime closeDate) {
+	public Tradingday findByOpenCloseDate(ZonedDateTime openDate, ZonedDateTime closeDate) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradingday> query = builder
-					.createQuery(Tradingday.class);
+			CriteriaQuery<Tradingday> query = builder.createQuery(Tradingday.class);
 			Root<Tradingday> from = query.from(Tradingday.class);
 			query.select(from);
 			if (null != openDate)
 				query.where(builder.equal(from.get("open"), openDate));
 			if (null != closeDate)
 				query.where(builder.equal(from.get("close"), closeDate));
-			List<Tradingday> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Tradingday> items = entityManager.createQuery(query).getResultList();
 			for (Tradingday tradingday : items) {
-				for (Tradestrategy tradestrategy : tradingday
-						.getTradestrategies()) {
+				for (Tradestrategy tradestrategy : tradingday.getTradestrategies()) {
 					tradestrategy.getTradeOrders().size();
 					tradestrategy.getStrategy().getIndicatorSeries().size();
 				}
@@ -340,15 +308,13 @@ public class TradingdayHome {
 	private Strategy findStrategyByName(String name) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Strategy> query = builder.createQuery(Strategy.class);
 			Root<Strategy> from = query.from(Strategy.class);
 			query.select(from);
 			query.where(builder.equal(from.get("name"), name));
-			List<Strategy> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Strategy> items = entityManager.createQuery(query).getResultList();
 			if (items.size() > 0) {
 				for (Strategy itme : items) {
 					itme.getIndicatorSeries().size();
@@ -370,17 +336,14 @@ public class TradingdayHome {
 	 * @param closeDate
 	 *            ZonedDateTime
 	 * 
-	 @return Tradingday
+	 * @return Tradingday
 	 */
-	private Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate,
-			ZonedDateTime closeDate) {
+	private Tradingday findTradingdayByOpenCloseDate(ZonedDateTime openDate, ZonedDateTime closeDate) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradingday> query = builder
-					.createQuery(Tradingday.class);
+			CriteriaQuery<Tradingday> query = builder.createQuery(Tradingday.class);
 			Root<Tradingday> from = query.from(Tradingday.class);
 			query.select(from);
 
@@ -388,8 +351,7 @@ public class TradingdayHome {
 				query.where(builder.equal(from.get("open"), openDate));
 			if (null != closeDate)
 				query.where(builder.equal(from.get("close"), closeDate));
-			List<Tradingday> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Tradingday> items = entityManager.createQuery(query).getResultList();
 
 			if (items.size() > 0) {
 				return items.get(0);
@@ -408,29 +370,23 @@ public class TradingdayHome {
 	 *            Date
 	 * @return List<Tradestrategy>
 	 */
-	private List<Tradestrategy> findTradestrategyByIdTradingday(
-			Integer idTradingday) {
+	private List<Tradestrategy> findTradestrategyByIdTradingday(Integer idTradingday) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradestrategy> query = builder
-					.createQuery(Tradestrategy.class);
+			CriteriaQuery<Tradestrategy> query = builder.createQuery(Tradestrategy.class);
 			Root<Tradestrategy> from = query.from(Tradestrategy.class);
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (null != idTradingday) {
-				Join<Tradestrategy, Tradingday> tradingday = from
-						.join("tradingday");
-				Predicate predicate = builder.equal(
-						tradingday.get("idTradingDay"), idTradingday);
+				Join<Tradestrategy, Tradingday> tradingday = from.join("tradingday");
+				Predicate predicate = builder.equal(tradingday.get("idTradingDay"), idTradingday);
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<Tradestrategy> typedQuery = entityManager
-					.createQuery(query);
+			TypedQuery<Tradestrategy> typedQuery = entityManager.createQuery(query);
 			List<Tradestrategy> items = typedQuery.getResultList();
 			return items;
 
@@ -454,12 +410,11 @@ public class TradingdayHome {
 	 *            Date
 	 * @return Contract
 	 */
-	private Contract findContractByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, ZonedDateTime expiryDate) {
+	private Contract findContractByUniqueKey(String SECType, String symbol, String exchange, String currency,
+			ZonedDateTime expiryDate) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Contract> query = builder.createQuery(Contract.class);
 			Root<Contract> from = query.from(Contract.class);
@@ -467,8 +422,7 @@ public class TradingdayHome {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (null != SECType) {
-				Predicate predicate = builder.equal(from.get("secType"),
-						SECType);
+				Predicate predicate = builder.equal(from.get("secType"), SECType);
 				predicates.add(predicate);
 			}
 			if (null != symbol) {
@@ -476,28 +430,23 @@ public class TradingdayHome {
 				predicates.add(predicate);
 			}
 			if (null != exchange) {
-				Predicate predicate = builder.equal(from.get("exchange"),
-						exchange);
+				Predicate predicate = builder.equal(from.get("exchange"), exchange);
 				predicates.add(predicate);
 			}
 			if (null != currency) {
-				Predicate predicate = builder.equal(from.get("currency"),
-						currency);
+				Predicate predicate = builder.equal(from.get("currency"), currency);
 				predicates.add(predicate);
 			}
 			if (null != expiryDate) {
 
 				Integer yearExpiry = expiryDate.getYear();
-				Expression<Integer> year = builder.function("year",
-						Integer.class, from.get("expiry"));
+				Expression<Integer> year = builder.function("year", Integer.class, from.get("expiry"));
 				Predicate predicateYear = builder.equal(year, yearExpiry);
 				predicates.add(predicateYear);
 
 				Integer monthExpiry = expiryDate.getMonthValue();
-				Expression<Integer> month = builder.function("month",
-						Integer.class, from.get("expiry"));
-				Predicate predicateMonth = builder.equal(month, new Integer(
-						1 + monthExpiry.intValue()));
+				Expression<Integer> month = builder.function("month", Integer.class, from.get("expiry"));
+				Predicate predicateMonth = builder.equal(month, new Integer(1 + monthExpiry.intValue()));
 				predicates.add(predicateMonth);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));

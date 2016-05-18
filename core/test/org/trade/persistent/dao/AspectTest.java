@@ -56,8 +56,7 @@ import org.trade.core.dao.Aspects;
  */
 public class AspectTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(AspectTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(AspectTest.class);
 
 	AspectHome aspectHome = null;
 

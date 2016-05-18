@@ -69,14 +69,9 @@ public class IndicatorSeriesTableModel extends TableModel {
 	private static final String COLOR = "Color";
 	private static final String PROPERTIES = "Properties";
 
-	private static final String[] columnHeaderToolTip = {
-			"The name of the strategy",
-			null,
-			"Specific name for this indicator i.e. 20-MA",
-			null,
-			"If checked display on the main chart",
-			"If checked display this indicator as a sub-chart i.e Y-axis not $",
-			null, null };
+	private static final String[] columnHeaderToolTip = { "The name of the strategy", null,
+			"Specific name for this indicator i.e. 20-MA", null, "If checked display on the main chart",
+			"If checked display this indicator as a sub-chart i.e Y-axis not $", null, null };
 
 	Strategy m_data = null;
 
@@ -167,12 +162,10 @@ public class IndicatorSeriesTableModel extends TableModel {
 			break;
 		}
 		case 1: {
-			String type = ((org.trade.dictionary.valuetype.IndicatorSeries) value)
-					.getCode();
+			String type = ((org.trade.dictionary.valuetype.IndicatorSeries) value).getCode();
 			String indicatorName = type.substring(0, type.indexOf("Series"));
-			element = this.getIndicatorSeries(element.getStrategy(),
-					indicatorName, type, indicatorName, new Boolean(false),
-					new Integer(0), new Boolean(false));
+			element = this.getIndicatorSeries(element.getStrategy(), indicatorName, type, indicatorName,
+					new Boolean(false), new Integer(0), new Boolean(false));
 			this.replaceRow(element, row);
 			break;
 		}
@@ -237,8 +230,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 	 */
 	public void deleteRow(int selectedRow) {
 
-		String type = ((org.trade.dictionary.valuetype.IndicatorSeries) this
-				.getValueAt(selectedRow, 1)).getCode();
+		String type = ((org.trade.dictionary.valuetype.IndicatorSeries) this.getValueAt(selectedRow, 1)).getCode();
 		String name = (String) this.getValueAt(selectedRow, 2);
 		for (final IndicatorSeries element : getData().getIndicatorSeries()) {
 			if (CoreUtils.nullSafeComparator(element.getName(), name) == 0
@@ -272,9 +264,8 @@ public class IndicatorSeriesTableModel extends TableModel {
 	 *            Boolean
 	 * @return IndicatorSeries
 	 */
-	private IndicatorSeries getIndicatorSeries(Strategy strategy, String name,
-			String type, String description, Boolean displaySeries,
-			Integer seriesRGBColory, Boolean subChart) {
+	private IndicatorSeries getIndicatorSeries(Strategy strategy, String name, String type, String description,
+			Boolean displaySeries, Integer seriesRGBColory, Boolean subChart) {
 		try {
 			Vector<Object> parm = new Vector<Object>();
 			parm.add(strategy);
@@ -285,8 +276,7 @@ public class IndicatorSeriesTableModel extends TableModel {
 			parm.add(seriesRGBColory);
 			parm.add(subChart);
 			String className = "org.trade.strategy.data." + type;
-			IndicatorSeries instance = (IndicatorSeries) ClassFactory
-					.getCreateClass(className, parm, this);
+			IndicatorSeries instance = (IndicatorSeries) ClassFactory.getCreateClass(className, parm, this);
 			return instance;
 		} catch (Exception e) {
 			/*
@@ -300,9 +290,8 @@ public class IndicatorSeriesTableModel extends TableModel {
 
 		String indicatorName = IndicatorSeries.MovingAverageSeries.substring(0,
 				IndicatorSeries.MovingAverageSeries.indexOf("Series"));
-		IndicatorSeries element = getIndicatorSeries(getData(), indicatorName,
-				IndicatorSeries.MovingAverageSeries, indicatorName,
-				new Boolean(false), new Integer(0), new Boolean(false));
+		IndicatorSeries element = getIndicatorSeries(getData(), indicatorName, IndicatorSeries.MovingAverageSeries,
+				indicatorName, new Boolean(false), new Integer(0), new Boolean(false));
 		getData().getIndicatorSeries().add(element);
 		getData().setDirty(true);
 		final Vector<Object> newRow = new Vector<Object>();
@@ -325,16 +314,13 @@ public class IndicatorSeriesTableModel extends TableModel {
 		if (null == element.getStrategy()) {
 			newRow.addElement(DAOStrategy.newInstance());
 		} else {
-			newRow.addElement(DAOStrategy.newInstance(element.getStrategy()
-					.getName()));
+			newRow.addElement(DAOStrategy.newInstance(element.getStrategy().getName()));
 		}
 
 		if (null == element.getType()) {
-			newRow.addElement(org.trade.dictionary.valuetype.IndicatorSeries
-					.newInstance());
+			newRow.addElement(org.trade.dictionary.valuetype.IndicatorSeries.newInstance());
 		} else {
-			newRow.addElement(org.trade.dictionary.valuetype.IndicatorSeries
-					.newInstance(element.getType()));
+			newRow.addElement(org.trade.dictionary.valuetype.IndicatorSeries.newInstance(element.getType()));
 		}
 		newRow.addElement(element.getName());
 		newRow.addElement(element.getDescription());

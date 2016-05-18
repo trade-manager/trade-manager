@@ -59,7 +59,8 @@ public class MessageEvent extends EventObject {
 	 * 
 	 * @param source
 	 *            Object
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public MessageEvent(Object source) {
 		super(source);

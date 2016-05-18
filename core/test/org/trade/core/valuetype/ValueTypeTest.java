@@ -53,8 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ValueTypeTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(ValueTypeTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(ValueTypeTest.class);
 
 	/**
 	 * Method setUpBeforeClass.

@@ -56,8 +56,7 @@ public class ProgressDialog extends JDialog {
 
 	private static final long serialVersionUID = -4399430258481031373L;
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(ProgressDialog.class);
+	private final static Logger _log = LoggerFactory.getLogger(ProgressDialog.class);
 
 	private static JTextField jTextFieldStatus = new JTextField();
 	private static JProgressBar jProgressBar1 = new JProgressBar();
@@ -88,8 +87,7 @@ public class ProgressDialog extends JDialog {
 			this.getContentPane().add(jPanel0, BorderLayout.CENTER);
 
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-			this.setLocation((d.width - this.getSize().width) / 2,
-					(d.height - this.getSize().height) / 2);
+			this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
 			this.setSize(new Dimension(250, 85));
 			// this.pack();
 			// this.repaint();

@@ -80,6 +80,5 @@ public interface IMessageFactory {
 	 *            ExceptionContext
 	 * @return ExceptionMessage
 	 */
-	ExceptionMessage create(ExceptionContext exceptionContext1,
-			ExceptionContext exceptionContext2);
+	ExceptionMessage create(ExceptionContext exceptionContext1, ExceptionContext exceptionContext2);
 }

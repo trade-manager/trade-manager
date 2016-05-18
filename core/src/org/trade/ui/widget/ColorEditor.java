@@ -14,8 +14,7 @@ import javax.swing.table.TableCellEditor;
 
 /**
  */
-public class ColorEditor extends AbstractCellEditor implements TableCellEditor,
-		ActionListener {
+public class ColorEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
 	/**
 	 * 
 	 */
@@ -95,8 +94,7 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor,
 	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(JTable,
 	 *      Object, boolean, int, int)
 	 */
-	public Component getTableCellEditorComponent(JTable table, Object value,
-			boolean isSelected, int row, int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		currentColor = (Color) value;
 		return button;
 	}

@@ -17,8 +17,7 @@ public class ZonedDateConverter implements AttributeConverter<LocalDate, Date> {
 		if (date == null) {
 			return null;
 		}
-		final Instant instant = date.atStartOfDay()
-				.atZone(TradingCalendar.MKT_TIMEZONE).toInstant();
+		final Instant instant = date.atStartOfDay().atZone(TradingCalendar.MKT_TIMEZONE).toInstant();
 		return (Date) Date.from(instant);
 	}
 
@@ -27,7 +26,6 @@ public class ZonedDateConverter implements AttributeConverter<LocalDate, Date> {
 			return null;
 		}
 		final Instant instant = Instant.ofEpochMilli(value.getTime());
-		return ZonedDateTime.ofInstant(instant, TradingCalendar.MKT_TIMEZONE)
-				.toLocalDate();
+		return ZonedDateTime.ofInstant(instant, TradingCalendar.MKT_TIMEZONE).toLocalDate();
 	}
 }

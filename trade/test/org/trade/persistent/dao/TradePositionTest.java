@@ -55,8 +55,7 @@ import org.trade.ui.TradeAppLoadConfig;
  */
 public class TradePositionTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(TradePositionTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(TradePositionTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -111,26 +110,21 @@ public class TradePositionTest {
 	public void testAddRemoveTradePosition() {
 
 		try {
-			TradePosition instance = new TradePosition(
-					this.tradestrategy.getContract(),
+			TradePosition instance = new TradePosition(this.tradestrategy.getContract(),
 					TradingCalendar.getDateTimeNowMarketTimeZone(), Side.BOT);
 
 			TradePosition tradePosition = aspectHome.persist(instance);
 
 			assertNotNull("1", tradePosition.getIdTradePosition());
-			_log.info("testAddTradePosition IdTradeStrategy: "
-					+ this.tradestrategy.getIdTradeStrategy()
+			_log.info("testAddTradePosition IdTradeStrategy: " + this.tradestrategy.getIdTradeStrategy()
 					+ "IdTradePosition: " + tradePosition.getIdTradePosition());
 
 			tradePositionHome.remove(tradePosition);
-			_log.info("testDeleteTradePosition IdTradeStrategy: "
-					+ tradestrategy.getIdTradeStrategy());
-			tradePosition = tradePositionHome.findById(tradePosition
-					.getIdTradePosition());
+			_log.info("testDeleteTradePosition IdTradeStrategy: " + tradestrategy.getIdTradeStrategy());
+			tradePosition = tradePositionHome.findById(tradePosition.getIdTradePosition());
 			assertNull("2", tradePosition);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

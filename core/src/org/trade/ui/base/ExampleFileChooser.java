@@ -51,11 +51,9 @@ public class ExampleFileChooser extends FileView {
 
 	private Hashtable<File, String> fileNames = new Hashtable<File, String>(5);
 
-	private Hashtable<File, String> fileDescriptions = new Hashtable<File, String>(
-			5);
+	private Hashtable<File, String> fileDescriptions = new Hashtable<File, String>(5);
 
-	private Hashtable<String, String> typeDescriptions = new Hashtable<String, String>(
-			5);
+	private Hashtable<String, String> typeDescriptions = new Hashtable<String, String>(5);
 
 	/**
 	 * The name of the file.

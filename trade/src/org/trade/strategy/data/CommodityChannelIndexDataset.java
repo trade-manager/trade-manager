@@ -53,8 +53,8 @@ import org.trade.strategy.data.cci.ICommodityChannelIndexDataset;
 
 /**
  */
-public class CommodityChannelIndexDataset extends AbstractXYDataset implements
-		IndicatorDataset, ICommodityChannelIndexDataset, Serializable {
+public class CommodityChannelIndexDataset extends AbstractXYDataset
+		implements IndicatorDataset, ICommodityChannelIndexDataset, Serializable {
 
 	/**
 	 * 
@@ -272,10 +272,8 @@ public class CommodityChannelIndexDataset extends AbstractXYDataset implements
 	 *         int)
 	 */
 	public double getXValue(int series, int item) {
-		CommodityChannelIndexSeries s = (CommodityChannelIndexSeries) this.data
-				.get(series);
-		CommodityChannelIndexItem di = (CommodityChannelIndexItem) s
-				.getDataItem(item);
+		CommodityChannelIndexSeries s = (CommodityChannelIndexSeries) this.data.get(series);
+		CommodityChannelIndexItem di = (CommodityChannelIndexItem) s.getDataItem(item);
 		RegularTimePeriod period = di.getPeriod();
 		return getX(period);
 	}
@@ -307,10 +305,8 @@ public class CommodityChannelIndexDataset extends AbstractXYDataset implements
 	 * @return The y-value. * @see org.jfree.data.xy.XYDataset#getY(int, int)
 	 */
 	public Number getY(int series, int item) {
-		CommodityChannelIndexSeries s = (CommodityChannelIndexSeries) this.data
-				.get(series);
-		CommodityChannelIndexItem di = (CommodityChannelIndexItem) s
-				.getDataItem(item);
+		CommodityChannelIndexSeries s = (CommodityChannelIndexSeries) this.data.get(series);
+		CommodityChannelIndexItem di = (CommodityChannelIndexItem) s.getDataItem(item);
 		return new Double(di.getY());
 	}
 
@@ -328,10 +324,8 @@ public class CommodityChannelIndexDataset extends AbstractXYDataset implements
 	 *         #getMovingAverageValue(int, int)
 	 */
 	public double getCommodityChannelIndexValue(int series, int item) {
-		CommodityChannelIndexSeries s = (CommodityChannelIndexSeries) this.data
-				.get(series);
-		CommodityChannelIndexItem di = (CommodityChannelIndexItem) s
-				.getDataItem(item);
+		CommodityChannelIndexSeries s = (CommodityChannelIndexSeries) this.data.get(series);
+		CommodityChannelIndexItem di = (CommodityChannelIndexItem) s.getDataItem(item);
 		return di.getCommodityChannelIndex();
 	}
 
@@ -386,10 +380,8 @@ public class CommodityChannelIndexDataset extends AbstractXYDataset implements
 	 */
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
-		CommodityChannelIndexDataset clone = (CommodityChannelIndexDataset) super
-				.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		CommodityChannelIndexDataset clone = (CommodityChannelIndexDataset) super.clone();
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -405,16 +397,15 @@ public class CommodityChannelIndexDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int x = 0; x < this.getSeriesCount(); x++) {
 			CommodityChannelIndexSeries series = this.getSeries(x);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 		}
 	}
 

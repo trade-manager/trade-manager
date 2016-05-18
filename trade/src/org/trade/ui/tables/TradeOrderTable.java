@@ -80,52 +80,39 @@ public class TradeOrderTable extends Table {
 	 * @throws ValueTypeException
 	 * @throws ParseException
 	 */
-	public TradeOrderTable(TableModel model) throws ValueTypeException,
-			ParseException {
+	public TradeOrderTable(TableModel model) throws ValueTypeException, ParseException {
 		super(model);
 
 		DecodeTableEditor actionEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new Action()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new Action()).getCodesDecodes()));
 		DecodeTableEditor oCATypeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new OCAType()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new OCAType()).getCodesDecodes()));
 		DecodeTableEditor orderTypeEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new OrderType()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new OrderType()).getCodesDecodes()));
 		DecodeTableEditor overrideConstraintsEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new OverrideConstraints())
-								.getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new OverrideConstraints()).getCodesDecodes()));
 		DecodeTableEditor timeInForceEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new TimeInForce()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new TimeInForce()).getCodesDecodes()));
 		DecodeTableEditor triggerMethodEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new TriggerMethod())
-								.getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new TriggerMethod()).getCodesDecodes()));
 		DecodeTableEditor orderStatusEditor = new DecodeTableEditor(
-				new JComboBox<Decode>(
-						(Vector<Decode>) (new OrderStatus()).getCodesDecodes()));
+				new JComboBox<Decode>((Vector<Decode>) (new OrderStatus()).getCodesDecodes()));
 
-		StringEditor eString = new StringEditor(new StringField(
-				new MaskFormatter(OCA_MASK), OCA_VALIDCHARS, null));
+		StringEditor eString = new StringEditor(new StringField(new MaskFormatter(OCA_MASK), OCA_VALIDCHARS, null));
 		StringRenderer rString = new StringRenderer();
 		this.setDefaultRenderer(String.class, rString);
 		this.setDefaultEditor(String.class, eString);
 		this.setDefaultEditor(Action.class, actionEditor);
 		this.setDefaultEditor(OCAType.class, oCATypeEditor);
 		this.setDefaultEditor(OrderType.class, orderTypeEditor);
-		this.setDefaultEditor(OverrideConstraints.class,
-				overrideConstraintsEditor);
+		this.setDefaultEditor(OverrideConstraints.class, overrideConstraintsEditor);
 		this.setDefaultEditor(TimeInForce.class, timeInForceEditor);
 		this.setDefaultEditor(TriggerMethod.class, triggerMethodEditor);
 		this.setDefaultEditor(OrderStatus.class, orderStatusEditor);
 		DateRenderer rDate = new DateRenderer(DATETIMEFORMAT);
 		DateEditor eDate = new DateEditor(new DateField(DATETIMEFORMAT),
-				new org.trade.core.valuetype.Date(TradingCalendar
-						.getDateTimeNowMarketTimeZone()),
-				DATETIMEFORMAT, Calendar.DAY_OF_MONTH);
+				new org.trade.core.valuetype.Date(TradingCalendar.getDateTimeNowMarketTimeZone()), DATETIMEFORMAT,
+				Calendar.DAY_OF_MONTH);
 		this.setDefaultRenderer(org.trade.core.valuetype.Date.class, rDate);
 		this.setDefaultEditor(org.trade.core.valuetype.Date.class, eDate);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

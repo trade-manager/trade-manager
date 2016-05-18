@@ -76,11 +76,9 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return boolean
 	 */
-	public static synchronized boolean updateXYPairs(
-			Hashtable<Long, Pair> userDataVector, double[] terms) {
+	public static synchronized boolean updateXYPairs(Hashtable<Long, Pair> userDataVector, double[] terms) {
 		boolean updated = false;
-		for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs
-				.hasMoreElements();) {
+		for (Enumeration<Pair> enumPairs = userDataVector.elements(); enumPairs.hasMoreElements();) {
 			Pair pair = enumPairs.nextElement();
 			double y = fx(pair.x, terms);
 			pair.y = y;
@@ -98,8 +96,7 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return double
 	 */
-	public static synchronized double getCorrelationCoefficient(Pair[] data,
-			double[] terms) {
+	public static synchronized double getCorrelationCoefficient(Pair[] data, double[] terms) {
 		double r = 0;
 		int n = data.length;
 		double sx = 0, sx2 = 0, sy = 0, sy2 = 0, sxy = 0;
@@ -113,8 +110,7 @@ public final class MatrixFunctions {
 			sx2 += x * x;
 			sy2 += y * y;
 		}
-		double div = Math.sqrt((sx2 - ((sx * sx) / n))
-				* (sy2 - ((sy * sy) / n)));
+		double div = Math.sqrt((sx2 - ((sx * sx) / n)) * (sy2 - ((sy * sy) / n)));
 		if (div != 0) {
 			r = Math.pow((sxy - ((sx * sy) / n)) / div, 2);
 		}
@@ -130,8 +126,7 @@ public final class MatrixFunctions {
 	 *            double[]
 	 * @return double
 	 */
-	public static synchronized double getStandardError(Pair[] data,
-			double[] terms) {
+	public static synchronized double getStandardError(Pair[] data, double[] terms) {
 		double r = 0;
 		int n = data.length;
 		if (n > 2) {
@@ -153,8 +148,7 @@ public final class MatrixFunctions {
 	 *            int
 	 * @return double[]
 	 */
-	public static synchronized double[] getCalculatedCoeffients(Pair[] data,
-			int p) {
+	public static synchronized double[] getCalculatedCoeffients(Pair[] data, int p) {
 		p += 1;
 		int n = data.length;
 		int r, c;
@@ -250,8 +244,7 @@ public final class MatrixFunctions {
 	 * @param m
 	 *            int
 	 */
-	private static synchronized void gj_eliminate(double[][] A, int i, int j,
-			int n, int m) {
+	private static synchronized void gj_eliminate(double[][] A, int i, int j, int n, int m) {
 		for (int k = 0; k < n; k++) {
 			if ((k != i) && (A[k][j] != 0)) {
 				for (int q = j + 1; q < m; q++) {
@@ -316,18 +309,15 @@ public final class MatrixFunctions {
 	 *            int
 	 * @return String
 	 */
-	public static synchronized String toPrint(int polyOrder,
-			double correlationCoeff, double standardDeviation, double[] terms,
-			int dataPoints) {
+	public static synchronized String toPrint(int polyOrder, double correlationCoeff, double standardDeviation,
+			double[] terms, int dataPoints) {
 
 		String styleTag[] = { "", "pow", "Math.pow" };
 		int n = dataPoints;
 		String text = "Degree " + polyOrder + ", " + n + " x,y pairs. ";
-		text += "Corr. coeff. (r^2) = " + formatNum(correlationCoeff, false)
-				+ ". ";
+		text += "Corr. coeff. (r^2) = " + formatNum(correlationCoeff, false) + ". ";
 		text += "SE = " + formatNum(standardDeviation, false) + "\n\n";
-		text += (listingForm > 0) ? "double f(double x) {\n    return"
-				: "f(x) =";
+		text += (listingForm > 0) ? "double f(double x) {\n    return" : "f(x) =";
 		for (int i = 0; i <= polyOrder; i++) {
 			double a = terms[i];
 			if (i > 0) {

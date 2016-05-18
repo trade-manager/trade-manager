@@ -70,21 +70,17 @@ public class TradelogHome {
 	 *            String
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogReport(Portfolio portfolio,
-			ZonedDateTime start, ZonedDateTime end, boolean filter,
-			String symbol, BigDecimal winLossAmount) {
-		EntityManager entityManagerLocal = EntityManagerHelper
-				.getLocalEntityManager();
+	public TradelogReport findByTradelogReport(Portfolio portfolio, ZonedDateTime start, ZonedDateTime end,
+			boolean filter, String symbol, BigDecimal winLossAmount) {
+		EntityManager entityManagerLocal = EntityManagerHelper.getLocalEntityManager();
 		try {
 			entityManagerLocal.getTransaction().begin();
-			Query queryDetail = entityManagerLocal.createNativeQuery(
-					TradelogDetail.getSQLString(), TradelogDetail.class);
+			Query queryDetail = entityManagerLocal.createNativeQuery(TradelogDetail.getSQLString(),
+					TradelogDetail.class);
 
 			queryDetail.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			queryDetail.setParameter("start",
-					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
-			queryDetail.setParameter("end",
-					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
+			queryDetail.setParameter("start", TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			queryDetail.setParameter("end", TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			queryDetail.setParameter("filter", filter);
 			queryDetail.setParameter("symbol", symbol);
 
@@ -93,15 +89,12 @@ public class TradelogHome {
 			for (Object item : queryDetail.getResultList()) {
 				tradelogReport.add((TradelogDetail) item);
 			}
-			Query querySummary = entityManagerLocal.createNativeQuery(
-					TradelogSummary.getSQLString(), TradelogSummary.class);
+			Query querySummary = entityManagerLocal.createNativeQuery(TradelogSummary.getSQLString(),
+					TradelogSummary.class);
 
-			querySummary
-					.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			querySummary.setParameter("start",
-					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
-			querySummary.setParameter("end",
-					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
+			querySummary.setParameter("idPortfolio", portfolio.getIdPortfolio());
+			querySummary.setParameter("start", TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			querySummary.setParameter("end", TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			querySummary.setParameter("symbol", symbol);
 			querySummary.setParameter("winLossAmount", winLossAmount);
 
@@ -112,8 +105,7 @@ public class TradelogHome {
 			return tradelogReport;
 
 		} catch (Exception re) {
-			if ((entityManagerLocal.getTransaction() != null)
-					&& entityManagerLocal.getTransaction().isActive()) {
+			if ((entityManagerLocal.getTransaction() != null) && entityManagerLocal.getTransaction().isActive()) {
 				entityManagerLocal.getTransaction().rollback();
 			}
 			throw re;
@@ -135,21 +127,17 @@ public class TradelogHome {
 	 *            boolean
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogDetail(Portfolio portfolio,
-			ZonedDateTime start, ZonedDateTime end, boolean filter,
-			String symbol) {
-		EntityManager entityManagerLocal = EntityManagerHelper
-				.getLocalEntityManager();
+	public TradelogReport findByTradelogDetail(Portfolio portfolio, ZonedDateTime start, ZonedDateTime end,
+			boolean filter, String symbol) {
+		EntityManager entityManagerLocal = EntityManagerHelper.getLocalEntityManager();
 		try {
 			entityManagerLocal.getTransaction().begin();
-			Query queryDetail = entityManagerLocal.createNativeQuery(
-					TradelogDetail.getSQLString(), "TradelogDetailMapping");
+			Query queryDetail = entityManagerLocal.createNativeQuery(TradelogDetail.getSQLString(),
+					"TradelogDetailMapping");
 
 			queryDetail.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			queryDetail.setParameter("start",
-					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
-			queryDetail.setParameter("end",
-					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
+			queryDetail.setParameter("start", TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			queryDetail.setParameter("end", TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			queryDetail.setParameter("filter", filter);
 			queryDetail.setParameter("symbol", symbol);
 
@@ -161,8 +149,7 @@ public class TradelogHome {
 			return tradelogReport;
 
 		} catch (Exception re) {
-			if ((entityManagerLocal.getTransaction() != null)
-					&& entityManagerLocal.getTransaction().isActive()) {
+			if ((entityManagerLocal.getTransaction() != null) && entityManagerLocal.getTransaction().isActive()) {
 				entityManagerLocal.getTransaction().rollback();
 			}
 			throw re;
@@ -182,22 +169,17 @@ public class TradelogHome {
 	 *            ZonedDateTime
 	 * @return TradelogReport
 	 */
-	public TradelogReport findByTradelogSummary(Portfolio portfolio,
-			ZonedDateTime start, ZonedDateTime end, String symbol,
-			BigDecimal winLossAmount) {
-		EntityManager entityManagerLocal = EntityManagerHelper
-				.getLocalEntityManager();
+	public TradelogReport findByTradelogSummary(Portfolio portfolio, ZonedDateTime start, ZonedDateTime end,
+			String symbol, BigDecimal winLossAmount) {
+		EntityManager entityManagerLocal = EntityManagerHelper.getLocalEntityManager();
 		try {
 			entityManagerLocal.getTransaction().begin();
-			Query querySummary = entityManagerLocal.createNativeQuery(
-					TradelogSummary.getSQLString(), TradelogSummary.class);
+			Query querySummary = entityManagerLocal.createNativeQuery(TradelogSummary.getSQLString(),
+					TradelogSummary.class);
 
-			querySummary
-					.setParameter("idPortfolio", portfolio.getIdPortfolio());
-			querySummary.setParameter("start",
-					TradingCalendar.getFormattedDate(start, DATE_FORMAT));
-			querySummary.setParameter("end",
-					TradingCalendar.getFormattedDate(end, DATE_FORMAT));
+			querySummary.setParameter("idPortfolio", portfolio.getIdPortfolio());
+			querySummary.setParameter("start", TradingCalendar.getFormattedDate(start, DATE_FORMAT));
+			querySummary.setParameter("end", TradingCalendar.getFormattedDate(end, DATE_FORMAT));
 			querySummary.setParameter("symbol", symbol);
 			querySummary.setParameter("winLossAmount", winLossAmount);
 
@@ -210,8 +192,7 @@ public class TradelogHome {
 			return tradelogReport;
 
 		} catch (Exception re) {
-			if ((entityManagerLocal.getTransaction() != null)
-					&& entityManagerLocal.getTransaction().isActive()) {
+			if ((entityManagerLocal.getTransaction() != null) && entityManagerLocal.getTransaction().isActive()) {
 				entityManagerLocal.getTransaction().rollback();
 			}
 			throw re;

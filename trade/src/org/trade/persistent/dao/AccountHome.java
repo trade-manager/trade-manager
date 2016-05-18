@@ -64,8 +64,7 @@ public class AccountHome {
 	public Account findById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Account instance = entityManager.find(Account.class, id);
 			entityManager.getTransaction().commit();
@@ -88,16 +87,14 @@ public class AccountHome {
 	public Account findByAccountNumber(String accountNumber) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Account> query = builder.createQuery(Account.class);
 			Root<Account> from = query.from(Account.class);
 			query.select(from);
 			query.where(builder.equal(from.get("accountNumber"), accountNumber));
-			List<Account> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Account> items = entityManager.createQuery(query).getResultList();
 			for (Account account : items) {
 				account.getPortfolioAccounts().size();
 			}

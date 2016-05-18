@@ -72,8 +72,7 @@ public class DAODecode extends Decode {
 	 * @param values
 	 *            Vector<Object>
 	 */
-	public DAODecode(String codeDecodeType, Vector<String> columnNames,
-			Vector<Object> values) {
+	public DAODecode(String codeDecodeType, Vector<String> columnNames, Vector<Object> values) {
 		super(codeDecodeType, columnNames, values, DAO_DECODE_IDENTIFIER);
 	}
 

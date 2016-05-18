@@ -91,16 +91,15 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String,
 	 *      LookupQualifier)
 	 */
-	public synchronized Lookup getLookup(String lookupName,
-			LookupQualifier qualifier, boolean optional) throws LookupException {
+	public synchronized Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean optional)
+			throws LookupException {
 		Lookup lookup = getCachedLookup(lookupName, qualifier);
 
 		if (null == lookup) {
 			try {
 				Vector<Vector<Object>> rows = new Vector<Vector<Object>>();
 				Vector<String> colNames = new Vector<String>();
-				Enumeration<?> en = ConfigProperties
-						.getPropAsEnumeration(lookupName + "_DBTable");
+				Enumeration<?> en = ConfigProperties.getPropAsEnumeration(lookupName + "_DBTable");
 
 				while (en.hasMoreElements()) {
 					colNames.addElement((String) en.nextElement());
@@ -113,8 +112,7 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 				int colNamesSize = colNames.size();
 
 				for (i = 0; i < colNamesSize; i++) {
-					colRows.addElement(ConfigProperties
-							.getPropAsEnumeration(colNames.elementAt(i)));
+					colRows.addElement(ConfigProperties.getPropAsEnumeration(colNames.elementAt(i)));
 				}
 
 				// Now construct a Vector Vector - representing the table of
@@ -145,8 +143,7 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 						// Check to see if the returned lookup is to be
 						// constrained
 						if (foundOne && (qualifier != null)) {
-							Object qualVal = qualifier.getValue(""
-									+ colNames.elementAt(i));
+							Object qualVal = qualifier.getValue("" + colNames.elementAt(i));
 
 							if (null != qualVal) {
 								if (!qualVal.equals(value)) {
@@ -180,11 +177,9 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 						if ("DAO_DECODE_TYPE".equals(colNames.elementAt(y))) {
 							type = (String) row.elementAt(y);
 
-						} else if ("DAO_DECODE_CODE".equals(colNames
-								.elementAt(y))) {
+						} else if ("DAO_DECODE_CODE".equals(colNames.elementAt(y))) {
 							dao = (String) row.elementAt(y);
-						} else if ("DAO_DECODE_DISPLAY_NAME".equals(colNames
-								.elementAt(y))) {
+						} else if ("DAO_DECODE_DISPLAY_NAME".equals(colNames.elementAt(y))) {
 							methodName = (String) row.elementAt(y);
 						}
 					}
@@ -207,12 +202,10 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 					List<?> codes = getCodes(dao);
 					for (Object daoObject : codes) {
 
-						Method method = Reflector.findMethod(
-								daoObject.getClass(), methodName, null);
+						Method method = Reflector.findMethod(daoObject.getClass(), methodName, null);
 						if (null != method) {
 							Object[] o = new Object[0];
-							Object displayNameValue = method.invoke(daoObject,
-									o);
+							Object displayNameValue = method.invoke(daoObject, o);
 							if (null != displayNameValue) {
 								Vector<Object> newRow = new Vector<Object>();
 								newRow.add(type);
@@ -278,8 +271,7 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 	 * @param lookup
 	 *            Lookup
 	 */
-	private synchronized void addLookupToCache(String lookupName,
-			LookupQualifier qualifier, Lookup lookup) {
+	private synchronized void addLookupToCache(String lookupName, LookupQualifier qualifier, Lookup lookup) {
 		Hashtable<String, Lookup> lookupsByQualifier = _lookups.get(lookupName);
 
 		if (null == lookupsByQualifier) {
@@ -298,16 +290,13 @@ public class DBTableLookupServiceProvider implements LookupServiceProvider {
 	 * @return List<?>
 	 * @throws ClassNotFoundException
 	 */
-	private synchronized List<?> getCodes(String className)
-			throws ClassNotFoundException {
+	private synchronized List<?> getCodes(String className) throws ClassNotFoundException {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Class<?> c = Class.forName(className);
-			CriteriaBuilder criteriaBuilder = entityManager
-					.getCriteriaBuilder();
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
 			Root<?> from = criteriaQuery.from(c);
 			CriteriaQuery<Object> select = criteriaQuery.select(from);

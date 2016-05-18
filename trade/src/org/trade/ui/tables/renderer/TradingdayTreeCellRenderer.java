@@ -79,14 +79,12 @@ public class TradingdayTreeCellRenderer extends DefaultTreeCellRenderer {
 	 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree,
 	 *      Object, boolean, boolean, boolean, int, boolean)
 	 */
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean selected, boolean expanded, boolean leaf, int row,
-			boolean hasFocus) {
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+			boolean leaf, int row, boolean hasFocus) {
 
 		Object node = ((TradingdayTreeModel) tree.getModel()).getNode(value);
 
-		Component comp = super.getTreeCellRendererComponent(tree, value,
-				selected, expanded, leaf, row, hasFocus);
+		Component comp = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 		if (selected) {
 			this.setBackgroundSelectionColor(backgroundSelectionColor);
 		}
@@ -94,11 +92,9 @@ public class TradingdayTreeCellRenderer extends DefaultTreeCellRenderer {
 			if ((node instanceof Tradestrategy) /* leaf */) {
 				Tradestrategy tradestrategy = (Tradestrategy) node;
 				if (!tradestrategy.getTradeOrders().isEmpty()) {
-					TradeOrder tradeOrder = tradestrategy.getTradeOrders().get(
-							0);
+					TradeOrder tradeOrder = tradestrategy.getTradeOrders().get(0);
 					if (tradeOrder.hasTradePosition()) {
-						if (Side.BOT.equals(tradeOrder.getTradePosition()
-								.getSide())) {
+						if (Side.BOT.equals(tradeOrder.getTradePosition().getSide())) {
 							comp.setForeground(Color.GREEN);
 						} else {
 							comp.setForeground(Color.RED);

@@ -205,8 +205,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 	 * @param urlGenerator
 	 *            the URL generator.
 	 */
-	public MACDItemRenderer(int type, XYToolTipGenerator toolTipGenerator,
-			XYURLGenerator urlGenerator) {
+	public MACDItemRenderer(int type, XYToolTipGenerator toolTipGenerator, XYURLGenerator urlGenerator) {
 		super();
 	}
 
@@ -241,15 +240,13 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 	 *            the pass index.
 	 */
 	@Override
-	public void drawItem(Graphics2D g2, XYItemRendererState state,
-			Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-			ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-			int series, int item, CrosshairState crosshairState, int pass) {
+	public void drawItem(Graphics2D g2, XYItemRendererState state, Rectangle2D dataArea, PlotRenderingInfo info,
+			XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset, int series, int item,
+			CrosshairState crosshairState, int pass) {
 
 		// get the data point...
 		MACDDataset mACDDataset = (MACDDataset) dataset;
-		MACDItem mACDItem = (MACDItem) mACDDataset.getSeries(series)
-				.getDataItem(item);
+		MACDItem mACDItem = (MACDItem) mACDDataset.getSeries(series).getDataItem(item);
 		double x1 = dataset.getXValue(series, item);
 		double y1 = mACDItem.getMACD();
 		double x0 = 0;
@@ -258,8 +255,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		MACDItem prevMACDItem = null;
 
 		if (item != 0) {
-			prevMACDItem = (MACDItem) mACDDataset.getSeries(series)
-					.getDataItem(item - 1);
+			prevMACDItem = (MACDItem) mACDDataset.getSeries(series).getDataItem(item - 1);
 			x0 = mACDDataset.getXValue(series, item - 1);
 			y0 = prevMACDItem.getMACD();
 			lastItem = mACDDataset.getItemCount(series) - 1;
@@ -271,9 +267,8 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		 * Draw MACD.
 		 */
 
-		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
-				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, mACDDataset.getSeriesColor(0), dataset);
+		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0, y0, x1, y1, lastItem, series, item,
+				crosshairState, pass, numX, minX, maxX, mACDDataset.getSeriesColor(0), dataset);
 
 		y1 = mACDItem.getSignalLine();
 		if (item != 0) {
@@ -282,9 +277,8 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		/*
 		 * Draw MACD smoothing.
 		 */
-		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
-				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.RED, dataset);
+		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0, y0, x1, y1, lastItem, series, item,
+				crosshairState, pass, numX, minX, maxX, Color.RED, dataset);
 		y1 = mACDItem.getMACDHistogram();
 		if (item != 0) {
 			y0 = prevMACDItem.getMACDHistogram();
@@ -294,17 +288,14 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		 */
 		y0 = 0;
 		x0 = x1;
-		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0,
-				y0, x1, y1, lastItem, series, item, crosshairState, pass, numX,
-				minX, maxX, Color.BLACK, dataset);
+		drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, x0, y0, x1, y1, lastItem, series, item,
+				crosshairState, pass, numX, minX, maxX, Color.BLACK, dataset);
 
 	}
 
-	public void drawItem(Graphics2D g2, XYItemRendererState state,
-			Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-			ValueAxis domainAxis, ValueAxis rangeAxis, double x0, double y0,
-			double x1, double y1, int lastItem, int series, int item,
-			CrosshairState crosshairState, int pass, int numX, double minX,
+	public void drawItem(Graphics2D g2, XYItemRendererState state, Rectangle2D dataArea, PlotRenderingInfo info,
+			XYPlot plot, ValueAxis domainAxis, ValueAxis rangeAxis, double x0, double y0, double x1, double y1,
+			int lastItem, int series, int item, CrosshairState crosshairState, int pass, int numX, double minX,
 			double maxX, Paint color, XYDataset dataset) {
 
 		boolean itemVisible = getItemVisible(series, item);
@@ -339,8 +330,7 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 				}
 
 				// update path to reflect latest point
-				if (itemVisible && !Double.isNaN(transX1)
-						&& !Double.isNaN(transY1)) {
+				if (itemVisible && !Double.isNaN(transX1) && !Double.isNaN(transY1)) {
 					float x = (float) transX1;
 					float y = (float) transY1;
 					if (orientation == PlotOrientation.HORIZONTAL) {
@@ -378,29 +368,23 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 						if (this.gapThresholdType == UnitType.ABSOLUTE) {
 							drawLine = Math.abs(x1 - x0) <= this.gapThreshold;
 						} else {
-							drawLine = Math.abs(x1 - x0) <= ((maxX - minX)
-									/ numX * getGapThreshold());
+							drawLine = Math.abs(x1 - x0) <= ((maxX - minX) / numX * getGapThreshold());
 						}
 					}
 					if (drawLine) {
-						double transX0 = domainAxis.valueToJava2D(x0, dataArea,
-								xAxisLocation);
-						double transY0 = rangeAxis.valueToJava2D(y0, dataArea,
-								yAxisLocation);
+						double transX0 = domainAxis.valueToJava2D(x0, dataArea, xAxisLocation);
+						double transY0 = rangeAxis.valueToJava2D(y0, dataArea, yAxisLocation);
 
 						// only draw if we have good values
-						if (Double.isNaN(transX0) || Double.isNaN(transY0)
-								|| Double.isNaN(transX1)
+						if (Double.isNaN(transX0) || Double.isNaN(transY0) || Double.isNaN(transX1)
 								|| Double.isNaN(transY1)) {
 							return;
 						}
 
 						if (orientation == PlotOrientation.HORIZONTAL) {
-							state.workingLine.setLine(transY0, transX0,
-									transY1, transX1);
+							state.workingLine.setLine(transY0, transX0, transY1, transX1);
 						} else if (orientation == PlotOrientation.VERTICAL) {
-							state.workingLine.setLine(transX0, transY0,
-									transX1, transY1);
+							state.workingLine.setLine(transX0, transY0, transX1, transY1);
 						}
 
 						if (state.workingLine.intersects(dataArea)) {
@@ -422,11 +406,9 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 
 			Shape shape = getItemShape(series, item);
 			if (orientation == PlotOrientation.HORIZONTAL) {
-				shape = ShapeUtilities.createTranslatedShape(shape, transY1,
-						transX1);
+				shape = ShapeUtilities.createTranslatedShape(shape, transY1, transX1);
 			} else if (orientation == PlotOrientation.VERTICAL) {
-				shape = ShapeUtilities.createTranslatedShape(shape, transX1,
-						transY1);
+				shape = ShapeUtilities.createTranslatedShape(shape, transX1, transY1);
 			}
 			if (shape.intersects(dataArea)) {
 				if (getItemShapeFilled(series, item)) {
@@ -442,13 +424,10 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 		if (getPlotImages()) {
 			Image image = getImage(plot, series, item, transX1, transY1);
 			if (image != null) {
-				Point hotspot = getImageHotspot(plot, series, item, transX1,
-						transY1, image);
-				g2.drawImage(image, (int) (transX1 - hotspot.getX()),
-						(int) (transY1 - hotspot.getY()), null);
-				entityArea = new Rectangle2D.Double(transX1 - hotspot.getX(),
-						transY1 - hotspot.getY(), image.getWidth(null),
-						image.getHeight(null));
+				Point hotspot = getImageHotspot(plot, series, item, transX1, transY1, image);
+				g2.drawImage(image, (int) (transX1 - hotspot.getX()), (int) (transY1 - hotspot.getY()), null);
+				entityArea = new Rectangle2D.Double(transX1 - hotspot.getX(), transY1 - hotspot.getY(),
+						image.getWidth(null), image.getHeight(null));
 			}
 
 		}
@@ -462,14 +441,12 @@ public class MACDItemRenderer extends StandardXYItemRenderer {
 
 		// draw the item label if there is one...
 		if (isItemLabelVisible(series, item)) {
-			drawItemLabel(g2, orientation, dataset, series, item, xx, yy,
-					(y1 < 0.0));
+			drawItemLabel(g2, orientation, dataset, series, item, xx, yy, (y1 < 0.0));
 		}
 
 		int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);
 		int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);
-		updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
-				rangeAxisIndex, transX1, transY1, orientation);
+		updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex, rangeAxisIndex, transX1, transY1, orientation);
 
 		// add an entity for the item...
 		if (entities != null && isPointInRect(dataArea, xx, yy)) {

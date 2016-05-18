@@ -67,8 +67,7 @@ public class CoreUtils {
 	 *            String
 	 * @return String
 	 */
-	public static final String replace(String replaceIn, String toReplace,
-			String replaceWith) {
+	public static final String replace(String replaceIn, String toReplace, String replaceWith) {
 		StringBuffer buf = new StringBuffer(replaceIn);
 		int replaceLength = toReplace.length();
 		int replaceWithLength = replaceWith.length();
@@ -117,9 +116,8 @@ public class CoreUtils {
 	 * @throws IllegalAccessException
 	 */
 
-	public static Hashtable<String, Object> getAllAttribueValues(Aspect aspect,
-			boolean decodeConvertion) throws InvocationTargetException,
-			IllegalAccessException {
+	public static Hashtable<String, Object> getAllAttribueValues(Aspect aspect, boolean decodeConvertion)
+			throws InvocationTargetException, IllegalAccessException {
 
 		final Hashtable<String, Object> attributeList = new Hashtable<String, Object>();
 		final Method method[] = aspect.getClass().getDeclaredMethods();
@@ -145,13 +143,10 @@ public class CoreUtils {
 						returnValue = "null";
 					}
 					if (decodeConvertion
-							&& returnValue.getClass().getSuperclass().getName()
-									.equals(Decode.class.getName())) {
+							&& returnValue.getClass().getSuperclass().getName().equals(Decode.class.getName())) {
 						returnValue = ((Decode) returnValue).getCode();
 					}
-					attributeList.put(
-							methodName.substring(3, methodName.length()),
-							returnValue);
+					attributeList.put(methodName.substring(3, methodName.length()), returnValue);
 				}
 
 			}
@@ -172,8 +167,7 @@ public class CoreUtils {
 	 * @throws IllegalAccessException
 	 */
 
-	public static String toFormattedXMLString(Aspect aspect)
-			throws InvocationTargetException, IllegalAccessException {
+	public static String toFormattedXMLString(Aspect aspect) throws InvocationTargetException, IllegalAccessException {
 		Hashtable<String, Object> attributeList = null;
 		StringBuffer returnStringBuf = null;
 		String returnString = null;
@@ -183,8 +177,7 @@ public class CoreUtils {
 			returnStringBuf = new StringBuffer();
 
 			String className = aspect.getClass().getName();
-			final StringTokenizer spaceTokens = new StringTokenizer(className,
-					".");
+			final StringTokenizer spaceTokens = new StringTokenizer(className, ".");
 			while (spaceTokens.hasMoreTokens()) {
 				className = spaceTokens.nextToken();
 			}
@@ -207,20 +200,16 @@ public class CoreUtils {
 
 				if (attributeList.get(attributeName) instanceof ArrayList) {
 					@SuppressWarnings("unchecked")
-					final List<Aspect> list = (List<Aspect>) attributeList
-							.get(attributeName);
+					final List<Aspect> list = (List<Aspect>) attributeList.get(attributeName);
 					for (Aspect aspect1 : list) {
 						returnStringBuf.append(toFormattedXMLString(aspect1));
 					}
-				} else if (attributeList.get(attributeName).getClass()
-						.getSuperclass().getName()
+				} else if (attributeList.get(attributeName).getClass().getSuperclass().getName()
 						.equals(Aspect.class.getName())) {
-					final Aspect aspect1 = (Aspect) attributeList
-							.get(attributeName);
+					final Aspect aspect1 = (Aspect) attributeList.get(attributeName);
 					returnStringBuf.append(toFormattedXMLString(aspect1));
 				} else {
-					returnStringBuf.append("    <" + attributeName + ">"
-							+ attributeList.get(attributeName) + "</"
+					returnStringBuf.append("    <" + attributeName + ">" + attributeList.get(attributeName) + "</"
 							+ attributeName + "> \n");
 				}
 			}
@@ -244,8 +233,7 @@ public class CoreUtils {
 	 * @throws IllegalAccessException
 	 */
 
-	public static String toFormattedString(Aspect aspect)
-			throws InvocationTargetException, IllegalAccessException {
+	public static String toFormattedString(Aspect aspect) throws InvocationTargetException, IllegalAccessException {
 		Hashtable<String, Object> attributeList = null;
 		StringBuffer returnStringBuf = null;
 		String returnString = null;
@@ -270,20 +258,16 @@ public class CoreUtils {
 
 				if (attributeList.get(attributeName) instanceof ArrayList) {
 					@SuppressWarnings("unchecked")
-					final List<Aspect> list = (List<Aspect>) attributeList
-							.get(attributeName);
+					final List<Aspect> list = (List<Aspect>) attributeList.get(attributeName);
 					for (Aspect aspect1 : list) {
 						returnStringBuf.append(toFormattedXMLString(aspect1));
 					}
-				} else if (attributeList.get(attributeName).getClass()
-						.getSuperclass().getName()
+				} else if (attributeList.get(attributeName).getClass().getSuperclass().getName()
 						.equals(Aspect.class.getName())) {
-					final Aspect aspect1 = (Aspect) attributeList
-							.get(attributeName);
+					final Aspect aspect1 = (Aspect) attributeList.get(attributeName);
 					returnStringBuf.append(toFormattedXMLString(aspect1));
 				} else {
-					returnStringBuf.append(attributeName + "=\'"
-							+ attributeList.get(attributeName) + "\'\n");
+					returnStringBuf.append(attributeName + "=\'" + attributeList.get(attributeName) + "\'\n");
 				}
 			}
 
@@ -312,8 +296,8 @@ public class CoreUtils {
 	 * @see com.inpurchase.icap.aspect.Aspect
 	 */
 
-	public static void appendSQLString(StringBuffer strBuf,
-			String attributeName, Object toAppend, boolean columnNamesOnly) {
+	public static void appendSQLString(StringBuffer strBuf, String attributeName, Object toAppend,
+			boolean columnNamesOnly) {
 
 		if (toAppend instanceof String) {
 			if ("null".equals(toAppend)) {
@@ -323,8 +307,7 @@ public class CoreUtils {
 			}
 		}
 		if (toAppend instanceof Date) {
-			final SimpleDateFormat newDateFormat = new SimpleDateFormat(
-					"dd-MMM-yy HH:mm:ss");
+			final SimpleDateFormat newDateFormat = new SimpleDateFormat("dd-MMM-yy HH:mm:ss");
 			toAppend = newDateFormat.format((Date) toAppend);
 
 		}
@@ -366,8 +349,7 @@ public class CoreUtils {
 	 *            SimpleAttributeSet
 	 * @throws BadLocationException
 	 */
-	public static void setDocumentText(Document doc, String content,
-			boolean newLine, SimpleAttributeSet attrSet)
+	public static void setDocumentText(Document doc, String content, boolean newLine, SimpleAttributeSet attrSet)
 			throws BadLocationException {
 		if (null != content) {
 			doc.insertString(doc.getLength(), content, attrSet);
@@ -436,10 +418,9 @@ public class CoreUtils {
 	 */
 
 	public static <T extends Number> boolean isBetween(T a, T b, T c) {
-		return b.doubleValue() > a.doubleValue() ? c.doubleValue() >= a
-				.doubleValue() && c.doubleValue() <= b.doubleValue() : c
-				.doubleValue() >= b.doubleValue()
-				&& c.doubleValue() <= a.doubleValue();
+		return b.doubleValue() > a.doubleValue()
+				? c.doubleValue() >= a.doubleValue() && c.doubleValue() <= b.doubleValue()
+				: c.doubleValue() >= b.doubleValue() && c.doubleValue() <= a.doubleValue();
 	}
 
 	/**

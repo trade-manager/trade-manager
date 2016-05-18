@@ -85,8 +85,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	private String marketBias;
 	private String marketGap;
 	private String marketBar;
-	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(
-			0);
+	private List<Tradestrategy> tradestrategies = new ArrayList<Tradestrategy>(0);
 	private List<Candle> candles = new ArrayList<Candle>(0);
 
 	public Tradingday() {
@@ -123,8 +122,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * @param candles
 	 *            List<Candle>
 	 */
-	public Tradingday(ZonedDateTime open, ZonedDateTime close,
-			String marketBias, String marketGap, String marketBar,
+	public Tradingday(ZonedDateTime open, ZonedDateTime close, String marketBias, String marketGap, String marketBar,
 			List<Tradestrategy> tradestrategies, List<Candle> candles) {
 		this.open = open;
 		this.close = close;
@@ -316,8 +314,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 *            Tradestrategy
 	 */
 	public boolean removeTradestrategy(Tradestrategy tradestrategy) {
-		for (ListIterator<Tradestrategy> itemIter = this.tradestrategies
-				.listIterator(); itemIter.hasNext();) {
+		for (ListIterator<Tradestrategy> itemIter = this.tradestrategies.listIterator(); itemIter.hasNext();) {
 			Tradestrategy item = itemIter.next();
 			if (item.equals(tradestrategy)) {
 				itemIter.remove();
@@ -361,8 +358,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 		public int compare(Tradingday o1, Tradingday o2) {
 			int returnVal = 0;
 			m_ascending = true;
-			returnVal = CoreUtils
-					.nullSafeComparator(o1.getOpen(), o2.getOpen());
+			returnVal = CoreUtils.nullSafeComparator(o1.getOpen(), o2.getOpen());
 			if (m_ascending.equals(Boolean.FALSE)) {
 				returnVal = returnVal * -1;
 			}
@@ -374,8 +370,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 		public int compare(Tradingday o1, Tradingday o2) {
 			int returnVal = 0;
 			m_ascending = false;
-			returnVal = CoreUtils
-					.nullSafeComparator(o1.getOpen(), o2.getOpen());
+			returnVal = CoreUtils.nullSafeComparator(o1.getOpen(), o2.getOpen());
 			if (m_ascending.equals(Boolean.FALSE)) {
 				returnVal = returnVal * -1;
 			}
@@ -389,8 +384,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * @return String
 	 */
 	public String toString() {
-		return TradingCalendar.getFormattedDate(getOpen().toLocalDate(),
-				"MM/dd/yyyy");
+		return TradingCalendar.getFormattedDate(getOpen().toLocalDate(), "MM/dd/yyyy");
 	}
 
 	/**
@@ -421,8 +415,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	public int hashCode() {
 		int hash = super.hashCode();
 		hash = hash + (this.getOpen() == null ? 0 : this.getOpen().hashCode());
-		hash = hash
-				+ (this.getClose() == null ? 0 : this.getClose().hashCode());
+		hash = hash + (this.getClose() == null ? 0 : this.getClose().hashCode());
 		return hash;
 	}
 
@@ -457,8 +450,7 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 * @return Tradingday
 	 */
 	public static Tradingday newInstance(ZonedDateTime date) {
-		Tradingday tradingday = new Tradingday(
-				TradingCalendar.getTradingDayStart(date),
+		Tradingday tradingday = new Tradingday(TradingCalendar.getTradingDayStart(date),
 				TradingCalendar.getTradingDayEnd(date));
 		return tradingday;
 
@@ -490,12 +482,10 @@ public class Tradingday extends Aspect implements Serializable, Cloneable {
 	 */
 	public void populateStrategyData(Tradingday tradingday) {
 		if (null != tradingday.getTradestrategies()) {
-			for (Tradestrategy currTradestrategy : tradingday
-					.getTradestrategies()) {
+			for (Tradestrategy currTradestrategy : tradingday.getTradestrategies()) {
 				for (Tradestrategy tradestrategy : this.getTradestrategies()) {
 					if (currTradestrategy.equals(tradestrategy)) {
-						tradestrategy.setStrategyData(currTradestrategy
-								.getStrategyData());
+						tradestrategy.setStrategyData(currTradestrategy.getStrategyData());
 						break;
 					}
 				}

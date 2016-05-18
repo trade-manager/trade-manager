@@ -59,8 +59,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class DynamicCode {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(DynamicCode.class);
+	private final static Logger _log = LoggerFactory.getLogger(DynamicCode.class);
 	private String compileClasspath;
 	private ClassLoader parentClassLoader;
 	private List<SourceDir> sourceDirs = new ArrayList<SourceDir>();
@@ -150,8 +149,7 @@ public final class DynamicCode {
 			String resource = className.replace('.', '/') + ".java";
 			SourceDir src = locateResource(resource);
 			if (src == null) {
-				throw new ClassNotFoundException("DynaCode class not found "
-						+ className);
+				throw new ClassNotFoundException("DynaCode class not found " + className);
 			}
 
 			synchronized (this) {
@@ -203,8 +201,7 @@ public final class DynamicCode {
 	private void unload(SourceDir src) {
 		// clear loaded classes
 		synchronized (loadedClasses) {
-			for (Iterator<LoadedClass> iter = loadedClasses.values().iterator(); iter
-					.hasNext();) {
+			for (Iterator<LoadedClass> iter = loadedClasses.values().iterator(); iter.hasNext();) {
 				LoadedClass loadedClass = iter.next();
 				if (loadedClass.srcDir == src) {
 					iter.remove();
@@ -227,8 +224,7 @@ public final class DynamicCode {
 		try {
 
 			SourceDir src = locateResource(resource);
-			return src == null ? null : new File(src.srcDir, resource).toURI()
-					.toURL();
+			return src == null ? null : new File(src.srcDir, resource).toURI().toURL();
 
 		} catch (MalformedURLException e) {
 			// should not happen
@@ -253,11 +249,9 @@ public final class DynamicCode {
 	 *             if an instance cannot be created, because of class not found
 	 *             for example
 	 */
-	public Object newProxyInstance(Class<?> interfaceClass, String implClassName)
-			throws Exception {
+	public Object newProxyInstance(Class<?> interfaceClass, String implClassName) throws Exception {
 		MyInvocationHandler handler = new MyInvocationHandler(implClassName);
-		return Proxy.newProxyInstance(interfaceClass.getClassLoader(),
-				new Class[] { interfaceClass }, handler);
+		return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, handler);
 	}
 
 	/**
@@ -272,12 +266,10 @@ public final class DynamicCode {
 	 * @return Object
 	 * @throws Exception
 	 */
-	public Object newProxyInstance(Class<?> interfaceClass,
-			String implClassName, Vector<Object> parm) throws Exception {
-		MyInvocationHandler handler = new MyInvocationHandler(implClassName,
-				parm);
-		return Proxy.newProxyInstance(interfaceClass.getClassLoader(),
-				new Class[] { interfaceClass }, handler);
+	public Object newProxyInstance(Class<?> interfaceClass, String implClassName, Vector<Object> parm)
+			throws Exception {
+		MyInvocationHandler handler = new MyInvocationHandler(implClassName, parm);
+		return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, handler);
 	}
 
 	/**
@@ -300,15 +292,12 @@ public final class DynamicCode {
 		SourceDir(File srcDir) {
 			this.srcDir = srcDir;
 
-			String subdir = srcDir.getAbsolutePath().replace(':', '_')
-					.replace('/', '_').replace('\\', '_');
-			this.binDir = new File(System.getProperty("java.io.tmpdir"), "bin/"
-					+ subdir);
+			String subdir = srcDir.getAbsolutePath().replace(':', '_').replace('/', '_').replace('\\', '_');
+			this.binDir = new File(System.getProperty("java.io.tmpdir"), "bin/" + subdir);
 			this.binDir.mkdirs();
 
 			// prepare compiler
-			this.javac = new Javac(compileClasspath.replace("%20", " "),
-					binDir.getAbsolutePath());
+			this.javac = new Javac(compileClasspath.replace("%20", " "), binDir.getAbsolutePath());
 
 			// class loader
 			recreateClassLoader();
@@ -316,8 +305,7 @@ public final class DynamicCode {
 
 		void recreateClassLoader() {
 			try {
-				classLoader = new URLClassLoader(new URL[] { binDir.toURI()
-						.toURL() }, parentClassLoader);
+				classLoader = new URLClassLoader(new URL[] { binDir.toURI().toURL() }, parentClassLoader);
 			} catch (MalformedURLException e) {
 				// should not happen
 			}
@@ -377,8 +365,7 @@ public final class DynamicCode {
 			}
 
 			if (error != null) {
-				throw new Exception("Failed to compile "
-						+ srcFile.getAbsolutePath() + ". Error: " + error);
+				throw new Exception("Failed to compile " + srcFile.getAbsolutePath() + ". Error: " + error);
 			}
 
 			try {
@@ -389,8 +376,7 @@ public final class DynamicCode {
 				lastModified = srcFile.lastModified();
 
 			} catch (ClassNotFoundException e) {
-				throw new Exception("Failed to load DynaCode class "
-						+ srcFile.getAbsolutePath());
+				throw new Exception("Failed to load DynaCode class " + srcFile.getAbsolutePath());
 			}
 		}
 	}
@@ -413,8 +399,7 @@ public final class DynamicCode {
 		 *            Vector<Object>
 		 * @throws Exception
 		 */
-		MyInvocationHandler(String className, Vector<Object> parm)
-				throws Exception {
+		MyInvocationHandler(String className, Vector<Object> parm) throws Exception {
 			backendClassName = className;
 			this.parm = parm;
 			try {
@@ -459,8 +444,7 @@ public final class DynamicCode {
 		 * @see java.lang.reflect.InvocationHandler#invoke(Object, Method,
 		 *      Object[])
 		 */
-		public Object invoke(Object proxy, Method method, Object[] args)
-				throws Throwable {
+		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
 			// check if class has been updated
 			Class<?> clz = loadClass(backendClassName);
@@ -490,8 +474,7 @@ public final class DynamicCode {
 				// return clz.newInstance();
 				return getCreateClass(clz, this.parm);
 			} catch (Exception e) {
-				throw new Exception("Failed to new instance of DynaCode class "
-						+ clz.getName(), e);
+				throw new Exception("Failed to new instance of DynaCode class " + clz.getName(), e);
 			}
 		}
 
@@ -512,10 +495,8 @@ public final class DynamicCode {
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
-	private static Object getCreateClass(Class<?> clz, Vector<Object> parm)
-			throws IOException, ClassNotFoundException, InstantiationException,
-			IllegalAccessException, NoSuchMethodException,
-			InvocationTargetException {
+	private static Object getCreateClass(Class<?> clz, Vector<Object> parm) throws IOException, ClassNotFoundException,
+			InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		int vectorSize = 0;
 		vectorSize = parm.size();
 		Object instance = null;
@@ -542,21 +523,18 @@ public final class DynamicCode {
 			instance = constructor.newInstance(object);
 		} catch (Exception e) {
 
-			_log.debug("Could not find constructor for default parms["
-					+ classes + "] will test all constructors.");
+			_log.debug("Could not find constructor for default parms[" + classes + "] will test all constructors.");
 			Constructor<?>[] constructors = clz.getConstructors();
 			for (Constructor<?> constructor2 : constructors) {
 				try {
 					instance = constructor2.newInstance(object);
 					if (null != instance) {
-						_log.debug("Found constructor: "
-								+ constructor2.toGenericString()
-								+ " for parms[" + classes + "]");
+						_log.debug(
+								"Found constructor: " + constructor2.toGenericString() + " for parms[" + classes + "]");
 						break;
 					}
 				} catch (Exception ex) {
-					_log.info("Constructor: " + constructor2.toGenericString()
-							+ " failed!!");
+					_log.info("Constructor: " + constructor2.toGenericString() + " failed!!");
 				}
 			}
 		}

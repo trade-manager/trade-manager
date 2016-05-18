@@ -86,9 +86,8 @@ public class StringValidator implements Validator {
 	 * @param isMandatory
 	 *            boolean
 	 */
-	public StringValidator(IMessageFactory messageFactory, int maxLength,
-			int permittedCharacterSet, String additionalPermittedCharacters,
-			boolean isMandatory) {
+	public StringValidator(IMessageFactory messageFactory, int maxLength, int permittedCharacterSet,
+			String additionalPermittedCharacters, boolean isMandatory) {
 		m_messageFactory = messageFactory;
 		m_maxLength = maxLength;
 		m_permittedCharacterSet = permittedCharacterSet;
@@ -112,11 +111,9 @@ public class StringValidator implements Validator {
 	 * @param isMandatory
 	 *            boolean
 	 */
-	public StringValidator(IMessageFactory messageFactory, int minLength,
-			int maxLength, int permittedCharacterSet,
+	public StringValidator(IMessageFactory messageFactory, int minLength, int maxLength, int permittedCharacterSet,
 			String additionalPermittedCharacters, boolean isMandatory) {
-		this(messageFactory, maxLength, permittedCharacterSet,
-				additionalPermittedCharacters, isMandatory);
+		this(messageFactory, maxLength, permittedCharacterSet, additionalPermittedCharacters, isMandatory);
 		m_minLength = minLength;
 	}
 
@@ -134,10 +131,9 @@ public class StringValidator implements Validator {
 	 * @param isMandatory
 	 *            boolean
 	 */
-	public StringValidator(IMessageFactory messageFactory, int minLength,
-			int maxLength, int permittedCharacterSet, boolean isMandatory) {
-		this(messageFactory, maxLength, permittedCharacterSet, null,
-				isMandatory);
+	public StringValidator(IMessageFactory messageFactory, int minLength, int maxLength, int permittedCharacterSet,
+			boolean isMandatory) {
+		this(messageFactory, maxLength, permittedCharacterSet, null, isMandatory);
 		m_minLength = minLength;
 	}
 
@@ -153,10 +149,9 @@ public class StringValidator implements Validator {
 	 * @param isMandatory
 	 *            boolean
 	 */
-	public StringValidator(IMessageFactory messageFactory, int maxLength,
-			int permittedCharacterSet, boolean isMandatory) {
-		this(messageFactory, maxLength, permittedCharacterSet, null,
-				isMandatory);
+	public StringValidator(IMessageFactory messageFactory, int maxLength, int permittedCharacterSet,
+			boolean isMandatory) {
+		this(messageFactory, maxLength, permittedCharacterSet, null, isMandatory);
 	}
 
 	/**
@@ -196,8 +191,8 @@ public class StringValidator implements Validator {
 	 * @see org.trade.core.validator.Validator#isValid(Object, String, String,
 	 *      ExceptionMessageListener)
 	 */
-	public boolean isValid(Object value, String invalidValue,
-			String expectedFormat, ExceptionMessageListener receiver) {
+	public boolean isValid(Object value, String invalidValue, String expectedFormat,
+			ExceptionMessageListener receiver) {
 		if (null == receiver) {
 			receiver = new ExceptionMessageListener() {
 				public void addExceptionMessage(ExceptionMessage e) {
@@ -215,37 +210,30 @@ public class StringValidator implements Validator {
 		{
 			if (m_isMandatory) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory().create(
-						MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED
-								.create()));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.MANDATORY_VALUE_NOT_PROVIDED.create()));
 			}
 		} else if (((String) value).length() > m_maxLength) // Max length check
 		{
 			valid = false;
-			receiver.addExceptionMessage(getMessageFactory().create(
-					MessageContextFactory.MAX_LENGTH_EXCEEDED
-							.create(MessageContextFactory.MAX_LENGTH
-									.create(new Integer(m_maxLength)))));
+			receiver.addExceptionMessage(getMessageFactory().create(MessageContextFactory.MAX_LENGTH_EXCEEDED
+					.create(MessageContextFactory.MAX_LENGTH.create(new Integer(m_maxLength)))));
 		} else if (((String) value).length() < m_minLength) // Min length check
 		{
 			valid = false;
-			receiver.addExceptionMessage(getMessageFactory().create(
-					MessageContextFactory.MIN_LENGTH_FAILED
-							.create(MessageContextFactory.MIN_LENGTH
-									.create(new Integer(m_minLength)))));
+			receiver.addExceptionMessage(getMessageFactory().create(MessageContextFactory.MIN_LENGTH_FAILED
+					.create(MessageContextFactory.MIN_LENGTH.create(new Integer(m_minLength)))));
 		} else
 		// 0 < length < max length so check valid characters
 		{
-			String invalidCharacters = checkForInvalidCharacters(
-					((String) value), m_permittedCharacterSet,
+			String invalidCharacters = checkForInvalidCharacters(((String) value), m_permittedCharacterSet,
 					m_additionalPermittedCharacters);
 
 			if (null != invalidCharacters) {
 				valid = false;
-				receiver.addExceptionMessage(getMessageFactory()
-						.create(MessageContextFactory.CONTAINS_INVALID_CHARACTERS
-								.create(MessageContextFactory.INVALID_CHARACTERS
-										.create(invalidCharacters))));
+				receiver.addExceptionMessage(
+						getMessageFactory().create(MessageContextFactory.CONTAINS_INVALID_CHARACTERS
+								.create(MessageContextFactory.INVALID_CHARACTERS.create(invalidCharacters))));
 			}
 		}
 
@@ -266,8 +254,7 @@ public class StringValidator implements Validator {
 	 * @return String A list of each invalid character; null if all characters
 	 *         are permitted.
 	 */
-	public static String checkForInvalidCharacters(String toStrip,
-			int whatToKeep, String whatElseToKeep) {
+	public static String checkForInvalidCharacters(String toStrip, int whatToKeep, String whatElseToKeep) {
 		if ((null == toStrip) || (toStrip.length() == 0)) {
 			return null;
 		}
@@ -276,8 +263,7 @@ public class StringValidator implements Validator {
 
 		int toStripLength = toStrip.length();
 		for (int i = 0; i < toStripLength; i++) {
-			if ((!isValidChar(toStrip.charAt(i), whatToKeep))
-					&& (!isValidChar(toStrip.charAt(i), whatElseToKeep))) {
+			if ((!isValidChar(toStrip.charAt(i), whatToKeep)) && (!isValidChar(toStrip.charAt(i), whatElseToKeep))) {
 				if (invalidChars.indexOf(toStrip.charAt(i)) == -1) {
 					invalidChars = invalidChars + toStrip.substring(i, i + 1);
 				}
@@ -316,8 +302,7 @@ public class StringValidator implements Validator {
 		}
 
 		boolean letters = ((whatToKeep & LETTERS) > 0);
-		if (((toCheck >= 'a') && (toCheck <= 'z'))
-				|| ((toCheck >= 'A') && (toCheck <= 'Z'))) {
+		if (((toCheck >= 'a') && (toCheck <= 'z')) || ((toCheck >= 'A') && (toCheck <= 'Z'))) {
 			return letters;
 		}
 

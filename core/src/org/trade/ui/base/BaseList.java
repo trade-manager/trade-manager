@@ -70,7 +70,8 @@ public class BaseList extends JList<Object> {
 	 *            String
 	 * @param items
 	 *            Vector<Object>
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public BaseList(BasePanel p, String UICode, Vector<Object> items) {
 		super(items);
@@ -89,7 +90,8 @@ public class BaseList extends JList<Object> {
 	 *            BasePanel
 	 * @param UICode
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public BaseList(BasePanel p, String UICode) {
 		jbInit(p, UICode);
@@ -108,8 +110,7 @@ public class BaseList extends JList<Object> {
 			this.addMessageListener(p);
 		}
 
-		BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes
-				.newInstance(UICode);
+		BaseUIPropertyCodes basePropertyCodes = BaseUIPropertyCodes.newInstance(UICode);
 
 		setMethod(basePropertyCodes.getMethod());
 		this.setName(basePropertyCodes.getDisplayName());
@@ -132,7 +133,8 @@ public class BaseList extends JList<Object> {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void addMessageListener(MessageListener listener) {
 		m_notifier.add(listener);
@@ -148,7 +150,8 @@ public class BaseList extends JList<Object> {
 	 * 
 	 * @param listener
 	 *            MessageListener
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	public void removeMessageListener(MessageListener listener) {
 		m_notifier.remove(listener);
@@ -163,11 +166,11 @@ public class BaseList extends JList<Object> {
 	 * 
 	 * @param selection
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	protected void messageEvent(String selection) {
-		m_notifier.notifyEvent(new MessageEvent(selection),
-				new Vector<Object>());
+		m_notifier.notifyEvent(new MessageEvent(selection), new Vector<Object>());
 	}
 
 	/**
@@ -177,7 +180,8 @@ public class BaseList extends JList<Object> {
 	 * 
 	 * 
 	 * 
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private void doValueChanged() {
 		if (getMethod() != null) {
@@ -194,7 +198,8 @@ public class BaseList extends JList<Object> {
 	 * 
 	 * @param method
 	 *            String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private void setMethod(String method) {
 		m_method = method;
@@ -208,7 +213,8 @@ public class BaseList extends JList<Object> {
 	 * 
 	 * 
 	 * @return String
-	 * @exception * @see
+	 * @exception *
+	 * 				@see
 	 */
 	private String getMethod() {
 		return m_method;

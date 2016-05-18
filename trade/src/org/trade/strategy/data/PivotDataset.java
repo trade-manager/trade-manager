@@ -53,8 +53,7 @@ import org.trade.ui.chart.renderer.PivotRenderer;
 
 /**
  */
-public class PivotDataset extends AbstractXYDataset implements
-		IndicatorDataset, IPivotDataset, Serializable {
+public class PivotDataset extends AbstractXYDataset implements IndicatorDataset, IPivotDataset, Serializable {
 
 	/**
 	 * 
@@ -399,8 +398,7 @@ public class PivotDataset extends AbstractXYDataset implements
 	@SuppressWarnings("unchecked")
 	public Object clone() throws CloneNotSupportedException {
 		PivotDataset clone = (PivotDataset) super.clone();
-		clone.data = (List<IndicatorSeries>) ObjectUtilities
-				.deepClone(this.data);
+		clone.data = (List<IndicatorSeries>) ObjectUtilities.deepClone(this.data);
 		return clone;
 	}
 
@@ -416,16 +414,15 @@ public class PivotDataset extends AbstractXYDataset implements
 	 * @see org.trade.strategy.data.IndicatorDataset#updateDataset(CandleDataset,
 	 *      int)
 	 */
-	public void updateDataset(CandleDataset source, int seriesIndex,
-			boolean newBar) {
+	public void updateDataset(CandleDataset source, int seriesIndex, boolean newBar) {
 		if (source == null) {
 			throw new IllegalArgumentException("Null source (CandleDataset).");
 		}
 
 		for (int i = 0; i < this.getSeriesCount(); i++) {
 			PivotSeries series = this.getSeries(i);
-			series.updateSeries(source.getSeries(seriesIndex), source
-					.getSeries(seriesIndex).getItemCount() - 1, newBar);
+			series.updateSeries(source.getSeries(seriesIndex), source.getSeries(seriesIndex).getItemCount() - 1,
+					newBar);
 
 		}
 	}

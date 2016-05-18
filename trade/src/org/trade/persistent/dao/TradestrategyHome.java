@@ -68,11 +68,9 @@ public class TradestrategyHome {
 	public synchronized Tradestrategy findById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			Tradestrategy instance = entityManager
-					.find(Tradestrategy.class, id);
+			Tradestrategy instance = entityManager.find(Tradestrategy.class, id);
 
 			if (null != instance) {
 				instance.getStrategy().getIndicatorSeries().size();
@@ -100,11 +98,9 @@ public class TradestrategyHome {
 	public synchronized TradestrategyLite findTradestrategyLiteById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradestrategyLite instance = entityManager.find(
-					TradestrategyLite.class, id);
+			TradestrategyLite instance = entityManager.find(TradestrategyLite.class, id);
 			entityManager.getTransaction().commit();
 			return instance;
 		} catch (Exception re) {
@@ -125,21 +121,17 @@ public class TradestrategyHome {
 	public synchronized Integer findVersionById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<TradestrategyLite> query = builder
-					.createQuery(TradestrategyLite.class);
+			CriteriaQuery<TradestrategyLite> query = builder.createQuery(TradestrategyLite.class);
 			Root<TradestrategyLite> from = query.from(TradestrategyLite.class);
 
-			CriteriaQuery<TradestrategyLite> select = query.multiselect(
-					from.get("idTradeStrategy"), from.get("version"));
-			Predicate predicate = builder
-					.equal(from.get("idTradeStrategy"), id);
+			CriteriaQuery<TradestrategyLite> select = query.multiselect(from.get("idTradeStrategy"),
+					from.get("version"));
+			Predicate predicate = builder.equal(from.get("idTradeStrategy"), id);
 			query.where(predicate);
-			TypedQuery<TradestrategyLite> typedQuery = entityManager
-					.createQuery(select);
+			TypedQuery<TradestrategyLite> typedQuery = entityManager.createQuery(select);
 			List<TradestrategyLite> items = typedQuery.getResultList();
 
 			entityManager.getTransaction().commit();
@@ -164,15 +156,12 @@ public class TradestrategyHome {
 	 * @return PositionOrders
 	 */
 
-	public synchronized TradestrategyOrders findPositionOrdersByTradestrategyId(
-			Integer idTradestrategy) {
+	public synchronized TradestrategyOrders findPositionOrdersByTradestrategyId(Integer idTradestrategy) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradestrategyOrders instance = entityManager.find(
-					TradestrategyOrders.class, idTradestrategy);
+			TradestrategyOrders instance = entityManager.find(TradestrategyOrders.class, idTradestrategy);
 			/*
 			 * If we have an open position get all the orders for that position.
 			 * Note the position could have been opened by a different
@@ -201,11 +190,9 @@ public class TradestrategyHome {
 
 		try {
 			Tradestrategy tradestrategy = null;
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
-			TradeOrder instance = entityManager.find(TradeOrder.class,
-					idTradeOrder);
+			TradeOrder instance = entityManager.find(TradeOrder.class, idTradeOrder);
 			if (null != instance) {
 				tradestrategy = instance.getTradestrategy();
 				tradestrategy.getContract();
@@ -231,16 +218,13 @@ public class TradestrategyHome {
 	public List<Tradestrategy> findAll() {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradestrategy> query = builder
-					.createQuery(Tradestrategy.class);
+			CriteriaQuery<Tradestrategy> query = builder.createQuery(Tradestrategy.class);
 			Root<Tradestrategy> from = query.from(Tradestrategy.class);
 			query.select(from);
-			List<Tradestrategy> items = entityManager.createQuery(query)
-					.getResultList();
+			List<Tradestrategy> items = entityManager.createQuery(query).getResultList();
 			for (Tradestrategy tradestrategy : items) {
 				tradestrategy.getTradingday().getCandles().size();
 				for (TradeOrder tradeOrder : tradestrategy.getTradeOrders()) {
@@ -271,49 +255,39 @@ public class TradestrategyHome {
 	 *            String
 	 * @return Tradestrategy
 	 */
-	public Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open,
-			String strategyName, Integer idContract, String portfolioName) {
+	public Tradestrategy findTradestrategyByUniqueKeys(ZonedDateTime open, String strategyName, Integer idContract,
+			String portfolioName) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradestrategy> query = builder
-					.createQuery(Tradestrategy.class);
+			CriteriaQuery<Tradestrategy> query = builder.createQuery(Tradestrategy.class);
 			Root<Tradestrategy> from = query.from(Tradestrategy.class);
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			if (null != strategyName) {
-				Join<Tradestrategy, Strategy> strategies = from
-						.join("strategy");
-				Predicate predicate = builder.equal(strategies.get("name"),
-						strategyName);
+				Join<Tradestrategy, Strategy> strategies = from.join("strategy");
+				Predicate predicate = builder.equal(strategies.get("name"), strategyName);
 				predicates.add(predicate);
 			}
 			if (null != portfolioName) {
-				Join<Tradestrategy, Portfolio> portfolio = from
-						.join("portfolio");
-				Predicate predicate = builder.equal(portfolio.get("name"),
-						portfolioName);
+				Join<Tradestrategy, Portfolio> portfolio = from.join("portfolio");
+				Predicate predicate = builder.equal(portfolio.get("name"), portfolioName);
 				predicates.add(predicate);
 			}
 			if (null != open) {
-				Join<Tradestrategy, Tradingday> tradingday = from
-						.join("tradingday");
-				Predicate predicate = builder.equal(tradingday.get("open"),
-						open);
+				Join<Tradestrategy, Tradingday> tradingday = from.join("tradingday");
+				Predicate predicate = builder.equal(tradingday.get("open"), open);
 				predicates.add(predicate);
 			}
 			if (null != idContract) {
 				Join<Tradestrategy, Contract> contract = from.join("contract");
-				Predicate predicate = builder.equal(contract.get("idContract"),
-						idContract);
+				Predicate predicate = builder.equal(contract.get("idContract"), idContract);
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<Tradestrategy> typedQuery = entityManager
-					.createQuery(query);
+			TypedQuery<Tradestrategy> typedQuery = entityManager.createQuery(query);
 			List<Tradestrategy> items = typedQuery.getResultList();
 			entityManager.getTransaction().commit();
 			if (items.size() > 0) {
@@ -338,41 +312,33 @@ public class TradestrategyHome {
 	 *            ZonedDateTime
 	 * @return Vector<ComboItem>
 	 */
-	public List<Tradestrategy> findTradestrategyDistinctByDateRange(
-			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
+	public List<Tradestrategy> findTradestrategyDistinctByDateRange(ZonedDateTime fromOpen, ZonedDateTime toOpen) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradestrategy> query = builder
-					.createQuery(Tradestrategy.class);
+			CriteriaQuery<Tradestrategy> query = builder.createQuery(Tradestrategy.class);
 			Root<Tradestrategy> from = query.from(Tradestrategy.class);
 			query.select(from);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (null != fromOpen) {
-				Join<Tradestrategy, Tradingday> tradingday = from
-						.join("tradingday");
-				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
-						.get("open").as(ZonedDateTime.class), fromOpen);
+				Join<Tradestrategy, Tradingday> tradingday = from.join("tradingday");
+				Predicate predicate = builder.greaterThanOrEqualTo(tradingday.get("open").as(ZonedDateTime.class),
+						fromOpen);
 				predicates.add(predicate);
 			}
 			if (null != toOpen) {
-				Join<Tradestrategy, Tradingday> tradingday = from
-						.join("tradingday");
-				Predicate predicate = builder.lessThanOrEqualTo(
-						tradingday.get("open").as(ZonedDateTime.class), toOpen);
+				Join<Tradestrategy, Tradingday> tradingday = from.join("tradingday");
+				Predicate predicate = builder.lessThanOrEqualTo(tradingday.get("open").as(ZonedDateTime.class), toOpen);
 				predicates.add(predicate);
 			}
 
-			query.multiselect(from.get("barSize"), from.get("chartDays"),
-					from.join("strategy")).distinct(true);
+			query.multiselect(from.get("barSize"), from.get("chartDays"), from.join("strategy")).distinct(true);
 
 			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<Tradestrategy> typedQuery = entityManager
-					.createQuery(query);
+			TypedQuery<Tradestrategy> typedQuery = entityManager.createQuery(query);
 			List<Tradestrategy> items = typedQuery.getResultList();
 			entityManager.getTransaction().commit();
 			return items;
@@ -394,16 +360,14 @@ public class TradestrategyHome {
 	 *            ZonedDateTime
 	 * @return Vector<ComboItem>
 	 */
-	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(
-			ZonedDateTime fromOpen, ZonedDateTime toOpen) {
+	public List<Tradestrategy> findTradestrategyContractDistinctByDateRange(ZonedDateTime fromOpen,
+			ZonedDateTime toOpen) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Tradestrategy> query = builder
-					.createQuery(Tradestrategy.class);
+			CriteriaQuery<Tradestrategy> query = builder.createQuery(Tradestrategy.class);
 			Root<Tradestrategy> from = query.from(Tradestrategy.class);
 			query.select(from);
 			query.orderBy(builder.asc(from.join("contract").get("symbol")));
@@ -411,25 +375,21 @@ public class TradestrategyHome {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (null != fromOpen) {
-				Join<Tradestrategy, Tradingday> tradingday = from
-						.join("tradingday");
-				Predicate predicate = builder.greaterThanOrEqualTo(tradingday
-						.get("open").as(ZonedDateTime.class), fromOpen);
+				Join<Tradestrategy, Tradingday> tradingday = from.join("tradingday");
+				Predicate predicate = builder.greaterThanOrEqualTo(tradingday.get("open").as(ZonedDateTime.class),
+						fromOpen);
 				predicates.add(predicate);
 			}
 			if (null != toOpen) {
-				Join<Tradestrategy, Tradingday> tradingday = from
-						.join("tradingday");
-				Predicate predicate = builder.lessThanOrEqualTo(
-						tradingday.get("open").as(ZonedDateTime.class), toOpen);
+				Join<Tradestrategy, Tradingday> tradingday = from.join("tradingday");
+				Predicate predicate = builder.lessThanOrEqualTo(tradingday.get("open").as(ZonedDateTime.class), toOpen);
 				predicates.add(predicate);
 			}
 
 			query.multiselect(from.join("contract")).distinct(true);
 
 			query.where(predicates.toArray(new Predicate[] {}));
-			TypedQuery<Tradestrategy> typedQuery = entityManager
-					.createQuery(query);
+			TypedQuery<Tradestrategy> typedQuery = entityManager.createQuery(query);
 			List<Tradestrategy> items = typedQuery.getResultList();
 			entityManager.getTransaction().commit();
 			return items;

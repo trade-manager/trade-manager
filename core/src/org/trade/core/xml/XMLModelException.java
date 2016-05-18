@@ -68,13 +68,11 @@ public class XMLModelException extends NestingException {
 		super(message);
 	}
 
-	public XMLModelException(ExceptionMessage exceptionMessage,
-			String gruesomeDetails) {
+	public XMLModelException(ExceptionMessage exceptionMessage, String gruesomeDetails) {
 		super(exceptionMessage, gruesomeDetails);
 	}
 
-	public XMLModelException(ExceptionMessage exceptionMessage,
-			String gruesomeDetails, Throwable t) {
+	public XMLModelException(ExceptionMessage exceptionMessage, String gruesomeDetails, Throwable t) {
 		super(exceptionMessage, gruesomeDetails, t);
 	}
 

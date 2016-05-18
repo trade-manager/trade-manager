@@ -59,13 +59,11 @@ public class ObjectToDecimal implements JavaDynamicTypeConverter {
 	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#convert(Class<?>,
 	 *      Object)
 	 */
-	public Object convert(Class<?> targetType, Object valueToConvert)
-			throws JavaTypeTranslatorException {
+	public Object convert(Class<?> targetType, Object valueToConvert) throws JavaTypeTranslatorException {
 		Decimal rVal = null;
 
 		if (valueToConvert == null) {
-			throw new JavaTypeTranslatorException(
-					"Null passed toObjectToDecimal.convert()");
+			throw new JavaTypeTranslatorException("Null passed toObjectToDecimal.convert()");
 		}
 
 		// If we get a string we will convert it using the default money format
@@ -74,8 +72,7 @@ public class ObjectToDecimal implements JavaDynamicTypeConverter {
 			String stringValue = (String) valueToConvert;
 			rVal = new Decimal(stringValue, 2);
 		} else {
-			throw new JavaTypeTranslatorException(
-					"internal error parsing value");
+			throw new JavaTypeTranslatorException("internal error parsing value");
 		}
 
 		return (rVal);
@@ -89,9 +86,8 @@ public class ObjectToDecimal implements JavaDynamicTypeConverter {
 	 * @param valueToConvert
 	 *            Object
 	 * @return boolean
-	 * @see 
-	 *      org.trade.core.conversion.JavaDynamicTypeConverter#supportsConversion
-	 *      (Class<?>, Object)
+	 * @see org.trade.core.conversion.JavaDynamicTypeConverter#
+	 *      supportsConversion (Class<?>, Object)
 	 */
 	public boolean supportsConversion(Class<?> targetType, Object valueToConvert) {
 		boolean rVal = false;

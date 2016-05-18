@@ -67,8 +67,7 @@ import org.trade.ui.TradeAppLoadConfig;
  */
 public class ValueTypeDAOTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(ValueTypeDAOTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(ValueTypeDAOTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -118,15 +117,10 @@ public class ValueTypeDAOTest {
 			assertFalse(decodes.isEmpty());
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
-				_log.info("TYPE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._TYPE));
-				_log.info("CODE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._CODE));
-				_log.info("DISPLAY_NAME:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._DISPLAY_NAME));
+				_log.info("TYPE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._TYPE));
+				_log.info("CODE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._CODE));
+				_log.info(
+						"DISPLAY_NAME:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._DISPLAY_NAME));
 
 			}
 
@@ -136,20 +130,14 @@ public class ValueTypeDAOTest {
 			eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
-				_log.info("TYPE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._TYPE));
-				_log.info("CODE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._CODE));
-				_log.info("DISPLAY_NAME:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._DISPLAY_NAME));
+				_log.info("TYPE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._TYPE));
+				_log.info("CODE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._CODE));
+				_log.info(
+						"DISPLAY_NAME:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._DISPLAY_NAME));
 
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -164,25 +152,18 @@ public class ValueTypeDAOTest {
 			Enumeration<Decode> eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
-				_log.info("TYPE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._TYPE));
-				_log.info("CODE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._CODE));
-				_log.info("DISPLAY_NAME:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._DISPLAY_NAME));
+				_log.info("TYPE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._TYPE));
+				_log.info("CODE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._CODE));
+				_log.info(
+						"DISPLAY_NAME:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._DISPLAY_NAME));
 
 			}
 			Money price = new Money(20.22);
 			Entrylimit entrylimit = entryLimits.getValue(price);
-			_log.info("Price:" + price + " Percent:"
-					+ entrylimit.getPercentOfPrice() + " LimitAmount:"
+			_log.info("Price:" + price + " Percent:" + entrylimit.getPercentOfPrice() + " LimitAmount:"
 					+ entrylimit.getLimitAmount());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -197,19 +178,13 @@ public class ValueTypeDAOTest {
 			Enumeration<Decode> eDecodes = decodes.elements();
 			while (eDecodes.hasMoreElements()) {
 				Decode decode = eDecodes.nextElement();
-				_log.info("TYPE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._TYPE));
-				_log.info("CODE:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._CODE));
-				_log.info("DISPLAY_NAME:"
-						+ decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER
-								+ DAODecode._DISPLAY_NAME));
+				_log.info("TYPE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._TYPE));
+				_log.info("CODE:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._CODE));
+				_log.info(
+						"DISPLAY_NAME:" + decode.getValue(DAODecode.CODE_DECODE_IDENTIFIER + DAODecode._DISPLAY_NAME));
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

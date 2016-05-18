@@ -64,8 +64,7 @@ public class MACDItem extends ComparableObjectItem {
 	 * @param MACD
 	 *            BigDecimal
 	 */
-	public MACDItem(RegularTimePeriod period, BigDecimal MACD,
-			BigDecimal signalLine, BigDecimal MACDHistogram) {
+	public MACDItem(RegularTimePeriod period, BigDecimal MACD, BigDecimal signalLine, BigDecimal MACDHistogram) {
 		super(period, new MACD(MACD, signalLine, MACDHistogram));
 	}
 

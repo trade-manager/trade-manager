@@ -76,16 +76,14 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 	 * @see org.trade.core.lookup.LookupServiceProvider#getLookup(String,
 	 *      LookupQualifier)
 	 */
-	public Lookup getLookup(String lookupName, LookupQualifier qualifier,
-			boolean optional) throws LookupException {
+	public Lookup getLookup(String lookupName, LookupQualifier qualifier, boolean optional) throws LookupException {
 		Lookup lookup = getCachedLookup(lookupName, qualifier);
 
 		if (null == lookup) {
 			try {
 
 				Vector<String> colNames = new Vector<String>();
-				Enumeration<?> en = ConfigProperties
-						.getPropAsEnumeration(lookupName + "_PropertyFile");
+				Enumeration<?> en = ConfigProperties.getPropAsEnumeration(lookupName + "_PropertyFile");
 
 				while (en.hasMoreElements()) {
 					colNames.addElement((String) en.nextElement());
@@ -98,8 +96,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 				int colNamesSize = colNames.size();
 
 				for (i = 0; i < colNamesSize; i++) {
-					colRows.addElement(ConfigProperties
-							.getPropAsEnumeration(colNames.elementAt(i)));
+					colRows.addElement(ConfigProperties.getPropAsEnumeration(colNames.elementAt(i)));
 				}
 
 				// Now construct a Vector Vector - representing the table of
@@ -112,8 +109,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 				if (optional) {
 					Vector<Object> newRowNone = new Vector<Object>();
 					for (i = 0; i < colRows.size(); i++) {
-						Object qualVal = qualifier.getValue(""
-								+ colNames.elementAt(i));
+						Object qualVal = qualifier.getValue("" + colNames.elementAt(i));
 						if (null != qualVal) {
 							newRowNone.add(qualVal);
 						} else {
@@ -144,8 +140,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 						// Check to see if the returned lookup is to be
 						// constrained
 						if (foundOne && (qualifier != null)) {
-							Object qualVal = qualifier.getValue(""
-									+ colNames.elementAt(i));
+							Object qualVal = qualifier.getValue("" + colNames.elementAt(i));
 
 							if (null != qualVal) {
 								if (!qualVal.equals(value)) {
@@ -217,8 +212,7 @@ public class PropertyFileLookupServiceProvider implements LookupServiceProvider 
 	 * @param lookup
 	 *            Lookup
 	 */
-	private synchronized void addLookupToCache(String lookupName,
-			LookupQualifier qualifier, Lookup lookup) {
+	private synchronized void addLookupToCache(String lookupName, LookupQualifier qualifier, Lookup lookup) {
 		Hashtable<String, Lookup> lookupsByQualifier = _lookups.get(lookupName);
 
 		if (null == lookupsByQualifier) {

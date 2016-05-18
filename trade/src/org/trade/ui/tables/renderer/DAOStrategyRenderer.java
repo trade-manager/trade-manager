@@ -61,8 +61,7 @@ public class DAOStrategyRenderer extends DefaultTableCellRenderer {
 	 * @param strategyWorkers
 	 *            ConcurrentHashMap<String,StrategyRule>
 	 */
-	public DAOStrategyRenderer(
-			ConcurrentHashMap<String, StrategyRule> strategyWorkers) {
+	public DAOStrategyRenderer(ConcurrentHashMap<String, StrategyRule> strategyWorkers) {
 		this.strategyWorkers = strategyWorkers;
 	}
 
@@ -85,20 +84,16 @@ public class DAOStrategyRenderer extends DefaultTableCellRenderer {
 	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
 	 *      Object, boolean, boolean, int, int)
 	 */
-	public Component getTableCellRendererComponent(JTable table,
-			Object dAOStrategy, boolean isSelected, boolean hasFocus, int row,
-			int column) {
+	public Component getTableCellRendererComponent(JTable table, Object dAOStrategy, boolean isSelected,
+			boolean hasFocus, int row, int column) {
 
 		synchronized (dAOStrategy) {
 			setBackground(null);
-			super.getTableCellRendererComponent(table, dAOStrategy, isSelected,
-					hasFocus, row, column);
+			super.getTableCellRendererComponent(table, dAOStrategy, isSelected, hasFocus, row, column);
 			if (row > -1 && ((DAOStrategy) dAOStrategy).isValid()) {
-				Tradestrategy transferObject = ((TradestrategyTableModel) table
-						.getModel()).getData().getTradestrategies()
-						.get(table.convertRowIndexToModel(row));
-				String key = ((Strategy) ((DAOStrategy) dAOStrategy)
-						.getObject()).getClassName()
+				Tradestrategy transferObject = ((TradestrategyTableModel) table.getModel()).getData()
+						.getTradestrategies().get(table.convertRowIndexToModel(row));
+				String key = ((Strategy) ((DAOStrategy) dAOStrategy).getObject()).getClassName()
 						+ transferObject.getIdTradeStrategy();
 				if (this.strategyWorkers.containsKey(key) && !isSelected) {
 					if (this.strategyWorkers.get(key).isDone()) {

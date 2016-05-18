@@ -69,8 +69,7 @@ public class RuleHome {
 	public Rule findById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Rule instance = entityManager.find(Rule.class, id);
 			entityManager.getTransaction().commit();
@@ -93,8 +92,7 @@ public class RuleHome {
 	public Integer findByMaxVersion(Strategy strategy) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Object> query = builder.createQuery();
@@ -107,8 +105,7 @@ public class RuleHome {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			if (null != strategy) {
 				Join<Rule, Strategy> strategies = from.join("strategy");
-				Predicate predicate = builder.equal(
-						strategies.get("idStrategy"), strategy.getIdStrategy());
+				Predicate predicate = builder.equal(strategies.get("idStrategy"), strategy.getIdStrategy());
 				predicates.add(predicate);
 			}
 			query.where(predicates.toArray(new Predicate[] {}));

@@ -61,8 +61,7 @@ public class DAOStrategyManagerRenderer extends DefaultTableCellRenderer {
 	 * @param strategyWorkers
 	 *            ConcurrentHashMap<String,StrategyRule>
 	 */
-	public DAOStrategyManagerRenderer(
-			ConcurrentHashMap<String, StrategyRule> strategyWorkers) {
+	public DAOStrategyManagerRenderer(ConcurrentHashMap<String, StrategyRule> strategyWorkers) {
 		this.strategyWorkers = strategyWorkers;
 	}
 
@@ -85,24 +84,19 @@ public class DAOStrategyManagerRenderer extends DefaultTableCellRenderer {
 	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable,
 	 *      Object, boolean, boolean, int, int)
 	 */
-	public Component getTableCellRendererComponent(JTable table,
-			Object dAOStrategyManager, boolean isSelected, boolean hasFocus,
-			int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object dAOStrategyManager, boolean isSelected,
+			boolean hasFocus, int row, int column) {
 
 		synchronized (dAOStrategyManager) {
 			setBackground(null);
-			super.getTableCellRendererComponent(table, dAOStrategyManager,
-					isSelected, hasFocus, row, column);
+			super.getTableCellRendererComponent(table, dAOStrategyManager, isSelected, hasFocus, row, column);
 			if (row > -1 && ((DAOStrategyManager) dAOStrategyManager).isValid()) {
-				Tradestrategy transferObject = ((TradestrategyTableModel) table
-						.getModel()).getData().getTradestrategies()
-						.get(table.convertRowIndexToModel(row));
+				Tradestrategy transferObject = ((TradestrategyTableModel) table.getModel()).getData()
+						.getTradestrategies().get(table.convertRowIndexToModel(row));
 
-				if (null == ((DAOStrategyManager) dAOStrategyManager)
-						.getObject())
+				if (null == ((DAOStrategyManager) dAOStrategyManager).getObject())
 					return this;
-				String key = ((Strategy) ((DAOStrategyManager) dAOStrategyManager)
-						.getObject()).getClassName()
+				String key = ((Strategy) ((DAOStrategyManager) dAOStrategyManager).getObject()).getClassName()
 						+ transferObject.getIdTradeStrategy();
 				if (this.strategyWorkers.containsKey(key) && !isSelected) {
 					if (this.strategyWorkers.get(key).isDone()) {

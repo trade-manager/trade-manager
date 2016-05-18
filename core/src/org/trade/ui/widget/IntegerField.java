@@ -49,8 +49,8 @@ import javax.swing.text.NumberFormatter;
  */
 public class IntegerField extends JFormattedTextField {
 	/**
-* 
-*/
+	* 
+	*/
 	private static final long serialVersionUID = 3445299380677561974L;
 
 	public IntegerField() {
@@ -59,9 +59,8 @@ public class IntegerField extends JFormattedTextField {
 		displayFormat.setMinimumFractionDigits(0);
 		NumberFormat editFormat = NumberFormat.getNumberInstance();
 		editFormat.setMinimumFractionDigits(0);
-		this.setFormatterFactory(new DefaultFormatterFactory(
-				new NumberFormatter(displayFormat), new NumberFormatter(
-						displayFormat), new NumberFormatter(editFormat)));
+		this.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(displayFormat),
+				new NumberFormatter(displayFormat), new NumberFormatter(editFormat)));
 		this.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.setValue(new Integer(0));
 		this.setColumns(10);

@@ -123,11 +123,9 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public RelativeStrengthIndexSeries(Strategy strategy, String name,
-			String type, String description, Boolean displayOnChart,
-			Integer chartRGBColor, Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public RelativeStrengthIndexSeries(Strategy strategy, String name, String type, String description,
+			Boolean displayOnChart, Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -150,11 +148,9 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public RelativeStrengthIndexSeries(Strategy strategy, String name,
-			String type, String description, Boolean displayOnChart,
-			Integer chartRGBColor, Boolean subChart, Integer length) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public RelativeStrengthIndexSeries(Strategy strategy, String name, String type, String description,
+			Boolean displayOnChart, Integer chartRGBColor, Boolean subChart, Integer length) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.length = length;
 	}
 
@@ -169,8 +165,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 * @throws CloneNotSupportedException
 	 */
 	public Object clone() throws CloneNotSupportedException {
-		RelativeStrengthIndexSeries clone = (RelativeStrengthIndexSeries) super
-				.clone();
+		RelativeStrengthIndexSeries clone = (RelativeStrengthIndexSeries) super.clone();
 		return clone;
 	}
 
@@ -218,15 +213,12 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 */
 	public void add(RegularTimePeriod period, BigDecimal relativeStrengthIndex) {
 		if (!this.isEmpty()) {
-			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this
-					.getDataItem(0);
+			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
-		super.add(new RelativeStrengthIndexItem(period, relativeStrengthIndex),
-				true);
+		super.add(new RelativeStrengthIndexItem(period, relativeStrengthIndex), true);
 	}
 
 	/**
@@ -239,12 +231,9 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 */
 	public void add(RelativeStrengthIndexItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
-			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this
-					.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			RelativeStrengthIndexItem item0 = (RelativeStrengthIndexItem) this.getDataItem(0);
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -259,8 +248,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) CodeValue.getValueCode(LENGTH,
-						this.getCodeValues());
+				this.length = (Integer) CodeValue.getValueCode(LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -286,8 +274,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	public Boolean getRollingCandle() {
 		try {
 			if (null == this.rollingCandle)
-				this.rollingCandle = (Boolean) CodeValue.getValueCode(
-						ROLLING_CANDLE, this.getCodeValues());
+				this.rollingCandle = (Boolean) CodeValue.getValueCode(ROLLING_CANDLE, this.getCodeValues());
 		} catch (Exception e) {
 			this.rollingCandle = null;
 		}
@@ -339,8 +326,7 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 		if (getLength() == null || getLength() < 1) {
-			throw new IllegalArgumentException(
-					"RSI period must be  greater than zero.");
+			throw new IllegalArgumentException("RSI period must be  greater than zero.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -350,10 +336,8 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 
 			double diffCloseValue = 0;
 			if (source.getItemCount() > 1) {
-				CandleItem prevCandleItem = (CandleItem) source
-						.getDataItem(skip - 1);
-				diffCloseValue = candleItem.getClose()
-						- prevCandleItem.getClose();
+				CandleItem prevCandleItem = (CandleItem) source.getDataItem(skip - 1);
+				diffCloseValue = candleItem.getClose() - prevCandleItem.getClose();
 				if (this.getRollingCandle()) {
 					diffCloseValue = source.getRollingCandle().getClose()
 							- source.getPreviousRollingCandle().getClose();
@@ -370,12 +354,10 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 				if (newBar) {
 
 					if (diffCloseValue > 0) {
-						posSumCloseDiff = posSumCloseDiff
-								+ Math.abs(diffCloseValue);
+						posSumCloseDiff = posSumCloseDiff + Math.abs(diffCloseValue);
 
 					} else {
-						negSumCloseDiff = negSumCloseDiff
-								+ Math.abs(diffCloseValue);
+						negSumCloseDiff = negSumCloseDiff + Math.abs(diffCloseValue);
 					}
 					prevAvgLossRSI = avgLossRSI;
 					prevAvgGainRSI = avgGainRSI;
@@ -383,25 +365,17 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 
 				} else {
 					if (diffCloseValue > 0 && preDiffCloseValue > 0) {
-						posSumCloseDiff = posSumCloseDiff
-								+ Math.abs(diffCloseValue)
-								- Math.abs(preDiffCloseValue);
+						posSumCloseDiff = posSumCloseDiff + Math.abs(diffCloseValue) - Math.abs(preDiffCloseValue);
 
 					} else if (diffCloseValue > 0 && preDiffCloseValue < 0) {
-						posSumCloseDiff = posSumCloseDiff
-								+ Math.abs(diffCloseValue);
-						negSumCloseDiff = negSumCloseDiff
-								- Math.abs(preDiffCloseValue);
+						posSumCloseDiff = posSumCloseDiff + Math.abs(diffCloseValue);
+						negSumCloseDiff = negSumCloseDiff - Math.abs(preDiffCloseValue);
 					} else if (diffCloseValue < 0 && preDiffCloseValue < 0) {
-						negSumCloseDiff = negSumCloseDiff
-								+ Math.abs(diffCloseValue)
-								- Math.abs(preDiffCloseValue);
+						negSumCloseDiff = negSumCloseDiff + Math.abs(diffCloseValue) - Math.abs(preDiffCloseValue);
 
 					} else if (diffCloseValue < 0 && preDiffCloseValue > 0) {
-						negSumCloseDiff = negSumCloseDiff
-								+ Math.abs(diffCloseValue);
-						posSumCloseDiff = posSumCloseDiff
-								- Math.abs(preDiffCloseValue);
+						negSumCloseDiff = negSumCloseDiff + Math.abs(diffCloseValue);
+						posSumCloseDiff = posSumCloseDiff - Math.abs(preDiffCloseValue);
 					}
 				}
 			}
@@ -409,28 +383,24 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 				if (currentRSI == Double.MAX_VALUE) {
 					avgGainRSI = posSumCloseDiff / getLength();
 					avgLossRSI = negSumCloseDiff / getLength();
-					currentRSI = 100 - (100 / (1 + (avgGainRSI / (avgLossRSI == 0 ? 1
-							: avgLossRSI))));
+					currentRSI = 100 - (100 / (1 + (avgGainRSI / (avgLossRSI == 0 ? 1 : avgLossRSI))));
 				} else {
 					if (preDiffCloseValue > 0) {
-						avgGainRSI = (((prevAvgGainRSI * (getLength() - 1)) + Math
-								.abs(preDiffCloseValue))) / getLength();
-						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + 0))
+						avgGainRSI = (((prevAvgGainRSI * (getLength() - 1)) + Math.abs(preDiffCloseValue)))
 								/ getLength();
+						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + 0)) / getLength();
 
 					} else {
-						avgGainRSI = (((prevAvgGainRSI * (getLength() - 1)) + 0))
+						avgGainRSI = (((prevAvgGainRSI * (getLength() - 1)) + 0)) / getLength();
+						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + Math.abs(preDiffCloseValue)))
 								/ getLength();
-						avgLossRSI = (((prevAvgLossRSI * (getLength() - 1)) + Math
-								.abs(preDiffCloseValue))) / getLength();
 					}
-					currentRSI = 100 - (100 / (1 + (avgGainRSI / (avgLossRSI == 0 ? 1
-							: avgLossRSI))));
+					currentRSI = 100 - (100 / (1 + (avgGainRSI / (avgLossRSI == 0 ? 1 : avgLossRSI))));
 				}
 
 				if (newBar) {
-					RelativeStrengthIndexItem dataItem = new RelativeStrengthIndexItem(
-							candleItem.getPeriod(), new BigDecimal(currentRSI));
+					RelativeStrengthIndexItem dataItem = new RelativeStrengthIndexItem(candleItem.getPeriod(),
+							new BigDecimal(currentRSI));
 					this.add(dataItem, false);
 				} else {
 					RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
@@ -447,10 +417,8 @@ public class RelativeStrengthIndexSeries extends IndicatorSeries {
 	 */
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
-			RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this
-					.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			RelativeStrengthIndexItem dataItem = (RelativeStrengthIndexItem) this.getDataItem(i);
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getRelativeStrengthIndex());
 		}
 	}

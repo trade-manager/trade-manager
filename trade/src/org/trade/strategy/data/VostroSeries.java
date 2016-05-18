@@ -116,11 +116,9 @@ public class VostroSeries extends IndicatorSeries {
 	 * @param subChart
 	 *            Boolean
 	 */
-	public VostroSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public VostroSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 	}
 
 	/**
@@ -145,11 +143,9 @@ public class VostroSeries extends IndicatorSeries {
 	 * @param length
 	 *            Integer
 	 */
-	public VostroSeries(Strategy strategy, String name, String type,
-			String description, Boolean displayOnChart, Integer chartRGBColor,
-			Boolean subChart, String MAType, Integer length) {
-		super(strategy, name, type, description, displayOnChart, chartRGBColor,
-				subChart);
+	public VostroSeries(Strategy strategy, String name, String type, String description, Boolean displayOnChart,
+			Integer chartRGBColor, Boolean subChart, String MAType, Integer length) {
+		super(strategy, name, type, description, displayOnChart, chartRGBColor, subChart);
 		this.MAType = MAType;
 		this.length = length;
 	}
@@ -221,8 +217,7 @@ public class VostroSeries extends IndicatorSeries {
 		if (!this.isEmpty()) {
 			VostroItem item0 = (VostroItem) this.getDataItem(0);
 			if (!period.getClass().equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(new VostroItem(period, vostro), true);
@@ -239,10 +234,8 @@ public class VostroSeries extends IndicatorSeries {
 	public void add(VostroItem dataItem, boolean notify) {
 		if (!this.isEmpty()) {
 			VostroItem item0 = (VostroItem) this.getDataItem(0);
-			if (!dataItem.getPeriod().getClass()
-					.equals(item0.getPeriod().getClass())) {
-				throw new IllegalArgumentException(
-						"Can't mix RegularTimePeriod class types.");
+			if (!dataItem.getPeriod().getClass().equals(item0.getPeriod().getClass())) {
+				throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
 			}
 		}
 		super.add(dataItem, notify);
@@ -257,8 +250,7 @@ public class VostroSeries extends IndicatorSeries {
 	public Integer getPriceSource() {
 		try {
 			if (null == this.priceSource)
-				this.priceSource = (Integer) CodeValue.getValueCode(
-						PRICE_SOURCE, this.getCodeValues());
+				this.priceSource = (Integer) CodeValue.getValueCode(PRICE_SOURCE, this.getCodeValues());
 		} catch (Exception e) {
 			this.priceSource = null;
 		}
@@ -284,8 +276,7 @@ public class VostroSeries extends IndicatorSeries {
 	public Integer getVostroPeriod() {
 		try {
 			if (null == this.vostroPeriod)
-				this.vostroPeriod = (Integer) CodeValue.getValueCode(
-						VOSTRO_PERIOD, this.getCodeValues());
+				this.vostroPeriod = (Integer) CodeValue.getValueCode(VOSTRO_PERIOD, this.getCodeValues());
 		} catch (Exception e) {
 			this.vostroPeriod = null;
 		}
@@ -311,8 +302,7 @@ public class VostroSeries extends IndicatorSeries {
 	public BigDecimal getVostroRange() {
 		try {
 			if (null == this.vostroRange)
-				this.vostroRange = (BigDecimal) CodeValue.getValueCode(
-						VOSTRO_RANGE, this.getCodeValues());
+				this.vostroRange = (BigDecimal) CodeValue.getValueCode(VOSTRO_RANGE, this.getCodeValues());
 		} catch (Exception e) {
 			this.vostroRange = null;
 		}
@@ -338,8 +328,7 @@ public class VostroSeries extends IndicatorSeries {
 	public Integer getLength() {
 		try {
 			if (null == this.length)
-				this.length = (Integer) CodeValue.getValueCode(LENGTH,
-						this.getCodeValues());
+				this.length = (Integer) CodeValue.getValueCode(LENGTH, this.getCodeValues());
 		} catch (Exception e) {
 			this.length = null;
 		}
@@ -365,8 +354,7 @@ public class VostroSeries extends IndicatorSeries {
 	public String getMAType() {
 		try {
 			if (null == this.MAType)
-				this.MAType = (String) CodeValue.getValueCode(MA_TYPE,
-						this.getCodeValues());
+				this.MAType = (String) CodeValue.getValueCode(MA_TYPE, this.getCodeValues());
 		} catch (Exception e) {
 			this.MAType = null;
 		}
@@ -466,16 +454,13 @@ public class VostroSeries extends IndicatorSeries {
 			throw new IllegalArgumentException("Null source (CandleSeries).");
 		}
 		if (getLength() == null || getLength() < 1) {
-			throw new IllegalArgumentException(
-					"MA period must be greater than zero.");
+			throw new IllegalArgumentException("MA period must be greater than zero.");
 		}
 		if (getVostroPeriod() == null || getVostroPeriod() < 1) {
-			throw new IllegalArgumentException(
-					"Vostro period must be greater than zero.");
+			throw new IllegalArgumentException("Vostro period must be greater than zero.");
 		}
 		if (getLength() < getVostroPeriod()) {
-			throw new IllegalArgumentException(
-					"MA period must be greater than Vostro period.");
+			throw new IllegalArgumentException("MA period must be greater than Vostro period.");
 		}
 
 		if (source.getItemCount() > skip) {
@@ -529,80 +514,53 @@ public class VostroSeries extends IndicatorSeries {
 					 */
 
 					if (newBar) {
-						this.highPlusLowSum = this.highPlusLowSum
-								- this.highPlusLowValues.getLast()
+						this.highPlusLowSum = this.highPlusLowSum - this.highPlusLowValues.getLast()
 								+ (candleItem.getHigh() + candleItem.getLow());
 						this.highPlusLowValues.removeLast();
-						this.highPlusLowValues
-								.addFirst((candleItem.getHigh() + candleItem
-										.getLow()));
+						this.highPlusLowValues.addFirst((candleItem.getHigh() + candleItem.getLow()));
 
-						this.highLessLowSum = this.highLessLowSum
-								- this.highLessLowValues.getLast()
+						this.highLessLowSum = this.highLessLowSum - this.highLessLowValues.getLast()
 								+ (candleItem.getHigh() - candleItem.getLow());
 						this.highLessLowValues.removeLast();
-						this.highLessLowValues
-								.addFirst((candleItem.getHigh() - candleItem
-										.getLow()));
+						this.highLessLowValues.addFirst((candleItem.getHigh() - candleItem.getLow()));
 					} else {
-						this.highPlusLowSum = this.highPlusLowSum
-								- this.highPlusLowValues.getFirst()
+						this.highPlusLowSum = this.highPlusLowSum - this.highPlusLowValues.getFirst()
 								+ (candleItem.getHigh() + candleItem.getLow());
 						this.highPlusLowValues.removeFirst();
-						this.highPlusLowValues
-								.addFirst((candleItem.getHigh() + candleItem
-										.getLow()));
+						this.highPlusLowValues.addFirst((candleItem.getHigh() + candleItem.getLow()));
 
-						this.highLessLowSum = this.highLessLowSum
-								- this.highLessLowValues.getFirst()
+						this.highLessLowSum = this.highLessLowSum - this.highLessLowValues.getFirst()
 								+ (candleItem.getHigh() - candleItem.getLow());
 						this.highLessLowValues.removeFirst();
-						this.highLessLowValues
-								.addFirst((candleItem.getHigh() - candleItem
-										.getLow()));
+						this.highLessLowValues.addFirst((candleItem.getHigh() - candleItem.getLow()));
 					}
 				} else {
 					if (newBar) {
-						this.highPlusLowSum = this.highPlusLowSum
-								+ (candleItem.getHigh() + candleItem.getLow());
-						this.highPlusLowValues
-								.addFirst((candleItem.getHigh() + candleItem
-										.getLow()));
+						this.highPlusLowSum = this.highPlusLowSum + (candleItem.getHigh() + candleItem.getLow());
+						this.highPlusLowValues.addFirst((candleItem.getHigh() + candleItem.getLow()));
 
-						this.highLessLowSum = this.highLessLowSum
-								+ (candleItem.getHigh() - candleItem.getLow());
-						this.highLessLowValues
-								.addFirst((candleItem.getHigh() - candleItem
-										.getLow()));
+						this.highLessLowSum = this.highLessLowSum + (candleItem.getHigh() - candleItem.getLow());
+						this.highLessLowValues.addFirst((candleItem.getHigh() - candleItem.getLow()));
 					} else {
-						this.highPlusLowSum = this.highPlusLowSum
-								+ (candleItem.getHigh() + candleItem.getLow())
+						this.highPlusLowSum = this.highPlusLowSum + (candleItem.getHigh() + candleItem.getLow())
 								- this.highPlusLowValues.getFirst();
 						this.highPlusLowValues.removeFirst();
-						this.highPlusLowValues
-								.addFirst((candleItem.getHigh() + candleItem
-										.getLow()));
+						this.highPlusLowValues.addFirst((candleItem.getHigh() + candleItem.getLow()));
 
-						this.highLessLowSum = this.highLessLowSum
-								+ (candleItem.getHigh() - candleItem.getLow())
+						this.highLessLowSum = this.highLessLowSum + (candleItem.getHigh() - candleItem.getLow())
 								- this.highLessLowValues.getFirst();
 						this.highLessLowValues.removeFirst();
-						this.highLessLowValues
-								.addFirst((candleItem.getHigh() - candleItem
-										.getLow()));
+						this.highLessLowValues.addFirst((candleItem.getHigh() - candleItem.getLow()));
 					}
 				}
 
 				if (this.yyValues.size() == getLength()) {
 
-					double ma = calculateMA(this.getMAType(), this.yyValues,
-							this.volValues, sum);
+					double ma = calculateMA(this.getMAType(), this.yyValues, this.volValues, sum);
 
-					double gd_128 = this.highPlusLowSum / 2.0d
-							/ this.getVostroPeriod();
+					double gd_128 = this.highPlusLowSum / 2.0d / this.getVostroPeriod();
 
-					double gd_136 = (this.highLessLowSum / this
-							.getVostroPeriod()) / this.getVostroPeriod();
+					double gd_136 = (this.highLessLowSum / this.getVostroPeriod()) / this.getVostroPeriod();
 
 					if (newBar && this.vostro1 != Double.MAX_VALUE) {
 						vostro1Values.addFirst(this.vostro1);
@@ -617,12 +575,10 @@ public class VostroSeries extends IndicatorSeries {
 					this.vostro2 = (candleItem.getHigh() - gd_128) / gd_136;
 
 					double vostro = 0;
-					if (vostro2 > this.getVostroRange().doubleValue()
-							&& candleItem.getHigh() > ma) {
+					if (vostro2 > this.getVostroRange().doubleValue() && candleItem.getHigh() > ma) {
 						vostro = 90.0;
 					} else {
-						if (vostro1 < (-1 * this.getVostroRange().doubleValue())
-								&& candleItem.getLow() < ma) {
+						if (vostro1 < (-1 * this.getVostroRange().doubleValue()) && candleItem.getLow() < ma) {
 							vostro = -90.0;
 						} else {
 							vostro = 0.0;
@@ -630,34 +586,28 @@ public class VostroSeries extends IndicatorSeries {
 					}
 					if (vostro2Values.size() > 0) {
 						if (vostro2 > this.getVostroRange().doubleValue()
-								&& vostro2Values.getFirst() > this
-										.getVostroRange().doubleValue()) {
+								&& vostro2Values.getFirst() > this.getVostroRange().doubleValue()) {
 							vostro = 0;
 						}
 					}
 
 					if (vostro2Values.size() > 1) {
 						if (vostro2 > this.getVostroRange().doubleValue()
-								&& vostro2Values.getFirst() > this
-										.getVostroRange().doubleValue()
-								&& vostro2Values.getLast() > this
-										.getVostroRange().doubleValue()) {
+								&& vostro2Values.getFirst() > this.getVostroRange().doubleValue()
+								&& vostro2Values.getLast() > this.getVostroRange().doubleValue()) {
 							vostro = 0;
 						}
 					}
 					if (vostro2Values.size() > 0) {
 						if (vostro1 < (-1 * this.getVostroRange().doubleValue())
-								&& vostro1Values.getFirst() < (-1 * this
-										.getVostroRange().doubleValue())) {
+								&& vostro1Values.getFirst() < (-1 * this.getVostroRange().doubleValue())) {
 							vostro = 0;
 						}
 					}
 					if (vostro1Values.size() > 1) {
 						if (vostro1 < (-1 * this.getVostroRange().doubleValue())
-								&& vostro1Values.getFirst() < (-1 * this
-										.getVostroRange().doubleValue())
-								&& vostro1Values.getLast() < (-1 * this
-										.getVostroRange().doubleValue())) {
+								&& vostro1Values.getFirst() < (-1 * this.getVostroRange().doubleValue())
+								&& vostro1Values.getLast() < (-1 * this.getVostroRange().doubleValue())) {
 							vostro = 0;
 						}
 					}
@@ -669,13 +619,11 @@ public class VostroSeries extends IndicatorSeries {
 					// + " gd_128: " + gd_128 + " gd_136: " + gd_136
 					// + " vostro1: " + vostro1 + " vostro2: " + vostro2);
 					if (newBar) {
-						VostroItem dataItem = new VostroItem(
-								candleItem.getPeriod(), new BigDecimal(vostro));
+						VostroItem dataItem = new VostroItem(candleItem.getPeriod(), new BigDecimal(vostro));
 						this.add(dataItem, false);
 
 					} else {
-						VostroItem dataItem = (VostroItem) this
-								.getDataItem(this.getItemCount() - 1);
+						VostroItem dataItem = (VostroItem) this.getDataItem(this.getItemCount() - 1);
 						dataItem.setVostro(vostro);
 					}
 				}
@@ -690,8 +638,7 @@ public class VostroSeries extends IndicatorSeries {
 	public void printSeries() {
 		for (int i = 0; i < this.getItemCount(); i++) {
 			VostroItem dataItem = (VostroItem) this.getDataItem(i);
-			_log.debug("Type: " + this.getType() + " Time: "
-					+ dataItem.getPeriod().getStart() + " Value: "
+			_log.debug("Type: " + this.getType() + " Time: " + dataItem.getPeriod().getStart() + " Value: "
 					+ dataItem.getVostro());
 		}
 	}
@@ -709,8 +656,7 @@ public class VostroSeries extends IndicatorSeries {
 	 *            Double
 	 * @return double
 	 */
-	private double calculateMA(String calcType, LinkedList<Double> yyValues,
-			LinkedList<Long> volValues, Double sum) {
+	private double calculateMA(String calcType, LinkedList<Double> yyValues, LinkedList<Long> volValues, Double sum) {
 
 		double ma = 0;
 		if (CalculationType.LINEAR.equals(calcType)) {
@@ -725,8 +671,7 @@ public class VostroSeries extends IndicatorSeries {
 				ma = sum / getLength();
 				multiplyer = 2 / (getLength() + 1.0d);
 			} else {
-				ma = ((yyValues.getFirst() - yyValues.get(1)) * multiplyer)
-						+ yyValues.get(1);
+				ma = ((yyValues.getFirst() - yyValues.get(1)) * multiplyer) + yyValues.get(1);
 			}
 			/*
 			 * Use the EMA in the stored values as we need the previous one for
@@ -751,8 +696,7 @@ public class VostroSeries extends IndicatorSeries {
 			double count = 0;
 			for (int i = yyValues.size(); i > 0; i--) {
 				count = count + ((getLength() + 1 - i) * volValues.get(i - 1));
-				sumYY = sumYY
-						+ (yyValues.get(i - 1) * volValues.get(i - 1) * (getLength() + 1 - i));
+				sumYY = sumYY + (yyValues.get(i - 1) * volValues.get(i - 1) * (getLength() + 1 - i));
 			}
 			ma = sumYY / count;
 		}
@@ -788,8 +732,7 @@ public class VostroSeries extends IndicatorSeries {
 			return (candle.getHigh() + candle.getLow() + candle.getClose()) / 3.0d;
 		}
 		case 7: {
-			return (candle.getOpen() + candle.getHigh() + candle.getLow() + candle
-					.getClose()) / 4.0d;
+			return (candle.getOpen() + candle.getHigh() + candle.getLow() + candle.getClose()) / 4.0d;
 		}
 		default: {
 			return candle.getClose();

@@ -10,8 +10,7 @@ import javax.persistence.Converter;
 import org.trade.core.util.TradingCalendar;
 
 @Converter(autoApply = true)
-public class ZonedDateTimeConverter implements
-		AttributeConverter<ZonedDateTime, Date> {
+public class ZonedDateTimeConverter implements AttributeConverter<ZonedDateTime, Date> {
 
 	public Date convertToDatabaseColumn(ZonedDateTime date) {
 		if (date == null) {

@@ -57,8 +57,7 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 	 * 
 	 */
 	private static final long serialVersionUID = -2281013751087462982L;
-	private final static Logger _log = LoggerFactory
-			.getLogger(StrategyRuleTemplate.class);
+	private final static Logger _log = LoggerFactory.getLogger(StrategyRuleTemplate.class);
 
 	/**
 	 * Default Constructor Note if you use class variables remember these will
@@ -75,8 +74,7 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 	 *            Integer
 	 */
 
-	public StrategyRuleTemplate(BrokerModel brokerManagerModel,
-			StrategyData strategyData, Integer idTradestrategy) {
+	public StrategyRuleTemplate(BrokerModel brokerManagerModel, StrategyData strategyData, Integer idTradestrategy) {
 		super(brokerManagerModel, strategyData, idTradestrategy);
 	}
 
@@ -116,8 +114,7 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 		try {
 			// Get the current candle
 			CandleItem currentCandleItem = this.getCurrentCandle();
-			ZonedDateTime startPeriod = currentCandleItem.getPeriod()
-					.getStart();
+			ZonedDateTime startPeriod = currentCandleItem.getPeriod().getStart();
 
 			/*
 			 * Position is open kill this Strategy as its job is done. In this
@@ -126,19 +123,17 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 			 * the position.
 			 */
 			if (this.isThereOpenPosition()) {
-				_log.info("Strategy complete open position filled symbol: "
-						+ getSymbol() + " startPeriod: " + startPeriod);
+				_log.info("Strategy complete open position filled symbol: " + getSymbol() + " startPeriod: "
+						+ startPeriod);
 				/*
 				 * If the order is partial filled check if the risk goes beyond
 				 * 1 risk unit. If it does cancel the openPositionOrder this
 				 * will cause it to be marked as filled.
 				 */
-				if (OrderStatus.PARTIALFILLED.equals(this
-						.getOpenPositionOrder().getStatus())) {
-					if (isRiskViolated(currentCandleItem.getClose(), this
-							.getTradestrategy().getRiskAmount(), this
-							.getOpenPositionOrder().getQuantity(), this
-							.getOpenPositionOrder().getAverageFilledPrice())) {
+				if (OrderStatus.PARTIALFILLED.equals(this.getOpenPositionOrder().getStatus())) {
+					if (isRiskViolated(currentCandleItem.getClose(), this.getTradestrategy().getRiskAmount(),
+							this.getOpenPositionOrder().getQuantity(),
+							this.getOpenPositionOrder().getAverageFilledPrice())) {
 						this.cancelOrder(this.getOpenPositionOrder());
 					}
 				}
@@ -150,10 +145,8 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 			 * Create code here to create orders based on your conditions/rules.
 			 */
 
-			if (startPeriod.equals(this.getTradestrategy().getTradingday()
-					.getOpen()
-					.plusMinutes(this.getTradestrategy().getBarSize() / 60))
-					&& newBar) {
+			if (startPeriod.equals(this.getTradestrategy().getTradingday().getOpen()
+					.plusMinutes(this.getTradestrategy().getBarSize() / 60)) && newBar) {
 
 				/*
 				 * Example On start of the second (9:35) candle check the 9:30
@@ -165,15 +158,10 @@ public class StrategyRuleTemplate extends AbstractStrategyRule {
 			 * Close any opened positions with a market order at day end minus
 			 * one bar.
 			 */
-			if (!currentCandleItem.getLastUpdateDate().isBefore(
-					this.getTradestrategy()
-							.getTradingday()
-							.getClose()
-							.minusMinutes(
-									this.getTradestrategy().getBarSize() / 60))) {
+			if (!currentCandleItem.getLastUpdateDate().isBefore(this.getTradestrategy().getTradingday().getClose()
+					.minusMinutes(this.getTradestrategy().getBarSize() / 60))) {
 				cancelOrdersClosePosition(true);
-				_log.info("Rule 15:55:00 close all open positions: "
-						+ getSymbol() + " Time: " + startPeriod);
+				_log.info("Rule 15:55:00 close all open positions: " + getSymbol() + " Time: " + startPeriod);
 				this.cancel();
 			}
 		} catch (StrategyRuleException ex) {

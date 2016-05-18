@@ -91,8 +91,8 @@ public class CodeAttribute extends Aspect implements java.io.Serializable {
 	 * @param classEditorName
 	 *            String
 	 */
-	public CodeAttribute(CodeType codeType, String name, String description,
-			String defaultValue, String className, String classEditorName) {
+	public CodeAttribute(CodeType codeType, String name, String description, String defaultValue, String className,
+			String classEditorName) {
 		this.name = name;
 		this.description = description;
 		this.defaultValue = defaultValue;

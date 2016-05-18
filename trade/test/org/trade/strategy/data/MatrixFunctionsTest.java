@@ -65,8 +65,7 @@ import org.trade.strategy.data.candle.CandlePeriod;
  */
 public class MatrixFunctionsTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(MatrixFunctionsTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(MatrixFunctionsTest.class);
 	@Rule
 	public TestName name = new TestName();
 
@@ -116,22 +115,16 @@ public class MatrixFunctionsTest {
 			int longShort = 1;
 
 			CandlePeriod period = new CandlePeriod(
-					TradingCalendar.getTradingDayStart(TradingCalendar
-							.getDateTimeNowMarketTimeZone()), 300);
-			Long startPeriod = TradingCalendar.geMillisFromZonedDateTime(period
-					.getStart());
+					TradingCalendar.getTradingDayStart(TradingCalendar.getDateTimeNowMarketTimeZone()), 300);
+			Long startPeriod = TradingCalendar.geMillisFromZonedDateTime(period.getStart());
 			Long endPeriod = null;
 			pairs.add(new Pair(0, vwap));
 
 			for (int i = 0; i < 3; i++) {
-				vwap = vwap + (0.1 * longShort)
-						+ (((double) i * longShort / 10));
+				vwap = vwap + (0.1 * longShort) + (((double) i * longShort / 10));
 				period = (CandlePeriod) period.next();
-				endPeriod = TradingCalendar.geMillisFromZonedDateTime(period
-						.getStart());
-				pairs.add(new Pair(
-						((double) (endPeriod - startPeriod) / (1000 * 60 * 60)),
-						vwap));
+				endPeriod = TradingCalendar.geMillisFromZonedDateTime(period.getStart());
+				pairs.add(new Pair(((double) (endPeriod - startPeriod) / (1000 * 60 * 60)), vwap));
 			}
 
 			Collections.sort(pairs, Pair.X_VALUE_ASC);
@@ -140,12 +133,10 @@ public class MatrixFunctionsTest {
 			}
 			Pair[] pairsArray = pairs.toArray(new Pair[] {});
 			double[] terms = MatrixFunctions.solve(pairsArray, polyOrder);
-			double correlationCoeff = MatrixFunctions
-					.getCorrelationCoefficient(pairsArray, terms);
-			double standardError = MatrixFunctions.getStandardError(pairsArray,
-					terms);
-			String output = MatrixFunctions.toPrint(polyOrder,
-					correlationCoeff, standardError, terms, pairsArray.length);
+			double correlationCoeff = MatrixFunctions.getCorrelationCoefficient(pairsArray, terms);
+			double standardError = MatrixFunctions.getStandardError(pairsArray, terms);
+			String output = MatrixFunctions.toPrint(polyOrder, correlationCoeff, standardError, terms,
+					pairsArray.length);
 			_log.info("Pivot Calc: " + output);
 
 			for (Pair pair : pairs) {
@@ -155,16 +146,13 @@ public class MatrixFunctionsTest {
 			}
 			Pair startXY = pairs.get(0);
 			Pair endXY = pairs.get(pairs.size() - 1);
-			double atan = Math.atan((endXY.y - startXY.y)
-					/ ((endXY.x - startXY.x)));
+			double atan = Math.atan((endXY.y - startXY.y) / ((endXY.x - startXY.x)));
 			double angle = (atan * 180) / Math.PI;
 			_log.info("angle: " + angle);
-			assertEquals("1",
-					new BigDecimal(67.38).setScale(2, RoundingMode.HALF_UP),
+			assertEquals("1", new BigDecimal(67.38).setScale(2, RoundingMode.HALF_UP),
 					new BigDecimal(angle).setScale(2, RoundingMode.HALF_UP));
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

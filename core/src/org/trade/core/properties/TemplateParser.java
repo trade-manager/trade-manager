@@ -45,10 +45,10 @@ import java.util.Vector;
  * Characters '(', '#', and ')' are used as a default mark up, and can be chaged
  * with setBrackets() and setDelimiter() methods.
  * 
- * E.g. template (String) : <font face="arial" size="2"
- * color="#(application_form_errors_color)#"> tags (Hashtable) : {
- * "application_form_errors_color", "#0fffff" } Output: <font face="arial"
- * size="2" color="#0fffff">
+ * E.g. template (String) :
+ * <font face="arial" size="2" color="#(application_form_errors_color)#"> tags
+ * (Hashtable) : { "application_form_errors_color", "#0fffff" } Output:
+ * <font face="arial" size="2" color="#0fffff">
  * 
  * @author Simon Allen
  */
@@ -86,14 +86,13 @@ public class TemplateParser {
 	 * @param tags
 	 *            - the tags and values.
 	 * 
-	 * @throws <code>InvalidParameterException</code> when tag in the template
-	 *         is not found in the tags Hashtable.
+	 * @throws <code>InvalidParameterException</code>
+	 *             when tag in the template is not found in the tags Hashtable.
 	 */
 	public TemplateParser(String template, Dictionary<?, ?> tags) {
 		if ((template == null) || (tags == null)) {
 			throw new IllegalArgumentException(
-					"Null argument passed to TemplateParser() constructor. template="
-							+ template + ", tags=" + tags);
+					"Null argument passed to TemplateParser() constructor. template=" + template + ", tags=" + tags);
 		}
 
 		m_template = template;
@@ -166,9 +165,8 @@ public class TemplateParser {
 
 			if (!result.finishedParsing()) {
 				if (result.foundToken()) {
-					parsedTemplate.append(m_template.substring(
-							result.getLastParsedPosition(),
-							result.getPositionBeforeKey() + 1));
+					parsedTemplate.append(
+							m_template.substring(result.getLastParsedPosition(), result.getPositionBeforeKey() + 1));
 
 					if (result.getMissingTag() == null) {
 						if (!result.getKey().endsWith("[]")) {
@@ -177,17 +175,12 @@ public class TemplateParser {
 							try {
 								Object[] array = result.getArrayOfValues();
 
-								if ((m_iterationNumber >= 0)
-										&& (m_iterationNumber < array.length)) {
-									parsedTemplate
-											.append(array[m_iterationNumber]
-													.toString());
+								if ((m_iterationNumber >= 0) && (m_iterationNumber < array.length)) {
+									parsedTemplate.append(array[m_iterationNumber].toString());
 								}
 							} catch (Exception e) {
 								m_missingKeys.addElement(result.getKey());
-								addErrorMessage("Key "
-										+ result.getKey()
-										+ " not found in the parameters. Iteration # "
+								addErrorMessage("Key " + result.getKey() + " not found in the parameters. Iteration # "
 										+ m_iterationNumber);
 							}
 						}
@@ -197,8 +190,7 @@ public class TemplateParser {
 
 							if (parsedSubtemplate == null) {
 								m_missingKeys.addElement(END_FOR_EACH);
-								addErrorMessage("Tag " + END_FOR_EACH
-										+ " not found in the template.");
+								addErrorMessage("Tag " + END_FOR_EACH + " not found in the template.");
 							} else {
 								parsedTemplate.append(parsedSubtemplate);
 							}
@@ -208,8 +200,7 @@ public class TemplateParser {
 							}
 
 							m_missingKeys.addElement(result.getKey());
-							addErrorMessage("Key " + result.getKey()
-									+ " not found in parameters.");
+							addErrorMessage("Key " + result.getKey() + " not found in parameters.");
 						}
 					}
 				} else
@@ -217,16 +208,13 @@ public class TemplateParser {
 				{
 					// This will happen when we find a pair of # characters
 					// which don't enclose a key #(key)#
-					parsedTemplate.append(m_template.substring(
-							result.getLastParsedPosition(),
-							result.getParsedPosition()));
+					parsedTemplate
+							.append(m_template.substring(result.getLastParsedPosition(), result.getParsedPosition()));
 				}
 			} else
 			// If finished parsing append the rest of the template
 			{
-				parsedTemplate.append(m_template.substring(
-						result.getLastParsedPosition(),
-						result.getParsedPosition()));
+				parsedTemplate.append(m_template.substring(result.getLastParsedPosition(), result.getParsedPosition()));
 
 				break;
 			}
@@ -251,8 +239,7 @@ public class TemplateParser {
 			NextToken result = getNextToken();
 
 			if (!result.finishedParsing()) {
-				if (result.foundToken()
-						&& !BEGIN_FOR_EACH.equals(result.getKey())
+				if (result.foundToken() && !BEGIN_FOR_EACH.equals(result.getKey())
 						&& !END_FOR_EACH.equals(result.getKey())) {
 					tags.put(result.getKey(), result.getKey());
 				}
@@ -272,20 +259,18 @@ public class TemplateParser {
 	 * 
 	 * 
 	 * @return NextToken
-	 * @throws <code>InvalidParameterException</code> when tag in the template
-	 *         is not found in the tags Hashtable.
+	 * @throws <code>InvalidParameterException</code>
+	 *             when tag in the template is not found in the tags Hashtable.
 	 */
 	public NextToken getNextToken() {
 		int delimiterPosition = -1;
 		int nextDelimiterPosition = -1;
 		NextToken result = new NextToken();
 
-		delimiterPosition = m_template.indexOf(m_delimiter,
-				m_lastParsedCharPosition);
+		delimiterPosition = m_template.indexOf(m_delimiter, m_lastParsedCharPosition);
 
 		if (delimiterPosition != -1) {
-			nextDelimiterPosition = m_template.indexOf(m_delimiter,
-					delimiterPosition + 1);
+			nextDelimiterPosition = m_template.indexOf(m_delimiter, delimiterPosition + 1);
 		}
 
 		if ((delimiterPosition == -1) || (nextDelimiterPosition == -1)) {
@@ -304,8 +289,7 @@ public class TemplateParser {
 					&& (m_template.charAt(rightBracketPosition) == m_rightBracket)) {
 				// We have correct syntax element : #(key)#
 				if ((rightBracketPosition - leftBracketPosition) > 0) {
-					String key = m_template.substring(leftBracketPosition + 1,
-							rightBracketPosition);
+					String key = m_template.substring(leftBracketPosition + 1, rightBracketPosition);
 
 					result.setKey(key);
 
@@ -367,8 +351,7 @@ public class TemplateParser {
 		do {
 			endToken = getNextToken();
 
-			if ((endToken != null) && (endToken.getKey() != null)
-					&& endToken.getKey().endsWith("[]")) {
+			if ((endToken != null) && (endToken.getKey() != null) && endToken.getKey().endsWith("[]")) {
 				try {
 					Object[] array = endToken.getArrayOfValues();
 
@@ -386,8 +369,7 @@ public class TemplateParser {
 			return null;
 		}
 
-		String subtemplate = m_template.substring(
-				beginToken.getPositionAfterKey(),
+		String subtemplate = m_template.substring(beginToken.getPositionAfterKey(),
 				endToken.getPositionBeforeKey() + 1);
 		TemplateParser parser;
 		String parsedSubtemplate;

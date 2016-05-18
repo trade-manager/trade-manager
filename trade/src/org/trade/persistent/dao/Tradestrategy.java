@@ -154,10 +154,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 * @param barSize
 	 *            Integer
 	 */
-	public Tradestrategy(Contract contract, Tradingday tradingday,
-			Strategy strategy, Portfolio portfolio, BigDecimal riskAmount,
-			String side, String tier, Boolean trade, Integer chartDays,
-			Integer barSize) {
+	public Tradestrategy(Contract contract, Tradingday tradingday, Strategy strategy, Portfolio portfolio,
+			BigDecimal riskAmount, String side, String tier, Boolean trade, Integer chartDays, Integer barSize) {
 		this.setBarSize(barSize);
 		this.chartDays = chartDays;
 		this.contract = contract;
@@ -213,9 +211,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	public void setBarSize(Integer barSize) {
 		this.barSize = barSize;
 		if (null != barSize && barSize == 1) {
-			Duration duration = Duration.between(
-					this.getTradingday().getOpen(), this.getTradingday()
-							.getClose());
+			Duration duration = Duration.between(this.getTradingday().getOpen(), this.getTradingday().getClose());
 			long daySeconds = duration.getSeconds();
 			this.barSize = ((int) daySeconds) * barSize;
 		}
@@ -339,8 +335,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return Contract
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "idContract", insertable = true, updatable = true, nullable = false)
 	public Contract getContract() {
 		return this.contract;
@@ -361,8 +356,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return Tradingday
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "idTradingDay", insertable = true, updatable = true, nullable = false)
 	public Tradingday getTradingday() {
 		return this.tradingday;
@@ -544,8 +538,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 			if (name.equals(value.getCodeAttribute().getName())) {
 				Vector<Object> parm = new Vector<Object>();
 				parm.add(value.getCodeValue());
-				codeValue = ClassFactory.getCreateClass(value
-						.getCodeAttribute().getClassName(), parm, this);
+				codeValue = ClassFactory.getCreateClass(value.getCodeAttribute().getClassName(), parm, this);
 				return codeValue;
 			}
 		}
@@ -561,8 +554,7 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	public void addTradeOrder(TradeOrder tradeOrder) {
 		int index = 0;
 		for (TradeOrder currTradeOrder : this.tradeOrders) {
-			if (CoreUtils.nullSafeComparator(currTradeOrder.getIdTradeOrder(),
-					tradeOrder.getIdTradeOrder()) == 0) {
+			if (CoreUtils.nullSafeComparator(currTradeOrder.getIdTradeOrder(), tradeOrder.getIdTradeOrder()) == 0) {
 				index = this.tradeOrders.indexOf(currTradeOrder);
 				break;
 			}
@@ -613,19 +605,15 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 			m_ascending = true;
 			int returnVal = 0;
 
-			if (CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2
-					.getTradingday().getOpen()) == 0) {
+			if (CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2.getTradingday().getOpen()) == 0) {
 				if (CoreUtils.nullSafeComparator(o1.getSide(), o2.getSide()) == 0) {
-					returnVal = CoreUtils.nullSafeComparator(o1.getTier(),
-							o2.getTier());
+					returnVal = CoreUtils.nullSafeComparator(o1.getTier(), o2.getTier());
 				} else {
-					returnVal = CoreUtils.nullSafeComparator(o1.getSide(),
-							o2.getSide());
+					returnVal = CoreUtils.nullSafeComparator(o1.getSide(), o2.getSide());
 				}
 
 			} else {
-				returnVal = CoreUtils.nullSafeComparator(o1.getTradingday()
-						.getOpen(), o2.getTradingday().getOpen());
+				returnVal = CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2.getTradingday().getOpen());
 
 			}
 
@@ -641,25 +629,19 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 			m_ascending = true;
 			int returnVal = 0;
 
-			if (CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2
-					.getTradingday().getOpen()) == 0) {
+			if (CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2.getTradingday().getOpen()) == 0) {
 				if (o1.getContract().equals(o2.getContract())) {
-					if (CoreUtils.nullSafeComparator(o1.getBarSize(),
-							o2.getBarSize()) == 0) {
-						returnVal = CoreUtils.nullSafeComparator(
-								o1.getChartDays(), o2.getChartDays());
+					if (CoreUtils.nullSafeComparator(o1.getBarSize(), o2.getBarSize()) == 0) {
+						returnVal = CoreUtils.nullSafeComparator(o1.getChartDays(), o2.getChartDays());
 					} else {
-						returnVal = CoreUtils.nullSafeComparator(
-								o1.getBarSize(), o2.getBarSize());
+						returnVal = CoreUtils.nullSafeComparator(o1.getBarSize(), o2.getBarSize());
 					}
 				} else {
-					returnVal = o1.getContract().getSymbol()
-							.compareTo(o2.getContract().getSymbol());
+					returnVal = o1.getContract().getSymbol().compareTo(o2.getContract().getSymbol());
 				}
 
 			} else {
-				returnVal = CoreUtils.nullSafeComparator(o1.getTradingday()
-						.getOpen(), o2.getTradingday().getOpen());
+				returnVal = CoreUtils.nullSafeComparator(o1.getTradingday().getOpen(), o2.getTradingday().getOpen());
 
 			}
 
@@ -709,23 +691,12 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	 */
 	public int hashCode() {
 		int hash = super.hashCode();
-		hash = hash
-				+ (this.getContract() == null ? 0 : this.getContract()
-						.hashCode());
-		hash = hash
-				+ (this.getStrategy() == null ? 0 : this.getStrategy()
-						.hashCode());
-		hash = hash
-				+ (this.getPortfolio() == null ? 0 : this.getPortfolio()
-						.hashCode());
-		hash = hash
-				+ (this.getTradingday() == null ? 0 : this.getTradingday()
-						.hashCode());
-		hash = hash
-				+ (this.getBarSize() == null ? 0 : this.getBarSize().hashCode());
-		hash = hash
-				+ (this.getChartDays() == null ? 0 : this.getChartDays()
-						.hashCode());
+		hash = hash + (this.getContract() == null ? 0 : this.getContract().hashCode());
+		hash = hash + (this.getStrategy() == null ? 0 : this.getStrategy().hashCode());
+		hash = hash + (this.getPortfolio() == null ? 0 : this.getPortfolio().hashCode());
+		hash = hash + (this.getTradingday() == null ? 0 : this.getTradingday().hashCode());
+		hash = hash + (this.getBarSize() == null ? 0 : this.getBarSize().hashCode());
+		hash = hash + (this.getChartDays() == null ? 0 : this.getChartDays().hashCode());
 		return hash;
 	}
 
@@ -744,14 +715,10 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 		if (objectToCompare instanceof Tradestrategy) {
 			Tradestrategy tradestrategy = (Tradestrategy) objectToCompare;
 			if (this.getContract().equals(tradestrategy.getContract())) {
-				if (this.getTradingday().getOpen()
-						.compareTo(tradestrategy.getTradingday().getOpen()) == 0) {
-					if (this.getStrategy().getName()
-							.equals(tradestrategy.getStrategy().getName())) {
-						if (this.getPortfolio().getName()
-								.equals(tradestrategy.getPortfolio().getName())) {
-							if (this.getBarSize().equals(
-									tradestrategy.getBarSize())) {
+				if (this.getTradingday().getOpen().compareTo(tradestrategy.getTradingday().getOpen()) == 0) {
+					if (this.getStrategy().getName().equals(tradestrategy.getStrategy().getName())) {
+						if (this.getPortfolio().getName().equals(tradestrategy.getPortfolio().getName())) {
+							if (this.getBarSize().equals(tradestrategy.getBarSize())) {
 								return true;
 							}
 						}
@@ -771,10 +738,8 @@ public class Tradestrategy extends Aspect implements Serializable, Cloneable {
 	@Transient
 	public boolean isThereOpenTradePosition() {
 		for (TradeOrder tradeOrder : this.getTradeOrders()) {
-			if (tradeOrder.getIsFilled()
-					&& tradeOrder.getTradePosition().equals(
-							tradeOrder.getTradePosition().getContract()
-									.getTradePosition())) {
+			if (tradeOrder.getIsFilled() && tradeOrder.getTradePosition()
+					.equals(tradeOrder.getTradePosition().getContract().getTradePosition())) {
 				return true;
 			}
 		}

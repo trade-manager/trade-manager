@@ -52,7 +52,8 @@ import org.trade.core.properties.ConfigProperties;
 /**
  */
 @Entity
-@SqlResultSetMappings({ @SqlResultSetMapping(name = "TradelogDetailMapping", entities = @EntityResult(entityClass = TradelogDetail.class)) })
+@SqlResultSetMappings({
+		@SqlResultSetMapping(name = "TradelogDetailMapping", entities = @EntityResult(entityClass = TradelogDetail.class) ) })
 public class TradelogDetail extends Aspect implements java.io.Serializable {
 
 	/**
@@ -123,13 +124,10 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 	 * @param profitLoss
 	 *            BigDecimal
 	 */
-	public TradelogDetail(Integer idTradestrategy, String open,
-			String marketBias, String marketBar, String name, String symbol,
-			String longShort, String tier, String status, String side,
-			String action, BigDecimal stopPrice, String orderStatus,
-			ZonedDateTime filledDate, Integer quantity,
-			BigDecimal averageFilledPrice, BigDecimal commission,
-			BigDecimal profitLoss) {
+	public TradelogDetail(Integer idTradestrategy, String open, String marketBias, String marketBar, String name,
+			String symbol, String longShort, String tier, String status, String side, String action,
+			BigDecimal stopPrice, String orderStatus, ZonedDateTime filledDate, Integer quantity,
+			BigDecimal averageFilledPrice, BigDecimal commission, BigDecimal profitLoss) {
 		this.idTradestrategy = idTradestrategy;
 		this.open = open;
 		this.marketBias = marketBias;
@@ -540,9 +538,8 @@ public class TradelogDetail extends Aspect implements java.io.Serializable {
 	public static String getSQLString() {
 		String sql = null;
 		try {
-			sql = ConfigProperties.readFileAsString(
-					"org/trade/persistent/dao/sql/TradelogDetail.sql", Thread
-							.currentThread().getContextClassLoader());
+			sql = ConfigProperties.readFileAsString("org/trade/persistent/dao/sql/TradelogDetail.sql",
+					Thread.currentThread().getContextClassLoader());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

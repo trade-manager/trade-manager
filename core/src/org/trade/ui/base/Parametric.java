@@ -89,8 +89,7 @@ public class Parametric {
 				for (Method method : methods) {
 					int modifiers = method.getModifiers();
 
-					if (method.getName().equals(methodName)
-							&& Modifier.isPublic(modifiers)) {
+					if (method.getName().equals(methodName) && Modifier.isPublic(modifiers)) {
 						if (isTargetSignature(method, parameters)) {
 							theReturn = method;
 
@@ -131,8 +130,7 @@ public class Parametric {
 				for (Field field : fields) {
 					int modifiers = field.getModifiers();
 
-					if (field.getName().equals(fieldName)
-							&& Modifier.isPublic(modifiers)) {
+					if (field.getName().equals(fieldName) && Modifier.isPublic(modifiers)) {
 						theReturn = field;
 
 						break;
@@ -173,8 +171,7 @@ public class Parametric {
 				Class<?> thisParm = thisMethodsParameters[i];
 				Class<?> target = parameters[i];
 
-				theReturn = thisParm.equals(target)
-						|| thisParm.isAssignableFrom(target);
+				theReturn = thisParm.equals(target) || thisParm.isAssignableFrom(target);
 
 				if (!theReturn) {
 					break;

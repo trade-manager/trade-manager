@@ -162,8 +162,7 @@ public class CodeAttributeTableModel extends TableModel {
 
 	public void addRow() {
 
-		final CodeAttribute element = new CodeAttribute(this.m_data, "", "",
-				null, "", null);
+		final CodeAttribute element = new CodeAttribute(this.m_data, "", "", null, "", null);
 		getData().getCodeAttribute().add(element);
 		getData().setDirty(true);
 		final Vector<Object> newRow = new Vector<Object>();

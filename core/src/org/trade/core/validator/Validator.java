@@ -51,6 +51,5 @@ public interface Validator {
 	 *            ExceptionMessageListener
 	 * @return boolean
 	 */
-	boolean isValid(Object value, String invalidValue, String expectedFormat,
-			ExceptionMessageListener receiver);
+	boolean isValid(Object value, String invalidValue, String expectedFormat, ExceptionMessageListener receiver);
 }

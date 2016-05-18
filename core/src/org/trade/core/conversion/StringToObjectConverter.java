@@ -69,15 +69,12 @@ public abstract class StringToObjectConverter implements JavaTypeConverter {
 	 *         conversion * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#convert(Object)
 	 */
-	public Object convert(Object valueToConvert)
-			throws IllegalArgumentException {
+	public Object convert(Object valueToConvert) throws IllegalArgumentException {
 		if (valueToConvert instanceof java.lang.String) {
 			return getConvertedString(((String) valueToConvert).trim());
 		}
 
-		throw new IllegalArgumentException(
-				"The source object must be of type: "
-						+ getSourceType().getName());
+		throw new IllegalArgumentException("The source object must be of type: " + getSourceType().getName());
 	}
 
 	/**
@@ -85,7 +82,8 @@ public abstract class StringToObjectConverter implements JavaTypeConverter {
 	 * from. In this case java.lang.String .
 	 * 
 	 * 
-	 * @return Class the class of the source value which will be converted * @see
+	 * @return Class the class of the source value which will be converted
+	 *         * @see
 	 *         org.trade.core.conversion.JavaTypeConverter#getSourceType()
 	 */
 	public Class<?> getSourceType() {
@@ -107,6 +105,5 @@ public abstract class StringToObjectConverter implements JavaTypeConverter {
 	 *         thrown if the String to convert is not in the correct format to
 	 *         do the conversion
 	 */
-	protected abstract Object getConvertedString(String aString)
-			throws IllegalArgumentException;
+	protected abstract Object getConvertedString(String aString) throws IllegalArgumentException;
 }

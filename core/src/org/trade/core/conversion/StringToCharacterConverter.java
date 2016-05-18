@@ -83,8 +83,7 @@ public class StringToCharacterConverter extends StringToObjectConverter {
 	 * @return Object the String converted to a Character * @exception
 	 *         IllegalArgumentException should never be thrown
 	 */
-	protected Object getConvertedString(String aString)
-			throws IllegalArgumentException {
+	protected Object getConvertedString(String aString) throws IllegalArgumentException {
 		try {
 			return new Character(aString.charAt(0));
 		} catch (Exception e) {

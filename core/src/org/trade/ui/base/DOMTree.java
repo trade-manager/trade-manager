@@ -106,8 +106,7 @@ import org.w3c.dom.NodeList;
 
 /**
  */
-public class DOMTree extends JTree implements DragSourceListener,
-		DragGestureListener, Autoscroll, TreeModelListener,
+public class DOMTree extends JTree implements DragSourceListener, DragGestureListener, Autoscroll, TreeModelListener,
 		TreeSelectionListener, MouseListener {
 
 	private static final long serialVersionUID = -8742998183708844989L;
@@ -162,12 +161,11 @@ public class DOMTree extends JTree implements DragSourceListener,
 		addTreeSelectionListener(this);
 		m_dragSource = DragSource.getDefaultDragSource();
 
-		DragGestureRecognizer dgr = m_dragSource
-				.createDefaultDragGestureRecognizer(this, // DragSource
-						DnDConstants.ACTION_COPY_OR_MOVE, // specifies valid
-						// actions
-						this // DragGestureListener
-				);
+		DragGestureRecognizer dgr = m_dragSource.createDefaultDragGestureRecognizer(this, // DragSource
+				DnDConstants.ACTION_COPY_OR_MOVE, // specifies valid
+				// actions
+				this // DragGestureListener
+		);
 
 		/*
 		 * Eliminates right mouse clicks as valid actions - useful especially if
@@ -258,8 +256,8 @@ public class DOMTree extends JTree implements DragSourceListener,
 		// row) visible as appropriate. If were at the absolute top or
 		// bottom, just return the first or last row respectively.
 		nRow = ((pt.y + raOuter.y) <= AUTOSCROLL_MARGIN) // Is row at top of
-		// screen?
-		? (nRow <= 0 ? 0 : nRow - 1) // Yes, scroll up one row
+				// screen?
+				? (nRow <= 0 ? 0 : nRow - 1) // Yes, scroll up one row
 				: (nRow < (getRowCount() - 1) ? nRow + 1 : nRow); // No, scroll
 		// down one row
 
@@ -278,12 +276,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 		Rectangle raOuter = getBounds();
 		Rectangle raInner = getParent().getBounds();
 
-		return new Insets((raInner.y - raOuter.y) + AUTOSCROLL_MARGIN,
-				(raInner.x - raOuter.x) + AUTOSCROLL_MARGIN, (raOuter.height
-						- raInner.height - raInner.y)
-						+ raOuter.y + AUTOSCROLL_MARGIN, (raOuter.width
-						- raInner.width - raInner.x)
-						+ raOuter.x + AUTOSCROLL_MARGIN);
+		return new Insets((raInner.y - raOuter.y) + AUTOSCROLL_MARGIN, (raInner.x - raOuter.x) + AUTOSCROLL_MARGIN,
+				(raOuter.height - raInner.height - raInner.y) + raOuter.y + AUTOSCROLL_MARGIN,
+				(raOuter.width - raInner.width - raInner.x) + raOuter.x + AUTOSCROLL_MARGIN);
 	}
 
 	// Use this method if you want to see the boundaries of the
@@ -302,8 +297,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 		Rectangle raInner = getParent().getBounds();
 
 		g.setColor(Color.red);
-		g.drawRect(-raOuter.x + 12, -raOuter.y + 12, raInner.width - 24,
-				raInner.height - 24);
+		g.drawRect(-raOuter.x + 12, -raOuter.y + 12, raInner.width - 24, raInner.height - 24);
 	}
 
 	// TreeModelListener interface...
@@ -365,8 +359,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 	private TreePath getChildPath(TreePath pathParent, int nChildIndex) {
 		TreeModel model = getModel();
 
-		return pathParent.pathByAddingChild(model.getChild(
-				pathParent.getLastPathComponent(), nChildIndex));
+		return pathParent.pathByAddingChild(model.getChild(pathParent.getLastPathComponent(), nChildIndex));
 	}
 
 	/**
@@ -451,18 +444,15 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 		popup = new JPopupMenu();
 
-		BaseMenuItem copy = new BaseMenuItem(m_basePanel,
-				BaseUIPropertyCodes.COPY);
+		BaseMenuItem copy = new BaseMenuItem(m_basePanel, BaseUIPropertyCodes.COPY);
 
 		popup.add(copy);
 
-		BaseMenuItem cut = new BaseMenuItem(m_basePanel,
-				BaseUIPropertyCodes.CUT);
+		BaseMenuItem cut = new BaseMenuItem(m_basePanel, BaseUIPropertyCodes.CUT);
 
 		popup.add(cut);
 
-		BaseMenuItem paste = new BaseMenuItem(m_basePanel,
-				BaseUIPropertyCodes.PASTE);
+		BaseMenuItem paste = new BaseMenuItem(m_basePanel, BaseUIPropertyCodes.PASTE);
 
 		popup.add(paste);
 		// Try to make the popup lightweight
@@ -567,33 +557,31 @@ public class DOMTree extends JTree implements DragSourceListener,
 			// rectangle origin
 			Rectangle raPath = getPathBounds(path);
 
-			m_ptOffset.setLocation(ptDragOrigin.x - raPath.x, ptDragOrigin.y
-					- raPath.y);
+			m_ptOffset.setLocation(ptDragOrigin.x - raPath.x, ptDragOrigin.y - raPath.y);
 
 			// Get the cell renderer (which is a XMLTreeCellRenderer) for the
 			// path being dragged
-			XMLTreeCellRenderer lbl = (XMLTreeCellRenderer) getCellRenderer()
-					.getTreeCellRendererComponent(this, // tree
-							path.getLastPathComponent(), // value
-							false, // isSelected (dont want a colored
-							// background)
-							isExpanded(path), // isExpanded
-							getModel().isLeaf(path.getLastPathComponent()), // isLeaf
-							0, // row (not important for rendering)
-							false // hasFocus (dont want a focus rectangle)
-					);
+			XMLTreeCellRenderer lbl = (XMLTreeCellRenderer) getCellRenderer().getTreeCellRendererComponent(this, // tree
+					path.getLastPathComponent(), // value
+					false, // isSelected (dont want a colored
+					// background)
+					isExpanded(path), // isExpanded
+					getModel().isLeaf(path.getLastPathComponent()), // isLeaf
+					0, // row (not important for rendering)
+					false // hasFocus (dont want a focus rectangle)
+			);
 
 			lbl.setSize((int) raPath.getWidth(), (int) raPath.getHeight()); // <--
 
 			// Get a buffered image of the selection for dragging a ghost image
-			m_imgGhost = new BufferedImage((int) raPath.getWidth(),
-					(int) raPath.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+			m_imgGhost = new BufferedImage((int) raPath.getWidth(), (int) raPath.getHeight(),
+					BufferedImage.TYPE_INT_ARGB_PRE);
 
 			Graphics2D g2 = m_imgGhost.createGraphics();
 
 			// Ask the cell renderer to paint itself into the BufferedImage
-			g2.setComposite(AlphaComposite
-					.getInstance(AlphaComposite.SRC, 0.5f)); // Make the
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, 0.5f)); // Make
+																					// the
 			// image
 			// ghostlike
 			lbl.paint(g2);
@@ -603,14 +591,14 @@ public class DOMTree extends JTree implements DragSourceListener,
 			// Note: this will need tweaking if your icon is not positioned to
 			// the left of the text
 			Icon icon = lbl.getIcon();
-			int nStartOfText = (icon == null) ? 0 : icon.getIconWidth()
-					+ lbl.getIconTextGap();
+			int nStartOfText = (icon == null) ? 0 : icon.getIconWidth() + lbl.getIconTextGap();
 
-			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER,
-					0.5f)); // Make the gradient ghostlike
-			g2.setPaint(new GradientPaint(nStartOfText, 0,
-					SystemColor.controlShadow, getWidth(), 0, new Color(255,
-							255, 255, 0)));
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 0.5f)); // Make
+																						// the
+																						// gradient
+																						// ghostlike
+			g2.setPaint(new GradientPaint(nStartOfText, 0, SystemColor.controlShadow, getWidth(), 0,
+					new Color(255, 255, 255, 0)));
 			g2.fillRect(nStartOfText, 0, getWidth(), m_imgGhost.getHeight());
 			g2.dispose();
 			setSelectionPath(path); // Select this path in the tree
@@ -682,8 +670,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 			m_selectedNode = null;
 			return;
 		}
-		m_selectedNode = (DefaultMutableTreeNode) m_selectedTreePath
-				.getLastPathComponent();
+		m_selectedNode = (DefaultMutableTreeNode) m_selectedTreePath.getLastPathComponent();
 	}
 
 	/**
@@ -703,8 +690,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 			return "Invalid drop location.";
 		}
 
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) destination
-				.getLastPathComponent();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) destination.getLastPathComponent();
 
 		if (!node.getAllowsChildren()) {
 			return "This node does not allow children";
@@ -765,8 +751,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 			((DefaultMutableTreeNode) getRoot()).removeAllChildren();
 			nodeMap.clear();
 			buildTree();
-			fireTreeStructureChanged(this, new Object[] { getRoot() },
-					new int[0], new Object[0]);
+			fireTreeStructureChanged(this, new Object[] { getRoot() }, new int[0], new Object[0]);
 		} // setDocument(Document)
 
 		/**
@@ -825,8 +810,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 		 * @return MutableTreeNode
 		 */
 		private MutableTreeNode insertNode(String what, MutableTreeNode where) {
-			MutableTreeNode node = new DefaultMutableTreeNode(new StringData(
-					what));
+			MutableTreeNode node = new DefaultMutableTreeNode(new StringData(what));
 
 			insertNodeInto(node, where, where.getChildCount());
 
@@ -840,10 +824,8 @@ public class DOMTree extends JTree implements DragSourceListener,
 		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
-		private MutableTreeNode insertDocumentNode(Node what,
-				MutableTreeNode where) {
-			MutableTreeNode treeNode = insertNode("<" + what.getNodeName()
-					+ '>', where);
+		private MutableTreeNode insertDocumentNode(Node what, MutableTreeNode where) {
+			MutableTreeNode treeNode = insertNode("<" + what.getNodeName() + '>', where);
 
 			nodeMap.put(treeNode, what);
 
@@ -857,8 +839,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
-		private MutableTreeNode insertElementNode(Node what,
-				MutableTreeNode where) {
+		private MutableTreeNode insertElementNode(Node what, MutableTreeNode where) {
 			// build up name
 			StringBuffer name = new StringBuffer();
 
@@ -939,8 +920,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 		 *            MutableTreeNode
 		 * @return MutableTreeNode
 		 */
-		private MutableTreeNode insertCDataSectionNode(Node what,
-				MutableTreeNode where) {
+		private MutableTreeNode insertCDataSectionNode(Node what, MutableTreeNode where) {
 			StringBuffer CSectionBfr = new StringBuffer();
 
 			// --- optional --- CSectionBfr.append( "<![CDATA[" );
@@ -948,8 +928,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 
 			// --- optional --- CSectionBfr.append( "]]>" );
 			if (CSectionBfr.length() > 0) {
-				MutableTreeNode treeNode = insertNode(CSectionBfr.toString(),
-						where);
+				MutableTreeNode treeNode = insertNode(CSectionBfr.toString(), where);
 				nodeMap.put(treeNode, what);
 				return treeNode;
 			}
@@ -969,17 +948,14 @@ public class DOMTree extends JTree implements DragSourceListener,
 		private Timer _timerHover;
 		private int _nLeftRight = 0; // Cumulative left/right mouse movement
 
-		private BufferedImage _imgRight = new CArrowImage(15, 15,
-				CArrowImage.ARROW_RIGHT);
+		private BufferedImage _imgRight = new CArrowImage(15, 15, CArrowImage.ARROW_RIGHT);
 
-		private BufferedImage _imgLeft = new CArrowImage(15, 15,
-				CArrowImage.ARROW_LEFT);
+		private BufferedImage _imgLeft = new CArrowImage(15, 15, CArrowImage.ARROW_LEFT);
 
 		public int _nShift = 0;
 
 		public CDropTargetListener() {
-			_colorCueLine = new Color(SystemColor.controlShadow.getRed(),
-					SystemColor.controlShadow.getGreen(),
+			_colorCueLine = new Color(SystemColor.controlShadow.getRed(), SystemColor.controlShadow.getGreen(),
 					SystemColor.controlShadow.getBlue(), 64);
 			// Set up a hover timer, so that a node will be automatically
 			// expanded or collapsed
@@ -1052,8 +1028,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 			// left
 			int nDeltaLeftRight = pt.x - _ptLast.x;
 
-			if (((_nLeftRight > 0) && (nDeltaLeftRight < 0))
-					|| ((_nLeftRight < 0) && (nDeltaLeftRight > 0))) {
+			if (((_nLeftRight > 0) && (nDeltaLeftRight < 0)) || ((_nLeftRight < 0) && (nDeltaLeftRight > 0))) {
 				_nLeftRight = 0;
 			}
 
@@ -1069,10 +1044,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 				// ghost image and cue
 				// line
 				// And remember where we are about to draw the new ghost image
-				_raGhost.setRect(pt.x - m_ptOffset.x, pt.y - m_ptOffset.y,
-						m_imgGhost.getWidth(), m_imgGhost.getHeight());
-				g2.drawImage(m_imgGhost, AffineTransform.getTranslateInstance(
-						_raGhost.getX(), _raGhost.getY()), null);
+				_raGhost.setRect(pt.x - m_ptOffset.x, pt.y - m_ptOffset.y, m_imgGhost.getWidth(),
+						m_imgGhost.getHeight());
+				g2.drawImage(m_imgGhost, AffineTransform.getTranslateInstance(_raGhost.getX(), _raGhost.getY()), null);
 			} else
 			// Just rub out the last cue line
 			{
@@ -1093,24 +1067,19 @@ public class DOMTree extends JTree implements DragSourceListener,
 			// indicating where a drop will occur
 			Rectangle raPath = getPathBounds(path);
 
-			_raCueLine.setRect(0, raPath.y + (int) raPath.getHeight(),
-					getWidth(), 2);
+			_raCueLine.setRect(0, raPath.y + (int) raPath.getHeight(), getWidth(), 2);
 			g2.setColor(_colorCueLine);
 			g2.fill(_raCueLine);
 
 			// Now superimpose the left/right movement indicator if necessary
 			if (_nLeftRight > 20) {
-				g2.drawImage(
-						_imgRight,
-						AffineTransform.getTranslateInstance(pt.x
-								- m_ptOffset.x, pt.y - m_ptOffset.y), null);
+				g2.drawImage(_imgRight, AffineTransform.getTranslateInstance(pt.x - m_ptOffset.x, pt.y - m_ptOffset.y),
+						null);
 
 				_nShift = +1;
 			} else if (_nLeftRight < -20) {
-				g2.drawImage(
-						_imgLeft,
-						AffineTransform.getTranslateInstance(pt.x
-								- m_ptOffset.x, pt.y - m_ptOffset.y), null);
+				g2.drawImage(_imgLeft, AffineTransform.getTranslateInstance(pt.x - m_ptOffset.x, pt.y - m_ptOffset.y),
+						null);
 
 				_nShift = -1;
 			} else {
@@ -1165,15 +1134,13 @@ public class DOMTree extends JTree implements DragSourceListener,
 				}
 
 				// cast into appropriate data type
-				StringData childInfo = (StringData) tr
-						.getTransferData(DataFlavor.stringFlavor);
+				StringData childInfo = (StringData) tr.getTransferData(DataFlavor.stringFlavor);
 
 				_log.debug("String node value " + childInfo);
 				// get new parent node
 				Point loc = e.getLocation();
 				TreePath destinationPath = getPathForLocation(loc.x, loc.y);
-				final String msg = testDropTarget(destinationPath,
-						m_selectedTreePath);
+				final String msg = testDropTarget(destinationPath, m_selectedTreePath);
 
 				if (msg != null) {
 					e.rejectDrop();
@@ -1188,11 +1155,9 @@ public class DOMTree extends JTree implements DragSourceListener,
 					return;
 				}
 
-				DefaultMutableTreeNode newParent = (DefaultMutableTreeNode) destinationPath
-						.getLastPathComponent();
+				DefaultMutableTreeNode newParent = (DefaultMutableTreeNode) destinationPath.getLastPathComponent();
 				// get old parent node
-				DefaultMutableTreeNode oldParent = (DefaultMutableTreeNode) getSelectedNode()
-						.getParent();
+				DefaultMutableTreeNode oldParent = (DefaultMutableTreeNode) getSelectedNode().getParent();
 				// DefaultMutableTreeNode child = new DefaultMutableTreeNode(
 				// childInfo);
 				int action = e.getDropAction();
@@ -1203,8 +1168,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 					MutableTreeNode selectedTreeNode = getSelectedNode();
 
 					if (null != m_model.getNode(selectedTreeNode)) {
-						m_model.insertTextNode(
-								m_model.getNode(selectedTreeNode), newParent);
+						m_model.insertTextNode(m_model.getNode(selectedTreeNode), newParent);
 						m_model.removeNodeFromParent(selectedTreeNode);
 					}
 
@@ -1267,8 +1231,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 			// Do this if you want to select the best flavor on offer...
 			DataFlavor[] flavors = e.getCurrentDataFlavors();
 			for (DataFlavor flavor : flavors) {
-				if (flavor
-						.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType)) {
+				if (flavor.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType)) {
 					return true;
 				}
 			}
@@ -1305,8 +1268,7 @@ public class DOMTree extends JTree implements DragSourceListener,
 			// Do this if you want to select the best flavor on offer...
 			DataFlavor[] flavors = e.getCurrentDataFlavors();
 			for (DataFlavor flavor : flavors) {
-				if (flavor
-						.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType)) {
+				if (flavor.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType)) {
 					return true;
 				}
 			}
@@ -1358,11 +1320,10 @@ public class DOMTree extends JTree implements DragSourceListener,
 		 * @see javax.swing.tree.TreeCellEditor#getTreeCellEditorComponent(JTree,
 		 *      Object, boolean, boolean, boolean, int)
 		 */
-		public Component getTreeCellEditorComponent(JTree tree, Object value,
-				boolean selected, boolean expanded, boolean leaf, int row) {
+		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded,
+				boolean leaf, int row) {
 			Node node = ((DOMTree) tree).getNode(value);
-			Component comp = super.getTreeCellEditorComponent(tree, value,
-					selected, expanded, leaf, row);
+			Component comp = super.getTreeCellEditorComponent(tree, value, selected, expanded, leaf, row);
 
 			_log.debug("something to edit :" + node);
 
@@ -1405,20 +1366,17 @@ public class DOMTree extends JTree implements DragSourceListener,
 		 * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(JTree,
 		 *      Object, boolean, boolean, boolean, int, boolean)
 		 */
-		public Component getTreeCellRendererComponent(JTree tree, Object value,
-				boolean selected, boolean expanded, boolean leaf, int row,
-				boolean hasFocus) {
+		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+				boolean leaf, int row, boolean hasFocus) {
 			Node node = ((DOMTree) tree).getNode(value);
-			Component comp = super.getTreeCellRendererComponent(tree, value,
-					selected, expanded, leaf, row, hasFocus);
+			Component comp = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
 			if (selected) {
 				comp.setBackground(Color.blue);
 			}
 
 			if (node != null) {
-				_log.debug("something to render :" + node + " class: "
-						+ node.getClass().getName());
+				_log.debug("something to render :" + node + " class: " + node.getClass().getName());
 
 				if (!(node instanceof Element) /* leaf */) {
 					setIcon(new ImageIcon(leafImage));

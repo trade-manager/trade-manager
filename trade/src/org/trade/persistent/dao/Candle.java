@@ -104,15 +104,13 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param contract
 	 *            Contract
 	 */
-	public Candle(Contract contract, Tradingday tradingday,
-			RegularTimePeriod period, ZonedDateTime lastUpdateDate) {
+	public Candle(Contract contract, Tradingday tradingday, RegularTimePeriod period, ZonedDateTime lastUpdateDate) {
 		this.setTradingday(tradingday);
 		this.setContract(contract);
 		this.setPeriod(period.toString());
 		this.setStartPeriod(period.getStart());
 		this.setEndPeriod(period.getEnd());
-		int barSize = (int) (TradingCalendar.getDurationInSeconds(
-				period.getStart(), period.getEnd()) + 1);
+		int barSize = (int) (TradingCalendar.getDurationInSeconds(period.getStart(), period.getEnd()) + 1);
 		this.setBarSize(barSize);
 		this.setLastUpdateDate(lastUpdateDate);
 	}
@@ -133,14 +131,13 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public Candle(Contract contract, RegularTimePeriod period, double open,
-			double high, double low, double close, ZonedDateTime lastUpdateDate) {
+	public Candle(Contract contract, RegularTimePeriod period, double open, double high, double low, double close,
+			ZonedDateTime lastUpdateDate) {
 		this.setContract(contract);
 		this.setPeriod(period.toString());
 		this.setStartPeriod(period.getStart());
 		this.setEndPeriod(period.getEnd());
-		Duration duration = Duration
-				.between(period.getStart(), period.getEnd());
+		Duration duration = Duration.between(period.getStart(), period.getEnd());
 		int barSize = (int) (duration.getSeconds() + 1);
 		this.setBarSize(barSize);
 		this.setOpen(new BigDecimal(open));
@@ -172,9 +169,8 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public Candle(Contract contract, RegularTimePeriod period, double open,
-			double high, double low, double close, long volume, double vwap,
-			int tradeCount, ZonedDateTime lastUpdateDate) {
+	public Candle(Contract contract, RegularTimePeriod period, double open, double high, double low, double close,
+			long volume, double vwap, int tradeCount, ZonedDateTime lastUpdateDate) {
 		this(contract, period, open, high, low, close, lastUpdateDate);
 		this.setVolume(new Long(volume));
 		this.setVwap(new BigDecimal(vwap));
@@ -205,10 +201,8 @@ public class Candle extends Aspect implements java.io.Serializable {
 	 * @param lastUpdateDate
 	 *            Date
 	 */
-	public Candle(Contract contract, Tradingday tradingday,
-			RegularTimePeriod period, double open, double high, double low,
-			double close, long volume, double vwap, int tradeCount,
-			ZonedDateTime lastUpdateDate) {
+	public Candle(Contract contract, Tradingday tradingday, RegularTimePeriod period, double open, double high,
+			double low, double close, long volume, double vwap, int tradeCount, ZonedDateTime lastUpdateDate) {
 		this(contract, tradingday, period, lastUpdateDate);
 		this.setOpen(new BigDecimal(open));
 		this.setClose(new BigDecimal(close));
@@ -493,8 +487,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 	@Column(name = "barSize")
 	public Integer getBarSize() {
 		if (null == this.barSize) {
-			Duration duration = Duration.between(getStartPeriod(),
-					getEndPeriod());
+			Duration duration = Duration.between(getStartPeriod(), getEndPeriod());
 			this.barSize = (int) (duration.getSeconds() + 1);
 		}
 		return this.barSize;
@@ -584,8 +577,7 @@ public class Candle extends Aspect implements java.io.Serializable {
 							if (this.getHigh().equals(candle.getHigh())) {
 								if (this.getLow().equals(candle.getLow())) {
 									if (this.getOpen().equals(candle.getOpen())) {
-										if (this.getClose().equals(
-												candle.getClose())) {
+										if (this.getClose().equals(candle.getClose())) {
 											return true;
 										}
 									}

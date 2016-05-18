@@ -49,8 +49,7 @@ import org.trade.ui.base.StreamEditorPane;
  */
 public class StrategyPanelTest {
 
-	private final static Logger _log = LoggerFactory
-			.getLogger(StrategyPanelTest.class);
+	private final static Logger _log = LoggerFactory.getLogger(StrategyPanelTest.class);
 	@org.junit.Rule
 	public TestName name = new TestName();
 
@@ -79,42 +78,30 @@ public class StrategyPanelTest {
 	public void setUp() throws Exception {
 		try {
 			TradeAppLoadConfig.loadAppProperties();
-			m_templateName = ConfigProperties
-					.getPropAsString("trade.strategy.template");
-			assertNotNull("setUp: Strategy template should be not null",
-					m_templateName);
-			m_strategyDir = ConfigProperties
-					.getPropAsString("trade.strategy.default.dir");
-			assertNotNull("setUp: Strategy dir should be not null",
-					m_strategyDir);
+			m_templateName = ConfigProperties.getPropAsString("trade.strategy.template");
+			assertNotNull("setUp: Strategy template should be not null", m_templateName);
+			m_strategyDir = ConfigProperties.getPropAsString("trade.strategy.default.dir");
+			assertNotNull("setUp: Strategy dir should be not null", m_strategyDir);
 			this.tradePersistentModel = (PersistentModel) ClassFactory
-					.getServiceForInterface(PersistentModel._persistentModel,
-							this);
+					.getServiceForInterface(PersistentModel._persistentModel, this);
 			this.tradestrategy = TradestrategyTest.getTestTradestrategy(symbol);
-			assertNotNull("setUp: tradestrategy should be not null",
-					this.tradestrategy);
-			List<Strategy> strategies = this.tradePersistentModel
-					.findStrategies();
+			assertNotNull("setUp: tradestrategy should be not null", this.tradestrategy);
+			List<Strategy> strategies = this.tradePersistentModel.findStrategies();
 			assertNotNull("setUp: Strategy should be not null", strategies);
 			for (Strategy strategy : strategies) {
-				String fileName = m_strategyDir + "/"
-						+ StrategyRule.PACKAGE.replace('.', '/')
-						+ strategy.getClassName() + ".java";
+				String fileName = m_strategyDir + "/" + StrategyRule.PACKAGE.replace('.', '/') + strategy.getClassName()
+						+ ".java";
 				String content = readFile(fileName);
-				assertNotNull("setUp: Strategy java file should be not null",
-						content);
+				assertNotNull("setUp: Strategy java file should be not null", content);
 				if (strategy.getRules().isEmpty()) {
-					Rule nextRule = new Rule(strategy, 1, null,
-							TradingCalendar.getDateTimeNowMarketTimeZone(),
-							content.getBytes(),
-							TradingCalendar.getDateTimeNowMarketTimeZone());
+					Rule nextRule = new Rule(strategy, 1, null, TradingCalendar.getDateTimeNowMarketTimeZone(),
+							content.getBytes(), TradingCalendar.getDateTimeNowMarketTimeZone());
 					strategy.add(nextRule);
 					this.tradePersistentModel.persistAspect(nextRule);
 				}
 			}
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -157,24 +144,19 @@ public class StrategyPanelTest {
 			sourceText.setSelectionColor(Color.red);
 			sourceText.setEditable(true);
 
-			String fileName = m_strategyDir + "/"
-					+ StrategyRule.PACKAGE.replace('.', '/') + m_templateName
-					+ ".java";
+			String fileName = m_strategyDir + "/" + StrategyRule.PACKAGE.replace('.', '/') + m_templateName + ".java";
 			String content = readFile(fileName);
 			sourceText.setText(content);
-			assertEquals(
-					"testJEditorPaneTextEquals:  Strategy java file not equal to test source",
-					content, sourceText.getText());
+			assertEquals("testJEditorPaneTextEquals:  Strategy java file not equal to test source", content,
+					sourceText.getText());
 			writeFile(fileName, content);
 			String content1 = readFile(fileName);
 			sourceText.setText(null);
 			sourceText.setText(content1);
-			assertEquals(
-					"testJEditorPaneTextEquals:  Strategy java file not equal to test source after write",
+			assertEquals("testJEditorPaneTextEquals:  Strategy java file not equal to test source after write",
 					content1, sourceText.getText());
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -240,9 +222,8 @@ public class StrategyPanelTest {
 			_log.info("Ready to create Strategy");
 			DynamicCode dynacode = new DynamicCode();
 			dynacode.addSourceDir(new File(m_strategyDir));
-			StrategyRule strategyProxy = (StrategyRule) dynacode
-					.newProxyInstance(StrategyRule.class, StrategyRule.PACKAGE
-							+ m_templateName, parm);
+			StrategyRule strategyProxy = (StrategyRule) dynacode.newProxyInstance(StrategyRule.class,
+					StrategyRule.PACKAGE + m_templateName, parm);
 			_log.info("Created Strategy" + strategyProxy);
 			strategyProxy.execute();
 
@@ -250,20 +231,15 @@ public class StrategyPanelTest {
 				Thread.sleep(250);
 			}
 
-			StrategyData.doDummyData(tradestrategy.getStrategyData()
-					.getBaseCandleSeries(),
-					Tradingday.newInstance(TradingCalendar
-							.getDateTimeNowMarketTimeZone()), 1,
-					BarSize.FIVE_MIN, true, 250);
-			assertFalse(
-					"testDoCompileAndRunStrategy: Base candle series is empty",
-					tradestrategy.getStrategyData().getBaseCandleSeries()
-							.isEmpty());
+			StrategyData.doDummyData(tradestrategy.getStrategyData().getBaseCandleSeries(),
+					Tradingday.newInstance(TradingCalendar.getDateTimeNowMarketTimeZone()), 1, BarSize.FIVE_MIN, true,
+					250);
+			assertFalse("testDoCompileAndRunStrategy: Base candle series is empty",
+					tradestrategy.getStrategyData().getBaseCandleSeries().isEmpty());
 			strategyProxy.cancel();
 
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -281,18 +257,15 @@ public class StrategyPanelTest {
 			parm.add(this.tradestrategy.getStrategyData());
 			parm.add(this.tradestrategy.getIdTradeStrategy());
 			Strategy strategy = this.tradePersistentModel
-					.findStrategyById(this.tradestrategy.getStrategy()
-							.getIdStrategy());
-			Integer version = this.tradePersistentModel
-					.findRuleByMaxVersion(strategy);
+					.findStrategyById(this.tradestrategy.getStrategy().getIdStrategy());
+			Integer version = this.tradePersistentModel.findRuleByMaxVersion(strategy);
 			Rule myRule = null;
 			for (Rule rule : strategy.getRules()) {
 				if (version.equals(rule.getVersion()))
 					myRule = rule;
 			}
 			assertNotNull("testDoCompileRule: Rule should be not null", myRule);
-			String fileDir = m_tmpDir + "/"
-					+ StrategyRule.PACKAGE.replace('.', '/');
+			String fileDir = m_tmpDir + "/" + StrategyRule.PACKAGE.replace('.', '/');
 			String className = strategy.getClassName() + ".java";
 
 			srcDirFile = new File(fileDir);
@@ -308,14 +281,11 @@ public class StrategyPanelTest {
 			_log.info("Ready to create Strategy");
 			DynamicCode dynacode = new DynamicCode();
 			dynacode.addSourceDir(new File(m_tmpDir));
-			StrategyRule strategyRule = (StrategyRule) dynacode
-					.newProxyInstance(StrategyRule.class, StrategyRule.PACKAGE
-							+ strategy.getClassName(), parm);
-			assertNotNull("testDoCompileRule: StrategyRule should be not null",
-					strategyRule);
+			StrategyRule strategyRule = (StrategyRule) dynacode.newProxyInstance(StrategyRule.class,
+					StrategyRule.PACKAGE + strategy.getClassName(), parm);
+			assertNotNull("testDoCompileRule: StrategyRule should be not null", strategyRule);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -324,16 +294,13 @@ public class StrategyPanelTest {
 	@Test
 	public void testDoCompile() {
 		try {
-			StrategyPanel strategyPanel = new StrategyPanel(
-					this.tradePersistentModel);
-			List<Strategy> strategies = this.tradePersistentModel
-					.findStrategies();
+			StrategyPanel strategyPanel = new StrategyPanel(this.tradePersistentModel);
+			List<Strategy> strategies = this.tradePersistentModel.findStrategies();
 			assertNotNull("No strategies", strategies);
 			assertEquals(false, strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
-			assertNotNull("testDoCompile: Strategy should be not null",
-					strategy);
+			assertNotNull("testDoCompile: Strategy should be not null", strategy);
 			Rule myrule = null;
 
 			Collections.sort(strategy.getRules(), Rule.VERSION_ORDER);
@@ -354,8 +321,7 @@ public class StrategyPanelTest {
 			assertNotNull("testDoCompile: Rule should be not null", myrule);
 			strategyPanel.doCompile(myrule);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}
@@ -364,14 +330,10 @@ public class StrategyPanelTest {
 	@Test
 	public void testDoSave() {
 		try {
-			StrategyPanel strategyPanel = new StrategyPanel(
-					this.tradePersistentModel);
-			List<Strategy> strategies = this.tradePersistentModel
-					.findStrategies();
-			assertNotNull("testDoSave: Strategies should be not null",
-					strategies);
-			assertEquals("testDoSave: Strategies should be not empty", false,
-					strategies.isEmpty());
+			StrategyPanel strategyPanel = new StrategyPanel(this.tradePersistentModel);
+			List<Strategy> strategies = this.tradePersistentModel.findStrategies();
+			assertNotNull("testDoSave: Strategies should be not null", strategies);
+			assertEquals("testDoSave: Strategies should be not empty", false, strategies.isEmpty());
 
 			Strategy strategy = strategies.get(0);
 			assertNotNull("testDoSave: Strategy should be not null", strategy);
@@ -395,27 +357,21 @@ public class StrategyPanelTest {
 			myrule.setCreateDate(TradingCalendar.getDateTimeNowMarketTimeZone());
 			StreamEditorPane textArea = new StreamEditorPane("text/rtf");
 			new JScrollPane(textArea);
-			String fileDir = m_strategyDir + "/"
-					+ StrategyRule.PACKAGE.replace('.', '/');
+			String fileDir = m_strategyDir + "/" + StrategyRule.PACKAGE.replace('.', '/');
 			String className = strategy.getClassName() + ".java";
 			String fileName = fileDir + className;
 			String content = strategyPanel.readFile(fileName);
 			textArea.setText(content);
 			myrule.setRule(textArea.getText().getBytes());
 			myrule = this.tradePersistentModel.persistAspect(myrule);
-			assertNotNull("testDoSave: Rule should be not null",
-					myrule.getIdRule());
-			Rule ruleSaved = this.tradePersistentModel.findRuleById(myrule
-					.getIdRule());
-			assertNotNull("testDoSave: Rule saved should be not null",
-					ruleSaved.getIdRule());
+			assertNotNull("testDoSave: Rule should be not null", myrule.getIdRule());
+			Rule ruleSaved = this.tradePersistentModel.findRuleById(myrule.getIdRule());
+			assertNotNull("testDoSave: Rule saved should be not null", ruleSaved.getIdRule());
 			String javaCode = new String(ruleSaved.getRule());
-			assertEquals("testDoSave: Java rule test should be equals",
-					javaCode, textArea.getText());
+			assertEquals("testDoSave: Java rule test should be equals", javaCode, textArea.getText());
 			_log.info("Java file to Saved: " + javaCode);
 		} catch (Exception | AssertionError ex) {
-			String msg = "Error running " + name.getMethodName() + " msg: "
-					+ ex.getMessage();
+			String msg = "Error running " + name.getMethodName() + " msg: " + ex.getMessage();
 			_log.error(msg);
 			fail(msg);
 		}

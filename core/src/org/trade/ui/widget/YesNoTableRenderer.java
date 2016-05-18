@@ -54,8 +54,7 @@ import org.trade.core.valuetype.YesNo;
 
 /**
  */
-public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
-		Serializable {
+public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer, Serializable {
 	/**
 	 * 
 	 */
@@ -146,16 +145,14 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	 *         #getTableCellRendererComponent(JTable, Object, boolean, boolean,
 	 *         int, int)
 	 */
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 		if (isSelected) {
 			super.setForeground(table.getSelectionForeground());
 			super.setBackground(table.getSelectionBackground());
 		} else {
-			super.setForeground((unselectedForeground != null) ? unselectedForeground
-					: table.getForeground());
-			super.setBackground((unselectedBackground != null) ? unselectedBackground
-					: table.getBackground());
+			super.setForeground((unselectedForeground != null) ? unselectedForeground : table.getForeground());
+			super.setBackground((unselectedBackground != null) ? unselectedBackground : table.getBackground());
 		}
 
 		setFont(table.getFont());
@@ -164,10 +161,8 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 			setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
 
 			if (table.isCellEditable(row, column)) {
-				super.setForeground(UIManager
-						.getColor("Table.focusCellForeground"));
-				super.setBackground(UIManager
-						.getColor("Table.focusCellBackground"));
+				super.setForeground(UIManager.getColor("Table.focusCellForeground"));
+				super.setBackground(UIManager.getColor("Table.focusCellBackground"));
 			}
 		} else {
 			setBorder(noFocusBorder);
@@ -177,8 +172,7 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 
 		// ---- begin optimization to avoid painting background ----
 		Color back = getBackground();
-		boolean colorMatch = (back != null)
-				&& (back.equals(table.getBackground())) && table.isOpaque();
+		boolean colorMatch = (back != null) && (back.equals(table.getBackground())) && table.isOpaque();
 
 		setOpaque(!colorMatch);
 
@@ -194,22 +188,22 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	 */
 
 	/**
-	 * Overridden for performance reasons. See the <a
-	 * href="#override">Implementation Note</a> for more information.
+	 * Overridden for performance reasons. See the
+	 * <a href="#override">Implementation Note</a> for more information.
 	 */
 	public void validate() {
 	}
 
 	/**
-	 * Overridden for performance reasons. See the <a
-	 * href="#override">Implementation Note</a> for more information.
+	 * Overridden for performance reasons. See the
+	 * <a href="#override">Implementation Note</a> for more information.
 	 */
 	public void revalidate() {
 	}
 
 	/**
-	 * Overridden for performance reasons. See the <a
-	 * href="#override">Implementation Note</a> for more information.
+	 * Overridden for performance reasons. See the
+	 * <a href="#override">Implementation Note</a> for more information.
 	 * 
 	 * @param tm
 	 *            long
@@ -226,8 +220,8 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	}
 
 	/**
-	 * Overridden for performance reasons. See the <a
-	 * href="#override">Implementation Note</a> for more information.
+	 * Overridden for performance reasons. See the
+	 * <a href="#override">Implementation Note</a> for more information.
 	 * 
 	 * @param r
 	 *            Rectangle
@@ -236,8 +230,8 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	}
 
 	/**
-	 * Overridden for performance reasons. See the <a
-	 * href="#override">Implementation Note</a> for more information.
+	 * Overridden for performance reasons. See the
+	 * <a href="#override">Implementation Note</a> for more information.
 	 * 
 	 * @param propertyName
 	 *            String
@@ -246,8 +240,7 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	 * @param newValue
 	 *            Object
 	 */
-	protected void firePropertyChange(String propertyName, Object oldValue,
-			Object newValue) {
+	protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
 		// Strings get interned...
 		if (propertyName.equals("text")) {
 			super.firePropertyChange(propertyName, oldValue, newValue);
@@ -255,8 +248,8 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	}
 
 	/**
-	 * Overridden for performance reasons. See the <a
-	 * href="#override">Implementation Note</a> for more information.
+	 * Overridden for performance reasons. See the
+	 * <a href="#override">Implementation Note</a> for more information.
 	 * 
 	 * @param propertyName
 	 *            String
@@ -265,8 +258,7 @@ public class YesNoTableRenderer extends JCheckBox implements TableCellRenderer,
 	 * @param newValue
 	 *            boolean
 	 */
-	public void firePropertyChange(String propertyName, boolean oldValue,
-			boolean newValue) {
+	public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {
 	}
 
 	/**

@@ -74,12 +74,11 @@ public class ContractHome {
 	 *            ZonedDateTime
 	 * @return Contract
 	 */
-	public Contract findByUniqueKey(String SECType, String symbol,
-			String exchange, String currency, ZonedDateTime expiryDate) {
+	public Contract findByUniqueKey(String SECType, String symbol, String exchange, String currency,
+			ZonedDateTime expiryDate) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Contract> query = builder.createQuery(Contract.class);
@@ -88,8 +87,7 @@ public class ContractHome {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (null != SECType) {
-				Predicate predicate = builder.equal(from.get("secType"),
-						SECType);
+				Predicate predicate = builder.equal(from.get("secType"), SECType);
 				predicates.add(predicate);
 			}
 			if (null != symbol) {
@@ -97,26 +95,22 @@ public class ContractHome {
 				predicates.add(predicate);
 			}
 			if (null != exchange) {
-				Predicate predicate = builder.equal(from.get("exchange"),
-						exchange);
+				Predicate predicate = builder.equal(from.get("exchange"), exchange);
 				predicates.add(predicate);
 			}
 			if (null != currency) {
-				Predicate predicate = builder.equal(from.get("currency"),
-						currency);
+				Predicate predicate = builder.equal(from.get("currency"), currency);
 				predicates.add(predicate);
 			}
 			if (null != expiryDate) {
 
 				Integer yearExpiry = expiryDate.getYear();
-				Expression<Integer> year = builder.function("year",
-						Integer.class, from.get("expiry"));
+				Expression<Integer> year = builder.function("year", Integer.class, from.get("expiry"));
 				Predicate predicateYear = builder.equal(year, yearExpiry);
 				predicates.add(predicateYear);
 
 				Integer monthExpiry = expiryDate.getMonthValue();
-				Expression<Integer> month = builder.function("month",
-						Integer.class, from.get("expiry"));
+				Expression<Integer> month = builder.function("month", Integer.class, from.get("expiry"));
 				Predicate predicateMonth = builder.equal(month, monthExpiry);
 				predicates.add(predicateMonth);
 			}
@@ -146,8 +140,7 @@ public class ContractHome {
 	public Contract findById(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			Contract instance = entityManager.find(Contract.class, id);
 			if (null != instance) {
@@ -173,8 +166,7 @@ public class ContractHome {
 	public ContractLite findByContractId(Integer id) {
 
 		try {
-			EntityManager entityManager = EntityManagerHelper
-					.getEntityManager();
+			EntityManager entityManager = EntityManagerHelper.getEntityManager();
 			entityManager.getTransaction().begin();
 			ContractLite instance = entityManager.find(ContractLite.class, id);
 			// if (null != instance) {

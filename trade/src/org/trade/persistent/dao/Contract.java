@@ -130,8 +130,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	private BigDecimal lastPrice = new BigDecimal(0);
 
 	private TradePosition tradePosition;
-	private List<Tradestrategy> tradestrategies = Collections
-			.synchronizedList(new ArrayList<Tradestrategy>(0));
+	private List<Tradestrategy> tradestrategies = Collections.synchronizedList(new ArrayList<Tradestrategy>(0));
 	private List<TradePosition> tradePositions = new ArrayList<TradePosition>(0);
 	private List<Candle> candles = new ArrayList<Candle>(0);
 
@@ -152,8 +151,8 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 * @param expiry
 	 *            Date
 	 */
-	public Contract(String secType, String symbol, String exchange,
-			String currency, ZonedDateTime expiry, BigDecimal priceMultiplier) {
+	public Contract(String secType, String symbol, String exchange, String currency, ZonedDateTime expiry,
+			BigDecimal priceMultiplier) {
 		this.currency = currency;
 		this.exchange = exchange;
 		this.symbol = symbol;
@@ -922,8 +921,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 *            Tradestrategy
 	 */
 	public boolean removeTradestrategy(Tradestrategy tradestrategy) {
-		for (ListIterator<Tradestrategy> itemIter = this.tradestrategies
-				.listIterator(); itemIter.hasNext();) {
+		for (ListIterator<Tradestrategy> itemIter = this.tradestrategies.listIterator(); itemIter.hasNext();) {
 			Tradestrategy item = itemIter.next();
 			if (item.equals(tradestrategy)) {
 				itemIter.remove();
@@ -1004,8 +1002,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 * 
 	 * @return List<Candle>
 	 */
-	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = {
-			CascadeType.REFRESH, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.REMOVE })
 	public List<Candle> getCandles() {
 		return this.candles;
 	}
@@ -1029,8 +1026,7 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	public void addTradePosition(TradePosition tradePosition) {
 		int index = 0;
 		for (TradePosition currTradePosition : this.tradePositions) {
-			if (currTradePosition.getIdTradePosition().equals(
-					tradePosition.getIdTradePosition())) {
+			if (currTradePosition.getIdTradePosition().equals(tradePosition.getIdTradePosition())) {
 				index = this.tradePositions.indexOf(currTradePosition);
 				break;
 			}
@@ -1111,16 +1107,10 @@ public class Contract extends Aspect implements Serializable, Cloneable {
 	 */
 	public int hashCode() {
 		int hash = super.hashCode();
-		hash = hash
-				+ (this.getCurrency() == null ? 0 : this.getCurrency()
-						.hashCode());
-		hash = hash
-				+ (this.getExchange() == null ? 0 : this.getExchange()
-						.hashCode());
-		hash = hash
-				+ (this.getSecType() == null ? 0 : this.getSecType().hashCode());
-		hash = hash
-				+ (this.getSymbol() == null ? 0 : this.getSymbol().hashCode());
+		hash = hash + (this.getCurrency() == null ? 0 : this.getCurrency().hashCode());
+		hash = hash + (this.getExchange() == null ? 0 : this.getExchange().hashCode());
+		hash = hash + (this.getSecType() == null ? 0 : this.getSecType().hashCode());
+		hash = hash + (this.getSymbol() == null ? 0 : this.getSymbol().hashCode());
 		return hash;
 	}
 
