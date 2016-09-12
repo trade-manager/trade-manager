@@ -13,7 +13,7 @@ Source and Documentation 2.1. Please see Wiki for Install instructions and Eclip
 9. Added type attribute to CodeType and FK idTradeStrategy to CodeValue run target upgradeDB in Build to upgrade a current Database.
 10. Split Configuration Tab/CodeTypes out into sub-types using CodeType.type attribute. This allows you to add parameters to Tradestrategies. Types are Indicator Parameters, Strategy Parameters.
 
-Demo database for 2.1 (TradeProdDB.sql) with data from 01/01/2013 through 03/13/2015 available at 
+Demo database for 2.1 (TradeProdDB.sql).
 
 [Demo database download](https://drive.google.com/folderview?id=0BxiRuTqY1XJhY2RhaEdjMFgtOXM&usp=sharing)
 
