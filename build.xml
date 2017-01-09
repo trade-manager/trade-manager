@@ -3,7 +3,7 @@
 	<property name="base" location="." />
 	<property environment="env" />
 	<property name="component.base" location="." />
-	<import file="${component.base}/ant/buildall.xml" />
+	<import file="${component.base}/trade-manager/ant/buildall.xml" />
 	<target name="test" depends="all" description="Default build file used by Travis-CI this builds, compiles, create DB and runs all testcases">
 	</target>
 </project>
