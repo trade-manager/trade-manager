@@ -6,16 +6,16 @@
 	<!-- Initialisation. -->
 	<target name="initialise" description="Initialise required settings.">
 		<tstamp />
-		<property name="build" value="${component.base}/bin" />
-		<property name="dist" value="${component.base}/dist" />
-		<property name="srctrade" value="${component.base}/trade/src" />
-		<property name="srccoretest" value="${component.base}/core/test" />
-		<property name="srctradetest" value="${component.base}/trade/test" />
-		<property name="srccore" value="${component.base}/core/src" />
-		<property name="config" value="${component.base}/config" />
-		<property name="lib" location="${component.base}/lib" />
-		<property name="reports" location="${component.base}/reports" />
-		<property name="db" location="${component.base}/db" />
+		<property name="build" value="${component.base}/trade-manager/bin" />
+		<property name="dist" value="${component.base}/trade-manager/dist" />
+		<property name="srctrade" value="${component.base}/trade-manager/trade/src" />
+		<property name="srccoretest" value="${component.base}/trade-manager/core/test" />
+		<property name="srctradetest" value="${component.base}/trade-manager/trade/test" />
+		<property name="srccore" value="${component.base}/trade-manager/core/src" />
+		<property name="config" value="${component.base}/trade-manager/config" />
+		<property name="lib" location="${component.base}/trade-manager/lib" />
+		<property name="reports" location="${component.base}/trade-manager/reports" />
+		<property name="db" location="${component.base}/trade-manager/db" />
 
 		<!-- the names of various distributable files -->
 		<property name="name" value="${dist}/${component.name.base}-${component.name.version}" />
@@ -24,7 +24,7 @@
 		<!-- Edit the next line to link to the swt library you want, see README file in the swt folder -->
 		<path id="build.classpath">
 			<pathelement location="${build}" />
-			<fileset dir="${component.base}/lib">
+			<fileset dir="${component.base}/trade-manager/lib">
 				<include name="jsyntaxpane-1.0.0.jar" />
 				<include name="tws-9.71.jar" />
 				<include name="jfreechart-1.0.19.jar" />
@@ -135,7 +135,7 @@
 					<include name="mysql-connector-java-5.1.37-bin.jar" />
 				</fileset>
 			</classpath>
-			<transaction src="${component.base}/db/TradeManagerData.sql" />
+			<transaction src="${component.base}/trade-manager/db/TradeManagerData.sql" />
 		</sql>
 	</target>
 	<target name="compile-test" depends="initialise-test" description="compile test source code ">
