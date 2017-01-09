@@ -5,10 +5,11 @@ jdk:
 
 
 dist: trusty
-sudo: false
+sudo: required
 
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('')"
-  
+  - mysql --version
+  - mysql -e "SELECT VERSION();"
