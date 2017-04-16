@@ -643,7 +643,8 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	 */
 	public static void main(String[] args) {
 		String inputFileDef = "db/CreateLoadFileDef.csv";
-		String outPutFileName = "C:\\Temp\\CCILoadFile.csv";
+		String outPutFileName = "db/CreatedLoadFile.csv";
+		
 		Tradingdays.createLoadFile(inputFileDef, outPutFileName);
 
 	}
@@ -703,13 +704,19 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 					switch (tokenNumber) {
 					case 1: {
 						if (token.length() == 10) {
-							startDate = TradingCalendar.getZonedDateTimeFromDateTimeString(token, "MM/dd/yyyy");
+							//startDate = TradingCalendar.getZonedDateTimeFromDateTimeString(token, "MM/dd/yyyy");
+							startDate = TradingCalendar.getTradingDayStart(TradingCalendar
+									.getZonedDateTimeFromDateString(token, "MM/dd/yyyy", TradingCalendar.MKT_TIMEZONE));
+						
 						}
 						break;
 					}
 					case 2: {
 						if (token.length() == 10) {
-							endDate = TradingCalendar.getZonedDateTimeFromDateTimeString(token, "MM/dd/yyyy");
+							//endDate = TradingCalendar.getZonedDateTimeFromDateTimeString(token, "MM/dd/yyyy");
+							endDate = TradingCalendar.getTradingDayStart(TradingCalendar
+									.getZonedDateTimeFromDateString(token, "MM/dd/yyyy", TradingCalendar.MKT_TIMEZONE));
+
 						}
 						break;
 					}
