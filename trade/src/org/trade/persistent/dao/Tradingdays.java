@@ -649,7 +649,7 @@ public class Tradingdays extends Aspect implements java.io.Serializable {
 	}
 
 	/**
-	 * Method createLoadFile. Create a file that cn be inported into the
+	 * Method createLoadFile. Create a file that cn be imported into the
 	 * tradeManager for the symbols specified in the input file.
 	 * 
 	 * CSV file format CSV file format is: 01/01/2013 (From date),01/01/2014 (To
