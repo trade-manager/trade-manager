@@ -13,6 +13,8 @@ LOCALCLASSPATH="$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/tools.jar:ant/lib/*"
 echo "PATH=$PATH"
 echo "CLASSPATH=$LOCALCLASSPATH"
 
+
+
 ANT_BUILD_FILE=ant/build.xml
 # ANT_BUILD_FILE=ant/buildtest.xml
 
