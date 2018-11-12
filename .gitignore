@@ -4,5 +4,6 @@
 /dist
 /temp
 /reports
+.idea/
 
 /bin/

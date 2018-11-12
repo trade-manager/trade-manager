@@ -51,7 +51,7 @@
 				<include name="junit-4.10.jar" />
 				<include name="validation-api-1.1.0.Final.jar" />
 			</fileset>
-			<fileset dir="${env.JAVA_HOME}/lib">
+			<fileset dir="${component.base}/lib">
 				<include name="tools.jar" />
 			</fileset>
 		</path>
